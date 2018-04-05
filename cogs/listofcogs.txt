@@ -1,0 +1,6 @@
+List of Cogs:
+Set
+Change
+Mod
+Roleplay
+Stats
