@@ -83,6 +83,7 @@ class SetCog:
                 await nickupdate(ctx, userarray)
             await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
 
+    @commands.command()
     async def resetsize(ctx):
     #Change nickname.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
