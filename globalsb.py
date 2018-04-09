@@ -53,6 +53,11 @@ DENS = 5
 UNIT = 6
 SPEC = 7
 
+#Statsplus array item names.
+FOOT = 0
+BUST = 1
+PNIS = 2
+
 #Monika line gen.
 def monikaline():
     return random.choice(monikalines)
@@ -215,6 +220,28 @@ def write_user(user_id, content):
     os.remove(folder + "/users/" + user_id + ".txt")
     #Make a new userfile.
     userfile = open(folder + "/users/" + user_id + ".txt", "w+")
+    #Write content to lines.
+    userfile.writelines(content)
+
+#Read in specific user's plusstats.
+def read_user_plus(user_id):
+    user_id = str(user_id)
+    with open(folder + "/plus/" + user_id + ".txt") as f:
+        #Make array of lines from file.
+        content = f.readlines()
+        return content
+
+#Write to specific user.
+def write_user_plus(user_id, content):
+    user_id = str(user_id)
+    #Add new line characters to entries that don't have them.
+    for idx, item in enumerate(content):
+        if not content[idx].endswith("\n"):
+            content[idx] = content[idx] + "\n"
+    #Delete plusfile.
+    os.remove(folder + "/plus/" + user_id + ".txt")
+    #Make a new plusfile.
+    userfile = open(folder + "/plus/" + user_id + ".txt", "w+")
     #Write content to lines.
     userfile.writelines(content)
 
@@ -671,6 +698,37 @@ def fromWVUSA(value):
     else:
         return "8"
     return output
+
+def toCV(size):
+    size = size.upper()
+    if size == "AA" or size == "AAA":
+        return "0.5"
+    firstlet = str(ord(size[0])&31)
+    extraletters = len(size) - 1
+    return str(int(firstlet) + extraletters)
+
+def fromCV(value):
+    if value == "0.5":
+        return "AA"
+    elif int(value) > 0.5 and int(value) <= 26:
+        answer = chr(int(value) + 64)
+        if answer = "E":
+            answer = "DD / E"
+        if answer = "F":
+            answer = "DDD / F"
+    elif int(value) > 26:
+        return "Z" * (int(value) - 25)
+
+def toShoeSize(sv):
+    inches = Decimal(sv) / inch
+    shoesize = (inches - Decimal(8)) * Decimal(3)
+    shoesize = place_value(round_nearest_half(shoesize))
+    return shoesize
+
+def fromShoeSize(size):
+    inches = Decimal(size) / Decimal(3) + Decimal(8)
+    out = inches * inch
+    return out
 
 def check(ctx):
 #Disable commands for users with the SizeBot_Banned role.
