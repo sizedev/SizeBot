@@ -33,7 +33,7 @@ defaultdensity = Decimal(1.0)
 
 #Constants
 newline = "\n"
-monikalines = ["What? I don't know anyone named Monika.", 
+monikalines = ["What? I don't know anyone named Monika.",
 "I don't know anyone named Monika! hehheh...",
 "Hey wha-- er...", "Did someone say my n- um... Monika? Weird.",
 "I hear Monika was the best character in Doki Doki. I may be a bit biased though 'cause... never mind.",
@@ -721,12 +721,12 @@ def fromCV(value):
 
 def toShoeSize(sv):
     inches = Decimal(sv) / inch
-    shoesize = (inches - Decimal(8)) * Decimal(3)
+    shoesize = (Decimal(3) * inches) - Decimal(22)
     shoesize = place_value(round_nearest_half(shoesize))
     return shoesize
 
 def fromShoeSize(size):
-    inches = Decimal(size) / Decimal(3) + Decimal(8)
+    inches = (Decimal(size) + Decimal(22)) / Decimal(3)
     out = inches * inch
     return out
 
