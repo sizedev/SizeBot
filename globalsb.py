@@ -712,9 +712,9 @@ def fromCV(value):
         return "AA"
     elif int(value) > 0.5 and int(value) <= 26:
         answer = chr(int(value) + 64)
-        if answer = "E":
+        if answer == "E":
             answer = "DD / E"
-        if answer = "F":
+        if answer == "F":
             answer = "DDD / F"
     elif int(value) > 26:
         return "Z" * (int(value) - 25)
