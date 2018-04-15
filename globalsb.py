@@ -415,7 +415,7 @@ def fromSV(value):
     elif value < uni * (10**27):
         output = str(round(Decimal(value) / uni / Decimal(10**24), 2)) + "Yuni"
     else:
-        return "8"
+        return "∞"
     return removedecimals(output)
 
 #Convert 'size values' to a more readable format (accurate).
@@ -479,7 +479,7 @@ def fromSVacc(value):
     elif value < uni * (10**27):
         output = str(round(Decimal(value) / uni / Decimal(10**24), 3)) + "Yuni"
     else:
-        return "8"
+        return "∞"
     return output
 
 #Convert 'size values' to a more readable format (USA).
@@ -521,7 +521,7 @@ def fromSVUSA(value):
     elif value < uni * (10**27):
         output = str(round(Decimal(value) / uni / Decimal(10**24), 2)) + "Yuni"
     else:
-        return "8"
+        return "∞"
     return removedecimals(output)
 
 #Convert any supported weight to 'weight value', or milligrams.
@@ -657,7 +657,7 @@ def fromWV(value):
     elif value < uniw * (10**27):
         output = str(round(Decimal(value) / uniw / Decimal(10**24), 1)) + "Yuni"
     else:
-        return "8"
+        return "∞"
     return output
 
 #Convert 'weight values' to a more readable format (USA).
@@ -696,7 +696,7 @@ def fromWVUSA(value):
     elif value < uniw * (10**27):
         output = str(round(Decimal(value) / uniw / Decimal(10**24), 1)) + "Yuni"
     else:
-        return "8"
+        return "∞"
     return output
 
 def toCV(size):
