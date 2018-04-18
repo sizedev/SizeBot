@@ -36,7 +36,9 @@ initial_extensions = ['cogs.change',
                       'cogs.mod',
                       'cogs.roleplay',
                       'cogs.set',
-                      'cogs.stats']
+                      'cogs.stats',
+                      #'cogs.statsplus',
+                      'cogs.fun']
 
 #Obviously we need this printed in the terminal.
 print(bg(24) + fg(202) + style.BOLD +ascii + style.RESET)
@@ -58,10 +60,10 @@ async def on_ready():
     print(test("Test test."))
 
 @bot.command()
-async def register(ctx, nick:str, display:str, currentheight:str, 
+async def register(ctx, nick:str, display:str, currentheight:str,
     baseheight:str, baseweight:str, units:str, species:str = None):
     #Registers a user for SizeBot.
-    
+
     #Extract values and units.
     chu = getlet(currentheight)
     bhu = getlet(baseheight)
@@ -82,7 +84,7 @@ async def register(ctx, nick:str, display:str, currentheight:str,
 
     #Already registered.
     if os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        await ctx.send("""Sorry! You already registered with SizeBot. 
+        await ctx.send("""Sorry! You already registered with SizeBot.
 To unregister, use the `&unregister` command.""", delete_after=5)
         print(warn("Error UAE1 on user registration: {1}.".format(ctx.message.author)))
         return
@@ -107,7 +109,7 @@ To unregister, use the `&unregister` command.""", delete_after=5)
             species = "None"
         #Make an array of string items, one per line.
         with open(folder + '/users/' + str(ctx.message.author.id) + '.txt', "w+") as userfile:
-            writethis = [str(nick) + newline, str(display) + newline, str(toSV(currentheight, chu)) + 
+            writethis = [str(nick) + newline, str(display) + newline, str(toSV(currentheight, chu)) +
                 newline, str(toSV(baseheight, bhu)) + newline, str(toWV(baseweight, bwu)) + newline, "1.0"
                 + newline, units + newline, species + newline]
             userfile.writelines(writethis)
@@ -127,7 +129,7 @@ Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] 
 async def unregister(ctx, code = None):
     if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
     #User file missing.
-        await ctx.send("""Sorry! You aren't registered with SizeBot. 
+        await ctx.send("""Sorry! You aren't registered with SizeBot.
 To register, use the `&register` command.""", delete_after=5)
     elif code is None:
         regenhexcode()
@@ -200,7 +202,7 @@ async def on_message(message):
     #if os.path.exists(folder + '/users/' + str(message.author.id) + '.txt'):
         #if discord.utils.get(message.server.roles, name='SizeBot_Banned') in ctx.member.roles:
             #os.remove(folder + "/users/" + user_id + ".txt")
-    
+
     await bot.process_commands(message)
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].
