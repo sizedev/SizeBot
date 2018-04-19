@@ -19,7 +19,7 @@ class StatsCog:
         whoid = str(who.id)
         if not os.path.exists(folder + '/users/' + whoid + '.txt'):
         #User file missing.
-            await ctx.send("""Sorry! User isn't registered with SizeBot. 
+            await ctx.send("""Sorry! User isn't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         else:
             userarray = read_user(whoid)
@@ -79,7 +79,7 @@ class StatsCog:
     Character Bases: {23}, {24} | {25}, {26}""".format(whoid, readableheight, readableUSAheight,
         hcms, hbms, readableweight, readableUSAweight,
         wcms, wbms, density, readablefootheight, readablefootUSAheight, shoesize,
-        footwidth, footwidthUSA, readablefootthick, readablefootUSAthick, 
+        footwidth, footwidthUSA, readablefootthick, readablefootUSAthick,
         thumbsize, thumbsizeUSA,
         normalheight, normalUSAheight, normalweight, normalUSAweight,
         userbaseh, userbasehusa, userbasew, userbasewusa))
@@ -152,7 +152,7 @@ class StatsCog:
     Weight of a Normal Man (Comparative) {21} | {22}""".format(whoin, readableheight, readableUSAheight,
         hcms, hbms, readableweight, readableUSAweight,
         wcms, wbms, density, readablefootheight, readablefootUSAheight, shoesize,
-        footwidth, footwidthUSA, readablefootthick, readablefootUSAthick, 
+        footwidth, footwidthUSA, readablefootthick, readablefootUSAthick,
         thumbsize, thumbsizeUSA,
         normalheight, normalUSAheight, normalweight, normalUSAweight,
         userbaseh, userbasehusa, userbasew, userbasewusa))
@@ -164,7 +164,7 @@ class StatsCog:
             await ctx.send("""SizeBot cannot perform this action due to a math error.
     Are you too big, {0}?""".format(ctx.message.author.id), delete_after=5)
         else:
-            await ctx.send("""Math error? {0}""".format(error))
+            await ctx.send("""Error? {0}""".format(error))
 
     @statsraw.error
     async def statsraw_handler(self, ctx, error):
@@ -172,7 +172,7 @@ class StatsCog:
             await ctx.send("""SizeBot cannot perform this action due to a math error.
     Are you too big, {0}?""".format(ctx.message.author.id), delete_after=5)
         else:
-            await ctx.send("""Math error? {0}""".format(error))
+            await ctx.send("""Error? {0}""".format(error))
 
     @commands.command()
     async def compare(self, ctx, who : discord.Member = None, who2 : discord.Member = None):
@@ -184,17 +184,17 @@ class StatsCog:
         if who2 is None:
             who2 = ctx.message.author
         if who is None:
-            await ctx.send("""Please use either two parameters to compare two people, 
+            await ctx.send("""Please use either two parameters to compare two people,
     or one to compare with yourself.""", delete_after=5)
         whoid = str(who.id)
         who2id = str(who2.id)
         if not os.path.exists(folder + '/users/' + whoid + '.txt'):
         #User file missing.
-            await ctx.send("""Sorry! User isn't registered with SizeBot. 
+            await ctx.send("""Sorry! User isn't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         if not os.path.exists(folder + '/users/' + who2id + '.txt'):
         #User file missing.
-            await ctx.send("""Sorry! User isn't registered with SizeBot. 
+            await ctx.send("""Sorry! User isn't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         else:
             userarray1 = read_user(whoid)
