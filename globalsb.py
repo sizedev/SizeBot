@@ -720,7 +720,7 @@ def fromCV(value):
         return "Z" * (int(value) - 25)
 
 def toShoeSize(sv):
-    inches = Decimal(sv) / inch
+    inches = Decimal(sv)
     print(inches)
     shoesize = 3 * inches
     print(shoesize)
