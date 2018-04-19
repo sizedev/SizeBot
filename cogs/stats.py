@@ -52,6 +52,7 @@ class StatsCog:
             footwidth = fromSV(Decimal(userarray[CHEI]) * footwidthfactor)
             footwidthUSA = fromSVUSA(Decimal(userarray[CHEI]) * footwidthfactor)
             footlengthinches = Decimal(userarray[CHEI]) * footfactor / inch
+            print(footlengthinches)
             shoesize = toShoeSize(footlengthinches)
             hcms = place_value(round(multiplier, 3))
             hbms = place_value(round(basemult, 3))
