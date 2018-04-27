@@ -235,6 +235,10 @@ class StatsCog:
             smalltobigheight = fromSVacc(s2bh)
             bigtosmallheightUSA = fromSVUSA(b2sh)
             smalltobigheightUSA = fromSVUSA(s2bh)
+            bigtosmallfoot = fromSVacc(b2sh / 7)
+            smalltobigfoot = fromSVacc(s2bh / 7)
+            bigtosmallfootUSA = fromSVUSA(b2sh / 7)
+            smalltobigfootUSA = fromSVUSA(s2bh / 7)
             bigtosmallweight = fromWV(b2sw)
             smalltobigweight = fromWV(s2bw)
             bigtosmallweightUSA = fromWVUSA(b2sw)
@@ -244,11 +248,14 @@ class StatsCog:
             await ctx.send("""**Comparison:**
     <@{0}> is really: {10} / {11} | {12} | {13}.
     To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
+    To <@{1}>, <@{0}>'s foot looks: {18} / {19} long.
 
     <@{1}> is really: {14} / {15} | {16} / {17}
-    To <@{0}>, <@{1}> looks: {6} / {7} | {8} / {9}.""".format(biguserid, smalluserid, bigtosmallheight, bigtosmallheightUSA,
+    To <@{0}>, <@{1}> looks: {6} / {7} | {8} / {9}.
+    To <@{0}>, <@{1}>'s foot looks: {20} / {21} long.""".format(biguserid, smalluserid, bigtosmallheight, bigtosmallheightUSA,
      bigtosmallweight, bigtosmallweightUSA, smalltobigheight, smalltobigheightUSA, smalltobigweight, smalltobigweightUSA,
-     fromSVacc(bch), fromSVUSA(bch), fromWV(bcw), fromWVUSA(bcw), fromSVacc(sch), fromSVUSA(sch), fromWV(scw), fromWVUSA(scw)))
+     fromSVacc(bch), fromSVUSA(bch), fromWV(bcw), fromWVUSA(bcw), fromSVacc(sch), fromSVUSA(sch), fromWV(scw), fromWVUSA(scw),
+     bigtosmallfoot, bigtosmallfootUSA, smalltobigfoot, smalltobigfootUSA))
         pass
 
     @compare.error
