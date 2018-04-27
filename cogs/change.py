@@ -136,6 +136,7 @@ class ChangeCog:
                         await asyncio.sleep(delay * 60)
             else:
                 await ctx.send("Please enter a valid change style.", delete_after=3)
+        bot = self.bot
         task = bot.loop.create_task(slowchangetask())
         tasks[ctx.message.author.id] = task
 
