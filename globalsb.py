@@ -372,7 +372,7 @@ def fromSV(value):
         output = str(round(Decimal(value) * Decimal(10**6), 2)) + "pm"
     elif value < 1:
         output = str(round(Decimal(value) * Decimal(10**3), 2)) + "nm"
-    elif value < 10**3:
+    elif value < 10**2:
         output = str(round(Decimal(value), 2)) + "µm"
     elif value < 10**4:
         output = str(round(Decimal(value) / Decimal(10**3), 2)) + "mm"
