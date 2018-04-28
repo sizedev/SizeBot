@@ -253,7 +253,7 @@ class StatsCog:
     To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
     To <@{1}>, <@{0}>'s foot looks: {18} / {19} long. (Size {22})
 
-    <@{0}> is {23}x taller than <@{1}>.
+    <@{0}> is {24}x taller than <@{1}>.
 
     <@{1}> is really: {14} / {15} | {16} / {17}
     To <@{0}>, <@{1}> looks: {6} / {7} | {8} / {9}.
