@@ -240,7 +240,7 @@ class StatsCog:
             bigtosmallfootUSA = fromSVUSA(b2sh / 7)
             smalltobigfootUSA = fromSVUSA(s2bh / 7)
             bigtosmallshoe = toShoeSize(b2sh / 7 / inch)
-            smalltobigshoe = toShoeSize(b2sh / 7 / inch)
+            smalltobigshoe = toShoeSize(s2bh / 7 / inch)
             bigtosmallweight = fromWV(b2sw)
             smalltobigweight = fromWV(s2bw)
             bigtosmallweightUSA = fromWVUSA(b2sw)
