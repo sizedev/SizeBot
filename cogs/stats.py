@@ -245,7 +245,7 @@ class StatsCog:
             smalltobigweight = fromWV(s2bw)
             bigtosmallweightUSA = fromWVUSA(b2sw)
             smalltobigweightUSA = fromWVUSA(s2bw)
-            timestaller = round((bch / sch), 3)
+            timestaller = place_value(round((bch / sch), 3))
             #Print compare.
 
             await ctx.send("""**Comparison:**

@@ -721,13 +721,9 @@ def fromCV(value):
 
 def toShoeSize(sv):
     inches = Decimal(sv)
-    print(inches)
     shoesize = 3 * inches
-    print(shoesize)
     shoesize = shoesize - 22
-    print(shoesize)
     shoesize = place_value(round_nearest_half(shoesize))
-    print(shoesize)
     return shoesize
 
 def fromShoeSize(size):
