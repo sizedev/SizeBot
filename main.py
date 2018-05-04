@@ -157,7 +157,8 @@ async def on_message(message):
     #Accurate!
     if message.content == "^":
         print(warn("Accuracy detected."))
-        await message.channel.send("Yes! What that person said is accurate!")
+        await message.channel.send("Yes! What that person said is accurate!"
+                ,delete_after=3)
 
     #Change user nick if display is Y.
     #TODO: Rewrite this, this is awful.

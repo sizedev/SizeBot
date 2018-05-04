@@ -168,7 +168,7 @@ class ChangeCog:
                 await nickupdate(ctx, userarray)
             #TODO: Randomize the italics message here.
             await ctx.send("""<@{0}> ate a :cake:! *I mean it said "Eat me..."*
-They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randint, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
+They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randmult, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
 
 
 #Necessary.
