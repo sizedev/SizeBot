@@ -12,7 +12,7 @@ class ChangeCog:
         #Change height.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
         #User file missing.
-            await ctx.send("""Sorry! You aren't registered with SizeBot. 
+            await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif style == "a" or style == "+" or style == "add":
             userarray = read_user(ctx.message.author.id)
@@ -65,7 +65,7 @@ class ChangeCog:
             print (userarray)
             if userarray[DISP] == "Y\n":
                 await nickupdate(ctx, userarray)
-                await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.        
+                await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
         else:
             await ctx.send("Please enter a valid change method.", delete_after=3)
             return
@@ -76,7 +76,7 @@ class ChangeCog:
             #Change height.
             if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
             #User file missing.
-                await ctx.send("""Sorry! You aren't registered with SizeBot. 
+                await ctx.send("""Sorry! You aren't registered with SizeBot.
         To register, use the `&register` command.""", delete_after=5)
             elif style == "a" or style == "+" or style == "add":
                 while True:
@@ -144,6 +144,32 @@ class ChangeCog:
     async def stopchange(self, ctx):
         tasks[ctx.message.author.id].cancel()
         del tasks[ctx.message.author.id]
+
+    @commands.command()
+    async def eatme(self, ctx):
+        #Eat me!
+        if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
+        #User file missing.
+            await ctx.send("""Sorry! You aren't registered with SizeBot.
+    To register, use the `&register` command.""", delete_after=5)
+        else:
+            userarray = read_user(ctx.message.author.id)
+            randmult = randint(2, 20)
+            newheight = float(userarray[CHEI]) * randmult
+            userarray[CHEI] = str(newheight) + newline
+            if (float(userarray[CHEI]) > infinity):
+                print(warn("Invalid size value."))
+                await ctx.send("Too big. x_x", delete_after=3)
+                userarray[CHEI] = str(infinity) + newline
+            write_user(ctx.message.author.id, userarray)
+            userarray = read_user(ctx.message.author.id)
+            print (userarray)
+            if userarray[DISP] == "Y\n":
+                await nickupdate(ctx, userarray)
+            #TODO: Randomize the italics message here.
+            await ctx.send("""<@{0}> ate a :cake:! *I mean it said "Eat me..."*
+They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randint, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
+
 
 #Necessary.
 def setup(bot):

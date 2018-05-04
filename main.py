@@ -154,6 +154,11 @@ async def on_message(message):
                 await message.channel.send(monikaline() + "<:monikajump:395732463902523393>"
                     ,delete_after=5)
 
+    #Accurate!
+    if message.content() == "^":
+        print(warn("Accuracy detected."))
+        await message.channel.send("Yes! What that person said is accurate!")
+
     #Change user nick if display is Y.
     #TODO: Rewrite this, this is awful.
     if os.path.exists(folder + '/users/' + str(message.author.id) + '.txt'):
@@ -197,11 +202,6 @@ async def on_message(message):
                                 if len(nick) > 32:
                                     nick = userarray[NICK] + " [∞]"
                         await message.author.edit(nick = nick)
-
-    #TODO: Message has no attribute 'server'.
-    #if os.path.exists(folder + '/users/' + str(message.author.id) + '.txt'):
-        #if discord.utils.get(message.server.roles, name='SizeBot_Banned') in ctx.member.roles:
-            #os.remove(folder + "/users/" + user_id + ".txt")
 
     await bot.process_commands(message)
 
