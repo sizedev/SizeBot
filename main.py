@@ -155,7 +155,7 @@ async def on_message(message):
                     ,delete_after=5)
 
     #Accurate!
-    if message.content() == "^":
+    if message.content == "^":
         print(warn("Accuracy detected."))
         await message.channel.send("Yes! What that person said is accurate!")
 
