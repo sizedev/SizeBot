@@ -154,7 +154,7 @@ class ChangeCog:
     To register, use the `&register` command.""", delete_after=5)
         else:
             userarray = read_user(ctx.message.author.id)
-            randmult = randint(2, 20)
+            randmult = random.randint(2, 20)
             newheight = float(userarray[CHEI]) * randmult
             userarray[CHEI] = str(newheight) + newline
             if (float(userarray[CHEI]) > infinity):
