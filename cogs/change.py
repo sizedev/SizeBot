@@ -172,7 +172,7 @@ They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id
 
     @commands.command()
     async def drinkme(self, ctx):
-        #Eat me!
+        #Drink me!
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
         #User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.

@@ -143,6 +143,16 @@ To register, use the `&register` command.""", delete_after=5)
         await ctx.send("Correct code! Unregisted {0}".format(ctx.message.author.name), delete_after=3)
         os.remove(folder + "/users/" + str(ctx.message.author.id) + ".txt")
 
+@bot.command()
+async def suicide(self, ctx):
+    await ctx.message.delete()
+    await ctx.send(""" **Suicide Hotline: 1-800-273-TALK (8255) [USA]**
+    *For other countries, visit http://ibpf.org/resource/list-international-suicide-hotlines .*
+    We are *not* licensed professionals. Please see a therapist, or a doctor you trust, about depression.
+    We want to see you through this. We love everyone here at Size Haven, and we are here to talk if you need it.
+    <3 ~ The Size Haven Team
+    """)
+
 @bot.event
 async def on_message(message):
     #Easter egg.
@@ -153,12 +163,6 @@ async def on_message(message):
                 print(warn("Monika triggered."))
                 await message.channel.send(monikaline() + "<:monikajump:395732463902523393>"
                     ,delete_after=5)
-
-    #Accurate!
-    if message.content == "^":
-        print(warn("Accuracy detected."))
-        await message.channel.send("Yes! What that person said is accurate!"
-                ,delete_after=3)
 
     #Change user nick if display is Y.
     #TODO: Rewrite this, this is awful.
