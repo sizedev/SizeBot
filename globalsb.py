@@ -40,6 +40,7 @@ monikalines = ["What? I don't know anyone named Monika.",
 "Monika? :sweat_smile: Never heard of her."]
 folder = ".."
 noboru = 291654189833256960
+reol = 106871675617820672
 sizebot_id = 344590087679639556
 digiid = 271803699095928832
 
@@ -90,7 +91,7 @@ ascii = """
 
 #Configure decimal module.
 getcontext()
-context = Context(prec=225, rounding=ROUND_HALF_EVEN, Emin=-9999999999, Emax=9999999999,
+context = Context(prec=100, rounding=ROUND_HALF_EVEN, Emin=-9999999, Emax=999999,
         capitals=1, clamp=0, flags=[], traps=[Overflow, DivisionByZero,
         InvalidOperation])
 setcontext(context)

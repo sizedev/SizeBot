@@ -21,6 +21,8 @@ import codecs
 
 from globalsb import *
 
+os.system("")
+
 #Get authtoken from file.
 with open("../_authtoken.txt") as f:
     authtoken = f.readlines()
@@ -143,16 +145,6 @@ To register, use the `&register` command.""", delete_after=5)
         await ctx.send("Correct code! Unregisted {0}".format(ctx.message.author.name), delete_after=3)
         os.remove(folder + "/users/" + str(ctx.message.author.id) + ".txt")
 
-@bot.command()
-async def suicide(self, ctx):
-    await ctx.message.delete()
-    await ctx.send(""" **Suicide Hotline: 1-800-273-TALK (8255) [USA]**
-    *For other countries, visit http://ibpf.org/resource/list-international-suicide-hotlines .*
-    We are *not* licensed professionals. Please see a therapist, or a doctor you trust, about depression.
-    We want to see you through this. We love everyone here at Size Haven, and we are here to talk if you need it.
-    <3 ~ The Size Haven Team
-    """)
-
 @bot.event
 async def on_message(message):
     #Easter egg.
@@ -166,47 +158,50 @@ async def on_message(message):
 
     #Change user nick if display is Y.
     #TODO: Rewrite this, this is awful.
-    if os.path.exists(folder + '/users/' + str(message.author.id) + '.txt'):
-        userarray = read_user(message.author.id)
-        if userarray[CHEI] == "None":
-            userarray[CHEI] = userarray[BHEI]
-            await message.channel.send("<@{0}>: Error in size value: Size value returned None. Resetting to base height.").format(message.author.id)
-        if userarray[DISP] == "Y\n":
-            if message.author.id != noboru:
-                if userarray[UNIT] == "M\n":
-                    if userarray[SPEC] == "None\n":
-                        nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + "]"
-                        if len(nick) > 32:
-                            nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSV(userarray[CHEI]) + "]"
-                            if len(nick) > 32:
-                                nick = userarray[NICK] + " [∞]"
-                        await message.author.edit(nick = nick)
-                    else:
-                        nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + ", " + userarray[SPEC] + "]"
-                        if len(nick) > 32:
+    try:
+        if os.path.exists(folder + '/users/' + str(message.author.id) + '.txt'):
+            userarray = read_user(message.author.id)
+            if userarray[CHEI] == "None":
+                userarray[CHEI] = userarray[BHEI]
+                await message.channel.send("<@{0}>: Error in size value: Size value returned None. Resetting to base height.").format(message.author.id)
+            if userarray[DISP] == "Y\n":
+                if message.author.id != noboru and message.author.id != reol:
+                    if userarray[UNIT] == "M\n":
+                        if userarray[SPEC] == "None\n":
                             nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + "]"
                             if len(nick) > 32:
                                 nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSV(userarray[CHEI]) + "]"
                                 if len(nick) > 32:
                                     nick = userarray[NICK] + " [∞]"
-                        await message.author.edit(nick = nick)
-                else:
-                    if userarray[SPEC] == "None\n":
-                        nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + "]"
-                        if len(nick) > 32:
-                            nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSVUSA(userarray[CHEI]) + "]"
+                            await message.author.edit(nick = nick)
+                        else:
+                            nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + ", " + userarray[SPEC] + "]"
                             if len(nick) > 32:
-                                nick = userarray[NICK] + " [∞]"
-                        await message.author.edit(nick = nick)
+                                nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + "]"
+                                if len(nick) > 32:
+                                    nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSV(userarray[CHEI]) + "]"
+                                    if len(nick) > 32:
+                                        nick = userarray[NICK] + " [∞]"
+                            await message.author.edit(nick = nick)
                     else:
-                        nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + ", " + userarray[SPEC] + "]"
-                        if len(nick) > 32:
+                        if userarray[SPEC] == "None\n":
                             nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + "]"
                             if len(nick) > 32:
                                 nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSVUSA(userarray[CHEI]) + "]"
                                 if len(nick) > 32:
                                     nick = userarray[NICK] + " [∞]"
-                        await message.author.edit(nick = nick)
+                            await message.author.edit(nick = nick)
+                        else:
+                            nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + ", " + userarray[SPEC] + "]"
+                            if len(nick) > 32:
+                                nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + "]"
+                                if len(nick) > 32:
+                                    nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSVUSA(userarray[CHEI]) + "]"
+                                    if len(nick) > 32:
+                                        nick = userarray[NICK] + " [∞]"
+                            await message.author.edit(nick = nick)
+    except discord.ext.commands.errors.CommandInvokeError:
+        pass
 
     await bot.process_commands(message)
 
