@@ -184,7 +184,7 @@ class StatsCog:
 		smalluser = []
 		smalluserid = ""
 		if who2 is None:
-			who2 = ctx.message.author
+			who2 = ctx.message.author.id
 		if who is None:
 			await ctx.send("""Please use either two parameters to compare two people,
 	or one to compare with yourself.""", delete_after=5)
@@ -278,7 +278,7 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
 		smalluserid = ""
 		if who is None:
 			who = "5.5ft"
-		userarray1 = read_user(ctx.message.author)
+		userarray1 = read_user(ctx.message.author.id)
 		userarray2 = userarray = ["Raw\n", "Y\n", who, defaultheight, defaultweight, defaultdensity, "M\n", "None\n"]
 		if userarray1[2] == userarray2[2]:
 			await ctx.send("Users match 1 to 1.")
