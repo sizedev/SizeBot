@@ -281,7 +281,7 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
         userarray2 = userarray = ["Raw\n", "Y\n", who, defaultheight, defaultweight, defaultdensity, "M\n", "None\n"]
         if userarray1[2] == userarray2[2]:
             await ctx.send("Users match 1 to 1.")
-        elif userarray1[2]) > userarray2[2]:
+        elif userarray1[2] > userarray2[2]:
             biguser = userarray1
             biguserid = ctx.message.author.id
             smalluser = userarray2
