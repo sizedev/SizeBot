@@ -201,9 +201,9 @@ class StatsCog:
 		else:
 			userarray1 = read_user(whoid)
 			userarray2 = read_user(who2id)
-			if userarray1[2] == userarray2[2]:
+			if toSV(userarray1[2]) == toSV(userarray2[2]):
 				await ctx.send("Users match 1 to 1.")
-			elif userarray1[2] > userarray2[2]:
+			elif toSV(userarray1[2]) > toSV(userarray2[2]):
 					biguser = userarray1
 					biguserid = whoid
 					smalluser = userarray2
@@ -280,9 +280,9 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
 			who = "5.5ft"
 		userarray1 = read_user(ctx.message.author.id)
 		userarray2 = userarray = ["Raw\n", "Y\n", who, defaultheight, defaultweight, defaultdensity, "M\n", "None\n"]
-		if userarray1[2] == userarray2[2]:
+		if toSV(userarray1[2]) == toSV(userarray2[2]):
 			await ctx.send("Users match 1 to 1.")
-		elif userarray1[2] > userarray2[2]:
+		elif toSV(userarray1[2]) > toSV(userarray2[2]):
 			biguser = userarray1
 			biguserid = ctx.message.author.id
 			smalluser = userarray2
