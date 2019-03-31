@@ -202,7 +202,7 @@ class StatsCog:
             userarray1 = read_user(whoid)
             userarray2 = read_user(who2id)
             if toSV(userarray1[2]) == toSV(userarray2[2]):
-                return
+                await ctx.send("Users match 1 to 1.")
             elif toSV(userarray1[2]) > toSV(userarray2[2]):
                     biguser = userarray1
                     biguserid = whoid
@@ -280,7 +280,7 @@ class StatsCog:
         userarray1 = read_user(ctx.message.author)
         userarray2 = userarray = ["Raw\n", "Y\n", who, defaultheight, defaultweight, defaultdensity, "M\n", "None\n"]
         if toSV(userarray1[2]) == toSV(userarray2[2]):
-            return
+            await ctx.send("Users match 1 to 1.")
         elif toSV(userarray1[2]) > toSV(userarray2[2]):
             biguser = userarray1
             biguserid = ctx.message.author.id
