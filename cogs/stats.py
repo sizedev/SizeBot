@@ -213,54 +213,54 @@ class StatsCog:
                     biguserid = who2id
                     smalluser = userarray1
                     smalluserid = whoid
-            #Compare.
-            bch = Decimal(biguser[2])
-            bbh = Decimal(biguser[3])
-            sch = Decimal(smalluser[2])
-            sbh = Decimal(smalluser[3])
-            bbw = Decimal(biguser[4])
-            sbw = Decimal(smalluser[4])
-            bd = Decimal(biguser[5])
-            sd = Decimal(smalluser[5])
-            bigmult = bch / bbh
-            smallmult = sch / sbh
-            bcw = bbw * (bigmult ** 3) * bd
-            scw = sbw * (smallmult ** 3) * sd
-            diffmult = bigmult / smallmult
-            b2sh = bbh * diffmult
-            s2bh = sbh / diffmult
-            b2sw = bbw * (diffmult ** 3)
-            s2bw = sbw / (diffmult ** 3)
-            bigtosmallheight = fromSVacc(b2sh)
-            smalltobigheight = fromSVacc(s2bh)
-            bigtosmallheightUSA = fromSVUSA(b2sh)
-            smalltobigheightUSA = fromSVUSA(s2bh)
-            bigtosmallfoot = fromSVacc(b2sh / 7)
-            smalltobigfoot = fromSVacc(s2bh / 7)
-            bigtosmallfootUSA = fromSVUSA(b2sh / 7)
-            smalltobigfootUSA = fromSVUSA(s2bh / 7)
-            bigtosmallshoe = toShoeSize(b2sh / 7 / inch)
-            smalltobigshoe = toShoeSize(s2bh / 7 / inch)
-            bigtosmallweight = fromWV(b2sw)
-            smalltobigweight = fromWV(s2bw)
-            bigtosmallweightUSA = fromWVUSA(b2sw)
-            smalltobigweightUSA = fromWVUSA(s2bw)
-            timestaller = place_value(round((bch / sch), 3))
-            #Print compare.
+        #Compare.
+        bch = Decimal(biguser[2])
+        bbh = Decimal(biguser[3])
+        sch = Decimal(smalluser[2])
+        sbh = Decimal(smalluser[3])
+        bbw = Decimal(biguser[4])
+        sbw = Decimal(smalluser[4])
+        bd = Decimal(biguser[5])
+        sd = Decimal(smalluser[5])
+        bigmult = bch / bbh
+        smallmult = sch / sbh
+        bcw = bbw * (bigmult ** 3) * bd
+        scw = sbw * (smallmult ** 3) * sd
+        diffmult = bigmult / smallmult
+        b2sh = bbh * diffmult
+        s2bh = sbh / diffmult
+        b2sw = bbw * (diffmult ** 3)
+        s2bw = sbw / (diffmult ** 3)
+        bigtosmallheight = fromSVacc(b2sh)
+        smalltobigheight = fromSVacc(s2bh)
+        bigtosmallheightUSA = fromSVUSA(b2sh)
+        smalltobigheightUSA = fromSVUSA(s2bh)
+        bigtosmallfoot = fromSVacc(b2sh / 7)
+        smalltobigfoot = fromSVacc(s2bh / 7)
+        bigtosmallfootUSA = fromSVUSA(b2sh / 7)
+        smalltobigfootUSA = fromSVUSA(s2bh / 7)
+        bigtosmallshoe = toShoeSize(b2sh / 7 / inch)
+        smalltobigshoe = toShoeSize(s2bh / 7 / inch)
+        bigtosmallweight = fromWV(b2sw)
+        smalltobigweight = fromWV(s2bw)
+        bigtosmallweightUSA = fromWVUSA(b2sw)
+        smalltobigweightUSA = fromWVUSA(s2bw)
+        timestaller = place_value(round((bch / sch), 3))
+        #Print compare.
 
-            await ctx.send("""**Comparison:**
-    <@{0}> is really: {10} / {11} | {12} | {13}.
-    To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
-    To <@{1}>, <@{0}>'s foot looks: {18} / {19} long. (Size {22})
+        await ctx.send("""**Comparison:**
+<@{0}> is really: {10} / {11} | {12} | {13}.
+To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
+To <@{1}>, <@{0}>'s foot looks: {18} / {19} long. (Size {22})
 
-    <@{0}> is {24}x taller than <@{1}>.
+<@{0}> is {24}x taller than <@{1}>.
 
-    <@{1}> is really: {14} / {15} | {16} / {17}
-    To <@{0}>, <@{1}> looks: {6} / {7} | {8} / {9}.
-    To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguserid, smalluserid, bigtosmallheight, bigtosmallheightUSA,
-     bigtosmallweight, bigtosmallweightUSA, smalltobigheight, smalltobigheightUSA, smalltobigweight, smalltobigweightUSA,
-     fromSVacc(bch), fromSVUSA(bch), fromWV(bcw), fromWVUSA(bcw), fromSVacc(sch), fromSVUSA(sch), fromWV(scw), fromWVUSA(scw),
-     bigtosmallfoot, bigtosmallfootUSA, smalltobigfoot, smalltobigfootUSA, bigtosmallshoe, smalltobigshoe, timestaller))
+<@{1}> is really: {14} / {15} | {16} / {17}
+To <@{0}>, <@{1}> looks: {6} / {7} | {8} / {9}.
+To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguserid, smalluserid, bigtosmallheight, bigtosmallheightUSA,
+ bigtosmallweight, bigtosmallweightUSA, smalltobigheight, smalltobigheightUSA, smalltobigweight, smalltobigweightUSA,
+ fromSVacc(bch), fromSVUSA(bch), fromWV(bcw), fromWVUSA(bcw), fromSVacc(sch), fromSVUSA(sch), fromWV(scw), fromWVUSA(scw),
+ bigtosmallfoot, bigtosmallfootUSA, smalltobigfoot, smalltobigfootUSA, bigtosmallshoe, smalltobigshoe, timestaller))
         pass
 
     @compare.error
