@@ -247,7 +247,6 @@ class StatsCog:
 		smalltobigweightUSA = fromWVUSA(s2bw)
 		timestaller = place_value(round((bch / sch), 3))
 		#Print compare.
-
 		await ctx.send("""**Comparison:**
 <@{0}> is really: {10} / {11} | {12} | {13}.
 To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
@@ -267,6 +266,8 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
 	async def compare_handler(self, ctx, error):
 		if isinstance(error, InvalidOperation):
 			await ctx.send("""Math error? {0}?""".format(error), delete_after=5)
+		else:
+			await ctx.send("""Error? {0}""".format(error))
 
 	@commands.command()
 	async def compareraw(self, ctx, who : str = None):
@@ -325,7 +326,6 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
 		smalltobigweightUSA = fromWVUSA(s2bw)
 		timestaller = place_value(round((bch / sch), 3))
 		#Print compare.
-
 		await ctx.send("""**Comparison:**
 <@{0}> is really: {10} / {11} | {12} | {13}.
 To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
@@ -345,6 +345,8 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
 	async def compareraw_handler(self, ctx, error):
 		if isinstance(error, InvalidOperation):
 			await ctx.send("""Math error? {0}?""".format(error), delete_after=5)
+		else:
+			await ctx.send("""Error? {0}""".format(error))
 
 #Necessary.
 def setup(bot):
