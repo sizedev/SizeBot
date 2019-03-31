@@ -5,7 +5,7 @@ from globalsb import *
 class ModCog:
     def __init__(self, bot):
         self.bot = bot
-        
+
     @commands.command()
     async def heightunits(self, ctx):
         await ctx.message.delete()
@@ -106,6 +106,8 @@ class ModCog:
     clearspecies
     setdisplay [Y/N]
     compare [user1] <user2>
+    statsraw [size]
+    compareraw [size]
     sing [string]```
 
     *Other Topics*
@@ -121,23 +123,22 @@ class ModCog:
         await ctx.send("""<@{0}>
     ***SizeBot3 by DigiDuncan***
     *A big program for big people.*
-    **Written for the Macropolis server**
+    **Written for the Size Haven server and adapted for Size Matters**
     **Slogan** **by Twitchy**
-    **Additional equations** *by Benyovski*
+    **Additional equations** *by Benyovski and Arceus3251*
     **Alpha Tested** *by AWK_*
     **Beta Tested** *by Speedbird 001, worstgender, Arceus3251*
-    **written in** *Python 3.6 with discord.py*
-    **written with** Sublime Text
-    **Special thanks** *to Noboru for making the Macropolis server*
+    **written in** *Python 3.7 with discord.py rewrite*
+    **written with** Atom
+    **Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server*
     **Special thanks** *to the discord.py Community Discord for helping with code*
     **Special thanks** to the {1} users of SizeBot3.
-    *Tana helped out a little bit. <3*
 
     "She (*SizeBot*) is beautiful." -- *GoddessArete*
     ":100::thumbsup:" -- *Anonymous*
     "I am the only person who has accidentally turned my fetish into a tech support job." -- *DigiDuncan*
 
-    Version {2} | 04 Apr 2018""".format(ctx.message.author.id, members, version))
+    Version {2} | 31 Mar 2019""".format(ctx.message.author.id, members, version))
 
     @commands.command()
     async def bug(self, ctx, *, message : str):
