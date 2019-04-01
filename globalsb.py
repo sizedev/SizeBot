@@ -736,7 +736,7 @@ def fromShoeSize(size):
 	if "c" in size.toLower(): child = True
 	size = getnum(size)
 	inches = Decimal(size) + 22
-	if child = True: inches = Decimal(size) + 22 - 12 - (1/3)
+	if child == True: inches = Decimal(size) + 22 - 12 - (1/3)
 	inches = inches / Decimal(3)
 	out = inches * inch
 	return out
