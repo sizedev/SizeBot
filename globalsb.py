@@ -24,11 +24,11 @@ class DigiException(Exception):
 	pass
 
 #Version.
-version = "3.1.1"
+version = "3.1.1.2"
 
 #Defaults
-defaultheight = Decimal(1617500) #micrometers
-defaultweight = Decimal(69472900) #milligrams
+defaultheight = Decimal(1754000) #micrometers
+defaultweight = Decimal(66760000) #milligrams
 defaultdensity = Decimal(1.0)
 
 #Constants
@@ -39,7 +39,6 @@ monikalines = ["What? I don't know anyone named Monika.",
 "I hear Monika was the best character in Doki Doki. I may be a bit biased though 'cause... never mind.",
 "Monika? :sweat_smile: Never heard of her."]
 folder = ".."
-noboru = 291654189833256960
 reol = 106871675617820672
 sizebot_id = 344590087679639556
 digiid = 271803699095928832

@@ -53,7 +53,6 @@ class StatsCog:
 			footwidthUSA = fromSVUSA(Decimal(userarray[CHEI]) * footwidthfactor)
 			footlengthinches = Decimal(userarray[CHEI]) * footfactor / inch
 			footlengthinches = round(footlengthinches, 3)
-			print(footlengthinches)
 			shoesize = toShoeSize(footlengthinches)
 			hcms = place_value(round(multiplier, 3))
 			hbms = place_value(round(basemult, 3))
@@ -85,6 +84,7 @@ class StatsCog:
 		thumbsize, thumbsizeUSA,
 		normalheight, normalUSAheight, normalweight, normalUSAweight,
 		userbaseh, userbasehusa, userbasew, userbasewusa))
+		print("Stats for {0} sent.".format(who))
 		pass
 
 	@commands.command()
@@ -158,6 +158,7 @@ class StatsCog:
 		thumbsize, thumbsizeUSA,
 		normalheight, normalUSAheight, normalweight, normalUSAweight,
 		userbaseh, userbasehusa, userbasew, userbasewusa))
+		print("Stats for {0} sent.".format(who))
 		pass
 
 	@stats.error
@@ -260,6 +261,7 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
  bigtosmallweight, bigtosmallweightUSA, smalltobigheight, smalltobigheightUSA, smalltobigweight, smalltobigweightUSA,
  fromSVacc(bch), fromSVUSA(bch), fromWV(bcw), fromWVUSA(bcw), fromSVacc(sch), fromSVUSA(sch), fromWV(scw), fromWVUSA(scw),
  bigtosmallfoot, bigtosmallfootUSA, smalltobigfoot, smalltobigfootUSA, bigtosmallshoe, smalltobigshoe, timestaller))
+		print("Compared {0} and {1}".format(who, who2))
 		pass
 
 	@compare.error
@@ -340,6 +342,7 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
  bigtosmallweight, bigtosmallweightUSA, smalltobigheight, smalltobigheightUSA, smalltobigweight, smalltobigweightUSA,
  fromSVacc(bch), fromSVUSA(bch), fromWV(bcw), fromWVUSA(bcw), fromSVacc(sch), fromSVUSA(sch), fromWV(scw), fromWVUSA(scw),
  bigtosmallfoot, bigtosmallfootUSA, smalltobigfoot, smalltobigfootUSA, bigtosmallshoe, smalltobigshoe, timestaller))
+		print("Compared {0} and {1}".format(ctx.message.author.name, who))
 		pass
 
 	@compareraw.error
