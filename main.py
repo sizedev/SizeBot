@@ -165,7 +165,7 @@ async def on_message(message):
 				userarray[CHEI] = userarray[BHEI]
 				await message.channel.send("<@{0}>: Error in size value: Size value returned None. Resetting to base height.").format(message.author.id)
 			if userarray[DISP] == "Y\n":
-				if message.author.id != noboru and message.author.id != reol:
+				if message.author.id != reol:
 					if userarray[UNIT] == "M\n":
 						if userarray[SPEC] == "None\n":
 							nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + "]"
