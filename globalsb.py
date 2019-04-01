@@ -720,14 +720,23 @@ def fromCV(value):
 		return "Z" * (int(value) - 25)
 
 def toShoeSize(sv):
+	child = False
 	inches = Decimal(sv)
 	shoesize = 3 * inches
 	shoesize = shoesize - 22
+	if shoesize < 1:
+		child = True
+		shoesize += 12 + (1/3)
 	shoesize = place_value(round_nearest_half(shoesize))
+	if child == True: shoesize = "Children's " + shoesize
 	return shoesize
 
 def fromShoeSize(size):
+	child = False
+	if "c" in size.toLower(): child = True
+	size = getnum(size)
 	inches = Decimal(size) + 22
+	if child = True: inches = Decimal(size) + 22 - 12 - (1/3)
 	inches = inches / Decimal(3)
 	out = inches * inch
 	return out
