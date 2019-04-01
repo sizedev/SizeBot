@@ -726,7 +726,7 @@ def toShoeSize(sv):
 	shoesize = shoesize - 22
 	if shoesize < 1:
 		child = True
-		shoesize += 12 + (1/3)
+		shoesize += 12 + Decimal(1/3)
 	shoesize = place_value(round_nearest_half(shoesize))
 	if child == True: shoesize = "Children's " + shoesize
 	return shoesize

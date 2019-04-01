@@ -8,7 +8,6 @@ class StatsCog:
 
 	@commands.command()
 	async def stats(self, ctx, who : discord.Member = None):
-		await ctx.message.delete()
 		#footfactor = Decimal(12800) / Decimal(70000)
 		footfactor = Decimal(10000) / Decimal(70000)
 		footwidthfactor = footfactor / Decimal(2.5)
@@ -89,7 +88,6 @@ class StatsCog:
 
 	@commands.command()
 	async def statsraw(self, ctx, who : str):
-		await ctx.message.delete()
 		footfactor = Decimal(10000) / Decimal(70000)
 		footwidthfactor = footfactor / Decimal(2.5)
 		footthickfactor = Decimal(1) / Decimal(65)
@@ -178,7 +176,6 @@ class StatsCog:
 
 	@commands.command()
 	async def compare(self, ctx, who : discord.Member = None, who2 : discord.Member = None):
-		await ctx.message.delete()
 		biguser = []
 		biguserid = ""
 		smalluser = []
@@ -272,7 +269,6 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
 
 	@commands.command()
 	async def compareraw(self, ctx, who : str = None):
-		await ctx.message.delete()
 		biguser = []
 		biguserid = ""
 		smalluser = []
