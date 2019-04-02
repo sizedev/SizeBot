@@ -719,9 +719,9 @@ def fromCV(value):
 	elif int(value) > 26:
 		return "Z" * (int(value) - 25)
 
-def toShoeSize(sv):
+def toShoeSize(inchamount):
 	child = False
-	inches = Decimal(sv)
+	inches = Decimal(inchamount)
 	shoesize = 3 * inches
 	shoesize = shoesize - 22
 	if shoesize < 1:
