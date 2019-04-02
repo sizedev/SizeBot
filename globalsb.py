@@ -615,7 +615,7 @@ def fromWV(value):
 	elif value < 1:
 		output = str(round(Decimal(value) * Decimal(10**3), 1)) + "µg"
 	elif value < 1000:
-		output = str(Decimal(value)) + "mg"
+		output = str(round(Decimal(value), 1)) + "mg"
 	elif value < 10000000:
 		output = str(round(Decimal(value) / Decimal(10**3), 1)) + "g"
 	elif value < 1000000000:
