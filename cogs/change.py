@@ -8,7 +8,6 @@ class ChangeCog:
 
 	@commands.command()
 	async def change(self, ctx, style, amount):
-		await ctx.message.delete()
 		#Change height.
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.

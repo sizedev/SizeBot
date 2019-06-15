@@ -7,7 +7,7 @@ class SetCog:
 		self.bot = bot
 
 	@commands.command()
-	async def changenick(self, ctx, newnick = None):
+	async def changenick(self, ctx, *, newnick = None):
 	#Change nickname.
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.
@@ -25,7 +25,7 @@ class SetCog:
 				await nickupdate(ctx, userarray)
 
 	@commands.command()
-	async def setspecies(self, ctx, newtag = None):
+	async def setspecies(self, ctx, *, newtag = None):
 	#Change nickname.
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.

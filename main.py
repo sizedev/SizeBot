@@ -1,24 +1,3 @@
-import discord
-from discord.ext import commands
-import re
-import datetime
-import sys
-import os
-import time
-from datetime import date
-from datetime import *
-import math
-import random
-from decimal import *
-from colored import fore, back, style, fg, bg, attr
-from pathlib import Path
-import string
-import traceback
-from discord.ext import commands
-from math import *
-import asyncio
-import codecs
-
 from globalsb import *
 
 os.system("")
@@ -33,7 +12,7 @@ authtoken = authtoken[0]
 prefix = '&'
 description = '''SizeBot3 is a complete rewrite of SizeBot for the Macropolis server.
 Written by DigiDuncan.
-The SizeBot Team: DigiDuncan, AWK_, Tana, Benyovski, Arceus3521.'''
+The SizeBot Team: DigiDuncan, AWK_, Benyovski, Arceus3521, Surge The Raichu.'''
 initial_extensions = ['cogs.change',
 					  'cogs.mod',
 					  'cogs.roleplay',
@@ -153,8 +132,7 @@ async def on_message(message):
 			print(warn("Monika detected."))
 			if random.randrange(10) == 7:
 				print(warn("Monika triggered."))
-				await message.channel.send(monikaline() + "<:monikajump:395732463902523393>"
-					,delete_after=5)
+				await message.channel.send(monikaline(), delete_after=5)
 
 	#Change user nick if display is Y.
 	#TODO: Rewrite this, this is awful.

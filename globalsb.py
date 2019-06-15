@@ -24,7 +24,7 @@ class DigiException(Exception):
 	pass
 
 #Version.
-version = "3.1.1.2"
+version = "3.1.b.1"
 
 #Defaults
 defaultheight = Decimal(1754000) #micrometers
@@ -52,11 +52,6 @@ BWEI = 4
 DENS = 5
 UNIT = 6
 SPEC = 7
-
-#Statsplus array item names.
-FOOT = 0
-BUST = 1
-PNIS = 2
 
 #Monika line gen.
 def monikaline():

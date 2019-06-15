@@ -11,7 +11,8 @@ class ModCog:
 		await ctx.message.delete()
 		await ctx.send("""<@{0}>, **Accepted Units**
 	*Height*
-	```+--------------------+--------------------------------+
+	```
+	+--------------------+--------------------------------+
 	|       Metric            |         Imperial          |
 	+--------------------+--------------------------------+
 	| ym (yoctometer[s])      | in (inch[es])             |
@@ -48,7 +49,8 @@ class ModCog:
 		await ctx.message.delete()
 		await ctx.send("""<@{0}>, **Accepted Units**
 	*Weight*
-	```+--------------------+--------------------------------+
+	```
+	+--------------------+--------------------------------+
 	|       Metric            |         Imperial          |
 	+--------------------+--------------------------------+
 	| yg (yoctogram[s])       | oz (ounce[s])             |
@@ -86,9 +88,10 @@ class ModCog:
 		await ctx.message.delete()
 		if what is None:
 			await ctx.send("""<@{0}>, **Help Topics**
-	note, [] indicates a required parameter, <> indicates an option parameter.
+	**note:** [] indicates a required parameter, <> indicates an optional parameter.
 	*Commands*
-	```register [nickname] [Y/N] [current height] [base height] [base weight] [U/M] <species>
+	```
+	register [nickname] [Y/N] [current height] [base height] [base weight] [U/M] <species>
 	unregister
 	stats <user>
 	change [x,/,+,-] [value]
@@ -111,7 +114,8 @@ class ModCog:
 	sing [string]```
 
 	*Other Topics*
-	```heightunits
+	```
+	heightunits
 	weightunits
 	about
 	bug```""".format(ctx.message.author.id))
@@ -119,7 +123,7 @@ class ModCog:
 	@commands.command()
 	async def about(self, ctx):
 		await ctx.message.delete()
-		await ctx.send("```" + ascii + "```")
+		await ctx.send("```\n" + ascii + "```")
 		await ctx.send("""<@{0}>
 	***SizeBot3 by DigiDuncan***
 	*A big program for big people.*
@@ -138,7 +142,7 @@ class ModCog:
 	":100::thumbsup:" -- *Anonymous*
 	"I am the only person who has accidentally turned my fetish into a tech support job." -- *DigiDuncan*
 
-	Version {2} | 31 Mar 2019""".format(ctx.message.author.id, members, version))
+	Version {2} | 15 Jun 2019""".format(ctx.message.author.id, members, version))
 
 	@commands.command()
 	async def bug(self, ctx, *, message : str):
