@@ -12,9 +12,9 @@ class ModCog:
 		await ctx.send("""<@{0}>, **Accepted Units**
 	*Height*
 	```
-	+--------------------+--------------------------------+
+	+-------------------------+---------------------------+
 	|       Metric            |         Imperial          |
-	+--------------------+--------------------------------+
+	+-------------------------+---------------------------+
 	| ym (yoctometer[s])      | in (inch[es])             |
 	| zm (zeptometer[s])      | ft (feet)                 |
 	| am (attometer[s])       | mi (mile[s])              |
@@ -42,7 +42,7 @@ class ModCog:
 	| Euni (exauniverse[s])   |                           |
 	| Zuni (zettauniverse[s]) |                           |
 	| Yuni (yottauniverse[s]) |                           |
-	+--------------------+--------------------------------+```""".format(ctx.message.author.id))
+	+-------------------------+---------------------------+```""".format(ctx.message.author.id))
 
 	@commands.command()
 	async def weightunits(self, ctx):
@@ -50,9 +50,9 @@ class ModCog:
 		await ctx.send("""<@{0}>, **Accepted Units**
 	*Weight*
 	```
-	+--------------------+--------------------------------+
+	+-------------------------+---------------------------+
 	|       Metric            |         Imperial          |
-	+--------------------+--------------------------------+
+	+-------------------------+---------------------------+
 	| yg (yoctogram[s])       | oz (ounce[s])             |
 	| zg (zeptogram[s])       | lbs (pound[s])            |
 	| ag (attogram[s])        | Earth[s]                  |
@@ -81,17 +81,22 @@ class ModCog:
 	| Euni (exauniverse[s])   |                           |
 	| Zuni (zettauniverse[s]) |                           |
 	| Yuni (yottauniverse[s]) |                           |
-	+--------------------+--------------------------------+```""".format(ctx.message.author.id))
+	+-------------------------+---------------------------+```""".format(ctx.message.author.id))
 
 	@commands.command()
 	async def help(self, ctx, what:str = None):
 		await ctx.message.delete()
 		if what is None:
 			await ctx.send("""<@{0}>, **Help Topics**
-	**note:** [] indicates a required parameter, <> indicates an optional parameter.
+	***N.B.:*** *`[]` indicates a required parameter, `<>` indicates an optional parameter.*
+	***N.B.:*** *Please don't use F'I" notation for heights right now, as it is currently broken. To input `5'4"`, instead please use `64in`.*
+
 	*Commands*
 	```
-	register [nickname] [Y/N] [current height] [base height] [base weight] [U/M] <species>
+	register "[nickname]" [Y/N]† [current height] [base height] [base weight] [U/M]†† "<species>"```
+	*† Indicates whether you want SizeBot to automatically set and continue to manage your nickname and sizetag.*
+	*†† Indicates which system to use for your sizetag. U = US, M = metric.*
+	```
 	unregister
 	stats <user>
 	change [x,/,+,-] [value]
