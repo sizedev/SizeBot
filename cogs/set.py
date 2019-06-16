@@ -213,7 +213,7 @@ class SetCog:
 			await ctx.send("Please enter `&setbaseweight <weight>`.", delete_after=3)
 		else:
 			userarray = read_user(ctx.message.author.id)
-			userarray[BWEI] = str(toSV(getnum(newbaseweight), getlet(newbaseweight))) + newline
+			userarray[BWEI] = str(toWV(getnum(newbaseweight), getlet(newbaseweight))) + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
