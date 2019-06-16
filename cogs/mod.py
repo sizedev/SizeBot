@@ -12,37 +12,37 @@ class ModCog:
 		await ctx.send("""<@{0}>, **Accepted Units**
 	*Height*
 	```
-	+-------------------------+---------------------------+
-	|       Metric            |         Imperial          |
-	+-------------------------+---------------------------+
-	| ym (yoctometer[s])      | in (inch[es])             |
-	| zm (zeptometer[s])      | ft (feet)                 |
-	| am (attometer[s])       | mi (mile[s])              |
-	| fm (femtometer[s])      | AU (astronomical_unit[s]) |
-	| pm (picometer[s])       | uni (universe[s])         |
-	| nm (nanometer[s])       |                           |
-	| µm (micrometer[s])      |                           |
-	| mm (millimeter[s])      |                           |
-	| cm (centimeter[s])      |                           |
-	| m (meter[s])            |                           |
-	| km (kilometer[s])       |                           |
-	| Mm (megameter[s])       |                           |
-	| Gm (gigameter[s])       |                           |
-	| Tm (terameter[s])       |                           |
-	| Pm (petameter[s])       |                           |
-	| Em (exameter[s])        |                           |
-	| Zm (zettameter[s])      |                           |
-	| Ym (yottameter[s])      |                           |
-	| uni (universe[s])       |                           |
-	| kuni (kilouniverse[s])  |                           |
-	| Muni (megauniverse[s])  |                           |
-	| Guni (gigauniverse[s])  |                           |
-	| Tuni (terauniverse[s])  |                           |
-	| Puni (petauniverse[s])  |                           |
-	| Euni (exauniverse[s])   |                           |
-	| Zuni (zettauniverse[s]) |                           |
-	| Yuni (yottauniverse[s]) |                           |
-	+-------------------------+---------------------------+```""".format(ctx.message.author.id))
+	┌─────────────────────────┬───────────────────────────┐
+	│       Metric            │         Imperial          │
+	├─────────────────────────┼───────────────────────────┤
+	│ ym (yoctometer[s])      │ in (inch[es])             │
+	│ zm (zeptometer[s])      │ ft (feet)                 │
+	│ am (attometer[s])       │ mi (mile[s])              │
+	│ fm (femtometer[s])      │ AU (astronomical_unit[s]) │
+	│ pm (picometer[s])       │ uni (universe[s])         │
+	│ nm (nanometer[s])       │                           │
+	│ µm (micrometer[s])      │                           │
+	│ mm (millimeter[s])      │                           │
+	│ cm (centimeter[s])      │                           │
+	│ m (meter[s])            │                           │
+	│ km (kilometer[s])       │                           │
+	│ Mm (megameter[s])       │                           │
+	│ Gm (gigameter[s])       │                           │
+	│ Tm (terameter[s])       │                           │
+	│ Pm (petameter[s])       │                           │
+	│ Em (exameter[s])        │                           │
+	│ Zm (zettameter[s])      │                           │
+	│ Ym (yottameter[s])      │                           │
+	│ uni (universe[s])       │                           │
+	│ kuni (kilouniverse[s])  │                           │
+	│ Muni (megauniverse[s])  │                           │
+	│ Guni (gigauniverse[s])  │                           │
+	│ Tuni (terauniverse[s])  │                           │
+	│ Puni (petauniverse[s])  │                           │
+	│ Euni (exauniverse[s])   │                           │
+	│ Zuni (zettauniverse[s]) │                           │
+	│ Yuni (yottauniverse[s]) │                           │
+	└─────────────────────────┴───────────────────────────┘```""".format(ctx.message.author.id))
 
 	@commands.command()
 	async def weightunits(self, ctx):
@@ -50,46 +50,46 @@ class ModCog:
 		await ctx.send("""<@{0}>, **Accepted Units**
 	*Weight*
 	```
-	+-------------------------+---------------------------+
-	|       Metric            |         Imperial          |
-	+-------------------------+---------------------------+
-	| yg (yoctogram[s])       | oz (ounce[s])             |
-	| zg (zeptogram[s])       | lbs (pound[s])            |
-	| ag (attogram[s])        | Earth[s]                  |
-	| fg (femtogram[s])       | Sun[s]                    |
-	| pg (picogram[s])        |                           |
-	| ng (nanogram[s])        |                           |
-	| µg (microgram[s])       |                           |
-	| mg (milligram[s])       |                           |
-	| g (gram[s])             |                           |
-	| kg (kilogram[s])        |                           |
-	| t (ton[s])              |                           |
-	| kt (kiloton[s])         |                           |
-	| Mt (megaton[s])         |                           |
-	| Gt (gigaton[s])         |                           |
-	| Tt (teraton[s])         |                           |
-	| Pt (petaton[s])         |                           |
-	| Et (exaton[s])          |                           |
-	| Zt (zettaton[s])        |                           |
-	| Yt (yottaton[s])        |                           |
-	| uni (universe[s])       |                           |
-	| kuni (kilouniverse[s])  |                           |
-	| Muni (megauniverse[s])  |                           |
-	| Guni (gigauniverse[s])  |                           |
-	| Tuni (terauniverse[s])  |                           |
-	| Puni (petauniverse[s])  |                           |
-	| Euni (exauniverse[s])   |                           |
-	| Zuni (zettauniverse[s]) |                           |
-	| Yuni (yottauniverse[s]) |                           |
-	+-------------------------+---------------------------+```""".format(ctx.message.author.id))
+	┌─────────────────────────┬───────────────────────────┐
+	│       Metric            │         Imperial          │
+	├─────────────────────────┼───────────────────────────┤
+	│ yg (yoctogram[s])       │ oz (ounce[s])             │
+	│ zg (zeptogram[s])       │ lbs (pound[s])            │
+	│ ag (attogram[s])        │ Earth[s]                  │
+	│ fg (femtogram[s])       │ Sun[s]                    │
+	│ pg (picogram[s])        │                           │
+	│ ng (nanogram[s])        │                           │
+	│ µg (microgram[s])       │                           │
+	│ mg (milligram[s])       │                           │
+	│ g (gram[s])             │                           │
+	│ kg (kilogram[s])        │                           │
+	│ t (ton[s])              │                           │
+	│ kt (kiloton[s])         │                           │
+	│ Mt (megaton[s])         │                           │
+	│ Gt (gigaton[s])         │                           │
+	│ Tt (teraton[s])         │                           │
+	│ Pt (petaton[s])         │                           │
+	│ Et (exaton[s])          │                           │
+	│ Zt (zettaton[s])        │                           │
+	│ Yt (yottaton[s])        │                           │
+	│ uni (universe[s])       │                           │
+	│ kuni (kilouniverse[s])  │                           │
+	│ Muni (megauniverse[s])  │                           │
+	│ Guni (gigauniverse[s])  │                           │
+	│ Tuni (terauniverse[s])  │                           │
+	│ Puni (petauniverse[s])  │                           │
+	│ Euni (exauniverse[s])   │                           │
+	│ Zuni (zettauniverse[s]) │                           │
+	│ Yuni (yottauniverse[s]) │                           │
+	└─────────────────────────┴───────────────────────────┘```""".format(ctx.message.author.id))
 
 	@commands.command()
 	async def help(self, ctx, what:str = None):
 		await ctx.message.delete()
 		if what is None:
 			await ctx.send("""<@{0}>, **Help Topics**
-	***N.B.:*** *`[]` indicates a required parameter, `<>` indicates an optional parameter.*
-	***N.B.:*** *Please don't use F'I" notation for heights right now, as it is currently broken. To input `5'4"`, instead please use `64in`.*
+	***☞*** *`[]` indicates a required parameter, `<>` indicates an optional parameter.*
+	***☞*** *Please don't use F'I" notation for heights right now, as it is currently broken. To input `5'4"`, instead please use `64in`.*
 
 	*Commands*
 	```
@@ -135,6 +135,7 @@ class ModCog:
 	**Written for the Size Haven server and adapted for Size Matters**
 	**Slogan** **by Twitchy**
 	**Additional equations** *by Benyovski and Arceus3251*
+	**Coding Assistance** *by Natalie*
 	**Alpha Tested** *by AWK_*
 	**Beta Tested** *by Speedbird 001, worstgender, Arceus3251*
 	**written in** *Python 3.7 with discord.py rewrite*
