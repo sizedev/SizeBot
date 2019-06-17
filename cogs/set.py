@@ -61,7 +61,6 @@ class SetCog:
 
 	@commands.command()
 	async def setheight(self, ctx, newheight = None):
-		await ctx.message.delete()
 		#Change height.
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.
@@ -70,6 +69,7 @@ class SetCog:
 		elif newheight is None:
 			await ctx.send("Please enter `&setheight <height>`.", delete_after=3)
 		else:
+			newheight = isFeetAndInchesAndIfSoFixIt(newheight)
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(toSV(getnum(newheight), getlet(newheight))) + newline
 			if (float(userarray[CHEI]) > infinity):
@@ -147,6 +147,8 @@ class SetCog:
 		elif newheightmin is None or newheightmax is None:
 			await ctx.send("Please enter `&setheight <height>`.", delete_after=3)
 		else:
+			newheightmin = isFeetAndInchesAndIfSoFixIt(newheightmin)
+			newheightmax = isFeetAndInchesAndIfSoFixIt(newheightmax)
 			newheightminval = toSV(getnum(newheightmin), getlet(newheightmin))
 			newheightmaxval = toSV(getnum(newheightmax), getlet(newheightmax))
 			newheight = random.randint(newheightminval, newheightmaxval)
@@ -183,7 +185,6 @@ class SetCog:
 
 	@commands.command()
 	async def setbaseheight(self, ctx, newbaseheight = None):
-		await ctx.message.delete()
 		#Change base height.
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.
@@ -192,6 +193,7 @@ class SetCog:
 		elif newbaseheight is None:
 			await ctx.send("Please enter `&setbaseheight <height>`.", delete_after=3)
 		else:
+			newbaseheight = isFeetAndInchesAndIfSoFixIt(newbaseheight)
 			userarray = read_user(ctx.message.author.id)
 			userarray[BHEI] = str(toSV(getnum(newbaseheight), getlet(newbaseheight))) + newline
 			write_user(ctx.message.author.id, userarray)

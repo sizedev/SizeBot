@@ -14,6 +14,7 @@ class ChangeCog:
 			await ctx.send("""Sorry! You aren't registered with SizeBot.
 	To register, use the `&register` command.""", delete_after=5)
 		elif style == "a" or style == "+" or style == "add":
+			amount = isFeetAndInchesAndIfSoFixIt(amount)
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(Decimal(userarray[CHEI]) + Decimal(toSV(getnum(amount), getlet(amount)))) + newline
 			if (float(userarray[CHEI]) > infinity):
@@ -40,6 +41,7 @@ class ChangeCog:
 				await nickupdate(ctx, userarray)
 				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
 		elif style == "s" or style == "-" or style == "sub" or style == "subtract":
+			amount = isFeetAndInchesAndIfSoFixIt(amount)
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(Decimal(userarray[CHEI]) - (toSV(getnum(amount), getlet(amount))))
 			if (float(userarray[CHEI]) > infinity):
@@ -79,6 +81,7 @@ class ChangeCog:
 		To register, use the `&register` command.""", delete_after=5)
 			elif style == "a" or style == "+" or style == "add":
 				while True:
+					amount = isFeetAndInchesAndIfSoFixIt(amount)
 					userarray = read_user(ctx.message.author.id)
 					userarray[CHEI] = str(Decimal(userarray[CHEI]) + Decimal(toSV(getnum(amount), getlet(amount)))) + newline
 					if (float(userarray[CHEI]) > infinity):
@@ -113,6 +116,7 @@ class ChangeCog:
 						await asyncio.sleep(delay * 60)
 			elif style == "s" or style == "-" or style == "sub" or style == "subtract":
 				while True:
+					amount = isFeetAndInchesAndIfSoFixIt(amount)
 					userarray = read_user(ctx.message.author.id)
 					userarray[CHEI] = str(Decimal(userarray[CHEI]) - (toSV(getnum(amount), getlet(amount))))
 					write_user(ctx.message.author.id, userarray)

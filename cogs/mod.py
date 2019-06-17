@@ -89,7 +89,6 @@ class ModCog:
 		if what is None:
 			await ctx.send("""<@{0}>, **Help Topics**
 	***☞*** *`[]` indicates a required parameter, `<>` indicates an optional parameter.*
-	***☞*** *Please don't use F'I" notation for heights right now, as it is currently broken. To input `5'4"`, instead please use `64in`.*
 
 	*Commands*
 	```

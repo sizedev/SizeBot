@@ -94,6 +94,7 @@ class StatsCog:
 		thumbfactor = Decimal(1) / Decimal(26)
 		if who is None:
 			who = "5.5ft"
+		who = isFeetAndInchesAndIfSoFixIt(who)
 		whoin = who
 		who = toSV(getnum(who), getlet(who))
 		userarray = ["Raw\n", "Y\n", who, defaultheight, defaultweight, defaultdensity, "M\n", "None\n"]
@@ -275,6 +276,7 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
 		smalluserid = ""
 		if who is None:
 			who = "5.5ft"
+		who = isFeetAndInchesAndIfSoFixIt(who)
 		who = toSV(getnum(who), getlet(who))
 		userarray1 = read_user(ctx.message.author.id)
 		userarray2 = ["Raw\n", "Y\n", who, defaultheight, defaultweight, defaultdensity, "M\n", "None\n"]

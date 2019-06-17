@@ -45,6 +45,10 @@ async def register(ctx, nick:str, display:str, currentheight:str,
 	baseheight:str, baseweight:str, units:str, species:str = None):
 	#Registers a user for SizeBot.
 
+	#Fix feet and inches.
+	currentheight = isFeetAndInchesAndIfSoFixIt(currentheight)
+	baseheight = isFeetAndInchesAndIfSoFixIt(baseheight)
+
 	#Extract values and units.
 	chu = getlet(currentheight)
 	bhu = getlet(baseheight)

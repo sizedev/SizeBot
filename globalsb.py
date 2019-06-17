@@ -240,6 +240,16 @@ def write_user_plus(user_id, content):
 	#Write content to lines.
 	userfile.writelines(content)
 
+def isFeetAndInchesAndIfSoFixIt(input):
+	if re.search(r"([0-9.]+)(\'|ft)([0-9.]+)(\"|in)", input):
+		m = re.match(r"([0-9.]+)(\'|ft)([0-9.]+)(\"|in)", input)
+		feet = Decimal(m.group(1))
+		inch = Decimal(m.group(3))
+		totalinches = (feet * 12) + inch
+		return f"{totalinches}in"
+	else:
+		return input
+
 #Count users.
 members = 0
 path = folder + '/users'
@@ -317,9 +327,9 @@ def toSV(value, unit):
 		output = Decimal(value) * Decimal(10**27)
 	elif (unit == "yottameters" or unit == "yottameter" or unit == "ym"):
 		output = Decimal(value) * Decimal(10**30)
-	elif (unit == "inches" or unit == "inch" or unit == "in"):
+	elif (unit == "inches" or unit == "inch" or unit == "in" or "\""):
 		output = Decimal(value) * inch
-	elif (unit == "feet" or unit == "foot" or unit == "ft"):
+	elif (unit == "feet" or unit == "foot" or unit == "ft" or "\'"):
 		output = Decimal(value) * foot
 	elif (unit == "miles" or unit == "mile" or unit == "mi"):
 		output = Decimal(value) * mile
