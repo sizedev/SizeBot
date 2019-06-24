@@ -97,7 +97,12 @@ To unregister, use the `&unregister` command.""", delete_after=5)
 			writethis = [str(nick) + newline, str(display) + newline, str(toSV(currentheight, chu)) +
 				newline, str(toSV(baseheight, bhu)) + newline, str(toWV(baseweight, bwu)) + newline, "1.0"
 				+ newline, units + newline, species + newline]
-			userfile.writelines(writethis)
+			try:
+				userfile.writelines(writethis)
+			except UnicodeDecodeError():
+				print(warn("Unicode in nick or species."))
+				await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your nick or species.".format(ctx.message.author.id))
+				return
 			print(warn("Made a new user: {0}!").format(ctx.message.author))
 			print(writethis)
 			print(userfile.readlines())

@@ -17,9 +17,15 @@ class SetCog:
 			await ctx.send("Please enter `&changenick <newnick>`.", delete_after=3)
 		else:
 			userarray = read_user(ctx.message.author.id)
+			olduserarray = userarray
 			userarray[NICK] = newnick + newline
-			write_user(ctx.message.author.id, userarray)
-			userarray = read_user(ctx.message.author.id)
+			try:
+				write_user(ctx.message.author.id, userarray)
+				userarray = read_user(ctx.message.author.id)
+				await ctx.send("<@{0}>'s nick is now {1}".format(ctx.message.author.id, userarray[NICK]))
+			except():
+				userarray = olduserarray
+				await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your nick.".format(ctx.message.author.id))
 			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx, userarray)
@@ -35,13 +41,19 @@ class SetCog:
 			await ctx.send("Please enter `&setspecies <newtag>`.", delete_after=3)
 		else:
 			userarray = read_user(ctx.message.author.id)
+			olduserarray = userarray
 			userarray[SPEC] = newtag + newline
-			write_user(ctx.message.author.id, userarray)
+			try:
+				write_user(ctx.message.author.id, userarray)
+				userarray = read_user(ctx.message.author.id)
+				await ctx.send("<@{0}>'s species is now {1}".format(ctx.message.author.id, userarray[SPEC]))
+			except():
+				userarray = olduserarray
+				await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your species.".format(ctx.message.author.id))
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx, userarray)
-			await ctx.send("""<@{0}> is now a {1}.""".format(ctx.message.author.id, userarray[SPEC]))
 
 	@commands.command()
 	async def clearspecies(self, ctx):
