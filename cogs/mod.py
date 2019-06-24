@@ -122,6 +122,7 @@ class ModCog:
 	heightunits
 	weightunits
 	about
+	donate
 	bug```""".format(ctx.message.author.id))
 
 	@commands.command()
@@ -148,6 +149,16 @@ class ModCog:
 	"I am the only person who has accidentally turned my fetish into a tech support job." -- *DigiDuncan*
 
 	Version {2} | 15 Jun 2019""".format(ctx.message.author.id, members, version))
+
+	@commands.command()
+	async def donate(self, ctx):
+		await ctx.message.delete()
+		await ctx.send("""<@{0}>
+	SizeBot is coded (mainly) by DigiDuncan, and for absolutely free.
+	However, if you wish to contribute to DigiDuncan directly, you can do so here:
+	https://paypal.me/DigiDuncanPayPal
+	SizeBot has been a passion project coded over a period of two years and learning a lot of Python along the way.
+	Thank you so much for being here throughout this journey!""".format(ctx.message.author.id))
 
 	@commands.command()
 	async def bug(self, ctx, *, message : str):
