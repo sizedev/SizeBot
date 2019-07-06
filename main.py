@@ -64,14 +64,14 @@ async def register(ctx, nick:str, display:str, currentheight:str,
 
 	readable = "CH {0}, CHU {1}, BH {2}, BHU {3}, BW {4}, BWU {5}".format(currentheight, chu,
 		baseheight, bhu, baseweight, bwu)
-	print("Nickname: {0}, Display: {1}".format(nick, display))
+	print("New user attempt! Nickname: {0}, Display: {1}".format(nick, display))
 	print(readable)
 
 	#Already registered.
 	if os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		await ctx.send("""Sorry! You already registered with SizeBot.
 To unregister, use the `&unregister` command.""", delete_after=5)
-		print(warn("Error UAE1 on user registration: {1}.".format(ctx.message.author)))
+		print(warn("User already registered on user registration: {1}.".format(ctx.message.author)))
 		return
 	#Invalid size value.
 	elif (currentheight <= 0 or
@@ -119,6 +119,7 @@ Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] 
 async def unregister(ctx, code = None):
 	if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 	#User file missing.
+        print(warn("User {0} not registered with SizeBot, but tried to unregister anyway.".format(ctx.message.author.id)))
 		await ctx.send("""Sorry! You aren't registered with SizeBot.
 To register, use the `&register` command.""", delete_after=5)
 	elif code is None:
@@ -127,9 +128,11 @@ To register, use the `&register` command.""", delete_after=5)
 `{0}`""".format(readhexcode())
 			, delete_after=5)
 	elif code != readhexcode():
+        print(warn("User {0} tried to unregister, but said the wrong hexcode.".format(ctx.message.author.id)))
 		await ctx.send("Incorrect code. You said: `{0}`. The correct code was: `{1}`. Try again.".format(
 			code, readhexcode()), delete_after=5)
 	else:
+        print(warn("User {0} successfully unregistered.".format(ctx.message.author.id)))
 		await ctx.send("Correct code! Unregisted {0}".format(ctx.message.author.name), delete_after=3)
 		os.remove(folder + "/users/" + str(ctx.message.author.id) + ".txt")
 
