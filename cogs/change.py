@@ -73,7 +73,7 @@ class ChangeCog:
 
 	@commands.command()
 	async def slowchange(self, ctx, style : str, amount : str, delay : float):
-		async def slowchangetask():
+		async def slowchangetask(ctx, style, amount, delay):
 			#Change height.
 			if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 			#User file missing.
@@ -140,7 +140,7 @@ class ChangeCog:
 			else:
 				await ctx.send("Please enter a valid change style.", delete_after=3)
 		bot = self.bot
-		task = bot.loop.create_task(slowchangetask())
+		task = bot.loop.create_task(slowchangetask(ctx, style, amount, delay))
 		tasks[ctx.message.author.id] = task
 
 	@commands.command()
