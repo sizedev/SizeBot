@@ -9,7 +9,7 @@ class StatsCog:
 	@commands.command()
 	async def stats(self, ctx, who : discord.Member = None):
 		#footfactor = Decimal(12800) / Decimal(70000)
-		footfactor = Decimal(10000) / Decimal(70000)
+		footfactor = Decimal(1) / Decimal(7)
 		footwidthfactor = footfactor / Decimal(2.5)
 		footthickfactor = Decimal(1) / Decimal(65)
 		thumbfactor = Decimal(1) / Decimal(26)
