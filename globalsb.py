@@ -291,69 +291,69 @@ uniw = Decimal(3400000000000000000000000000000000000000000000000000000000000)
 #Convert any supported height to 'size value', or micrometers.
 def toSV(value, unit):
 	unit = unit.lower()
-	if (unit == "yoctometers" or unit == "yoctometer"):
+	if unit in ["yoctometers", "yoctometer"]:
 		output = Decimal(value) / Decimal(10**18)
-	elif (unit == "zeptometers" or unit == "zeptometer"):
+	elif unit in ["zeptometers", "zeptometer"]:
 		output = Decimal(value) / Decimal(10**15)
-	elif (unit == "attometers" or unit == "attometer" or unit == "am"):
+	elif unit == ["attometers", "attometer", "am"]:
 		output = Decimal(value) / Decimal(10**12)
-	elif (unit == "femtometers" or unit == "femtometer" or unit == "fm"):
+	elif unit in ["femtometers", "femtometer", "fm"]:
 		output = Decimal(value) / Decimal(10**9)
-	elif (unit == "picometers" or unit == "picometer"):
+	elif unit in ["picometers", "picometer"]:
 		output = Decimal(value) / Decimal(10**6)
-	elif (unit == "nanometers" or unit == "nanometer" or unit == "nm"):
+	elif unit in ["nanometers", "nanometer", "nm"]:
 		output = Decimal(value) / Decimal(10**3)
-	elif (unit == "micrometers" or unit == "micrometer" or unit == "um"):
+	elif unit in ["micrometers", "micrometer", "um"]:
 		output = Decimal(value)
-	elif (unit == "millimeters" or unit == "millimeter" or unit == "mm"):
+	elif unit in ["millimeters", "millimeter", "mm"]:
 		output = Decimal(value) * Decimal(10**3)
-	elif (unit == "centimeters" or unit == "centimeter" or unit == "cm"):
+	elif unit in ["centimeters", "centimeter", "cm"]:
 		output = Decimal(value) * Decimal(10**4)
-	elif (unit == "meters" or unit == "meter" or unit == "m"):
+	elif unit in ["meters", "meter", "m"]:
 		output = Decimal(value) * Decimal(10**6)
-	elif (unit == "kilometers" or unit == "kilometer" or unit == "km"):
+	elif unit in ["kilometers", "kilometer", "km"]:
 		output = Decimal(value) * Decimal(10**9)
-	elif (unit == "megameters" or unit == "megameter"):
+	elif unit in ["megameters", "megameter"]:
 		output = Decimal(value) * Decimal(10**12)
-	elif (unit == "gigameters" or unit == "gigameter" or unit == "gm"):
+	elif unit in ["gigameters", "gigameter", "gm"]:
 		output = Decimal(value) * Decimal(10**15)
-	elif (unit == "terameters" or unit == "terameter" or unit == "tm"):
+	elif unit in ["terameters", "terameter", "tm"]:
 		output = Decimal(value) * Decimal(10**18)
-	elif (unit == "petameters" or unit == "petameter" or unit == "pm"):
+	elif unit in ["petameters", "petameter", "pm"]:
 		output = Decimal(value) * Decimal(10**21)
-	elif (unit == "exameters" or unit == "exameter" or unit == "em"):
+	elif unit in ["exameters", "exameter", "em"]:
 		output = Decimal(value) * Decimal(10**24)
-	elif (unit == "zettameters" or unit == "zettameter" or unit == "zm"):
+	elif unit in ["zettameters", "zettameter", "zm"]:
 		output = Decimal(value) * Decimal(10**27)
-	elif (unit == "yottameters" or unit == "yottameter" or unit == "ym"):
+	elif unit in ["yottameters", "yottameter", "ym"]:
 		output = Decimal(value) * Decimal(10**30)
-	elif (unit == "inches" or unit == "inch" or unit == "in" or "\""):
+	elif unit in ["inches", "inch", "in", "\""]:
 		output = Decimal(value) * inch
-	elif (unit == "feet" or unit == "foot" or unit == "ft" or "\'"):
+	elif unit in ["feet", "foot", "ft", "\'"]:
 		output = Decimal(value) * foot
-	elif (unit == "miles" or unit == "mile" or unit == "mi"):
+	elif unit in ["miles", "mile", "mi"]:
 		output = Decimal(value) * mile
-	elif (unit == "lightyears" or unit == "lightyear" or unit == "ly"):
+	elif unit in ["lightyears", "lightyear", "ly"]:
 		output = Decimal(value) * ly
-	elif (unit == "astronomical_units" or unit == "astronomical_unit" or unit == "au"):
+	elif unit in ["astronomical_units", "astronomical_unit", "au"]:
 		output = Decimal(value) * au
-	elif (unit == "universes" or unit == "universe" or unit == "uni"):
+	elif unit in ["universes", "universe", "uni"]:
 		output = Decimal(value) * uni
-	elif (unit == "kilouniverses" or unit == "kilouniverse" or unit == "kuni"):
+	elif unit in ["kilouniverses", "kilouniverse", "kuni"]:
 		output = Decimal(value) * uni * Decimal(10**3)
-	elif (unit == "megauniverses" or unit == "megauniverse" or unit == "muni"):
+	elif unit in ["megauniverses", "megauniverse", "muni"]:
 		output = Decimal(value) * uni * Decimal(10**6)
-	elif (unit == "gigauniverses" or unit == "gigauniverse" or unit == "guni"):
+	elif unit in ["gigauniverses", "gigauniverse", "guni"]:
 		output = Decimal(value) * uni * Decimal(10**9)
-	elif (unit == "terauniverses" or unit == "terauniverse" or unit == "tuni"):
+	elif unit in ["terauniverses", "terauniverse", "tuni"]:
 		output = Decimal(value) * uni * Decimal(10**12)
-	elif (unit == "petauniverses" or unit == "petauniverse" or unit == "puni"):
+	elif unit in ["petauniverses", "petauniverse", "puni"]:
 		output = Decimal(value) * uni * Decimal(10**15)
-	elif (unit == "exauniverses" or unit == "exauniverse" or unit == "euni"):
+	elif unit in ["exauniverses", "exauniverse", "euni"]:
 		output = Decimal(value) * uni * Decimal(10**18)
-	elif (unit == "zettauniverses" or unit == "zettauniverse" or unit == "zuni"):
+	elif unit in ["zettauniverses", "zettauniverse", "zuni"]:
 		output = Decimal(value) * uni * Decimal(10**21)
-	elif (unit == "yottauniverses" or unit == "yottauniverse" or unit == "yuni"):
+	elif unit in ["yottauniverses", "yottauniverse", "yuni"]:
 		output = Decimal(value) * uni * Decimal(10**24)
 	else:
 		return None
@@ -532,69 +532,69 @@ def fromSVUSA(value):
 #Convert any supported weight to 'weight value', or milligrams.
 def toWV(value, unit):
 	unit = unit.lower()
-	if (unit == "yoctograms" or unit == "yoctograms" or unit == "yg"):
+	if (unit == "yoctograms", "yoctograms", "yg"]:
 		output = Decimal(value) / Decimal(10**21)
-	elif (unit == "zeptograms" or unit == "zeptograms" or unit == "zg"):
+	elif unit in ["zeptograms", "zeptograms", "zg"]:
 		output = Decimal(value) / Decimal(10**18)
-	elif (unit == "attograms" or unit == "attogram" or unit == "ag"):
+	elif unit in ["attograms", "attogram", "ag"]:
 		output = Decimal(value) / Decimal(10**15)
-	elif (unit == "femtogram" or unit == "femtogram" or unit == "fg"):
+	elif unit in ["femtogram", "femtogram", "fg"]:
 		output = Decimal(value) / Decimal(10**12)
-	elif (unit == "picogram" or unit == "picogram" or unit == "pg"):
+	elif unit in ["picogram", "picogram", "pg"]:
 		output = Decimal(value) / Decimal(10**9)
-	elif (unit == "nanogram" or unit == "nanogram" or unit == "ng"):
+	elif unit in ["nanogram", "nanogram", "ng"]:
 		output = Decimal(value) / Decimal(10**6)
-	elif (unit == "microgram" or unit == "microgram" or unit == "ug"):
+	elif unit in ["microgram", "microgram", "ug"]:
 		output = Decimal(value) / Decimal(10**3)
-	elif (unit == "milligrams" or unit == "milligram" or unit == "mg"):
+	elif unit in ["milligrams", "milligram", "mg"]:
 		output = Decimal(value)
-	elif (unit == "grams" or unit == "gram" or unit == "g"):
+	elif unit in ["grams", "gram", "g"]:
 		output = Decimal(value) * Decimal(10**3)
-	elif (unit == "kilograms" or unit == "kilogram" or unit == "kg"):
+	elif unit in ["kilograms", "kilogram", "kg"]:
 		output = Decimal(value) * Decimal(10**6)
-	elif (unit == "megagrams" or unit == "megagram" or unit == "t" or unit == "ton" or unit == "tons" or unit == "tonnes" or unit == "tons"):
+	elif unit in ["megagrams", "megagram", "t", "ton", "tons", "tonnes", "tons"]:
 		output = Decimal(value) * Decimal(10**9)
-	elif (unit == "gigagrams" or unit == "gigagram" or unit == "gg" or unit == "kilotons" or unit == "kiloton" or unit == "kilotonnes" or unit == "kilotonne" or unit == "kt"):
+	elif unit in ["gigagrams", "gigagram", "gg", "kilotons", "kiloton", "kilotonnes", "kilotonne", "kt"]:
 		output = Decimal(value) * Decimal(10**12)
-	elif (unit == "teragrams" or unit == "teragram" or unit == "tg" or unit == "megatons" or unit == "megaton" or unit == "megatonnes" or unit == "megatonne" or unit == "mt"):
+	elif unit in ["teragrams", "teragram", "tg", "megatons", "megaton", "megatonnes", "megatonne", "mt"]:
 		output = Decimal(value) * Decimal(10**15)
-	elif (unit == "petagrams" or unit == "petagram" or unit == "gigatons" or unit == "gigaton" or unit == "gigatonnes" or unit == "gigatonnes" or unit == "gt"):
+	elif unit in ["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes", "gt"]:
 		output = Decimal(value) * Decimal(10**18)
-	elif (unit == "exagrams" or unit == "exagram" or unit == "eg" or unit == "teratons" or unit == "teraton" or unit == "teratonnes" or unit == "teratonne" or unit == "tt"):
+	elif unit in ["exagrams", "exagram", "eg", "teratons", "teraton", "teratonnes", "teratonne", "tt"]:
 		output = Decimal(value) * Decimal(10**21)
-	elif (unit == "zettagrams" or unit == "zettagram" or unit == "petatons" or unit == "petaton" or unit == "petatonnes" or unit == "petatonne" or unit == "pt"):
+	elif unit in ["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne", "pt"]:
 		output = Decimal(value) * Decimal(10**24)
-	elif (unit == "yottagrams" or unit == "yottagram" or unit == "exatons" or unit == "exaton" or unit == "exatonnes" or unit == "exatonne" or unit == "et"):
+	elif unit in ["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne", "et"]:
 		output = Decimal(value) * Decimal(10**27)
-	elif (unit == "zettatons" or unit == "zettaton" or unit == "zettatonnes" or unit == "zettatonne" or unit == "zt"):
+	elif unit in ["zettatons", "zettaton", "zettatonnes", "zettatonne", "zt"]:
 		output = Decimal(value) * Decimal(10**30)
-	elif (unit == "yottatons" or unit == "yottaton" or unit == "yottatonnes" or unit == "yottatonne" or unit == "yt"):
+	elif unit in ["yottatons", "yottaton", "yottatonnes", "yottatonne", "yt"]:
 		output = Decimal(value) * Decimal(10**33)
-	elif (unit == "universes" or unit == "universe" or unit == "uni"):
+	elif unit in ["universes", "universe", "uni"]:
 		output = Decimal(value) * uniw
-	elif (unit == "kilouniverses" or unit == "kilouniverse" or unit == "kuni"):
+	elif unit in ["kilouniverses", "kilouniverse", "kuni"]:
 		output = Decimal(value) * uniw * Decimal(10**3)
-	elif (unit == "megauniverses" or unit == "megauniverse" or unit == "muni"):
+	elif unit in ["megauniverses", "megauniverse", "muni"]:
 		output = Decimal(value) * uniw * Decimal(10**6)
-	elif (unit == "gigauniverses" or unit == "gigauniverse" or unit == "guni"):
+	elif unit in ["gigauniverses", "gigauniverse", "guni"]:
 		output = Decimal(value) * uniw * Decimal(10**9)
-	elif (unit == "terauniverses" or unit == "terauniverse" or unit == "tuni"):
+	elif unit in ["terauniverses", "terauniverse", "tuni"]:
 		output = Decimal(value) * uniw * Decimal(10**12)
-	elif (unit == "petauniverses" or unit == "petauniverse" or unit == "puni"):
+	elif unit in ["petauniverses", "petauniverse", "puni"]:
 		output = Decimal(value) * uniw * Decimal(10**15)
-	elif (unit == "exauniverses" or unit == "exauniverse" or unit == "euni"):
+	elif unit in ["exauniverses", "exauniverse", "euni"]:
 		output = Decimal(value) * uniw * Decimal(10**18)
-	elif (unit == "zettauniverses" or unit == "zettauniverse" or unit == "zuni"):
+	elif unit in ["zettauniverses", "zettauniverse", "zuni"]:
 		output = Decimal(value) * uniw * Decimal(10**21)
-	elif (unit == "yottauniverses" or unit == "yottauniverse" or unit == "yuni"):
+	elif unit in ["yottauniverses", "yottauniverse", "yuni"]:
 		output = Decimal(value) * uniw * Decimal(10**24)
-	elif (unit == "ounces" or unit == "ounce" or unit == "oz"):
+	elif unit in ["ounces", "ounce", "oz"]:
 		output = Decimal(value) * ounce
-	elif (unit == "pounds" or unit == "pound" or unit == "lb" or unit == "lbs"):
+	elif unit in ["pounds", "pound", "lb", "lbs"]:
 		output = Decimal(value) * pound
-	elif (unit == "earth" or unit == "earths"):
+	elif unit in ["earth", "earths"]:
 		output = Decimal(value) * earth
-	elif (unit == "sun" or unit == "suns"):
+	elif unit in ["sun", "suns"]:
 		output = Decimal(value) * sun
 	else:
 		return None
