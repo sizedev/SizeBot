@@ -70,7 +70,7 @@ class StatsCog:
 	Current Height: {1} | {2} ({3}x character base, {4}x normal)
 	Current Weight: {5} | {6} ({7}x charbase, {8}x norm)
 	Current Density: {9}x
-	Foot Length: {10} | {11} (Size {12})
+	Foot Length: {10} | {11} ({12})
 	Foot Width: {13} | {14}
 	Toe Height: {15} | {16}
 	Thumb Size: {17} | {18}
@@ -144,7 +144,7 @@ class StatsCog:
 		await ctx.send("""**{0} Stats:**
 	Current Height: {1} | {2} ({4}x normal)
 	Current Weight: {5} | {6} ({8}x normal)
-	Foot Length: {10} | {11} (Size {12})
+	Foot Length: {10} | {11} ({12})
 	Foot Width: {13} | {14}
 	Toe Height: {15} | {16}
 	Thumb Size: {17} | {18}
@@ -247,13 +247,13 @@ class StatsCog:
 		await ctx.send("""**Comparison:**
 <@{0}> is really: {10} / {11} | {12} | {13}.
 To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
-To <@{1}>, <@{0}>'s foot looks: {18} / {19} long. (Size {22})
+To <@{1}>, <@{0}>'s foot looks: {18} / {19} long. ({22})
 
 <@{0}> is {24}x taller than <@{1}>.
 
 <@{1}> is really: {14} / {15} | {16} / {17}
 To <@{0}>, <@{1}> looks: {6} / {7} | {8} / {9}.
-To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguserid, smalluserid, bigtosmallheight, bigtosmallheightUSA,
+To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. ({23})""".format(biguserid, smalluserid, bigtosmallheight, bigtosmallheightUSA,
  bigtosmallweight, bigtosmallweightUSA, smalltobigheight, smalltobigheightUSA, smalltobigweight, smalltobigweightUSA,
  fromSVacc(bch), fromSVUSA(bch), fromWV(bcw), fromWVUSA(bcw), fromSVacc(sch), fromSVUSA(sch), fromWV(scw), fromWVUSA(scw),
  bigtosmallfoot, bigtosmallfootUSA, smalltobigfoot, smalltobigfootUSA, bigtosmallshoe, smalltobigshoe, timestaller))
@@ -328,13 +328,13 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguseri
 		await ctx.send("""**Comparison:**
 <@{0}> is really: {10} / {11} | {12} | {13}.
 To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
-To <@{1}>, <@{0}>'s foot looks: {18} / {19} long. (Size {22})
+To <@{1}>, <@{0}>'s foot looks: {18} / {19} long. ({22})
 
 <@{0}> is {24}x taller than <@{1}>.
 
 <@{1}> is really: {14} / {15} | {16} / {17}
 To <@{0}>, <@{1}> looks: {6} / {7} | {8} / {9}.
-To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. (Size {23})""".format(biguserid, smalluserid, bigtosmallheight, bigtosmallheightUSA,
+To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. ({23})""".format(biguserid, smalluserid, bigtosmallheight, bigtosmallheightUSA,
  bigtosmallweight, bigtosmallweightUSA, smalltobigheight, smalltobigheightUSA, smalltobigweight, smalltobigweightUSA,
  fromSVacc(bch), fromSVUSA(bch), fromWV(bcw), fromWVUSA(bcw), fromSVacc(sch), fromSVUSA(sch), fromWV(scw), fromWVUSA(scw),
  bigtosmallfoot, bigtosmallfootUSA, smalltobigfoot, smalltobigfootUSA, bigtosmallshoe, smalltobigshoe, timestaller))

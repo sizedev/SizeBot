@@ -736,7 +736,7 @@ def toShoeSize(inchamount):
 		return "No shoes exist this small!"
 	shoesize = place_value(round_nearest_half(shoesize))
 	if child == True: shoesize = "Children's " + shoesize
-	return shoesize
+	return "Size US " + shoesize
 
 def fromShoeSize(size):
 	child = False
