@@ -182,10 +182,9 @@ class StatsCog:
 		smalluser = []
 		smalluserid = ""
 		if who2 is None:
-			who2 = ctx.message.author.id
+			who2 = ctx.message.author
 		if who is None:
-			await ctx.send("""Please use either two parameters to compare two people,
-	or one to compare with yourself.""", delete_after=5)
+			await ctx.send("""Please use either two parameters to compare two people, or one to compare with yourself.""", delete_after=5)
 		whoid = str(who.id)
 		who2id = str(who2.id)
 		if not os.path.exists(folder + '/users/' + whoid + '.txt'):

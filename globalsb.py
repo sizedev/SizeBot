@@ -733,6 +733,8 @@ def toShoeSize(inchamount):
 		child = True
 		shoesize += 12 + Decimal(1/3)
 	shoesize = place_value(round_nearest_half(shoesize))
+	if shoesize < 1:
+		return "No shoes exist this small!"
 	if child == True: shoesize = "Children's " + shoesize
 	return shoesize
 
