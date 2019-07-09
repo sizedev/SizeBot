@@ -295,7 +295,7 @@ def toSV(value, unit):
 		output = Decimal(value) / Decimal(10**18)
 	elif unit in ["zeptometers", "zeptometer"]:
 		output = Decimal(value) / Decimal(10**15)
-	elif unit == ["attometers", "attometer", "am"]:
+	elif unit in ["attometers", "attometer", "am"]:
 		output = Decimal(value) / Decimal(10**12)
 	elif unit in ["femtometers", "femtometer", "fm"]:
 		output = Decimal(value) / Decimal(10**9)
@@ -532,7 +532,7 @@ def fromSVUSA(value):
 #Convert any supported weight to 'weight value', or milligrams.
 def toWV(value, unit):
 	unit = unit.lower()
-	if (unit == "yoctograms", "yoctograms", "yg"]:
+	if unit in ["yoctograms", "yoctograms", "yg"]:
 		output = Decimal(value) / Decimal(10**21)
 	elif unit in ["zeptograms", "zeptograms", "zg"]:
 		output = Decimal(value) / Decimal(10**18)
