@@ -6,3 +6,4 @@ hexstring.txt
 *.code-workspace
 *.pyproj
 *.sln
+*.pyc
