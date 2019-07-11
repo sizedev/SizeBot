@@ -6,7 +6,7 @@ from globalsb import *
 #
 #Commands: roll
 
-class RPCog:
+class RPCog(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 

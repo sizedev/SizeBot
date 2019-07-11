@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from globalsb import *
 
-class StatsCog:
+class StatsCog(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 

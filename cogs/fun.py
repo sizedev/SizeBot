@@ -6,7 +6,7 @@ from globalsb import *
 #
 #Commands:
 
-class FunCog:
+class FunCog(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
