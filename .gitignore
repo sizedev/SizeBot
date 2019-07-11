@@ -1,3 +1,8 @@
 
 hexstring.txt
 *.pyc
+.vs
+.vscode
+*.code-workspace
+*.pyproj
+*.sln
