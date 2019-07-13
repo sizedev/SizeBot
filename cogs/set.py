@@ -180,7 +180,7 @@ class SetCog(commands.Cog):
 	@commands.command()
 	async def setinf(self, ctx):
 		userarray = read_user(ctx.message.author.id)
-		await ctx.send("<@{0}> is now infinitely tall.".format(ctx.message.author.id), delete_after=3)
+		await ctx.send("<@{0}> is now infinitely tall.".format(ctx.message.author.id))
 		userarray[CHEI] = str(infinity) + newline
 		write_user(ctx.message.author.id, userarray)
 		if userarray[DISP] == "Y\n":
@@ -189,7 +189,7 @@ class SetCog(commands.Cog):
 	@commands.command()
 	async def set0(self, ctx):
 		userarray = read_user(ctx.message.author.id)
-		await ctx.send("<@{0}> is now nothing.".format(ctx.message.author.id), delete_after=3)
+		await ctx.send("<@{0}> is now nothing.".format(ctx.message.author.id))
 		userarray[CHEI] = "0" + newline
 		write_user(ctx.message.author.id, userarray)
 		if userarray[DISP] == "Y\n":

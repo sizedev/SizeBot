@@ -155,7 +155,7 @@ class StatsCog(commands.Cog):
 		footwidth, footwidthUSA, readablefootthick, readablefootUSAthick,
 		thumbsize, thumbsizeUSA,
 		normalheight, normalUSAheight, normalweight, normalUSAweight,
-		userbaseh, userbasehusa, userbasew, userbasewusa))
+		userbaseh, userbasehusa, userbasew, userbasewusa).replace("<@Raw>", "**Raw**"))
 		print("Stats for {0} sent.".format(who))
 		pass
 
@@ -163,7 +163,7 @@ class StatsCog(commands.Cog):
 	async def stats_handler(self, ctx, error):
 		if isinstance(error, InvalidOperation):
 			await ctx.send("""SizeBot cannot perform this action due to a math error.
-	Are you too big, {0}?""".format(ctx.message.author.id), delete_after=5)
+	Are you too big, {0}?""".format(ctx.message.author.id))
 		else:
 			await ctx.send("""Error? {0}""".format(error))
 
@@ -171,7 +171,7 @@ class StatsCog(commands.Cog):
 	async def statsraw_handler(self, ctx, error):
 		if isinstance(error, InvalidOperation):
 			await ctx.send("""SizeBot cannot perform this action due to a math error.
-	Are you too big, {0}?""".format(ctx.message.author.id), delete_after=5)
+	Are you too big, {0}?""".format(ctx.message.author.id))
 		else:
 			await ctx.send("""Error? {0}""".format(error))
 
@@ -245,7 +245,7 @@ class StatsCog(commands.Cog):
 		timestaller = place_value(round((bch / sch), 3))
 		#Print compare.
 		await ctx.send("""**Comparison:**
-<@{0}> is really: {10} / {11} | {12} | {13}.
+<@{0}> is really: {10} / {11} | {12} / {13}.
 To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
 To <@{1}>, <@{0}>'s foot looks: {18} / {19} long. ({22})
 
@@ -263,7 +263,7 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. ({23})""".format(biguserid, sm
 	@compare.error
 	async def compare_handler(self, ctx, error):
 		if isinstance(error, InvalidOperation):
-			await ctx.send("""Math error? {0}?""".format(error), delete_after=5)
+			await ctx.send("""Math error? {0}?""".format(error))
 		else:
 			await ctx.send("""Error? {0}""".format(error))
 
@@ -326,7 +326,7 @@ To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. ({23})""".format(biguserid, sm
 		timestaller = place_value(round((bch / sch), 3))
 		#Print compare.
 		await ctx.send("""**Comparison:**
-<@{0}> is really: {10} / {11} | {12} | {13}.
+<@{0}> is really: {10} / {11} | {12} / {13}.
 To <@{1}>, <@{0}> looks: {2} / {3} | {4} / {5}.
 To <@{1}>, <@{0}>'s foot looks: {18} / {19} long. ({22})
 
@@ -337,14 +337,14 @@ To <@{0}>, <@{1}> looks: {6} / {7} | {8} / {9}.
 To <@{0}>, <@{1}>'s foot looks: {20} / {21} long. ({23})""".format(biguserid, smalluserid, bigtosmallheight, bigtosmallheightUSA,
  bigtosmallweight, bigtosmallweightUSA, smalltobigheight, smalltobigheightUSA, smalltobigweight, smalltobigweightUSA,
  fromSVacc(bch), fromSVUSA(bch), fromWV(bcw), fromWVUSA(bcw), fromSVacc(sch), fromSVUSA(sch), fromWV(scw), fromWVUSA(scw),
- bigtosmallfoot, bigtosmallfootUSA, smalltobigfoot, smalltobigfootUSA, bigtosmallshoe, smalltobigshoe, timestaller))
+ bigtosmallfoot, bigtosmallfootUSA, smalltobigfoot, smalltobigfootUSA, bigtosmallshoe, smalltobigshoe, timestaller).replace("<@Raw>", "**Raw**"))
 		print("Compared {0} and {1}".format(ctx.message.author.name, who))
 		pass
 
 	@compareraw.error
 	async def compareraw_handler(self, ctx, error):
 		if isinstance(error, InvalidOperation):
-			await ctx.send("""Math error? {0}?""".format(error), delete_after=5)
+			await ctx.send("""Math error? {0}?""".format(error))
 		else:
 			await ctx.send("""Error? {0}""".format(error))
 

@@ -39,7 +39,7 @@ class ChangeCog(commands.Cog):
 			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx, userarray)
-				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
+				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI]))) #Add comp to base.
 		elif style == "s" or style == "-" or style == "sub" or style == "subtract":
 			amount = isFeetAndInchesAndIfSoFixIt(amount)
 			userarray = read_user(ctx.message.author.id)
@@ -53,7 +53,7 @@ class ChangeCog(commands.Cog):
 			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx, userarray)
-				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
+				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI]))) #Add comp to base.
 		elif style == "d" or style == "/" or style == "div" or style == "divide":
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(Decimal(userarray[CHEI]) / Decimal(amount))
@@ -66,7 +66,7 @@ class ChangeCog(commands.Cog):
 			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx, userarray)
-				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
+				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI]))) #Add comp to base.
 		else:
 			await ctx.send("Please enter a valid change method.", delete_after=3)
 			return
