@@ -241,8 +241,8 @@ def write_user_plus(user_id, content):
 	userfile.writelines(content)
 
 def isFeetAndInchesAndIfSoFixIt(input):
-	if re.search(r"([0-9.]+)(\'|ft)([0-9.]+)(\"|in)", input):
-		m = re.match(r"([0-9.]+)(\'|ft)([0-9.]+)(\"|in)", input)
+	if re.search(r"([0-9.]+)(\'|ft|feet)([0-9.]+)(\"|in|inch|inches)*$", input):
+		m = re.match(r"([0-9.]+)(\'|ft|feet)([0-9.]+)(\"|in|inch|inches)*$", input)
 		feet = Decimal(m.group(1))
 		inch = Decimal(m.group(3))
 		totalinches = (feet * 12) + inch
