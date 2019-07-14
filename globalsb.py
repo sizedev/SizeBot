@@ -493,6 +493,22 @@ def fromSVUSA(value):
 	output = ""
 	if value <= 0:
 		return "0"
+	elif value < 0.000000000000001:
+		output = str(round(Decimal(value) * Decimal(10**18), 2)) + "ym"
+	elif value < 0.000000000001:
+		output = str(round(Decimal(value) * Decimal(10**15), 2)) + "zm"
+	elif value < 0.000000001:
+		output = str(round(Decimal(value) * Decimal(10**12), 2)) + "am"
+	elif value < 0.000001:
+		output = str(round(Decimal(value) * Decimal(10**9), 2)) + "fm"
+	elif value < 0.001:
+		output = str(round(Decimal(value) * Decimal(10**6), 2)) + "pm"
+	elif value < 1:
+		output = str(round(Decimal(value) * Decimal(10**3), 2)) + "nm"
+	elif value < 10**2:
+		output = str(round(Decimal(value), 2)) + "µm"
+	elif value < 10**4:
+		output = str(round(Decimal(value) / Decimal(10**3), 2)) + "mm"
 	elif value < foot:
 		output = str(round(Decimal(value) / inch, 2)) + "in"
 	elif value < mile:
@@ -670,6 +686,24 @@ def fromWVUSA(value):
 	value = Decimal(value)
 	if value == 0:
 		return "almost nothing"
+	elif value < 0.000000000000000001:
+		output = str(round(Decimal(value) * Decimal(10**21), 1)) + "yg"
+	elif value < 0.000000000000001:
+		output = str(round(Decimal(value) * Decimal(10**18), 1)) + "zg"
+	elif value < 0.000000000001:
+		output = str(round(Decimal(value) * Decimal(10**15), 1)) + "ag"
+	elif value < 0.000000001:
+		output = str(round(Decimal(value) * Decimal(10**12), 1)) + "fg"
+	elif value < 0.000001:
+		output = str(round(Decimal(value) * Decimal(10**9), 1)) + "pg"
+	elif value < 0.001:
+		output = str(round(Decimal(value) * Decimal(10**6), 1)) + "ng"
+	elif value < 1:
+		output = str(round(Decimal(value) * Decimal(10**3), 1)) + "µg"
+	elif value < 1000:
+		output = str(round(Decimal(value), 1)) + "mg"
+	elif value < (ounce / 10):
+		output = str(round(Decimal(value) / Decimal(10**3), 1)) + "g"
 	elif value < pound:
 		output = str(place_value(round(Decimal(value) / ounce, 1))) + "oz"
 	elif value < uston:
