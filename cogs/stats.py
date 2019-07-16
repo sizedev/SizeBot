@@ -14,6 +14,7 @@ class StatsCog(commands.Cog):
 		footthickfactor = Decimal(1) / Decimal(65)
 		thumbfactor = Decimal(1) / Decimal(26)
 		fingerprintfactor = Decimal(1) / Decimal(35080)
+		hairwidthfactor = Decimal(1) / Decimal(23387)
 		if who is None:
 			who = ctx.message.author
 		whoid = str(who.id)
@@ -56,6 +57,8 @@ class StatsCog(commands.Cog):
 			shoesize = toShoeSize(footlengthinches)
 			fingerprintdepth = fromSVacc(Decimal(userarray[CHEI]) * fingerprintfactor)
 			fingerprintdepthUSA = fromSVUSA(Decimal(userarray[CHEI]) * fingerprintfactor)
+			hairwidth = fromSVacc(Decimal(userarray[CHEI]) * hairwidthfactor)
+			hairwidthUSA = fromSVUSA(Decimal(userarray[CHEI]) * hairwidthfactor)
 			hcms = place_value(round(multiplier, 3))
 			hbms = place_value(round(basemult, 3))
 			wcms = place_value(round(multipliercubed * density, 3))
@@ -78,6 +81,7 @@ class StatsCog(commands.Cog):
 	Toe Height: {15} | {16}
 	Thumb Size: {17} | {18}
 	Fingerprint Depth: {27} | {28}
+	Hair Width: {29} | {30}
 	Size of a Normal Man (Comparative) {19} | {20}
 	Weight of a Normal Man (Comparative) {21} | {22}
 	Character Bases: {23}, {24} | {25}, {26}""".format(whoid, readableheight, readableUSAheight,
@@ -87,7 +91,8 @@ class StatsCog(commands.Cog):
 		thumbsize, thumbsizeUSA,
 		normalheight, normalUSAheight, normalweight, normalUSAweight,
 		userbaseh, userbasehusa, userbasew, userbasewusa,
-		fingerprintdepth, fingerprintdepthUSA))
+		fingerprintdepth, fingerprintdepthUSA,
+		hairwidth, hairwidthUSA))
 		print("Stats for {0} sent.".format(who))
 		pass
 
@@ -98,6 +103,7 @@ class StatsCog(commands.Cog):
 		footthickfactor = Decimal(1) / Decimal(65)
 		thumbfactor = Decimal(1) / Decimal(26)
 		fingerprintfactor = Decimal(1) / Decimal(35080)
+		hairwidthfactor = Decimal(1) / Decimal(23387)
 		if who is None:
 			who = "5.5ft"
 		who = isFeetAndInchesAndIfSoFixIt(who)
@@ -136,6 +142,8 @@ class StatsCog(commands.Cog):
 		shoesize = toShoeSize(footlengthinches)
 		fingerprintdepth = fromSVacc(Decimal(userarray[CHEI]) * fingerprintfactor)
 		fingerprintdepthUSA = fromSVUSA(Decimal(userarray[CHEI]) * fingerprintfactor)
+		hairwidth = fromSVacc(Decimal(userarray[CHEI]) * hairwidthfactor)
+		hairwidthUSA = fromSVUSA(Decimal(userarray[CHEI]) * hairwidthfactor)
 		hcms = place_value(round(multiplier, 3))
 		hbms = place_value(round(basemult, 3))
 		wcms = place_value(round(multipliercubed * density, 3))
@@ -157,6 +165,7 @@ class StatsCog(commands.Cog):
 	Toe Height: {15} | {16}
 	Thumb Size: {17} | {18}
 	Fingerprint Depth: {23} | {24}
+	Hair Width: {25} | {26}
 	Size of a Normal Man (Comparative) {19} | {20}
 	Weight of a Normal Man (Comparative) {21} | {22}""".format(whoin, readableheight, readableUSAheight,
 		hcms, hbms, readableweight, readableUSAweight,
@@ -164,7 +173,8 @@ class StatsCog(commands.Cog):
 		footwidth, footwidthUSA, readablefootthick, readablefootUSAthick,
 		thumbsize, thumbsizeUSA,
 		normalheight, normalUSAheight, normalweight, normalUSAweight,
-		fingerprintdepth, fingerprintdepthUSA).replace("<@Raw>", "**Raw**"))
+		fingerprintdepth, fingerprintdepthUSA,
+		hairwidth, hairwidthUSA).replace("<@Raw>", "**Raw**"))
 		print("Stats for {0} sent.".format(who))
 		pass
 
