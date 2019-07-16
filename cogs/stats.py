@@ -164,7 +164,6 @@ class StatsCog(commands.Cog):
 		footwidth, footwidthUSA, readablefootthick, readablefootUSAthick,
 		thumbsize, thumbsizeUSA,
 		normalheight, normalUSAheight, normalweight, normalUSAweight,
-		userbaseh, userbasehusa, userbasew, userbasewusa,
 		fingerprintdepth, fingerprintdepthUSA).replace("<@Raw>", "**Raw**"))
 		print("Stats for {0} sent.".format(who))
 		pass
