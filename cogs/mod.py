@@ -132,17 +132,17 @@ class ModCog(commands.Cog):
 		await ctx.send("""<@{0}>
 	***SizeBot3 by DigiDuncan***
 	*A big program for big people.*
-	**Written for the Size Haven server and adapted for Size Matters**
-	**Slogan** **by Twitchy**
+	**Written for** *the Size Haven server* and **adapted for** *Size Matters*
+	**Slogan** *by Twitchy*
 	**Additional equations** *by Benyovski and Arceus3251*
 	**Coding Assistance** *by Natalie*
 	**Alpha Tested** *by AWK_*
 	**Beta Tested** *by Speedbird 001, worstgender, Arceus3251*
 	**written in** *Python 3.7 with discord.py rewrite*
-	**written with** Atom
+	**written with** *Atom*
 	**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server*
 	**Special thanks** *to the discord.py Community Discord for helping with code*
-	**Special thanks** to the {1} users of SizeBot3.
+	**Special thanks** *to the {1} users of SizeBot3.*
 
 	"She (*SizeBot*) is beautiful." -- *GoddessArete*
 	":100::thumbsup:" -- *Anonymous*
