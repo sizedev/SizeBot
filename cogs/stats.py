@@ -13,6 +13,7 @@ class StatsCog(commands.Cog):
 		footwidthfactor = footfactor / Decimal(2.5)
 		footthickfactor = Decimal(1) / Decimal(65)
 		thumbfactor = Decimal(1) / Decimal(26)
+		fingerprintfactor = Decimal(1) / Decimal(35080)
 		if who is None:
 			who = ctx.message.author
 		whoid = str(who.id)
@@ -44,7 +45,7 @@ class StatsCog(commands.Cog):
 			normalheight = fromSVacc(Decimal(defaultheight)/Decimal(basemult))
 			normalUSAheight = fromSVUSA(Decimal(defaultheight)/Decimal(basemult))
 			normalweight = fromWV(Decimal(defaultweight)/Decimal(basemultcubed))
-			normalUSAweight = fromWVUSA( Decimal(defaultweight) / Decimal(basemultcubed) )
+			normalUSAweight = fromWVUSA(Decimal(defaultweight) / Decimal(basemultcubed))
 			thumbsize = fromSVacc(Decimal(userarray[CHEI]) * thumbfactor)
 			thumbsizeUSA = fromSVUSA(Decimal(userarray[CHEI]) * thumbfactor)
 			footheight = Decimal(userarray[CHEI]) * footfactor
@@ -53,6 +54,8 @@ class StatsCog(commands.Cog):
 			footlengthinches = Decimal(userarray[CHEI]) * footfactor / inch
 			footlengthinches = round(footlengthinches, 3)
 			shoesize = toShoeSize(footlengthinches)
+			fingerprintdepth = fromSVacc(Decimal(userarray[CHEI]) * fingerprintfactor)
+			fingerprintdepthUSA = fromSVUSA(Decimal(userarray[CHEI]) * fingerprintfactor)
 			hcms = place_value(round(multiplier, 3))
 			hbms = place_value(round(basemult, 3))
 			wcms = place_value(round(multipliercubed * density, 3))
@@ -74,6 +77,7 @@ class StatsCog(commands.Cog):
 	Foot Width: {13} | {14}
 	Toe Height: {15} | {16}
 	Thumb Size: {17} | {18}
+	Fingerprint Depth: {27} | {28}
 	Size of a Normal Man (Comparative) {19} | {20}
 	Weight of a Normal Man (Comparative) {21} | {22}
 	Character Bases: {23}, {24} | {25}, {26}""".format(whoid, readableheight, readableUSAheight,
@@ -82,7 +86,8 @@ class StatsCog(commands.Cog):
 		footwidth, footwidthUSA, readablefootthick, readablefootUSAthick,
 		thumbsize, thumbsizeUSA,
 		normalheight, normalUSAheight, normalweight, normalUSAweight,
-		userbaseh, userbasehusa, userbasew, userbasewusa))
+		userbaseh, userbasehusa, userbasew, userbasewusa,
+		fingerprintdepth, fingerprintdepthUSA))
 		print("Stats for {0} sent.".format(who))
 		pass
 
@@ -92,6 +97,7 @@ class StatsCog(commands.Cog):
 		footwidthfactor = footfactor / Decimal(2.5)
 		footthickfactor = Decimal(1) / Decimal(65)
 		thumbfactor = Decimal(1) / Decimal(26)
+		fingerprintfactor = Decimal(1) / Decimal(35080)
 		if who is None:
 			who = "5.5ft"
 		who = isFeetAndInchesAndIfSoFixIt(who)
@@ -128,6 +134,8 @@ class StatsCog(commands.Cog):
 		footwidthUSA = fromSVUSA(Decimal(userarray[CHEI]) * footwidthfactor)
 		footlengthinches = Decimal(userarray[CHEI]) * footfactor / inch
 		shoesize = toShoeSize(footlengthinches)
+		fingerprintdepth = fromSVacc(Decimal(userarray[CHEI]) * fingerprintfactor)
+		fingerprintdepthUSA = fromSVUSA(Decimal(userarray[CHEI]) * fingerprintfactor)
 		hcms = place_value(round(multiplier, 3))
 		hbms = place_value(round(basemult, 3))
 		wcms = place_value(round(multipliercubed * density, 3))
@@ -148,6 +156,7 @@ class StatsCog(commands.Cog):
 	Foot Width: {13} | {14}
 	Toe Height: {15} | {16}
 	Thumb Size: {17} | {18}
+	Fingerprint Depth: {23} | {24}
 	Size of a Normal Man (Comparative) {19} | {20}
 	Weight of a Normal Man (Comparative) {21} | {22}""".format(whoin, readableheight, readableUSAheight,
 		hcms, hbms, readableweight, readableUSAweight,
@@ -155,7 +164,8 @@ class StatsCog(commands.Cog):
 		footwidth, footwidthUSA, readablefootthick, readablefootUSAthick,
 		thumbsize, thumbsizeUSA,
 		normalheight, normalUSAheight, normalweight, normalUSAweight,
-		userbaseh, userbasehusa, userbasew, userbasewusa).replace("<@Raw>", "**Raw**"))
+		userbaseh, userbasehusa, userbasew, userbasewusa,
+		fingerprintdepth, fingerprintdepthUSA).replace("<@Raw>", "**Raw**"))
 		print("Stats for {0} sent.".format(who))
 		pass
 
@@ -199,7 +209,7 @@ class StatsCog(commands.Cog):
 			userarray1 = read_user(whoid)
 			userarray2 = read_user(who2id)
 			if Decimal(userarray1[2]) == Decimal(userarray2[2]):
-				await ctx.send("Users match 1 to 1.")
+				await ctx.send("<@{0}> and <@{1}> match 1 to 1.".format(whoid, who2id))
 			elif Decimal(userarray1[2]) > Decimal(userarray2[2]):
 					biguser = userarray1
 					biguserid = whoid
