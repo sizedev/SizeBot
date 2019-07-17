@@ -149,7 +149,7 @@ class ModCog(commands.Cog):
 	"Um... I like it?" -- *Goddess Syn*
 	"I am the only person who has accidentally turned my fetish into a tech support job." -- *DigiDuncan*
 
-	Version {2} | 15 Jun 2019""".format(ctx.message.author.id, members, version))
+	Version {2} | 16 Jul 2019""".format(ctx.message.author.id, members, version))
 
 	@commands.command()
 	async def donate(self, ctx):
