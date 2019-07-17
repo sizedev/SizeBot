@@ -14,15 +14,15 @@ from globalsb import fromSVacc, fromSVUSA, fromSV, fromWV, fromWVUSA, toShoeSize
 
 
 # TODO: Move to logging module
-# error debugging
-def print_error(command, error):
-    print('Ignoring exception in command {}:'.format(command), file=sys.stderr)
+# Error debugging
+def print_error(ctx, error):
+    print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
     traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+    await ctx.send(f"Error? {error}")
 
 
 # TODO: Move to units module
 # Conversion constants
-# footfactor = Decimal(12800) / Decimal(70000)
 footfactor = Decimal(1) / Decimal(7)
 footwidthfactor = footfactor / Decimal(2.5)
 footthickfactor = Decimal(1) / Decimal(65)
@@ -195,26 +195,6 @@ class StatsCog(commands.Cog):
         print(f"Stats for {heightstring} sent.")
         pass
 
-    @stats.error
-    async def stats_handler(self, ctx, error):
-        if isinstance(error, InvalidOperation):
-            await ctx.send(
-                "SizeBot cannot perform this action due to a math error.\n"
-                f"Are you too big, {ctx.message.author.id}?")
-        else:
-            await ctx.send(f"Error? {error}")
-        print_error(ctx.command, error)
-
-    @statsraw.error
-    async def statsraw_handler(self, ctx, error):
-        if isinstance(error, InvalidOperation):
-            await ctx.send(
-                "SizeBot cannot perform this action due to a math error.\n"
-                f"Are you too big, {ctx.message.author.id}?")
-        else:
-            await ctx.send(f"Error? {error}")
-        print_error(ctx.command, error)
-
     @commands.command()
     async def compare(self, ctx, user1: discord.Member = None, user2: discord.Member = None):
         if user2 is None:
@@ -244,23 +224,19 @@ class StatsCog(commands.Cog):
         await ctx.send(output)
         print(f"Compared {user1} and {user2}")
 
-    @compare.error
-    async def compare_handler(self, ctx, error):
-        if isinstance(error, InvalidOperation):
-            await ctx.send(f"Math error? {error}?")
-        else:
-            await ctx.send(f"Error? {error}")
-        print_error(ctx.command, error)
-
     @commands.command()
-    async def compareraw(self, ctx, height: str = None):
+    async def compareraw(self, ctx, height: str = None, user1: discord.Member = None):
         if height is None:
             height = "5.5ft"
 
         height = isFeetAndInchesAndIfSoFixIt(height)
         height = toSV(getnum(height), getlet(height))
 
-        user1id = str(ctx.message.author.id)
+        if user1 = None:
+            user1id = str(ctx.message.author.id)
+        else:
+            user1id = str(user1.id)
+
         user1tag = f"<@{user1id}>"
         user2tag = f"**Raw**"
 
@@ -288,14 +264,6 @@ class StatsCog(commands.Cog):
         output = self.compare_users(user1tag, user1, user2tag, user2)
         await ctx.send(output)
         print(f"Compared {ctx.message.author.name} and {height}")
-
-    @compareraw.error
-    async def compareraw_handler(self, ctx, error):
-        if isinstance(error, InvalidOperation):
-            await ctx.send(f"Math error? {error}?")
-        else:
-            await ctx.send(f"Error? {error}")
-        print_error(ctx.command, error)
 
     def compare_users(self, user1tag, user1, user2tag, user2):
         if Decimal(user1[CHEI]) == Decimal(user2[CHEI]):
@@ -358,6 +326,30 @@ class StatsCog(commands.Cog):
             f"{smallusertag} is really: {fromSVacc(sch)} / {fromSVUSA(sch)} | {fromWV(scw)} / {fromWVUSA(scw)}\n"
             f"To {bigusertag}, {smallusertag} looks: {smalltobigheight} / {smalltobigheightUSA} | {smalltobigweight} / {smalltobigweightUSA}.\n"
             f"To {bigusertag}, {smallusertag}'s foot looks: {smalltobigfoot} / {smalltobigfootUSA} long. ({smalltobigshoe})")
+
+    @stats.error
+    async def stats_handler(self, ctx, error):
+        if isinstance(error, InvalidOperation):
+            await ctx.send(
+                "SizeBot cannot perform this action due to a math error.\n"
+                f"Are you too big, {ctx.message.author.id}?")
+        print_error(ctx.command, error)
+
+    @statsraw.error
+    async def statsraw_handler(self, ctx, error):
+        if isinstance(error, InvalidOperation):
+            await ctx.send(
+                "SizeBot cannot perform this action due to a math error.\n"
+                f"Are you too big, {ctx.message.author.id}?")
+        print_error(ctx.command, error)
+
+    @compare.error
+    async def compare_handler(self, ctx, error):
+        print_error(ctx.command, error)
+
+    @compareraw.error
+    async def compareraw_handler(self, ctx, error):
+        print_error(ctx.command, error)
 
 
 # Necessary
