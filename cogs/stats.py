@@ -1,6 +1,4 @@
 import os
-import sys
-import traceback
 from decimal import Decimal, InvalidOperation
 
 import discord
@@ -12,14 +10,7 @@ from globalsb import read_user, folder, getnum, getlet, isFeetAndInchesAndIfSoFi
 from globalsb import defaultheight, defaultweight, defaultdensity, inch
 from globalsb import fromSVacc, fromSVUSA, fromSV, fromWV, fromWVUSA, toShoeSize, toSV
 
-
-# TODO: Move to logging module
-# Error debugging
-async def print_error(ctx, error):
-    print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
-    traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
-    await ctx.send(f"Error? {error}")
-
+import digilogger as logger
 
 # TODO: Move to units module
 # Conversion constants
@@ -328,28 +319,21 @@ class StatsCog(commands.Cog):
             f"To {bigusertag}, {smallusertag}'s foot looks: {smalltobigfoot} / {smalltobigfootUSA} long. ({smalltobigshoe})")
 
     @stats.error
+    @statsraw.error
+    @logger.err2console
     async def stats_handler(self, ctx, error):
         if isinstance(error, InvalidOperation):
             await ctx.send(
                 "SizeBot cannot perform this action due to a math error.\n"
                 f"Are you too big, {ctx.message.author.id}?")
-        print_error(ctx.command, error)
-
-    @statsraw.error
-    async def statsraw_handler(self, ctx, error):
-        if isinstance(error, InvalidOperation):
-            await ctx.send(
-                "SizeBot cannot perform this action due to a math error.\n"
-                f"Are you too big, {ctx.message.author.id}?")
-        print_error(ctx.command, error)
+        else:
+            await ctx.send(f"Error? {error}")
 
     @compare.error
-    async def compare_handler(self, ctx, error):
-        print_error(ctx.command, error)
-
     @compareraw.error
-    async def compareraw_handler(self, ctx, error):
-        print_error(ctx.command, error)
+    @logger.err2console
+    async def compare_handler(self, ctx, error):
+        await ctx.send(f"Error? {error}")
 
 
 # Necessary
