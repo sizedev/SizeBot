@@ -15,7 +15,7 @@ from globalsb import fromSVacc, fromSVUSA, fromSV, fromWV, fromWVUSA, toShoeSize
 
 # TODO: Move to logging module
 # Error debugging
-def print_error(ctx, error):
+async def print_error(ctx, error):
     print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
     traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
     await ctx.send(f"Error? {error}")
