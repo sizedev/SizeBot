@@ -293,30 +293,64 @@ class StatsCog(commands.Cog):
         smalltobigheight = fromSVacc(s2bh)
         bigtosmallheightUSA = fromSVUSA(b2sh)
         smalltobigheightUSA = fromSVUSA(s2bh)
-        bigtosmallfoot = fromSVacc(b2sh / 7)
-        smalltobigfoot = fromSVacc(s2bh / 7)
-        bigtosmallfootUSA = fromSVUSA(b2sh / 7)
-        smalltobigfootUSA = fromSVUSA(s2bh / 7)
-        bigtosmallshoe = toShoeSize(b2sh / 7 / inch)
-        smalltobigshoe = toShoeSize(s2bh / 7 / inch)
+        bigtosmallfoot = fromSVacc(b2sh * footfactor)
+        smalltobigfoot = fromSVacc(s2bh * footfactor)
+        bigtosmallfootUSA = fromSVUSA(b2sh * footfactor)
+        smalltobigfootUSA = fromSVUSA(s2bh * footfactor)
+        bigtosmallshoe = toShoeSize(b2sh * footfactor / inch)
+        smalltobigshoe = toShoeSize(s2bh * footfactor / inch)
         bigtosmallweight = fromWV(b2sw)
         smalltobigweight = fromWV(s2bw)
         bigtosmallweightUSA = fromWVUSA(b2sw)
         smalltobigweightUSA = fromWVUSA(s2bw)
+        bigtosmallfootwidth = fromSVacc(b2sh * footwidthfactor)
+        smalltobigfootwidth = fromSVacc(s2bh * footwidthfactor)
+        bigtosmallfootwidthUSA = fromSVUSA(b2sh * footwidthfactor)
+        smalltobigfootwidthUSA = fromSVUSA(s2bh * footwidthfactor)
+        bigtosmallfootthick = fromSVacc(b2sh * footthickfactor)
+        smalltobigfootthick = fromSVacc(s2bh * footthickfactor)
+        bigtosmallfootthickUSA = fromSVUSA(b2sh * footthickfactor)
+        smalltobigfootthickUSA = fromSVUSA(s2bh * footthickfactor)
+        bigtosmallthumb = fromSVacc(b2sh * thumbfactor)
+        smalltobigthumb = fromSVacc(s2bh * thumbfactor)
+        bigtosmallthumbUSA = fromSVUSA(b2sh * thumbfactor)
+        smalltobigthumbUSA = fromSVUSA(s2bh * thumbfactor)
+        bigtosmallfingerprint = fromSVacc(b2sh * fingerprintfactor)
+        smalltobigfingerprint = fromSVacc(s2bh * fingerprintfactor)
+        bigtosmallfingerprintUSA = fromSVUSA(b2sh * fingerprintfactor)
+        smalltobigfingerprintUSA = fromSVUSA(s2bh * fingerprintfactor)
+        bigtosmallhairwidth = fromSVacc(b2sh * hairwidthfactor)
+        smalltobighairwidth = fromSVacc(s2bh * hairwidthfactor)
+        bigtosmallhairwidthUSA = fromSVUSA(b2sh * hairwidthfactor)
+        smalltobighairwidthUSA = fromSVUSA(s2bh * hairwidthfactor)
         timestaller = place_value(round((bch / sch), 3))
 
         # Print compare
         return (
             "**Comparison:**\n"
             f"{bigusertag} is really: {fromSVacc(bch)} / {fromSVUSA(bch)} | {fromWV(bcw)} / {fromWVUSA(bcw)}.\n"
-            f"To {smallusertag}, {bigusertag} looks: {bigtosmallheight} / {bigtosmallheightUSA} | {bigtosmallweight} / {bigtosmallweightUSA}.\n"
-            f"To {smallusertag}, {bigusertag}'s foot looks: {bigtosmallfoot} / {bigtosmallfootUSA} long. ({bigtosmallshoe})\n"
+            f"To {smallusertag}, {bigusertag} looks:\n"
+            f"  Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
+            f"  Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
+            f"  Foot Length: {bigtosmallfoot} / {bigtosmallfootUSA} ({bigtosmallshoe})\n"
+            f"  Foot Width: {bigtosmallfootwidth} / {bigtosmallfootwidthUSA}\n"
+            f"  Toe Height: {bigtosmallfootthick} / {bigtosmallfootthickUSA}\n"
+            f"  Thumb Size: {bigtosmallthumb} / {bigtosmallthumbUSA}\n"
+            f"  Fingerprint Depth: {bigtosmallfingerprint} / {bigtosmallfingerprintUSA}\n"
+            f"  Hair Width: {bigtosmallhairwidth} / {bigtosmallhairwidthUSA}\n"
             "\n"
             f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
             "\n"
             f"{smallusertag} is really: {fromSVacc(sch)} / {fromSVUSA(sch)} | {fromWV(scw)} / {fromWVUSA(scw)}\n"
-            f"To {bigusertag}, {smallusertag} looks: {smalltobigheight} / {smalltobigheightUSA} | {smalltobigweight} / {smalltobigweightUSA}.\n"
-            f"To {bigusertag}, {smallusertag}'s foot looks: {smalltobigfoot} / {smalltobigfootUSA} long. ({smalltobigshoe})")
+            f"To {bigusertag}, {smallusertag} looks:\n"
+            f"  Height: {smalltobigheight} / {smalltobigheightUSA}\n"
+            f"  Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
+            f"  Foot Length: {smalltobigfoot} / {smalltobigfootUSA} ({smalltobigshoe})\n"
+            f"  Foot Width: {smalltobigfootwidth} / {smalltobigfootwidthUSA}\n"
+            f"  Toe Height: {smalltobigfootthick} / {smalltobigfootthickUSA}\n"
+            f"  Thumb Size: {smalltobigthumb} / {smalltobigthumbUSA}\n"
+            f"  Fingerprint Depth: {smalltobigfingerprint} / {smalltobigfingerprintUSA}\n"
+            f"  Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n")
 
     @stats.error
     @statsraw.error
