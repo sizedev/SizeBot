@@ -330,7 +330,7 @@ class StatsCog(commands.Cog):
         smalltobigfingerprintUSA = fromSVUSA(s2bh * fingerprintfactor)
         bigtosmallhairwidth = fromSVacc(b2sh * hairwidthfactor)
         smalltobighairwidth = fromSVacc(s2bh * hairwidthfactor)
-        bigtosmallhairwidthtUSA = fromSVUSA(b2sh * hairwidthfactor)
+        bigtosmallhairwidthUSA = fromSVUSA(b2sh * hairwidthfactor)
         smalltobighairwidthUSA = fromSVUSA(s2bh * hairwidthfactor)
         timestaller = place_value(round((bch / sch), 3))
 
@@ -367,7 +367,7 @@ class StatsCog(commands.Cog):
             await ctx.send(
                 "SizeBot cannot perform this action due to a math error.\n"
                 f"Are you too big, {ctx.message.author.id}?")
-        await print_error(ctx.command, error)
+        await print_error(ctx, error)
 
     @statsraw.error
     async def statsraw_handler(self, ctx, error):
@@ -375,15 +375,15 @@ class StatsCog(commands.Cog):
             await ctx.send(
                 "SizeBot cannot perform this action due to a math error.\n"
                 f"Are you too big, {ctx.message.author.id}?")
-        await print_error(ctx.command, error)
+        await print_error(ctx, error)
 
     @compare.error
     async def compare_handler(self, ctx, error):
-        await print_error(ctx.command, error)
+        await print_error(ctx, error)
 
     @compareraw.error
     async def compareraw_handler(self, ctx, error):
-        await print_error(ctx.command, error)
+        await print_error(ctx, error)
 
 
 # Necessary
