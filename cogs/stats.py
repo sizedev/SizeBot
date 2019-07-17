@@ -232,7 +232,7 @@ class StatsCog(commands.Cog):
         height = isFeetAndInchesAndIfSoFixIt(height)
         height = toSV(getnum(height), getlet(height))
 
-        if user1 = None:
+        if user1 == None:
             user1id = str(ctx.message.author.id)
         else:
             user1id = str(user1.id)
