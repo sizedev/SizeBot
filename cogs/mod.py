@@ -114,7 +114,7 @@ class ModCog(commands.Cog):
 	setdisplay [Y/N]
 	compare [user1] <user2>
 	statsraw [size]
-	compareraw [size]
+	compareraw [size] <user>
 	sing [string]```
 
 	*Other Topics*
