@@ -133,7 +133,7 @@ def place_value(number):
 async def nickupdate(ctx, userarray):
 	if userarray[CHEI] == "None":
 		userarray[CHEI] = userarray[BHEI]
-		await ctx.send("<@{0}>: Error in size value: Size value returned 'None'. Resetting to base height.").format(message.author.id)
+		await ctx.send("<@{0}>: Error in size value: Size value returned 'None'. Resetting to base height.").format(ctx.message.author.id)
 	if ctx.message.author.id != 291654189833256960:
 		if userarray[UNIT] == "M\n":
 			if userarray[SPEC] == "None\n":
