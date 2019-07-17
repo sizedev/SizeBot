@@ -37,7 +37,10 @@ class RPCog(commands.Cog):
 		for x in range(dDrops, len(rolls)):
 			dTotal = dTotal + rolls[x]
 			usedrolls.append(rolls[x])
-		await ctx.send("{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.name, dString, str(dTotal), str(usedrolls)))
+		dropped = rolls - usedrolls
+		sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.name, dString, str(dTotal), str(usedrolls))
+		if dropped != []: sendstring = sendstring + "\n~~Dropped: {0}~~".format(str(dropped))
+		await ctx.send(sendstring)
 
 #Necessary.
 def setup(bot):
