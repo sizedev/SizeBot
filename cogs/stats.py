@@ -367,7 +367,7 @@ class StatsCog(commands.Cog):
             await ctx.send(
                 "SizeBot cannot perform this action due to a math error.\n"
                 f"Are you too big, {ctx.message.author.id}?")
-        print_error(ctx.command, error)
+        await print_error(ctx.command, error)
 
     @statsraw.error
     async def statsraw_handler(self, ctx, error):
@@ -375,15 +375,15 @@ class StatsCog(commands.Cog):
             await ctx.send(
                 "SizeBot cannot perform this action due to a math error.\n"
                 f"Are you too big, {ctx.message.author.id}?")
-        print_error(ctx.command, error)
+        await print_error(ctx.command, error)
 
     @compare.error
     async def compare_handler(self, ctx, error):
-        print_error(ctx.command, error)
+        await print_error(ctx.command, error)
 
     @compareraw.error
     async def compareraw_handler(self, ctx, error):
-        print_error(ctx.command, error)
+        await print_error(ctx.command, error)
 
 
 # Necessary
