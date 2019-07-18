@@ -354,7 +354,7 @@ class StatsCog(commands.Cog):
             "\n"
             f"**Base Sizes:**\n"
             f"{bigusertag}: {fromSVacc(bbh)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
-            f"{smallusertag}: {fromSVacc(sbh)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}\n")
+            f"{smallusertag}: {fromSVacc(sbh)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
 
     @stats.error
     @statsraw.error
