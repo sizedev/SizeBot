@@ -189,6 +189,8 @@ class StatsCog(commands.Cog):
         sd = Decimal(smalluser[DENS])
         bigmult = bch / bbh
         smallmult = sch / sbh
+        bigmultcubed = bigmult ** 3
+        smallmultcubed = smallmult ** 3
         bcw = bbw * (bigmult ** 3) * bd
         scw = sbw * (smallmult ** 3) * sd
         diffmult = bigmult / smallmult
@@ -235,7 +237,9 @@ class StatsCog(commands.Cog):
         # Print compare
         return (
             "**Comparison:**\n"
-            f"{bigusertag} is really: {fromSVacc(bch)} / {fromSVUSA(bch)} | {fromWV(bcw)} / {fromWVUSA(bcw)}.\n"
+            f"{bigusertag} is really:\n"
+            f"  Real Height: {fromSVacc(bch)} / {fromSVUSA(bch)} ({bigmult}x basesize)\n"
+            f"  Real Weight:{fromWV(bcw)} / {fromWVUSA(bcw)}. ({bigmultcubed}x basesize)\n"
             f"To {smallusertag}, {bigusertag} looks:\n"
             f"  Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
             f"  Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
@@ -248,7 +252,9 @@ class StatsCog(commands.Cog):
             "\n"
             f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
             "\n"
-            f"{smallusertag} is really: {fromSVacc(sch)} / {fromSVUSA(sch)} | {fromWV(scw)} / {fromWVUSA(scw)}\n"
+            f"{smallusertag} is really:\n"
+            f"  Real Height: {fromSVacc(sch)} / {fromSVUSA(sch)} ({smallmult}x basesize)\n"
+            f"  Real Weight:{fromWV(scw)} / {fromWVUSA(scw)}. ({smallmultcubed}x basesize)\n"
             f"To {bigusertag}, {smallusertag} looks:\n"
             f"  Height: {smalltobigheight} / {smalltobigheightUSA}\n"
             f"  Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
@@ -313,8 +319,8 @@ class StatsCog(commands.Cog):
 
         return (
             f"**{user1tag} Stats:**\n"
-            f"Current Height: {readableheight} | {readableUSAheight} ({hcms}x character base, {hbms}x normal)\n"
-            f"Current Weight: {readableweight} | {readableUSAweight} ({wcms}x charbase, {wbms}x norm)\n"
+            f"Current Height: {readableheight} | {readableUSAheight} ({hcms}x character base, {hbms}x average)\n"
+            f"Current Weight: {readableweight} | {readableUSAweight} ({wcms}x charbase, {wbms}x average)\n"
             f"Current Density: {density}x\n"
             f"Foot Length: {readablefootheight} | {readablefootUSAheight} ({shoesize})\n"
             f"Foot Width: {footwidth} | {footwidthUSA}\n"
