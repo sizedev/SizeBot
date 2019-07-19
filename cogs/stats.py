@@ -22,169 +22,76 @@ fingerprintfactor = Decimal(1) / Decimal(35080)
 hairwidthfactor = Decimal(1) / Decimal(23387)
 
 
+# TODO: Move to dedicated module
+async def get_user(ctx, user_string):
+    try:
+        member = await commands.MemberConverter().convert(ctx, user_string)
+    except commands.errors.BadArgument:
+        member = None
+
+    if member:
+        usertag = f"<@{member.id}>"
+        user = load_user(member.id)
+        if user is None:
+            await ctx.send(
+                "Sorry! User isn't registered with SizeBot.\n"
+                "To register, use the `&register` command.",
+                delete_after=5)
+            return None, None
+    else:
+        usertag = "Raw"
+        heightstring = isFeetAndInchesAndIfSoFixIt(user_string)
+        height = toSV(getnum(heightstring), getlet(heightstring))
+        if height is None:
+            await ctx.send(
+                "Sorry! I didn't recognize that user or height.",
+                delete_after=5)
+            return None, None
+
+        user = height_to_user(height)
+
+    return usertag, user
+
+
+def load_user(userid):
+    userid = str(userid)
+    if not os.path.exists(folder + "/users/" + userid + ".txt"):
+        # User file missing
+        return None
+    user = read_user(userid)
+    return user
+
+
+def height_to_user(height):
+    user = [
+        "Raw\n",
+        "Y\n",
+        height,
+        defaultheight,
+        defaultweight,
+        defaultdensity,
+        "M\n",
+        "None\n"
+    ]
+    return user
+
+
 class StatsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
-    async def stats(self, ctx, who: discord.Member = None):
+    async def stats(self, ctx, who: str = None):
         if who is None:
-            who = ctx.message.author
+            who = str(ctx.message.author.id)
 
-        whoid = str(who.id)
-        if not os.path.exists(folder + "/users/" + whoid + ".txt"):
-            # User file missing
-            await ctx.send(
-                "Sorry! User isn't registered with SizeBot.\n"
-                "To register, use the `&register` command.",
-                delete_after=5)
+        user1tag, user1 = await get_user(ctx, who)
+        if user1 is None:
             return
 
-        user1 = read_user(whoid)
-        readableheight = fromSVacc(user1[CHEI])
-        readablefootheight = fromSVacc(Decimal(user1[CHEI]) * footfactor)
-        readablefootUSAheight = fromSVUSA(Decimal(user1[CHEI]) * footfactor)
-        readablefootthick = fromSVacc(Decimal(user1[CHEI]) * footthickfactor)
-        readablefootUSAthick = fromSVUSA(Decimal(user1[CHEI]) * footthickfactor)
-        readableUSAheight = fromSVUSA(user1[CHEI])
-        userbaseh = fromSV(user1[BHEI])
-        userbasehusa = fromSVUSA(user1[BHEI])
-        userbasew = fromWV(user1[BWEI])
-        userbasewusa = fromWVUSA(user1[BWEI])
-        density = Decimal(user1[DENS])
-        multiplier = Decimal(user1[CHEI]) / Decimal(user1[BHEI])
-        basemult = Decimal(user1[CHEI]) / Decimal(defaultheight)
-        multipliercubed = multiplier**3
-        basemultcubed = basemult**3
-        baseweight = Decimal(user1[BWEI])
-        weightmath = (baseweight * (multipliercubed)) * density
-        readableweight = fromWV(weightmath)
-        readableUSAweight = fromWVUSA(weightmath)
-        normalheight = fromSVacc(Decimal(defaultheight) / Decimal(basemult))
-        normalUSAheight = fromSVUSA(Decimal(defaultheight) / Decimal(basemult))
-        normalweight = fromWV(Decimal(defaultweight) / Decimal(basemultcubed))
-        normalUSAweight = fromWVUSA(Decimal(defaultweight) / Decimal(basemultcubed))
-        thumbsize = fromSVacc(Decimal(user1[CHEI]) * thumbfactor)
-        thumbsizeUSA = fromSVUSA(Decimal(user1[CHEI]) * thumbfactor)
-        footheight = Decimal(user1[CHEI]) * footfactor
-        footwidth = fromSV(Decimal(user1[CHEI]) * footwidthfactor)
-        footwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * footwidthfactor)
-        footlengthinches = Decimal(user1[CHEI]) * footfactor / inch
-        footlengthinches = round(footlengthinches, 3)
-        shoesize = toShoeSize(footlengthinches)
-        fingerprintdepth = fromSVacc(Decimal(user1[CHEI]) * fingerprintfactor)
-        fingerprintdepthUSA = fromSVUSA(Decimal(user1[CHEI]) * fingerprintfactor)
-        hairwidth = fromSVacc(Decimal(user1[CHEI]) * hairwidthfactor)
-        hairwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * hairwidthfactor)
-        hcms = place_value(round(multiplier, 3))
-        hbms = place_value(round(basemult, 3))
-        wcms = place_value(round(multipliercubed * density, 3))
-        wbms = place_value(round(basemultcubed * density, 3))
-        if multiplier > 999999999999999:
-            hcms = "{:.2e}".format(multiplier)
-        if basemult > 999999999999999:
-            hbms = "{:.2e}".format(basemult)
-        if multipliercubed > 999999999999999:
-            wcms = "{:.2e}".format(multipliercubed * density)
-        if basemultcubed > 999999999999999:
-            wbms = "{:.2e}".format(basemultcubed * density)
-
-        await ctx.send(
-            f"**<@{whoid}> Stats:**\n"
-            f"Current Height: {readableheight} | {readableUSAheight} ({hcms}x character base, {hbms}x normal)\n"
-            f"Current Weight: {readableweight} | {readableUSAweight} ({wcms}x charbase, {wbms}x norm)\n"
-            f"Current Density: {density}x\n"
-            f"Foot Length: {readablefootheight} | {readablefootUSAheight} ({shoesize})\n"
-            f"Foot Width: {footwidth} | {footwidthUSA}\n"
-            f"Toe Height: {readablefootthick} | {readablefootUSAthick}\n"
-            f"Thumb Size: {thumbsize} | {thumbsizeUSA}\n"
-            f"Fingerprint Depth: {fingerprintdepth} | {fingerprintdepthUSA}\n"
-            f"Hair Width: {hairwidth} | {hairwidthUSA}\n"
-            f"Size of a Normal Man (Comparative) {normalheight} | {normalUSAheight}\n"
-            f"Weight of a Normal Man (Comparative) {normalweight} | {normalUSAweight}\n"
-            f"Character Bases: {userbaseh}, {userbasehusa} | {userbasew}, {userbasewusa}")
-        print(f"Stats for {user1} sent.")
-        pass
-
-    @commands.command()
-    async def statsraw(self, ctx, heightstring: str = None):
-        if heightstring is None:
-            heightstring = "5.5ft"
-
-        heightstring = isFeetAndInchesAndIfSoFixIt(heightstring)
-
-        height = toSV(getnum(heightstring), getlet(heightstring))
-        userarray = [
-            "Raw\n",
-            "Y\n",
-            height,
-            defaultheight,
-            defaultweight,
-            defaultdensity,
-            "M\n",
-            "None\n"
-        ]
-        readableheight = fromSVacc(userarray[CHEI])
-        readablefootheight = fromSVacc(Decimal(userarray[CHEI]) * footfactor)
-        readablefootUSAheight = fromSVUSA(Decimal(userarray[CHEI]) * footfactor)
-        readablefootthick = fromSVacc(Decimal(userarray[CHEI]) * footthickfactor)
-        readablefootUSAthick = fromSVUSA(Decimal(userarray[CHEI]) * footthickfactor)
-        readableUSAheight = fromSVUSA(userarray[CHEI])
-        userbaseh = fromSV(userarray[BHEI])
-        userbasehusa = fromSVUSA(userarray[BHEI])
-        userbasew = fromWV(userarray[BWEI])
-        userbasewusa = fromWVUSA(userarray[BWEI])
-        density = Decimal(userarray[DENS])
-        multiplier = Decimal(userarray[CHEI]) / Decimal(userarray[BHEI])
-        basemult = Decimal(userarray[CHEI]) / Decimal(defaultheight)
-        multipliercubed = multiplier**3
-        basemultcubed = basemult**3
-        baseweight = Decimal(userarray[BWEI])
-        weightmath = (baseweight * (multipliercubed)) * density
-        readableweight = fromWV(weightmath)
-        readableUSAweight = fromWVUSA(weightmath)
-        normalheight = fromSVacc(Decimal(defaultheight) / Decimal(basemult))
-        normalUSAheight = fromSVUSA(Decimal(defaultheight) / Decimal(basemult))
-        normalweight = fromWV(Decimal(defaultweight) / Decimal(basemultcubed))
-        normalUSAweight = fromWVUSA(Decimal(defaultweight) / Decimal(basemultcubed))
-        thumbsize = fromSVacc(Decimal(userarray[CHEI]) * thumbfactor)
-        thumbsizeUSA = fromSVUSA(Decimal(userarray[CHEI]) * thumbfactor)
-        footheight = Decimal(userarray[CHEI]) * footfactor
-        footwidth = fromSV(Decimal(userarray[CHEI]) * footwidthfactor)
-        footwidthUSA = fromSVUSA(Decimal(userarray[CHEI]) * footwidthfactor)
-        footlengthinches = Decimal(userarray[CHEI]) * footfactor / inch
-        shoesize = toShoeSize(footlengthinches)
-        fingerprintdepth = fromSVacc(Decimal(userarray[CHEI]) * fingerprintfactor)
-        fingerprintdepthUSA = fromSVUSA(Decimal(userarray[CHEI]) * fingerprintfactor)
-        hairwidth = fromSVacc(Decimal(userarray[CHEI]) * hairwidthfactor)
-        hairwidthUSA = fromSVUSA(Decimal(userarray[CHEI]) * hairwidthfactor)
-        hcms = place_value(round(multiplier, 3))
-        hbms = place_value(round(basemult, 3))
-        wcms = place_value(round(multipliercubed * density, 3))
-        wbms = place_value(round(basemultcubed * density, 3))
-        if multiplier > 999999999999999:
-            hcms = "{:.2e}".format(multiplier)
-        if basemult > 999999999999999:
-            hbms = "{:.2e}".format(basemult)
-        if multipliercubed > 999999999999999:
-            wcms = "{:.2e}".format(multipliercubed * density)
-        if basemultcubed > 999999999999999:
-            wbms = "{:.2e}".format(basemultcubed * density)
-
-        await ctx.send(
-            f"**{heightstring} Stats:**\n"
-            f"Current Height: {readableheight} | {readableUSAheight} ({hbms}x normal)\n"
-            f"Current Weight: {readableweight} | {readableUSAweight} ({wbms}x normal)\n"
-            f"Foot Length: {readablefootheight} | {readablefootUSAheight} ({shoesize})\n"
-            f"Foot Width: {footwidth} | {footwidthUSA}\n"
-            f"Toe Height: {readablefootthick} | {readablefootUSAthick}\n"
-            f"Thumb Size: {thumbsize} | {thumbsizeUSA}\n"
-            f"Fingerprint Depth: {fingerprintdepth} | {fingerprintdepthUSA}\n"
-            f"Hair Width: {hairwidth} | {hairwidthUSA}\n"
-            f"Size of a Normal Man (Comparative) {normalheight} | {normalUSAheight}\n"
-            f"Weight of a Normal Man (Comparative) {normalweight} | {normalUSAweight}")
-        print(f"Stats for {heightstring} sent.")
-        pass
+        output = self.user_stats(user1tag, user1)
+        await ctx.send(output)
+        print(f"Stats for {who} sent.")
 
     @commands.command()
     async def compare(self, ctx, user1: discord.Member = None, user2: discord.Member = None):
@@ -352,8 +259,70 @@ class StatsCog(commands.Cog):
             f"  Fingerprint Depth: {smalltobigfingerprint} / {smalltobigfingerprintUSA}\n"
             f"  Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n")
 
+    def user_stats(self, user1tag, user1):
+        readableheight = fromSVacc(user1[CHEI])
+        readablefootheight = fromSVacc(Decimal(user1[CHEI]) * footfactor)
+        readablefootUSAheight = fromSVUSA(Decimal(user1[CHEI]) * footfactor)
+        readablefootthick = fromSVacc(Decimal(user1[CHEI]) * footthickfactor)
+        readablefootUSAthick = fromSVUSA(Decimal(user1[CHEI]) * footthickfactor)
+        readableUSAheight = fromSVUSA(user1[CHEI])
+        userbaseh = fromSV(user1[BHEI])
+        userbasehusa = fromSVUSA(user1[BHEI])
+        userbasew = fromWV(user1[BWEI])
+        userbasewusa = fromWVUSA(user1[BWEI])
+        density = Decimal(user1[DENS])
+        multiplier = Decimal(user1[CHEI]) / Decimal(user1[BHEI])
+        basemult = Decimal(user1[CHEI]) / Decimal(defaultheight)
+        multipliercubed = multiplier**3
+        basemultcubed = basemult**3
+        baseweight = Decimal(user1[BWEI])
+        weightmath = (baseweight * (multipliercubed)) * density
+        readableweight = fromWV(weightmath)
+        readableUSAweight = fromWVUSA(weightmath)
+        normalheight = fromSVacc(Decimal(defaultheight) / Decimal(basemult))
+        normalUSAheight = fromSVUSA(Decimal(defaultheight) / Decimal(basemult))
+        normalweight = fromWV(Decimal(defaultweight) / Decimal(basemultcubed))
+        normalUSAweight = fromWVUSA(Decimal(defaultweight) / Decimal(basemultcubed))
+        thumbsize = fromSVacc(Decimal(user1[CHEI]) * thumbfactor)
+        thumbsizeUSA = fromSVUSA(Decimal(user1[CHEI]) * thumbfactor)
+        footheight = Decimal(user1[CHEI]) * footfactor
+        footwidth = fromSV(Decimal(user1[CHEI]) * footwidthfactor)
+        footwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * footwidthfactor)
+        footlengthinches = Decimal(user1[CHEI]) * footfactor / inch
+        shoesize = toShoeSize(footlengthinches)
+        fingerprintdepth = fromSVacc(Decimal(user1[CHEI]) * fingerprintfactor)
+        fingerprintdepthUSA = fromSVUSA(Decimal(user1[CHEI]) * fingerprintfactor)
+        hairwidth = fromSVacc(Decimal(user1[CHEI]) * hairwidthfactor)
+        hairwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * hairwidthfactor)
+        hcms = place_value(round(multiplier, 3))
+        hbms = place_value(round(basemult, 3))
+        wcms = place_value(round(multipliercubed * density, 3))
+        wbms = place_value(round(basemultcubed * density, 3))
+        if multiplier > 999999999999999:
+            hcms = "{:.2e}".format(multiplier)
+        if basemult > 999999999999999:
+            hbms = "{:.2e}".format(basemult)
+        if multipliercubed > 999999999999999:
+            wcms = "{:.2e}".format(multipliercubed * density)
+        if basemultcubed > 999999999999999:
+            wbms = "{:.2e}".format(basemultcubed * density)
+
+        return (
+            f"**{user1tag} Stats:**\n"
+            f"Current Height: {readableheight} | {readableUSAheight} ({hcms}x character base, {hbms}x normal)\n"
+            f"Current Weight: {readableweight} | {readableUSAweight} ({wcms}x charbase, {wbms}x norm)\n"
+            f"Current Density: {density}x\n"
+            f"Foot Length: {readablefootheight} | {readablefootUSAheight} ({shoesize})\n"
+            f"Foot Width: {footwidth} | {footwidthUSA}\n"
+            f"Toe Height: {readablefootthick} | {readablefootUSAthick}\n"
+            f"Thumb Size: {thumbsize} | {thumbsizeUSA}\n"
+            f"Fingerprint Depth: {fingerprintdepth} | {fingerprintdepthUSA}\n"
+            f"Hair Width: {hairwidth} | {hairwidthUSA}\n"
+            f"Size of a Normal Man (Comparative) {normalheight} | {normalUSAheight}\n"
+            f"Weight of a Normal Man (Comparative) {normalweight} | {normalUSAweight}\n"
+            f"Character Bases: {userbaseh}, {userbasehusa} | {userbasew}, {userbasewusa}")
+
     @stats.error
-    @statsraw.error
     @logger.err2console
     async def stats_handler(self, ctx, error):
         if isinstance(error, InvalidOperation):
