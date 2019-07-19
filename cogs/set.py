@@ -134,7 +134,7 @@ class SetCog(commands.Cog):
 	@commands.command()
 	async def setdisplay(self, ctx, newdisp = None):
 		#Set display mode.
-		newdisp = string.lower(newdisp)
+		newdisp = newdisp.lower()
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.
 			await ctx.send("""Sorry! You aren't registered with SizeBot.
@@ -153,7 +153,7 @@ class SetCog(commands.Cog):
 	@commands.command()
 	async def setsystem(self, ctx, newsys = None):
 		#Set measurement system.
-		newsys = string.lower(newsys)
+		newsys = newsys.lower()
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.
 			await ctx.send("""Sorry! You aren't registered with SizeBot.
