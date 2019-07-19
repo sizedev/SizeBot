@@ -133,16 +133,36 @@ class SetCog(commands.Cog):
 
 	@commands.command()
 	async def setdisplay(self, ctx, newdisp = None):
-		#Change height.
+		#Set display mode.
+		newdisp = string.lower(newdisp)
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.
 			await ctx.send("""Sorry! You aren't registered with SizeBot.
 	To register, use the `&register` command.""", delete_after=5)
-		elif newdisp not in ["Y", "N"]:
+		elif newdisp not in ["y", "n"]:
 			await ctx.send("Please enter `&setdisplay [Y/N]`.", delete_after=3)
 		else:
 			userarray = read_user(ctx.message.author.id)
 			userarray[DISP] = str(newdisp) + newline
+			write_user(ctx.message.author.id, userarray)
+			userarray = read_user(ctx.message.author.id)
+			print (userarray)
+			if userarray[DISP] == "Y\n":
+				await nickupdate(ctx, userarray)
+
+	@commands.command()
+	async def setsystem(self, ctx, newsys = None):
+		#Set measurement system.
+		newsys = string.lower(newsys)
+		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
+		#User file missing.
+			await ctx.send("""Sorry! You aren't registered with SizeBot.
+	To register, use the `&register` command.""", delete_after=5)
+		elif newsys not in ["m", "u"]:
+			await ctx.send("Please enter `&setsystem [U/M]`.", delete_after=3)
+		else:
+			userarray = read_user(ctx.message.author.id)
+			userarray[UNIT] = str(newsys) + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)

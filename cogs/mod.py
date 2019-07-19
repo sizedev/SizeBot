@@ -97,7 +97,7 @@ class ModCog(commands.Cog):
 	*†† Indicates which system to use for your sizetag. U = US, M = metric.*
 	```
 	unregister
-	stats <user>
+	stats <user/size>
 	change [x,/,+,-] [value]
 	setheight [height]
 	set0
@@ -112,8 +112,8 @@ class ModCog(commands.Cog):
 	setspecies [species]
 	clearspecies
 	setdisplay [Y/N]
+	setsystem [M/U]
 	compare [user1] <user2>
-	statsraw [size]
 	compareraw [size] <user>
 	sing [string]```
 
@@ -149,7 +149,7 @@ class ModCog(commands.Cog):
 	"Um... I like it?" -- *Goddess Syn*
 	"I am the only person who has accidentally turned my fetish into a tech support job." -- *DigiDuncan*
 
-	Version {2} | 16 Jul 2019""".format(ctx.message.author.id, members, version))
+	Version {2} | 19 Jul 2019""".format(ctx.message.author.id, members, version))
 
 	@commands.command()
 	async def donate(self, ctx):
