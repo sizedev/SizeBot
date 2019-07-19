@@ -257,7 +257,11 @@ class StatsCog(commands.Cog):
             f"  Toe Height: {smalltobigfootthick} / {smalltobigfootthickUSA}\n"
             f"  Thumb Size: {smalltobigthumb} / {smalltobigthumbUSA}\n"
             f"  Fingerprint Depth: {smalltobigfingerprint} / {smalltobigfingerprintUSA}\n"
-            f"  Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n")
+            f"  Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
+            "\n"
+            f"**Base Sizes:**\n"
+            f"{bigusertag}: {fromSVacc(bbh)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
+            f"{smallusertag}: {fromSVacc(sbh)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
 
     def user_stats(self, user1tag, user1):
         readableheight = fromSVacc(user1[CHEI])
