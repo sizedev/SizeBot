@@ -187,10 +187,14 @@ class StatsCog(commands.Cog):
         sbw = Decimal(smalluser[BWEI])
         bd = Decimal(biguser[DENS])
         sd = Decimal(smalluser[DENS])
-        bigmult = round((bch / bbh),3)
-        smallmult = round((sch / sbh),3)
-        bigmultcubed = round((bigmult ** 3),3)
-        smallmultcubed = round((smallmult ** 3),3)
+        bigmult = (bch / bbh)
+        smallmult = (sch / sbh)
+        bigmultcubed = (bigmult ** 3)
+        smallmultcubed = (smallmult ** 3)
+        dispbigmult = round(bigmult, 4)
+        dispsmallmult = round(smallmult, 4)
+        dispbigmultcubed = round(bigmultcubed, 4)
+        dispsmallmultcubed = round(smallmultcubed, 4)
         bcw = bbw * (bigmult ** 3) * bd
         scw = sbw * (smallmult ** 3) * sd
         diffmult = bigmult / smallmult
@@ -238,8 +242,8 @@ class StatsCog(commands.Cog):
         return (
             "**Comparison:**\n"
             f"{bigusertag} is really:\n"
-            f"  Real Height: {fromSVacc(bch)} / {fromSVUSA(bch)} ({place_value(bigmult)}x basesize)\n"
-            f"  Real Weight:{fromWV(bcw)} / {fromWVUSA(bcw)}. ({place_value(bigmultcubed)}x basesize)\n"
+            f"  Real Height: {fromSVacc(bch)} / {fromSVUSA(bch)} ({place_value(dispbigmult)}x basesize)\n"
+            f"  Real Weight:{fromWV(bcw)} / {fromWVUSA(bcw)}. ({place_value(dispbigmultcubed)}x basesize)\n"
             f"To {smallusertag}, {bigusertag} looks:\n"
             f"  Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
             f"  Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
@@ -253,8 +257,8 @@ class StatsCog(commands.Cog):
             f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
             "\n"
             f"{smallusertag} is really:\n"
-            f"  Real Height: {fromSVacc(sch)} / {fromSVUSA(sch)} ({place_value(smallmult)}x basesize)\n"
-            f"  Real Weight:{fromWV(scw)} / {fromWVUSA(scw)}. ({place_value(smallmultcubed)}x basesize)\n"
+            f"  Real Height: {fromSVacc(sch)} / {fromSVUSA(sch)} ({place_value(dispsmallmult)}x basesize)\n"
+            f"  Real Weight:{fromWV(scw)} / {fromWVUSA(scw)}. ({place_value(dispsmallmultcubed)}x basesize)\n"
             f"To {bigusertag}, {smallusertag} looks:\n"
             f"  Height: {smalltobigheight} / {smalltobigheightUSA}\n"
             f"  Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
@@ -304,10 +308,10 @@ class StatsCog(commands.Cog):
         fingerprintdepthUSA = fromSVUSA(Decimal(user1[CHEI]) * fingerprintfactor)
         hairwidth = fromSVacc(Decimal(user1[CHEI]) * hairwidthfactor)
         hairwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * hairwidthfactor)
-        hcms = place_value(round(multiplier, 3))
-        hbms = place_value(round(basemult, 3))
-        wcms = place_value(round(multipliercubed * density, 3))
-        wbms = place_value(round(basemultcubed * density, 3))
+        hcms = place_value(round(multiplier, 4))
+        hbms = place_value(round(basemult, 4))
+        wcms = place_value(round(multipliercubed * density, 4))
+        wbms = place_value(round(basemultcubed * density, 4))
         if multiplier > 999999999999999:
             hcms = "{:.2e}".format(multiplier)
         if basemult > 999999999999999:
