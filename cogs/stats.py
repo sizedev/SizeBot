@@ -17,7 +17,7 @@ import digilogger as logger
 footfactor = Decimal(1) / Decimal(7)
 footwidthfactor = footfactor / Decimal(2.5)
 footthickfactor = Decimal(1) / Decimal(65)
-thumbfactor = Decimal(1) / Decimal(26)
+thumbfactor = defaultheight / inch
 fingerprintfactor = Decimal(1) / Decimal(35080)
 hairwidthfactor = Decimal(1) / Decimal(23387)
 
@@ -250,7 +250,7 @@ class StatsCog(commands.Cog):
             f"  Foot Length: {bigtosmallfoot} / {bigtosmallfootUSA} ({bigtosmallshoe})\n"
             f"  Foot Width: {bigtosmallfootwidth} / {bigtosmallfootwidthUSA}\n"
             f"  Toe Height: {bigtosmallfootthick} / {bigtosmallfootthickUSA}\n"
-            f"  Thumb Size: {bigtosmallthumb} / {bigtosmallthumbUSA}\n"
+            f"  Thumb Width: {bigtosmallthumb} / {bigtosmallthumbUSA}\n"
             f"  Fingerprint Depth: {bigtosmallfingerprint} / {bigtosmallfingerprintUSA}\n"
             f"  Hair Width: {bigtosmallhairwidth} / {bigtosmallhairwidthUSA}\n"
             "\n"
@@ -265,7 +265,7 @@ class StatsCog(commands.Cog):
             f"  Foot Length: {smalltobigfoot} / {smalltobigfootUSA} ({smalltobigshoe})\n"
             f"  Foot Width: {smalltobigfootwidth} / {smalltobigfootwidthUSA}\n"
             f"  Toe Height: {smalltobigfootthick} / {smalltobigfootthickUSA}\n"
-            f"  Thumb Size: {smalltobigthumb} / {smalltobigthumbUSA}\n"
+            f"  Thumb Width: {smalltobigthumb} / {smalltobigthumbUSA}\n"
             f"  Fingerprint Depth: {smalltobigfingerprint} / {smalltobigfingerprintUSA}\n"
             f"  Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
             "\n"
@@ -329,7 +329,7 @@ class StatsCog(commands.Cog):
             f"Foot Length: {readablefootheight} | {readablefootUSAheight} ({shoesize})\n"
             f"Foot Width: {footwidth} | {footwidthUSA}\n"
             f"Toe Height: {readablefootthick} | {readablefootUSAthick}\n"
-            f"Thumb Size: {thumbsize} | {thumbsizeUSA}\n"
+            f"Thumb Width: {thumbsize} | {thumbsizeUSA}\n"
             f"Fingerprint Depth: {fingerprintdepth} | {fingerprintdepthUSA}\n"
             f"Hair Width: {hairwidth} | {hairwidthUSA}\n"
             f"Size of a Normal Man (Comparative) {normalheight} | {normalUSAheight}\n"
