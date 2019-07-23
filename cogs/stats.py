@@ -308,7 +308,6 @@ class StatsCog(commands.Cog):
             await ctx.send(f"Error? {error}")
 
     @compare.error
-    @compareraw.error
     @logger.err2console
     async def compare_handler(self, ctx, error):
         await ctx.send(f"Error? {error}")
