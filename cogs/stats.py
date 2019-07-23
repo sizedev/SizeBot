@@ -25,11 +25,14 @@ pointerfactor = Decimal(1) / Decimal(17.26)
 
 
 # TODO: Move to dedicated module.
-async def get_user(ctx, user_string):
+async def get_user(ctx, user_string, fakename = None):
     try:
         member = await commands.MemberConverter().convert(ctx, user_string)
     except commands.errors.BadArgument:
         member = None
+
+    if fakename == None:
+        fakename = "Raw"
 
     if member:
         usertag = f"<@{member.id}>"
@@ -41,7 +44,7 @@ async def get_user(ctx, user_string):
                 delete_after=5)
             return None, None
     else:
-        usertag = "Raw"
+        usertag = fakename
         heightstring = isFeetAndInchesAndIfSoFixIt(user_string)
         height = toSV(getnum(heightstring), getlet(heightstring))
         if height is None:
@@ -50,7 +53,7 @@ async def get_user(ctx, user_string):
                 delete_after=5)
             return None, None
 
-        user = height_to_user(height)
+        user = height_to_user(height, fakename)
 
     return usertag, user
 
@@ -64,9 +67,14 @@ def load_user(userid):
     return user
 
 
-def height_to_user(height):
+def height_to_user(height, fakename = None):
+    if fakename == None:
+        fakename = "Raw\n"
+    else:
+        fakename = fakename + "\n"
+
     user = [
-        "Raw\n",
+        fakename,
         "Y\n",
         height,
         defaultheight,
@@ -104,11 +112,11 @@ class StatsCog(commands.Cog):
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.", delete_after=5)
             return
 
-        user1tag, user1 = await get_user(ctx, who1)
+        user1tag, user1 = await get_user(ctx, who1, "Raw 1")
         if user1 is None:
             await ctx.send(f"{who1} is not a recognized user or size.")
             return
-        user2tag, user2 = await get_user(ctx, who2)
+        user2tag, user2 = await get_user(ctx, who2, "Raw 2")
         if user2 is None:
             await ctx.send(f"{who2} is not a recognized user or size.")
             return
