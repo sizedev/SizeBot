@@ -18,7 +18,7 @@ import digilogger as logger
 footfactor = Decimal(1) / Decimal(7)
 footwidthfactor = footfactor / Decimal(2.5)
 footthickfactor = Decimal(1) / Decimal(65)
-thumbfactor = defaultheight / inch
+thumbfactor = Decimal(1) / Decimal(69.06)
 fingerprintfactor = Decimal(1) / Decimal(35080)
 hairwidthfactor = Decimal(1) / Decimal(23387)
 pointerfactor = Decimal(1) / Decimal(17.26)
@@ -277,6 +277,8 @@ class StatsCog(commands.Cog):
         fingerprintdepthUSA = fromSVUSA(Decimal(user1[CHEI]) * fingerprintfactor)
         hairwidth = fromSVacc(Decimal(user1[CHEI]) * hairwidthfactor)
         hairwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * hairwidthfactor)
+        pointer = fromSVacc(Decimal(user1[CHEI]) * pointerfactor)
+        pointerUSA = fromSVUSA(Decimal(user1[CHEI]) * pointerfactor)
         hcms = place_value(round(multiplier, 4))
         hbms = place_value(round(basemult, 4))
         wcms = place_value(round(multipliercubed * density, 4))
@@ -292,18 +294,19 @@ class StatsCog(commands.Cog):
 
         return (
             f"**{user1tag} Stats:**\n"
-            f"Current Height: {readableheight} | {readableUSAheight} ({hcms}x character base, {hbms}x average)\n"
-            f"Current Weight: {readableweight} | {readableUSAweight} ({wcms}x charbase, {wbms}x average)\n"
+            f"Current Height: {readableheight} / {readableUSAheight} ({hcms}x character base, {hbms}x average)\n"
+            f"Current Weight: {readableweight} / {readableUSAweight} ({wcms}x charbase, {wbms}x average)\n"
             f"Current Density: {density}x\n"
-            f"Foot Length: {readablefootheight} | {readablefootUSAheight} ({shoesize})\n"
-            f"Foot Width: {footwidth} | {footwidthUSA}\n"
-            f"Toe Height: {readablefootthick} | {readablefootUSAthick}\n"
-            f"Thumb Width: {thumbsize} | {thumbsizeUSA}\n"
-            f"Fingerprint Depth: {fingerprintdepth} | {fingerprintdepthUSA}\n"
-            f"Hair Width: {hairwidth} | {hairwidthUSA}\n"
-            f"Size of a Normal Man (Comparative) {normalheight} | {normalUSAheight}\n"
-            f"Weight of a Normal Man (Comparative) {normalweight} | {normalUSAweight}\n"
-            f"Character Bases: {userbaseh}, {userbasehusa} | {userbasew}, {userbasewusa}")
+            f"Foot Length: {readablefootheight} / {readablefootUSAheight} ({shoesize})\n"
+            f"Foot Width: {footwidth} / {footwidthUSA}\n"
+            f"Toe Height: {readablefootthick} / {readablefootUSAthick}\n"
+            f"Pointer Finger Length: {pointer} / {pointerUSA}\n"
+            f"Thumb Width: {thumbsize} / {thumbsizeUSA}\n"
+            f"Fingerprint Depth: {fingerprintdepth} / {fingerprintdepthUSA}\n"
+            f"Hair Width: {hairwidth} / {hairwidthUSA}\n"
+            f"Size of a Normal Man (Comparative) {normalheight} / {normalUSAheight}\n"
+            f"Weight of a Normal Man (Comparative) {normalweight} / {normalUSAweight}\n"
+            f"Character Bases: {userbaseh} / {userbasehusa} | {userbasew} / {userbasewusa}")
 
     @stats.error
     @logger.err2console
