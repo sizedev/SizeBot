@@ -113,8 +113,7 @@ class ModCog(commands.Cog):
 	clearspecies
 	setdisplay [Y/N]
 	setsystem [M/U]
-	compare [user1] <user2>
-	compareraw [size] <user>
+	compare [user/size 1] <user/size 2>
 	sing [string]```
 
 	*Other Topics*
