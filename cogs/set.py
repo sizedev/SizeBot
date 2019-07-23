@@ -134,12 +134,12 @@ class SetCog(commands.Cog):
 	@commands.command()
 	async def setdisplay(self, ctx, newdisp = None):
 		#Set display mode.
-		newdisp = newdisp.lower()
+		newdisp = newdisp.upper()
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.
 			await ctx.send("""Sorry! You aren't registered with SizeBot.
 	To register, use the `&register` command.""", delete_after=5)
-		elif newdisp not in ["y", "n"]:
+		elif newdisp not in ["Y", "N"]:
 			await ctx.send("Please enter `&setdisplay [Y/N]`.", delete_after=3)
 		else:
 			userarray = read_user(ctx.message.author.id)
@@ -153,12 +153,12 @@ class SetCog(commands.Cog):
 	@commands.command()
 	async def setsystem(self, ctx, newsys = None):
 		#Set measurement system.
-		newsys = newsys.lower()
+		newsys = newsys.upper()
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.
 			await ctx.send("""Sorry! You aren't registered with SizeBot.
 	To register, use the `&register` command.""", delete_after=5)
-		elif newsys not in ["m", "u"]:
+		elif newsys not in ["M", "U"]:
 			await ctx.send("Please enter `&setsystem [U/M]`.", delete_after=3)
 		else:
 			userarray = read_user(ctx.message.author.id)
