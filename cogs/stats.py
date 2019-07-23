@@ -9,20 +9,22 @@ from globalsb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC
 from globalsb import read_user, folder, getnum, getlet, isFeetAndInchesAndIfSoFixIt, place_value
 from globalsb import defaultheight, defaultweight, defaultdensity, inch
 from globalsb import fromSVacc, fromSVUSA, fromSV, fromWV, fromWVUSA, toShoeSize, toSV
+from globalsb import printtab
 
 import digilogger as logger
 
-# TODO: Move to units module
-# Conversion constants
+# TODO: Move to units module.
+# Conversion constants.
 footfactor = Decimal(1) / Decimal(7)
 footwidthfactor = footfactor / Decimal(2.5)
 footthickfactor = Decimal(1) / Decimal(65)
 thumbfactor = defaultheight / inch
 fingerprintfactor = Decimal(1) / Decimal(35080)
 hairwidthfactor = Decimal(1) / Decimal(23387)
+pointerfactor = Decimal(1) / Decimal(17.26)
 
 
-# TODO: Move to dedicated module
+# TODO: Move to dedicated module.
 async def get_user(ctx, user_string):
     try:
         member = await commands.MemberConverter().convert(ctx, user_string)
@@ -94,79 +96,32 @@ class StatsCog(commands.Cog):
         print(f"Stats for {who} sent.")
 
     @commands.command()
-    async def compare(self, ctx, user1: discord.Member = None, user2: discord.Member = None):
-        if user2 is None:
-            user2 = ctx.message.author
+    async def compare(self, ctx, who1 = None, who2 = None):
+        if who2 is None:
+            who2 = str(ctx.message.author.id)
 
+        if who1 is None:
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.", delete_after=5)
+            return
+
+        user1tag, user1 = await get_user(ctx, who1)
         if user1 is None:
-            await ctx.send("Please use either two parameters to compare two people, or one to compare with yourself.", delete_after=5)
+            await ctx.send(f"{who1} is not a recognized user or size.")
             return
-
-        user1id = str(user1.id)
-        user2id = str(user2.id)
-        user1tag = f"<@{user1id}>"
-        user2tag = f"<@{user2id}>"
-
-        if not os.path.exists(folder + "/users/" + user1id + ".txt") or not os.path.exists(folder + "/users/" + user2id + ".txt"):
-            # User file missing
-            await ctx.send(
-                "Sorry! User isn't registered with SizeBot.\n"
-                "To register, use the `& register` command.",
-                delete_after=5)
+        user2tag, user2 = await get_user(ctx, who2)
+        if user2 is None:
+            await ctx.send(f"{who2} is not a recognized user or size.")
             return
-
-        user1 = read_user(user1id)
-        user2 = read_user(user2id)
 
         output = self.compare_users(user1tag, user1, user2tag, user2)
         await ctx.send(output)
         print(f"Compared {user1} and {user2}")
 
-    @commands.command()
-    async def compareraw(self, ctx, height: str = None, user1: discord.Member = None):
-        if height is None:
-            height = "5.5ft"
-
-        height = isFeetAndInchesAndIfSoFixIt(height)
-        height = toSV(getnum(height), getlet(height))
-
-        if user1 is None:
-            user1id = str(ctx.message.author.id)
-        else:
-            user1id = str(user1.id)
-
-        user1tag = f"<@{user1id}>"
-        user2tag = f"**Raw**"
-
-        if not os.path.exists(folder + "/users/" + user1id + ".txt"):
-            # User file missing
-            await ctx.send(
-                "Sorry! User isn't registered with SizeBot.\n"
-                "To register, use the `& register` command.",
-                delete_after=5)
-            return
-
-        user1 = read_user(ctx.message.author.id)
-        # TODO: Check if user is registered
-        user2 = [
-            "Raw\n",
-            "Y\n",
-            height,
-            defaultheight,
-            defaultweight,
-            defaultdensity,
-            "M\n",
-            "None\n"
-        ]
-
-        output = self.compare_users(user1tag, user1, user2tag, user2)
-        await ctx.send(output)
-        print(f"Compared {ctx.message.author.name} and {height}")
-
     def compare_users(self, user1tag, user1, user2tag, user2):
         if Decimal(user1[CHEI]) == Decimal(user2[CHEI]):
             return f"{user1tag} and {user2tag} match 1 to 1."
 
+        # Who's taller?
         if Decimal(user1[CHEI]) > Decimal(user2[CHEI]):
             biguser = user1
             bigusertag = user1tag
@@ -178,7 +133,7 @@ class StatsCog(commands.Cog):
             smalluser = user1
             smallusertag = user1tag
 
-        # Compare
+        # Compare math.
         bch = Decimal(biguser[CHEI])
         bbh = Decimal(biguser[BHEI])
         sch = Decimal(smalluser[CHEI])
@@ -236,42 +191,48 @@ class StatsCog(commands.Cog):
         smalltobighairwidth = fromSVacc(s2bh * hairwidthfactor)
         bigtosmallhairwidthUSA = fromSVUSA(b2sh * hairwidthfactor)
         smalltobighairwidthUSA = fromSVUSA(s2bh * hairwidthfactor)
+        bigtosmallpointer = fromSVacc(b2sh * pointerfactor)
+        smalltobigpointer = fromSVacc(s2bh * pointerfactor)
+        bigtosmallpointerUSA = fromSVUSA(b2sh * pointerfactor)
+        smalltobigpointerUSA = fromSVUSA(s2bh * pointerfactor)
         timestaller = place_value(round((bch / sch), 3))
 
-        # Print compare
+        # Print compare.
         return (
             "**Comparison:**\n"
             f"{bigusertag} is really:\n"
-            f"  Real Height: {fromSVacc(bch)} / {fromSVUSA(bch)} ({place_value(dispbigmult)}x basesize)\n"
-            f"  Real Weight:{fromWV(bcw)} / {fromWVUSA(bcw)}. ({place_value(dispbigmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {fromSVacc(bch)} / {fromSVUSA(bch)} ({place_value(dispbigmult)}x basesize)\n"
+            f"{printtab}Real Weight: {fromWV(bcw)} / {fromWVUSA(bcw)}. ({place_value(dispbigmultcubed)}x basesize)\n"
             f"To {smallusertag}, {bigusertag} looks:\n"
-            f"  Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
-            f"  Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
-            f"  Foot Length: {bigtosmallfoot} / {bigtosmallfootUSA} ({bigtosmallshoe})\n"
-            f"  Foot Width: {bigtosmallfootwidth} / {bigtosmallfootwidthUSA}\n"
-            f"  Toe Height: {bigtosmallfootthick} / {bigtosmallfootthickUSA}\n"
-            f"  Thumb Width: {bigtosmallthumb} / {bigtosmallthumbUSA}\n"
-            f"  Fingerprint Depth: {bigtosmallfingerprint} / {bigtosmallfingerprintUSA}\n"
-            f"  Hair Width: {bigtosmallhairwidth} / {bigtosmallhairwidthUSA}\n"
+            f"{printtab}Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
+            f"{printtab}Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
+            f"{printtab}Foot Length: {bigtosmallfoot} / {bigtosmallfootUSA} ({bigtosmallshoe})\n"
+            f"{printtab}Foot Width: {bigtosmallfootwidth} / {bigtosmallfootwidthUSA}\n"
+            f"{printtab}Toe Height: {bigtosmallfootthick} / {bigtosmallfootthickUSA}\n"
+            f"{printtab}Pointer Finger Length: {bigtosmallpointer} / {bigtosmallpointerUSA}\n"
+            f"{printtab}Thumb Width: {bigtosmallthumb} / {bigtosmallthumbUSA}\n"
+            f"{printtab}Fingerprint Depth: {bigtosmallfingerprint} / {bigtosmallfingerprintUSA}\n"
+            f"{printtab}Hair Width: {bigtosmallhairwidth} / {bigtosmallhairwidthUSA}\n"
             "\n"
             f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
             "\n"
             f"{smallusertag} is really:\n"
-            f"  Real Height: {fromSVacc(sch)} / {fromSVUSA(sch)} ({place_value(dispsmallmult)}x basesize)\n"
-            f"  Real Weight:{fromWV(scw)} / {fromWVUSA(scw)}. ({place_value(dispsmallmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {fromSVacc(sch)} / {fromSVUSA(sch)} ({place_value(dispsmallmult)}x basesize)\n"
+            f"{printtab}Real Weight: {fromWV(scw)} / {fromWVUSA(scw)}. ({place_value(dispsmallmultcubed)}x basesize)\n"
             f"To {bigusertag}, {smallusertag} looks:\n"
-            f"  Height: {smalltobigheight} / {smalltobigheightUSA}\n"
-            f"  Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
-            f"  Foot Length: {smalltobigfoot} / {smalltobigfootUSA} ({smalltobigshoe})\n"
-            f"  Foot Width: {smalltobigfootwidth} / {smalltobigfootwidthUSA}\n"
-            f"  Toe Height: {smalltobigfootthick} / {smalltobigfootthickUSA}\n"
-            f"  Thumb Width: {smalltobigthumb} / {smalltobigthumbUSA}\n"
-            f"  Fingerprint Depth: {smalltobigfingerprint} / {smalltobigfingerprintUSA}\n"
-            f"  Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
+            f"{printtab}Height: {smalltobigheight} / {smalltobigheightUSA}\n"
+            f"{printtab}Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
+            f"{printtab}Foot Length: {smalltobigfoot} / {smalltobigfootUSA} ({smalltobigshoe})\n"
+            f"{printtab}Foot Width: {smalltobigfootwidth} / {smalltobigfootwidthUSA}\n"
+            f"{printtab}Toe Height: {smalltobigfootthick} / {smalltobigfootthickUSA}\n"
+            f"{printtab}Pointer Finger Length: {smalltobigpointer} / {smalltobigpointerUSA}\n"
+            f"{printtab}Thumb Width: {smalltobigthumb} / {smalltobigthumbUSA}\n"
+            f"{printtab}Fingerprint Depth: {smalltobigfingerprint} / {smalltobigfingerprintUSA}\n"
+            f"{printtab}Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
             "\n"
             f"**Base Sizes:**\n"
-            f"{bigusertag}: {fromSVacc(bbh)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
-            f"{smallusertag}: {fromSVacc(sbh)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
+            f"{printtab}{bigusertag}: {fromSVacc(bbh)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
+            f"{printtab}{smallusertag}: {fromSVacc(sbh)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
 
     def user_stats(self, user1tag, user1):
         readableheight = fromSVacc(user1[CHEI])

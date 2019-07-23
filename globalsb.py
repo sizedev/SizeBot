@@ -244,32 +244,6 @@ def write_user(user_id, content):
     # Write content to lines.
     userfile.writelines(content)
 
-# Read in specific user's plusstats.
-
-
-def read_user_plus(user_id):
-    user_id = str(user_id)
-    with open(folder + "/plus/" + user_id + ".txt") as f:
-        # Make array of lines from file.
-        content = f.readlines()
-        return content
-
-# Write to specific user.
-
-
-def write_user_plus(user_id, content):
-    user_id = str(user_id)
-    # Add new line characters to entries that don't have them.
-    for idx, item in enumerate(content):
-        if not content[idx].endswith("\n"):
-            content[idx] = content[idx] + "\n"
-    # Delete plusfile.
-    os.remove(folder + "/plus/" + user_id + ".txt")
-    # Make a new plusfile.
-    userfile = open(folder + "/plus/" + user_id + ".txt", "w+")
-    # Write content to lines.
-    userfile.writelines(content)
-
 
 def isFeetAndInchesAndIfSoFixIt(input):
     if re.search(r"([0-9.]+)(\'|ft|feet)([0-9.]+)(\"|in|inch|inches)*$", input):
@@ -293,7 +267,6 @@ print("Loaded {0} users.".format(members))
 
 # Color styling for terminal messages.
 
-
 def warn(message):
     return (fore.YELLOW + message + style.RESET)
 
@@ -304,6 +277,9 @@ def crit(message):
 
 def test(message):
     return (fore.BLUE + message + style.RESET)
+
+enspace = "\u2002"
+printtab = enspace * 4
 
 
 # Slow growth tasks.
