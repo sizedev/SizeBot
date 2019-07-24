@@ -148,28 +148,54 @@ def place_value(number):
 
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
-    if os.path.exists(folder + '/users/' + str(user.id) + '.txt'):
-        userarray = read_user(user.id)
+    # Don't update reol's nick, for some reason?
+    if user.id == reol:
+        return
+    # Don't update users who aren't registered
+    if not os.path.exists(f"{folder}/users/{user.id}.txt"):
+        return
+
+    userarray = read_user(user.id)
+
+    if userarray[DISP].strip() != "Y":
+        return
+
+    height = userarray[CHEI]
+    if height is None:
+        height = userarray[BHEI]
+    nick = userarray[NICK].strip()
+    species = userarray[SPEC].strip()
+
+    unit_system = userarray[UNIT].strip()
+    if unit_system == "M":
+        sizetag = fromSV(height)
+    elif unit_system == "U":
+        sizetag = fromSVUSA(height)
+    else:
         sizetag = ""
 
-        if userarray[DISP] == "Y\n" and user.id != reol: return
+    if species != "None":
+        sizetag = f"{sizetag}, {species}"
 
-        if userarray[CHEI] == None: userarray[CHEI] = userarray[BHEI]
-        userarray[NICK] = userarray[NICK].strip()
-        userarray[SPEC] = userarray[SPEC].strip()
+    max_nick_len = 32
 
-        if userarray[UNIT] == "M\n" : sizetag = fromSV(userarray[CHEI])
-        if userarray[UNIT] == "U\n" : sizetag = fromSVUSA(userarray[CHEI])
+    if len(nick) > max_nick_len:
+        # User has set their nick too large. Truncate.
+        nick = nick[:32]
 
-        if userarray[SPEC] != "None": sizetag = f"{sizetag}, {userarray[SPEC]}"
+    if len(nick) + len(sizetag) + 3 <= max_nick_len:
+        # Fit full nick and sizetag
+        newnick = f"{nick} [{sizetag}]"
+    elif len(sizetag) + 7 <= max_nick_len:
+        # Fit short nick and sizetag
+        chars_left = max_nick_len - len(sizetag) - 4
+        short_nick = nick[:chars_left]
+        newnick = f"{shortnick}… [{sizetag}]"
+    else:
+        # Cannot fit the new sizetag
+        newnick = nick
+    await message.author.edit(nick=newnick)
 
-        charsleft = 32 - len(sizetag) - 4
-        newnick = f"{userarray[NICK]} [{sizetag}]"
-
-        if len(newnick) > 32: newnick = f"{userarray[NICK][:charsleft]}… [{sizetag}]"
-        if len(newnick) > 32: newnick = userarray[NICK]
-
-        await message.author.edit(nick = nick)
 
 # Read in specific user.
 def read_user(user_id):
