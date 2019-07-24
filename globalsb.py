@@ -194,7 +194,7 @@ async def nickupdate(user):
     else:
         # Cannot fit the new sizetag
         newnick = nick
-    await message.author.edit(nick=newnick)
+    await user.edit(nick=newnick)
 
 
 # Read in specific user.
