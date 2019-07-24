@@ -19,9 +19,8 @@ from math import *
 import asyncio
 import codecs
 
+
 # TODO: Make this do something useful.
-
-
 class DigiException(Exception):
     pass
 
@@ -56,16 +55,15 @@ DENS = 5
 UNIT = 6
 SPEC = 7
 
+
 # Monika line gen.
-
-
 def monikaline():
     return random.choice(monikalines)
 
 
 def regenhexcode():
     # 16-char hex string gen for unregister.
-    hexdigits = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f"]
+    hexdigits = "1234567890abcdef"
     lst = [random.choice(hexdigits) for n in range(16)]
     hexstring = "".join(lst)
     hexfile = open("hexstring.txt", "r+")
@@ -98,27 +96,24 @@ context = Context(prec=100, rounding=ROUND_HALF_EVEN, Emin=-9999999, Emax=999999
                                                         InvalidOperation])
 setcontext(context)
 
+
 # Get number from string.
-
-
 def getnum(string):
     match = re.search(r"\d+\.?\d*", string)
     if match is None:
         return None
     return Decimal(match.group(0))
 
+
 # Get letters from string.
-
-
 def getlet(string):
     match = re.search(r"[a-zA-Z]+", string)
     if match is None:
         return None
     return match.group(0)
 
+
 # Remove decimals.
-
-
 def removedecimals(output):
     if ".00" in output:
         output = output.replace(".00", "")
@@ -150,8 +145,8 @@ def round_nearest_half(number):
 def place_value(number):
     return ("{:,}".format(number))
 
-# Update users nicknames to include sizetags.
 
+# Update users nicknames to include sizetags.
 async def nickupdate(user):
     if os.path.exists(folder + '/users/' + str(user.id) + '.txt'):
         userarray = read_user(user.id)
@@ -177,8 +172,6 @@ async def nickupdate(user):
         await message.author.edit(nick = nick)
 
 # Read in specific user.
-
-
 def read_user(user_id):
     user_id = str(user_id)
     with open(folder + "/users/" + user_id + ".txt") as f:
@@ -202,9 +195,8 @@ def read_userline(user_id, line):
     content = read_user(user_id)
     return content[line - 1]
 
+
 # Write to specific user.
-
-
 def write_user(user_id, content):
     user_id = str(user_id)
     # Replace None.
@@ -250,8 +242,8 @@ for infile in listing:
         members += 1
 print("Loaded {0} users.".format(members))
 
-# Color styling for terminal messages.
 
+# Color styling for terminal messages.
 def warn(message):
     return (fore.YELLOW + message + style.RESET)
 
@@ -262,6 +254,7 @@ def crit(message):
 
 def test(message):
     return (fore.BLUE + message + style.RESET)
+
 
 enspace = "\u2002"
 printtab = enspace * 4
@@ -288,9 +281,8 @@ sun = Decimal(1988435000000000000000000000000000000)
 milkyway = Decimal(95000000000000000000000000000000000000000000000)
 uniw = Decimal(3400000000000000000000000000000000000000000000000000000000000)
 
+
 # Convert any supported height to 'size value'
-
-
 def toSV(value, unit):
     if value is None or unit is None:
         return None
@@ -363,9 +355,8 @@ def toSV(value, unit):
         return None
     return output
 
+
 # Convert 'size values' to a more readable format (metric).
-
-
 def fromSV(value):
     value = float(value)
     output = ""
@@ -429,9 +420,8 @@ def fromSV(value):
         return "∞"
     return removedecimals(output)
 
+
 # Convert 'size values' to a more readable format (accurate).
-
-
 def fromSVacc(value):
     value = float(value)
     output = ""
@@ -495,9 +485,8 @@ def fromSVacc(value):
         return "∞"
     return output
 
+
 # Convert 'size values' to a more readable format (USA).
-
-
 def fromSVUSA(value):
     value = float(value)
     output = ""
@@ -555,9 +544,8 @@ def fromSVUSA(value):
         return "∞"
     return removedecimals(output)
 
+
 # Convert any supported weight to 'weight value', or milligrams.
-
-
 def toWV(value, unit):
     unit = unit.lower()
     if unit in ["yoctograms", "yoctograms", "yg"]:
@@ -628,9 +616,8 @@ def toWV(value, unit):
         return None
     return output
 
+
 # Convert 'weight values' to a more readable format.
-
-
 def fromWV(value):
     value = Decimal(value)
     if value <= 0:
@@ -695,9 +682,8 @@ def fromWV(value):
         return "∞"
     return output
 
+
 # Convert 'weight values' to a more readable format (USA).
-
-
 def fromWVUSA(value):
     value = Decimal(value)
     if value == 0:
