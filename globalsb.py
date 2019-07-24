@@ -157,6 +157,8 @@ async def nickupdate(user):
         userarray = read_user(user.id)
         sizetag = ""
 
+        if userarray[DISP] == "Y\n" and user.id != reol: return
+
         if userarray[CHEI] == None: userarray[CHEI] = userarray[BHEI]
         userarray[NICK] = userarray[NICK].strip()
         userarray[SPEC] = userarray[SPEC].strip()
@@ -172,8 +174,7 @@ async def nickupdate(user):
         if len(newnick) > 32: newnick = f"{userarray[NICK][:charsleft]}… [{sizetag}]}"
         if len(newnick) > 32: newnick = userarray[NICK]
 
-        if userarray[DISP] == "Y\n" and user.id != reol:
-            await message.author.edit(nick = nick)
+        await message.author.edit(nick = nick)
 
 # Read in specific user.
 
