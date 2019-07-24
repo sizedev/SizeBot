@@ -148,7 +148,7 @@ def place_value(number):
 
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
-    # Don't update reol's nick, for some reason?
+    # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
         return
     # Don't update users who aren't registered.
@@ -167,7 +167,7 @@ async def nickupdate(user):
     nick = userarray[NICK].strip()
     species = userarray[SPEC].strip()
 
-    unit_system = userarray[UNIT].strip()
+    unit_system = userarray[UNIT].strip().upper()
     if unit_system == "M":
         sizetag = fromSV(height)
     elif unit_system == "U":
@@ -182,7 +182,7 @@ async def nickupdate(user):
 
     if len(nick) > max_nick_len:
         # User has set their nick too large. Truncate.
-        nick = nick[:32]
+        nick = nick[:max_nick_len]
 
     if len(nick) + len(sizetag) + 3 <= max_nick_len:
         # Fit full nick and sizetag.
@@ -195,7 +195,7 @@ async def nickupdate(user):
     else:
         # Cannot fit the new sizetag.
         newnick = nick
-    await user.edit(nick=newnick)
+    await user.edit(nick = newnick)
 
 
 # Read in specific user.

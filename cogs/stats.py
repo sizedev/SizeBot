@@ -104,7 +104,7 @@ class StatsCog(commands.Cog):
         print(f"Stats for {who} sent.")
 
     @commands.command()
-    async def compare(self, ctx, who1 = None, who2 = None):
+    async def compare(self, ctx, who1 = None, who2 = None, who1name = None, who2name = None):
         if who2 is None:
             who2 = str(ctx.message.author.id)
 
@@ -112,11 +112,17 @@ class StatsCog(commands.Cog):
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.", delete_after=5)
             return
 
-        user1tag, user1 = await get_user(ctx, who1, "Raw 1")
+        if who1name is None:
+            who1name = "Raw 1"
+
+        if who2name is None:
+            who2name = "Raw 2"
+
+        user1tag, user1 = await get_user(ctx, who1, who1name)
         if user1 is None:
             await ctx.send(f"{who1} is not a recognized user or size.")
             return
-        user2tag, user2 = await get_user(ctx, who2, "Raw 2")
+        user2tag, user2 = await get_user(ctx, who2, who2name)
         if user2 is None:
             await ctx.send(f"{who2} is not a recognized user or size.")
             return
