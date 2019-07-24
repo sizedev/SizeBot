@@ -149,7 +149,7 @@ def place_value(number):
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
     # Don't update reol's nick, for some reason?
-    if user.id == reol:
+    if user.id == user.guild.ownerID:
         return
     # Don't update users who aren't registered
     if not os.path.exists(f"{folder}/users/{user.id}.txt"):
