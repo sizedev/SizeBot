@@ -190,7 +190,7 @@ async def nickupdate(user):
         # Fit short nick and sizetag
         chars_left = max_nick_len - len(sizetag) - 4
         short_nick = nick[:chars_left]
-        newnick = f"{shortnick}… [{sizetag}]"
+        newnick = f"{short_nick}… [{sizetag}]"
     else:
         # Cannot fit the new sizetag
         newnick = nick
