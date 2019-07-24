@@ -171,7 +171,7 @@ async def nickupdate(user):
         charsleft = 32 - len(sizetag) - 4
         newnick = f"{userarray[NICK]} [{sizetag}]"
 
-        if len(newnick) > 32: newnick = f"{userarray[NICK][:charsleft]}… [{sizetag}]}"
+        if len(newnick) > 32: newnick = f"{userarray[NICK][:charsleft]}… [{sizetag}]"
         if len(newnick) > 32: newnick = userarray[NICK]
 
         await message.author.edit(nick = nick)
