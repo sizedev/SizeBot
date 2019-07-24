@@ -149,14 +149,15 @@ def place_value(number):
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
     # Don't update reol's nick, for some reason?
-    if user.id == user.guild.ownerID:
+    if user.id == user.guild.owner.id:
         return
-    # Don't update users who aren't registered
+    # Don't update users who aren't registered.
     if not os.path.exists(f"{folder}/users/{user.id}.txt"):
         return
 
     userarray = read_user(user.id)
 
+    #User's display setting is N. No sizetag.
     if userarray[DISP].strip() != "Y":
         return
 
@@ -184,15 +185,15 @@ async def nickupdate(user):
         nick = nick[:32]
 
     if len(nick) + len(sizetag) + 3 <= max_nick_len:
-        # Fit full nick and sizetag
+        # Fit full nick and sizetag.
         newnick = f"{nick} [{sizetag}]"
     elif len(sizetag) + 7 <= max_nick_len:
-        # Fit short nick and sizetag
+        # Fit short nick and sizetag.
         chars_left = max_nick_len - len(sizetag) - 4
         short_nick = nick[:chars_left]
         newnick = f"{short_nick}… [{sizetag}]"
     else:
-        # Cannot fit the new sizetag
+        # Cannot fit the new sizetag.
         newnick = nick
     await user.edit(nick=newnick)
 
