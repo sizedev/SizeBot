@@ -6,6 +6,7 @@ class ChangeCog(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
+	# TODO: This isn't very clean.
 	@commands.command()
 	async def change(self, ctx, style, amount):
 		#Change height.
@@ -25,7 +26,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI]))) #Add comp to base.
 		elif style == "m" or style == "*" or style == "x" or style == "mult" or style == "multiply":
 			userarray = read_user(ctx.message.author.id)
@@ -38,7 +39,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI]))) #Add comp to base.
 		elif style == "s" or style == "-" or style == "sub" or style == "subtract":
 			amount = isFeetAndInchesAndIfSoFixIt(amount)
@@ -52,7 +53,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI]))) #Add comp to base.
 		elif style == "d" or style == "/" or style == "div" or style == "divide":
 			userarray = read_user(ctx.message.author.id)
@@ -65,7 +66,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 				await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI]))) #Add comp to base.
 		else:
 			await ctx.send("Please enter a valid change method.", delete_after=3)
@@ -94,7 +95,7 @@ class ChangeCog(commands.Cog):
 					userarray = read_user(ctx.message.author.id)
 					print (userarray)
 					if userarray[DISP] == "Y\n":
-						await nickupdate(ctx, userarray)
+						await nickupdate(ctx.message.author)
 					await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
 					await asyncio.sleep(delay * 60)
 			elif style == "m" or style == "*" or style == "x" or style == "mult" or style == "multiply":
@@ -111,7 +112,7 @@ class ChangeCog(commands.Cog):
 					userarray = read_user(ctx.message.author.id)
 					print (userarray)
 					if userarray[DISP] == "Y\n":
-						await nickupdate(ctx, userarray)
+						await nickupdate(ctx.message.author)
 						await ctx.send("""{0} is now {1} tall. ({2})""".format(ctx.message.author.name, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
 						await asyncio.sleep(delay * 60)
 			elif style == "s" or style == "-" or style == "sub" or style == "subtract":
@@ -123,7 +124,7 @@ class ChangeCog(commands.Cog):
 					userarray = read_user(ctx.message.author.id)
 					print (userarray)
 					if userarray[DISP] == "Y\n":
-						await nickupdate(ctx, userarray)
+						await nickupdate(ctx.message.author)
 						await ctx.send("""{0} is now {1} tall. ({2})""".format(ctx.message.author.name, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
 						await asyncio.sleep(delay * 60)
 			elif style == "d" or style == "/" or style == "div" or style == "divide":
@@ -134,7 +135,7 @@ class ChangeCog(commands.Cog):
 					userarray = read_user(ctx.message.author.id)
 					print (userarray)
 					if userarray[DISP] == "Y\n":
-						await nickupdate(ctx, userarray)
+						await nickupdate(ctx.message.author)
 						await ctx.send("""{0} is now {1} tall. ({2})""".format(ctx.message.author.name, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
 						await asyncio.sleep(delay * 60)
 			else:
@@ -168,7 +169,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 			#TODO: Randomize the italics message here.
 			await ctx.send("""<@{0}> ate a :cake:! *I mean it said "Eat me..."*
 They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randmult, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
@@ -193,7 +194,7 @@ They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 			#TODO: Randomize the italics message here.
 			await ctx.send("""<@{0}> drank a :milk:! *What harm could a drink do?*
 They shrunk {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randmult, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))

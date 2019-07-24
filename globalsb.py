@@ -27,7 +27,7 @@ class DigiException(Exception):
 
 
 # Version.
-version = "3.3.0.1"
+version = "3.3.1"
 
 # Defaults
 defaultheight = Decimal(1754000)  # micrometers
@@ -82,7 +82,7 @@ def readhexcode():
 
 
 # ASCII art.
-ascii = """
+ascii = r"""
 . _____ _        ______       _   _____ .
 ./  ___(_)       | ___ \     | | |____ |.
 .\ `--. _ _______| |_/ / ___ | |_    / /.
@@ -150,46 +150,30 @@ def round_nearest_half(number):
 def place_value(number):
     return ("{:,}".format(number))
 
+# Update users nicknames to include sizetags.
 
-async def nickupdate(ctx, userarray):
-    if userarray[CHEI] == "None":
-        userarray[CHEI] = userarray[BHEI]
-        await ctx.send("<@{0}>: Error in size value: Size value returned 'None'. Resetting to base height.").format(ctx.message.author.id)
-    if ctx.message.author.id != 291654189833256960:
-        if userarray[UNIT] == "M\n":
-            if userarray[SPEC] == "None\n":
-                nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + "]"
-                if len(nick) > 32:
-                    nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSV(userarray[CHEI]) + "]"
-                    if len(nick) > 32:
-                        nick = userarray[NICK] + " [8]"
-                await ctx.message.author.edit(nick=nick)
-            else:
-                nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + ", " + userarray[SPEC] + "]"
-                if len(nick) > 32:
-                    nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + "]"
-                    if len(nick) > 32:
-                        nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSV(userarray[CHEI]) + "]"
-                        if len(nick) > 32:
-                            nick = userarray[NICK] + " [8]"
-                await ctx.message.author.edit(nick=nick)
-        else:
-            if userarray[SPEC] == "None\n":
-                nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + "]"
-                if len(nick) > 32:
-                    nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSVUSA(userarray[CHEI]) + "]"
-                    if len(nick) > 32:
-                        nick = userarray[NICK] + " [8]"
-                await ctx.message.author.edit(nick=nick)
-            else:
-                nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + ", " + userarray[SPEC] + "]"
-                if len(nick) > 32:
-                    nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + "]"
-                    if len(nick) > 32:
-                        nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSVUSA(userarray[CHEI]) + "]"
-                        if len(nick) > 32:
-                            nick = userarray[NICK] + " [8]"
-                await ctx.message.author.edit(nick=nick)
+async def nickupdate(user):
+    if os.path.exists(folder + '/users/' + str(user.id) + '.txt'):
+        userarray = read_user(user.id)
+        sizetag = ""
+
+        if userarray[CHEI] == None: userarray[CHEI] = userarray[BHEI]
+        userarray[NICK] = userarray[NICK].strip()
+        userarray[SPEC] = userarray[SPEC].strip()
+
+        if userarray[UNIT] == "M\n" : sizetag = fromSV(userarray[CHEI])
+        if userarray[UNIT] == "U\n" : sizetag = fromSVUSA(userarray[CHEI])
+
+        if userarray[SPEC] != "None": sizetag = f"{sizetag}, {userarray[SPEC]}"
+
+        charsleft = 32 - len(sizetag) - 4
+        newnick = f"{userarray[NICK]} [{sizetag}]"
+
+        if len(newnick) > 32: newnick = f"{userarray[NICK][:charsleft]}… [{sizetag}]}"
+        if len(newnick) > 32: newnick = userarray[NICK]
+
+        if userarray[DISP] == "Y\n" and user.id != reol:
+            await message.author.edit(nick = nick)
 
 # Read in specific user.
 

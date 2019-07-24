@@ -28,7 +28,7 @@ class SetCog(commands.Cog):
 				await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your nick.".format(ctx.message.author.id))
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 
 	@commands.command()
 	async def setspecies(self, ctx, *, newtag = None):
@@ -53,7 +53,7 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 
 	@commands.command()
 	async def clearspecies(self, ctx):
@@ -69,7 +69,7 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 
 	@commands.command()
 	async def setheight(self, ctx, newheight = None):
@@ -92,7 +92,7 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
 
 	@commands.command()
@@ -109,7 +109,7 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 
 	@commands.command()
 	async def setdensity(self, ctx, newdensity : float = None):
@@ -128,7 +128,7 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}> is now {1}x density.""".format(ctx.message.author.id, userarray[DENS][:-1]))
 
 	@commands.command()
@@ -148,7 +148,8 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
+			await ctx.send("""<@{0}>'s display is now set to {1}.'""".format(ctx.message.author.id, userarray[DISP][:-1]))
 
 	@commands.command()
 	async def setsystem(self, ctx, newsys = None):
@@ -167,7 +168,8 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
+			await ctx.send("""<@{0}>'s system is now set to {1}.'""".format(ctx.message.author.id, userarray[UNIT][:-1]))
 
 	@commands.command()
 	async def setrandomheight(self, ctx, newheightmin = None, newheightmax = None):
@@ -194,7 +196,7 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
 
 	@commands.command()
@@ -204,7 +206,7 @@ class SetCog(commands.Cog):
 		userarray[CHEI] = str(infinity) + newline
 		write_user(ctx.message.author.id, userarray)
 		if userarray[DISP] == "Y\n":
-			await nickupdate(ctx, userarray)
+			await nickupdate(ctx.message.author)
 
 	@commands.command()
 	async def set0(self, ctx):
@@ -213,7 +215,7 @@ class SetCog(commands.Cog):
 		userarray[CHEI] = "0" + newline
 		write_user(ctx.message.author.id, userarray)
 		if userarray[DISP] == "Y\n":
-			await nickupdate(ctx, userarray)
+			await nickupdate(ctx.message.author)
 
 	@commands.command()
 	async def setbaseheight(self, ctx, newbaseheight = None):
@@ -232,7 +234,7 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}>'s base height is now {1}. ({2})""".format(ctx.message.author.id, fromSV(userarray[BHEI]), fromSVUSA(userarray[BHEI])))
 
 	@commands.command()
@@ -252,7 +254,7 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			print (userarray)
 			if userarray[DISP] == "Y\n":
-				await nickupdate(ctx, userarray)
+				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}>'s base weight is now {1}. ({2})""".format(ctx.message.author.id, fromWV(userarray[BWEI]), fromWVUSA(userarray[BWEI])))
 
 #Necessary.

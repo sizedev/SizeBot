@@ -149,47 +149,7 @@ async def on_message(message):
 	#Change user nick if display is Y.
 	#TODO: Rewrite this, this is awful.
 	try:
-		if os.path.exists(folder + '/users/' + str(message.author.id) + '.txt'):
-			userarray = read_user(message.author.id)
-			if userarray[CHEI] == "None":
-				userarray[CHEI] = userarray[BHEI]
-				await message.channel.send("<@{0}>: Error in size value: Size value returned None. Resetting to base height.").format(message.author.id)
-			if userarray[DISP] == "Y\n":
-				if message.author.id != reol:
-					if userarray[UNIT] == "M\n":
-						if userarray[SPEC] == "None\n":
-							nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + "]"
-							if len(nick) > 32:
-								nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSV(userarray[CHEI]) + "]"
-								if len(nick) > 32:
-									nick = userarray[NICK] + " [∞]"
-							await message.author.edit(nick = nick)
-						else:
-							nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + ", " + userarray[SPEC] + "]"
-							if len(nick) > 32:
-								nick = userarray[NICK] + " [" + fromSV(userarray[CHEI]) + "]"
-								if len(nick) > 32:
-									nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSV(userarray[CHEI]) + "]"
-									if len(nick) > 32:
-										nick = userarray[NICK] + " [∞]"
-							await message.author.edit(nick = nick)
-					else:
-						if userarray[SPEC] == "None\n":
-							nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + "]"
-							if len(nick) > 32:
-								nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSVUSA(userarray[CHEI]) + "]"
-								if len(nick) > 32:
-									nick = userarray[NICK] + " [∞]"
-							await message.author.edit(nick = nick)
-						else:
-							nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + ", " + userarray[SPEC] + "]"
-							if len(nick) > 32:
-								nick = userarray[NICK] + " [" + fromSVUSA(userarray[CHEI]) + "]"
-								if len(nick) > 32:
-									nick = userarray[NICK][:-(len(nick) - 33)] + "… [" + fromSVUSA(userarray[CHEI]) + "]"
-									if len(nick) > 32:
-										nick = userarray[NICK] + " [∞]"
-							await message.author.edit(nick = nick)
+		nickupdate(message.author)
 	except discord.ext.commands.errors.CommandInvokeError:
 		pass
 
