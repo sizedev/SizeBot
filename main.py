@@ -149,7 +149,7 @@ async def on_message(message):
 	#Change user nick if display is Y.
 	#TODO: Rewrite this, this is awful.
 	try:
-		nickupdate(message.author)
+		await nickupdate(message.author)
 	except discord.ext.commands.errors.CommandInvokeError:
 		pass
 
