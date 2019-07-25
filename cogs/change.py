@@ -141,8 +141,11 @@ class ChangeCog(commands.Cog):
 			else:
 				await ctx.send("Please enter a valid change style.", delete_after=3)
 		bot = self.bot
-		try tasks[ctx.message.author.id].cancel()
-		try del tasks[ctx.message.author.id]
+		try:
+			tasks[ctx.message.author.id].cancel()
+			del tasks[ctx.message.author.id]
+		except:
+			pass
 		task = bot.loop.create_task(slowchangetask(ctx, style, amount, delay))
 		tasks[ctx.message.author.id] = task
 
