@@ -9,6 +9,7 @@ class ChangeCog(commands.Cog):
 	# TODO: This isn't very clean.
 	@commands.command()
 	async def change(self, ctx, style, amount):
+		msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed {style}-style {amount}.")
 		#Change height.
 		if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		#User file missing.
@@ -70,6 +71,7 @@ class ChangeCog(commands.Cog):
 
 	@commands.command()
 	async def slowchange(self, ctx, style : str, amount : str, delay : float):
+		msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) slow-changed {style}-style {amount} every {delay} minutes.")
 		async def slowchangetask(ctx, style, amount, delay):
 			#Change height.
 			if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
@@ -143,6 +145,7 @@ class ChangeCog(commands.Cog):
 
 	@commands.command()
 	async def stopchange(self, ctx):
+		msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) stopped slow-changing.")
 		tasks[ctx.message.author.id].cancel()
 		del tasks[ctx.message.author.id]
 
@@ -166,6 +169,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
+			msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) ate a cake and multiplied {randmult}.")
 			#TODO: Randomize the italics message here.
 			await ctx.send("""<@{0}> ate a :cake:! *I mean it said "Eat me..."*
 They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randmult, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
@@ -190,6 +194,7 @@ They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id
 			userarray = read_user(ctx.message.author.id)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
+			msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) drank a potion and divided {randmult}.")
 			#TODO: Randomize the italics message here.
 			await ctx.send("""<@{0}> drank a :shrinkpotion:! *What harm could a drink do?*
 They shrunk {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randmult, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))

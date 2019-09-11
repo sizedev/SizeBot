@@ -19,6 +19,7 @@ class RPCog(commands.Cog):
 		dNum = 0
 		dDrops = 0
 		dTotal = 0
+		stop = False
 		dArray = dString.split("d")
 		if len(dArray) == 2:
 			dNum = int(dArray[0])
@@ -30,6 +31,15 @@ class RPCog(commands.Cog):
 		else:
 			await ctx.send('Format has to be in XdY or XdYdZ.')
 			return
+		if dSides > 1000000:
+			await ctx.send('Too many sides!')
+			warn(f"{ctx.message.user.id} ({ctx.message.user.nick}) tried to roll a {dSides}-sided die!")
+			stop = True
+		if dNum > 250:
+			await ctx.send('Too many dice!')
+			warn(f"{ctx.message.user.id} ({ctx.message.user.nick}) tried to roll {dNum} dice!")
+			stop = True
+		if stop: return
 		for x in range(dNum):
 			currentRoll = (random.randrange(1, dSides + 1))
 			rolls.append(currentRoll)
@@ -39,8 +49,9 @@ class RPCog(commands.Cog):
 			usedrolls.append(rolls[x])
 		dropped = rolls
 		for item in usedrolls: dropped.remove(item)
-		sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.name, dString, str(dTotal), str(usedrolls))
+		sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.nick, dString, str(dTotal), str(usedrolls))
 		if dropped != []: sendstring = sendstring + "\n~~Dropped: {0}~~".format(str(dropped))
+		(f"{ctx.message.user.id} ({ctx.message.user.nick}) rolled {dString}.")
 		await ctx.send(sendstring)
 
 #Necessary.
