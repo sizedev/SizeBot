@@ -266,7 +266,7 @@ def isFeetAndInchesAndIfSoFixIt(input):
 
 #Color styling for terminal messages.
 def time():
-	print(fore.MAGENTA + strftime("%d %b %H:%M:%S | ", localtime()) + style.RESET)
+	return (fore.MAGENTA + strftime("%d %b %H:%M:%S | ", localtime()) + style.RESET)
 def warn(message):
 	print(time() + fore.YELLOW + message + style.RESET)
 def crit(message):
