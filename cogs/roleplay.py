@@ -33,11 +33,11 @@ class RPCog(commands.Cog):
 			return
 		if dSides > 1000000:
 			await ctx.send('Too many sides!')
-			warn(f"{ctx.message.user.id} ({ctx.message.user.nick}) tried to roll a {dSides}-sided die!")
+			warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll a {dSides}-sided die!")
 			stop = True
 		if dNum > 250:
 			await ctx.send('Too many dice!')
-			warn(f"{ctx.message.user.id} ({ctx.message.user.nick}) tried to roll {dNum} dice!")
+			warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll {dNum} dice!")
 			stop = True
 		if stop: return
 		for x in range(dNum):
@@ -51,7 +51,7 @@ class RPCog(commands.Cog):
 		for item in usedrolls: dropped.remove(item)
 		sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.nick, dString, str(dTotal), str(usedrolls))
 		if dropped != []: sendstring = sendstring + "\n~~Dropped: {0}~~".format(str(dropped))
-		(f"{ctx.message.user.id} ({ctx.message.user.nick}) rolled {dString}.")
+		(f"{ctx.message.author.id} ({ctx.message.author.nick}) rolled {dString}.")
 		await ctx.send(sendstring)
 
 #Necessary.
