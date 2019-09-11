@@ -200,6 +200,7 @@ async def nickupdate(user):
 
 # Read in specific user.
 def read_user(user_id):
+    print(f"Reading user {user_id}.")
     user_id = str(user_id)
     with open(folder + "/users/" + user_id + ".txt") as f:
         # Make array of lines from file.
