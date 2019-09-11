@@ -19,7 +19,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(Decimal(userarray[CHEI]) + Decimal(toSV(getnum(amount), getlet(amount)))) + newline
 			if (float(userarray[CHEI]) > infinity):
-				warn("Invalid size value."))
+				warn("Invalid size value.")
 				await ctx.send("Too big. x_x", delete_after=3)
 				userarray[CHEI] = str(infinity) + newline
 			write_user(ctx.message.author.id, userarray)
@@ -31,7 +31,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(Decimal(userarray[CHEI]) * Decimal(amount)) + newline
 			if (float(userarray[CHEI]) > infinity):
-				warn("Invalid size value."))
+				warn("Invalid size value.")
 				await ctx.send("Too big. x_x", delete_after=3)
 				userarray[CHEI] = str(infinity) + newline
 			write_user(ctx.message.author.id, userarray)
@@ -44,7 +44,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(Decimal(userarray[CHEI]) - (toSV(getnum(amount), getlet(amount))))
 			if (float(userarray[CHEI]) > infinity):
-				warn("Invalid size value."))
+				warn("Invalid size value.")
 				await ctx.send("Too big. x_x", delete_after=3)
 				userarray[CHEI] = str(infinity) + newline
 			write_user(ctx.message.author.id, userarray)
@@ -56,7 +56,7 @@ class ChangeCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(Decimal(userarray[CHEI]) / Decimal(amount))
 			if (float(userarray[CHEI]) > infinity):
-				warn("Invalid size value."))
+				warn("Invalid size value.")
 				await ctx.send("Too big. x_x", delete_after=3)
 				userarray[CHEI] = str(infinity) + newline
 			write_user(ctx.message.author.id, userarray)
@@ -82,7 +82,7 @@ class ChangeCog(commands.Cog):
 					userarray = read_user(ctx.message.author.id)
 					userarray[CHEI] = str(Decimal(userarray[CHEI]) + Decimal(toSV(getnum(amount), getlet(amount)))) + newline
 					if (float(userarray[CHEI]) > infinity):
-						warn("Invalid size value."))
+						warn("Invalid size value.")
 						await ctx.send("Too big. x_x", delete_after=3)
 						userarray[CHEI] = str(infinity) + newline
 						tasks[ctx.message.author.id].cancel()
@@ -98,7 +98,7 @@ class ChangeCog(commands.Cog):
 					userarray = read_user(ctx.message.author.id)
 					userarray[CHEI] = str(Decimal(userarray[CHEI]) * Decimal(amount)) + newline
 					if (float(userarray[CHEI]) > infinity):
-						warn("Invalid size value."))
+						warn("Invalid size value.")
 						await ctx.send("Too big. x_x", delete_after=3)
 						uuserarray[CHEI] = str(infinity) + newline
 						tasks[ctx.message.author.id].cancel()
@@ -159,7 +159,7 @@ class ChangeCog(commands.Cog):
 			newheight = float(userarray[CHEI]) * randmult
 			userarray[CHEI] = str(newheight) + newline
 			if (float(userarray[CHEI]) > infinity):
-				warn("Invalid size value."))
+				warn("Invalid size value.")
 				await ctx.send("Too big. x_x", delete_after=3)
 				userarray[CHEI] = str(infinity) + newline
 			write_user(ctx.message.author.id, userarray)
@@ -183,7 +183,7 @@ They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id
 			newheight = float(userarray[CHEI]) / randmult
 			userarray[CHEI] = str(newheight) + newline
 			if (float(userarray[CHEI]) > infinity):
-				warn("Invalid size value."))
+				warn("Invalid size value.")
 				await ctx.send("Too big. x_x", delete_after=3)
 				userarray[CHEI] = str(infinity) + newline
 			write_user(ctx.message.author.id, userarray)
