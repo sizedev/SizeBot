@@ -155,7 +155,7 @@ class ChangeCog(commands.Cog):
 	To register, use the `&register` command.""", delete_after=5)
 		else:
 			userarray = read_user(ctx.message.author.id)
-			randmult = random.randint(2, 20)
+			randmult = round(random.random(2, 20), 1)
 			newheight = float(userarray[CHEI]) * randmult
 			userarray[CHEI] = str(newheight) + newline
 			if (float(userarray[CHEI]) > infinity):
@@ -179,7 +179,7 @@ They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id
 	To register, use the `&register` command.""", delete_after=5)
 		else:
 			userarray = read_user(ctx.message.author.id)
-			randmult = random.randint(2, 20)
+			randmult = round(random.random(2, 20), 1)
 			newheight = float(userarray[CHEI]) / randmult
 			userarray[CHEI] = str(newheight) + newline
 			if (float(userarray[CHEI]) > infinity):
@@ -191,7 +191,7 @@ They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 			#TODO: Randomize the italics message here.
-			await ctx.send("""<@{0}> drank a :milk:! *What harm could a drink do?*
+			await ctx.send("""<@{0}> drank a :shrinkpotion:! *What harm could a drink do?*
 They shrunk {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randmult, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
 
 
