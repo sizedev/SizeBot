@@ -26,7 +26,6 @@ class SetCog(commands.Cog):
 			except():
 				userarray = olduserarray
 				await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your nick.".format(ctx.message.author.id))
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 
@@ -51,7 +50,6 @@ class SetCog(commands.Cog):
 				userarray = olduserarray
 				await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your species.".format(ctx.message.author.id))
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 
@@ -67,7 +65,6 @@ class SetCog(commands.Cog):
 			userarray[SPEC] = "None" + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 
@@ -85,12 +82,11 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(toSV(getnum(newheight), getlet(newheight))) + newline
 			if (float(userarray[CHEI]) > infinity):
-				print(warn("Invalid size value."))
+				warn("Invalid size value.")
 				await ctx.send("Too big. x_x", delete_after=3)
 				userarray[CHEI] = str(infinity) + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
@@ -107,7 +103,6 @@ class SetCog(commands.Cog):
 			userarray[CHEI] = userarray[BHEI]
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 
@@ -126,7 +121,6 @@ class SetCog(commands.Cog):
 			userarray[DENS] = str(newdensity) + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}> is now {1}x density.""".format(ctx.message.author.id, userarray[DENS][:-1]))
@@ -146,7 +140,6 @@ class SetCog(commands.Cog):
 			userarray[DISP] = str(newdisp) + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}>'s display is now set to {1}.'""".format(ctx.message.author.id, userarray[DISP][:-1]))
@@ -166,7 +159,6 @@ class SetCog(commands.Cog):
 			userarray[UNIT] = str(newsys) + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}>'s system is now set to {1}.'""".format(ctx.message.author.id, userarray[UNIT][:-1]))
@@ -189,12 +181,11 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(newheight) + newline
 			if (float(userarray[CHEI]) > infinity):
-				print(warn("Invalid size value."))
+				warn("Invalid size value.")
 				await ctx.send("Too big. x_x", delete_after=3)
 				userarray[CHEI] = str(infinity) + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
@@ -232,7 +223,6 @@ class SetCog(commands.Cog):
 			userarray[BHEI] = str(toSV(getnum(newbaseheight), getlet(newbaseheight))) + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}>'s base height is now {1}. ({2})""".format(ctx.message.author.id, fromSV(userarray[BHEI]), fromSVUSA(userarray[BHEI])))
@@ -252,7 +242,6 @@ class SetCog(commands.Cog):
 			userarray[BWEI] = str(toWV(getnum(newbaseweight), getlet(newbaseweight))) + newline
 			write_user(ctx.message.author.id, userarray)
 			userarray = read_user(ctx.message.author.id)
-			print (userarray)
 			if userarray[DISP] == "Y\n":
 				await nickupdate(ctx.message.author)
 			await ctx.send("""<@{0}>'s base weight is now {1}. ({2})""".format(ctx.message.author.id, fromWV(userarray[BWEI]), fromWVUSA(userarray[BWEI])))

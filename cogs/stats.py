@@ -101,7 +101,7 @@ class StatsCog(commands.Cog):
 
         output = self.user_stats(user1tag, user1)
         await ctx.send(output)
-        print(f"Stats for {who} sent.")
+        msg(f"Stats for {who} sent.")
 
     @commands.command()
     async def compare(self, ctx, who1 = None, who2 = None, who1name = None, who2name = None):
@@ -129,7 +129,7 @@ class StatsCog(commands.Cog):
 
         output = self.compare_users(user1tag, user1, user2tag, user2)
         await ctx.send(output)
-        print(f"Compared {user1} and {user2}")
+        msg(f"Compared {user1} and {user2}")
 
     def compare_users(self, user1tag, user1, user2tag, user2):
         if Decimal(user1[CHEI]) == Decimal(user2[CHEI]):

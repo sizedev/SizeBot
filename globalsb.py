@@ -2,20 +2,19 @@ import discord
 from discord.ext import commands
 import re
 import datetime
+from datetime import *
+import time
+from time import strftime, localtime
 import sys
 import os
-import time
-from datetime import date
-from datetime import *
 import math
+from math import *
 import random
 from decimal import *
 from colored import fore, back, style, fg, bg, attr
 from pathlib import Path
 import string
 import traceback
-from discord.ext import commands
-from math import *
 import asyncio
 import codecs
 
@@ -26,7 +25,7 @@ class DigiException(Exception):
 
 
 # Version.
-version = "3.3.1"
+version = "3.3.2"
 
 # Defaults
 defaultheight = Decimal(1754000)  # micrometers
@@ -148,8 +147,12 @@ def place_value(number):
 
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
+    if not isinstance(user, discord.Member):
+        warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
+        return
     # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
+        warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
         return
     # Don't update users who aren't registered.
     if not os.path.exists(f"{folder}/users/{user.id}.txt"):
@@ -197,10 +200,11 @@ async def nickupdate(user):
         newnick = nick
     await user.edit(nick = newnick)
 
+    msg(f"Updated user {user.id} ({user.name}).")
+
 
 # Read in specific user.
 def read_user(user_id):
-    print(f"Reading user {user_id}.")
     user_id = str(user_id)
     with open(folder + "/users/" + user_id + ".txt") as f:
         # Make array of lines from file.
@@ -260,6 +264,19 @@ def isFeetAndInchesAndIfSoFixIt(input):
     else:
         return input
 
+#Color styling for terminal messages.
+def time():
+	print(fore.MAGENTA + strftime("%d %b %H:%M:%S | ", localtime()) + style.RESET)
+def warn(message):
+	print(time() + fore.YELLOW + message + style.RESET)
+def crit(message):
+	print(time() + back.RED + style.BOLD + message + style.RESET)
+def test(message):
+	print(time() + fore.BLUE + message + style.RESET)
+def msg(message):
+	 print(time() + fg(51) + message + style.RESET)
+def load(message):
+    	return (fg(238) + message + style.RESET)
 
 # Count users.
 members = 0
@@ -268,21 +285,7 @@ listing = os.listdir(path)
 for infile in listing:
     if infile.endswith(".txt"):
         members += 1
-print("Loaded {0} users.".format(members))
-
-
-# Color styling for terminal messages.
-def warn(message):
-    return (fore.YELLOW + message + style.RESET)
-
-
-def crit(message):
-    return (back.RED + style.BOLD + message + style.RESET)
-
-
-def test(message):
-    return (fore.BLUE + message + style.RESET)
-
+load("Loaded {0} users.".format(members))
 
 enspace = "\u2002"
 printtab = enspace * 4
@@ -827,3 +830,5 @@ def check(ctx):
 
     role = discord.utils.get(ctx.author.roles, name='SizeBot_Banned')
     return role is None
+
+load("Global functions loaded.")
