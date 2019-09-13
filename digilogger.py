@@ -3,6 +3,7 @@ import traceback
 import functools
 import time
 from time import strftime, localtime
+from colored import fore, back, style, fg, bg, attr
 
 # Error debugging
 def print_error(command, error):

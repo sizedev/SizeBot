@@ -24,8 +24,9 @@ import digilogger as logger
 class DigiException(Exception):
 	pass
 
+
 # Version.
-version = "3.3.3"
+version = "3.3.2"
 
 # Defaults
 defaultheight = Decimal(1754000)  # micrometers
@@ -148,11 +149,11 @@ def place_value(number):
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
 	if not isinstance(user, discord.Member):
-		warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
+		logger.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
 		return
 	# Don't update owner's nick, permissions error.
 	if user.id == user.guild.owner.id:
-		warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
+		logger.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
 		return
 	# Don't update users who aren't registered.
 	if not os.path.exists(f"{folder}/users/{user.id}.txt"):
@@ -200,7 +201,7 @@ async def nickupdate(user):
 		newnick = nick
 	await user.edit(nick = newnick)
 
-	msg(f"Updated user {user.id} ({user.name}).")
+	logger.msg(f"Updated user {user.id} ({user.name}).")
 
 
 # Read in specific user.
@@ -264,6 +265,20 @@ def isFeetAndInchesAndIfSoFixIt(input):
 	else:
 		return input
 
+#Color styling for terminal messages.
+def time():
+	return (fore.MAGENTA + strftime("%d %b %H:%M:%S | ", localtime()) + style.RESET)
+def warn(message):
+	print(time() + fore.YELLOW + message + style.RESET)
+def crit(message):
+	print(time() + back.RED + style.BOLD + message + style.RESET)
+def test(message):
+	print(time() + fore.BLUE + message + style.RESET)
+def msg(message):
+	 print(time() + fg(51) + message + style.RESET)
+def load(message):
+		return (fg(238) + message + style.RESET)
+
 # Count users.
 members = 0
 path = folder + '/users'
@@ -271,7 +286,7 @@ listing = os.listdir(path)
 for infile in listing:
 	if infile.endswith(".txt"):
 		members += 1
-load("Loaded {0} users.".format(members))
+logger.load("Loaded {0} users.".format(members))
 
 enspace = "\u2002"
 printtab = enspace * 4
@@ -817,4 +832,4 @@ def check(ctx):
 	role = discord.utils.get(ctx.author.roles, name='SizeBot_Banned')
 	return role is None
 
-load("Global functions loaded.")
+logger.load("Global functions loaded.")
