@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from globalsb import *
+import digilogger as logger
 
 #Commands for non-size stuff.
 #

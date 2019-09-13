@@ -1,4 +1,5 @@
 from globalsb import *
+import digilogger as logger
 
 os.system("")
 
@@ -18,7 +19,6 @@ initial_extensions = ['cogs.change',
 					  'cogs.roleplay',
 					  'cogs.set',
 					  'cogs.stats',
-					  #'cogs.statsplus',
 					  'cogs.fun']
 
 #Obviously we need this printed in the terminal.
@@ -36,9 +36,9 @@ async def on_ready():
 	print(bot.user.id)
 	print('------' + style.RESET)
 	await bot.change_presence(activity=discord.Game(name="Ratchet and Clank: Size Matters"))
-	warn("Warn test.")
-	crit("Crit test.")
-	test("Test test.")
+	logger.warn("Warn test.")
+	logger.crit("Crit test.")
+	logger.test("Test test.")
 
 @bot.command()
 async def register(ctx, nick:str, display:str, currentheight:str,
@@ -64,28 +64,28 @@ async def register(ctx, nick:str, display:str, currentheight:str,
 
 	readable = "CH {0}, CHU {1}, BH {2}, BHU {3}, BW {4}, BWU {5}".format(currentheight, chu,
 		baseheight, bhu, baseweight, bwu)
-	warn("New user attempt! Nickname: {0}, Display: {1}".format(nick, display))
+	logger.warn("New user attempt! Nickname: {0}, Display: {1}".format(nick, display))
 	print(readable)
 
 	#Already registered.
 	if os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 		await ctx.send("""Sorry! You already registered with SizeBot.
 To unregister, use the `&unregister` command.""", delete_after=5)
-		warn("User already registered on user registration: {1}.".format(ctx.message.author))
+		logger.warn("User already registered on user registration: {1}.".format(ctx.message.author))
 		return
 	#Invalid size value.
 	elif (currentheight <= 0 or
 		baseheight <= 0 or
 		baseweight <= 0):
-		warn("Invalid size value.")
+		logger.warn("Invalid size value.")
 		await ctx.send("All values must be an integer greater than zero.", delete_after=3)
 		return
 	#Invalid display value.
 	elif display.lower() not in ["y", "n"]:
-		warn("display was {0}, must be Y or N.".format(display))
+		logger.warn("display was {0}, must be Y or N.".format(display))
 		return
 	elif units.lower() not in ["m", "u"]:
-		warn("units was {0}, must be M or U.".format(units))
+		logger.warn("units was {0}, must be M or U.".format(units))
 		await ctx.send("Units must be `M` or `U`.", delete_after=3)
 		return
 	#Success.
@@ -103,7 +103,7 @@ To unregister, use the `&unregister` command.""", delete_after=5)
 				warn("Unicode in nick or species.")
 				await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your nick or species.".format(ctx.message.author.id))
 				return
-			warn("Made a new user: {0}!".format(ctx.message.author))
+			logger.warn("Made a new user: {0}!".format(ctx.message.author))
 			print(writethis)
 			print(userfile.readlines())
 		await ctx.send("Registered <@{0}>. {1}.".format(ctx.message.author.id, readable), delete_after=3)
@@ -119,7 +119,7 @@ Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] 
 async def unregister(ctx, code = None):
 	if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
 	#User file missing.
-		warn("User {0} not registered with SizeBot, but tried to unregister anyway.".format(ctx.message.author.id))
+		logger.warn("User {0} not registered with SizeBot, but tried to unregister anyway.".format(ctx.message.author.id))
 		await ctx.send("""Sorry! You aren't registered with SizeBot.
 To register, use the `&register` command.""", delete_after=5)
 	elif code is None:
@@ -128,11 +128,11 @@ To register, use the `&register` command.""", delete_after=5)
 `{0}`""".format(readhexcode())
 			, delete_after=5)
 	elif code != readhexcode():
-		warn("User {0} tried to unregister, but said the wrong hexcode.".format(ctx.message.author.id))
+		logger.warn("User {0} tried to unregister, but said the wrong hexcode.".format(ctx.message.author.id))
 		await ctx.send("Incorrect code. You said: `{0}`. The correct code was: `{1}`. Try again.".format(
 			code, readhexcode()), delete_after=5)
 	else:
-		warn("User {0} successfully unregistered.".format(ctx.message.author.id))
+		logger.warn("User {0} successfully unregistered.".format(ctx.message.author.id))
 		await ctx.send("Correct code! Unregisted {0}".format(ctx.message.author.name), delete_after=3)
 		os.remove(folder + "/users/" + str(ctx.message.author.id) + ".txt")
 
@@ -141,9 +141,9 @@ async def on_message(message):
 	#Easter egg.
 	if "monika" in message.content.lower():
 		if message.author.id != sizebot_id:
-			warn("Monika detected.")
+			logger.warn("Monika detected.")
 			if random.randrange(10) == 7:
-				warn("Monika triggered.")
+				logger.warn("Monika triggered.")
 				await message.channel.send(monikaline(), delete_after=5)
 
 	#Change user nick if display is Y.

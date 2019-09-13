@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from globalsb import *
+import digilogger as logger
 
 class ModCog(commands.Cog):
 	def __init__(self, bot):
@@ -162,6 +163,7 @@ Thank you so much for being here throughout this journey!""".format(ctx.message.
 
 	@commands.command()
 	async def bug(self, ctx, *, message : str):
+		logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
 		await bot.get_user(digiid).send("<@{0}>: {1}".format(ctx.message.author.id, message))
 
 #Necessary.
