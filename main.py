@@ -1,6 +1,8 @@
 from globalsb import *
 import digilogger as logger
 
+launch = datetime.datetime.now()
+
 os.system("")
 
 #Get authtoken from file.
@@ -163,3 +165,6 @@ if __name__ == '__main__':
 
 
 bot.run(authtoken)
+finishlaunch = datetime.datetime.now()
+elapsed = finishlaunch - launch
+msg(f"SizeBot launched in {elapsed.total_seconds() * 1000} milliseconds.")
