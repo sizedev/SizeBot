@@ -256,8 +256,9 @@ def write_user(user_id, content):
 
 
 def isFeetAndInchesAndIfSoFixIt(input):
-	if re.search(r"([0-9.]+)(\'|ft|feet)([0-9.]+)(\"|in|inch|inches)*$", input):
-		m = re.match(r"([0-9.]+)(\'|ft|feet)([0-9.]+)(\"|in|inch|inches)*$", input)
+	regex = r"([0-9]+(?:\.[0-9]+)?)(?:\'|ft|feet)([0-9]+(?:\.[0-9]+)?)(?:\"|in|inch|inches)"
+	if re.search(regex, input):
+		m = re.match(regex, input)
 		feet = Decimal(m.group(1))
 		inch = Decimal(m.group(3))
 		totalinches = (feet * 12) + inch
