@@ -72,7 +72,7 @@ class ChangeCog(commands.Cog):
 
 	@commands.command()
 	async def slowchange(self, ctx, style : str, amount : str, delay : float):
-		msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) slow-changed {style}-style {amount} every {delay} minutes.")
+		logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) slow-changed {style}-style {amount} every {delay} minutes.")
 		async def slowchangetask(ctx, style, amount, delay):
 			#Change height.
 			if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
