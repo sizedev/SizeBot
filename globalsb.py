@@ -26,7 +26,7 @@ class DigiException(Exception):
 
 
 # Version.
-version = "3.3.2"
+version = "3.3.4"
 
 # Defaults
 defaultheight = Decimal(1754000)  # micrometers
@@ -270,20 +270,6 @@ def isFeetAndInchesAndIfSoFixIt(input):
 		return f"{totalinches}in"
 	else:
 		return input
-
-#Color styling for terminal messages.
-def time():
-	return (fore.MAGENTA + strftime("%d %b %H:%M:%S | ", localtime()) + style.RESET)
-def warn(message):
-	print(time() + fore.YELLOW + message + style.RESET)
-def crit(message):
-	print(time() + back.RED + style.BOLD + message + style.RESET)
-def test(message):
-	print(time() + fore.BLUE + message + style.RESET)
-def msg(message):
-	 print(time() + fg(51) + message + style.RESET)
-def load(message):
-		return (fg(238) + message + style.RESET)
 
 # Count users.
 members = 0
