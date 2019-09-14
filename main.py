@@ -1,6 +1,8 @@
 from globalsb import *
 import digilogger as logger
 
+launch = datetime.now()
+
 os.system("")
 
 #Get authtoken from file.
@@ -39,6 +41,10 @@ async def on_ready():
 	logger.warn("Warn test.")
 	logger.crit("Crit test.")
 	logger.test("Test test.")
+	finishlaunch = datetime.now()
+	elapsed = finishlaunch - launch
+	msg(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.")
+	print()
 
 @bot.command()
 async def register(ctx, nick:str, display:str, currentheight:str,
