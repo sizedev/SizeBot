@@ -49,6 +49,7 @@ folder = ".."
 reol = 106871675617820672
 sizebot_id = 344590087679639556
 digiid = 271803699095928832
+yukioid = 140162671445147648
 
 # Array item names.
 NICK = 0
