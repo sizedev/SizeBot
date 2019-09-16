@@ -152,6 +152,17 @@ async def on_message(message):
 				logger.warn("Monika triggered.")
 				await message.channel.send(monikaline(), delete_after=7)
 
+	#Yukio wink count.
+	if message.author.id == yukioid and ";)" in message.content.replace(" ", ""):
+	    winkfile = open(“winkcount.txt”, “w+”)
+	    winkcount = int(winkfile.read())
+	    winkcount += 1
+	    winkfile.seek(0)
+	    winkfile.write(winkcount)
+	    winkfile.truncate()
+	    logger.msg(f"Yukio has winked {winkcount} times!")
+	    winkfile.close()
+
 	try:
 		await nickupdate(message.author)
 	except discord.ext.commands.errors.CommandInvokeError:
