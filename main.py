@@ -22,7 +22,8 @@ initial_extensions = ['cogs.change',
                       'cogs.roleplay',
                       'cogs.set',
                       'cogs.stats',
-                      'cogs.fun']
+                      'cogs.fun',
+                      'cogs.dm']
 
 # Obviously we need this printed in the terminal.
 print(bg(24) + fg(202) + style.BOLD + ascii + style.RESET)
