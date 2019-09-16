@@ -43,7 +43,7 @@ async def on_ready():
 	logger.test("Test test.")
 	finishlaunch = datetime.now()
 	elapsed = finishlaunch - launch
-	logger.msg(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.")
+	logger.test(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.")
 	print()
 
 @bot.command()
