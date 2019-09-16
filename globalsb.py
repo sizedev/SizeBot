@@ -207,7 +207,7 @@ async def nickupdate(user):
 		newnick = nick
 	await user.edit(nick = newnick)
 
-	logger.msg(f"Updated user {user.id} ({user.name}).")
+	#logger.msg(f"Updated user {user.id} ({user.name}).")
 
 
 # Read in specific user.
