@@ -154,14 +154,14 @@ async def on_message(message):
 
 	#Yukio wink count.
 	if message.author.id == yukioid and ";)" in message.content.replace(" ", ""):
-		winkfile = open("winkcount.txt", "w+")
-		winkcount = int(winkfile.read())
-		winkcount += 1
-		winkfile.seek(0)
-		winkfile.write(winkcount)
-		winkfile.truncate()
-		logger.msg(f"Yukio has winked {winkcount} times!")
-		winkfile.close()
+		with open("../winkcount.txt", "w+") as winkfile:
+			winkcount = int(winkfile.read())
+			winkcount += 1
+			winkfile.seek(0)
+			winkfile.write(str(winkcount))
+			winkfile.truncate()
+			logger.msg(f"Yukio has winked {winkcount} times!")
+			winkfile.close()
 
 	try:
 		await nickupdate(message.author)

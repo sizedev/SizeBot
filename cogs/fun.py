@@ -41,7 +41,7 @@ class FunCog(commands.Cog):
 
 	@commands.command()
 	async def winkcount(self, ctx):
-		winkfile = open("winkcount.txt", "w+")
+		winkfile = open("../winkcount.txt", "r")
 		winkcount = int(winkfile.read())
 		await ctx.send(f"Yukio has winked {winkcount} times! :wink:")
 		logger.msg(f"Wink count requested: {winkcount} times!")
