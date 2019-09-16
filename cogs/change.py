@@ -101,7 +101,7 @@ class ChangeCog(commands.Cog):
 					userarray = read_user(ctx.message.author.id)
 					userarray[CHEI] = str(Decimal(userarray[CHEI]) * Decimal(amount)) + newline
 					if (float(userarray[CHEI]) > infinity):
-						warn("Invalid size value.")
+						logger.warn("Invalid size value.")
 						await ctx.send("Too big. x_x", delete_after=3)
 						uuserarray[CHEI] = str(infinity) + newline
 						tasks[ctx.message.author.id].cancel()

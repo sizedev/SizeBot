@@ -109,7 +109,7 @@ To unregister, use the `&unregister` command.""", delete_after=5)
             try:
                 userfile.writelines(writethis)
             except UnicodeDecodeError():
-                warn("Unicode in nick or species.")
+                logger.warn("Unicode in nick or species.")
                 await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your nick or species.".format(ctx.message.author.id))
                 return
             logger.warn("Made a new user: {0}!".format(ctx.message.author))

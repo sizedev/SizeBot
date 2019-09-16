@@ -190,7 +190,7 @@ class SetCog(commands.Cog):
 			userarray = read_user(ctx.message.author.id)
 			userarray[CHEI] = str(newheight) + newline
 			if (float(userarray[CHEI]) > infinity):
-				warn("Invalid size value.")
+				logger.warn("Invalid size value.")
 				await ctx.send("Too big. x_x", delete_after=3)
 				userarray[CHEI] = str(infinity) + newline
 			write_user(ctx.message.author.id, userarray)
