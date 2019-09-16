@@ -1,5 +1,5 @@
 from globalsb import *
-from globalsb import yukioid, digiid, warn
+from globalsb import yukioid, digiid
 import digilogger as logger
 
 launch = datetime.now()
