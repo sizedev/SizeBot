@@ -3,11 +3,10 @@ from discord.ext import commands
 from globalsb import *
 import digilogger as logger
 
+
 # Commands for non-size stuff.
 #
 # Commands:
-
-
 class FunCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -51,8 +50,7 @@ class FunCog(commands.Cog):
         await ctx.send(f"Yukio has winked {winkcount} times! :wink:")
         logger.msg(f"Wink count requested: {winkcount} times!")
 
+
 # Necessary.
-
-
 def setup(bot):
     bot.add_cog(FunCog(bot))
