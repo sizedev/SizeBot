@@ -153,8 +153,8 @@ async def on_message(message):
 				await message.channel.send(monikaline(), delete_after=7)
 
 	#Yukio wink count.
-	if message.author.id == yukioid and ";)" in message.content.replace(" ", ""):
-	    winkfile = open(“winkcount.txt”, “w+”)
+	if message.author.id == yukioid and ";)" in message.content.replace(" ", "")
+		winkfile = open("winkcount.txt", "w+")
 	    winkcount = int(winkfile.read())
 	    winkcount += 1
 	    winkfile.seek(0)
