@@ -39,7 +39,7 @@ class FunCog(commands.Cog):
 		newstring = ":musical_score: *" + string + "* :musical_note:"
 		await ctx.send(newstring)
 
-    @commands.command()
+	@commands.command()
 	async def winkcount(self, ctx):
 		winkfile = open("winkcount.txt", "w+")
 		winkcount = int(winkfile.read())
