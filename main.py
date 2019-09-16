@@ -160,7 +160,10 @@ async def on_message(message):
     # Yukio wink count.
     if message.author.id == yukioid and ";)" in message.content.replace(" ", ""):
         with open("../winkcount.txt", "r") as winkfile:
-            winkcount = int(winkfile.read())
+            try:
+                winkcount = int(winkfile.read())
+            except ValueError:
+                winkcount = 0
         winkcount += 1
         with open("../winkcount.txt", "w") as winkfile:
             winkfile.write(str(winkcount))
