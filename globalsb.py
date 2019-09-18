@@ -261,14 +261,14 @@ def write_user(user_id, content):
 
 
 def isFeetAndInchesAndIfSoFixIt(input):
-    regex = r"^(?P<feet>\d+(ft|foot|feet|\'))(?P<inch>\d+(in|\"))"
+    regex = r"^(?P<feet>\d+(ft|foot|feet|\'))(?P<inch>\d+(in|\")*)"
     m = re.match(regex, input, flags=re.I)
     if not m:
         return input
     wholefeet = m.group('feet')
     wholeinch = m.group('inch')
-    feet = getnum(feet)
-    inch = getnum(inch)
+    feet = getnum(wholefeet)
+    inch = getnum(wholeinch)
     if feet == None: feet = 0
     if inch == None: inch = 0
     totalinches = (feet * 12) + inch
