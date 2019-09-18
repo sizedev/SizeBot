@@ -112,7 +112,7 @@ def getnum(string):
 
 # Get letters from string.
 def getlet(string):
-    match = re.search(r"[a-zA-Z]+", string)
+    match = re.search(r"[a-zA-Z\'\"]+", string)
     if match is None:
         return None
     return match.group(0)
