@@ -25,7 +25,8 @@ initial_extensions = [
     'cogs.stats',
     'cogs.fun',
     'cogs.dm',
-    'cogs.register'
+    'cogs.register',
+    'cogs.winks'
 ]
 
 # Obviously we need this printed in the terminal.
@@ -62,20 +63,6 @@ async def on_message(message):
             if random.randrange(6) == 1:
                 logger.warn("Monika triggered.")
                 await message.channel.send(monikaline(), delete_after=7)
-
-    # Yukio wink count.
-    if ((message.author.id == yukioid and ";)" in message.content.replace(" ", ""))
-        or (message.author.id == yukioid and ":wink:" in message.content.replace(" ", ""))
-        or (message.author.id == yukioid and "😉" in message.content.replace(" ", ""))):
-        with open("../winkcount.txt", "r") as winkfile:
-            try:
-                winkcount = int(winkfile.read())
-            except ValueError:
-                winkcount = 0
-        winkcount += 1
-        with open("../winkcount.txt", "w") as winkfile:
-            winkfile.write(str(winkcount))
-        logger.msg(f"Yukio has winked {winkcount} times!")
 
     try:
         await nickupdate(message.author)

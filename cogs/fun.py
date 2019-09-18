@@ -40,16 +40,6 @@ class FunCog(commands.Cog):
         newstring = ":musical_score: *" + string + "* :musical_note:"
         await ctx.send(newstring)
 
-    @commands.command()
-    async def winkcount(self, ctx):
-        with open("../winkcount.txt", "r") as winkfile:
-            try:
-                winkcount = int(winkfile.read())
-            except ValueError:
-                winkcount = 0
-        await ctx.send(f"Yukio has winked {winkcount} times! :wink:")
-        logger.msg(f"Wink count requested: {winkcount} times!")
-
 
 # Necessary.
 def setup(bot):
