@@ -81,8 +81,8 @@ class RegisterCog(commands.Cog):
             f"{toSV(baseheight, bhu)}",
             f"{toWV(baseweight, bwu)}",
             "1.0",
-            f"${units}",
-            f"${species}"
+            f"{units}",
+            f"{species}"
         ])
 
         with open(folder + '/users/' + str(ctx.message.author.id) + '.txt', "w") as userfile:
