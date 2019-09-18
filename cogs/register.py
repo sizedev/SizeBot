@@ -3,15 +3,33 @@ from decimal import Decimal
 
 import discord
 from discord.ext import commands
+from discord.utils import get
 
 import digilogger as logger
 from globalsb import folder, readhexcode, regenhexcode
 from globalsb import isFeetAndInchesAndIfSoFixIt, getlet, getnum, toSV, toWV
+from globalsb import sizebotuser_roleid
 
 
 # Add newlines and join into one string
 def lines(items):
     return "".join(item + "\n" for item in items)
+
+
+async def addUserRole(member):
+    role = get(member.guild.roles, id=sizebotuser_roleid)
+    if role is None:
+        logger.warn(f"Sizebot user role {sizebotuser_roleid} not found in guild {member.guild.id}")
+        return
+    await member.add_roles(role, reason="Registered as sizebot user")
+
+
+async def removeUserRole(member):
+    role = get(member.guild.roles, id=sizebotuser_roleid)
+    if role is None:
+        logger.warn(f"Sizebot user role {sizebotuser_roleid} not found in guild {member.guild.id}")
+        return
+    await member.remove_roles(role, reason="Unregistered as sizebot user")
 
 
 class RegisterCog(commands.Cog):
@@ -93,6 +111,8 @@ class RegisterCog(commands.Cog):
                 await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your nick or species.".format(ctx.message.author.id))
                 return
 
+        await addUserRole(ctx.message.author)
+
         logger.warn("Made a new user: {0}!".format(ctx.message.author))
         print(output)
         await ctx.send("Registered <@{0}>. {1}.".format(ctx.message.author.id, readable), delete_after=5)
@@ -111,17 +131,24 @@ class RegisterCog(commands.Cog):
             logger.warn("User {0} not registered with SizeBot, but tried to unregister anyway.".format(ctx.message.author.id))
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
-        elif code is None:
+            return
+
+        if code is None:
             regenhexcode()
             await ctx.send("""To unregister, use the `&unregister` command and the following code.
     `{0}`""".format(readhexcode()), delete_after=30)
-        elif code != readhexcode():
+            return
+
+        if code != readhexcode():
             logger.warn("User {0} tried to unregister, but said the wrong hexcode.".format(ctx.message.author.id))
             await ctx.send("Incorrect code. You said: `{0}`. The correct code was: `{1}`. Try again.".format(code, readhexcode()), delete_after=10)
-        else:
-            logger.warn("User {0} successfully unregistered.".format(ctx.message.author.id))
-            await ctx.send("Correct code! Unregistered {0}".format(ctx.message.author.name), delete_after=5)
-            os.remove(folder + "/users/" + str(ctx.message.author.id) + ".txt")
+            return
+
+        logger.warn("User {0} successfully unregistered.".format(ctx.message.author.id))
+        await ctx.send("Correct code! Unregistered {0}".format(ctx.message.author.name), delete_after=5)
+        os.remove(folder + "/users/" + str(ctx.message.author.id) + ".txt")
+
+        await removeUserRole(ctx.message.author)
 
 
 # Necessary.
