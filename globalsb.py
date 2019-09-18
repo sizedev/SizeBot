@@ -269,8 +269,8 @@ def isFeetAndInchesAndIfSoFixIt(input):
     wholeinch = m.group('inch')
     feet = getnum(feet)
     inch = getnum(inch)
-    if feet = None: feet = 0
-    if inch = None: inch = 0
+    if feet == None: feet = 0
+    if inch == None: inch = 0
     totalinches = (feet * 12) + inch
     return f"{totalinches}in"
 
