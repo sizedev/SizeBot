@@ -12,7 +12,7 @@ class DmCog(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_message(m):
+    async def on_message(self, m):
         if not isinstance(m.channel, discord.DMChannel):
             return
         logger.msg(f"DM from {m.author.name}#{m.author.discriminator}: {m.content}")
