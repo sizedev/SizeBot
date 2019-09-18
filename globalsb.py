@@ -26,7 +26,7 @@ class DigiException(Exception):
 
 
 # Version.
-version = "3.3.4"
+version = "3.3.5"
 
 # Defaults
 defaultheight = Decimal(1754000)  # micrometers
@@ -72,14 +72,14 @@ def regenhexcode():
     hexdigits = "1234567890abcdef"
     lst = [random.choice(hexdigits) for n in range(16)]
     hexstring = "".join(lst)
-    hexfile = open("hexstring.txt", "r+")
+    hexfile = open("../hexstring.txt", "w")
     hexfile.write(hexstring)
     hexfile.close()
 
 
 def readhexcode():
     # Read the hexcode from the file.
-    hexfile = open("hexstring.txt", "r+")
+    hexfile = open("../hexstring.txt", "r")
     hexcode = hexfile.readlines()
     hexfile.close()
     return str(hexcode[0])
@@ -92,8 +92,7 @@ ascii = r"""
 .\ `--. _ _______| |_/ / ___ | |_    / /.
 . `--. \ |_  / _ \ ___ \/ _ \| __|   \ \.
 ./\__/ / |/ /  __/ |_/ / (_) | |_.___/ /.
-.\____/|_/___\___\____/ \___/ \__\____/ .
-"""
+.\____/|_/___\___\____/ \___/ \__\____/ ."""
 
 # Configure decimal module.
 getcontext()
@@ -159,7 +158,7 @@ async def nickupdate(user):
         return
     # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
-        logger.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
+        # logger.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
         return
     # Don't update users who aren't registered.
     if not os.path.exists(f"{folder}/users/{user.id}.txt"):
@@ -262,16 +261,16 @@ def write_user(user_id, content):
 
 
 def isFeetAndInchesAndIfSoFixIt(input):
-    regex = r"([0-9]+(?:\.[0-9]+)?)(?:\'|ft|feet)([0-9]+(?:\.[0-9]+)?)(?:\"|in|inch|inches)"
-    if re.search(regex, input):
-        m = re.match(regex, input)
-        feet = Decimal(m.group(1))
-        inch = Decimal(m.group(3))
-        totalinches = (feet * 12) + inch
-        return f"{totalinches}in"
-    else:
+    regex = r"^(?P<feet>\d+(ft|foot|feet|\'))(?P<inch>\d+(in|\"))"
+    m = re.match(regex, input, flags=re.I)
+    if not m:
         return input
-
+    wholefeet = Decimal(m.group('feet'))
+    wholeinch = Decimal(m.group('inch'))
+    feet = getnum(feet)
+    inch = getnum(inch)
+    totalinches = (feet * 12) + inch
+    return f"{totalinches}in"
 
 # Count users.
 members = 0
@@ -767,28 +766,6 @@ def fromWVUSA(value):
     return output
 
 
-def toCV(size):
-    size = size.upper()
-    if size == "AA" or size == "AAA":
-        return "0.5"
-    firstlet = str(ord(size[0]) & 31)
-    extraletters = len(size) - 1
-    return str(int(firstlet) + extraletters)
-
-
-def fromCV(value):
-    if value == "0.5":
-        return "AA"
-    elif int(value) > 0.5 and int(value) <= 26:
-        answer = chr(int(value) + 64)
-        if answer == "E":
-            answer = "DD / E"
-        if answer == "F":
-            answer = "DDD / F"
-    elif int(value) > 26:
-        return "Z" * (int(value) - 25)
-
-
 def toShoeSize(inchamount):
     child = False
     inches = Decimal(inchamount)
@@ -804,7 +781,7 @@ def toShoeSize(inchamount):
         shoesize = "Children's " + shoesize
     return "Size US " + shoesize
 
-
+#Currently unused.
 def fromShoeSize(size):
     child = False
     if "c" in size.toLower():
