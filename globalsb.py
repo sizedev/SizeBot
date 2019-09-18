@@ -265,10 +265,12 @@ def isFeetAndInchesAndIfSoFixIt(input):
     m = re.match(regex, input, flags=re.I)
     if not m:
         return input
-    wholefeet = Decimal(m.group('feet'))
-    wholeinch = Decimal(m.group('inch'))
+    wholefeet = m.group('feet')
+    wholeinch = m.group('inch')
     feet = getnum(feet)
     inch = getnum(inch)
+    if feet = None: feet = 0
+    if inch = None: inch = 0
     totalinches = (feet * 12) + inch
     return f"{totalinches}in"
 
