@@ -14,6 +14,8 @@ class DmCog(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, m):
         if not isinstance(m.channel, discord.DMChannel):
+            if not isinstance(m.author, discord.Member):
+                logger.msg(f"Received a message from {m.author.name}#{m.author.discriminator} that wasn't a DM: {m.content}")
             return
         logger.msg(f"DM from {m.author.name}#{m.author.discriminator}: {m.content}")
 
