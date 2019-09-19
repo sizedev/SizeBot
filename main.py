@@ -64,11 +64,6 @@ async def on_message(message):
                 logger.warn("Monika triggered.")
                 await message.channel.send(monikaline(), delete_after=7)
 
-    try:
-        await nickupdate(message.author)
-    except discord.ext.commands.errors.CommandInvokeError:
-        pass
-
     await bot.process_commands(message)
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].

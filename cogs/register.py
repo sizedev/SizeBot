@@ -9,6 +9,7 @@ import digilogger as logger
 from globalsb import folder, readhexcode, regenhexcode
 from globalsb import isFeetAndInchesAndIfSoFixIt, getlet, getnum, toSV, toWV
 from globalsb import sizebotuser_roleid
+from globalsb import nickupdate
 
 
 # Add newlines and join into one string
@@ -149,6 +150,10 @@ class RegisterCog(commands.Cog):
         os.remove(folder + "/users/" + str(ctx.message.author.id) + ".txt")
 
         await removeUserRole(ctx.message.author)
+
+    @commands.Cog.listener()
+    async def on_message(self, m):
+        await nickupdate(m.author)
 
 
 # Necessary.
