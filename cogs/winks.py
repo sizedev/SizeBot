@@ -54,7 +54,7 @@ class WinksCog(commands.Cog):
     @commands.command()
     async def winkcount(self, ctx):
         winkcount = getWinks()
-        await ctx.send(f"Yukio has winked {winkcount} times! :wink:")
+        await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
         logger.msg(f"Wink count requested: {winkcount} times!")
 
 
