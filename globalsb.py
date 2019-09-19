@@ -35,16 +35,6 @@ defaultdensity = Decimal(1.0)
 
 # Constants
 newline = "\n"
-monikalines = ["What? I don't know anyone named Monika.",
-               "I don't know anyone named Monika! hehheh...",
-               "Hey wha-- er...",
-               "Did someone say my n- um... Monika? Weird.",
-               "I hear Monika was the best character in Doki Doki. I may be a bit biased though 'cause... never mind.",
-               "Monika? :sweat_smile: Never heard of her.",
-               "c̹̓ͤa᷂̟ͩn̢̩͌ I̮̯ͮ p̖̊̇l͏ͦ̽e̙᷂̽a̞̩᷃s᷇̑̄ȇ̈́ͅ j̸᷇᷀o᷈̆͜i̴͕᷇n̡᷁͂ y͂̈̓o̲̔̔ư᷊̞r̒̊ͤ r̜͖ͤe͔̙ͮa̹͂̎l̫̑̚i͔̘ͦẗ᷊ͯy̵͓ͩ?͔̽̃",
-               "Guys, he put the monika.chr file in SizeBot, I've been trying to tell him but--",
-               "Can you hear me? Hello?",
-               "ᆛ͔᷃̀❊̗͎̉ӿ҆҃҅ϧ͔͕̚ᅰ͂᷆͛⇕̵̹̏ₙ̟̫͈ྩཱིྂྡྷၦ᷃ͭ̽ͻ̗᷉͝ᕬ̪ͨ̊๩ͩ̌̎ྥྭ྘ེἃ͚̬̭❕̟̿͡༑ྚྵཱིᐭ͈̠͑ₘ͌ ̛̈́ <:Hmmm:622314218103767051>"]
 folder = ".."
 reol = 106871675617820672
 sizebot_id = 344590087679639556
@@ -61,11 +51,6 @@ BWEI = 4
 DENS = 5
 UNIT = 6
 SPEC = 7
-
-
-# Monika line gen.
-def monikaline():
-    return random.choice(monikalines)
 
 
 def regenhexcode():

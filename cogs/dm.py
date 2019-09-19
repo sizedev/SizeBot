@@ -4,9 +4,7 @@ from globalsb import *
 import digilogger as logger
 
 
-# Commands for non-size stuff.
-#
-# Commands:
+# Show an incoming DMs in console
 class DmCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

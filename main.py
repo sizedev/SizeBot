@@ -56,14 +56,6 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    # Easter egg.
-    if "monika" in message.content.lower():
-        if message.author.id != sizebot_id:
-            logger.warn("Monika detected.")
-            if random.randrange(6) == 1:
-                logger.warn("Monika triggered.")
-                await message.channel.send(monikaline(), delete_after=7)
-
     await bot.process_commands(message)
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].
