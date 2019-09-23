@@ -19,7 +19,6 @@ class DmCog(commands.Cog):
                     f"    Message type: {m.type.name}\n"
                     f"    Embeds: {len(m.embeds)}\n"
                     f"    Attachments: {len(m.attachments)}\n"
-                    f"    System message: {m.is_system()}\n"
                     f"    System content: {m.system_content}"
                 )
 
