@@ -1,17 +1,19 @@
+
+from functools import reduce
+
 import discord
 from discord.ext import commands
-from globalsb import *
 import digilogger as logger
 
 
 def deepgetattr(obj, attr):
     """Recurses through an attribute chain to get the ultimate value."""
-    return reduce(getattr, attr.split('.'), obj)
+    return reduce(lambda o, a: getattr(o, a, None), attr.split('.'), obj)
 
 
 def dump_message(m):
     channelName = getattr(m.channel, "name", None)
-    guildId = deepgetattr(m.channel, "guild.id", None)
+    guildId = deepgetattr(m.channel, "guild.id")
     embeds = [e.to_dict() for e in m.embeds]
     logger.msg(
         f"Received a message from {m.author.name}#{m.author.discriminator} that wasn't a DM: {m.content}\n"
@@ -19,14 +21,13 @@ def dump_message(m):
         f"    Guild ID: {guildId}\n"
         f"    Channel ID: {m.channel.id}\n"
         f"    Message ID: {m.id}\n"
-        f"    Channel name: {channelName\n}"
+        f"    Channel name: {channelName}\n"
         f"    Channel type: {m.channel.type.name}\n"
         f"    Message type: {m.type.name}\n"
         f"    Embeds: {len(m.embeds)}\n{embeds}\n"
         f"    Attachments: {len(m.attachments)}\n"
         f"    System content: {m.system_content}\n"
     )
-   
 
 
 # Show an incoming DMs in console
