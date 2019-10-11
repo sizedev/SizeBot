@@ -56,7 +56,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    await bot.process_commands(message)
+    await bot.process_commands(removebrackets(message))
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].
 if __name__ == '__main__':

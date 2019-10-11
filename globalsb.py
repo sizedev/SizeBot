@@ -41,6 +41,7 @@ sizebot_id = 344590087679639556
 digiid = 271803699095928832
 yukioid = 140162671445147648
 sizebotuser_roleid = 562356758522101769
+brackets = ["[", "]", "<", ">"]
 
 # Array item names.
 NICK = 0
@@ -127,6 +128,11 @@ def removedecimals(output):
     elif ".90" in output:
         output = output.replace(".90", ".9")
     return output
+
+def removebrackets(string):
+    for bracket in brackets:
+        string = string.replace(bracket, "")
+    return string
 
 
 def round_nearest_half(number):
