@@ -150,7 +150,7 @@ class SetCog(commands.Cog):
             if userarray[DISP] == "Y\n":
                 await nickupdate(ctx.message.author)
             logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) set their display to {str(newdisp)}.")
-            await ctx.send("""<@{0}>'s display is now set to {1}.'""".format(ctx.message.author.id, userarray[DISP][:-1]))
+            await ctx.send("""<@{0}>'s display is now set to {1}.""".format(ctx.message.author.id, userarray[DISP][:-1]))
 
     @commands.command()
     async def setsystem(self, ctx, newsys = None):
