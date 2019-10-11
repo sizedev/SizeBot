@@ -40,6 +40,7 @@ reol = 106871675617820672
 sizebot_id = 344590087679639556
 digiid = 271803699095928832
 yukioid = 140162671445147648
+mee6id = 553792568824037386
 sizebotuser_roleid = 562356758522101769
 brackets = ["[", "]", "<", ">"]
 
@@ -146,7 +147,7 @@ def place_value(number):
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
     if not isinstance(user, discord.Member):
-        logger.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
+        if user.id != mee6id: logger.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
         return
     # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
