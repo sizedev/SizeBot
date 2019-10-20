@@ -34,7 +34,7 @@ def countWinks(s):
     return len(winkPattern.findall(s))
 
 
-def sayMilestone(winkcount):
+async def sayMilestone(winkcount):
     now = datetime.today()
     timesince = now - starttime
     timeperwink = timesince / winkcount
