@@ -144,6 +144,24 @@ def place_value(number):
     return ("{:,}".format(number))
 
 
+def pretty_time_delta(seconds):
+    seconds = int(seconds)
+    years, seconds = divmod(seconds, 86400 * 365)
+    days, seconds = divmod(seconds, 86400)
+    hours, seconds = divmod(seconds, 3600)
+    minutes, seconds = divmod(seconds, 60)
+    if years > 0:
+        return '%d years, %d days, %d hours, %d minutes, %d seconds' % (years, days, hours, minutes, seconds)
+    elif days > 0:
+        return '%d days, %d hours, %d minutes, %d seconds' % (days, hours, minutes, seconds)
+    elif hours > 0:
+        return '%d hours, %d minutes, %d seconds' % (hours, minutes, seconds)
+    elif minutes > 0:
+        return '%d minutes, %d seconds' % (minutes, seconds)
+    else:
+        return '%d seconds' % (seconds)
+
+
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
     if not isinstance(user, discord.Member):
