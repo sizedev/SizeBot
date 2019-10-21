@@ -30,7 +30,7 @@ initial_extensions = [
 ]
 
 # Obviously we need this printed in the terminal.
-print(bg(24) + fg(202) + style.BOLD + ascii + style.RESET)
+print(bg(24) + fg(202) + style.BOLD + ascii + style.RESET + " v" + version)
 
 bot = commands.Bot(command_prefix=prefix, description=description)
 bot.remove_command("help")
