@@ -56,7 +56,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    message.content = removebrackets(message.content)
+    if not message.content.startswith(allowbrackets): message.content = removebrackets(message.content)
     await bot.process_commands(message)
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].

@@ -146,6 +146,7 @@ class ModCog(commands.Cog):
 
     "She (*SizeBot*) is beautiful." -- *GoddessArete*
     ":100::thumbsup:" -- *Anonymous*
+    "I want to put SizeBot in charge of the world government." -- *AWK*
     "Um... I like it?" -- *Goddess Syn*
     "I am the only person who has accidentally turned my fetish into a tech support job." -- *DigiDuncan*
 
@@ -157,7 +158,7 @@ class ModCog(commands.Cog):
         await ctx.send("""<@{0}>
 SizeBot is coded (mainly) by DigiDuncan, and for absolutely free.
 However, if you wish to contribute to DigiDuncan directly, you can do so here:
-https://paypal.me/DigiDuncanPayPal
+https://ko-fi.com/DigiDuncan
 SizeBot has been a passion project coded over a period of two years and learning a lot of Python along the way.
 Thank you so much for being here throughout this journey!""".format(ctx.message.author.id))
 

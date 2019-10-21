@@ -26,7 +26,7 @@ class DigiException(Exception):
 
 
 # Version.
-version = "3.3.5"
+version = "3.3.6"
 
 # Defaults
 defaultheight = Decimal(1754000)  # micrometers
@@ -43,6 +43,7 @@ yukioid = 140162671445147648
 mee6id = 553792568824037386
 sizebotuser_roleid = 562356758522101769
 brackets = ["[", "]", "<", ">"]
+allowbrackets = ("&compare", "&stats")
 
 # Array item names.
 NICK = 0
@@ -165,8 +166,8 @@ def pretty_time_delta(seconds):
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
     if not isinstance(user, discord.Member):
-        if user.id != mee6id: logger.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
-        return
+        if user.id == mee6id: return
+        logger.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
     # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
         # logger.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
