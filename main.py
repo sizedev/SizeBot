@@ -14,18 +14,19 @@ authtoken = authtoken[0]
 
 # Predefined variables.
 prefix = '&'
-description = '''SizeBot3 is a complete rewrite of SizeBot for the Macropolis server.
+description = '''SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.
 Written by DigiDuncan.
 The SizeBot Team: DigiDuncan, AWK_, Benyovski, Arceus3521, Surge The Raichu.'''
 initial_extensions = [
     'cogs.change',
+    'cogs.dm',
+    'cogs.fun',
     'cogs.mod',
+    'cogs.monika',
+    'cogs.register',
     'cogs.roleplay',
     'cogs.set',
     'cogs.stats',
-    'cogs.fun',
-    'cogs.dm',
-    'cogs.register',
     'cogs.winks'
 ]
 
