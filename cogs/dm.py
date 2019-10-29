@@ -15,7 +15,7 @@ def dump_message(m):
     channelName = getattr(m.channel, "name", None)
     guildId = deepgetattr(m.channel, "guild.id")
     embeds = [e.to_dict() for e in m.embeds]
-    if m.author.name == "MEE6" and m.author.discriminator == "0000":
+    if m.author.discriminator == "0000":
         return
     else:
         logger.msg(

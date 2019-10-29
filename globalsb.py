@@ -26,7 +26,7 @@ class DigiException(Exception):
 
 
 # Version.
-version = "3.3.6"
+version = "3.3.7"
 
 # Defaults
 defaultheight = Decimal(1754000)  # micrometers
@@ -165,6 +165,7 @@ def pretty_time_delta(seconds):
 
 # Update users nicknames to include sizetags.
 async def nickupdate(user):
+    if user.discriminator == "0000": return
     if not isinstance(user, discord.Member):
         if user.id == mee6id: return
         logger.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
@@ -227,6 +228,9 @@ def read_user(user_id):
     with open(folder + "/users/" + user_id + ".txt") as f:
         # Make array of lines from file.
         content = f.readlines()
+        if content == [""]: content = ["Invalid User", "N", str(defaultheight),
+                                        str(defaultheight), str(defaultweight),
+                                        "1.0", "M", "None"]
         # Replace None.
         if content[BWEI] == "None" + newline:
             content[BWEI] = str(defaultweight) + newline

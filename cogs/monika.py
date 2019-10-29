@@ -22,11 +22,11 @@ class MonikaCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, m):
-        if m.author.bot:
+        if m.author.id == sizebotid:
             return
         if "monika" in m.content.lower():
             logger.warn("Monika detected.")
-            if random.randrange(6) == 0:
+            if random.randrange(7) == 0:
                 logger.warn("Monika triggered.")
                 line = random.choice(monikalines)
                 await m.channel.send(line, delete_after=7)
