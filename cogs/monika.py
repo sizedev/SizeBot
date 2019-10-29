@@ -22,7 +22,7 @@ class MonikaCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, m):
-        if m.author.id == sizebotid:
+        if m.author.id == sizebot_id:
             return
         if "monika" not in m.content.lower():
             return
