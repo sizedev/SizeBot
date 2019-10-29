@@ -24,12 +24,13 @@ class MonikaCog(commands.Cog):
     async def on_message(self, m):
         if m.author.id == sizebotid:
             return
-        if "monika" in m.content.lower():
-            logger.warn("Monika detected.")
-            if random.randrange(7) == 0:
-                logger.warn("Monika triggered.")
-                line = random.choice(monikalines)
-                await m.channel.send(line, delete_after=7)
+        if "monika" not in m.content.lower():
+            return
+        logger.warn("Monika detected.")
+        if random.randrange(6) == 1:
+            logger.warn("Monika triggered.")
+            line = random.choice(monikalines)
+            await m.channel.send(line, delete_after=7)
 
 
 # Necessary.
