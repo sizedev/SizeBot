@@ -147,8 +147,12 @@ class ChangeCog(commands.Cog):
     @commands.command()
     async def stopchange(self, ctx):
         logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) stopped slow-changing.")
-        tasks[ctx.message.author.id].cancel()
-        del tasks[ctx.message.author.id]
+        try:
+            tasks[ctx.message.author.id].cancel()
+            del tasks[ctx.message.author.id]
+        except:
+            await ctx.send("You can't stop slow-changing, as you don't have a task active!")
+            logger.warn(f"User {ctx.message.author.id} ({ctx.message.author.nick}) tried to stop slow-changing, but there didn't have a task active.")
 
     @commands.command()
     async def eatme(self, ctx):
