@@ -225,12 +225,11 @@ async def nickupdate(user):
 # Read in specific user.
 def read_user(user_id):
     user_id = str(user_id)
-    with open(folder + "/users/" + user_id + ".txt") as f:
+    userfile = folder + "/users/" + user_id + ".txt"
+    with open(userfile) as f:
         # Make array of lines from file.
         content = f.readlines()
-        if content == [""]: content = ["Invalid User", "N", str(defaultheight),
-                                        str(defaultheight), str(defaultweight),
-                                        "1.0", "M", "None"]
+        if content == []: os.remove(userfile)
         # Replace None.
         if content[BWEI] == "None" + newline:
             content[BWEI] = str(defaultweight) + newline
