@@ -217,7 +217,12 @@ async def nickupdate(user):
     else:
         # Cannot fit the new sizetag.
         newnick = nick
-    await user.edit(nick=newnick)
+    try:
+        await user.edit(nick=newnick)
+    except discord.Forbidden:
+        logger.crit(f"Tried to nickupdate {user.id} ({user.name}), but it is forbidden!")
+        return
+
 
     #logger.msg(f"Updated user {user.id} ({user.name}).")
 
