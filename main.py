@@ -1,5 +1,4 @@
 from globalsb import *
-from globalsb import yukioid, digiid
 import digilogger as logger
 
 launch = datetime.now()
@@ -16,7 +15,7 @@ authtoken = authtoken[0]
 prefix = '&'
 description = '''SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.
 Written by DigiDuncan.
-The SizeBot Team: DigiDuncan, AWK_, Benyovski, Arceus3521, Surge The Raichu.'''
+The SizeBot Team: DigiDuncan, Natalie, AWK_, Benyovski, Arceus3521, Surge The Raichu.'''
 initial_extensions = [
     'cogs.change',
     'cogs.dm',

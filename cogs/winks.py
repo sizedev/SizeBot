@@ -41,11 +41,10 @@ async def sayMilestone(winkcount):
     await ctx.send(f"""Yukio has winked **{winkcount}** times since 15 September, 2019! :wink:
 It took **{pretty_time_delta(timesince.total_seconds())}** to hit this milestone!
 That's an average of **{pretty_time_delta(timeperwink.total_seconds())}** per wink!
+(That's **{winkcount / (timesince / timedelta(days = 1))}** winks/day!)
 Great winking, <@{yukioid}>!""")
 
 
-# Commands for non-size stuff.
-#
 # Commands:
 class WinksCog(commands.Cog):
     def __init__(self, bot):
