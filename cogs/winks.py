@@ -38,7 +38,7 @@ async def sayMilestone(winkcount):
     now = datetime.today()
     timesince = now - starttime
     timeperwink = timesince / winkcount
-    await ctx.send(f"""Yukio has winked **{winkcount}** times since 15 September, 2019! :wink:
+    await ctx.send(f""":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball:
 It took **{pretty_time_delta(timesince.total_seconds())}** to hit this milestone!
 That's an average of **{pretty_time_delta(timeperwink.total_seconds())}** per wink!
 (That's **{winkcount / (timesince / timedelta(days = 1))}** winks/day!)
