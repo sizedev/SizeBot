@@ -15,11 +15,11 @@ class FunCog(commands.Cog):
         if ctx.message.author.id != getID("DigiDuncan"): return
         await ctx.message.delete()
 
-        async def repeattask():
+        async def repeatTask():
             while True:
                 await ctx.send(message)
                 await asyncio.sleep(delay * 60)
-        task = bot.loop.create_task(repeattask())
+        task = bot.loop.create_task(repeatTask())
         tasks[ctx.message.author.id] = task
 
     @commands.command()

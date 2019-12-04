@@ -6,7 +6,7 @@ from discord.ext import commands
 
 # TODO: Fix this...
 from globalsb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC
-from globalsb import read_user, folder, getnum, getlet, isFeetAndInchesAndIfSoFixIt, place_value
+from globalsb import readUser, folder, getNum, getLet, isFeetAndInchesAndIfSoFixIt, place_value
 from globalsb import defaultheight, defaultweight, defaultdensity, inch
 from globalsb import fromSVacc, fromSVUSA, fromSV, fromWV, fromWVUSA, toShoeSize, toSV
 from globalsb import printtab
@@ -26,7 +26,7 @@ pointerfactor = Decimal(1) / Decimal(17.26)
 
 
 # TODO: Move to dedicated module.
-async def get_user(ctx, user_string, fakename = None):
+async def getUser(ctx, user_string, fakename = None):
     try:
         member = await commands.MemberConverter().convert(ctx, user_string)
     except commands.errors.BadArgument:
@@ -37,7 +37,7 @@ async def get_user(ctx, user_string, fakename = None):
 
     if member:
         usertag = f"<@{member.id}>"
-        user = load_user(member.id)
+        user = loadUser(member.id)
         if user is None:
             await ctx.send(
                 "Sorry! User isn't registered with SizeBot.\n"
@@ -47,28 +47,28 @@ async def get_user(ctx, user_string, fakename = None):
     else:
         usertag = fakename
         heightstring = isFeetAndInchesAndIfSoFixIt(user_string)
-        height = toSV(getnum(heightstring), getlet(heightstring))
+        height = toSV(getNum(heightstring), getLet(heightstring))
         if height is None:
             await ctx.send(
                 "Sorry! I didn't recognize that user or height.",
                 delete_after=5)
             return None, None
 
-        user = height_to_user(height, fakename)
+        user = heightToUser(height, fakename)
 
     return usertag, user
 
 
-def load_user(userid):
+def loadUser(userid):
     userid = str(userid)
     if not os.path.exists(folder + "/users/" + userid + ".txt"):
         # User file missing
         return None
-    user = read_user(userid)
+    user = readUser(userid)
     return user
 
 
-def height_to_user(height, fakename = None):
+def heightToUser(height, fakename = None):
     if fakename == None:
         fakename = "Raw\n"
     else:
@@ -96,11 +96,11 @@ class StatsCog(commands.Cog):
         if who is None:
             who = str(ctx.message.author.id)
 
-        user1tag, user1 = await get_user(ctx, who)
+        user1tag, user1 = await getUser(ctx, who)
         if user1 is None:
             return
 
-        output = self.user_stats(user1tag, user1)
+        output = self.userStats(user1tag, user1)
         await ctx.send(output)
         df.msg(f"Stats for {who} sent.")
 
@@ -119,20 +119,21 @@ class StatsCog(commands.Cog):
         if who2name is None:
             who2name = "Raw 2"
 
-        user1tag, user1 = await get_user(ctx, who1, who1name)
+        user1tag, user1 = await getUser(ctx, who1, who1name)
         if user1 is None:
             await ctx.send(f"{who1} is not a recognized user or size.")
             return
-        user2tag, user2 = await get_user(ctx, who2, who2name)
+        user2tag, user2 = await getUser(ctx, who2, who2name)
         if user2 is None:
             await ctx.send(f"{who2} is not a recognized user or size.")
             return
 
-        output = self.compare_users(user1tag, user1, user2tag, user2)
+        output = self.compareUsers(user1tag, user1, user2tag, user2)
         await ctx.send(output)
         df.msg(f"Compared {user1} and {user2}")
 
-    def compare_users(self, user1tag, user1, user2tag, user2):
+    # TODO: Clean this up.
+    def compareUsers(self, user1tag, user1, user2tag, user2):
         if Decimal(user1[CHEI]) == Decimal(user2[CHEI]):
             return f"{user1tag} and {user2tag} match 1 to 1."
 
@@ -249,7 +250,8 @@ class StatsCog(commands.Cog):
             f"{printtab}{bigusertag}: {fromSVacc(bbh)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
             f"{printtab}{smallusertag}: {fromSVacc(sbh)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
 
-    def user_stats(self, user1tag, user1):
+    # TODO: Clean this up.
+    def userStats(self, user1tag, user1):
         readableheight = fromSVacc(user1[CHEI])
         readablefootheight = fromSVacc(Decimal(user1[CHEI]) * footfactor)
         readablefootUSAheight = fromSVUSA(Decimal(user1[CHEI]) * footfactor)

@@ -56,7 +56,7 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     if message.content.startswith("&") and message.content.endswith("&"): return #Ignore Tupperboxes being mistaken for commands.
-    if not message.content.startswith(allowbrackets): message.content = removebrackets(message.content)
+    if not message.content.startswith(allowbrackets): message.content = removeBrackets(message.content)
     await bot.process_commands(message)
 
 

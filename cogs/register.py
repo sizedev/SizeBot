@@ -6,15 +6,10 @@ from discord.ext import commands
 from discord.utils import get
 
 import digiformatter as df
-from globalsb import folder, readhexcode, regenhexcode
-from globalsb import isFeetAndInchesAndIfSoFixIt, getlet, getnum, toSV, toWV
+from globalsb import folder, readHexCode, regenHexCode
+from globalsb import isFeetAndInchesAndIfSoFixIt, getLet, getNum, toSV, toWV, lines
 from globalsb import sizebotuser_roleid
 from globalsb import nickupdate
-
-
-# Add newlines and join into one string
-def lines(items):
-    return "".join(item + "\n" for item in items)
 
 
 async def addUserRole(member):
@@ -46,12 +41,12 @@ class RegisterCog(commands.Cog):
         baseheight = isFeetAndInchesAndIfSoFixIt(baseheight)
 
         # Extract values and units.
-        chu = getlet(currentheight)
-        bhu = getlet(baseheight)
-        bwu = getlet(baseweight)
-        currentheight = getnum(currentheight)
-        baseheight = getnum(baseheight)
-        baseweight = getnum(baseweight)
+        chu = getLet(currentheight)
+        bhu = getLet(baseheight)
+        bwu = getLet(baseweight)
+        currentheight = getNum(currentheight)
+        baseheight = getNum(baseheight)
+        baseweight = getNum(baseweight)
 
         # Convert floats to decimals.
         currentheight = Decimal(currentheight)
@@ -135,14 +130,14 @@ class RegisterCog(commands.Cog):
             return
 
         if code is None:
-            regenhexcode()
+            regenHexCode()
             await ctx.send("""To unregister, use the `&unregister` command and the following code.
-    `{0}`""".format(readhexcode()), delete_after=30)
+    `{0}`""".format(readHexCode()), delete_after=30)
             return
 
-        if code != readhexcode():
+        if code != readHexCode():
             df.warn("User {0} tried to unregister, but said the wrong hexcode.".format(ctx.message.author.id))
-            await ctx.send("Incorrect code. You said: `{0}`. The correct code was: `{1}`. Try again.".format(code, readhexcode()), delete_after=10)
+            await ctx.send("Incorrect code. You said: `{0}`. The correct code was: `{1}`. Try again.".format(code, readHexCode()), delete_after=10)
             return
 
         df.warn("User {0} successfully unregistered.".format(ctx.message.author.id))

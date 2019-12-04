@@ -1,5 +1,5 @@
 from discord.ext import commands
-from globalsb import getID, pretty_time_delta
+from globalsb import getID, prettyTimeDelta
 import digiformatter as df
 import re
 import datetime
@@ -39,13 +39,13 @@ async def sayMilestone(winkcount):
     timesince = now - starttime
     timeperwink = timesince / winkcount
     await ctx.send(f""":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball:
-It took **{pretty_time_delta(timesince.total_seconds())}** to hit this milestone!
-That's an average of **{pretty_time_delta(timeperwink.total_seconds())}** per wink!
+It took **{prettyTimeDelta(timesince.total_seconds())}** to hit this milestone!
+That's an average of **{prettyTimeDelta(timeperwink.total_seconds())}** per wink!
 (That's **{winkcount / (timesince / timedelta(days = 1))}** winks/day!)
 Great winking, <@{getID("Yukio")}>!""")
     df.crit(f"""Yukio has winked {winkcount} times since 15 September, 2019! :wink:
-It took {pretty_time_delta(timesince.total_seconds())} to hit this milestone!
-That's an average of {pretty_time_delta(timeperwink.total_seconds())} per wink!
+It took {prettyTimeDelta(timesince.total_seconds())} to hit this milestone!
+That's an average of {prettyTimeDelta(timeperwink.total_seconds())} per wink!
 (That's {winkcount / (timesince / timedelta(days = 1))} winks/day!)""")
 
 

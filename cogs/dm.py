@@ -16,7 +16,7 @@ def dump_message(m):
     if m.author.discriminator == "0000":
         return
     else:
-        df.msg(
+        df.warn(
             f"Received a message from {m.author.name}#{m.author.discriminator} that wasn't a DM: {m.content}\n"
             f"    URL: {m.jump_url}\n"
             f"    Guild ID: {guildId}\n"
