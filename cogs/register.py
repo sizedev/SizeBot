@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 
-import digilogger as logger
+import digiformatter as df
 from globalsb import folder, readhexcode, regenhexcode
 from globalsb import isFeetAndInchesAndIfSoFixIt, getlet, getnum, toSV, toWV
 from globalsb import sizebotuser_roleid
@@ -20,7 +20,7 @@ def lines(items):
 async def addUserRole(member):
     role = get(member.guild.roles, id=sizebotuser_roleid)
     if role is None:
-        logger.warn(f"Sizebot user role {sizebotuser_roleid} not found in guild {member.guild.id}")
+        df.warn(f"Sizebot user role {sizebotuser_roleid} not found in guild {member.guild.id}")
         return
     await member.add_roles(role, reason="Registered as sizebot user")
 
@@ -28,7 +28,7 @@ async def addUserRole(member):
 async def removeUserRole(member):
     role = get(member.guild.roles, id=sizebotuser_roleid)
     if role is None:
-        logger.warn(f"Sizebot user role {sizebotuser_roleid} not found in guild {member.guild.id}")
+        df.warn(f"Sizebot user role {sizebotuser_roleid} not found in guild {member.guild.id}")
         return
     await member.remove_roles(role, reason="Unregistered as sizebot user")
 
@@ -59,32 +59,32 @@ class RegisterCog(commands.Cog):
         baseweight = Decimal(baseweight)
 
         readable = "CH {0}, CHU {1}, BH {2}, BHU {3}, BW {4}, BWU {5}".format(currentheight, chu, baseheight, bhu, baseweight, bwu)
-        logger.warn("New user attempt! Nickname: {0}, Display: {1}".format(nick, display))
+        df.warn("New user attempt! Nickname: {0}, Display: {1}".format(nick, display))
         print(readable)
 
         # Already registered.
         if os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
             await ctx.send("""Sorry! You already registered with SizeBot.
     To unregister, use the `&unregister` command.""", delete_after=10)
-            logger.warn("User already registered on user registration: {1}.".format(ctx.message.author))
+            df.warn("User already registered on user registration: {1}.".format(ctx.message.author))
             return
 
         # Invalid size value.
         if (currentheight <= 0 or
                 baseheight <= 0 or
                 baseweight <= 0):
-            logger.warn("Invalid size value.")
+            df.warn("Invalid size value.")
             await ctx.send("All values must be an integer greater than zero.", delete_after=5)
             return
 
         # Invalid display value.
         if display.lower() not in ["y", "n"]:
-            logger.warn("display was {0}, must be Y or N.".format(display))
+            df.warn("display was {0}, must be Y or N.".format(display))
             return
 
         # Invalid unit value.
         if units.lower() not in ["m", "u"]:
-            logger.warn("units was {0}, must be M or U.".format(units))
+            df.warn("units was {0}, must be M or U.".format(units))
             await ctx.send("Units must be `M` or `U`.", delete_after=5)
             return
 
@@ -108,13 +108,13 @@ class RegisterCog(commands.Cog):
             try:
                 userfile.write(output)
             except UnicodeDecodeError():
-                logger.warn("Unicode in nick or species.")
+                df.warn("Unicode in nick or species.")
                 await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your nick or species.".format(ctx.message.author.id))
                 return
 
         await addUserRole(ctx.message.author)
 
-        logger.warn("Made a new user: {0}!".format(ctx.message.author))
+        df.warn("Made a new user: {0}!".format(ctx.message.author))
         print(output)
         await ctx.send("Registered <@{0}>. {1}.".format(ctx.message.author.id, readable), delete_after=5)
 
@@ -129,7 +129,7 @@ class RegisterCog(commands.Cog):
     async def unregister(self, ctx, code=None):
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
             # User file missing.
-            logger.warn("User {0} not registered with SizeBot, but tried to unregister anyway.".format(ctx.message.author.id))
+            df.warn("User {0} not registered with SizeBot, but tried to unregister anyway.".format(ctx.message.author.id))
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
             return
@@ -141,11 +141,11 @@ class RegisterCog(commands.Cog):
             return
 
         if code != readhexcode():
-            logger.warn("User {0} tried to unregister, but said the wrong hexcode.".format(ctx.message.author.id))
+            df.warn("User {0} tried to unregister, but said the wrong hexcode.".format(ctx.message.author.id))
             await ctx.send("Incorrect code. You said: `{0}`. The correct code was: `{1}`. Try again.".format(code, readhexcode()), delete_after=10)
             return
 
-        logger.warn("User {0} successfully unregistered.".format(ctx.message.author.id))
+        df.warn("User {0} successfully unregistered.".format(ctx.message.author.id))
         await ctx.send("Correct code! Unregistered {0}".format(ctx.message.author.name), delete_after=5)
         os.remove(folder + "/users/" + str(ctx.message.author.id) + ".txt")
 

@@ -1,9 +1,7 @@
-
 from functools import reduce
-
 import discord
 from discord.ext import commands
-import digilogger as logger
+import digiformatter as df
 
 
 def deepgetattr(obj, attr):
@@ -18,7 +16,7 @@ def dump_message(m):
     if m.author.discriminator == "0000":
         return
     else:
-        logger.msg(
+        df.msg(
             f"Received a message from {m.author.name}#{m.author.discriminator} that wasn't a DM: {m.content}\n"
             f"    URL: {m.jump_url}\n"
             f"    Guild ID: {guildId}\n"
@@ -44,7 +42,7 @@ class DmCog(commands.Cog):
             if not isinstance(m.author, discord.Member):
                 dump_message(m)
             return
-        logger.msg(f"DM from {m.author.name}#{m.author.discriminator}: {m.content}")
+        df.msg(f"DM from {m.author.name}#{m.author.discriminator}: {m.content}")
 
 
 # Necessary.

@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from globalsb import *
-import digilogger as logger
 
 
 # Commands for non-size stuff.
@@ -13,6 +12,7 @@ class FunCog(commands.Cog):
 
     @commands.command()
     async def repeat(self, ctx, delay: float, *, message: str):
+        if ctx.message.author.id != getID("DigiDuncan"): return
         await ctx.message.delete()
 
         async def repeattask():
@@ -31,7 +31,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def say(self, ctx, *, message: str):
         await ctx.message.delete()
-        if ctx.message.author.id == digiid:
+        if ctx.message.author.id == getID("DigiDuncan"):
             await ctx.send(message)
 
     @commands.command()

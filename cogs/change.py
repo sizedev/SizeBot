@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from globalsb import *
-import digilogger as logger
+import digiformatter as df
 
 class ChangeCog(commands.Cog):
     def __init__(self, bot):
@@ -10,7 +10,7 @@ class ChangeCog(commands.Cog):
     # TODO: This isn't very clean.
     @commands.command()
     async def change(self, ctx, style, *, amount):
-        logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed {style}-style {amount}.")
+        df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed {style}-style {amount}.")
         #Change height.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
         #User file missing.
@@ -21,7 +21,7 @@ class ChangeCog(commands.Cog):
             userarray = read_user(ctx.message.author.id)
             userarray[CHEI] = str(Decimal(userarray[CHEI]) + Decimal(toSV(getnum(amount), getlet(amount)))) + newline
             if (float(userarray[CHEI]) > infinity):
-                logger.warn("Invalid size value.")
+                df.warn("Invalid size value.")
                 await ctx.send("Too big. x_x", delete_after=3)
                 userarray[CHEI] = str(infinity) + newline
             write_user(ctx.message.author.id, userarray)
@@ -33,7 +33,7 @@ class ChangeCog(commands.Cog):
             userarray = read_user(ctx.message.author.id)
             userarray[CHEI] = str(Decimal(userarray[CHEI]) * Decimal(amount)) + newline
             if (float(userarray[CHEI]) > infinity):
-                logger.warn("Invalid size value.")
+                df.warn("Invalid size value.")
                 await ctx.send("Too big. x_x", delete_after=3)
                 userarray[CHEI] = str(infinity) + newline
             write_user(ctx.message.author.id, userarray)
@@ -46,7 +46,7 @@ class ChangeCog(commands.Cog):
             userarray = read_user(ctx.message.author.id)
             userarray[CHEI] = str(Decimal(userarray[CHEI]) - (toSV(getnum(amount), getlet(amount))))
             if (float(userarray[CHEI]) > infinity):
-                logger.warn("Invalid size value.")
+                df.warn("Invalid size value.")
                 await ctx.send("Too big. x_x", delete_after=3)
                 userarray[CHEI] = str(infinity) + newline
             write_user(ctx.message.author.id, userarray)
@@ -58,7 +58,7 @@ class ChangeCog(commands.Cog):
             userarray = read_user(ctx.message.author.id)
             userarray[CHEI] = str(Decimal(userarray[CHEI]) / Decimal(amount))
             if (float(userarray[CHEI]) > infinity):
-                logger.warn("Invalid size value.")
+                df.warn("Invalid size value.")
                 await ctx.send("Too big. x_x", delete_after=3)
                 userarray[CHEI] = str(infinity) + newline
             write_user(ctx.message.author.id, userarray)
@@ -72,7 +72,7 @@ class ChangeCog(commands.Cog):
 
     @commands.command()
     async def slowchange(self, ctx, style : str, amount : str, delay : float):
-        logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) slow-changed {style}-style {amount} every {delay} minutes.")
+        df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) slow-changed {style}-style {amount} every {delay} minutes.")
         async def slowchangetask(ctx, style, amount, delay):
             #Change height.
             if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
@@ -85,7 +85,7 @@ class ChangeCog(commands.Cog):
                     userarray = read_user(ctx.message.author.id)
                     userarray[CHEI] = str(Decimal(userarray[CHEI]) + Decimal(toSV(getnum(amount), getlet(amount)))) + newline
                     if (float(userarray[CHEI]) > infinity):
-                        logger.warn("Invalid size value.")
+                        df.warn("Invalid size value.")
                         await ctx.send("Too big. x_x", delete_after=3)
                         userarray[CHEI] = str(infinity) + newline
                         tasks[ctx.message.author.id].cancel()
@@ -101,7 +101,7 @@ class ChangeCog(commands.Cog):
                     userarray = read_user(ctx.message.author.id)
                     userarray[CHEI] = str(Decimal(userarray[CHEI]) * Decimal(amount)) + newline
                     if (float(userarray[CHEI]) > infinity):
-                        logger.warn("Invalid size value.")
+                        df.warn("Invalid size value.")
                         await ctx.send("Too big. x_x", delete_after=3)
                         uuserarray[CHEI] = str(infinity) + newline
                         tasks[ctx.message.author.id].cancel()
@@ -146,13 +146,13 @@ class ChangeCog(commands.Cog):
 
     @commands.command()
     async def stopchange(self, ctx):
-        logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) stopped slow-changing.")
+        df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) stopped slow-changing.")
         try:
             tasks[ctx.message.author.id].cancel()
             del tasks[ctx.message.author.id]
         except:
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
-            logger.warn(f"User {ctx.message.author.id} ({ctx.message.author.nick}) tried to stop slow-changing, but there didn't have a task active.")
+            df.warn(f"User {ctx.message.author.id} ({ctx.message.author.nick}) tried to stop slow-changing, but there didn't have a task active.")
 
     @commands.command()
     async def eatme(self, ctx):
@@ -167,14 +167,14 @@ class ChangeCog(commands.Cog):
             newheight = float(userarray[CHEI]) * randmult
             userarray[CHEI] = str(newheight) + newline
             if (float(userarray[CHEI]) > infinity):
-                logger.warn("Invalid size value.")
+                df.warn("Invalid size value.")
                 await ctx.send("Too big. x_x", delete_after=3)
                 userarray[CHEI] = str(infinity) + newline
             write_user(ctx.message.author.id, userarray)
             userarray = read_user(ctx.message.author.id)
             if userarray[DISP] == "Y\n":
                 await nickupdate(ctx.message.author)
-            logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) ate a cake and multiplied {randmult}.")
+            df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) ate a cake and multiplied {randmult}.")
             #TODO: Randomize the italics message here.
             await ctx.send("""<@{0}> ate a :cake:! *I mean it said "Eat me..."*
 They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randmult, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
@@ -192,14 +192,14 @@ They multiplied {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id
             newheight = float(userarray[CHEI]) / randmult
             userarray[CHEI] = str(newheight) + newline
             if (float(userarray[CHEI]) > infinity):
-                logger.warn("Invalid size value.")
+                df.warn("Invalid size value.")
                 await ctx.send("Too big. x_x", delete_after=3)
                 userarray[CHEI] = str(infinity) + newline
             write_user(ctx.message.author.id, userarray)
             userarray = read_user(ctx.message.author.id)
             if userarray[DISP] == "Y\n":
                 await nickupdate(ctx.message.author)
-            logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) drank a potion and divided {randmult}.")
+            df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) drank a potion and divided {randmult}.")
             #TODO: Randomize the italics message here.
             await ctx.send("""<@{0}> drank a :shrinkpotion:! *What harm could a drink do?*
 They shrunk {1}x and are now {2} tall. ({3})""".format(ctx.message.author.id, randmult, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))

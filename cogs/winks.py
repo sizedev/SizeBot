@@ -1,6 +1,6 @@
 from discord.ext import commands
-from globalsb import yukioid, pretty_time_delta
-import digilogger as logger
+from globalsb import getID, pretty_time_delta
+import digiformatter as df
 import re
 import datetime
 
@@ -42,8 +42,8 @@ async def sayMilestone(winkcount):
 It took **{pretty_time_delta(timesince.total_seconds())}** to hit this milestone!
 That's an average of **{pretty_time_delta(timeperwink.total_seconds())}** per wink!
 (That's **{winkcount / (timesince / timedelta(days = 1))}** winks/day!)
-Great winking, <@{yukioid}>!""")
-    logger.crit(f"""Yukio has winked {winkcount} times since 15 September, 2019! :wink:
+Great winking, <@{getID("Yukio")}>!""")
+    df.crit(f"""Yukio has winked {winkcount} times since 15 September, 2019! :wink:
 It took {pretty_time_delta(timesince.total_seconds())} to hit this milestone!
 That's an average of {pretty_time_delta(timeperwink.total_seconds())} per wink!
 (That's {winkcount / (timesince / timedelta(days = 1))} winks/day!)""")
@@ -57,7 +57,7 @@ class WinksCog(commands.Cog):
     # Yukio wink count.
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.id != yukioid:
+        if message.author.id != getID("Yukio"):
             return
 
         winksSeen = countWinks(message.content)
@@ -65,14 +65,14 @@ class WinksCog(commands.Cog):
             return
 
         winkcount = addWinks(winksSeen)
-        logger.msg(f"Yukio has winked {winkcount} times!")
+        df.msg(f"Yukio has winked {winkcount} times!")
         if winkcount in milestones: sayMilestone(winkcount)
 
     @commands.command()
     async def winkcount(self, ctx):
         winkcount = getWinks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
-        logger.msg(f"Wink count requested! Current count: {winkcount} times!")
+        df.msg(f"Wink count requested! Current count: {winkcount} times!")
 
 
 # Necessary.

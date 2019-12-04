@@ -12,4 +12,5 @@
 *.code-workspace
 
 # Data files
-hexstring.txt
+text/hexstring.txt
+text/ids.txt

@@ -8,6 +8,7 @@ from time import strftime, localtime
 import sys
 import os
 import math
+import io
 from math import *
 import random
 from decimal import *
@@ -18,6 +19,7 @@ import traceback
 import asyncio
 import codecs
 import digilogger as logger
+import digiformatter as df
 
 
 # TODO: Make this do something useful.
@@ -36,14 +38,34 @@ defaultdensity = Decimal(1.0)
 # Constants
 newline = "\n"
 folder = ".."
-reol = 106871675617820672
-sizebot_id = 344590087679639556
-digiid = 271803699095928832
-yukioid = 140162671445147648
-mee6id = 553792568824037386
 sizebotuser_roleid = 562356758522101769
 brackets = ["[", "]", "<", ">"]
-allowbrackets = ("&compare", "&stats")
+enspace = "\u2002"
+printtab = enspace * 4
+allowbrackets = ("&compare", "&stats") # TODO: Could be better.
+
+def getID(*names):
+#IDs are stored in text/ids.txt.
+#The format is one ID per line, in the form {id}:{name}
+#This file is not tracked by Git.
+    iddict = {}
+    with io.open("text/ids.txt", "r", encoding="utf-8") as idfile:
+        ids = idfile.readlines()
+    ids = [x.strip() for x in ids]
+    for line in ids:
+        iddict[line[19:]] = line[:18].lower()
+    if len(names) == 0:
+        return iddict
+    if len(names) == 1:
+        if names in iddict.keys(): return int(iddict[names])
+        else: return 000000000000000000
+    else:
+        for name in names:
+            idlist = []
+            for name in names:
+                if name in iddict.keys(): idlist.append(int(iddict[name]))
+                else: idlist.append(000000000000000000)
+            return tuple(idlist)
 
 # Array item names.
 NICK = 0
@@ -61,14 +83,14 @@ def regenhexcode():
     hexdigits = "1234567890abcdef"
     lst = [random.choice(hexdigits) for n in range(16)]
     hexstring = "".join(lst)
-    hexfile = open("../hexstring.txt", "w")
+    hexfile = open("text/hexstring.txt", "w")
     hexfile.write(hexstring)
     hexfile.close()
 
 
 def readhexcode():
     # Read the hexcode from the file.
-    hexfile = open("../hexstring.txt", "r")
+    hexfile = open("text/hexstring.txt", "r")
     hexcode = hexfile.readlines()
     hexfile.close()
     return str(hexcode[0])
@@ -131,6 +153,7 @@ def removedecimals(output):
         output = output.replace(".90", ".9")
     return output
 
+
 def removebrackets(string):
     for bracket in brackets:
         string = string.replace(bracket, "")
@@ -168,10 +191,10 @@ async def nickupdate(user):
     if user.discriminator == "0000": return
     if not isinstance(user, discord.Member):
         if user.id == mee6id: return
-        logger.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
+        df.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
     # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
-        # logger.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
+        # df.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
         return
     # Don't update users who aren't registered.
     if not os.path.exists(f"{folder}/users/{user.id}.txt"):
@@ -220,14 +243,12 @@ async def nickupdate(user):
     try:
         await user.edit(nick=newnick)
     except discord.Forbidden:
-        logger.crit(f"Tried to nickupdate {user.id} ({user.name}), but it is forbidden!")
+        df.crit(f"Tried to nickupdate {user.id} ({user.name}), but it is forbidden!")
         return
 
 
-    #logger.msg(f"Updated user {user.id} ({user.name}).")
-
-
 # Read in specific user.
+# TODO: Read this from a MariaDB. Rewrite like all of this.
 def read_user(user_id):
     user_id = str(user_id)
     userfile = folder + "/users/" + user_id + ".txt"
@@ -301,13 +322,11 @@ listing = os.listdir(path)
 for infile in listing:
     if infile.endswith(".txt"):
         members += 1
-logger.load("Loaded {0} users.".format(members))
-
-enspace = "\u2002"
-printtab = enspace * 4
+df.load("Loaded {0} users.".format(members))
 
 
 # Slow growth tasks.
+# TODO: Get rid of asyncio tasks, replace with timed database checks.
 tasks = {}
 
 # Unit constants.
@@ -826,4 +845,4 @@ def check(ctx):
     return role is None
 
 
-logger.load("Global functions loaded.")
+df.load("Global functions loaded.")

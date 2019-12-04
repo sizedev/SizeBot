@@ -1,9 +1,7 @@
 from globalsb import *
-import digilogger as logger
+import digiformatter as df
 
 launch = datetime.now()
-
-os.system("")
 
 # Get authtoken from file.
 with open("../_authtoken.txt") as f:
@@ -14,8 +12,9 @@ authtoken = authtoken[0]
 # Predefined variables.
 prefix = '&'
 description = '''SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.
+SizeBot3AndAHalf is a refactorization and SB3 and adds database support.
 Written by DigiDuncan.
-The SizeBot Team: DigiDuncan, Natalie, AWK_, Benyovski, Arceus3521, Surge The Raichu.'''
+The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.'''
 initial_extensions = [
     'cogs.change',
     'cogs.dm',
@@ -45,12 +44,12 @@ async def on_ready():
     print(bot.user.id)
     print('------' + style.RESET)
     await bot.change_presence(activity=discord.Game(name="Ratchet and Clank: Size Matters"))
-    logger.warn("Warn test.")
-    logger.crit("Crit test.")
-    logger.test("Test test.")
+    df.warn("Warn test.")
+    df.crit("Crit test.")
+    df.test("Test test.")
     finishlaunch = datetime.now()
     elapsed = finishlaunch - launch
-    logger.test(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.")
+    df.test(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.")
     print()
 
 
@@ -59,6 +58,7 @@ async def on_message(message):
     if message.content.startswith("&") and message.content.endswith("&"): return #Ignore Tupperboxes being mistaken for commands.
     if not message.content.startswith(allowbrackets): message.content = removebrackets(message.content)
     await bot.process_commands(message)
+
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].
 if __name__ == '__main__':
