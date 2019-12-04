@@ -1,0 +1,8 @@
+- Don't import * globalsb
+- Start using MariaDB
+- Replace .format() with f-strings
+- Make commands easier to use and give better use output
+	- register
+- Make SizeBot respond to DMs in a helpful way
+- Figure out the DigiLogger thing.
+- Follow and document style conventions.
