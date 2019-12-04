@@ -5,9 +5,7 @@
 - Make commands easier to use and give better use output.
 	- register
 - Make SizeBot respond to DMs in a helpful way.
-- Figure out the DigiLogger thing.
 - Follow and document style conventions.
-	- Make variable and function names follow naming conventions.
 - Switch some things to embeds.
 - Fix allowbrackets.
 - Make repeating tasks check the database every X time instead of asyncio tasks that are unwieldy.
