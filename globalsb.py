@@ -28,7 +28,7 @@ class DigiException(Exception):
 
 
 # Version.
-version = "3AAH.0.0.b1"
+version = "3AAH.0.0.b3"
 
 # Defaults
 defaultheight = Decimal(1754000)  # micrometers
@@ -45,9 +45,9 @@ printtab = enspace * 4
 allowbrackets = ("&compare", "&stats") # TODO: Could be better.
 
 def getID(*names):
-#IDs are stored in text/ids.txt.
-#The format is one ID per line, in the form {id}:{name}
-#This file is not tracked by Git.
+# IDs are stored in text/ids.txt.
+# The format is one ID per line, in the form {id}:{name}
+# This file is not tracked by Git.
     iddict = {}
     with io.open("text/ids.txt", "r", encoding="utf-8") as idfile:
         ids = idfile.readlines()
@@ -423,7 +423,7 @@ def toSV(value, unit):
 
 
 # Convert 'size values' to a more readable format (metric).
-def fromSV(value, accuracy):
+def fromSV(value, accuracy = 2):
     value = float(value)
     output = ""
     if value <= 0:
@@ -488,7 +488,7 @@ def fromSV(value, accuracy):
 
 
 # Convert 'size values' to a more readable format (USA).
-def fromSVUSA(value, accuracy):
+def fromSVUSA(value, accuracy = 2):
     value = float(value)
     output = ""
     if value <= 0:
@@ -619,7 +619,7 @@ def toWV(value, unit):
 
 
 # Convert 'weight values' to a more readable format.
-def fromWV(value, accuracy):
+def fromWV(value, accuracy = 2):
     value = Decimal(value)
     if value <= 0:
         return "0"
@@ -685,7 +685,7 @@ def fromWV(value, accuracy):
 
 
 # Convert 'weight values' to a more readable format (USA).
-def fromWVUSA(value, accuracy):
+def fromWVUSA(value, accuracy = 2):
     value = Decimal(value)
     if value == 0:
         return "almost nothing"
@@ -708,17 +708,17 @@ def fromWVUSA(value, accuracy):
     elif value < (ounce / 10):
         output = str(round(Decimal(value) / Decimal(10**3), accuracy)) + "g"
     elif value < pound:
-        output = str(place_value(round(Decimal(value) / ounce, accuracy))) + "oz"
+        output = str(placeValue(round(Decimal(value) / ounce, accuracy))) + "oz"
     elif value < uston:
-        output = str(place_value(round(Decimal(value) / pound, accuracy))) + "lb"
+        output = str(placeValue(round(Decimal(value) / pound, accuracy))) + "lb"
     elif value < earth / 10:
-        output = str(place_value(round(Decimal(value) / uston, accuracy))) + " US tons"
+        output = str(placeValue(round(Decimal(value) / uston, accuracy))) + " US tons"
     elif value < sun / 10:
-        output = str(place_value(round(Decimal(value) / earth, accuracy))) + " Earths"
+        output = str(placeValue(round(Decimal(value) / earth, accuracy))) + " Earths"
     elif value < milkyway:
-        output = str(place_value(round(Decimal(value) / sun, accuracy))) + " Suns"
+        output = str(placeValue(round(Decimal(value) / sun, accuracy))) + " Suns"
     elif value < uniw:
-        output = str(place_value(round(Decimal(value) / milkyway, accuracy))) + " Milky Ways"
+        output = str(placeValue(round(Decimal(value) / milkyway, accuracy))) + " Milky Ways"
     elif value < uniw * (10**3):
         output = str(round(Decimal(value) / uniw, accuracy)) + "uni"
     elif value < uniw * (10**6):

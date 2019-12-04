@@ -160,12 +160,12 @@ SizeBot is coded (mainly) by DigiDuncan, and for absolutely free.
 However, if you wish to contribute to DigiDuncan directly, you can do so here:
 https://ko-fi.com/DigiDuncan
 SizeBot has been a passion project coded over a period of two years and learning a lot of Python along the way.
-Thank you so much for being here throughout this journey!"""
+Thank you so much for being here throughout this journey!""")
 
     @commands.command()
     async def bug(self, ctx, *, message : str):
         df.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-        await bot.get_user(getID("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}"
+        await bot.get_user(getID("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
 
 #Necessary.
 def setup(bot):

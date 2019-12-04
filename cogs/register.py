@@ -9,7 +9,7 @@ import digiformatter as df
 from globalsb import folder, readHexCode, regenHexCode
 from globalsb import isFeetAndInchesAndIfSoFixIt, getLet, getNum, toSV, toWV, lines
 from globalsb import sizebotuser_roleid
-from globalsb import nickupdate
+from globalsb import nickUpdate
 
 
 async def addUserRole(member):

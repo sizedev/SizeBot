@@ -4,7 +4,7 @@ import digiformatter as df
 import re
 import datetime
 
-winkpath = "../winkcount.txt"
+winkpath = "text/winkcount.txt"
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
 starttime = datetime.datetime(2019, 9, 15)
 milestones = [1000, 2500, 5000, 10000, 25000, 50000, 100000]
@@ -19,6 +19,8 @@ def getWinks():
                 winkcount = 0
     except FileNotFoundError:
         winkcount = 0
+        with open(winkpath, "w") as f:
+            f.write(str(winkcount))
     return winkcount
 
 

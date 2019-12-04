@@ -3,7 +3,7 @@ from discord.ext import commands
 from globalsb import *
 import digiformatter as df
 
-monikalines = open("text/monikalines.txt").readlines()
+monikalines = io.open("text/monikalines.txt", encoding="utf-8").readlines()
 
 
 # Easter egg

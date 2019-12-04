@@ -6,9 +6,9 @@ from discord.ext import commands
 
 # TODO: Fix this...
 from globalsb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC
-from globalsb import readUser, folder, getNum, getLet, isFeetAndInchesAndIfSoFixIt, place_value
+from globalsb import readUser, folder, getNum, getLet, isFeetAndInchesAndIfSoFixIt, placeValue
 from globalsb import defaultheight, defaultweight, defaultdensity, inch
-from globalsb import fromSVacc, fromSVUSA, fromSV, fromWV, fromWVUSA, toShoeSize, toSV
+from globalsb import fromSV, fromSVUSA, fromWV, fromWVUSA, toShoeSize, toSV
 from globalsb import printtab
 
 import digilogger as logger
@@ -173,12 +173,12 @@ class StatsCog(commands.Cog):
         s2bh = sbh / diffmult
         b2sw = bbw * (diffmult ** 3)
         s2bw = sbw / (diffmult ** 3)
-        bigtosmallheight = fromSVacc(b2sh)
-        smalltobigheight = fromSVacc(s2bh)
+        bigtosmallheight = fromSV(b2sh, 3)
+        smalltobigheight = fromSV(s2bh, 3)
         bigtosmallheightUSA = fromSVUSA(b2sh)
         smalltobigheightUSA = fromSVUSA(s2bh)
-        bigtosmallfoot = fromSVacc(b2sh * footfactor)
-        smalltobigfoot = fromSVacc(s2bh * footfactor)
+        bigtosmallfoot = fromSV(b2sh * footfactor, 3)
+        smalltobigfoot = fromSV(s2bh * footfactor, 3)
         bigtosmallfootUSA = fromSVUSA(b2sh * footfactor)
         smalltobigfootUSA = fromSVUSA(s2bh * footfactor)
         bigtosmallshoe = toShoeSize(b2sh * footfactor / inch)
@@ -187,38 +187,38 @@ class StatsCog(commands.Cog):
         smalltobigweight = fromWV(s2bw)
         bigtosmallweightUSA = fromWVUSA(b2sw)
         smalltobigweightUSA = fromWVUSA(s2bw)
-        bigtosmallfootwidth = fromSVacc(b2sh * footwidthfactor)
-        smalltobigfootwidth = fromSVacc(s2bh * footwidthfactor)
+        bigtosmallfootwidth = fromSV(b2sh * footwidthfactor, 3)
+        smalltobigfootwidth = fromSV(s2bh * footwidthfactor, 3)
         bigtosmallfootwidthUSA = fromSVUSA(b2sh * footwidthfactor)
         smalltobigfootwidthUSA = fromSVUSA(s2bh * footwidthfactor)
-        bigtosmallfootthick = fromSVacc(b2sh * footthickfactor)
-        smalltobigfootthick = fromSVacc(s2bh * footthickfactor)
+        bigtosmallfootthick = fromSV(b2sh * footthickfactor, 3)
+        smalltobigfootthick = fromSV(s2bh * footthickfactor, 3)
         bigtosmallfootthickUSA = fromSVUSA(b2sh * footthickfactor)
         smalltobigfootthickUSA = fromSVUSA(s2bh * footthickfactor)
-        bigtosmallthumb = fromSVacc(b2sh * thumbfactor)
-        smalltobigthumb = fromSVacc(s2bh * thumbfactor)
+        bigtosmallthumb = fromSV(b2sh * thumbfactor, 3)
+        smalltobigthumb = fromSV(s2bh * thumbfactor, 3)
         bigtosmallthumbUSA = fromSVUSA(b2sh * thumbfactor)
         smalltobigthumbUSA = fromSVUSA(s2bh * thumbfactor)
-        bigtosmallfingerprint = fromSVacc(b2sh * fingerprintfactor)
-        smalltobigfingerprint = fromSVacc(s2bh * fingerprintfactor)
+        bigtosmallfingerprint = fromSV(b2sh * fingerprintfactor, 3)
+        smalltobigfingerprint = fromSV(s2bh * fingerprintfactor, 3)
         bigtosmallfingerprintUSA = fromSVUSA(b2sh * fingerprintfactor)
         smalltobigfingerprintUSA = fromSVUSA(s2bh * fingerprintfactor)
-        bigtosmallhairwidth = fromSVacc(b2sh * hairwidthfactor)
-        smalltobighairwidth = fromSVacc(s2bh * hairwidthfactor)
+        bigtosmallhairwidth = fromSV(b2sh * hairwidthfactor, 3)
+        smalltobighairwidth = fromSV(s2bh * hairwidthfactor, 3)
         bigtosmallhairwidthUSA = fromSVUSA(b2sh * hairwidthfactor)
         smalltobighairwidthUSA = fromSVUSA(s2bh * hairwidthfactor)
-        bigtosmallpointer = fromSVacc(b2sh * pointerfactor)
-        smalltobigpointer = fromSVacc(s2bh * pointerfactor)
+        bigtosmallpointer = fromSV(b2sh * pointerfactor, 3)
+        smalltobigpointer = fromSV(s2bh * pointerfactor, 3)
         bigtosmallpointerUSA = fromSVUSA(b2sh * pointerfactor)
         smalltobigpointerUSA = fromSVUSA(s2bh * pointerfactor)
-        timestaller = place_value(round((bch / sch), 3))
+        timestaller = placeValue(round((bch / sch), 3))
 
         # Print compare.
         return (
             "**Comparison:**\n"
             f"{bigusertag} is really:\n"
-            f"{printtab}Real Height: {fromSVacc(bch)} / {fromSVUSA(bch)} ({place_value(dispbigmult)}x basesize)\n"
-            f"{printtab}Real Weight: {fromWV(bcw)} / {fromWVUSA(bcw)}. ({place_value(dispbigmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {fromSV(bch, 3)} / {fromSVUSA(bch)} ({placeValue(dispbigmult)}x basesize)\n"
+            f"{printtab}Real Weight: {fromWV(bcw)} / {fromWVUSA(bcw)}. ({placeValue(dispbigmultcubed)}x basesize)\n"
             f"To {smallusertag}, {bigusertag} looks:\n"
             f"{printtab}Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
             f"{printtab}Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
@@ -233,8 +233,8 @@ class StatsCog(commands.Cog):
             f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
             "\n"
             f"{smallusertag} is really:\n"
-            f"{printtab}Real Height: {fromSVacc(sch)} / {fromSVUSA(sch)} ({place_value(dispsmallmult)}x basesize)\n"
-            f"{printtab}Real Weight: {fromWV(scw)} / {fromWVUSA(scw)}. ({place_value(dispsmallmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {fromSV(sch, 3)} / {fromSVUSA(sch)} ({placeValue(dispsmallmult)}x basesize)\n"
+            f"{printtab}Real Weight: {fromWV(scw)} / {fromWVUSA(scw)}. ({placeValue(dispsmallmultcubed)}x basesize)\n"
             f"To {bigusertag}, {smallusertag} looks:\n"
             f"{printtab}Height: {smalltobigheight} / {smalltobigheightUSA}\n"
             f"{printtab}Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
@@ -247,15 +247,15 @@ class StatsCog(commands.Cog):
             f"{printtab}Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
             "\n"
             f"**Base Sizes:**\n"
-            f"{printtab}{bigusertag}: {fromSVacc(bbh)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
-            f"{printtab}{smallusertag}: {fromSVacc(sbh)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
+            f"{printtab}{bigusertag}: {fromSV(bbh, 3)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
+            f"{printtab}{smallusertag}: {fromSV(sbh, 3)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
 
     # TODO: Clean this up.
     def userStats(self, user1tag, user1):
-        readableheight = fromSVacc(user1[CHEI])
-        readablefootheight = fromSVacc(Decimal(user1[CHEI]) * footfactor)
+        readableheight = fromSV(user1[CHEI], 3)
+        readablefootheight = fromSV(Decimal(user1[CHEI]) * footfactor, 3)
         readablefootUSAheight = fromSVUSA(Decimal(user1[CHEI]) * footfactor)
-        readablefootthick = fromSVacc(Decimal(user1[CHEI]) * footthickfactor)
+        readablefootthick = fromSV(Decimal(user1[CHEI]) * footthickfactor, 3)
         readablefootUSAthick = fromSVUSA(Decimal(user1[CHEI]) * footthickfactor)
         readableUSAheight = fromSVUSA(user1[CHEI])
         userbaseh = fromSV(user1[BHEI])
@@ -271,27 +271,27 @@ class StatsCog(commands.Cog):
         weightmath = (baseweight * (multipliercubed)) * density
         readableweight = fromWV(weightmath)
         readableUSAweight = fromWVUSA(weightmath)
-        normalheight = fromSVacc(Decimal(defaultheight) / Decimal(basemult))
+        normalheight = fromSV(Decimal(defaultheight) / Decimal(basemult), 3)
         normalUSAheight = fromSVUSA(Decimal(defaultheight) / Decimal(basemult))
         normalweight = fromWV(Decimal(defaultweight) / Decimal(basemultcubed))
         normalUSAweight = fromWVUSA(Decimal(defaultweight) / Decimal(basemultcubed))
-        thumbsize = fromSVacc(Decimal(user1[CHEI]) * thumbfactor)
+        thumbsize = fromSV(Decimal(user1[CHEI]) * thumbfactor, 3)
         thumbsizeUSA = fromSVUSA(Decimal(user1[CHEI]) * thumbfactor)
         footheight = Decimal(user1[CHEI]) * footfactor
         footwidth = fromSV(Decimal(user1[CHEI]) * footwidthfactor)
         footwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * footwidthfactor)
         footlengthinches = Decimal(user1[CHEI]) * footfactor / inch
         shoesize = toShoeSize(footlengthinches)
-        fingerprintdepth = fromSVacc(Decimal(user1[CHEI]) * fingerprintfactor)
+        fingerprintdepth = fromSV(Decimal(user1[CHEI]) * fingerprintfactor, 3)
         fingerprintdepthUSA = fromSVUSA(Decimal(user1[CHEI]) * fingerprintfactor)
-        hairwidth = fromSVacc(Decimal(user1[CHEI]) * hairwidthfactor)
+        hairwidth = fromSV(Decimal(user1[CHEI]) * hairwidthfactor, 3)
         hairwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * hairwidthfactor)
-        pointer = fromSVacc(Decimal(user1[CHEI]) * pointerfactor)
+        pointer = fromSV(Decimal(user1[CHEI]) * pointerfactor, 3)
         pointerUSA = fromSVUSA(Decimal(user1[CHEI]) * pointerfactor)
-        hcms = place_value(round(multiplier, 4))
-        hbms = place_value(round(basemult, 4))
-        wcms = place_value(round(multipliercubed * density, 4))
-        wbms = place_value(round(basemultcubed * density, 4))
+        hcms = placeValue(round(multiplier, 4))
+        hbms = placeValue(round(basemult, 4))
+        wcms = placeValue(round(multipliercubed * density, 4))
+        wbms = placeValue(round(basemultcubed * density, 4))
         if multiplier > 999999999999999:
             hcms = "{:.2e}".format(multiplier)
         if basemult > 999999999999999:
