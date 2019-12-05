@@ -15,6 +15,10 @@ Apparently, there should be two blank lines between these things.<a href="#footn
 
 Variables should be all lowercase, with underscores (`_`) if desired.
 
+### "Magic Number" Variables
+
+Usually used for indexes you want to be able to understand at a glance. I prefer these to be four characters in all uppercase. (`INDX = 1`)<a href="#footnote2"><sup>2</sup></a>
+
 ### Formatting strings
 
 Use f-strings. Just do it.    
@@ -27,4 +31,5 @@ TODO comments should start with `# TODO:`.
 ____
 
 <small>
-<a name="footnote"></a><sup>1</sup> Natalie has recommended this, and she's a real programmer.
+<a name="footnote1"></a><sup>1</sup> Natalie has recommended this, and she's a real programmer.
+<a name="footnote2"></a><sup>2</sup> This isn't a standard formatting thing, it just makes me understand what the variable means better.

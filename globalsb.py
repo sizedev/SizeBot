@@ -272,6 +272,8 @@ def readUser(user_id):
         content[CHEI] = str(round(float(content[CHEI]), 18))
         content[BHEI] = str(round(float(content[BHEI]), 18))
         content[BWEI] = str(round(float(content[BWEI]), 18))
+        for idx, item in enumerate(content):
+            content[idx] = content[idx].strip()
         return content
 
 
