@@ -65,6 +65,7 @@ if __name__ == '__main__':
     for extension in initial_extensions:
         # try:
         bot.load_extension(extension)
+    df.load("Loaded cogs.")
 
 
 bot.run(authtoken)

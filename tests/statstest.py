@@ -1,71 +1,52 @@
-import discord
-from discord.ext import commands
-import re
-import datetime
-from datetime import *
-import time
-from time import strftime, localtime
-import sys
-import os
 import math
-import io
 from math import *
-import random
 from decimal import *
-from colored import fore, back, style, fg, bg, attr
-from pathlib import Path
-import string
-import traceback
-import asyncio
-import codecs
-import digilogger as logger
-import digiformatter as df
+import re
 
+# Configure decimal module.
+getcontext()
+context = Context(prec=100, rounding=ROUND_HALF_EVEN, Emin=-9999999, Emax=999999,
+                  capitals=1, clamp=0, flags=[], traps=[Overflow, DivisionByZero,
+                                                        InvalidOperation])
+setcontext(context)
 
-# TODO: Make this do something useful.
-class DigiException(Exception):
-    pass
+inputname = input("Name? > ")
+inputheight = input("Height? > ")
+inputbheight = input("Base Height? > ")
+inputbweight = input("Base Weight? > ")
 
-
-# Version.
-version = "3AAH.0.0.b3"
+# Unit constants.
+# Height [micrometers]
+inch = Decimal(25400)
+foot = inch * Decimal(12)
+mile = foot * Decimal(5280)
+ly = mile * Decimal(5879000000000)
+au = Decimal(149597870700000000)
+uni = Decimal(879848000000000000000000000000000)
+infinity = Decimal(879848000000000000000000000000000000000000000000000000000000)
+# Weight [milligrams]
+ounce = Decimal(28350)
+pound = ounce * Decimal(16)
+uston = pound * Decimal(2000)
+earth = Decimal(5972198600000000000000000000000)
+sun = Decimal(1988435000000000000000000000000000000)
+milkyway = Decimal(95000000000000000000000000000000000000000000000)
+uniw = Decimal(3400000000000000000000000000000000000000000000000000000000000)
 
 # Defaults
 defaultheight = Decimal(1754000)  # micrometers
 defaultweight = Decimal(66760000)  # milligrams
 defaultdensity = Decimal(1.0)
 
-# Constants
-newline = "\n"
-folder = ".."
-sizebotuser_roleid = 562356758522101769
-brackets = ["[", "]", "<", ">"]
-enspace = "\u2002"
-printtab = enspace * 4
-allowbrackets = ("&compare", "&stats") # TODO: Could be better.
-
-def getID(*names):
-# IDs are stored in text/ids.txt.
-# The format is one ID per line, in the form {id}:{name}
-# This file is not tracked by Git.
-    iddict = {}
-    with io.open("text/ids.txt", "r", encoding="utf-8") as idfile:
-        ids = idfile.readlines()
-    ids = [x.strip() for x in ids]
-    for line in ids:
-        iddict[line[19:]] = line[:18].lower()
-    if len(names) == 0:
-        return iddict
-    if len(names) == 1:
-        if names in iddict.keys(): return int(iddict[names])
-        else: return 000000000000000000
-    else:
-        for name in names:
-            idlist = []
-            for name in names:
-                if name in iddict.keys(): idlist.append(int(iddict[name]))
-                else: idlist.append(000000000000000000)
-            return tuple(idlist)
+# TODO: Move to units module.
+# Conversion constants.
+footfactor = Decimal(1) / Decimal(7)
+footwidthfactor = footfactor / Decimal(2.5)
+toeheightfactor = Decimal(1) / Decimal(65)
+thumbfactor = Decimal(1) / Decimal(69.06)
+fingerprintfactor = Decimal(1) / Decimal(35080)
+hairfactor = Decimal(1) / Decimal(23387)
+pointerfactor = Decimal(1) / Decimal(17.26)
 
 # Array item names.
 NICK = 0
@@ -76,42 +57,6 @@ BWEI = 4
 DENS = 5
 UNIT = 6
 SPEC = 7
-
-
-def regenHexCode():
-    # 16-char hex string gen for unregister.
-    hexdigits = "1234567890abcdef"
-    lst = [random.choice(hexdigits) for n in range(16)]
-    hexstring = "".join(lst)
-    hexfile = open("text/hexstring.txt", "w")
-    hexfile.write(hexstring)
-    hexfile.close()
-
-
-def readHexCode():
-    # Read the hexcode from the file.
-    hexfile = open("text/hexstring.txt", "r")
-    hexcode = hexfile.readlines()
-    hexfile.close()
-    return str(hexcode[0])
-
-
-# ASCII art.
-ascii = r"""
-. _____ _        ______       _   _____ .
-./  ___(_)       | ___ \     | | |____ |.
-.\ `--. _ _______| |_/ / ___ | |_    / /.
-. `--. \ |_  / _ \ ___ \/ _ \| __|   \ \.
-./\__/ / |/ /  __/ |_/ / (_) | |_.___/ /.
-.\____/|_/___\___\____/ \___/ \__\____/ ."""
-
-# Configure decimal module.
-getcontext()
-context = Context(prec=100, rounding=ROUND_HALF_EVEN, Emin=-9999999, Emax=999999,
-                  capitals=1, clamp=0, flags=[], traps=[Overflow, DivisionByZero,
-                                                        InvalidOperation])
-setcontext(context)
-
 
 # Get number from string.
 def getNum(string):
@@ -136,153 +81,12 @@ def removeDecimals(output):
     return output
 
 
-def removeBrackets(string):
-    for bracket in brackets:
-        string = string.replace(bracket, "")
-    return string
-
-
 def roundNearestHalf(number):
     return round(number * 2) / 2
 
 
 def placeValue(number):
     return ("{:,}".format(number))
-
-# Add newlines and join into one string
-def lines(items):
-    return "".join(item + "\n" for item in items)
-
-
-def prettyTimeDelta(seconds):
-    seconds = int(seconds)
-    years, seconds = divmod(seconds, 86400 * 365)
-    days, seconds = divmod(seconds, 86400)
-    hours, seconds = divmod(seconds, 3600)
-    minutes, seconds = divmod(seconds, 60)
-    if years > 0:
-        return '%d years, %d days, %d hours, %d minutes, %d seconds' % (years, days, hours, minutes, seconds)
-    elif days > 0:
-        return '%d days, %d hours, %d minutes, %d seconds' % (days, hours, minutes, seconds)
-    elif hours > 0:
-        return '%d hours, %d minutes, %d seconds' % (hours, minutes, seconds)
-    elif minutes > 0:
-        return '%d minutes, %d seconds' % (minutes, seconds)
-    else:
-        return '%d seconds' % (seconds)
-
-
-# Update users nicknames to include sizetags.
-async def nickUpdate(user):
-    if user.discriminator == "0000": return
-    if not isinstance(user, discord.Member):
-        if user.id == mee6id: return
-        df.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
-    # Don't update owner's nick, permissions error.
-    if user.id == user.guild.owner.id:
-        # df.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
-        return
-    # Don't update users who aren't registered.
-    if not os.path.exists(f"{folder}/users/{user.id}.txt"):
-        return
-
-    userarray = readUser(user.id)
-
-    # User's display setting is N. No sizetag.
-    if userarray[DISP].strip() != "Y":
-        return
-
-    height = userarray[CHEI]
-    if height is None:
-        height = userarray[BHEI]
-    nick = userarray[NICK].strip()
-    species = userarray[SPEC].strip()
-
-    unit_system = userarray[UNIT].strip().upper()
-    if unit_system == "M":
-        sizetag = fromSV(height)
-    elif unit_system == "U":
-        sizetag = fromSVUSA(height)
-    else:
-        sizetag = ""
-
-    if species != "None":
-        sizetag = f"{sizetag}, {species}"
-
-    max_nick_len = 32
-
-    if len(nick) > max_nick_len:
-        # User has set their nick too large. Truncate.
-        nick = nick[:max_nick_len]
-
-    if len(nick) + len(sizetag) + 3 <= max_nick_len:
-        # Fit full nick and sizetag.
-        newnick = f"{nick} [{sizetag}]"
-    elif len(sizetag) + 7 <= max_nick_len:
-        # Fit short nick and sizetag.
-        chars_left = max_nick_len - len(sizetag) - 4
-        short_nick = nick[:chars_left]
-        newnick = f"{short_nick}… [{sizetag}]"
-    else:
-        # Cannot fit the new sizetag.
-        newnick = nick
-    try:
-        await user.edit(nick=newnick)
-    except discord.Forbidden:
-        df.crit(f"Tried to nickupdate {user.id} ({user.name}), but it is forbidden!")
-        return
-
-
-# Read in specific user.
-# TODO: Read this from a MariaDB. Rewrite like all of this.
-def readUser(user_id):
-    user_id = str(user_id)
-    userfile = folder + "/users/" + user_id + ".txt"
-    with open(userfile) as f:
-        # Make array of lines from file.
-        content = f.readlines()
-        if content == []: os.remove(userfile)
-        # Replace None.
-        if content[BWEI] == "None" + newline:
-            content[BWEI] = str(defaultweight) + newline
-        if content[BHEI] == "None" + newline:
-            content[BHEI] = str(defaultweight) + newline
-        if content[CHEI] == "None" + newline:
-            content[CHEI] = content[3]
-        # Round all values to 18 decimal places.
-        content[CHEI] = str(round(float(content[CHEI]), 18))
-        content[BHEI] = str(round(float(content[BHEI]), 18))
-        content[BWEI] = str(round(float(content[BWEI]), 18))
-        for idx, item in enumerate(content):
-            content[idx] = content[idx].strip()
-        return content
-
-
-# Write to specific user.
-def writeUser(user_id, content):
-    user_id = str(user_id)
-    # Replace None.
-    if content[BWEI] == "None" + newline:
-        content[BWEI] = str(defaultweight) + newline
-    if content[BHEI] == "None" + newline:
-        content[BHEI] = str(defaultweight) + newline
-    if content[CHEI] == "None" + newline:
-        content[CHEI] = content[3]
-    # Round all values to 18 decimal places.
-    content[CHEI] = str(round(float(content[CHEI]), 18))
-    content[BHEI] = str(round(float(content[BHEI]), 18))
-    content[BWEI] = str(round(float(content[BWEI]), 18))
-    # Add new line characters to entries that don't have them.
-    for idx, item in enumerate(content):
-        if not content[idx].endswith("\n"):
-            content[idx] = content[idx] + "\n"
-    # Delete userfile.
-    os.remove(folder + "/users/" + user_id + ".txt")
-    # Make a new userfile.
-    userfile = open(folder + "/users/" + user_id + ".txt", "w+")
-    # Write content to lines.
-    userfile.writelines(content)
-
 
 def isFeetAndInchesAndIfSoFixIt(input):
     regex = r"^(?P<feet>\d+(ft|foot|feet|\'))(?P<inch>\d+(in|\")*)"
@@ -297,38 +101,6 @@ def isFeetAndInchesAndIfSoFixIt(input):
     if inch == None: inch = 0
     totalinches = (feet * 12) + inch
     return f"{totalinches}in"
-
-# Count users.
-members = 0
-path = folder + '/users'
-listing = os.listdir(path)
-for infile in listing:
-    if infile.endswith(".txt"):
-        members += 1
-df.load("Loaded {0} users.".format(members))
-
-
-# Slow growth tasks.
-# TODO: Get rid of asyncio tasks, replace with timed database checks.
-tasks = {}
-
-# Unit constants.
-# Height [micrometers]
-inch = Decimal(25400)
-foot = inch * Decimal(12)
-mile = foot * Decimal(5280)
-ly = mile * Decimal(5879000000000)
-au = Decimal(149597870700000000)
-uni = Decimal(879848000000000000000000000000000)
-infinity = Decimal(879848000000000000000000000000000000000000000000000000000000)
-# Weight [milligrams]
-ounce = Decimal(28350)
-pound = ounce * Decimal(16)
-uston = pound * Decimal(2000)
-earth = Decimal(5972198600000000000000000000000)
-sun = Decimal(1988435000000000000000000000000000000)
-milkyway = Decimal(95000000000000000000000000000000000000000000000)
-uniw = Decimal(3400000000000000000000000000000000000000000000000000000000000)
 
 
 # Convert any supported height to 'size value'
@@ -740,27 +512,106 @@ def toShoeSize(inchamount):
         shoesize = "Children's " + shoesize
     return "Size US " + shoesize
 
-#Currently unused.
-def fromShoeSize(size):
-    child = False
-    if "c" in size.toLower():
-        child = True
-    size = getNum(size)
-    inches = Decimal(size) + 22
-    if child:
-        inches = Decimal(size) + 22 - 12 - (1 / 3)
-    inches = inches / Decimal(3)
-    out = inches * inch
-    return out
+
+userlist = [inputname,
+        "Y",
+        toSV(getNum(isFeetAndInchesAndIfSoFixIt(inputheight)),getLet(isFeetAndInchesAndIfSoFixIt(inputheight))),
+        toSV(getNum(isFeetAndInchesAndIfSoFixIt(inputbheight)),getLet(isFeetAndInchesAndIfSoFixIt(inputbheight))),
+        toWV(getNum(inputbweight),getLet(inputbweight)),
+        1.0,
+        "M",
+        "None"
+]
 
 
-def check(ctx):
-    # Disable commands for users with the SizeBot_Banned role.
-    if not isinstance(ctx.channel, discord.abc.GuildChannel):
-        return False
+def userStats(user1):
+        userattrs = user1
+        usernick = userattrs[NICK]
+        userdisplay = userattrs[DISP]
+        userbaseheight = Decimal(userattrs[BHEI])
+        userbaseweight = Decimal(userattrs[BWEI])
+        usercurrentheight = Decimal(userattrs[CHEI])
+        userdensity = Decimal(userattrs[DENS])
+        userspecies = userattrs[SPEC]
 
-    role = discord.utils.get(ctx.author.roles, name='SizeBot_Banned')
-    return role is None
+        multiplier = userattrs[CHEI] / userattrs[BHEI]
+        multiplier2 = multiplier ** 2
+        multiplier3 = multiplier ** 3
 
+        baseheight_m = fromSV(userattrs[BHEI], 3)
+        baseheight_u = fromSVUSA(userattrs[BHEI], 3)
+        baseweight_m = fromWV(userattrs[BWEI], 3)
+        baseweight_u = fromWVUSA(userattrs[BWEI], 3)
+        currentheight_m = fromSV(userattrs[CHEI], 3)
+        currentheight_u = fromSVUSA(userattrs[CHEI], 3)
 
-df.load("Global functions loaded.")
+        usercurrentweight = userbaseweight * multiplier3 * userdensity
+        currentweight_m = fromWV(usercurrentweight, 3)
+        currentweight_u = fromWVUSA(usercurrentweight, 3)
+
+        printdensity = round(userdensity, 3)
+
+        defaultheightmult = usercurrentheight / defaultheight
+        defaultweightmult = usercurrentweight / defaultweight ** 3
+
+        footlength_m = fromSV(usercurrentheight * footfactor, 3)
+        footlength_u = fromSVUSA(usercurrentheight * footfactor, 3)
+        footlengthinches = usercurrentheight * footfactor / inch
+        shoesize = toShoeSize(footlengthinches)
+        footwidth_m = fromSV(usercurrentheight * footwidthfactor, 3)
+        footwidth_u = fromSVUSA(usercurrentheight * footwidthfactor, 3)
+        toeheight_m = fromSV(usercurrentheight * toeheightfactor, 3)
+        toeheight_u = fromSVUSA(usercurrentheight * toeheightfactor, 3)
+
+        pointer_m = fromSV(usercurrentheight * pointerfactor, 3)
+        pointer_u = fromSVUSA(usercurrentheight * pointerfactor, 3)
+        thumb_m = fromSV(usercurrentheight * thumbfactor, 3)
+        thumb_u = fromSVUSA(usercurrentheight * thumbfactor, 3)
+        fingerprint_m = fromSV(usercurrentheight * fingerprintfactor, 3)
+        fingerprint_u = fromSVUSA(usercurrentheight * fingerprintfactor, 3)
+
+        hair_m = fromSV(usercurrentheight * hairfactor, 3)
+        hair_u = fromSVUSA(usercurrentheight * hairfactor, 3)
+
+        normalheightcomp_m = fromSV(defaultheight / defaultheightmult, 3)
+        normalheightcomp_u = fromSVUSA(defaultheight / defaultheightmult, 3)
+        normalweightcomp_m = fromWV(defaultweight / defaultweightmult, 3)
+        normalweightcomp_u = fromWVUSA(defaultweight / defaultweightmult, 3)
+
+        tallerheight = 0
+        smallerheight = 0
+        lookdirection = ""
+        if usercurrentheight >= defaultheight:
+            tallerheight = usercurrentheight
+            smallerheight = defaultheight
+            lookdirection = "down"
+        else:
+            tallerheight = defaultheight
+            smallerheight = usercurrentheight
+            lookdirection = "up"
+
+        #This is disgusting, but it works!
+        lookangle = str(round(math.degrees(math.atan((tallerheight - smallerheight) / (tallerheight / 2))), 0)).split(".")[0]
+
+        return (
+        f"**{usernick} Stats:\n"
+        f"*Current Height:*  {currentheight_m} / {currentheight_u}\n"
+        f"*Current Weight:*  {currentweight_m} / {currentweight_u}\n"
+        f"*Current Density:* {printdensity}x\n"
+        f"\n"
+        f"Foot Length: {footlength_m} / {footlength_u}\n"
+        f"Foot Width: {footwidth_m} / {footwidth_u}\n"
+        f"Toe Height: {toeheight_m} / {toeheight_u}\n"
+        f"Pointer Finger Length: {pointer_m} / {pointer_u}\n"
+        f"Thumb Width: {thumb_m} / {thumb_u}\n"
+        f"Fingerprint Depth: {fingerprint_m} / {fingerprint_u}\n"
+        f"Hair Width: {hair_m} / {hair_u}\n"
+        f"\n"
+        f"Size of a Normal Man (Comparative): {normalheightcomp_m} / {normalheightcomp_u}\n"
+        f"Weight of a Normal Man (Comparative): {normalweightcomp_m} / {normalheightcomp_u}\n"
+        f"To look {lookdirection} at a average human, you'd have to look {lookdirection} {lookangle}°.\n"
+        f"\n"
+        f"Character Bases: {baseheight_m} / {baseheight_u} | {baseweight_m} / {baseweight_u}"
+        )
+
+print(userStats(userlist))
