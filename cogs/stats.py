@@ -273,8 +273,13 @@ class StatsCog(commands.Cog):
             currentheight_u = fromSVUSA(userattrs[CHEI], 3)
 
             currentweight = userbaseweight * multiplier3 * userdensity
-            currentweight_m = fromSV(currentweight, 3)
-            currentweight_u = fromSVUSA(currentweight, 3)
+            currentweight_m = fromWV(currentweight, 3)
+            currentweight_u = fromWVUSA(currentweight, 3)
+
+            printdensity = round(userdensity, 3)
+
+            defaultheightmult = currentheight / defaultheight
+            defaultweightmult = currentweight / defaultweight ** 3
 
             footlength_m = fromSV(usercurrentheight * footfactor, 3)
             footlength_u = fromSVUSA(usercurrentheight * footfactor, 3)
@@ -295,10 +300,46 @@ class StatsCog(commands.Cog):
             hair_m = fromSV(usercurrentheight * hairfactor, 3)
             hair_u = fromSVUSA(usercurrentheight * hairfactor, 3)
 
-            normalheightcomp_m = toSV(0, 3)
-            normalheightcomp_u = toSV(0, 3)
-            normalweightcomp_m = toWV(0, 3)
-            normalweightcomp_u = toWV(0, 3)
+            normalheightcomp_m = toSV(defaultheight / defaultheightmult, 3)
+            normalheightcomp_u = toSVUSA(defaultheight / defaultheightmult, 3)
+            normalweightcomp_m = toWV(defaultweight / defaultweightmult, 3)
+            normalweightcomp_u = toWVUSA(defaultweight / defaultweightmult, 3)
+
+            tallerheight = 0
+            smallerheight = 0
+            lookdirection = ""
+            if currentheight >= defaultheight:
+                tallerheight = currentheight
+                smallerheight = defaultheight
+                lookdirection = "down"
+            else:
+                tallerheight = defaultheight
+                smallerheight = currentheight
+                lookdirection = "up"
+
+            #This is disgusting, but it works!
+            lookangle = str(round(math.degrees(math.atan((tallerheight - smallerheight) / (tallerheight / 2))), 0)).split(".")[0]
+
+            return (
+            f"**{usertag} Stats:"
+            f"*Current Height:*  {currentheight_m} / {currentheight_u}"
+            f"*Current Weight:*  {currentweight_m} / {currentweight_u}"
+            f"*Current Density:* {printdensity}x"
+            f""
+            f"Foot Length: {footlength_m} / {footlength_u}"
+            f"Foot Width: {footwidth_m} / {footwidth_u}"
+            f"Toe Height: {toeheight_m} / {toeheight_u}"
+            f"Pointer Finger Length: {pointer_m} / {pointer_u}"
+            f"Thumb Width: {thumb_m} / {thumb_u}"
+            f"Fingerprint Depth: {fingerprint_m} / {fingerprint_u}"
+            f"Hair Width: {hair_m} / {hair_u}"
+            f""
+            f"Size of a Normal Man (Comparative): {normalheightcomp_m} / {normalheightcomp_u}"
+            f"Weight of a Normal Man (Comparative): {normalweightcomp_m} / {normalheightcomp_u}"
+            f"To look {lookdirection} at a average human, you'd have to look {lookdirection} {lookangle}°."
+            f""
+            f"Character Bases: {baseheight_m} / {baseheight_u} | {baseweight_m} / {baseweight_u}"
+            )
 
 
     @stats.error
