@@ -25,11 +25,13 @@ Use f-strings. Just do it.
 `f"This is a pretty {swearword} cool string."`
 
 ### Comments
-Comments should start have a space between the hash and the comment.<a href="#footnote1"><sup>1</sup></a>    
+Comments should start have a space between the hash and the comment.<a href="#footnote1"><sup>1</sup></a>   
+Comments usually end with punctuation, like a sentence.<a href="#footnote3"><sup>3</sup></a>    
 TODO comments should start with `# TODO:`.
-
+Comments denoting temp code should start with `# TEMP:`.
 ____
 
 <small>
 <a name="footnote1"></a><sup>1</sup> Natalie has recommended this, and she's a real programmer.    
 <a name="footnote2"></a><sup>2</sup> This isn't a standard formatting thing, it just makes me understand what the variable means better.
+<a name="footnote3"></a><sup>3</sup> Apparently this is not common practice but the other way annoys me.

@@ -20,6 +20,7 @@ import asyncio
 import codecs
 import digilogger as logger
 import digiformatter as df
+import digierror as errors
 
 
 # TODO: Make this do something useful.
@@ -44,6 +45,30 @@ enspace = "\u2002"
 printtab = enspace * 4
 allowbrackets = ("&compare", "&stats") # TODO: Could be better.
 
+
+# Unit constants.
+# Height [micrometers]
+inch = Decimal(25400)
+foot = inch * Decimal(12)
+mile = foot * Decimal(5280)
+ly = mile * Decimal(5879000000000)
+au = Decimal(149597870700000000)
+uni = Decimal(879848000000000000000000000000000)
+infinity = Decimal(879848000000000000000000000000000000000000000000000000000000)
+# Weight [milligrams]
+ounce = Decimal(28350)
+pound = ounce * Decimal(16)
+uston = pound * Decimal(2000)
+earth = Decimal(5972198600000000000000000000000)
+sun = Decimal(1988435000000000000000000000000000000)
+milkyway = Decimal(95000000000000000000000000000000000000000000000)
+uniw = Decimal(3400000000000000000000000000000000000000000000000000000000000)
+
+# Slow growth tasks.
+# TODO: Get rid of asyncio tasks, replace with timed database checks.
+tasks = {}
+
+
 def getID(*names):
 # IDs are stored in text/ids.txt.
 # The format is one ID per line, in the form {id}:{name}
@@ -66,6 +91,7 @@ def getID(*names):
                 if name in iddict.keys(): idlist.append(int(iddict[name]))
                 else: idlist.append(000000000000000000)
             return tuple(idlist)
+
 
 # Array item names.
 NICK = 0
@@ -148,6 +174,7 @@ def roundNearestHalf(number):
 
 def placeValue(number):
     return ("{:,}".format(number))
+
 
 # Add newlines and join into one string
 def lines(items):
@@ -233,57 +260,6 @@ async def nickUpdate(user):
         return
 
 
-# Read in specific user.
-# TODO: Read this from a MariaDB. Rewrite like all of this.
-def readUser(user_id):
-    user_id = str(user_id)
-    userfile = folder + "/users/" + user_id + ".txt"
-    with open(userfile) as f:
-        # Make array of lines from file.
-        content = f.readlines()
-        if content == []: os.remove(userfile)
-        # Replace None.
-        if content[BWEI] == "None" + newline:
-            content[BWEI] = str(defaultweight) + newline
-        if content[BHEI] == "None" + newline:
-            content[BHEI] = str(defaultweight) + newline
-        if content[CHEI] == "None" + newline:
-            content[CHEI] = content[3]
-        # Round all values to 18 decimal places.
-        content[CHEI] = str(round(float(content[CHEI]), 18))
-        content[BHEI] = str(round(float(content[BHEI]), 18))
-        content[BWEI] = str(round(float(content[BWEI]), 18))
-        for idx, item in enumerate(content):
-            content[idx] = content[idx].strip()
-        return content
-
-
-# Write to specific user.
-def writeUser(user_id, content):
-    user_id = str(user_id)
-    # Replace None.
-    if content[BWEI] == "None" + newline:
-        content[BWEI] = str(defaultweight) + newline
-    if content[BHEI] == "None" + newline:
-        content[BHEI] = str(defaultweight) + newline
-    if content[CHEI] == "None" + newline:
-        content[CHEI] = content[3]
-    # Round all values to 18 decimal places.
-    content[CHEI] = str(round(float(content[CHEI]), 18))
-    content[BHEI] = str(round(float(content[BHEI]), 18))
-    content[BWEI] = str(round(float(content[BWEI]), 18))
-    # Add new line characters to entries that don't have them.
-    for idx, item in enumerate(content):
-        if not content[idx].endswith("\n"):
-            content[idx] = content[idx] + "\n"
-    # Delete userfile.
-    os.remove(folder + "/users/" + user_id + ".txt")
-    # Make a new userfile.
-    userfile = open(folder + "/users/" + user_id + ".txt", "w+")
-    # Write content to lines.
-    userfile.writelines(content)
-
-
 def isFeetAndInchesAndIfSoFixIt(input):
     regex = r"^(?P<feet>\d+(ft|foot|feet|\'))(?P<inch>\d+(in|\")*)"
     m = re.match(regex, input, flags=re.I)
@@ -298,6 +274,16 @@ def isFeetAndInchesAndIfSoFixIt(input):
     totalinches = (feet * 12) + inch
     return f"{totalinches}in"
 
+
+def eitherInfZeroOrInput(input):
+    if input > infinity:
+        return infinity
+    else if input < 0:
+        return Decimal(0)
+    else:
+        return Decimal(input)
+
+
 # Count users.
 members = 0
 path = folder + '/users'
@@ -306,29 +292,6 @@ for infile in listing:
     if infile.endswith(".txt"):
         members += 1
 df.load("Loaded {0} users.".format(members))
-
-
-# Slow growth tasks.
-# TODO: Get rid of asyncio tasks, replace with timed database checks.
-tasks = {}
-
-# Unit constants.
-# Height [micrometers]
-inch = Decimal(25400)
-foot = inch * Decimal(12)
-mile = foot * Decimal(5280)
-ly = mile * Decimal(5879000000000)
-au = Decimal(149597870700000000)
-uni = Decimal(879848000000000000000000000000000)
-infinity = Decimal(879848000000000000000000000000000000000000000000000000000000)
-# Weight [milligrams]
-ounce = Decimal(28350)
-pound = ounce * Decimal(16)
-uston = pound * Decimal(2000)
-earth = Decimal(5972198600000000000000000000000)
-sun = Decimal(1988435000000000000000000000000000000)
-milkyway = Decimal(95000000000000000000000000000000000000000000000)
-uniw = Decimal(3400000000000000000000000000000000000000000000000000000000000)
 
 
 # Convert any supported height to 'size value'
@@ -752,6 +715,102 @@ def fromShoeSize(size):
     inches = inches / Decimal(3)
     out = inches * inch
     return out
+
+
+# Read in specific user.
+# TODO: Read this from a MariaDB. Rewrite like all of this.
+def readUser(user_id):
+    user_id = str(user_id)
+    userfile = folder + "/users/" + user_id + ".txt"
+    if not os.path.isfile(userfile): return None
+    with open(userfile) as f:
+        # Make array of lines from file.
+        content = f.readlines()
+        if content == []: os.remove(userfile)
+        # Replace None.
+        if content[BWEI] == "None" + newline:
+            content[BWEI] = str(defaultweight) + newline
+        if content[BHEI] == "None" + newline:
+            content[BHEI] = str(defaultweight) + newline
+        if content[CHEI] == "None" + newline:
+            content[CHEI] = content[3]
+        # Round all values to 18 decimal places.
+        content[CHEI] = round(float(content[CHEI]), 18)
+        content[BHEI] = round(float(content[BHEI]), 18)
+        content[BWEI] = round(float(content[BWEI]), 18)
+
+        for idx, item in enumerate(content):
+            content[idx] = content[idx].strip()
+
+        for idx, item in enumerate(content):
+            if idx in [CHEI, BHEI, BWEI, DENS]:
+                content[idx] = Decimal(content[idx])
+
+        return content
+
+
+# Write to specific user.
+# TODO: Read this from a MariaDB. Rewrite like all of this.
+def writeUser(user_id, content):
+    user_id = str(user_id)
+    # Replace None.
+    if content[BWEI] == "None" + newline:
+        content[BWEI] = str(defaultweight) + newline
+    if content[BHEI] == "None" + newline:
+        content[BHEI] = str(defaultheight) + newline
+    if content[CHEI] == "None" + newline:
+        content[CHEI] = content[3]
+    # Round all values to 18 decimal places.
+    content[CHEI] = str(round(float(content[CHEI]), 18))
+    content[BHEI] = str(round(float(content[BHEI]), 18))
+    content[BWEI] = str(round(float(content[BWEI]), 18))
+    # Add new line characters to entries that don't have them.
+    for idx, item in enumerate(content):
+        content[idx] = str(content[idx])
+        if not content[idx].endswith("\n"):
+            content[idx] = content[idx] + "\n"
+    # Delete userfile.
+    os.remove(folder + "/users/" + user_id + ".txt")
+    # Make a new userfile.
+    userfile = open(folder + "/users/" + user_id + ".txt", "w+")
+    # Write content to lines.
+    userfile.writelines(content)
+
+def changeUser(userid, style, amount, attribute = "height"):
+    user = readUser(userid)
+    if user = None: return errors.USER_NOT_FOUND
+
+    style = style.lower()
+    if style in ["add", "+", "a", "plus"]: style = "add"
+    if style in ["subtract", "sub", "-", "minus"]: style = "subtract"
+    if style in ["multiply", "mult", "m", "x", "times"]: style = "multiply"
+    if style in ["divide", "d", "/", "div"]: style = "divide"
+
+    amount = isFeetAndInchesAndIfSoFixIt(amount)
+    value = getNum(value)
+    unit = getLet(value)
+    amountSV = 0
+    if unit: amountSV = toSV(getNum, getLet)
+
+    if attribute == "height":
+        if style == "add":
+            newamount = user[CHEI] + amountSV
+        elif style == "subtract":
+            newamount = user[CHEI] - amountSV
+        elif style == "multiply":
+            if value == 1: return errors.CHANGE_VALUE_IS_ONE
+            if value == 0: return errors.CHANGE_VALUE_IS_ZERO
+            newamount = user[CHEI] * value
+        elif style == "divide":
+            if value == 1: return errors.CHANGE_VALUE_IS_ONE
+            if value == 0: return errors.CHANGE_VALUE_IS_ZERO
+            newamount = user[CHEI] / value
+        user[CHEI] = eitherInfZeroOrInput(newamount)
+    else:
+        return errors.CHANGE_METHOD_INVALID
+
+    writeUser(userid, user)
+    return errors.SUCCESS
 
 
 def check(ctx):
