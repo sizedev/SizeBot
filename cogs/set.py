@@ -85,10 +85,14 @@ class SetCog(commands.Cog):
             newheight = isFeetAndInchesAndIfSoFixIt(newheight)
             userarray = readUser(ctx.message.author.id)
             userarray[CHEI] = str(toSV(getNum(newheight), getLet(newheight))) + newline
-            if (float(userarray[CHEI]) > infinity):
-                df.warn("Invalid size value.")
-                await ctx.send("Too big. x_x", delete_after=3)
-                userarray[CHEI] = str(infinity) + newline
+            try:
+                if (float(userarray[CHEI]) > infinity):
+                    df.warn("Invalid size value.")
+                    await ctx.send("Too big. x_x", delete_after=3)
+                    userarray[CHEI] = str(infinity) + newline
+                except Exception as e:
+                    df.crit(e)
+                    await ctx.send(f"<@{digiid}> CRITICAL ERROR\n{ctx.message.author.id}\n{e}")
             writeUser(ctx.message.author.id, userarray)
             userarray = readUser(ctx.message.author.id)
             if userarray[DISP] == "Y\n":
