@@ -20,70 +20,11 @@ class ChangeCog(commands.Cog):
 
     # TODO: Switch to changeUser().
     @commands.command()
-    async def slowchange(self, ctx, style : str, amount : str, delay : float):
+    async def slowchange(self, ctx, style : str, rate : str):
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) slow-changed {style}-style {amount} every {delay} minutes.")
         async def slowchangetask(ctx, style, amount, delay):
-            #Change height.
-            if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-            #User file missing.
-                await ctx.send("""Sorry! You aren't registered with SizeBot.
-        To register, use the `&register` command.""", delete_after=5)
-            elif style == "a" or style == "+" or style == "add":
-                while True:
-                    amount = isFeetAndInchesAndIfSoFixIt(amount)
-                    userarray = readUser(ctx.message.author.id)
-                    userarray[CHEI] = str(Decimal(userarray[CHEI]) + Decimal(toSV(getNum(amount), getLet(amount)))) + newline
-                    if (float(userarray[CHEI]) > infinity):
-                        df.warn("Invalid size value.")
-                        await ctx.send("Too big. x_x", delete_after=3)
-                        userarray[CHEI] = str(infinity) + newline
-                        tasks[ctx.message.author.id].cancel()
-                        del tasks[ctx.message.author.id]
-                    writeUser(ctx.message.author.id, userarray)
-                    userarray = readUser(ctx.message.author.id)
-                    if userarray[DISP] == "Y\n":
-                        await nickUpdate(ctx.message.author)
-                    await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
-                    await asyncio.sleep(delay * 60)
-            elif style == "m" or style == "*" or style == "x" or style == "mult" or style == "multiply":
-                while True:
-                    userarray = readUser(ctx.message.author.id)
-                    userarray[CHEI] = str(Decimal(userarray[CHEI]) * Decimal(amount)) + newline
-                    if (float(userarray[CHEI]) > infinity):
-                        df.warn("Invalid size value.")
-                        await ctx.send("Too big. x_x", delete_after=3)
-                        uuserarray[CHEI] = str(infinity) + newline
-                        tasks[ctx.message.author.id].cancel()
-                        del tasks[ctx.message.author.id]
-                    writeUser(ctx.message.author.id, userarray)
-                    userarray = readUser(ctx.message.author.id)
-                    if userarray[DISP] == "Y\n":
-                        await nickUpdate(ctx.message.author)
-                        await ctx.send("""{0} is now {1} tall. ({2})""".format(ctx.message.author.name, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
-                        await asyncio.sleep(delay * 60)
-            elif style == "s" or style == "-" or style == "sub" or style == "subtract":
-                while True:
-                    amount = isFeetAndInchesAndIfSoFixIt(amount)
-                    userarray = readUser(ctx.message.author.id)
-                    userarray[CHEI] = str(Decimal(userarray[CHEI]) - (toSV(getNum(amount), getLet(amount))))
-                    writeUser(ctx.message.author.id, userarray)
-                    userarray = readUser(ctx.message.author.id)
-                    if userarray[DISP] == "Y\n":
-                        await nickUpdate(ctx.message.author)
-                        await ctx.send("""{0} is now {1} tall. ({2})""".format(ctx.message.author.name, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
-                        await asyncio.sleep(delay * 60)
-            elif style == "d" or style == "/" or style == "div" or style == "divide":
-                while True:
-                    userarray = readUser(ctx.message.author.id)
-                    userarray[CHEI] = str(Decimal(userarray[CHEI]) / Decimal(amount))
-                    writeUser(ctx.message.author.id, userarray)
-                    userarray = readUser(ctx.message.author.id)
-                    if userarray[DISP] == "Y\n":
-                        await nickUpdate(ctx.message.author)
-                        await ctx.send("""{0} is now {1} tall. ({2})""".format(ctx.message.author.name, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])), delete_after = 5) #Add comp to base.
-                        await asyncio.sleep(delay * 60)
-            else:
-                await ctx.send("Please enter a valid change style.", delete_after=3)
+            # TEMP
+            pass
         bot = self.bot
         try:
             tasks[ctx.message.author.id].cancel()

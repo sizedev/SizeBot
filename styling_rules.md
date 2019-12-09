@@ -28,7 +28,7 @@ Use f-strings. Just do it.
 Comments should start have a space between the hash and the comment.<a href="#footnote1"><sup>1</sup></a>   
 Comments usually end with punctuation, like a sentence.<a href="#footnote3"><sup>3</sup></a>    
 TODO comments should start with `# TODO:`.
-Comments denoting temp code should start with `# TEMP:`.
+Comments denoting temp code should start with `# TEMP`.
 ____
 
 <small>
