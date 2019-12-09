@@ -15,9 +15,13 @@ Apparently, there should be two blank lines between these things.<a href="#footn
 
 Variables should be all lowercase, with underscores (`_`) if desired.
 
-### "Magic Number" Constants
+#### "Magic Number" Constants
 
 Usually used for indexes you want to be able to understand at a glance. I prefer these to be four characters in all uppercase. (`INDX = 1`)<a href="#footnote2"><sup>2</sup></a>
+
+#### Error Constants
+
+Error constants should be in all uppercase and with underscores. (`THIS_IS_AN_ERROR`)
 
 ### Formatting strings
 
