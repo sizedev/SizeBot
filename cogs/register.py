@@ -64,9 +64,7 @@ class RegisterCog(commands.Cog):
             return
 
         # Invalid size value.
-        if (currentheight <= 0 or
-                baseheight <= 0 or
-                baseweight <= 0):
+        if (currentheight <= 0 or baseheight <= 0 or baseweight <= 0):
             df.warn("Invalid size value.")
             await ctx.send("All values must be an integer greater than zero.", delete_after=5)
             return
