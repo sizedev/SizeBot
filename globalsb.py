@@ -1,24 +1,14 @@
-import discord
-from discord.ext import commands
+
 import re
-import datetime
-from datetime import *
-import time
-from time import strftime, localtime
-import sys
 import os
-import math
 import io
-from math import *
+import math
 import random
-from decimal import *
-from colored import fore, back, style, fg, bg, attr
-from pathlib import Path
-import string
-import traceback
-import asyncio
-import codecs
-import digilogger as logger
+import decimal
+from decimal import Decimal
+
+import discord
+
 import digiformatter as df
 import digierror as errors
 
@@ -43,8 +33,8 @@ sizebotuser_roleid = 562356758522101769
 brackets = ["[", "]", "<", ">"]
 enspace = "\u2002"
 printtab = enspace * 4
-allowbrackets = ("&compare", "&stats") # TODO: Could be better.
-
+allowbrackets = ("&compare", "&stats")  # TODO: Could be better.
+digiid = 0  # TODO: Replace with actual value
 
 # Unit constants.
 # Height [micrometers]
@@ -70,9 +60,9 @@ tasks = {}
 
 
 def getID(*names):
-# IDs are stored in text/ids.txt.
-# The format is one ID per line, in the form {id}:{name}
-# This file is not tracked by Git.
+    # IDs are stored in text/ids.txt.
+    # The format is one ID per line, in the form {id}:{name}
+    # This file is not tracked by Git.
     iddict = {}
     with io.open("text/ids.txt", "r", encoding="utf-8") as idfile:
         ids = idfile.readlines()
@@ -82,15 +72,18 @@ def getID(*names):
     if len(names) == 0:
         return iddict
     if len(names) == 1:
-        if names in iddict.keys(): return int(iddict[names])
-        else: return 000000000000000000
+        if names in iddict.keys():
+            return int(iddict[names])
+        else:
+            return 000000000000000000
     else:
+        idlist = []
         for name in names:
-            idlist = []
-            for name in names:
-                if name in iddict.keys(): idlist.append(int(iddict[name]))
-                else: idlist.append(000000000000000000)
-            return tuple(idlist)
+            if name in iddict.keys():
+                idlist.append(int(iddict[name]))
+            else:
+                idlist.append(000000000000000000)
+        return tuple(idlist)
 
 
 # Array item names.
@@ -123,7 +116,7 @@ def readHexCode():
 
 
 # ASCII art.
-ascii = r"""
+banner = r"""
 . _____ _        ______       _   _____ .
 ./  ___(_)       | ___ \     | | |____ |.
 .\ `--. _ _______| |_/ / ___ | |_    / /.
@@ -132,24 +125,24 @@ ascii = r"""
 .\____/|_/___\___\____/ \___/ \__\____/ ."""
 
 # Configure decimal module.
-getcontext()
-context = Context(prec=100, rounding=ROUND_HALF_EVEN, Emin=-9999999, Emax=999999,
-                  capitals=1, clamp=0, flags=[], traps=[Overflow, DivisionByZero,
-                                                        InvalidOperation])
-setcontext(context)
+decimal.getcontext()
+context = decimal.Context(prec=100, rounding=decimal.ROUND_HALF_EVEN,
+                          Emin=-9999999, Emax=999999, capitals=1, clamp=0, flags=[],
+                          traps=[decimal.Overflow, decimal.DivisionByZero, decimal.InvalidOperation])
+decimal.setcontext(context)
 
 
 # Get number from string.
-def getNum(string):
-    match = re.search(r"\d+\.?\d*", string)
+def getNum(s):
+    match = re.search(r"\d+\.?\d*", s)
     if match is None:
         return None
     return Decimal(match.group(0))
 
 
 # Get letters from string.
-def getLet(string):
-    match = re.search(r"[a-zA-Z\'\"]+", string)
+def getLet(s):
+    match = re.search(r"[a-zA-Z\'\"]+", s)
     if match is None:
         return None
     return match.group(0)
@@ -157,15 +150,17 @@ def getLet(string):
 
 # Remove decimals.
 def removeDecimals(output):
-    if re.search(r"(\.\d*?)(0+)", output): output = re.sub(r"(\.\d*?)(0+)", r"\1", output)
-    if re.search(r"(.*)(\.)(\D+)", output): output = re.sub(r"(.*)(\.)(\D+)", r"\1\3", output)
+    if re.search(r"(\.\d*?)(0+)", output):
+        output = re.sub(r"(\.\d*?)(0+)", r"\1", output)
+    if re.search(r"(.*)(\.)(\D+)", output):
+        output = re.sub(r"(.*)(\.)(\D+)", r"\1\3", output)
     return output
 
 
-def removeBrackets(string):
+def removeBrackets(s):
     for bracket in brackets:
-        string = string.replace(bracket, "")
-    return string
+        s = s.replace(bracket, "")
+    return s
 
 
 def roundNearestHalf(number):
@@ -173,7 +168,7 @@ def roundNearestHalf(number):
 
 
 def placeValue(number):
-    return ("{:,}".format(number))
+    return "{:,}".format(number)
 
 
 # Add newlines and join into one string
@@ -201,9 +196,11 @@ def prettyTimeDelta(seconds):
 
 # Update users nicknames to include sizetags.
 async def nickUpdate(user):
-    if user.discriminator == "0000": return
+    if user.discriminator == "0000":
+        return
     if not isinstance(user, discord.Member):
-        if user.id == mee6id: return
+        if user.bot:
+            return
         df.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
     # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
@@ -260,28 +257,30 @@ async def nickUpdate(user):
         return
 
 
-def isFeetAndInchesAndIfSoFixIt(input):
+def isFeetAndInchesAndIfSoFixIt(value):
     regex = r"^(?P<feet>\d+(ft|foot|feet|\'))(?P<inch>\d+(in|\")*)"
-    m = re.match(regex, input, flags=re.I)
+    m = re.match(regex, value, flags=re.I)
     if not m:
-        return input
-    wholefeet = m.group('feet')
-    wholeinch = m.group('inch')
-    feet = getNum(wholefeet)
-    inch = getNum(wholeinch)
-    if feet == None: feet = 0
-    if inch == None: inch = 0
-    totalinches = (feet * 12) + inch
+        return value
+    feetstr = m.group("feet")
+    inchstr = m.group("inch")
+    feetval = getNum(feetstr)
+    inchval = getNum(inchstr)
+    if feetval is None:
+        feetval = 0
+    if inchval is None:
+        inchval = 0
+    totalinches = (feetval * 12) + inchval
     return f"{totalinches}in"
 
 
-def eitherInfZeroOrInput(input):
-    if input > infinity:
+def eitherInfZeroOrInput(value):
+    if value > infinity:
         return infinity
-    else if input < 0:
+    elif value < 0:
         return Decimal(0)
     else:
-        return Decimal(input)
+        return Decimal(value)
 
 
 # Count users.
@@ -369,7 +368,7 @@ def toSV(value, unit):
 
 
 # Convert 'size values' to a more readable format (metric).
-def fromSV(value, accuracy = 2):
+def fromSV(value, accuracy=2):
     value = float(value)
     output = ""
     if value <= 0:
@@ -434,7 +433,7 @@ def fromSV(value, accuracy = 2):
 
 
 # Convert 'size values' to a more readable format (USA).
-def fromSVUSA(value, accuracy = 2):
+def fromSVUSA(value, accuracy=2):
     value = float(value)
     output = ""
     if value <= 0:
@@ -458,11 +457,11 @@ def fromSVUSA(value, accuracy = 2):
     elif value < foot:
         output = str(round(Decimal(value) / inch, accuracy)) + "in"
     elif value < mile:
-        feet = floor(Decimal(value) / foot)
+        feetval = math.floor(Decimal(value) / foot)
         fulloninches = round(Decimal(value) / inch, accuracy)
-        feettoinches = feet * Decimal(12)
-        inches = fulloninches - feettoinches
-        output = str(feet) + "'" + str(inches) + "\""
+        feettoinches = feetval * Decimal(12)
+        inchval = fulloninches - feettoinches
+        output = str(feetval) + "'" + str(inchval) + "\""
     elif value < au:
         output = str(round(Decimal(value) / mile, accuracy)) + "mi"
     elif value < ly:
@@ -565,7 +564,7 @@ def toWV(value, unit):
 
 
 # Convert 'weight values' to a more readable format.
-def fromWV(value, accuracy = 2):
+def fromWV(value, accuracy=2):
     value = Decimal(value)
     if value <= 0:
         return "0"
@@ -631,7 +630,7 @@ def fromWV(value, accuracy = 2):
 
 
 # Convert 'weight values' to a more readable format (USA).
-def fromWVUSA(value, accuracy = 2):
+def fromWVUSA(value, accuracy=2):
     value = Decimal(value)
     if value == 0:
         return "almost nothing"
@@ -703,7 +702,8 @@ def toShoeSize(inchamount):
         shoesize = "Children's " + shoesize
     return "Size US " + shoesize
 
-#Currently unused.
+
+# Currently unused.
 def fromShoeSize(size):
     child = False
     if "c" in size.toLower():
@@ -722,11 +722,13 @@ def fromShoeSize(size):
 def readUser(user_id):
     user_id = str(user_id)
     userfile = folder + "/users/" + user_id + ".txt"
-    if not os.path.isfile(userfile): return None
+    if not os.path.isfile(userfile):
+        return None
     with open(userfile) as f:
         # Make array of lines from file.
         content = f.readlines()
-        if content == []: os.remove(userfile)
+        if content == []:
+            os.remove(userfile)
         # Replace None.
         if content[BWEI] == "None" + newline:
             content[BWEI] = str(defaultweight) + newline
@@ -739,12 +741,11 @@ def readUser(user_id):
         content[BHEI] = round(float(content[BHEI]), 18)
         content[BWEI] = round(float(content[BWEI]), 18)
 
-        for idx, item in enumerate(content):
-            content[idx] = content[idx].strip()
+        content = [item.strip() for item in content]
 
         for idx, item in enumerate(content):
             if idx in [CHEI, BHEI, BWEI, DENS]:
-                content[idx] = Decimal(content[idx])
+                content[idx] = Decimal(item)
 
         return content
 
@@ -766,9 +767,10 @@ def writeUser(user_id, content):
     content[BWEI] = str(round(float(content[BWEI]), 18))
     # Add new line characters to entries that don't have them.
     for idx, item in enumerate(content):
-        content[idx] = str(content[idx])
-        if not content[idx].endswith("\n"):
-            content[idx] = content[idx] + "\n"
+        item = str(item)
+        if not item.endswith("\n"):
+            item = item + "\n"
+        context[idx] = item
     # Delete userfile.
     os.remove(folder + "/users/" + user_id + ".txt")
     # Make a new userfile.
@@ -776,34 +778,45 @@ def writeUser(user_id, content):
     # Write content to lines.
     userfile.writelines(content)
 
-def changeUser(userid, style, amount, attribute = "height"):
-    user = readUser(userid)
-    if user = None: return errors.USER_NOT_FOUND
 
-    style = style.lower()
-    if style in ["add", "+", "a", "plus"]: style = "add"
-    if style in ["subtract", "sub", "-", "minus"]: style = "subtract"
-    if style in ["multiply", "mult", "m", "x", "times"]: style = "multiply"
-    if style in ["divide", "d", "/", "div"]: style = "divide"
+def changeUser(userid, changestyle, amount, attribute="height"):
+    user = readUser(userid)
+    if user is None:
+        return errors.USER_NOT_FOUND
+
+    changestyle = changestyle.lower()
+    if changestyle in ["add", "+", "a", "plus"]:
+        changestyle = "add"
+    if changestyle in ["subtract", "sub", "-", "minus"]:
+        changestyle = "subtract"
+    if changestyle in ["multiply", "mult", "m", "x", "times"]:
+        changestyle = "multiply"
+    if changestyle in ["divide", "d", "/", "div"]:
+        changestyle = "divide"
 
     amount = isFeetAndInchesAndIfSoFixIt(amount)
-    value = getNum(value)
-    unit = getLet(value)
+    value = getNum(amount)
+    unit = getLet(amount)
     amountSV = 0
-    if unit: amountSV = toSV(getNum, getLet)
+    if unit:
+        amountSV = toSV(getNum, getLet)
 
     if attribute == "height":
-        if style == "add":
+        if changestyle == "add":
             newamount = user[CHEI] + amountSV
-        elif style == "subtract":
+        elif changestyle == "subtract":
             newamount = user[CHEI] - amountSV
-        elif style == "multiply":
-            if value == 1: return errors.CHANGE_VALUE_IS_ONE
-            if value == 0: return errors.CHANGE_VALUE_IS_ZERO
+        elif changestyle == "multiply":
+            if value == 1:
+                return errors.CHANGE_VALUE_IS_ONE
+            if value == 0:
+                return errors.CHANGE_VALUE_IS_ZERO
             newamount = user[CHEI] * value
-        elif style == "divide":
-            if value == 1: return errors.CHANGE_VALUE_IS_ONE
-            if value == 0: return errors.CHANGE_VALUE_IS_ZERO
+        elif changestyle == "divide":
+            if value == 1:
+                return errors.CHANGE_VALUE_IS_ONE
+            if value == 0:
+                return errors.CHANGE_VALUE_IS_ZERO
             newamount = user[CHEI] / value
         user[CHEI] = eitherInfZeroOrInput(newamount)
     else:

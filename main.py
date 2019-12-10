@@ -1,5 +1,12 @@
-from globalsb import *
+from datetime import datetime
+
+from colored import fore, style, fg, bg
+import discord
+from discord.ext import commands
+
 import digiformatter as df
+from globalsb import banner, version, check
+from globalsb import allowbrackets, removeBrackets
 
 launch = datetime.now()
 
@@ -29,7 +36,7 @@ initial_extensions = [
 ]
 
 # Obviously we need this printed in the terminal.
-print(bg(24) + fg(202) + style.BOLD + ascii + style.RESET + " v" + version)
+print(bg(24) + fg(202) + style.BOLD + banner + style.RESET + " v" + version)
 
 bot = commands.Bot(command_prefix=prefix, description=description)
 bot.remove_command("help")
@@ -55,8 +62,10 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    if message.content.startswith("&") and message.content.endswith("&"): return #Ignore Tupperboxes being mistaken for commands.
-    if not message.content.startswith(allowbrackets): message.content = removeBrackets(message.content)
+    if message.content.startswith("&") and message.content.endswith("&"):
+        return  # Ignore Tupperboxes being mistaken for commands.
+    if not message.content.startswith(allowbrackets):
+        message.content = removeBrackets(message.content)
     await bot.process_commands(message)
 
 
@@ -66,6 +75,5 @@ if __name__ == '__main__':
         # try:
         bot.load_extension(extension)
     df.load("Loaded cogs.")
-
 
 bot.run(authtoken)

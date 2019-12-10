@@ -1,17 +1,18 @@
-import discord
+import random
+
 from discord.ext import commands
-from globalsb import *
+
 import digiformatter as df
 
-#Commands for roleplaying.
-#
-#Commands: roll
 
+# Commands for roleplaying.
+#
+# Commands: roll
 class RPCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    #Die rolling command. XdY format.
+    # Die rolling command. XdY format.
     @commands.command()
     async def roll(self, ctx, dString):
         rolls = []
@@ -40,7 +41,8 @@ class RPCog(commands.Cog):
             await ctx.send('Too many dice!')
             df.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll {dNum} dice!")
             stop = True
-        if stop: return
+        if stop:
+            return
         for x in range(dNum):
             currentRoll = (random.randrange(1, dSides + 1))
             rolls.append(currentRoll)
@@ -49,12 +51,16 @@ class RPCog(commands.Cog):
             dTotal = dTotal + rolls[x]
             usedrolls.append(rolls[x])
         dropped = rolls
-        for item in usedrolls: dropped.remove(item)
+        for item in usedrolls:
+            dropped.remove(item)
         sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.nick, dString, str(dTotal), str(usedrolls))
-        if dropped != []: sendstring = sendstring + "\n~~Dropped: {0}~~".format(str(dropped))
+        if dropped != []:
+            sendstring = sendstring + "\n~~Dropped: {0}~~".format(str(dropped))
         df.msg(f"{ctx.message.author.id} ({ctx.message.author.nick}) rolled {dString}.")
         await ctx.send(sendstring)
 
-#Necessary.
+# Necessary.
+
+
 def setup(bot):
     bot.add_cog(RPCog(bot))

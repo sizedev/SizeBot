@@ -1,7 +1,10 @@
-import discord
+import io
+import random
+
 from discord.ext import commands
-from globalsb import *
+
 import digiformatter as df
+from globalsb import getID
 
 monikalines = io.open("text/monikalines.txt", encoding="utf-8").readlines()
 

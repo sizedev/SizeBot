@@ -1,8 +1,10 @@
-from discord.ext import commands
-from globalsb import getID, prettyTimeDelta
-import digiformatter as df
 import re
-import datetime
+from datetime import datetime, timedelta
+
+from discord.ext import commands
+
+import digiformatter as df
+from globalsb import getID, prettyTimeDelta
 
 winkpath = "text/winkcount.txt"
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
@@ -36,19 +38,25 @@ def countWinks(s):
     return len(winkPattern.findall(s))
 
 
-async def sayMilestone(winkcount):
+async def sayMilestone(channel, winkcount):
     now = datetime.today()
     timesince = now - starttime
+    prettytimesince = prettyTimeDelta(timesince.total_seconds())
     timeperwink = timesince / winkcount
-    await ctx.send(f""":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball:
-It took **{prettyTimeDelta(timesince.total_seconds())}** to hit this milestone!
-That's an average of **{prettyTimeDelta(timeperwink.total_seconds())}** per wink!
-(That's **{winkcount / (timesince / timedelta(days = 1))}** winks/day!)
-Great winking, <@{getID("Yukio")}>!""")
-    df.crit(f"""Yukio has winked {winkcount} times since 15 September, 2019! :wink:
-It took {prettyTimeDelta(timesince.total_seconds())} to hit this milestone!
-That's an average of {prettyTimeDelta(timeperwink.total_seconds())} per wink!
-(That's {winkcount / (timesince / timedelta(days = 1))} winks/day!)""")
+    prettytimeperwink = prettyTimeDelta(timeperwink.total_seconds())
+    winksperday = winkcount / (timesince / timedelta(days=1))
+    yukioid = getID("Yukio")
+
+    await channel.send(f":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball\n:"
+                       f"It took **{prettytimesince}** to hit this milestone!\n"
+                       f"That's an average of **{prettytimeperwink}** per wink!\n"
+                       f"(That's **{winksperday}** winks/day!)\n"
+                       f"Great winking, <@{yukioid}>!")
+
+    df.crit(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
+            f"It took {prettytimesince} to hit this milestone!\n"
+            f"That's an average of {prettytimeperwink} per wink!\n"
+            f"(That's {winksperday} winks/day!)")
 
 
 # Commands:
@@ -68,7 +76,8 @@ class WinksCog(commands.Cog):
 
         winkcount = addWinks(winksSeen)
         df.msg(f"Yukio has winked {winkcount} times!")
-        if winkcount in milestones: sayMilestone(winkcount)
+        if winkcount in milestones:
+            sayMilestone(message.channel, winkcount)
 
     @commands.command()
     async def winkcount(self, ctx):

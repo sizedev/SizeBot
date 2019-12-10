@@ -1,18 +1,18 @@
 import os
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
+import decimal
+import math
 
-import discord
 from discord.ext import commands
 
+import digilogger as logger
+import digiformatter as df
 # TODO: Fix this...
-from globalsb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC
+from globalsb import CHEI, BHEI, BWEI, DENS
 from globalsb import readUser, folder, getNum, getLet, isFeetAndInchesAndIfSoFixIt, placeValue
 from globalsb import defaultheight, defaultweight, defaultdensity, inch
 from globalsb import fromSV, fromSVUSA, fromWV, fromWVUSA, toShoeSize, toSV
 from globalsb import printtab
-
-import digilogger as logger
-import digiformatter as df
 
 # TODO: Move to units module.
 # Conversion constants.
@@ -23,16 +23,18 @@ thumbfactor = Decimal(1) / Decimal(69.06)
 fingerprintfactor = Decimal(1) / Decimal(35080)
 hairfactor = Decimal(1) / Decimal(23387)
 pointerfactor = Decimal(1) / Decimal(17.26)
+footthickfactor = Decimal(1)  # TODO: Provide a real value
+hairwidthfactor = Decimal(1)  # TODO: Provide a real value
 
 
 # TODO: Move to dedicated module.
-async def getUser(ctx, user_string, fakename = None):
+async def getUser(ctx, user_string, fakename=None):
     try:
         member = await commands.MemberConverter().convert(ctx, user_string)
     except commands.errors.BadArgument:
         member = None
 
-    if fakename == None:
+    if fakename is None:
         fakename = "Raw"
 
     if member:
@@ -68,8 +70,8 @@ def loadUser(userid):
     return user
 
 
-def heightToUser(height, fakename = None):
-    if fakename == None:
+def heightToUser(height, fakename=None):
+    if fakename is None:
         fakename = "Raw\n"
     else:
         fakename = fakename + "\n"
@@ -87,6 +89,98 @@ def heightToUser(height, fakename = None):
     return user
 
 
+# TODO: Clean this up.
+def userStats(usertag, userid):
+    userattrs = readUser(userid)
+    # usernick = userattrs[NICK]                  # TODO: Unused
+    # userdisplay = userattrs[DISP]               # TODO: Unused
+    userbaseheight = Decimal(userattrs[BHEI])
+    userbaseweight = Decimal(userattrs[BWEI])
+    usercurrentheight = Decimal(userattrs[CHEI])
+    userdensity = Decimal(userattrs[DENS])
+    # userspecies = userattrs[SPEC]               # TODO: Unused
+
+    multiplier = usercurrentheight / userbaseheight
+    # multiplier2 = multiplier ** 2               # TODO: Unused
+    multiplier3 = multiplier ** 3
+
+    baseheight_m = fromSV(userbaseheight, 3)
+    baseheight_u = fromSVUSA(userbaseheight, 3)
+    baseweight_m = fromWV(userbaseweight, 3)
+    baseweight_u = fromWVUSA(userbaseweight, 3)
+    currentheight_m = fromSV(usercurrentheight, 3)
+    currentheight_u = fromSVUSA(usercurrentheight, 3)
+
+    currentweight = userbaseweight * multiplier3 * userdensity
+    currentweight_m = fromWV(currentweight, 3)
+    currentweight_u = fromWVUSA(currentweight, 3)
+
+    printdensity = round(userdensity, 3)
+
+    defaultheightmult = usercurrentheight / defaultheight
+    defaultweightmult = currentweight / defaultweight ** 3
+
+    footlength_m = fromSV(usercurrentheight * footfactor, 3)
+    footlength_u = fromSVUSA(usercurrentheight * footfactor, 3)
+    # footlengthinches = usercurrentheight * footfactor / inch # TODO: Unused
+    # shoesize = toShoeSize(footlengthinches) # TODO: Unused
+    footwidth_m = fromSV(usercurrentheight * footwidthfactor, 3)
+    footwidth_u = fromSVUSA(usercurrentheight * footwidthfactor, 3)
+    toeheight_m = fromSV(usercurrentheight * toeheightfactor, 3)
+    toeheight_u = fromSVUSA(usercurrentheight * toeheightfactor, 3)
+
+    pointer_m = fromSV(usercurrentheight * pointerfactor, 3)
+    pointer_u = fromSVUSA(usercurrentheight * pointerfactor, 3)
+    thumb_m = fromSV(usercurrentheight * thumbfactor, 3)
+    thumb_u = fromSVUSA(usercurrentheight * thumbfactor, 3)
+    fingerprint_m = fromSV(usercurrentheight * fingerprintfactor, 3)
+    fingerprint_u = fromSVUSA(usercurrentheight * fingerprintfactor, 3)
+
+    hair_m = fromSV(usercurrentheight * hairfactor, 3)
+    hair_u = fromSVUSA(usercurrentheight * hairfactor, 3)
+
+    normalheightcomp_m = fromSV(defaultheight / defaultheightmult, 3)
+    normalheightcomp_u = fromSVUSA(defaultheight / defaultheightmult, 3)
+    normalweightcomp_m = fromWV(defaultweight / defaultweightmult, 3)
+    # normalweightcomp_u = fromWVUSA(defaultweight / defaultweightmult, 3)  # TODO: Unused
+
+    tallerheight = 0
+    smallerheight = 0
+    lookdirection = ""
+    if usercurrentheight >= defaultheight:
+        tallerheight = usercurrentheight
+        smallerheight = defaultheight
+        lookdirection = "down"
+    else:
+        tallerheight = defaultheight
+        smallerheight = usercurrentheight
+        lookdirection = "up"
+
+    # This is disgusting, but it works!
+    lookangle = str(round(math.degrees(math.atan((tallerheight - smallerheight) / (tallerheight / 2))), 0)).split(".")[0]
+
+    return (
+        f"**{usertag} Stats:"
+        f"*Current Height:*  {currentheight_m} / {currentheight_u}"
+        f"*Current Weight:*  {currentweight_m} / {currentweight_u}"
+        f"*Current Density:* {printdensity}x"
+        f""
+        f"Foot Length: {footlength_m} / {footlength_u}"
+        f"Foot Width: {footwidth_m} / {footwidth_u}"
+        f"Toe Height: {toeheight_m} / {toeheight_u}"
+        f"Pointer Finger Length: {pointer_m} / {pointer_u}"
+        f"Thumb Width: {thumb_m} / {thumb_u}"
+        f"Fingerprint Depth: {fingerprint_m} / {fingerprint_u}"
+        f"Hair Width: {hair_m} / {hair_u}"
+        f""
+        f"Size of a Normal Man (Comparative): {normalheightcomp_m} / {normalheightcomp_u}"
+        f"Weight of a Normal Man (Comparative): {normalweightcomp_m} / {normalheightcomp_u}"
+        f"To look {lookdirection} at a average human, you'd have to look {lookdirection} {lookangle}°."
+        f""
+        f"Character Bases: {baseheight_m} / {baseheight_u} | {baseweight_m} / {baseweight_u}"
+    )
+
+
 class StatsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -100,12 +194,12 @@ class StatsCog(commands.Cog):
         if user1 is None:
             return
 
-        output = self.userStats(user1tag, user1)
+        output = userStats(user1tag, user1)
         await ctx.send(output)
         df.msg(f"Stats for {who} sent.")
 
     @commands.command()
-    async def compare(self, ctx, who1 = None, who2 = None, who1name = None, who2name = None):
+    async def compare(self, ctx, who1=None, who2=None, who1name=None, who2name=None):
         if who2 is None:
             who2 = str(ctx.message.author.id)
 
@@ -250,102 +344,10 @@ class StatsCog(commands.Cog):
             f"{printtab}{bigusertag}: {fromSV(bbh, 3)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
             f"{printtab}{smallusertag}: {fromSV(sbh, 3)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
 
-    # TODO: Clean this up.
-    def userStats(self, user1tag, user1):
-            userattrs = readUser(user1)
-            usernick = userattrs[NICK]
-            userdisplay = userattrs[DISP]
-            userbaseheight = Decimal(userattrs[BHEI])
-            userbaseweight = Decimal(userattrs[BWEI])
-            usercurrentheight = Decimal(userattrs[CHEI])
-            userdensity = Decimal(userattrs[DENS])
-            userspecies = userattrs[SPEC]
-
-            multiplier = userattrs[CHEI] / userattrs[BHEI]
-            multiplier2 = multiplier ** 2
-            multiplier3 = multiplier ** 3
-
-            baseheight_m = fromSV(userattrs[BHEI], 3)
-            baseheight_u = fromSVUSA(userattrs[BHEI], 3)
-            baseweight_m = fromWV(userattrs[BWEI], 3)
-            baseweight_u = fromWVUSA(userattrs[BWEI], 3)
-            currentheight_m = fromSV(userattrs[CHEI], 3)
-            currentheight_u = fromSVUSA(userattrs[CHEI], 3)
-
-            currentweight = userbaseweight * multiplier3 * userdensity
-            currentweight_m = fromWV(currentweight, 3)
-            currentweight_u = fromWVUSA(currentweight, 3)
-
-            printdensity = round(userdensity, 3)
-
-            defaultheightmult = currentheight / defaultheight
-            defaultweightmult = currentweight / defaultweight ** 3
-
-            footlength_m = fromSV(usercurrentheight * footfactor, 3)
-            footlength_u = fromSVUSA(usercurrentheight * footfactor, 3)
-            footlengthinches = usercurrentheight * footfactor / inch
-            shoesize = toShoeSize(footlengthinches)
-            footwidth_m = fromSV(usercurrentheight * footwidthfactor, 3)
-            footwidth_u = fromSVUSA(usercurrentheight * footwidthfactor, 3)
-            toeheight_m = fromSV(usercurrentheight * toeheightfactor, 3)
-            toeheight_u = fromSVUSA(usercurrentheight * toeheightfactor, 3)
-
-            pointer_m = fromSV(usercurrentheight * pointerfactor, 3)
-            pointer_u = fromSVUSA(usercurrentheight * pointerfactor, 3)
-            thumb_m = fromSV(usercurrentheight * thumbfactor, 3)
-            thumb_u = fromSVUSA(usercurrentheight * thumbfactor, 3)
-            fingerprint_m = fromSV(usercurrentheight * fingerprintfactor, 3)
-            fingerprint_u = fromSVUSA(usercurrentheight * fingerprintfactor, 3)
-
-            hair_m = fromSV(usercurrentheight * hairfactor, 3)
-            hair_u = fromSVUSA(usercurrentheight * hairfactor, 3)
-
-            normalheightcomp_m = toSV(defaultheight / defaultheightmult, 3)
-            normalheightcomp_u = toSVUSA(defaultheight / defaultheightmult, 3)
-            normalweightcomp_m = toWV(defaultweight / defaultweightmult, 3)
-            normalweightcomp_u = toWVUSA(defaultweight / defaultweightmult, 3)
-
-            tallerheight = 0
-            smallerheight = 0
-            lookdirection = ""
-            if currentheight >= defaultheight:
-                tallerheight = currentheight
-                smallerheight = defaultheight
-                lookdirection = "down"
-            else:
-                tallerheight = defaultheight
-                smallerheight = currentheight
-                lookdirection = "up"
-
-            #This is disgusting, but it works!
-            lookangle = str(round(math.degrees(math.atan((tallerheight - smallerheight) / (tallerheight / 2))), 0)).split(".")[0]
-
-            return (
-            f"**{usertag} Stats:"
-            f"*Current Height:*  {currentheight_m} / {currentheight_u}"
-            f"*Current Weight:*  {currentweight_m} / {currentweight_u}"
-            f"*Current Density:* {printdensity}x"
-            f""
-            f"Foot Length: {footlength_m} / {footlength_u}"
-            f"Foot Width: {footwidth_m} / {footwidth_u}"
-            f"Toe Height: {toeheight_m} / {toeheight_u}"
-            f"Pointer Finger Length: {pointer_m} / {pointer_u}"
-            f"Thumb Width: {thumb_m} / {thumb_u}"
-            f"Fingerprint Depth: {fingerprint_m} / {fingerprint_u}"
-            f"Hair Width: {hair_m} / {hair_u}"
-            f""
-            f"Size of a Normal Man (Comparative): {normalheightcomp_m} / {normalheightcomp_u}"
-            f"Weight of a Normal Man (Comparative): {normalweightcomp_m} / {normalheightcomp_u}"
-            f"To look {lookdirection} at a average human, you'd have to look {lookdirection} {lookangle}°."
-            f""
-            f"Character Bases: {baseheight_m} / {baseheight_u} | {baseweight_m} / {baseweight_u}"
-            )
-
-
     @stats.error
     @logger.err2console
     async def stats_handler(self, ctx, error):
-        if isinstance(error, InvalidOperation):
+        if isinstance(error, decimal.InvalidOperation):
             await ctx.send(
                 "SizeBot cannot perform this action due to a math error.\n"
                 f"Are you too big, {ctx.message.author.id}?")

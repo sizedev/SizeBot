@@ -1,14 +1,14 @@
 import math
-from math import *
-from decimal import *
+from decimal import Decimal
+import decimal
 import re
 
 # Configure decimal module.
-getcontext()
-context = Context(prec=100, rounding=ROUND_HALF_EVEN, Emin=-9999999, Emax=999999,
-                  capitals=1, clamp=0, flags=[], traps=[Overflow, DivisionByZero,
-                                                        InvalidOperation])
-setcontext(context)
+decimal.getcontext()
+context = decimal.Context(prec=100, rounding=decimal.ROUND_HALF_EVEN,
+                          Emin=-9999999, Emax=999999, capitals=1, clamp=0, flags=[],
+                          traps=[decimal.Overflow, decimal.DivisionByZero, decimal.InvalidOperation])
+decimal.setcontext(context)
 
 inputname = input("Name? > ")
 inputheight = input("Height? > ")
@@ -58,17 +58,18 @@ DENS = 5
 UNIT = 6
 SPEC = 7
 
+
 # Get number from string.
-def getNum(string):
-    match = re.search(r"\d+\.?\d*", string)
+def getNum(s):
+    match = re.search(r"\d+\.?\d*", s)
     if match is None:
         return None
     return Decimal(match.group(0))
 
 
 # Get letters from string.
-def getLet(string):
-    match = re.search(r"[a-zA-Z\'\"]+", string)
+def getLet(s):
+    match = re.search(r"[a-zA-Z\'\"]+", s)
     if match is None:
         return None
     return match.group(0)
@@ -76,8 +77,10 @@ def getLet(string):
 
 # Remove decimals.
 def removeDecimals(output):
-    if re.search(r"(\.\d*?)(0+)", output): output = re.sub(r"(\.\d*?)(0+)", r"\1", output)
-    if re.search(r"(.*)(\.)(\D+)", output): output = re.sub(r"(.*)(\.)(\D+)", r"\1\3", output)
+    if re.search(r"(\.\d*?)(0+)", output):
+        output = re.sub(r"(\.\d*?)(0+)", r"\1", output)
+    if re.search(r"(.*)(\.)(\D+)", output):
+        output = re.sub(r"(.*)(\.)(\D+)", r"\1\3", output)
     return output
 
 
@@ -86,20 +89,23 @@ def roundNearestHalf(number):
 
 
 def placeValue(number):
-    return ("{:,}".format(number))
+    return "{:,}".format(number)
 
-def isFeetAndInchesAndIfSoFixIt(input):
+
+def isFeetAndInchesAndIfSoFixIt(value):
     regex = r"^(?P<feet>\d+(ft|foot|feet|\'))(?P<inch>\d+(in|\")*)"
-    m = re.match(regex, input, flags=re.I)
+    m = re.match(regex, value, flags=re.I)
     if not m:
-        return input
-    wholefeet = m.group('feet')
-    wholeinch = m.group('inch')
-    feet = getNum(wholefeet)
-    inch = getNum(wholeinch)
-    if feet == None: feet = 0
-    if inch == None: inch = 0
-    totalinches = (feet * 12) + inch
+        return value
+    feetstr = m.group("feet")
+    inchstr = m.group("inch")
+    feetval = getNum(feetstr)
+    inchval = getNum(inchstr)
+    if feetval is None:
+        feetval = 0
+    if inchval is None:
+        inchval = 0
+    totalinches = (feetval * 12) + inchval
     return f"{totalinches}in"
 
 
@@ -178,7 +184,7 @@ def toSV(value, unit):
 
 
 # Convert 'size values' to a more readable format (metric).
-def fromSV(value, accuracy = 2):
+def fromSV(value, accuracy=2):
     value = float(value)
     output = ""
     if value <= 0:
@@ -243,7 +249,7 @@ def fromSV(value, accuracy = 2):
 
 
 # Convert 'size values' to a more readable format (USA).
-def fromSVUSA(value, accuracy = 2):
+def fromSVUSA(value, accuracy=2):
     value = float(value)
     output = ""
     if value <= 0:
@@ -267,11 +273,11 @@ def fromSVUSA(value, accuracy = 2):
     elif value < foot:
         output = str(round(Decimal(value) / inch, accuracy)) + "in"
     elif value < mile:
-        feet = floor(Decimal(value) / foot)
+        feetval = math.floor(Decimal(value) / foot)
         fulloninches = round(Decimal(value) / inch, accuracy)
-        feettoinches = feet * Decimal(12)
-        inches = fulloninches - feettoinches
-        output = str(feet) + "'" + str(inches) + "\""
+        feettoinches = feetval * Decimal(12)
+        inchval = fulloninches - feettoinches
+        output = str(feetval) + "'" + str(inchval) + "\""
     elif value < au:
         output = str(round(Decimal(value) / mile, accuracy)) + "mi"
     elif value < ly:
@@ -374,7 +380,7 @@ def toWV(value, unit):
 
 
 # Convert 'weight values' to a more readable format.
-def fromWV(value, accuracy = 2):
+def fromWV(value, accuracy=2):
     value = Decimal(value)
     if value <= 0:
         return "0"
@@ -440,7 +446,7 @@ def fromWV(value, accuracy = 2):
 
 
 # Convert 'weight values' to a more readable format (USA).
-def fromWVUSA(value, accuracy = 2):
+def fromWVUSA(value, accuracy=2):
     value = Decimal(value)
     if value == 0:
         return "almost nothing"
@@ -514,86 +520,85 @@ def toShoeSize(inchamount):
 
 
 userlist = [inputname,
-        "Y",
-        toSV(getNum(isFeetAndInchesAndIfSoFixIt(inputheight)),getLet(isFeetAndInchesAndIfSoFixIt(inputheight))),
-        toSV(getNum(isFeetAndInchesAndIfSoFixIt(inputbheight)),getLet(isFeetAndInchesAndIfSoFixIt(inputbheight))),
-        toWV(getNum(inputbweight),getLet(inputbweight)),
-        1.0,
-        "M",
-        "None"
-]
+            "Y",
+            toSV(getNum(isFeetAndInchesAndIfSoFixIt(inputheight)), getLet(isFeetAndInchesAndIfSoFixIt(inputheight))),
+            toSV(getNum(isFeetAndInchesAndIfSoFixIt(inputbheight)), getLet(isFeetAndInchesAndIfSoFixIt(inputbheight))),
+            toWV(getNum(inputbweight), getLet(inputbweight)),
+            1.0,
+            "M",
+            "None"
+            ]
 
 
-def userStats(user1):
-        userattrs = user1
-        usernick = userattrs[NICK]
-        userdisplay = userattrs[DISP]
-        userbaseheight = Decimal(userattrs[BHEI])
-        userbaseweight = Decimal(userattrs[BWEI])
-        usercurrentheight = Decimal(userattrs[CHEI])
-        userdensity = Decimal(userattrs[DENS])
-        userspecies = userattrs[SPEC]
+def userStats(userattrs):
+    usernick = userattrs[NICK]
+    # userdisplay = userattrs[DISP] # TODO: Unused
+    userbaseheight = Decimal(userattrs[BHEI])
+    userbaseweight = Decimal(userattrs[BWEI])
+    usercurrentheight = Decimal(userattrs[CHEI])
+    userdensity = Decimal(userattrs[DENS])
+    # userspecies = userattrs[SPEC] # TODO: Unused
 
-        multiplier = userattrs[CHEI] / userattrs[BHEI]
-        multiplier2 = multiplier ** 2
-        multiplier3 = multiplier ** 3
+    multiplier = usercurrentheight / userbaseheight
+    # multiplier2 = multiplier ** 2 # TODO: Unused
+    multiplier3 = multiplier ** 3
 
-        baseheight_m = fromSV(userattrs[BHEI], 3)
-        baseheight_u = fromSVUSA(userattrs[BHEI], 3)
-        baseweight_m = fromWV(userattrs[BWEI], 3)
-        baseweight_u = fromWVUSA(userattrs[BWEI], 3)
-        currentheight_m = fromSV(userattrs[CHEI], 3)
-        currentheight_u = fromSVUSA(userattrs[CHEI], 3)
+    baseheight_m = fromSV(userbaseheight, 3)
+    baseheight_u = fromSVUSA(userbaseheight, 3)
+    baseweight_m = fromWV(userbaseweight, 3)
+    baseweight_u = fromWVUSA(userbaseweight, 3)
+    currentheight_m = fromSV(usercurrentheight, 3)
+    currentheight_u = fromSVUSA(usercurrentheight, 3)
 
-        usercurrentweight = userbaseweight * multiplier3 * userdensity
-        currentweight_m = fromWV(usercurrentweight, 3)
-        currentweight_u = fromWVUSA(usercurrentweight, 3)
+    currentweight = userbaseweight * multiplier3 * userdensity
+    currentweight_m = fromWV(currentweight, 3)
+    currentweight_u = fromWVUSA(currentweight, 3)
 
-        printdensity = round(userdensity, 3)
+    printdensity = round(userdensity, 3)
 
-        defaultheightmult = usercurrentheight / defaultheight
-        defaultweightmult = usercurrentweight / defaultweight ** 3
+    defaultheightmult = usercurrentheight / defaultheight
+    defaultweightmult = currentweight / defaultweight ** 3
 
-        footlength_m = fromSV(usercurrentheight * footfactor, 3)
-        footlength_u = fromSVUSA(usercurrentheight * footfactor, 3)
-        footlengthinches = usercurrentheight * footfactor / inch
-        shoesize = toShoeSize(footlengthinches)
-        footwidth_m = fromSV(usercurrentheight * footwidthfactor, 3)
-        footwidth_u = fromSVUSA(usercurrentheight * footwidthfactor, 3)
-        toeheight_m = fromSV(usercurrentheight * toeheightfactor, 3)
-        toeheight_u = fromSVUSA(usercurrentheight * toeheightfactor, 3)
+    footlength_m = fromSV(usercurrentheight * footfactor, 3)
+    footlength_u = fromSVUSA(usercurrentheight * footfactor, 3)
+    # footlengthinches = usercurrentheight * footfactor / inch # TODO: Unused
+    # shoesize = toShoeSize(footlengthinches) # TODO: Unused
+    footwidth_m = fromSV(usercurrentheight * footwidthfactor, 3)
+    footwidth_u = fromSVUSA(usercurrentheight * footwidthfactor, 3)
+    toeheight_m = fromSV(usercurrentheight * toeheightfactor, 3)
+    toeheight_u = fromSVUSA(usercurrentheight * toeheightfactor, 3)
 
-        pointer_m = fromSV(usercurrentheight * pointerfactor, 3)
-        pointer_u = fromSVUSA(usercurrentheight * pointerfactor, 3)
-        thumb_m = fromSV(usercurrentheight * thumbfactor, 3)
-        thumb_u = fromSVUSA(usercurrentheight * thumbfactor, 3)
-        fingerprint_m = fromSV(usercurrentheight * fingerprintfactor, 3)
-        fingerprint_u = fromSVUSA(usercurrentheight * fingerprintfactor, 3)
+    pointer_m = fromSV(usercurrentheight * pointerfactor, 3)
+    pointer_u = fromSVUSA(usercurrentheight * pointerfactor, 3)
+    thumb_m = fromSV(usercurrentheight * thumbfactor, 3)
+    thumb_u = fromSVUSA(usercurrentheight * thumbfactor, 3)
+    fingerprint_m = fromSV(usercurrentheight * fingerprintfactor, 3)
+    fingerprint_u = fromSVUSA(usercurrentheight * fingerprintfactor, 3)
 
-        hair_m = fromSV(usercurrentheight * hairfactor, 3)
-        hair_u = fromSVUSA(usercurrentheight * hairfactor, 3)
+    hair_m = fromSV(usercurrentheight * hairfactor, 3)
+    hair_u = fromSVUSA(usercurrentheight * hairfactor, 3)
 
-        normalheightcomp_m = fromSV(defaultheight / defaultheightmult, 3)
-        normalheightcomp_u = fromSVUSA(defaultheight / defaultheightmult, 3)
-        normalweightcomp_m = fromWV(defaultweight / defaultweightmult, 3)
-        normalweightcomp_u = fromWVUSA(defaultweight / defaultweightmult, 3)
+    normalheightcomp_m = fromSV(defaultheight / defaultheightmult, 3)
+    normalheightcomp_u = fromSVUSA(defaultheight / defaultheightmult, 3)
+    normalweightcomp_m = fromWV(defaultweight / defaultweightmult, 3)
+    # normalweightcomp_u = fromWVUSA(defaultweight / defaultweightmult, 3) # TODO: Unused
 
-        tallerheight = 0
-        smallerheight = 0
-        lookdirection = ""
-        if usercurrentheight >= defaultheight:
-            tallerheight = usercurrentheight
-            smallerheight = defaultheight
-            lookdirection = "down"
-        else:
-            tallerheight = defaultheight
-            smallerheight = usercurrentheight
-            lookdirection = "up"
+    tallerheight = 0
+    smallerheight = 0
+    lookdirection = ""
+    if usercurrentheight >= defaultheight:
+        tallerheight = usercurrentheight
+        smallerheight = defaultheight
+        lookdirection = "down"
+    else:
+        tallerheight = defaultheight
+        smallerheight = usercurrentheight
+        lookdirection = "up"
 
-        #This is disgusting, but it works!
-        lookangle = str(round(math.degrees(math.atan((tallerheight - smallerheight) / (tallerheight / 2))), 0)).split(".")[0]
+    # This is disgusting, but it works!
+    lookangle = str(round(math.degrees(math.atan((tallerheight - smallerheight) / (tallerheight / 2))), 0)).split(".")[0]
 
-        return (
+    return (
         f"**{usernick} Stats:\n"
         f"*Current Height:*  {currentheight_m} / {currentheight_u}\n"
         f"*Current Weight:*  {currentweight_m} / {currentweight_u}\n"
@@ -612,6 +617,7 @@ def userStats(user1):
         f"To look {lookdirection} at a average human, you'd have to look {lookdirection} {lookangle}°.\n"
         f"\n"
         f"Character Bases: {baseheight_m} / {baseheight_u} | {baseweight_m} / {baseweight_u}"
-        )
+    )
+
 
 print(userStats(userlist))

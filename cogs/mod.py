@@ -1,7 +1,9 @@
-import discord
 from discord.ext import commands
-from globalsb import *
+
 import digiformatter as df
+from globalsb import banner, version
+from globalsb import getID, members
+
 
 class ModCog(commands.Cog):
     def __init__(self, bot):
@@ -85,7 +87,7 @@ class ModCog(commands.Cog):
     └─────────────────────────┴───────────────────────────┘```""".format(ctx.message.author.id))
 
     @commands.command()
-    async def help(self, ctx, what:str = None):
+    async def help(self, ctx, what: str = None):
         await ctx.message.delete()
         if what is None:
             await ctx.send("""<@{0}>, **Help Topics**
@@ -128,7 +130,7 @@ class ModCog(commands.Cog):
     @commands.command()
     async def about(self, ctx):
         await ctx.message.delete()
-        await ctx.send("```\n" + ascii + "```")
+        await ctx.send("```\n" + banner + "```")
         await ctx.send("""<@{0}>
     ***SizeBot3 by DigiDuncan***
     *A big program for big people.*
@@ -163,10 +165,11 @@ SizeBot has been a passion project coded over a period of two years and learning
 Thank you so much for being here throughout this journey!""")
 
     @commands.command()
-    async def bug(self, ctx, *, message : str):
+    async def bug(self, ctx, *, message: str):
         df.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-        await bot.get_user(getID("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
+        await self.bot.get_user(getID("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
 
-#Necessary.
+
+# Necessary.
 def setup(bot):
     bot.add_cog(ModCog(bot))

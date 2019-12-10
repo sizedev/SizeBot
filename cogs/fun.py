@@ -1,6 +1,8 @@
-import discord
+import asyncio
+
 from discord.ext import commands
-from globalsb import *
+
+from globalsb import getID, tasks
 
 
 # Commands for non-size stuff.
@@ -12,14 +14,15 @@ class FunCog(commands.Cog):
 
     @commands.command()
     async def repeat(self, ctx, delay: float, *, message: str):
-        if ctx.message.author.id != getID("DigiDuncan"): return
+        if ctx.message.author.id != getID("DigiDuncan"):
+            return
         await ctx.message.delete()
 
         async def repeatTask():
             while True:
                 await ctx.send(message)
                 await asyncio.sleep(delay * 60)
-        task = bot.loop.create_task(repeatTask())
+        task = self.bot.loop.create_task(repeatTask())
         tasks[ctx.message.author.id] = task
 
     @commands.command()
@@ -35,9 +38,9 @@ class FunCog(commands.Cog):
             await ctx.send(message)
 
     @commands.command()
-    async def sing(self, ctx, *, string: str):
+    async def sing(self, ctx, *, s: str):
         await ctx.message.delete()
-        newstring = ":musical_score: *" + string + "* :musical_note:"
+        newstring = ":musical_score: *" + s + "* :musical_note:"
         await ctx.send(newstring)
 
 

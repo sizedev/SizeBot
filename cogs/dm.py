@@ -1,6 +1,8 @@
 from functools import reduce
+
 import discord
 from discord.ext import commands
+
 import digiformatter as df
 
 
@@ -15,20 +17,19 @@ def dump_message(m):
     embeds = [e.to_dict() for e in m.embeds]
     if m.author.discriminator == "0000":
         return
-    else:
-        df.warn(
-            f"Received a message from {m.author.name}#{m.author.discriminator} that wasn't a DM: {m.content}\n"
-            f"    URL: {m.jump_url}\n"
-            f"    Guild ID: {guildId}\n"
-            f"    Channel ID: {m.channel.id}\n"
-            f"    Message ID: {m.id}\n"
-            f"    Channel name: {channelName}\n"
-            f"    Channel type: {m.channel.type.name}\n"
-            f"    Message type: {m.type.name}\n"
-            f"    Embeds: {len(m.embeds)}\n{embeds}\n"
-            f"    Attachments: {len(m.attachments)}\n"
-            f"    System content: {m.system_content}\n"
-        )
+    df.warn(
+        f"Received a message from {m.author.name}#{m.author.discriminator} that wasn't a DM: {m.content}\n"
+        f"    URL: {m.jump_url}\n"
+        f"    Guild ID: {guildId}\n"
+        f"    Channel ID: {m.channel.id}\n"
+        f"    Message ID: {m.id}\n"
+        f"    Channel name: {channelName}\n"
+        f"    Channel type: {m.channel.type.name}\n"
+        f"    Message type: {m.type.name}\n"
+        f"    Embeds: {len(m.embeds)}\n{embeds}\n"
+        f"    Attachments: {len(m.attachments)}\n"
+        f"    System content: {m.system_content}\n"
+    )
 
 
 # Show an incoming DMs in console

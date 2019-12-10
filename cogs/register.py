@@ -1,7 +1,6 @@
 import os
 from decimal import Decimal
 
-import discord
 from discord.ext import commands
 from discord.utils import get
 
@@ -148,7 +147,7 @@ class RegisterCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, m):
-        await nickupdate(m.author)
+        await nickUpdate(m.author)
 
 
 # Necessary.
