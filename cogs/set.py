@@ -7,8 +7,8 @@ import digiformatter as df
 from globalsb import readUser, writeUser, folder
 from globalsb import nickUpdate
 from globalsb import infinity
-from globalsb import digiid
-from globalsb import isFeetAndInchesAndIfSoFixIt, toSV, getNum, getLet, fromSV, fromSVUSA, toWV, fromWV, fromWVUSA
+from globalsb import toSV, fromSV, fromSVUSA, toWV, fromWV, fromWVUSA
+from globalsb import isFeetAndInchesAndIfSoFixIt, getNum, getLet, getID
 from globalsb import NICK, DISP, SPEC, CHEI, BHEI, DENS, UNIT, BWEI
 from globalsb import newline
 
@@ -102,7 +102,7 @@ class SetCog(commands.Cog):
                     userarray[CHEI] = str(infinity) + newline
             except Exception as e:
                 df.crit(e)
-                await ctx.send(f"<@{digiid}> CRITICAL ERROR\n{ctx.message.author.id}\n{e}")
+                await ctx.send(f"<@{getID('DigiDuncan')}> CRITICAL ERROR\n{ctx.message.author.id}\n{e}")
             writeUser(ctx.message.author.id, userarray)
             userarray = readUser(ctx.message.author.id)
             if userarray[DISP] == "Y\n":

@@ -1,4 +1,3 @@
-
 import re
 import os
 import io
@@ -18,6 +17,14 @@ class DigiException(Exception):
     pass
 
 
+# Configure decimal module.
+decimal.getcontext()
+context = decimal.Context(prec = 120, rounding = decimal.ROUND_HALF_EVEN,
+                          Emin = -9999999, Emax = 999999, capitals = 1, clamp = 0, flags = [],
+                          traps = [decimal.Overflow, decimal.DivisionByZero, decimal.InvalidOperation])
+decimal.setcontext(context)
+
+
 # Version.
 version = "3AAH.0.0.b3"
 
@@ -34,7 +41,6 @@ brackets = ["[", "]", "<", ">"]
 enspace = "\u2002"
 printtab = enspace * 4
 allowbrackets = ("&compare", "&stats")  # TODO: Could be better.
-digiid = 0  # TODO: Replace with actual value
 
 # Unit constants.
 # Height [micrometers]
@@ -123,13 +129,6 @@ banner = r"""
 . `--. \ |_  / _ \ ___ \/ _ \| __|   \ \.
 ./\__/ / |/ /  __/ |_/ / (_) | |_.___/ /.
 .\____/|_/___\___\____/ \___/ \__\____/ ."""
-
-# Configure decimal module.
-decimal.getcontext()
-context = decimal.Context(prec = 100, rounding = decimal.ROUND_HALF_EVEN,
-                          Emin = -9999999, Emax = 999999, capitals = 1, clamp = 0, flags = [],
-                          traps = [decimal.Overflow, decimal.DivisionByZero, decimal.InvalidOperation])
-decimal.setcontext(context)
 
 
 # Get number from string.
@@ -799,7 +798,10 @@ def changeUser(userid, changestyle, amount, attribute="height"):
     unit = getLet(amount)
     amountSV = 0
     if unit:
-        amountSV = toSV(getNum, getLet)
+        if attribute == "weight":
+            amountSV = toWV(getNum, getLet)
+        else:
+            amountSV = toSV(getNum, getLet)
 
     if attribute == "height":
         if changestyle == "add":
