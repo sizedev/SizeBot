@@ -126,9 +126,11 @@ class User:
 
 
 def save(user):
+    id = user.id
+    if id is None:
+        raise ValueError("Cannot save user without id")
     userdbpath.mkdir(exist_ok = True)
     jsondata = user.toJSON()
-    id = user.id
     with open(userdbpath / f"{id}.json", "w") as f:
         json.dump(jsondata, f, indent = 4)
 
