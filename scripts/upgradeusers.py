@@ -1,10 +1,9 @@
-from pathlib import Path
 import userdb
 from userdb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC, User
 
 # Load a user from the old file format
 def loadLegacy(id):
-    with open(userpath / f"{id}.txt", "r") as f:
+    with open(userdb.userdbpath / f"{id}.txt", "r") as f:
         # Make array of lines from file.
         lines = f.read().splitlines()
         lines = [line.strip() for line in lines]
