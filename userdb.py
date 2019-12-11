@@ -13,8 +13,8 @@ UNIT = 6
 SPEC = 7
 
 # Defaults
-defaultheight = Decimal("1754000")  # micrometers
-defaultweight = Decimal("66760000")  # milligrams
+defaultheight = Decimal("1.754")  # meters
+defaultweight = Decimal("66760")  # grams
 defaultdensity = Decimal("1.0")
 
 # Map the deprecated user array constants to the new names
