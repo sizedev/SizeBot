@@ -29,8 +29,8 @@ decimal.setcontext(context)
 version = "3AAH.0.0.b3"
 
 # Defaults
-defaultheight = Decimal(1754000)  # micrometers
-defaultweight = Decimal(66760000)  # milligrams
+defaultheight = Decimal(1.754)  # meters
+defaultweight = Decimal(66760)  # grams
 defaultdensity = Decimal(1.0)
 
 # Constants
@@ -43,22 +43,22 @@ printtab = enspace * 4
 allowbrackets = ("&compare", "&stats")  # TODO: Could be better.
 
 # Unit constants.
-# Height [micrometers]
-inch = Decimal(25400)
+# Height [meters]
+inch = Decimal(0.0254)
 foot = inch * Decimal(12)
 mile = foot * Decimal(5280)
 ly = mile * Decimal(5879000000000)
-au = Decimal(149597870700000000)
-uni = Decimal(879848000000000000000000000000000)
-infinity = Decimal(879848000000000000000000000000000000000000000000000000000000)
-# Weight [milligrams]
-ounce = Decimal(28350)
+au = Decimal(149597870700)
+uni = Decimal(879848000000000000000000000)
+infinity = uni ** Decimal(10**27)
+# Weight [grams]
+ounce = Decimal(28.35)
 pound = ounce * Decimal(16)
 uston = pound * Decimal(2000)
-earth = Decimal(5972198600000000000000000000000)
-sun = Decimal(1988435000000000000000000000000000000)
-milkyway = Decimal(95000000000000000000000000000000000000000000000)
-uniw = Decimal(3400000000000000000000000000000000000000000000000000000000000)
+earth = Decimal(5972198600000000000000000000)
+sun = Decimal(1988435000000000000000000000000000)
+milkyway = Decimal(95000000000000000000000000000000000000000000)
+uniw = Decimal(3400000000000000000000000000000000000000000000000000000000)
 
 # Slow growth tasks.
 # TODO: Get rid of asyncio tasks, replace with timed database checks.
@@ -298,41 +298,41 @@ def toSV(value, unit):
         return None
     unit = unit.lower()
     if unit in ["yoctometers", "yoctometer"]:
-        output = Decimal(value) / Decimal(10**18)
+        output = Decimal(value) / Decimal(10**24)
     elif unit in ["zeptometers", "zeptometer"]:
-        output = Decimal(value) / Decimal(10**15)
+        output = Decimal(value) / Decimal(10**21)
     elif unit in ["attometers", "attometer", "am"]:
-        output = Decimal(value) / Decimal(10**12)
+        output = Decimal(value) / Decimal(10**18)
     elif unit in ["femtometers", "femtometer", "fm"]:
-        output = Decimal(value) / Decimal(10**9)
+        output = Decimal(value) / Decimal(10**15)
     elif unit in ["picometers", "picometer"]:
-        output = Decimal(value) / Decimal(10**6)
+        output = Decimal(value) / Decimal(10**12)
     elif unit in ["nanometers", "nanometer", "nm"]:
-        output = Decimal(value) / Decimal(10**3)
+        output = Decimal(value) / Decimal(10**9)
     elif unit in ["micrometers", "micrometer", "um"]:
-        output = Decimal(value)
+        output = Decimal(value) / Decimal(10**6)
     elif unit in ["millimeters", "millimeter", "mm"]:
-        output = Decimal(value) * Decimal(10**3)
+        output = Decimal(value) / Decimal(10**3)
     elif unit in ["centimeters", "centimeter", "cm"]:
-        output = Decimal(value) * Decimal(10**4)
+        output = Decimal(value) / Decimal(10**2)
     elif unit in ["meters", "meter", "m"]:
-        output = Decimal(value) * Decimal(10**6)
+        output = Decimal(value)
     elif unit in ["kilometers", "kilometer", "km"]:
-        output = Decimal(value) * Decimal(10**9)
+        output = Decimal(value) * Decimal(10**3)
     elif unit in ["megameters", "megameter"]:
-        output = Decimal(value) * Decimal(10**12)
+        output = Decimal(value) * Decimal(10**6)
     elif unit in ["gigameters", "gigameter", "gm"]:
-        output = Decimal(value) * Decimal(10**15)
+        output = Decimal(value) * Decimal(10**9)
     elif unit in ["terameters", "terameter", "tm"]:
-        output = Decimal(value) * Decimal(10**18)
+        output = Decimal(value) * Decimal(10**12)
     elif unit in ["petameters", "petameter", "pm"]:
-        output = Decimal(value) * Decimal(10**21)
+        output = Decimal(value) * Decimal(10**15)
     elif unit in ["exameters", "exameter", "em"]:
-        output = Decimal(value) * Decimal(10**24)
+        output = Decimal(value) * Decimal(10**18)
     elif unit in ["zettameters", "zettameter", "zm"]:
-        output = Decimal(value) * Decimal(10**27)
+        output = Decimal(value) * Decimal(10**21)
     elif unit in ["yottameters", "yottameter", "ym"]:
-        output = Decimal(value) * Decimal(10**30)
+        output = Decimal(value) * Decimal(10**24)
     elif unit in ["inches", "inch", "in", "\""]:
         output = Decimal(value) * inch
     elif unit in ["feet", "foot", "ft", "\'"]:
@@ -372,39 +372,39 @@ def fromSV(value, accuracy=2):
     output = ""
     if value <= 0:
         return "0"
-    elif value < 0.000000000000001:
+    elif value < 0.000000000000000000001:
         output = str(round(Decimal(value) * Decimal(10**18), accuracy)) + "ym"
-    elif value < 0.000000000001:
+    elif value < 0.000000000000000001:
         output = str(round(Decimal(value) * Decimal(10**15), accuracy)) + "zm"
-    elif value < 0.000000001:
+    elif value < 0.000000000000001:
         output = str(round(Decimal(value) * Decimal(10**12), accuracy)) + "am"
-    elif value < 0.000001:
+    elif value < 0.000000000001:
         output = str(round(Decimal(value) * Decimal(10**9), accuracy)) + "fm"
-    elif value < 0.001:
+    elif value < 0.000000001:
         output = str(round(Decimal(value) * Decimal(10**6), accuracy)) + "pm"
-    elif value < 1:
+    elif value < 0.0000001:
         output = str(round(Decimal(value) * Decimal(10**3), accuracy)) + "nm"
-    elif value < 10**2:
+    elif value < 0.00001:
         output = str(round(Decimal(value), accuracy)) + "µm"
-    elif value < 10**4:
+    elif value < 0.01:
         output = str(round(Decimal(value) / Decimal(10**3), accuracy)) + "mm"
-    elif value < 10**6:
+    elif value < 10:
         output = str(round(Decimal(value) / Decimal(10**4), accuracy)) + "cm"
-    elif value < 10**9:
+    elif value < 10**3:
         output = str(round(Decimal(value) / Decimal(10**6), accuracy)) + "m"
-    elif value < 10**12:
+    elif value < 10**6:
         output = str(round(Decimal(value) / Decimal(10**9), accuracy)) + "km"
-    elif value < 10**15:
+    elif value < 10**9:
         output = str(round(Decimal(value) / Decimal(10**12), accuracy)) + "Mm"
-    elif value < 10**18:
+    elif value < 10**12:
         output = str(round(Decimal(value) / Decimal(10**15), accuracy)) + "Gm"
-    elif value < 10**21:
+    elif value < 10**15:
         output = str(round(Decimal(value) / Decimal(10**18), accuracy)) + "Tm"
-    elif value < 10**24:
+    elif value < 10**18:
         output = str(round(Decimal(value) / Decimal(10**21), accuracy)) + "Pm"
-    elif value < 10**27:
+    elif value < 10**21:
         output = str(round(Decimal(value) / Decimal(10**24), accuracy)) + "Em"
-    elif value < 10**30:
+    elif value < 10**24:
         output = str(round(Decimal(value) / Decimal(10**27), accuracy)) + "Zm"
     elif value < uni:
         output = str(round(Decimal(value) / Decimal(10**30), accuracy)) + "Ym"
@@ -437,21 +437,21 @@ def fromSVUSA(value, accuracy=2):
     output = ""
     if value <= 0:
         return "0"
-    elif value < 0.000000000000001:
+    elif value < 0.000000000000000000001:
         output = str(round(Decimal(value) * Decimal(10**18), accuracy)) + "ym"
-    elif value < 0.000000000001:
+    elif value < 0.000000000000000001:
         output = str(round(Decimal(value) * Decimal(10**15), accuracy)) + "zm"
-    elif value < 0.000000001:
+    elif value < 0.000000000000001:
         output = str(round(Decimal(value) * Decimal(10**12), accuracy)) + "am"
-    elif value < 0.000001:
+    elif value < 0.000000000001:
         output = str(round(Decimal(value) * Decimal(10**9), accuracy)) + "fm"
-    elif value < 0.001:
+    elif value < 0.000000001:
         output = str(round(Decimal(value) * Decimal(10**6), accuracy)) + "pm"
-    elif value < 1:
+    elif value < 0.000001:
         output = str(round(Decimal(value) * Decimal(10**3), accuracy)) + "nm"
-    elif value < 10**2:
+    elif value < 0.0001:
         output = str(round(Decimal(value), accuracy)) + "µm"
-    elif value < 10**4:
+    elif value < 0.01:
         output = str(round(Decimal(value) / Decimal(10**3), accuracy)) + "mm"
     elif value < foot:
         output = str(round(Decimal(value) / inch, accuracy)) + "in"
@@ -494,19 +494,19 @@ def fromSVUSA(value, accuracy=2):
 def toWV(value, unit):
     unit = unit.lower()
     if unit in ["yoctograms", "yoctograms", "yg"]:
-        output = Decimal(value) / Decimal(10**21)
+        output = Decimal(value) / Decimal(10**24)
     elif unit in ["zeptograms", "zeptograms", "zg"]:
-        output = Decimal(value) / Decimal(10**18)
+        output = Decimal(value) / Decimal(10**21)
     elif unit in ["attograms", "attogram", "ag"]:
-        output = Decimal(value) / Decimal(10**15)
+        output = Decimal(value) / Decimal(10**18)
     elif unit in ["femtogram", "femtogram", "fg"]:
-        output = Decimal(value) / Decimal(10**12)
+        output = Decimal(value) / Decimal(10**15)
     elif unit in ["picogram", "picogram", "pg"]:
-        output = Decimal(value) / Decimal(10**9)
+        output = Decimal(value) / Decimal(10**12)
     elif unit in ["nanogram", "nanogram", "ng"]:
-        output = Decimal(value) / Decimal(10**6)
+        output = Decimal(value) / Decimal(10**9)
     elif unit in ["microgram", "microgram", "ug"]:
-        output = Decimal(value) / Decimal(10**3)
+        output = Decimal(value) / Decimal(10**6)
     elif unit in ["milligrams", "milligram", "mg"]:
         output = Decimal(value)
     elif unit in ["grams", "gram", "g"]:
@@ -567,43 +567,43 @@ def fromWV(value, accuracy=2):
     value = Decimal(value)
     if value <= 0:
         return "0"
-    elif value < 0.000000000000000001:
+    elif value < 0.000000000000000000001:
         output = str(round(Decimal(value) * Decimal(10**21), accuracy)) + "yg"
-    elif value < 0.000000000000001:
+    elif value < 0.000000000000000001:
         output = str(round(Decimal(value) * Decimal(10**18), accuracy)) + "zg"
-    elif value < 0.000000000001:
+    elif value < 0.000000000000001:
         output = str(round(Decimal(value) * Decimal(10**15), accuracy)) + "ag"
-    elif value < 0.000000001:
+    elif value < 0.000000000001:
         output = str(round(Decimal(value) * Decimal(10**12), accuracy)) + "fg"
-    elif value < 0.000001:
+    elif value < 0.000000001:
         output = str(round(Decimal(value) * Decimal(10**9), accuracy)) + "pg"
-    elif value < 0.001:
+    elif value < 0.000001:
         output = str(round(Decimal(value) * Decimal(10**6), accuracy)) + "ng"
-    elif value < 1:
+    elif value < 0.001:
         output = str(round(Decimal(value) * Decimal(10**3), accuracy)) + "µg"
-    elif value < 1000:
+    elif value < 1:
         output = str(round(Decimal(value), accuracy)) + "mg"
-    elif value < 10000000:
+    elif value < 10000:
         output = str(round(Decimal(value) / Decimal(10**3), accuracy)) + "g"
-    elif value < 1000000000:
+    elif value < 1000000:
         output = str(round(Decimal(value) / Decimal(10**6), accuracy)) + "kg"
-    elif value < 100000000000:
+    elif value < 100000000:
         output = str(round(Decimal(value) / Decimal(10**9), accuracy)) + "t"
-    elif value < 100000000000000:
+    elif value < 100000000000:
         output = str(round(Decimal(value) / Decimal(10**12), accuracy)) + "kt"
-    elif value < 100000000000000000:
+    elif value < 100000000000000:
         output = str(round(Decimal(value) / Decimal(10**15), accuracy)) + "Mt"
-    elif value < 100000000000000000000:
+    elif value < 100000000000000000:
         output = str(round(Decimal(value) / Decimal(10**18), accuracy)) + "Gt"
-    elif value < 100000000000000000000000:
+    elif value < 100000000000000000000:
         output = str(round(Decimal(value) / Decimal(10**21), accuracy)) + "Tt"
-    elif value < 100000000000000000000000000:
+    elif value < 100000000000000000000000:
         output = str(round(Decimal(value) / Decimal(10**24), accuracy)) + "Pt"
-    elif value < 100000000000000000000000000000:
+    elif value < 100000000000000000000000000:
         output = str(round(Decimal(value) / Decimal(10**27), accuracy)) + "Et"
-    elif value < 100000000000000000000000000000000:
+    elif value < 100000000000000000000000000000:
         output = str(round(Decimal(value) / Decimal(10**30), accuracy)) + "Zt"
-    elif value < 100000000000000000000000000000000000:
+    elif value < 100000000000000000000000000000000:
         output = str(round(Decimal(value) / Decimal(10**33), accuracy)) + "Yt"
     elif value < uniw * (10**3):
         output = str(round(Decimal(value) / uniw, accuracy)) + "uni"
@@ -633,21 +633,21 @@ def fromWVUSA(value, accuracy=2):
     value = Decimal(value)
     if value == 0:
         return "almost nothing"
-    elif value < 0.000000000000000001:
+    elif value < 0.000000000000000000001:
         output = str(round(Decimal(value) * Decimal(10**21), accuracy)) + "yg"
-    elif value < 0.000000000000001:
+    elif value < 0.000000000000000001:
         output = str(round(Decimal(value) * Decimal(10**18), accuracy)) + "zg"
-    elif value < 0.000000000001:
+    elif value < 0.000000000000001:
         output = str(round(Decimal(value) * Decimal(10**15), accuracy)) + "ag"
-    elif value < 0.000000001:
+    elif value < 0.000000000001:
         output = str(round(Decimal(value) * Decimal(10**12), accuracy)) + "fg"
-    elif value < 0.000001:
+    elif value < 0.000000001:
         output = str(round(Decimal(value) * Decimal(10**9), accuracy)) + "pg"
-    elif value < 0.001:
+    elif value < 0.000001:
         output = str(round(Decimal(value) * Decimal(10**6), accuracy)) + "ng"
-    elif value < 1:
+    elif value < 0.001:
         output = str(round(Decimal(value) * Decimal(10**3), accuracy)) + "µg"
-    elif value < 1000:
+    elif value < 1:
         output = str(round(Decimal(value), accuracy)) + "mg"
     elif value < (ounce / 10):
         output = str(round(Decimal(value) / Decimal(10**3), accuracy)) + "g"
