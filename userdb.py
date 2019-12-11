@@ -20,7 +20,7 @@ defaultdensity = Decimal(1.0)
 # Map the deprecated user array constants to the new names
 DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweight", "density", "unitsystem", "species"]
 
-userdbpath = Path("json_test")
+userdbpath = Path("../users")
 
 
 class User:
