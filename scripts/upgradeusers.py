@@ -1,6 +1,7 @@
 import userdb
 from userdb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC, User
 
+
 # Load a user from the old file format
 def loadLegacy(id):
     with open(userdb.userdbpath / f"{id}.txt", "r") as f:
@@ -14,10 +15,13 @@ def loadLegacy(id):
         user.display = lines[DISP]
         if lines[CHEI] != "None":
             user.height = lines[CHEI]
+            user.height /= 10**6
         if lines[BHEI] != "None":
             user.baseheight = lines[BHEI]
+            user.baseheight /= 10**6
         if lines[BWEI] != "None":
             user.baseweight = lines[BWEI]
+            user.baseweight /= 10**3
         if lines[DENS] != "None":
             user.density = lines[DENS]
         user.unitsystem = lines[UNIT]

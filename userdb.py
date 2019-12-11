@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from decimal import Decimal
+import digierror as errors
 
 # Deprecated user array constants
 NICK = 0
@@ -128,7 +129,7 @@ class User:
 def save(user):
     id = user.id
     if id is None:
-        raise ValueError("Cannot save user without id")
+        errors.throw(errors.CANNOT_SAVE_WITHOUT_ID)
     userdbpath.mkdir(exist_ok = True)
     jsondata = user.toJSON()
     with open(userdbpath / f"{id}.json", "w") as f:
