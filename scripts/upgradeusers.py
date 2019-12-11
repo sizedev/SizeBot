@@ -2,9 +2,6 @@ from pathlib import Path
 import userdb
 from userdb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC, User
 
-userpath = Path("../users")
-
-
 # Load a user from the old file format
 def loadLegacy(id):
     with open(userpath / f"{id}.txt", "r") as f:
@@ -32,9 +29,14 @@ def loadLegacy(id):
 
 
 def upgradeusers():
-    for filepath in userpath.glob("*.txt"):
+    print(f"Looking for user files in {userdb.userdbpath}")
+    filepaths = list(userdb.userdbpath.glob("*.txt"))
+    print(f"Found {len(filepaths)} users")
+    for filepath in filepaths:
         id = filepath.stem
+        print(f"Loading legacy user file for {id}")
         user = loadLegacy(id)
+        print(f"Saving new user file for {id}")
         userdb.save(user)
 
 
