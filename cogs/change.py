@@ -5,6 +5,7 @@ from discord.ext import commands
 
 import digiformatter as df
 import digierror as errors
+import userdb
 from globalsb import changeUser, readUser, folder
 from globalsb import fromSV, fromSVUSA
 from globalsb import CHEI
@@ -21,9 +22,9 @@ class ChangeCog(commands.Cog):
         changereturn = changeUser(ctx.message.author.id, style, amount)
         errors.throw(ctx, changereturn)
         if changereturn == errors.SUCCESS:
-            userfile = readUser(ctx.message.author.id)
+            user = userdb.load(ctx.message.author.id)
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed {style}-style {amount}.")
-            await ctx.send(f"User <@{ctx.message.author.id}> is now {fromSV(userfile[CHEI])} ({fromSVUSA(userfile[CHEI])}) tall.")
+            await ctx.send(f"User <@{ctx.message.author.id}> is now {fromSV(user.height)} ({fromSVUSA(user.height)}) tall.")
 
     # TODO: Switch to changeUser().
     @commands.command()
