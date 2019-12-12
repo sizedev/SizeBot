@@ -1,4 +1,4 @@
-import digiformatter as df
+# import digiformatter as df
 
 
 # error.message will be printed when you do print(error)
@@ -13,56 +13,53 @@ class DigiException(Exception):
 
 
 class UserNotFoundException(DigiException):
-    def __init__(self, userid):
-        message = f"User {userid} not found."
-        user_message = ("Sorry! You aren't registered with SizeBot.\n"
+    def __init__(self, userid, usernick):
+        message = f"User {userid} ({usernick}) not found."
+        user_message = (f"Sorry, {usernick}! You aren't registered with SizeBot.\n"
                         "To register, use the `&register` command.")
         super().__init__(message, user_message)
 
 
-SUCCESS = "success"
-USER_NOT_FOUND = "unf"
-USER_IS_BOT = "uib"
-USER_IS_WEBHOOK = "uiw"
-USER_IS_OWNER = "uio"
-CHANGE_VALUE_IS_ZERO = "cvi0"
-CHANGE_VALUE_IS_ONE = "cvi1"
-CHANGE_METHOD_INVALID = "cmi"
-CANNOT_SAVE_WITHOUT_ID = "cswi"
-MESSAGE_WAS_DM = "mwdm"
-NO_PERMISSIONS = "np"
+class ValueIsZero(DigiException):
+    def __init__(self, userid, usernick):
+        message = f"Value zero recieved when unexpected (Thanks, {userid}/{usernick}...)."
+        user_message = (f"Nice try, {usernick}.\n"
+                        "You can't change by a value of zero.")
+        super().__init__(message, user_message)
 
 
-async def throw(code, **kwargs):
-    delete = 0
-    if 'delete' in kwargs:
-        delete = kwargs['delete']
+class ValueIsOne(DigiException):
+    def __init__(self, userid, usernick):
+        message = f"Value one recieved when unexpected (Thanks, {userid}/{usernick}...)."
+        user_message = (f"Nice try, {usernick}.\n"
+                        "You can't change by a value of one.\n"
+                        "The reason for this is that it doesn't do anything, "
+                        "and this is a waste of memory and processing power for SizeBot, "
+                        "especially if the task is a repeating one.")
+        super().__init__(message, user_message)
 
-    if code == SUCCESS:
-        return
-    if code == USER_IS_BOT:
-        pass
-    if code == USER_IS_WEBHOOK:
-        pass
-    if code == USER_IS_OWNER:
-        pass
-    if code == USER_NOT_REGISTERED:
-        pass
-    if code == CHANGE_VALUE_IS_ZERO:
-        df.warn(f"User {kwargs['ctx'].message.author.id} tried to change by zero.")
-        await kwargs['ctx'].send("Nice try.\n"
-                                 "You can't change by zero. :stuck_out_tounge:", delete_after=delete)
-    if code == CHANGE_VALUE_IS_ONE:
-        df.warn(f"User {kwargs['ctx'].message.author.id} tried to change by one.")
-        await kwargs['ctx'].send("You can't change by one.\n"
-                                 "This is because changing by one doesn't change the value of your attribute, and especially with slowchange tasks, this clogs up SizeBot's memory.", delete_after=delete)
-    if code == CHANGE_METHOD_INVALID:
-        df.warn(f"User {kwargs['ctx'].message.author.id} tried to use an invalid changing method.")
-        await kwargs['ctx'].send("Your change method is invalid. Valid methods are add, subtract, multiply, or divide (and aliases for these modes.)", delete_after=delete)
-    if code == CANNOT_SAVE_WITHOUT_ID:
-        df.crit(f"Cannot save user without ID!")
-        raise ValueError("Cannot save user without ID!")
-    if code == MESSAGE_WAS_DM:
-        df.warn(f"Tried to update user {kwargs['user'].id} ({kwargs['user'].name})'s nick, but the message was a DM (and hence there is no nickname to update.)")
-    if code == NO_PERMISSIONS:
-        df.crit("Missing permssions!")
+
+class ChangeMethodInvalid(DigiException):
+    def __init__(self, userid, usernick, changemethod):
+        message = f"User {userid} tried to use {changemethod} change method."
+        user_message = f"Sorry, {usernick}! {changemethod} is not a valid change method."
+        super().__init__(message, user_message)
+
+
+class CannotSaveWithoutID(DigiException):
+    def __init__(self, userid, usernick):
+        message = f"Tried to save a user without an ID."
+        super().__init__(message)
+
+
+class MessageWasDM(DigiException):
+    def __init__(self, userid, usernick):
+        message = f"User {userid} tried to DM SizeBot."
+        user_message = f"Sorry, {usernick}! You can't DM SizeBot *(yet..!)*"
+        super().__init__(message, user_message)
+
+
+class NoPermissions(DigiException):
+    def __init__(self, userid, usernick):
+        message = f"SizeBot does not have the permssions to perform this action."
+        super().__init__(message)
