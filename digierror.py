@@ -21,6 +21,7 @@ SUCCESS = "success"
 CHANGE_VALUE_IS_ZERO = "cvi0"
 CHANGE_VALUE_IS_ONE = "cvi1"
 CHANGE_METHOD_INVALID = "cmi"
+CANNOT_SAVE_WITHOUT_ID = "cswi"
 
 
 async def throw(ctx, code, delete=0):
@@ -37,3 +38,6 @@ async def throw(ctx, code, delete=0):
     if code == CHANGE_METHOD_INVALID:
         df.warn(f"User {ctx.message.author.id} tried to use an invalid changing method.")
         await ctx.send("Your change method is invalid. Valid methods are add, subtract, multiply, or divide (and aliases for these modes.)", delete_after=delete)
+    if code == CANNOT_SAVE_WITHOUT_ID:
+        df.crit(f"Cannot save user without ID!")
+        raise ValueError("Cannot save user without ID!")
