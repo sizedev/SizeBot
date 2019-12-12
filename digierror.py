@@ -4,17 +4,20 @@ import digiformatter as df
 # error.message will be printed when you do print(error)
 # error.user_message will be displayed to the user
 class DigiException(Exception):
-    def __init__(self, message):
+    def __init__(self, message, user_message = None):
+        if user_message is None:
+            user_message = message
         self.delete_after = None
-        self.user_message = message
+        self.user_message = user_message
         super().__init__(message)
 
 
 class UserNotFoundException(Exception):
     def __init__(self, userid):
-        super().__init__(f"User {userid} not found.")
-        self.user_message = ("Sorry! You aren't registered with SizeBot.\n"
-                             "To register, use the `&register` command.")
+        message = f"User {userid} not found."
+        user_message = ("Sorry! You aren't registered with SizeBot.\n"
+                        "To register, use the `&register` command.")
+        super().__init__(message, user_message)
 
 
 SUCCESS = "success"
