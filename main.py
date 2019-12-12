@@ -1,9 +1,12 @@
+import sys
+import traceback
 from datetime import datetime
 
 from colored import fore, style, fg, bg
 import discord
 from discord.ext import commands
 
+import digierror as errors
 import digiformatter as df
 from globalsb import banner, version, check
 from globalsb import allowbrackets, removeBrackets
@@ -67,6 +70,19 @@ async def on_message(message):
     if not message.content.startswith(allowbrackets):
         message.content = removeBrackets(message.content)
     await bot.process_commands(message)
+
+
+@bot.event
+async def on_command_error(ctx, error):
+    # DigiException handling
+    if isinstance(error, errors.DigiException):
+        df.warn(error)
+        print(error.user_message)
+        return
+
+    # Default command handling
+    print(f"Ignoring exception in command {ctx.command}:", file=sys.stderr)
+    traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].

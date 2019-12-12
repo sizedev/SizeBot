@@ -781,7 +781,7 @@ def writeUser(user_id, content):
 def changeUser(userid, changestyle, amount, attribute="height"):
     user = readUser(userid)
     if user is None:
-        return errors.USER_NOT_FOUND
+        raise errors.UserNotFoundException(userid)
 
     changestyle = changestyle.lower()
     if changestyle in ["add", "+", "a", "plus"]:
