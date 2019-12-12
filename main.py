@@ -76,7 +76,8 @@ async def on_message(message):
 async def on_command_error(ctx, error):
     # DigiException handling
     if isinstance(error, errors.DigiException):
-        df.warn(error)
+        logCmd = getattr(df, error.level, df.warn)
+        logCmd(error)
         await ctx.send(error.user_message, delete_after=error.delete_after)
         return
 

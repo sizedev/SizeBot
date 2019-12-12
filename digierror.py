@@ -4,7 +4,7 @@
 # error.message will be printed when you do print(error)
 # error.user_message will be displayed to the user
 class DigiException(Exception):
-    def __init__(self, message, user_message = None):
+    def __init__(self, message, user_message = None, level = "warn"):
         if user_message is None:
             user_message = message
         self.delete_after = None
@@ -49,7 +49,7 @@ class ChangeMethodInvalid(DigiException):
 class CannotSaveWithoutID(DigiException):
     def __init__(self, userid, usernick):
         message = f"Tried to save a user without an ID."
-        super().__init__(message)
+        super().__init__(message, level = "crit")
 
 
 class MessageWasDM(DigiException):
@@ -62,4 +62,4 @@ class MessageWasDM(DigiException):
 class NoPermissions(DigiException):
     def __init__(self, userid, usernick):
         message = f"SizeBot does not have the permssions to perform this action."
-        super().__init__(message)
+        super().__init__(message, level = "crit")
