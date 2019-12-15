@@ -9,6 +9,9 @@ import discord
 
 import digiformatter as df
 import digierror as errors
+import digiSV
+import userdb
+from userdb import NICK, DISP, CHEI, BHEI, UNIT, SPEC
 
 
 # Configure decimal module.
@@ -174,7 +177,7 @@ async def nickUpdate(user):
     if not os.path.exists(f"{folder}/users/{user.id}.txt"):
         return errors.USER_NOT_REGISTERED
 
-    userarray = readUser(user.id)
+    userarray = userdb.load(user.id)
 
     # User's display setting is N. No sizetag.
     if userarray[DISP].strip() != "Y":
@@ -247,7 +250,7 @@ def eitherInfZeroOrInput(value):
 
 
 def changeUser(userid, changestyle, amount, attribute="height"):
-    user = readUser(userid)
+    user = userdb.load(userid)
     if user is None:
         raise errors.UserNotFoundException(userid)
 
@@ -292,7 +295,7 @@ def changeUser(userid, changestyle, amount, attribute="height"):
     else:
         return errors.CHANGE_METHOD_INVALID
 
-    writeUser(userid, user)
+    userdb.save(user)
     return errors.SUCCESS
 
 
