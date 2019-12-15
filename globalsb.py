@@ -9,7 +9,6 @@ import discord
 
 import digiformatter as df
 import digierror as errors
-import digiSV
 
 
 # Configure decimal module.
@@ -245,16 +244,6 @@ def eitherInfZeroOrInput(value):
         return Decimal(0)
     else:
         return Decimal(value)
-
-
-# Count users.
-members = 0
-path = folder + '/users'
-listing = os.listdir(path)
-for infile in listing:
-    if infile.endswith(".txt"):
-        members += 1
-df.load("Loaded {0} users.".format(members))
 
 
 def changeUser(userid, changestyle, amount, attribute="height"):

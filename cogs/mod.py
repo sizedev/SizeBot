@@ -2,7 +2,8 @@ from discord.ext import commands
 
 import digiformatter as df
 from globalsb import banner, version
-from globalsb import getID, members
+from globalsb import getID
+import userdb
 
 
 class ModCog(commands.Cog):
@@ -152,7 +153,7 @@ class ModCog(commands.Cog):
     "Um... I like it?" -- *Goddess Syn*
     "I am the only person who has accidentally turned my fetish into a tech support job." -- *DigiDuncan*
 
-    Version {2} | 19 Jul 2019""".format(ctx.message.author.id, members, version))
+    Version {2} | 19 Jul 2019""".format(ctx.message.author.id, userdb.count(), version))
 
     @commands.command()
     async def donate(self, ctx):
