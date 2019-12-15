@@ -20,7 +20,7 @@ class UserNotFoundException(DigiException):
         super().__init__(message, user_message)
 
 
-class ValueIsZero(DigiException):
+class ValueIsZeroException(DigiException):
     def __init__(self, userid, usernick):
         message = f"Value zero recieved when unexpected (Thanks, {userid}/{usernick}...)."
         user_message = (f"Nice try, {usernick}.\n"
@@ -28,7 +28,7 @@ class ValueIsZero(DigiException):
         super().__init__(message, user_message)
 
 
-class ValueIsOne(DigiException):
+class ValueIsOneException(DigiException):
     def __init__(self, userid, usernick):
         message = f"Value one recieved when unexpected (Thanks, {userid}/{usernick}...)."
         user_message = (f"Nice try, {usernick}.\n"
@@ -39,27 +39,27 @@ class ValueIsOne(DigiException):
         super().__init__(message, user_message)
 
 
-class ChangeMethodInvalid(DigiException):
+class ChangeMethodInvalidException(DigiException):
     def __init__(self, userid, usernick, changemethod):
         message = f"User {userid} tried to use {changemethod} change method."
         user_message = f"Sorry, {usernick}! {changemethod} is not a valid change method."
         super().__init__(message, user_message)
 
 
-class CannotSaveWithoutID(DigiException):
-    def __init__(self, userid, usernick):
+class CannotSaveWithoutIDException(DigiException):
+    def __init__(self):
         message = f"Tried to save a user without an ID."
         super().__init__(message, level = "crit")
 
 
-class MessageWasDM(DigiException):
+class MessageWasDMException(DigiException):
     def __init__(self, userid, usernick):
         message = f"User {userid} tried to DM SizeBot."
         user_message = f"Sorry, {usernick}! You can't DM SizeBot *(yet..!)*"
         super().__init__(message, user_message)
 
 
-class NoPermissions(DigiException):
-    def __init__(self, userid, usernick):
+class NoPermissionsException(DigiException):
+    def __init__(self):
         message = f"SizeBot does not have the permssions to perform this action."
         super().__init__(message, level = "crit")

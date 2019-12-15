@@ -11,7 +11,6 @@ import digiformatter as df
 import digierror as errors
 import digiSV
 import userdb
-from userdb import NICK, DISP, CHEI, BHEI, UNIT, SPEC
 
 
 # Configure decimal module.
@@ -164,36 +163,39 @@ def prettyTimeDelta(seconds):
 # Update users nicknames to include sizetags.
 async def nickUpdate(user):
     if user.discriminator == "0000":
-        return errors.USER_IS_BOT
+        return
     if not isinstance(user, discord.Member):
         if user.bot:
-            return errors.USER_IS_BOT
-        return errors.MESSAGE_WAS_DM
+            return
+        return
     # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
         # df.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
-        return errors.USER_IS_OWNER
+        return
+
+    userarray = userdb.load(user.id)
+
     # Don't update users who aren't registered.
     if not os.path.exists(f"{folder}/users/{user.id}.txt"):
-        return errors.USER_NOT_REGISTERED
+        raise errors.UserNotFoundException(user.id, userarray.nickname)
 
     userdata = userdb.load(user.id)
 
     # User's display setting is N. No sizetag.
-    if not userdata[DISP]:
+    if not userdata.display:
         return
 
-    height = userdata[CHEI]
+    height = userdata.height
     if height is None:
-        height = userdata[BHEI]
-    nick = userdata[NICK]
-    species = userdata[SPEC]
+        height = userdata.baseheight
+    nick = userdata.nickname
+    species = userdata.species
 
-    unit_system = userdata[UNIT]
-    if unit_system == "M":
-        sizetag = fromSV(height)
-    elif unit_system == "U":
-        sizetag = fromSVUSA(height)
+    unit_system = userdata.unitsystem
+    if unit_system == "m":
+        sizetag = digiSV.fromSV(height)
+    elif unit_system == "u":
+        sizetag = digiSV.fromSV(height, "u")
     else:
         sizetag = ""
 
@@ -220,7 +222,7 @@ async def nickUpdate(user):
     try:
         await user.edit(nick=newnick)
     except discord.Forbidden:
-        return (errors.MESSAGE_WAS_DM, user)
+        raise errors.NoPermissions()
 
 
 def isFeetAndInchesAndIfSoFixIt(value):
@@ -241,8 +243,8 @@ def isFeetAndInchesAndIfSoFixIt(value):
 
 
 def eitherInfZeroOrInput(value):
-    if value > infinity:
-        return infinity
+    if value > digiSV.infinity:
+        return digiSV.infinity
     elif value < 0:
         return Decimal(0)
     else:
@@ -268,33 +270,32 @@ def changeUser(userid, changestyle, amount, attribute="height"):
     amountSV = 0
     if unit:
         if attribute == "weight":
-            amountSV = toWV(getNum, getLet)
+            amountSV = digiSV.toWV(getNum, getLet)
         else:
-            amountSV = toSV(getNum, getLet)
+            amountSV = digiSV.toSV(getNum, getLet)
 
     if attribute == "height":
         if changestyle == "add":
-            newamount = userdata[CHEI] + amountSV
+            newamount = userdata.height + amountSV
         elif changestyle == "subtract":
-            newamount = userdata[CHEI] - amountSV
+            newamount = userdata.height - amountSV
         elif changestyle == "multiply":
             if value == 1:
-                return errors.CHANGE_VALUE_IS_ONE
+                raise errors.ValueIsZeroException(userid, userdata.nickname)
             if value == 0:
-                return errors.CHANGE_VALUE_IS_ZERO
-            newamount = userdata[CHEI] * value
+                raise errors.ValueIsZeroException(userid, userdata.nickname)
+            newamount = userdata.height * value
         elif changestyle == "divide":
             if value == 1:
-                return errors.CHANGE_VALUE_IS_ONE
+                raise errors.ValueIsOneException(userid, userdata.nickname)
             if value == 0:
-                return errors.CHANGE_VALUE_IS_ZERO
-            newamount = userdata[CHEI] / value
-        userdata[CHEI] = eitherInfZeroOrInput(newamount)
+                raise errors.ValueIsZeroException(userid, userdata.nickname)
+            newamount = userdata.height / value
+        userdata.height = eitherInfZeroOrInput(newamount)
     else:
-        return errors.CHANGE_METHOD_INVALID
+        raise errors.ChangeMethodInvalidException(userid, userdata.nickname)
 
     userdb.save(userdata)
-    return errors.SUCCESS
 
 
 def check(ctx):
