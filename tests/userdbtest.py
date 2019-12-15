@@ -1,23 +1,23 @@
 import userdb
 from userdb import SPEC, User
 
-user = User()
-user.id = "123"
+userdata = User()
+userdata.id = "123"
 print("Created new user")
-print(user)
+print(userdata)
 
-user.nickname = "Steve"
+userdata.nickname = "Steve"
 print("Set user's nickname using new attribute")
-print(user)
+print(userdata)
 
-user[SPEC] = "Catperson"
+userdata[SPEC] = "Catperson"
 print("Set user's nickname using deprecated array access")
-print(user)
+print(userdata)
 
 print("Saving user")
-userdb.save(user)
+userdb.save(userdata)
 
 print("Loading user by id into a new variable")
-user2 = userdb.load("123")
+userdata2 = userdb.load("123")
 
-print(user2)
+print(userdata2)

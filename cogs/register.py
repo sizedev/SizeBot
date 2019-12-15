@@ -5,7 +5,7 @@ from discord.ext import commands
 from discord.utils import get
 
 import digiformatter as df
-from globalsb import folder, readHexCode, regenHexCode
+from globalsb import readHexCode, regenHexCode
 from globalsb import isFeetAndInchesAndIfSoFixIt, getLet, getNum, toSV, toWV, lines
 from globalsb import sizebotuser_roleid
 from globalsb import nickUpdate

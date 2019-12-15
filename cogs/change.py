@@ -6,7 +6,7 @@ from discord.ext import commands
 import digiformatter as df
 import digierror as errors
 import userdb
-from globalsb import changeUser, readUser, folder
+from globalsb import changeUser
 from globalsb import fromSV, fromSVUSA
 from globalsb import CHEI
 from globalsb import tasks
@@ -22,9 +22,9 @@ class ChangeCog(commands.Cog):
         changereturn = changeUser(ctx.message.author.id, style, amount)
         errors.throw(ctx, changereturn)
         if changereturn == errors.SUCCESS:
-            user = userdb.load(ctx.message.author.id)
+            userdata = userdb.load(ctx.message.author.id)
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed {style}-style {amount}.")
-            await ctx.send(f"User <@{ctx.message.author.id}> is now {fromSV(user.height)} ({fromSVUSA(user.height)}) tall.")
+            await ctx.send(f"User <@{ctx.message.author.id}> is now {fromSV(userdata.height)} ({fromSVUSA(userdata.height)}) tall.")
 
     # TODO: Switch to changeUser().
     @commands.command()
@@ -65,29 +65,24 @@ class ChangeCog(commands.Cog):
         changereturn = changeUser(ctx.message.author.id, "multiply", randmult)
         errors.throw(ctx, changereturn)
         if changereturn == errors.SUCCESS:
-            userfile = readUser(ctx.message.author.id)
+            userdata = userdb.load(ctx.message.author.id)
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) ate a cake and multiplied {randmult}.")
             # TODO: Randomize the italics message here.
             await ctx.send(f"""<@{ctx.message.author.id}> ate a :cake:! *I mean it said "Eat me..."*
-They multiplied {randmult}x and are now {fromSV(userfile[CHEI])} tall. ({fromSVUSA(userfile[CHEI])})""")
+They multiplied {randmult}x and are now {fromSV(userdata[CHEI])} tall. ({fromSVUSA(userdata[CHEI])})""")
 
     @commands.command()
     async def drinkme(self, ctx):
         # Drink me!
-        if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-            # User file missing.
-            await ctx.send("""Sorry! You aren't registered with SizeBot.
-To register, use the `&register` command.""", delete_after=5)
-        else:
-            randmult = round(random.random(2, 20), 1)
-            changereturn = changeUser(ctx.message.author.id, "divide", randmult)
-            errors.throw(ctx, changereturn)
-            if changereturn == errors.SUCCESS:
-                userfile = readUser(ctx.message.author.id)
-                df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) drank a potion and shrunk {randmult}.")
-                # TODO: Randomize the italics message here.
-                await ctx.send(f"""<@{ctx.message.author.id}> ate a :milk:! *I mean it said "Drink me..."*
-    They shrunk {randmult}x and are now {fromSV(userfile[CHEI])} tall. ({fromSVUSA(userfile[CHEI])})""")
+        userdata = userdb.load(ctx.message.author.id)
+        randmult = round(random.random(2, 20), 1)
+        changereturn = changeUser(ctx.message.author.id, "divide", randmult)
+        errors.throw(ctx, changereturn)
+        if changereturn == errors.SUCCESS:
+            df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) drank a potion and shrunk {randmult}.")
+            # TODO: Randomize the italics message here.
+            await ctx.send(f"""<@{ctx.message.author.id}> ate a :milk:! *I mean it said "Drink me..."*
+    They shrunk {randmult}x and are now {fromSV(userdata[CHEI])} tall. ({fromSVUSA(userdata[CHEI])})""")
 
 
 # Necessary.

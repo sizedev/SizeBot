@@ -8,8 +8,9 @@ from discord.ext import commands
 import digilogger as logger
 import digiformatter as df
 # TODO: Fix this...
-from globalsb import CHEI, BHEI, BWEI, DENS
-from globalsb import readUser, folder, getNum, getLet, isFeetAndInchesAndIfSoFixIt, placeValue
+import userdb
+from userdb import CHEI, BHEI, BWEI, DENS
+from globalsb import getNum, getLet, isFeetAndInchesAndIfSoFixIt, placeValue
 from globalsb import defaultheight, defaultweight, defaultdensity, inch
 from globalsb import fromSV, fromSVUSA, fromWV, fromWVUSA, toShoeSize, toSV
 from globalsb import printtab
@@ -39,66 +40,34 @@ async def getUser(ctx, user_string, fakename=None):
 
     if member:
         usertag = f"<@{member.id}>"
-        user = loadUser(member.id)
-        if user is None:
-            await ctx.send(
-                "Sorry! User isn't registered with SizeBot.\n"
-                "To register, use the `&register` command.",
-                delete_after=5)
-            return None, None
+        userdata = userdb.load(member.id)
     else:
         usertag = fakename
         heightstring = isFeetAndInchesAndIfSoFixIt(user_string)
-        height = toSV(getNum(heightstring), getLet(heightstring))
-        if height is None:
+        heightsv = toSV(getNum(heightstring), getLet(heightstring))
+        if heightsv is None:
             await ctx.send(
                 "Sorry! I didn't recognize that user or height.",
                 delete_after=5)
             return None, None
 
-        user = heightToUser(height, fakename)
+        userdata = userdb.User()
+        userdata.nickname = fakename
+        userdata.height = heightsv
 
-    return usertag, user
-
-
-def loadUser(userid):
-    userid = str(userid)
-    if not os.path.exists(folder + "/users/" + userid + ".txt"):
-        # User file missing
-        return None
-    user = readUser(userid)
-    return user
-
-
-def heightToUser(height, fakename=None):
-    if fakename is None:
-        fakename = "Raw\n"
-    else:
-        fakename = fakename + "\n"
-
-    user = [
-        fakename,
-        "Y\n",
-        height,
-        defaultheight,
-        defaultweight,
-        defaultdensity,
-        "M\n",
-        "None\n"
-    ]
-    return user
+    return usertag, userdata
 
 
 # TODO: Clean this up.
 def userStats(usertag, userid):
-    userattrs = readUser(userid)
-    # usernick = userattrs[NICK]                  # TODO: Unused
-    # userdisplay = userattrs[DISP]               # TODO: Unused
-    userbaseheight = Decimal(userattrs[BHEI])
-    userbaseweight = Decimal(userattrs[BWEI])
-    usercurrentheight = Decimal(userattrs[CHEI])
-    userdensity = Decimal(userattrs[DENS])
-    # userspecies = userattrs[SPEC]               # TODO: Unused
+    userdata = userdb.load(userid)
+    # usernick = userdata[NICK]                  # TODO: Unused
+    # userdisplay = userdata[DISP]               # TODO: Unused
+    userbaseheight = Decimal(userdata[BHEI])
+    userbaseweight = Decimal(userdata[BWEI])
+    usercurrentheight = Decimal(userdata[CHEI])
+    userdensity = Decimal(userdata[DENS])
+    # userspecies = userdata[SPEC]               # TODO: Unused
 
     multiplier = usercurrentheight / userbaseheight
     # multiplier2 = multiplier ** 2               # TODO: Unused

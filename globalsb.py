@@ -177,19 +177,19 @@ async def nickUpdate(user):
     if not os.path.exists(f"{folder}/users/{user.id}.txt"):
         return errors.USER_NOT_REGISTERED
 
-    userarray = userdb.load(user.id)
+    userdata = userdb.load(user.id)
 
     # User's display setting is N. No sizetag.
-    if userarray[DISP].strip() != "Y":
+    if not userdata[DISP]:
         return
 
-    height = userarray[CHEI]
+    height = userdata[CHEI]
     if height is None:
-        height = userarray[BHEI]
-    nick = userarray[NICK].strip()
-    species = userarray[SPEC].strip()
+        height = userdata[BHEI]
+    nick = userdata[NICK]
+    species = userdata[SPEC]
 
-    unit_system = userarray[UNIT].strip().upper()
+    unit_system = userdata[UNIT]
     if unit_system == "M":
         sizetag = fromSV(height)
     elif unit_system == "U":
@@ -250,9 +250,7 @@ def eitherInfZeroOrInput(value):
 
 
 def changeUser(userid, changestyle, amount, attribute="height"):
-    user = userdb.load(userid)
-    if user is None:
-        raise errors.UserNotFoundException(userid)
+    userdata = userdb.load(userid)
 
     changestyle = changestyle.lower()
     if changestyle in ["add", "+", "a", "plus"]:
@@ -276,26 +274,26 @@ def changeUser(userid, changestyle, amount, attribute="height"):
 
     if attribute == "height":
         if changestyle == "add":
-            newamount = user[CHEI] + amountSV
+            newamount = userdata[CHEI] + amountSV
         elif changestyle == "subtract":
-            newamount = user[CHEI] - amountSV
+            newamount = userdata[CHEI] - amountSV
         elif changestyle == "multiply":
             if value == 1:
                 return errors.CHANGE_VALUE_IS_ONE
             if value == 0:
                 return errors.CHANGE_VALUE_IS_ZERO
-            newamount = user[CHEI] * value
+            newamount = userdata[CHEI] * value
         elif changestyle == "divide":
             if value == 1:
                 return errors.CHANGE_VALUE_IS_ONE
             if value == 0:
                 return errors.CHANGE_VALUE_IS_ZERO
-            newamount = user[CHEI] / value
-        user[CHEI] = eitherInfZeroOrInput(newamount)
+            newamount = userdata[CHEI] / value
+        userdata[CHEI] = eitherInfZeroOrInput(newamount)
     else:
         return errors.CHANGE_METHOD_INVALID
 
-    userdb.save(user)
+    userdb.save(userdata)
     return errors.SUCCESS
 
 

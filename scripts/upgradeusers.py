@@ -9,26 +9,26 @@ def loadLegacy(id):
         lines = f.read().splitlines()
     lines = [line.strip() for line in lines]
 
-    user = User()
-    user.id = id
-    user.nickname = lines[NICK]
-    user.display = lines[DISP]
+    userdata = User()
+    userdata.id = id
+    userdata.nickname = lines[NICK]
+    userdata.display = lines[DISP]
     if lines[CHEI] != "None":
-        user.height = lines[CHEI]
-        user.height /= 10**6
+        userdata.height = lines[CHEI]
+        userdata.height /= 10**6
     if lines[BHEI] != "None":
-        user.baseheight = lines[BHEI]
-        user.baseheight /= 10**6
+        userdata.baseheight = lines[BHEI]
+        userdata.baseheight /= 10**6
     if lines[BWEI] != "None":
-        user.baseweight = lines[BWEI]
-        user.baseweight /= 10**3
+        userdata.baseweight = lines[BWEI]
+        userdata.baseweight /= 10**3
     if lines[DENS] != "None":
-        user.density = lines[DENS]
-    user.unitsystem = lines[UNIT]
+        userdata.density = lines[DENS]
+    userdata.unitsystem = lines[UNIT]
     if lines[SPEC] != "None":
-        user.species = lines[SPEC]
+        userdata.species = lines[SPEC]
 
-    return user
+    return userdata
 
 
 def upgradeusers():
@@ -38,9 +38,9 @@ def upgradeusers():
     for filepath in filepaths:
         id = filepath.stem
         print(f"Loading legacy user file for {id}")
-        user = loadLegacy(id)
+        userdata = loadLegacy(id)
         print(f"Saving new user file for {id}")
-        userdb.save(user)
+        userdb.save(userdata)
 
 
 if __name__ == "__main__":

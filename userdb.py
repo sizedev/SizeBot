@@ -137,8 +137,11 @@ def save(user):
 
 
 def load(id):
-    with open(userdbpath / f"{id}.json", "r") as f:
-        jsondata = json.load(f)
+    try:
+        with open(userdbpath / f"{id}.json", "r") as f:
+            jsondata = json.load(f)
+    except FileNotFoundError:
+        raise errors.UserNotFoundException(id)
     return User.fromJSON(jsondata)
 
 
