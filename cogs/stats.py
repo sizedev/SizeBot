@@ -1,4 +1,3 @@
-import os
 from decimal import Decimal
 import decimal
 import math
@@ -11,7 +10,7 @@ import digiformatter as df
 import userdb
 from userdb import CHEI, BHEI, BWEI, DENS
 from globalsb import getNum, getLet, isFeetAndInchesAndIfSoFixIt, placeValue
-from globalsb import defaultheight, defaultweight, defaultdensity, inch
+from globalsb import defaultheight, defaultweight, inch
 from globalsb import fromSV, fromSVUSA, fromWV, fromWVUSA, toShoeSize, toSV
 from globalsb import printtab
 
