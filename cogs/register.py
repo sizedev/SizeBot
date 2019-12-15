@@ -1,4 +1,3 @@
-import os
 from decimal import Decimal
 
 from discord.ext import commands
@@ -6,9 +5,10 @@ from discord.utils import get
 
 import digiformatter as df
 from globalsb import readHexCode, regenHexCode
-from globalsb import isFeetAndInchesAndIfSoFixIt, getLet, getNum, toSV, toWV, lines
+from globalsb import isFeetAndInchesAndIfSoFixIt, getLet, getNum, toSV, toWV
 from globalsb import sizebotuser_roleid
 from globalsb import nickUpdate
+import userdb
 
 
 async def addUserRole(member):
@@ -56,25 +56,25 @@ class RegisterCog(commands.Cog):
         df.warn("New user attempt! Nickname: {0}, Display: {1}".format(nick, display))
         print(readable)
 
-        # Already registered.
-        if os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
+        # Already registered
+        if userdb.exists(ctx.message.author.id):
             await ctx.send("""Sorry! You already registered with SizeBot.
     To unregister, use the `&unregister` command.""", delete_after=10)
             df.warn("User already registered on user registration: {1}.".format(ctx.message.author))
             return
 
-        # Invalid size value.
+        # Invalid size value
         if (currentheight <= 0 or baseheight <= 0 or baseweight <= 0):
             df.warn("Invalid size value.")
             await ctx.send("All values must be an integer greater than zero.", delete_after=5)
             return
 
-        # Invalid display value.
+        # Invalid display value
         if display.lower() not in ["y", "n"]:
             df.warn("display was {0}, must be Y or N.".format(display))
             return
 
-        # Invalid unit value.
+        # Invalid unit value
         if units.lower() not in ["m", "u"]:
             df.warn("units was {0}, must be M or U.".format(units))
             await ctx.send("Units must be `M` or `U`.", delete_after=5)
@@ -84,30 +84,21 @@ class RegisterCog(commands.Cog):
         if species is None:
             species = "None"
 
-        # Make an array of string items, one per line.
-        output = lines([
-            f"{nick}",
-            f"{display}",
-            f"{toSV(currentheight, chu)}",
-            f"{toSV(baseheight, bhu)}",
-            f"{toWV(baseweight, bwu)}",
-            "1.0",
-            f"{units}",
-            f"{species}"
-        ])
+        userdata = userdb.User()
+        userdata.nickname = nick
+        userdata.display = display
+        userdata.height = toSV(currentheight, chu)
+        userdata.baseheight = toSV(baseheight, bhu)
+        userdata.baseweight = toWV(baseweight, bwu)
+        userdata.units = units
+        userdata.species = species
 
-        with open(folder + '/users/' + str(ctx.message.author.id) + '.txt', "w") as userfile:
-            try:
-                userfile.write(output)
-            except UnicodeDecodeError():
-                df.warn("Unicode in nick or species.")
-                await ctx.send("<@{0}> Unicode error! Please don't put Unicode characters in your nick or species.".format(ctx.message.author.id))
-                return
+        userdb.save(userdata)
 
         await addUserRole(ctx.message.author)
 
         df.warn("Made a new user: {0}!".format(ctx.message.author))
-        print(output)
+        print(userdata)
         await ctx.send("Registered <@{0}>. {1}.".format(ctx.message.author.id, readable), delete_after=5)
 
     @register.error
@@ -119,8 +110,8 @@ class RegisterCog(commands.Cog):
 
     @commands.command()
     async def unregister(self, ctx, code=None):
-        if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-            # User file missing.
+        # User file missing
+        if not userdb.exists(ctx.message.author.id):
             df.warn("User {0} not registered with SizeBot, but tried to unregister anyway.".format(ctx.message.author.id))
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
@@ -137,11 +128,11 @@ class RegisterCog(commands.Cog):
             await ctx.send("Incorrect code. You said: `{0}`. The correct code was: `{1}`. Try again.".format(code, readHexCode()), delete_after=10)
             return
 
+        userdb.delete(ctx.message.author.id)
+        await removeUserRole(ctx.message.author)
+
         df.warn("User {0} successfully unregistered.".format(ctx.message.author.id))
         await ctx.send("Correct code! Unregistered {0}".format(ctx.message.author.name), delete_after=5)
-        os.remove(folder + "/users/" + str(ctx.message.author.id) + ".txt")
-
-        await removeUserRole(ctx.message.author)
 
     @commands.Cog.listener()
     async def on_message(self, m):

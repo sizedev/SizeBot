@@ -126,23 +126,40 @@ class User:
         return userdata
 
 
+def getuserpath(userid):
+    return userdbpath / f"{id}.json"
+
+
 def save(userdata):
-    id = userdata.id
-    if id is None:
+    userid = userdata.id
+    if userid is None:
         errors.throw(errors.CANNOT_SAVE_WITHOUT_ID)
     userdbpath.mkdir(exist_ok = True)
     jsondata = userdata.toJSON()
-    with open(userdbpath / f"{id}.json", "w") as f:
+    with open(getuserpath(userid), "w") as f:
         json.dump(jsondata, f, indent = 4)
 
 
-def load(id):
+def load(userid):
     try:
-        with open(userdbpath / f"{id}.json", "r") as f:
+        with open(getuserpath(userid), "r") as f:
             jsondata = json.load(f)
     except FileNotFoundError:
-        raise errors.UserNotFoundException(id)
+        raise errors.UserNotFoundException(userid)
     return User.fromJSON(jsondata)
+
+
+def delete(userid):
+    getuserpath(userid).unlink(missing_ok=True)
+
+
+def exists(userid):
+    exists = True
+    try:
+        load(userid)
+    except errors.UserNotFoundException:
+        exists = False
+    return exists
 
 
 def count():
