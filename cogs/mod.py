@@ -1,8 +1,7 @@
 from discord.ext import commands
 
 import digiformatter as df
-from globalsb import banner, version
-from globalsb import getID
+from globalsb import banner, version, getID
 import userdb
 
 

@@ -8,10 +8,9 @@ from discord.ext import commands
 
 import digierror as errors
 import digiformatter as df
-from globalsb import banner, version, check
-from globalsb import allowbrackets, removeBrackets
+from globalsb import banner, version, check, allowbrackets, removeBrackets
 
-launch = datetime.now()
+launchtime = datetime.now()
 
 # Get authtoken from file.
 with open("../_authtoken.txt") as f:
@@ -46,8 +45,8 @@ bot.remove_command("help")
 bot.add_check(check)
 
 
+# Output header
 @bot.event
-# Output header.
 async def on_ready():
     print(fore.CYAN + 'Logged in as')
     print(bot.user.name)
@@ -57,8 +56,8 @@ async def on_ready():
     df.warn("Warn test.")
     df.crit("Crit test.")
     df.test("Test test.")
-    finishlaunch = datetime.now()
-    elapsed = finishlaunch - launch
+    launchfinishtime = datetime.now()
+    elapsed = launchfinishtime - launchtime
     df.test(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.")
     print()
 

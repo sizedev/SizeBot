@@ -1,6 +1,6 @@
 from decimal import Decimal
-from globalsb import removeDecimals, placeValue, roundNearestHalf, getNum
 import math
+import re
 
 # Unit constants.
 # Height [meters]
@@ -21,8 +21,61 @@ milkyway = Decimal(95000000000000000000000000000000000000000000)
 uniw = Decimal(3400000000000000000000000000000000000000000000000000000000)
 
 
+def roundNearestHalf(number):
+    return round(number * 2) / 2
+
+
+def placeValue(number):
+    return "{:,}".format(number)
+
+
+# Remove decimals
+def removeDecimals(output):
+    if re.search(r"(\.\d*?)(0+)", output):
+        output = re.sub(r"(\.\d*?)(0+)", r"\1", output)
+    if re.search(r"(.*)(\.)(\D+)", output):
+        output = re.sub(r"(.*)(\.)(\D+)", r"\1\3", output)
+    return output
+
+
+# Get number from string
+def getNum(s):
+    match = re.search(r"", s)
+    if match is None:
+        return None
+    return Decimal(match.group(0))
+
+
+# Get letters from string
+def getSVPair(s):
+    match = re.search(r"(\d+\.?\d*) *([a-zA-Z\'\"]+)", s)
+    value, unit = None, None
+    if match is not None:
+        value, unit = match.group(1), match.group(2)
+    return value, unit
+
+
+def isFeetAndInchesAndIfSoFixIt(value):
+    regex = r"^(?P<feet>\d+\.?\d*(ft|foot|feet|\'))?(?P<inch>\d+\.?\d*(in|\"))?"
+    m = re.match(regex, value, flags=re.I)
+    if not m:
+        return value
+    feetval = m.group("feet")
+    inchval = m.group("inch")
+    if feetval is None and inchval in None:
+        return value
+    if feetval is None:
+        feetval = 0
+    if inchval is None:
+        inchval = 0
+    totalinches = (feetval * 12) + inchval
+    return f"{totalinches}in"
+
+
 # Convert any supported height to 'size value'
-def toSV(value, unit):
+def toSV(s):
+    s = isFeetAndInchesAndIfSoFixIt(s)
+    value, unit = getSVPair(s)
     if value is None or unit is None:
         return None
     unit = unit.lower()
@@ -215,7 +268,10 @@ def fromSV(value, system="m", accuracy=2):
 
 
 # Convert any supported weight to 'weight value', or milligrams.
-def toWV(value, unit):
+def toWV(s):
+    value, unit = getSVPair(s)
+    if value is None or unit is None:
+        return None
     unit = unit.lower()
     if unit in ["yoctograms", "yoctograms", "yg"]:
         output = Decimal(value) / Decimal(10**24)

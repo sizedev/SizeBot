@@ -4,11 +4,9 @@ from discord.ext import commands
 
 import digiformatter as df
 from globalsb import nickUpdate
-from globalsb import infinity
-from globalsb import toSV, fromSV, fromSVUSA, toWV, fromWV, fromWVUSA
-from globalsb import isFeetAndInchesAndIfSoFixIt, getNum, getLet
 import userdb
 from userdb import NICK, DISP, SPEC, CHEI, BHEI, DENS, UNIT, BWEI
+import digiSV
 
 
 class SetCog(commands.Cog):
@@ -75,12 +73,11 @@ class SetCog(commands.Cog):
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
             return
 
-        newheight = isFeetAndInchesAndIfSoFixIt(newheight)
-        newheightsv = toSV(getNum(newheight), getLet(newheight))
-        if newheightsv > infinity:
+        newheightsv = digiSV.toSV(newheight)
+        if newheightsv > digiSV.infinity:
             df.warn("Invalid size value.")
             await ctx.send("Too big. x_x")
-            newheightsv = infinity
+            newheightsv = digiSV.infinity
 
         userdata = userdb.load(ctx.message.author.id)
 
@@ -88,7 +85,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) is now {str(newheight)} tall.")
-        await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userdata[CHEI]), fromSVUSA(userdata[CHEI])))
+        await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, digiSV.fromSV(userdata[CHEI], 'm'), digiSV.fromSV(userdata[CHEI], 'u')))
 
         if userdata[DISP]:
             await nickUpdate(ctx.message.author)
@@ -155,12 +152,12 @@ class SetCog(commands.Cog):
     async def setsystem(self, ctx, newsys=None):
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newsys is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [U/M]`.")
+            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/m]`.")
             return
 
-        newsys = newsys.upper()
-        if newsys not in ["M", "U"]:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [U/M]`.")
+        newsys = newsys.lower()
+        if newsys not in ["m", "u"]:
+            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/m]`.")
             return
 
         userdata = userdb.load(ctx.message.author.id)
@@ -181,15 +178,13 @@ class SetCog(commands.Cog):
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
             return
 
-        newheightmin = isFeetAndInchesAndIfSoFixIt(newheightmin)
-        newheightmax = isFeetAndInchesAndIfSoFixIt(newheightmax)
-        newheightminval = toSV(getNum(newheightmin), getLet(newheightmin))
-        newheightmaxval = toSV(getNum(newheightmax), getLet(newheightmax))
-        newheight = random.randint(newheightminval, newheightmaxval)
-        if newheight > infinity:
+        newheightminSV = digiSV.toSV(newheightmin)
+        newheightmaxSV = digiSV.toSV(newheightmax)
+        newheight = random.randint(newheightminSV, newheightmaxSV)
+        if newheight > digiSV.infinity:
             df.warn("Invalid size value.")
             await ctx.send("Too big. x_x")
-            newheight = infinity
+            newheight = digiSV.infinity
 
         userdata = userdb.load(ctx.message.author.id)
 
@@ -197,7 +192,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) set a random height, and are now {str(newheight)}SV tall.")
-        await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userdata[CHEI]), fromSVUSA(userdata[CHEI])))
+        await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, digiSV.fromSV(userdata[CHEI], 'm'), digiSV.fromSV(userdata[CHEI], 'u')))
 
         if userdata[DISP]:
             await nickUpdate(ctx.message.author)
@@ -206,7 +201,7 @@ class SetCog(commands.Cog):
     async def setinf(self, ctx):
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[CHEI] = infinity
+        userdata[CHEI] = digiSV.infinity
         userdb.save(userdata)
 
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) is now infinitely tall.")
@@ -237,15 +232,13 @@ class SetCog(commands.Cog):
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
             return
 
-        newbaseheight = isFeetAndInchesAndIfSoFixIt(newbaseheight)
-
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[BHEI] = toSV(getNum(newbaseheight), getLet(newbaseheight))
+        userdata[BHEI] = digiSV.toSV(newbaseheight)
         userdb.save(userdata)
 
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed their base height to {str(newbaseheight)}.")
-        await ctx.send("""<@{0}>'s base height is now {1}. ({2})""".format(ctx.message.author.id, fromSV(userdata[BHEI]), fromSVUSA(userdata[BHEI])))
+        await ctx.send("""<@{0}>'s base height is now {1}. ({2})""".format(ctx.message.author.id, digiSV.fromSV(userdata[BHEI], 'm'), digiSV.fromSV(userdata[BHEI], 'u')))
 
         if userdata[DISP]:
             await nickUpdate(ctx.message.author)
@@ -260,11 +253,11 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[BWEI] = toWV(getNum(newbaseweight), getLet(newbaseweight))
+        userdata[BWEI] = digiSV.toWV(newbaseweight)
         userdb.save(userdata)
 
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed their base weight to {str(newbaseweight)}.")
-        await ctx.send("""<@{0}>'s base weight is now {1}. ({2})""".format(ctx.message.author.id, fromWV(userdata[BWEI]), fromWVUSA(userdata[BWEI])))
+        await ctx.send("""<@{0}>'s base weight is now {1}. ({2})""".format(ctx.message.author.id, digiSV.fromWV(userdata[BWEI], 'm'), digiSV.fromWV(userdata[BWEI], 'u')))
 
         if userdata[DISP]:
             await nickUpdate(ctx.message.author)

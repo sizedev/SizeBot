@@ -1,2 +1,0 @@
-py statstest.py
-pause

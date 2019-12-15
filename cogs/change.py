@@ -1,15 +1,13 @@
 import random
-import os
 
 from discord.ext import commands
 
 import digiformatter as df
 import digierror as errors
 import userdb
-from globalsb import changeUser
-from globalsb import fromSV, fromSVUSA
-from globalsb import CHEI
-from globalsb import tasks
+from userdb import CHEI
+from globalsb import changeUser, tasks
+import digiSV
 
 
 class ChangeCog(commands.Cog):
@@ -24,7 +22,7 @@ class ChangeCog(commands.Cog):
         if changereturn == errors.SUCCESS:
             userdata = userdb.load(ctx.message.author.id)
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed {style}-style {amount}.")
-            await ctx.send(f"User <@{ctx.message.author.id}> is now {fromSV(userdata.height)} ({fromSVUSA(userdata.height)}) tall.")
+            await ctx.send(f"User <@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} ({digiSV.fromSV(userdata.height, 'u')}) tall.")
 
     # TODO: Switch to changeUser().
     @commands.command()
@@ -69,7 +67,7 @@ class ChangeCog(commands.Cog):
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) ate a cake and multiplied {randmult}.")
             # TODO: Randomize the italics message here.
             await ctx.send(f"""<@{ctx.message.author.id}> ate a :cake:! *I mean it said "Eat me..."*
-They multiplied {randmult}x and are now {fromSV(userdata[CHEI])} tall. ({fromSVUSA(userdata[CHEI])})""")
+They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})""")
 
     @commands.command()
     async def drinkme(self, ctx):
@@ -82,7 +80,7 @@ They multiplied {randmult}x and are now {fromSV(userdata[CHEI])} tall. ({fromSVU
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) drank a potion and shrunk {randmult}.")
             # TODO: Randomize the italics message here.
             await ctx.send(f"""<@{ctx.message.author.id}> ate a :milk:! *I mean it said "Drink me..."*
-    They shrunk {randmult}x and are now {fromSV(userdata[CHEI])} tall. ({fromSVUSA(userdata[CHEI])})""")
+    They shrunk {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})""")
 
 
 # Necessary.

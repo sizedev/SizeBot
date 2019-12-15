@@ -9,10 +9,8 @@ import digiformatter as df
 # TODO: Fix this...
 import userdb
 from userdb import CHEI, BHEI, BWEI, DENS
-from globalsb import getNum, getLet, isFeetAndInchesAndIfSoFixIt, placeValue
-from globalsb import defaultheight, defaultweight, inch
-from globalsb import fromSV, fromSVUSA, fromWV, fromWVUSA, toShoeSize, toSV
 from globalsb import printtab
+import digiSV
 
 # TODO: Move to units module.
 # Conversion constants.
@@ -42,8 +40,7 @@ async def getUser(ctx, user_string, fakename=None):
         userdata = userdb.load(member.id)
     else:
         usertag = fakename
-        heightstring = isFeetAndInchesAndIfSoFixIt(user_string)
-        heightsv = toSV(getNum(heightstring), getLet(heightstring))
+        heightsv = digiSV.toSV(user_string)
         if heightsv is None:
             await ctx.send(
                 "Sorry! I didn't recognize that user or height.",
@@ -72,55 +69,55 @@ def userStats(usertag, userid):
     # multiplier2 = multiplier ** 2               # TODO: Unused
     multiplier3 = multiplier ** 3
 
-    baseheight_m = fromSV(userbaseheight, 3)
-    baseheight_u = fromSVUSA(userbaseheight, 3)
-    baseweight_m = fromWV(userbaseweight, 3)
-    baseweight_u = fromWVUSA(userbaseweight, 3)
-    currentheight_m = fromSV(usercurrentheight, 3)
-    currentheight_u = fromSVUSA(usercurrentheight, 3)
+    baseheight_m = digiSV.fromSV(userbaseheight, 'm', 3)
+    baseheight_u = digiSV.fromSV(userbaseheight, 'u', 3)
+    baseweight_m = digiSV.fromWV(userbaseweight, 'm', 3)
+    baseweight_u = digiSV.fromWV(userbaseweight, 'u', 3)
+    currentheight_m = digiSV.fromSV(usercurrentheight, 'm', 3)
+    currentheight_u = digiSV.fromSV(usercurrentheight, 'u', 3)
 
     currentweight = userbaseweight * multiplier3 * userdensity
-    currentweight_m = fromWV(currentweight, 3)
-    currentweight_u = fromWVUSA(currentweight, 3)
+    currentweight_m = digiSV.fromWV(currentweight, 'm', 3)
+    currentweight_u = digiSV.fromWV(currentweight, 'u', 3)
 
     printdensity = round(userdensity, 3)
 
-    defaultheightmult = usercurrentheight / defaultheight
-    defaultweightmult = currentweight / defaultweight ** 3
+    defaultheightmult = usercurrentheight / userdb.defaultheight
+    defaultweightmult = currentweight / userdb.defaultweight ** 3
 
-    footlength_m = fromSV(usercurrentheight * footfactor, 3)
-    footlength_u = fromSVUSA(usercurrentheight * footfactor, 3)
-    # footlengthinches = usercurrentheight * footfactor / inch # TODO: Unused
-    # shoesize = toShoeSize(footlengthinches) # TODO: Unused
-    footwidth_m = fromSV(usercurrentheight * footwidthfactor, 3)
-    footwidth_u = fromSVUSA(usercurrentheight * footwidthfactor, 3)
-    toeheight_m = fromSV(usercurrentheight * toeheightfactor, 3)
-    toeheight_u = fromSVUSA(usercurrentheight * toeheightfactor, 3)
+    footlength_m = digiSV.fromSV(usercurrentheight * footfactor, 'm', 3)
+    footlength_u = digiSV.fromSV(usercurrentheight * footfactor, 'u', 3)
+    # footlengthinches = usercurrentheight * footfactor / digiSV.inch # TODO: Unused
+    # shoesize = digiSV.toShoeSize(footlengthinches) # TODO: Unused
+    footwidth_m = digiSV.fromSV(usercurrentheight * footwidthfactor, 'm', 3)
+    footwidth_u = digiSV.fromSV(usercurrentheight * footwidthfactor, 'u', 3)
+    toeheight_m = digiSV.fromSV(usercurrentheight * toeheightfactor, 'm', 3)
+    toeheight_u = digiSV.fromSV(usercurrentheight * toeheightfactor, 'u', 3)
 
-    pointer_m = fromSV(usercurrentheight * pointerfactor, 3)
-    pointer_u = fromSVUSA(usercurrentheight * pointerfactor, 3)
-    thumb_m = fromSV(usercurrentheight * thumbfactor, 3)
-    thumb_u = fromSVUSA(usercurrentheight * thumbfactor, 3)
-    fingerprint_m = fromSV(usercurrentheight * fingerprintfactor, 3)
-    fingerprint_u = fromSVUSA(usercurrentheight * fingerprintfactor, 3)
+    pointer_m = digiSV.fromSV(usercurrentheight * pointerfactor, 'm', 3)
+    pointer_u = digiSV.fromSV(usercurrentheight * pointerfactor, 'u', 3)
+    thumb_m = digiSV.fromSV(usercurrentheight * thumbfactor, 'm', 3)
+    thumb_u = digiSV.fromSV(usercurrentheight * thumbfactor, 'u', 3)
+    fingerprint_m = digiSV.fromSV(usercurrentheight * fingerprintfactor, 'm', 3)
+    fingerprint_u = digiSV.fromSV(usercurrentheight * fingerprintfactor, 'u', 3)
 
-    hair_m = fromSV(usercurrentheight * hairfactor, 3)
-    hair_u = fromSVUSA(usercurrentheight * hairfactor, 3)
+    hair_m = digiSV.fromSV(usercurrentheight * hairfactor, 'm', 3)
+    hair_u = digiSV.fromSV(usercurrentheight * hairfactor, 'u', 3)
 
-    normalheightcomp_m = fromSV(defaultheight / defaultheightmult, 3)
-    normalheightcomp_u = fromSVUSA(defaultheight / defaultheightmult, 3)
-    normalweightcomp_m = fromWV(defaultweight / defaultweightmult, 3)
-    # normalweightcomp_u = fromWVUSA(defaultweight / defaultweightmult, 3)  # TODO: Unused
+    normalheightcomp_m = digiSV.fromSV(userdb.defaultheight / defaultheightmult, 'm', 3)
+    normalheightcomp_u = digiSV.fromSV(userdb.defaultheight / defaultheightmult, 'u', 3)
+    normalweightcomp_m = digiSV.fromWV(userdb.defaultweight / defaultweightmult, 'm', 3)
+    # normalweightcomp_u = fromWVUSA(userdb.defaultweight / defaultweightmult, 3)  # TODO: Unused
 
     tallerheight = 0
     smallerheight = 0
     lookdirection = ""
-    if usercurrentheight >= defaultheight:
+    if usercurrentheight >= userdb.defaultheight:
         tallerheight = usercurrentheight
-        smallerheight = defaultheight
+        smallerheight = userdb.defaultheight
         lookdirection = "down"
     else:
-        tallerheight = defaultheight
+        tallerheight = userdb.defaultheight
         smallerheight = usercurrentheight
         lookdirection = "up"
 
@@ -235,52 +232,52 @@ class StatsCog(commands.Cog):
         s2bh = sbh / diffmult
         b2sw = bbw * (diffmult ** 3)
         s2bw = sbw / (diffmult ** 3)
-        bigtosmallheight = fromSV(b2sh, 3)
-        smalltobigheight = fromSV(s2bh, 3)
-        bigtosmallheightUSA = fromSVUSA(b2sh)
-        smalltobigheightUSA = fromSVUSA(s2bh)
-        bigtosmallfoot = fromSV(b2sh * footfactor, 3)
-        smalltobigfoot = fromSV(s2bh * footfactor, 3)
-        bigtosmallfootUSA = fromSVUSA(b2sh * footfactor)
-        smalltobigfootUSA = fromSVUSA(s2bh * footfactor)
-        bigtosmallshoe = toShoeSize(b2sh * footfactor / inch)
-        smalltobigshoe = toShoeSize(s2bh * footfactor / inch)
-        bigtosmallweight = fromWV(b2sw)
-        smalltobigweight = fromWV(s2bw)
-        bigtosmallweightUSA = fromWVUSA(b2sw)
-        smalltobigweightUSA = fromWVUSA(s2bw)
-        bigtosmallfootwidth = fromSV(b2sh * footwidthfactor, 3)
-        smalltobigfootwidth = fromSV(s2bh * footwidthfactor, 3)
-        bigtosmallfootwidthUSA = fromSVUSA(b2sh * footwidthfactor)
-        smalltobigfootwidthUSA = fromSVUSA(s2bh * footwidthfactor)
-        bigtosmallfootthick = fromSV(b2sh * footthickfactor, 3)
-        smalltobigfootthick = fromSV(s2bh * footthickfactor, 3)
-        bigtosmallfootthickUSA = fromSVUSA(b2sh * footthickfactor)
-        smalltobigfootthickUSA = fromSVUSA(s2bh * footthickfactor)
-        bigtosmallthumb = fromSV(b2sh * thumbfactor, 3)
-        smalltobigthumb = fromSV(s2bh * thumbfactor, 3)
-        bigtosmallthumbUSA = fromSVUSA(b2sh * thumbfactor)
-        smalltobigthumbUSA = fromSVUSA(s2bh * thumbfactor)
-        bigtosmallfingerprint = fromSV(b2sh * fingerprintfactor, 3)
-        smalltobigfingerprint = fromSV(s2bh * fingerprintfactor, 3)
-        bigtosmallfingerprintUSA = fromSVUSA(b2sh * fingerprintfactor)
-        smalltobigfingerprintUSA = fromSVUSA(s2bh * fingerprintfactor)
-        bigtosmallhairwidth = fromSV(b2sh * hairwidthfactor, 3)
-        smalltobighairwidth = fromSV(s2bh * hairwidthfactor, 3)
-        bigtosmallhairwidthUSA = fromSVUSA(b2sh * hairwidthfactor)
-        smalltobighairwidthUSA = fromSVUSA(s2bh * hairwidthfactor)
-        bigtosmallpointer = fromSV(b2sh * pointerfactor, 3)
-        smalltobigpointer = fromSV(s2bh * pointerfactor, 3)
-        bigtosmallpointerUSA = fromSVUSA(b2sh * pointerfactor)
-        smalltobigpointerUSA = fromSVUSA(s2bh * pointerfactor)
-        timestaller = placeValue(round((bch / sch), 3))
+        bigtosmallheight = digiSV.fromSV(b2sh, 'm', 3)
+        smalltobigheight = digiSV.fromSV(s2bh, 'm', 3)
+        bigtosmallheightUSA = digiSV.fromSV(b2sh, 'u')
+        smalltobigheightUSA = digiSV.fromSV(s2bh), 'u'
+        bigtosmallfoot = digiSV.fromSV(b2sh * footfactor, 'm', 3)
+        smalltobigfoot = digiSV.fromSV(s2bh * footfactor, 'm', 3)
+        bigtosmallfootUSA = digiSV.fromSV(b2sh * footfactor, 'u')
+        smalltobigfootUSA = digiSV.fromSV(s2bh * footfactor, 'u')
+        bigtosmallshoe = digiSV.toShoeSize(b2sh * footfactor / digiSV.inch)
+        smalltobigshoe = digiSV.toShoeSize(s2bh * footfactor / digiSV.inch)
+        bigtosmallweight = digiSV.fromWV(b2sw, 'm')
+        smalltobigweight = digiSV.fromWV(s2bw, 'm')
+        bigtosmallweightUSA = digiSV.fromWV(b2sw, 'u')
+        smalltobigweightUSA = digiSV.fromWV(s2bw, 'u')
+        bigtosmallfootwidth = digiSV.fromSV(b2sh * footwidthfactor, 'm', 3)
+        smalltobigfootwidth = digiSV.fromSV(s2bh * footwidthfactor, 'm', 3)
+        bigtosmallfootwidthUSA = digiSV.fromSV(b2sh * footwidthfactor, 'u')
+        smalltobigfootwidthUSA = digiSV.fromSV(s2bh * footwidthfactor, 'u')
+        bigtosmallfootthick = digiSV.fromSV(b2sh * footthickfactor, 'm', 3)
+        smalltobigfootthick = digiSV.fromSV(s2bh * footthickfactor, 'm', 3)
+        bigtosmallfootthickUSA = digiSV.fromSV(b2sh * footthickfactor, 'u')
+        smalltobigfootthickUSA = digiSV.fromSV(s2bh * footthickfactor, 'u')
+        bigtosmallthumb = digiSV.fromSV(b2sh * thumbfactor, 'm', 3)
+        smalltobigthumb = digiSV.fromSV(s2bh * thumbfactor, 'm', 3)
+        bigtosmallthumbUSA = digiSV.fromSV(b2sh * thumbfactor, 'u')
+        smalltobigthumbUSA = digiSV.fromSV(s2bh * thumbfactor, 'u')
+        bigtosmallfingerprint = digiSV.fromSV(b2sh * fingerprintfactor, 'm', 3)
+        smalltobigfingerprint = digiSV.fromSV(s2bh * fingerprintfactor, 'm', 3)
+        bigtosmallfingerprintUSA = digiSV.fromSV(b2sh * fingerprintfactor, 'u')
+        smalltobigfingerprintUSA = digiSV.fromSV(s2bh * fingerprintfactor, 'u')
+        bigtosmallhairwidth = digiSV.fromSV(b2sh * hairwidthfactor, 'm', 3)
+        smalltobighairwidth = digiSV.fromSV(s2bh * hairwidthfactor, 'm', 3)
+        bigtosmallhairwidthUSA = digiSV.fromSV(b2sh * hairwidthfactor, 'u')
+        smalltobighairwidthUSA = digiSV.fromSV(s2bh * hairwidthfactor, 'u')
+        bigtosmallpointer = digiSV.fromSV(b2sh * pointerfactor, 'm', 3)
+        smalltobigpointer = digiSV.fromSV(s2bh * pointerfactor, 'm', 3)
+        bigtosmallpointerUSA = digiSV.fromSV(b2sh * pointerfactor, 'u')
+        smalltobigpointerUSA = digiSV.fromSV(s2bh * pointerfactor, 'u')
+        timestaller = digiSV.placeValue(round((bch / sch), 3))
 
         # Print compare.
         return (
             "**Comparison:**\n"
             f"{bigusertag} is really:\n"
-            f"{printtab}Real Height: {fromSV(bch, 3)} / {fromSVUSA(bch)} ({placeValue(dispbigmult)}x basesize)\n"
-            f"{printtab}Real Weight: {fromWV(bcw)} / {fromWVUSA(bcw)}. ({placeValue(dispbigmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {digiSV.fromSV(bch, 'm', 3)} / {digiSV.fromSV(bch, 'u')} ({digiSV.placeValue(dispbigmult)}x basesize)\n"
+            f"{printtab}Real Weight: {digiSV.fromWV(bcw, 'm')} / {digiSV.fromWV(bcw, 'u')}. ({digiSV.placeValue(dispbigmultcubed)}x basesize)\n"
             f"To {smallusertag}, {bigusertag} looks:\n"
             f"{printtab}Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
             f"{printtab}Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
@@ -295,8 +292,8 @@ class StatsCog(commands.Cog):
             f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
             "\n"
             f"{smallusertag} is really:\n"
-            f"{printtab}Real Height: {fromSV(sch, 3)} / {fromSVUSA(sch)} ({placeValue(dispsmallmult)}x basesize)\n"
-            f"{printtab}Real Weight: {fromWV(scw)} / {fromWVUSA(scw)}. ({placeValue(dispsmallmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {digiSV.fromSV(sch, 'm', 3)} / {digiSV.fromSV(sch, 'u')} ({digiSV.placeValue(dispsmallmult)}x basesize)\n"
+            f"{printtab}Real Weight: {digiSV.fromWV(scw, 'm')} / {digiSV.fromWV(scw, 'u')}. ({digiSV.placeValue(dispsmallmultcubed)}x basesize)\n"
             f"To {bigusertag}, {smallusertag} looks:\n"
             f"{printtab}Height: {smalltobigheight} / {smalltobigheightUSA}\n"
             f"{printtab}Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
@@ -309,8 +306,8 @@ class StatsCog(commands.Cog):
             f"{printtab}Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
             "\n"
             f"**Base Sizes:**\n"
-            f"{printtab}{bigusertag}: {fromSV(bbh, 3)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
-            f"{printtab}{smallusertag}: {fromSV(sbh, 3)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
+            f"{printtab}{bigusertag}: {digiSV.fromSV(bbh, 'm', 3)} / {digiSV.fromSV(bbh, 'u')} | {digiSV.fromWV(bbw, 'm')} / {digiSV.fromWV(bbw, 'u')}\n"
+            f"{printtab}{smallusertag}: {digiSV.fromSV(sbh, 'm', 3)} / {digiSV.fromSV(sbh, 'u')} | {digiSV.fromWV(sbw, 'm')} / {digiSV.fromWV(sbw, 'u')}")
 
     @stats.error
     @logger.err2console

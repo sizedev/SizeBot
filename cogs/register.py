@@ -1,14 +1,10 @@
-from decimal import Decimal
-
 from discord.ext import commands
 from discord.utils import get
 
 import digiformatter as df
-from globalsb import readHexCode, regenHexCode
-from globalsb import isFeetAndInchesAndIfSoFixIt, getLet, getNum, toSV, toWV
-from globalsb import sizebotuser_roleid
-from globalsb import nickUpdate
+from globalsb import readHexCode, regenHexCode, sizebotuser_roleid, nickUpdate
 import userdb
+import digiSV
 
 
 async def addUserRole(member):
@@ -31,30 +27,16 @@ class RegisterCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    # Registers a user for SizeBot
     @commands.command()
     async def register(self, ctx, nick: str, display: str, currentheight: str, baseheight: str, baseweight: str, units: str, species: str = None):
-        # Registers a user for SizeBot.
-
-        # Fix feet and inches.
-        currentheight = isFeetAndInchesAndIfSoFixIt(currentheight)
-        baseheight = isFeetAndInchesAndIfSoFixIt(baseheight)
-
-        # Extract values and units.
-        chu = getLet(currentheight)
-        bhu = getLet(baseheight)
-        bwu = getLet(baseweight)
-        currentheight = getNum(currentheight)
-        baseheight = getNum(baseheight)
-        baseweight = getNum(baseweight)
-
-        # Convert floats to decimals.
-        currentheight = Decimal(currentheight)
-        baseheight = Decimal(baseheight)
-        baseweight = Decimal(baseweight)
-
-        readable = "CH {0}, CHU {1}, BH {2}, BHU {3}, BW {4}, BWU {5}".format(currentheight, chu, baseheight, bhu, baseweight, bwu)
+        readable = "CH {0}, BH {1}, BW {2}".format(currentheight, baseheight, baseweight)
         df.warn("New user attempt! Nickname: {0}, Display: {1}".format(nick, display))
         print(readable)
+
+        currentheightSV = digiSV.toWV(currentheight)
+        baseheightSV = digiSV.toWV(baseheight)
+        baseweightWV = digiSV.toWV(baseweight)
 
         # Already registered
         if userdb.exists(ctx.message.author.id):
@@ -64,7 +46,7 @@ class RegisterCog(commands.Cog):
             return
 
         # Invalid size value
-        if (currentheight <= 0 or baseheight <= 0 or baseweight <= 0):
+        if (currentheightSV <= 0 or baseheightSV <= 0 or baseweightWV <= 0):
             df.warn("Invalid size value.")
             await ctx.send("All values must be an integer greater than zero.", delete_after=5)
             return
@@ -87,9 +69,9 @@ class RegisterCog(commands.Cog):
         userdata = userdb.User()
         userdata.nickname = nick
         userdata.display = display
-        userdata.height = toSV(currentheight, chu)
-        userdata.baseheight = toSV(baseheight, bhu)
-        userdata.baseweight = toWV(baseweight, bwu)
+        userdata.height = digiSV.toSV(currentheight)
+        userdata.baseheight = digiSV.toSV(baseheight)
+        userdata.baseweight = digiSV.toWV(baseweight)
         userdata.units = units
         userdata.species = species
 

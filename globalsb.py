@@ -23,14 +23,7 @@ decimal.setcontext(context)
 # Version.
 version = "3AAH.0.0.b4"
 
-# Defaults
-defaultheight = Decimal(1.754)  # meters
-defaultweight = Decimal(66760)  # grams
-defaultdensity = Decimal(1.0)
-
 # Constants
-newline = "\n"
-folder = ".."
 sizebotuser_roleid = 562356758522101769
 brackets = ["[", "]", "<", ">"]
 enspace = "\u2002"
@@ -97,43 +90,10 @@ banner = r"""
 .\____/|_/___\___\____/ \___/ \__\____/ ."""
 
 
-# Get number from string.
-def getNum(s):
-    match = re.search(r"\d+\.?\d*", s)
-    if match is None:
-        return None
-    return Decimal(match.group(0))
-
-
-# Get letters from string.
-def getLet(s):
-    match = re.search(r"[a-zA-Z\'\"]+", s)
-    if match is None:
-        return None
-    return match.group(0)
-
-
-# Remove decimals.
-def removeDecimals(output):
-    if re.search(r"(\.\d*?)(0+)", output):
-        output = re.sub(r"(\.\d*?)(0+)", r"\1", output)
-    if re.search(r"(.*)(\.)(\D+)", output):
-        output = re.sub(r"(.*)(\.)(\D+)", r"\1\3", output)
-    return output
-
-
 def removeBrackets(s):
     for bracket in brackets:
         s = s.replace(bracket, "")
     return s
-
-
-def roundNearestHalf(number):
-    return round(number * 2) / 2
-
-
-def placeValue(number):
-    return "{:,}".format(number)
 
 
 # Add newlines and join into one string
@@ -164,8 +124,8 @@ async def nickUpdate(user):
     if user.discriminator == "0000":
         return
     if not isinstance(user, discord.Member):
-        if user.bot:
-            return
+        return
+    if user.bot:
         return
     # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
@@ -184,15 +144,12 @@ async def nickUpdate(user):
     nick = userdata.nickname
     species = userdata.species
 
-    unit_system = userdata.unitsystem
-    if unit_system == "m":
-        sizetag = digiSV.fromSV(height)
-    elif unit_system == "u":
-        sizetag = digiSV.fromSV(height, "u")
+    if userdata.unitsystem in ["m", "u"]:
+        sizetag = digiSV.fromSV(height, userdata.unitsystem)
     else:
         sizetag = ""
 
-    if species != "None":
+    if species is not None:
         sizetag = f"{sizetag}, {species}"
 
     max_nick_len = 32
@@ -218,35 +175,11 @@ async def nickUpdate(user):
         raise errors.NoPermissions()
 
 
-def isFeetAndInchesAndIfSoFixIt(value):
-    regex = r"^(?P<feet>\d+(ft|foot|feet|\'))(?P<inch>\d+(in|\")*)"
-    m = re.match(regex, value, flags=re.I)
-    if not m:
-        return value
-    feetstr = m.group("feet")
-    inchstr = m.group("inch")
-    feetval = getNum(feetstr)
-    inchval = getNum(inchstr)
-    if feetval is None:
-        feetval = 0
-    if inchval is None:
-        inchval = 0
-    totalinches = (feetval * 12) + inchval
-    return f"{totalinches}in"
+def clamp(minVal, val, maxVal):
+    return max(minVal, min(maxVal, val))
 
 
-def eitherInfZeroOrInput(value):
-    if value > digiSV.infinity:
-        return digiSV.infinity
-    elif value < 0:
-        return Decimal(0)
-    else:
-        return Decimal(value)
-
-
-def changeUser(userid, changestyle, amount, attribute="height"):
-    userdata = userdb.load(userid)
-
+def changeUser(userid, changestyle, amount):
     changestyle = changestyle.lower()
     if changestyle in ["add", "+", "a", "plus"]:
         changestyle = "add"
@@ -257,36 +190,31 @@ def changeUser(userid, changestyle, amount, attribute="height"):
     if changestyle in ["divide", "d", "/", "div"]:
         changestyle = "divide"
 
-    amount = isFeetAndInchesAndIfSoFixIt(amount)
-    value = getNum(amount)
-    unit = getLet(amount)
-    amountSV = 0
-    if unit:
-        if attribute == "weight":
-            amountSV = digiSV.toWV(getNum, getLet)
-        else:
-            amountSV = digiSV.toSV(getNum, getLet)
+    if changestyle not in ["add", "subtract", "multiply", "divide"]:
+        return
+        # TODO: raise an error
 
-    if attribute == "height":
-        if changestyle == "add":
-            newamount = userdata.height + amountSV
-        elif changestyle == "subtract":
-            newamount = userdata.height - amountSV
-        elif changestyle == "multiply":
-            if value == 1:
-                raise errors.ValueIsZeroException(userid, userdata.nickname)
-            if value == 0:
-                raise errors.ValueIsZeroException(userid, userdata.nickname)
-            newamount = userdata.height * value
-        elif changestyle == "divide":
-            if value == 1:
-                raise errors.ValueIsOneException(userid, userdata.nickname)
-            if value == 0:
-                raise errors.ValueIsZeroException(userid, userdata.nickname)
-            newamount = userdata.height / value
-        userdata.height = eitherInfZeroOrInput(newamount)
-    else:
-        raise errors.ChangeMethodInvalidException(userid, userdata.nickname)
+    if changestyle in ["add", "subtract"]:
+        amountSV = digiSV.toSV(amount)
+    elif changestyle in ["multiply", "divide"]:
+        amountVal = digiSV.getNum(amount)
+        if amountVal == 1:
+            raise errors.ValueIsOneException
+        if amountVal == 0:
+            raise errors.ValueIsZeroException
+
+    userdata = userdb.load(userid)
+
+    if changestyle == "add":
+        newamount = userdata.height + amountSV
+    elif changestyle == "subtract":
+        newamount = userdata.height - amountSV
+    elif changestyle == "multiply":
+        newamount = userdata.height * amountVal
+    elif changestyle == "divide":
+        newamount = userdata.height / amountVal
+
+    userdata.height = clamp(0, newamount, digiSV.infinity)
 
     userdb.save(userdata)
 

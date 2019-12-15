@@ -21,17 +21,17 @@ class UserNotFoundException(DigiException):
 
 
 class ValueIsZeroException(DigiException):
-    def __init__(self, userid, usernick):
-        message = f"Value zero recieved when unexpected (Thanks, {userid}/{usernick}...)."
-        user_message = (f"Nice try, {usernick}.\n"
+    def __init__(self):
+        message = f"Value zero recieved when unexpected."
+        user_message = (f"Nice try.\n"
                         "You can't change by a value of zero.")
         super().__init__(message, user_message)
 
 
 class ValueIsOneException(DigiException):
-    def __init__(self, userid, usernick):
-        message = f"Value one recieved when unexpected (Thanks, {userid}/{usernick}...)."
-        user_message = (f"Nice try, {usernick}.\n"
+    def __init__(self):
+        message = f"Value one recieved when unexpected."
+        user_message = (f"Nice try.\n"
                         "You can't change by a value of one.\n"
                         "The reason for this is that it doesn't do anything, "
                         "and this is a waste of memory and processing power for SizeBot, "
