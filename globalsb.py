@@ -173,12 +173,6 @@ async def nickUpdate(user):
         # df.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
         return
 
-    userarray = userdb.load(user.id)
-
-    # Don't update users who aren't registered.
-    if not os.path.exists(f"{folder}/users/{user.id}.txt"):
-        raise errors.UserNotFoundException(user.id, userarray.nickname)
-
     userdata = userdb.load(user.id)
 
     # User's display setting is N. No sizetag.

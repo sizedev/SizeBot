@@ -113,25 +113,25 @@ class User:
     # Create a new object from a python dictionary imported using json
     @classmethod
     def fromJSON(cls, jsondata):
-        user = User()
-        user.id = jsondata["id"]
-        user.nickname = jsondata["nickname"]
-        user.display = jsondata["display"]
-        user.height = Decimal(jsondata["height"])
-        user.baseheight = Decimal(jsondata["baseheight"])
-        user.baseweight = Decimal(jsondata["baseweight"])
-        user.density = Decimal(jsondata["density"])
-        user.unitsystem = jsondata["unitsystem"]
-        user.species = jsondata["species"]
-        return user
+        userdata = User()
+        userdata.id = jsondata["id"]
+        userdata.nickname = jsondata["nickname"]
+        userdata.display = jsondata["display"]
+        userdata.height = Decimal(jsondata["height"])
+        userdata.baseheight = Decimal(jsondata["baseheight"])
+        userdata.baseweight = Decimal(jsondata["baseweight"])
+        userdata.density = Decimal(jsondata["density"])
+        userdata.unitsystem = jsondata["unitsystem"]
+        userdata.species = jsondata["species"]
+        return userdata
 
 
-def save(user):
-    id = user.id
+def save(userdata):
+    id = userdata.id
     if id is None:
         errors.throw(errors.CANNOT_SAVE_WITHOUT_ID)
     userdbpath.mkdir(exist_ok = True)
-    jsondata = user.toJSON()
+    jsondata = userdata.toJSON()
     with open(userdbpath / f"{id}.json", "w") as f:
         json.dump(jsondata, f, indent = 4)
 
