@@ -251,16 +251,6 @@ def eitherInfZeroOrInput(value):
         return Decimal(value)
 
 
-# Count users.
-members = 0
-path = folder + '/users'
-listing = os.listdir(path)
-for infile in listing:
-    if infile.endswith(".txt"):
-        members += 1
-df.load("Loaded {0} users.".format(members))
-
-
 def changeUser(userid, changestyle, amount, attribute="height"):
     user = userdb.load(userid)
     if user is None:
@@ -307,7 +297,7 @@ def changeUser(userid, changestyle, amount, attribute="height"):
     else:
         raise errors.ChangeMethodInvalidException(userid, user.nickname)
 
-    userdb.save(userid, user)
+    userdb.save(user)
 
 
 def check(ctx):

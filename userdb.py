@@ -140,3 +140,8 @@ def load(id):
     with open(userdbpath / f"{id}.json", "r") as f:
         jsondata = json.load(f)
     return User.fromJSON(jsondata)
+
+
+def count():
+    usercount = len(list(userdbpath.glob("*.json")))
+    return usercount
