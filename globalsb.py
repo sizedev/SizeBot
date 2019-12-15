@@ -10,6 +10,7 @@ import discord
 import digiformatter as df
 import digierror as errors
 import digiSV
+import userdb
 
 
 # Configure decimal module.
@@ -162,36 +163,39 @@ def prettyTimeDelta(seconds):
 # Update users nicknames to include sizetags.
 async def nickUpdate(user):
     if user.discriminator == "0000":
-        return errors.USER_IS_BOT
+        return
     if not isinstance(user, discord.Member):
         if user.bot:
-            return errors.USER_IS_BOT
-        return errors.MESSAGE_WAS_DM
+            return
+        return
     # Don't update owner's nick, permissions error.
     if user.id == user.guild.owner.id:
         # df.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
-        return errors.USER_IS_OWNER
-    # Don't update users who aren't registered.
-    if not os.path.exists(f"{folder}/users/{user.id}.txt"):
-        return errors.USER_NOT_REGISTERED
-
-    userarray = readUser(user.id)
-
-    # User's display setting is N. No sizetag.
-    if userarray[DISP].strip() != "Y":
         return
 
-    height = userarray[CHEI]
-    if height is None:
-        height = userarray[BHEI]
-    nick = userarray[NICK].strip()
-    species = userarray[SPEC].strip()
+    userarray = userdb.load(user.id)
 
-    unit_system = userarray[UNIT].strip().upper()
-    if unit_system == "M":
-        sizetag = fromSV(height)
-    elif unit_system == "U":
-        sizetag = fromSVUSA(height)
+    # Don't update users who aren't registered.
+    if not os.path.exists(f"{folder}/users/{user.id}.txt"):
+        raise errors.UserNotFoundException(user.id, userarray.nickname)
+
+    userarray = userdb.load(user.id)
+
+    # User's display setting is N. No sizetag.
+    if userarray.display.strip() != "Y":
+        return
+
+    height = userarray.height
+    if height is None:
+        height = userarray.baseheight
+    nick = userarray.nickname
+    species = userarray.species
+
+    unit_system = userarray.unitsystem
+    if unit_system == "m":
+        sizetag = digiSV.fromSV(height)
+    elif unit_system == "u":
+        sizetag = digiSV.fromSV(height, "u")
     else:
         sizetag = ""
 
@@ -218,7 +222,7 @@ async def nickUpdate(user):
     try:
         await user.edit(nick=newnick)
     except discord.Forbidden:
-        return (errors.MESSAGE_WAS_DM, user)
+        raise errors.NoPermissions()
 
 
 def isFeetAndInchesAndIfSoFixIt(value):
@@ -239,8 +243,8 @@ def isFeetAndInchesAndIfSoFixIt(value):
 
 
 def eitherInfZeroOrInput(value):
-    if value > infinity:
-        return infinity
+    if value > digiSV.infinity:
+        return digiSV.infinity
     elif value < 0:
         return Decimal(0)
     else:
@@ -258,7 +262,7 @@ df.load("Loaded {0} users.".format(members))
 
 
 def changeUser(userid, changestyle, amount, attribute="height"):
-    user = readUser(userid)
+    user = userdb.load(userid)
     if user is None:
         raise errors.UserNotFoundException(userid)
 
@@ -278,33 +282,32 @@ def changeUser(userid, changestyle, amount, attribute="height"):
     amountSV = 0
     if unit:
         if attribute == "weight":
-            amountSV = toWV(getNum, getLet)
+            amountSV = digiSV.toWV(getNum, getLet)
         else:
-            amountSV = toSV(getNum, getLet)
+            amountSV = digiSV.toSV(getNum, getLet)
 
     if attribute == "height":
         if changestyle == "add":
-            newamount = user[CHEI] + amountSV
+            newamount = user.height + amountSV
         elif changestyle == "subtract":
-            newamount = user[CHEI] - amountSV
+            newamount = user.height - amountSV
         elif changestyle == "multiply":
             if value == 1:
-                return errors.CHANGE_VALUE_IS_ONE
+                raise errors.ValueIsZeroException(userid, user.nickname)
             if value == 0:
-                return errors.CHANGE_VALUE_IS_ZERO
-            newamount = user[CHEI] * value
+                raise errors.ValueIsZeroException(userid, user.nickname)
+            newamount = user.height * value
         elif changestyle == "divide":
             if value == 1:
-                return errors.CHANGE_VALUE_IS_ONE
+                raise errors.ValueIsOneException(userid, user.nickname)
             if value == 0:
-                return errors.CHANGE_VALUE_IS_ZERO
-            newamount = user[CHEI] / value
-        user[CHEI] = eitherInfZeroOrInput(newamount)
+                raise errors.ValueIsZeroException(userid, user.nickname)
+            newamount = user.height / value
+        user.height = eitherInfZeroOrInput(newamount)
     else:
-        return errors.CHANGE_METHOD_INVALID
+        raise errors.ChangeMethodInvalidException(userid, user.nickname)
 
-    writeUser(userid, user)
-    return errors.SUCCESS
+    userdb.save(userid, user)
 
 
 def check(ctx):
