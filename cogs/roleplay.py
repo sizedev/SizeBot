@@ -1,60 +1,58 @@
-import discord
 from discord.ext import commands
 from globalsb import *
 import digilogger as logger
+import roller
 
-#Commands for roleplaying.
+
+# Commands for roleplaying.
 #
-#Commands: roll
-
+# Commands: roll, r
 class RPCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    #Die rolling command. XdY format.
+    # Die rolling command
     @commands.command()
-    async def roll(self, ctx, dString):
-        rolls = []
-        usedrolls = []
-        dSides = 0
-        dNum = 0
-        dDrops = 0
-        dTotal = 0
-        stop = False
-        dArray = dString.split("d")
-        if len(dArray) == 2:
-            dNum = int(dArray[0])
-            dSides = int(dArray[1])
-        elif len(dArray) == 3:
-            dNum = int(dArray[0])
-            dSides = int(dArray[1])
-            dDrops = int(dArray[2])
-        else:
-            await ctx.send('Format has to be in XdY or XdYdZ.')
+    async def roll(self, ctx, *, dString):
+        logger.msg(f"{ctx.message.author.nick} rolled {dString} verbosely.")
+        try:
+            result = roller.roll(dString)
+        except roller.RollException:
+            logger.warn("Invalid roll string.")
+            await ctx.send(f"Invalid roll string `{dString}`")
             return
-        if dSides > 1000000:
-            await ctx.send('Too many sides!')
-            logger.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll a {dSides}-sided die!")
-            stop = True
-        if dNum > 250:
-            await ctx.send('Too many dice!')
-            logger.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll {dNum} dice!")
-            stop = True
-        if stop: return
-        for x in range(dNum):
-            currentRoll = (random.randrange(1, dSides + 1))
-            rolls.append(currentRoll)
-        rolls.sort(key=int)
-        for x in range(dDrops, len(rolls)):
-            dTotal = dTotal + rolls[x]
-            usedrolls.append(rolls[x])
-        dropped = rolls
-        for item in usedrolls: dropped.remove(item)
-        sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.nick, dString, str(dTotal), str(usedrolls))
-        if dropped != []: sendstring = sendstring + "\n~~Dropped: {0}~~".format(str(dropped))
-        logger.msg(f"{ctx.message.author.id} ({ctx.message.author.nick}) rolled {dString}.")
+
+        header = (f"{ctx.message.author.nick} rolled `{dString}`!\n"
+                  f"__**TOTAL: {result.total}**__\n")
+        rollstrings = []
+        for i, r in enumerate(result.rolls):
+            rollheader = f"Roll {i+1}: **{r.total}** | "
+            dicestrings = []
+            if r.used:
+                dicestrings.append(f"{', '.join([str(u) for u in r.used])}")
+            if r.dropped:
+                dicestrings.append(f"~~{', '.join([str(d) for d in r.dropped])}~~")
+            rollstrings.append(rollheader + ", ".join(dicestrings))
+
+        sendstring = header + "\n".join(rollstrings)
+
         await ctx.send(sendstring)
 
-#Necessary.
+    @commands.command()
+    async def r(self, ctx, *, dString):
+        logger.msg(f"{ctx.message.author.nick} rolled {dString} non-verbosely.")
+        try:
+            result = roller.roll(dString)
+        except roller.RollException:
+            logger.warn("Invalid roll string.")
+            await ctx.send(f"Invalid roll string `{dString}`")
+            return
+
+        sendstring = f"{ctx.message.author.nick} rolled `{dString}` = **{result.total}**"
+
+        await ctx.send(sendstring)
+
+
+# Necessary
 def setup(bot):
     bot.add_cog(RPCog(bot))
