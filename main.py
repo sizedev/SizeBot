@@ -45,7 +45,7 @@ initial_extensions = [
 # Obviously we need the banner printed in the terminal.
 print(bg(24) + fg(202) + style.BOLD + conf.banner + style.RESET + " v" + conf.version)
 
-bot = commands.Bot(command_prefix=prefix, description=description)
+bot = commands.Bot(command_prefix = prefix, description = description)
 bot.remove_command("help")
 
 
@@ -56,7 +56,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------' + style.RESET)
-    await bot.change_presence(activity=discord.Game(name="Ratchet and Clank: Size Matters"))
+    await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
     df.warn("Warn test.")
     df.crit("Crit test.")
     df.test("Test test.")
@@ -78,18 +78,18 @@ async def on_message(message):
 async def on_command_error(ctx, error):
     # DigiException handling
     if isinstance(error, errors.DigiException):
-        log_message = str(error).format(usernick=ctx.message.author.display_name, userid=ctx.message.author.id)
+        log_message = str(error).format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
         logCmd = getattr(df, error.level, df.warn)
         logCmd(log_message)
 
-        user_message = error.user_message.format(usernick=ctx.message.author.display_name, userid=ctx.message.author.id)
-        await ctx.send(user_message, delete_after=error.delete_after)
+        user_message = error.user_message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
+        await ctx.send(user_message, delete_after = error.delete_after)
 
         return
 
     # Default command handling
-    print(f"Ignoring exception in command {ctx.command}:", file=sys.stderr)
-    traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+    print(f"Ignoring exception in command {ctx.command}:", file = sys.stderr)
+    traceback.print_exception(type(error), error, error.__traceback__, file = sys.stderr)
 
 
 @bot.event

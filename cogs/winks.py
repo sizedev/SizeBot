@@ -27,7 +27,7 @@ def getWinks():
     return winkcount
 
 
-def addWinks(count=1):
+def addWinks(count = 1):
     winkcount = getWinks()
     winkcount += count
     with open(winkpath, "w") as winkfile:
@@ -45,7 +45,7 @@ async def sayMilestone(channel, winkcount):
     prettytimesince = utils.prettyTimeDelta(timesince.total_seconds())
     timeperwink = timesince / winkcount
     prettytimeperwink = utils.prettyTimeDelta(timeperwink.total_seconds())
-    winksperday = winkcount / (timesince / timedelta(days=1))
+    winksperday = winkcount / (timesince / timedelta(days = 1))
     yukioid = iddb.getID("Yukio")
 
     await channel.send(f":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball\n:"

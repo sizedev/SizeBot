@@ -57,7 +57,7 @@ def getSVPair(s):
 
 def isFeetAndInchesAndIfSoFixIt(value):
     regex = r"^(?P<feet>\d+\.?\d*(ft|foot|feet|\'))?(?P<inch>\d+\.?\d*(in|\"))?"
-    m = re.match(regex, value, flags=re.I)
+    m = re.match(regex, value, flags = re.I)
     if not m:
         return value
     feetval = m.group("feet")
@@ -149,7 +149,7 @@ def toSV(s):
 
 
 # Convert 'size values' to a more readable format (metric).
-def fromSV(value, system="m", accuracy=2):
+def fromSV(value, system = "m", accuracy = 2):
     value = float(value)
     output = ""
     if system == "m":
@@ -343,7 +343,7 @@ def toWV(s):
 
 
 # Convert 'weight values' to a more readable format.
-def fromWV(value, system = "m", accuracy=2):
+def fromWV(value, system = "m", accuracy = 2):
     value = Decimal(value)
     if system == "m":
         if value <= 0:

@@ -26,7 +26,7 @@ hairwidthfactor = Decimal(1)  # TODO: Provide a real value
 
 
 # TODO: Move to dedicated module.
-async def getUser(ctx, user_string, fakename=None):
+async def getUser(ctx, user_string, fakename = None):
     try:
         member = await commands.MemberConverter().convert(ctx, user_string)
     except commands.errors.BadArgument:
@@ -44,7 +44,7 @@ async def getUser(ctx, user_string, fakename=None):
         if heightsv is None:
             await ctx.send(
                 "Sorry! I didn't recognize that user or height.",
-                delete_after=5)
+                delete_after = 5)
             return None, None
 
         userdata = userdb.User()
@@ -164,12 +164,12 @@ class StatsCog(commands.Cog):
         df.msg(f"Stats for {who} sent.")
 
     @commands.command()
-    async def compare(self, ctx, who1=None, who2=None, who1name=None, who2name=None):
+    async def compare(self, ctx, who1 = None, who2 = None, who1name = None, who2name = None):
         if who2 is None:
             who2 = str(ctx.message.author.id)
 
         if who1 is None:
-            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.", delete_after=5)
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.", delete_after = 5)
             return
 
         if who1name is None:

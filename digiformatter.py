@@ -134,35 +134,35 @@ def time():
     return fg(timecolor) + strftime(f"{timestring} | ", localtime()) + style.RESET
 
 
-def warn(message, showtime=True):
+def warn(message, showtime = True):
     if showtime:
         print(time() + fore.YELLOW + message + style.RESET)
     else:
         print(fore.YELLOW + message + style.RESET)
 
 
-def crit(message, showtime=True):
+def crit(message, showtime = True):
     if showtime:
         print(time() + back.RED + style.BOLD + message + style.RESET)
     else:
         print(back.RED + style.BOLD + message + style.RESET)
 
 
-def test(message, showtime=True):
+def test(message, showtime = True):
     if showtime:
         print(time() + fg(testcolor) + message + style.RESET)
     else:
         print(fg(testcolor) + message + style.RESET)
 
 
-def load(message, showtime=False):
+def load(message, showtime = False):
     if showtime:
         print(time() + fg(238) + message + style.RESET)
     else:
         print(fg(238) + message + style.RESET)
 
 
-def msg(message, showtime=True):
+def msg(message, showtime = True):
     if showtime:
         print(time() + fg(msgcolor) + message + style.RESET)
     else:
@@ -170,12 +170,12 @@ def msg(message, showtime=True):
 
 
 # Create a custom color preset.
-def createCustom(name, foreval=256, backval=256, attrval=None):
+def createCustom(name, foreval = 256, backval = 256, attrval = None):
     customs[name] = [foreval, backval, attrval]
 
 
 # Use a custom color preset.
-def custom(name, message, showtime=True):
+def custom(name, message, showtime = True):
     fgcolor = customs[name][FORE]
     bgcolor = customs[name][BACK]
     attrval = customs[name][ATTR]
@@ -192,7 +192,7 @@ def custom(name, message, showtime=True):
 
 
 # Create a progress bar.
-def createLoadBar(current, total, barlength=50, showpercent=False):
+def createLoadBar(current, total, barlength = 50, showpercent = False):
     TWENTYFIVE = '\u2591'
     FIFTY = '\u2592'
     SEVENTYFIVE = '\u2593'
@@ -223,7 +223,7 @@ def createLoadBar(current, total, barlength=50, showpercent=False):
 
 
 # Truncate a long string for terminal printing.
-def truncate(item, trunclen=80):
+def truncate(item, trunclen = 80):
     if len(item) > trunclen:
         printitem = "…" + item[-(trunclen - 1):]
     else:

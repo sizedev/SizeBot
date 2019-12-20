@@ -15,7 +15,7 @@ class SetCog(commands.Cog):
 
     # Change nickname
     @commands.command()
-    async def changenick(self, ctx, *, newnick=None):
+    async def changenick(self, ctx, *, newnick = None):
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newnick is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <newnick>`.")
@@ -34,7 +34,7 @@ class SetCog(commands.Cog):
 
     # Change species
     @commands.command()
-    async def setspecies(self, ctx, *, newtag=None):
+    async def setspecies(self, ctx, *, newtag = None):
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newtag is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <newtag>`.")
@@ -67,7 +67,7 @@ class SetCog(commands.Cog):
 
     # Change height
     @commands.command()
-    async def setheight(self, ctx, *, newheight=None):
+    async def setheight(self, ctx, *, newheight = None):
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newheight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
@@ -125,7 +125,7 @@ class SetCog(commands.Cog):
 
     # Set display mode
     @commands.command()
-    async def setdisplay(self, ctx, newdisp=None):
+    async def setdisplay(self, ctx, newdisp = None):
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newdisp is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N]`.")
@@ -149,7 +149,7 @@ class SetCog(commands.Cog):
 
     # Set measurement system
     @commands.command()
-    async def setsystem(self, ctx, newsys=None):
+    async def setsystem(self, ctx, newsys = None):
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newsys is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/m]`.")
@@ -173,7 +173,7 @@ class SetCog(commands.Cog):
 
     # Change height to a random value
     @commands.command()
-    async def setrandomheight(self, ctx, newheightmin=None, newheightmax=None):
+    async def setrandomheight(self, ctx, newheightmin = None, newheightmax = None):
         if newheightmin is None or newheightmax is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
             return
@@ -226,7 +226,7 @@ class SetCog(commands.Cog):
 
     # Change base height
     @commands.command()
-    async def setbaseheight(self, ctx, *, newbaseheight=None):
+    async def setbaseheight(self, ctx, *, newbaseheight = None):
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newbaseheight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
@@ -245,7 +245,7 @@ class SetCog(commands.Cog):
 
     # Change base weight
     @commands.command()
-    async def setbaseweight(self, ctx, *, newbaseweight=None):
+    async def setbaseweight(self, ctx, *, newbaseweight = None):
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newbaseweight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <weight>`.")

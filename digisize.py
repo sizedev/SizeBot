@@ -59,7 +59,7 @@ async def nickUpdate(user):
         # Cannot fit the new sizetag.
         newnick = nick
     try:
-        await user.edit(nick=newnick)
+        await user.edit(nick = newnick)
     except discord.Forbidden:
         raise errors.NoPermissionsException
 

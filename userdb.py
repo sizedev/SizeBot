@@ -150,7 +150,7 @@ def load(userid):
 
 
 def delete(userid):
-    getuserpath(userid).unlink(missing_ok=True)
+    getuserpath(userid).unlink(missing_ok = True)
 
 
 def exists(userid):

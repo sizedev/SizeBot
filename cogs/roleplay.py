@@ -46,7 +46,7 @@ class RPCog(commands.Cog):
         for x in range(dNum):
             currentRoll = (random.randrange(1, dSides + 1))
             rolls.append(currentRoll)
-        rolls.sort(key=int)
+        rolls.sort(key = int)
         for x in range(dDrops, len(rolls)):
             dTotal = dTotal + rolls[x]
             usedrolls.append(rolls[x])

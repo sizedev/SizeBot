@@ -11,19 +11,19 @@ import digisize
 
 
 async def addUserRole(member):
-    role = get(member.guild.roles, id=conf.sizebotuser_roleid)
+    role = get(member.guild.roles, id = conf.sizebotuser_roleid)
     if role is None:
         df.warn(f"Sizebot user role {conf.sizebotuser_roleid} not found in guild {member.guild.id}")
         return
-    await member.add_roles(role, reason="Registered as sizebot user")
+    await member.add_roles(role, reason = "Registered as sizebot user")
 
 
 async def removeUserRole(member):
-    role = get(member.guild.roles, id=conf.sizebotuser_roleid)
+    role = get(member.guild.roles, id = conf.sizebotuser_roleid)
     if role is None:
         df.warn(f"Sizebot user role {conf.sizebotuser_roleid} not found in guild {member.guild.id}")
         return
-    await member.remove_roles(role, reason="Unregistered as sizebot user")
+    await member.remove_roles(role, reason = "Unregistered as sizebot user")
 
 
 def regenHexCode():
@@ -60,14 +60,14 @@ class RegisterCog(commands.Cog):
         # Already registered
         if userdb.exists(ctx.message.author.id):
             await ctx.send("""Sorry! You already registered with SizeBot.
-    To unregister, use the `&unregister` command.""", delete_after=10)
+    To unregister, use the `&unregister` command.""", delete_after = 10)
             df.warn("User already registered on user registration: {1}.".format(ctx.message.author))
             return
 
         # Invalid size value
         if (currentheightSV <= 0 or baseheightSV <= 0 or baseweightWV <= 0):
             df.warn("Invalid size value.")
-            await ctx.send("All values must be an integer greater than zero.", delete_after=5)
+            await ctx.send("All values must be an integer greater than zero.", delete_after = 5)
             return
 
         # Invalid display value
@@ -78,7 +78,7 @@ class RegisterCog(commands.Cog):
         # Invalid unit value
         if units.lower() not in ["m", "u"]:
             df.warn("units was {0}, must be M or U.".format(units))
-            await ctx.send("Units must be `M` or `U`.", delete_after=5)
+            await ctx.send("Units must be `M` or `U`.", delete_after = 5)
             return
 
         # Success.
@@ -100,41 +100,41 @@ class RegisterCog(commands.Cog):
 
         df.warn("Made a new user: {0}!".format(ctx.message.author))
         print(userdata)
-        await ctx.send("Registered <@{0}>. {1}.".format(ctx.message.author.id, readable), delete_after=5)
+        await ctx.send("Registered <@{0}>. {1}.".format(ctx.message.author.id, readable), delete_after = 5)
 
     @register.error
     async def register_handler(self, ctx, error):
         # Check if required argument is missing.
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("""Not enough variables for `register`.
-    Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] [M/U]`.""", delete_after=30)
+    Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] [M/U]`.""", delete_after = 30)
 
     @commands.command()
-    async def unregister(self, ctx, code=None):
+    async def unregister(self, ctx, code = None):
         # User file missing
         if not userdb.exists(ctx.message.author.id):
             df.warn(f"User {ctx.message.author.id} not registered with SizeBot, but tried to unregister anyway.")
             await ctx.send("Sorry! You aren't registered with SizeBot.\n"
-                           "To register, use the `&register` command.", delete_after=5)
+                           "To register, use the `&register` command.", delete_after = 5)
             return
 
         if code is None:
             hexcode = regenHexCode()
             await ctx.send("To unregister, use the `&unregister` command and the following code.\n"
-                           f"`{hexcode}`", delete_after=30)
+                           f"`{hexcode}`", delete_after = 30)
             return
 
         hexcode = readHexCode()
         if code != hexcode:
             df.warn(f"User {ctx.message.author.id} tried to unregister, but said the wrong hexcode.")
-            await ctx.send(f"Incorrect code. You said: `{code}`. The correct code was: `{hexcode}`. Try again.", delete_after=10)
+            await ctx.send(f"Incorrect code. You said: `{code}`. The correct code was: `{hexcode}`. Try again.", delete_after = 10)
             return
 
         userdb.delete(ctx.message.author.id)
         await removeUserRole(ctx.message.author)
 
         df.warn(f"User {ctx.message.author.id} successfully unregistered.")
-        await ctx.send(f"Correct code! Unregistered {ctx.message.author.name}", delete_after=5)
+        await ctx.send(f"Correct code! Unregistered {ctx.message.author.name}", delete_after = 5)
 
     @commands.Cog.listener()
     async def on_message(self, m):
