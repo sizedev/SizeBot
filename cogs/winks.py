@@ -78,7 +78,7 @@ class WinksCog(commands.Cog):
         winkcount = addWinks(winksSeen)
         df.msg(f"Yukio has winked {winkcount} times!")
         if winkcount in milestones:
-            sayMilestone(message.channel, winkcount)
+            await sayMilestone(message.channel, winkcount)
 
     @commands.command()
     async def winkcount(self, ctx):

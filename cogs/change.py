@@ -19,14 +19,14 @@ class Change:
         self.mulPerSec = Decimal(mulPerSec)
         self.lastRan = time.time()
 
-    def apply(self):
+    async def apply(self):
         seconds = Decimal(time.time())
         addPerTick = seconds * self.addPerSec
         mulPerTick = self.mulPerTick ** seconds
         user = userdb.load(self.userid)
         user.height = (user.height * mulPerTick) + addPerTick
         userdb.save()
-        digisize.nickUpdate(self.userid)
+        await digisize.nickUpdate(self.userid)
 
 
 class ChangeCog(commands.Cog):
@@ -97,7 +97,7 @@ They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tal
     @tasks.loop(seconds=6)
     async def changeTask(self):
         for change in self.changes.values():
-            change.apply()
+            await change.apply()
 
 
 # Necessary.

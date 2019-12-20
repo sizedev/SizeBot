@@ -198,6 +198,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     # Change height to a infinity
+    @commands.command()
     async def setinf(self, ctx):
         userdata = userdb.load(ctx.message.author.id)
 
