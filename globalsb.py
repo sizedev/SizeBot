@@ -1,4 +1,3 @@
-import random
 import decimal
 
 import discord
@@ -21,24 +20,6 @@ decimal.setcontext(context)
 # Slow growth tasks.
 # TODO: Get rid of asyncio tasks, replace with timed database checks.
 tasks = {}
-
-
-def regenHexCode():
-    # 16-char hex string gen for unregister.
-    hexdigits = "1234567890abcdef"
-    lst = [random.choice(hexdigits) for n in range(16)]
-    hexstring = "".join(lst)
-    hexfile = open("text/hexstring.txt", "w")
-    hexfile.write(hexstring)
-    hexfile.close()
-
-
-def readHexCode():
-    # Read the hexcode from the file.
-    hexfile = open("text/hexstring.txt", "r")
-    hexcode = hexfile.readlines()
-    hexfile.close()
-    return str(hexcode[0])
 
 
 # Update users nicknames to include sizetags.
