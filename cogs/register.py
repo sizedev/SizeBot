@@ -2,23 +2,24 @@ from discord.ext import commands
 from discord.utils import get
 
 import digiformatter as df
-from globalsb import readHexCode, regenHexCode, sizebotuser_roleid, nickUpdate
+from globalsb import readHexCode, regenHexCode, nickUpdate
+import conf
 import userdb
 import digiSV
 
 
 async def addUserRole(member):
-    role = get(member.guild.roles, id=sizebotuser_roleid)
+    role = get(member.guild.roles, id=conf.sizebotuser_roleid)
     if role is None:
-        df.warn(f"Sizebot user role {sizebotuser_roleid} not found in guild {member.guild.id}")
+        df.warn(f"Sizebot user role {conf.sizebotuser_roleid} not found in guild {member.guild.id}")
         return
     await member.add_roles(role, reason="Registered as sizebot user")
 
 
 async def removeUserRole(member):
-    role = get(member.guild.roles, id=sizebotuser_roleid)
+    role = get(member.guild.roles, id=conf.sizebotuser_roleid)
     if role is None:
-        df.warn(f"Sizebot user role {sizebotuser_roleid} not found in guild {member.guild.id}")
+        df.warn(f"Sizebot user role {conf.sizebotuser_roleid} not found in guild {member.guild.id}")
         return
     await member.remove_roles(role, reason="Unregistered as sizebot user")
 

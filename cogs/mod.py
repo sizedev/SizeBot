@@ -1,7 +1,8 @@
 from discord.ext import commands
 
 import digiformatter as df
-from globalsb import banner, version, getID
+from globalsb import getID
+import conf
 import userdb
 
 
@@ -130,7 +131,7 @@ class ModCog(commands.Cog):
     @commands.command()
     async def about(self, ctx):
         await ctx.message.delete()
-        await ctx.send("```\n" + banner + "```")
+        await ctx.send("```\n" + conf.banner + "```")
         await ctx.send("""<@{0}>
     ***SizeBot3 by DigiDuncan***
     *A big program for big people.*
@@ -152,7 +153,7 @@ class ModCog(commands.Cog):
     "Um... I like it?" -- *Goddess Syn*
     "I am the only person who has accidentally turned my fetish into a tech support job." -- *DigiDuncan*
 
-    Version {2} | 19 Jul 2019""".format(ctx.message.author.id, userdb.count(), version))
+    Version {2} | 19 Jul 2019""".format(ctx.message.author.id, userdb.count(), conf.version))
 
     @commands.command()
     async def donate(self, ctx):

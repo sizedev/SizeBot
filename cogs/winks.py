@@ -4,7 +4,8 @@ from datetime import datetime, timedelta
 from discord.ext import commands
 
 import digiformatter as df
-from globalsb import getID, prettyTimeDelta
+from globalsb import getID
+import utils
 
 winkpath = "text/winkcount.txt"
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
@@ -41,9 +42,9 @@ def countWinks(s):
 async def sayMilestone(channel, winkcount):
     now = datetime.today()
     timesince = now - starttime
-    prettytimesince = prettyTimeDelta(timesince.total_seconds())
+    prettytimesince = utils.prettyTimeDelta(timesince.total_seconds())
     timeperwink = timesince / winkcount
-    prettytimeperwink = prettyTimeDelta(timeperwink.total_seconds())
+    prettytimeperwink = utils.prettyTimeDelta(timeperwink.total_seconds())
     winksperday = winkcount / (timesince / timedelta(days=1))
     yukioid = getID("Yukio")
 

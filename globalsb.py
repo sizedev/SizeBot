@@ -1,8 +1,6 @@
-import re
 import io
 import random
 import decimal
-from decimal import Decimal
 
 import discord
 
@@ -10,6 +8,8 @@ import digiformatter as df
 import digierror as errors
 import digiSV
 import userdb
+
+import utils
 
 
 # Configure decimal module.
@@ -19,16 +19,6 @@ context = decimal.Context(prec = 120, rounding = decimal.ROUND_HALF_EVEN,
                           traps = [decimal.Overflow, decimal.DivisionByZero, decimal.InvalidOperation])
 decimal.setcontext(context)
 
-
-# Version.
-version = "3AAH.0.0.b4"
-
-# Constants
-sizebotuser_roleid = 562356758522101769
-brackets = ["[", "]", "<", ">"]
-enspace = "\u2002"
-printtab = enspace * 4
-allowbrackets = ("&compare", "&stats")  # TODO: Could be better.
 
 # Slow growth tasks.
 # TODO: Get rid of asyncio tasks, replace with timed database checks.
@@ -78,45 +68,6 @@ def readHexCode():
     hexcode = hexfile.readlines()
     hexfile.close()
     return str(hexcode[0])
-
-
-# ASCII art.
-banner = r"""
-. _____ _        ______       _   _____ .
-./  ___(_)       | ___ \     | | |____ |.
-.\ `--. _ _______| |_/ / ___ | |_    / /.
-. `--. \ |_  / _ \ ___ \/ _ \| __|   \ \.
-./\__/ / |/ /  __/ |_/ / (_) | |_.___/ /.
-.\____/|_/___\___\____/ \___/ \__\____/ ."""
-
-
-def removeBrackets(s):
-    for bracket in brackets:
-        s = s.replace(bracket, "")
-    return s
-
-
-# Add newlines and join into one string
-def lines(items):
-    return "".join(item + "\n" for item in items)
-
-
-def prettyTimeDelta(seconds):
-    seconds = int(seconds)
-    years, seconds = divmod(seconds, 86400 * 365)
-    days, seconds = divmod(seconds, 86400)
-    hours, seconds = divmod(seconds, 3600)
-    minutes, seconds = divmod(seconds, 60)
-    if years > 0:
-        return '%d years, %d days, %d hours, %d minutes, %d seconds' % (years, days, hours, minutes, seconds)
-    elif days > 0:
-        return '%d days, %d hours, %d minutes, %d seconds' % (days, hours, minutes, seconds)
-    elif hours > 0:
-        return '%d hours, %d minutes, %d seconds' % (hours, minutes, seconds)
-    elif minutes > 0:
-        return '%d minutes, %d seconds' % (minutes, seconds)
-    else:
-        return '%d seconds' % (seconds)
 
 
 # Update users nicknames to include sizetags.
@@ -175,10 +126,6 @@ async def nickUpdate(user):
         raise errors.NoPermissionsException
 
 
-def clamp(minVal, val, maxVal):
-    return max(minVal, min(maxVal, val))
-
-
 def changeUser(userid, changestyle, amount):
     changestyle = changestyle.lower()
     if changestyle in ["add", "+", "a", "plus"]:
@@ -214,7 +161,7 @@ def changeUser(userid, changestyle, amount):
     elif changestyle == "divide":
         newamount = userdata.height / amountVal
 
-    userdata.height = clamp(0, newamount, digiSV.infinity)
+    userdata.height = utils.clamp(0, newamount, digiSV.infinity)
 
     userdb.save(userdata)
 

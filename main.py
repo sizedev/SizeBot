@@ -8,7 +8,9 @@ from discord.ext import commands
 
 import digierror as errors
 import digiformatter as df
-from globalsb import banner, version, check, allowbrackets, removeBrackets
+from globalsb import check
+import conf
+import utils
 
 launchtime = datetime.now()
 
@@ -38,7 +40,7 @@ initial_extensions = [
 ]
 
 # Obviously we need the banner printed in the terminal.
-print(bg(24) + fg(202) + style.BOLD + banner + style.RESET + " v" + version)
+print(bg(24) + fg(202) + style.BOLD + conf.banner + style.RESET + " v" + conf.version)
 
 bot = commands.Bot(command_prefix=prefix, description=description)
 bot.remove_command("help")
@@ -66,8 +68,7 @@ async def on_ready():
 async def on_message(message):
     if message.content.startswith("&") and message.content.endswith("&"):
         return  # Ignore Tupperboxes being mistaken for commands.
-    if not message.content.startswith(allowbrackets):
-        message.content = removeBrackets(message.content)
+    utils.removeBrackets(message.content)
     await bot.process_commands(message)
 
 
