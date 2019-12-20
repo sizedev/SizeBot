@@ -10,6 +10,7 @@ import digierror as errors
 import digiformatter as df
 import conf
 import utils
+import digidecimal
 
 launchtime = datetime.now()
 
@@ -18,6 +19,8 @@ with open("../_authtoken.txt") as f:
     authtoken = f.readlines()
 authtoken = [x.strip() for x in authtoken]
 authtoken = authtoken[0]
+
+digidecimal.init()
 
 # Predefined variables.
 prefix = '&'

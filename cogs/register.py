@@ -4,10 +4,10 @@ from discord.ext import commands
 from discord.utils import get
 
 import digiformatter as df
-from globalsb import nickUpdate
 import conf
 import userdb
 import digiSV
+import digisize
 
 
 async def addUserRole(member):
@@ -138,7 +138,7 @@ class RegisterCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, m):
-        await nickUpdate(m.author)
+        await digisize.nickUpdate(m.author)
 
 
 # Necessary.

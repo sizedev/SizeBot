@@ -6,8 +6,9 @@ import digiformatter as df
 import digierror as errors
 import userdb
 from userdb import CHEI
-from globalsb import changeUser, tasks
+from globalsb import tasks
 import digiSV
+import digisize
 
 
 class ChangeCog(commands.Cog):
@@ -17,14 +18,14 @@ class ChangeCog(commands.Cog):
     @commands.command()
     async def change(self, ctx, style, *, amount):
         # Change height.
-        changereturn = changeUser(ctx.message.author.id, style, amount)
+        changereturn = digisize.changeUser(ctx.message.author.id, style, amount)
         errors.throw(ctx, changereturn)
         if changereturn == errors.SUCCESS:
             userdata = userdb.load(ctx.message.author.id)
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed {style}-style {amount}.")
             await ctx.send(f"User <@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} ({digiSV.fromSV(userdata.height, 'u')}) tall.")
 
-    # TODO: Switch to changeUser().
+    # TODO: Switch to digisize.changeUser().
     @commands.command()
     async def slowchange(self, ctx, style: str, rate: str):
         # TODO: calculate these from rate?
@@ -60,7 +61,7 @@ class ChangeCog(commands.Cog):
     async def eatme(self, ctx):
         # Eat me!
         randmult = round(random.random(2, 20), 1)
-        changereturn = changeUser(ctx.message.author.id, "multiply", randmult)
+        changereturn = digisize.changeUser(ctx.message.author.id, "multiply", randmult)
         errors.throw(ctx, changereturn)
         if changereturn == errors.SUCCESS:
             userdata = userdb.load(ctx.message.author.id)
@@ -74,7 +75,7 @@ They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tal
         # Drink me!
         userdata = userdb.load(ctx.message.author.id)
         randmult = round(random.random(2, 20), 1)
-        changereturn = changeUser(ctx.message.author.id, "divide", randmult)
+        changereturn = digisize.changeUser(ctx.message.author.id, "divide", randmult)
         errors.throw(ctx, changereturn)
         if changereturn == errors.SUCCESS:
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) drank a potion and shrunk {randmult}.")

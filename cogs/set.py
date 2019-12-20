@@ -3,10 +3,10 @@ import random
 from discord.ext import commands
 
 import digiformatter as df
-from globalsb import nickUpdate
 import userdb
 from userdb import NICK, DISP, SPEC, CHEI, BHEI, DENS, UNIT, BWEI
 import digiSV
+import digisize
 
 
 class SetCog(commands.Cog):
@@ -30,7 +30,7 @@ class SetCog(commands.Cog):
         await ctx.send("<@{0}>'s nick is now {1}".format(ctx.message.author.id, userdata[NICK]))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Change species
     @commands.command()
@@ -49,7 +49,7 @@ class SetCog(commands.Cog):
         await ctx.send("<@{0}>'s species is now {1}".format(ctx.message.author.id, userdata[SPEC]))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Remove species
     @commands.command()
@@ -63,7 +63,7 @@ class SetCog(commands.Cog):
         await ctx.send("<@{0}>'s species is now cleared".format(ctx.message.author.id))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Change height
     @commands.command()
@@ -88,7 +88,7 @@ class SetCog(commands.Cog):
         await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, digiSV.fromSV(userdata[CHEI], 'm'), digiSV.fromSV(userdata[CHEI], 'u')))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Reset size
     @commands.command()
@@ -102,7 +102,7 @@ class SetCog(commands.Cog):
         # TODO: Add user message
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Change density
     @commands.command()
@@ -121,7 +121,7 @@ class SetCog(commands.Cog):
         await ctx.send("""<@{0}> is now {1}x density.""".format(ctx.message.author.id, userdata[DENS][:-1]))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Set display mode
     @commands.command()
@@ -145,7 +145,7 @@ class SetCog(commands.Cog):
         await ctx.send("""<@{0}>'s display is now set to {1}.""".format(ctx.message.author.id, userdata[DISP][:-1]))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Set measurement system
     @commands.command()
@@ -169,7 +169,7 @@ class SetCog(commands.Cog):
         await ctx.send("""<@{0}>'s system is now set to {1}.'""".format(ctx.message.author.id, userdata[UNIT][:-1]))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Change height to a random value
     @commands.command()
@@ -195,7 +195,7 @@ class SetCog(commands.Cog):
         await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, digiSV.fromSV(userdata[CHEI], 'm'), digiSV.fromSV(userdata[CHEI], 'u')))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Change height to a infinity
     async def setinf(self, ctx):
@@ -208,7 +208,7 @@ class SetCog(commands.Cog):
         await ctx.send("<@{0}> is now infinitely tall.".format(ctx.message.author.id))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Change height to a zero
     @commands.command()
@@ -222,7 +222,7 @@ class SetCog(commands.Cog):
         await ctx.send("<@{0}> is now nothing.".format(ctx.message.author.id))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Change base height
     @commands.command()
@@ -241,7 +241,7 @@ class SetCog(commands.Cog):
         await ctx.send("""<@{0}>'s base height is now {1}. ({2})""".format(ctx.message.author.id, digiSV.fromSV(userdata[BHEI], 'm'), digiSV.fromSV(userdata[BHEI], 'u')))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
     # Change base weight
     @commands.command()
@@ -260,7 +260,7 @@ class SetCog(commands.Cog):
         await ctx.send("""<@{0}>'s base weight is now {1}. ({2})""".format(ctx.message.author.id, digiSV.fromWV(userdata[BWEI], 'm'), digiSV.fromWV(userdata[BWEI], 'u')))
 
         if userdata[DISP]:
-            await nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(ctx.message.author)
 
 
 # Necessary
