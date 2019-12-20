@@ -8,7 +8,7 @@ import digiformatter as df
 
 def deepgetattr(obj, attr):
     """Recurses through an attribute chain to get the ultimate value."""
-    return reduce(lambda o, a: getattr(o, a, None), attr.split('.'), obj)
+    return reduce(lambda o, a: getattr(o, a, None), attr.split("."), obj)
 
 
 def dump_message(m):

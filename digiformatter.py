@@ -24,28 +24,28 @@ timestring = "%d %b %H:%M:%S"
 customs = {}
 
 # ASCII/ANSI characters.
-BLANK = ' '
-BELL = BEL = '\x07'
+BLANK = " "
+BELL = BEL = "\x07"
 
 # VT-100 escape sequences.
-ESC = '\033'
+ESC = "\033"
 
-CURSOR_UP = C_UP = ESC + 'A'
-CURSOR_DOWN = C_DOWN = ESC + 'B'
-CURSOR_RIGHT = C_RIGHT = ESC + 'C'
-CURSOR_LEFT = C_LEFT = ESC + 'D'
-CURSOR_HOME = C_HOME = ESC + 'H'
+CURSOR_UP = C_UP = ESC + "A"
+CURSOR_DOWN = C_DOWN = ESC + "B"
+CURSOR_RIGHT = C_RIGHT = ESC + "C"
+CURSOR_LEFT = C_LEFT = ESC + "D"
+CURSOR_HOME = C_HOME = ESC + "H"
 
-SAVE_CURSOR = C_SAVE = ESC + '7'
-LOAD_CURSOR = C_LOAD = ESC + '8'
+SAVE_CURSOR = C_SAVE = ESC + "7"
+LOAD_CURSOR = C_LOAD = ESC + "8"
 
-START_CURSOR_BLINKING = C_BLINK_ON = ESC + '[?12h'
-STOP_CURSOR_BLINKING = C_BLINK_OFF = ESC + '[?12l'
-SHOW_CURSOR = C_SHOW = ESC + '[?25h'
-HIDE_CURSOR = C_HIDE = ESC + '[?25l'
+START_CURSOR_BLINKING = C_BLINK_ON = ESC + "[?12h"
+STOP_CURSOR_BLINKING = C_BLINK_OFF = ESC + "[?12l"
+SHOW_CURSOR = C_SHOW = ESC + "[?25h"
+HIDE_CURSOR = C_HIDE = ESC + "[?25l"
 
-SCROLL_UP = ESC + '[1S'
-SCROLL_DOWN = ESC + '[1S'
+SCROLL_UP = ESC + "[1S"
+SCROLL_DOWN = ESC + "[1S"
 
 INSERT_BLANK = INS_BLANK = ESC + "[1@"
 DELETE_CHAR = DEL_CHAR = ESC + "[1P"
@@ -64,7 +64,7 @@ CLEAR_SCREEN = CLEAR = CLS = ESC + "[2J"
 END_OF_LINE = EOL = CURSOR_RIGHT * linelength
 BEGIN_OF_LINE = BOL = CURSOR_LEFT * linelength
 
-RESET_TERMINAL = RESET = ESC + 'c'
+RESET_TERMINAL = RESET = ESC + "c"
 
 
 # Cursor movement functions.
@@ -86,11 +86,11 @@ def cursorLeft(amount):
 
 # Scrolling methods.
 def scrollUp(amount):
-    print(ESC + f'[{amount}S')
+    print(ESC + f"[{amount}S")
 
 
 def scrollDown(amount):
-    print(ESC + f'[{amount}T')
+    print(ESC + f"[{amount}T")
 
 
 # Set window title.
@@ -193,10 +193,10 @@ def custom(name, message, showtime = True):
 
 # Create a progress bar.
 def createLoadBar(current, total, barlength = 50, showpercent = False):
-    TWENTYFIVE = '\u2591'
-    FIFTY = '\u2592'
-    SEVENTYFIVE = '\u2593'
-    FULL = '\u2588'
+    TWENTYFIVE = "\u2591"
+    FIFTY = "\u2592"
+    SEVENTYFIVE = "\u2593"
+    FULL = "\u2588"
     shades = {
         0: "",
         1: TWENTYFIVE,

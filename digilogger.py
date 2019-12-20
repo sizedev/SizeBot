@@ -5,7 +5,7 @@ import functools
 
 # Error debugging
 def print_error(command, error):
-    print('Ignoring exception in command {}:'.format(command), file = sys.stderr)
+    print("Ignoring exception in command {}:".format(command), file = sys.stderr)
     traceback.print_exception(type(error), error, error.__traceback__, file = sys.stderr)
 
 

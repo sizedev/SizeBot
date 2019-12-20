@@ -85,7 +85,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) is now {str(newheight)} tall.")
-        await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, digiSV.fromSV(userdata[CHEI], 'm'), digiSV.fromSV(userdata[CHEI], 'u')))
+        await ctx.send(f"<@{ctx.message.author.id}> is now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})")
 
         if userdata[DISP]:
             await digisize.nickUpdate(ctx.message.author)
@@ -192,7 +192,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) set a random height, and are now {str(newheight)}SV tall.")
-        await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, digiSV.fromSV(userdata[CHEI], 'm'), digiSV.fromSV(userdata[CHEI], 'u')))
+        await ctx.send(f"<@{ctx.message.author.id}> is now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})")
 
         if userdata[DISP]:
             await digisize.nickUpdate(ctx.message.author)
@@ -238,7 +238,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed their base height to {str(newbaseheight)}.")
-        await ctx.send("""<@{0}>'s base height is now {1}. ({2})""".format(ctx.message.author.id, digiSV.fromSV(userdata[BHEI], 'm'), digiSV.fromSV(userdata[BHEI], 'u')))
+        await ctx.send(f"<@{ctx.message.author.id}>'s base height is now {digiSV.fromSV(userdata[BHEI], 'm')}. ({digiSV.fromSV(userdata[BHEI], 'u')})")
 
         if userdata[DISP]:
             await digisize.nickUpdate(ctx.message.author)
@@ -257,7 +257,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed their base weight to {str(newbaseweight)}.")
-        await ctx.send("""<@{0}>'s base weight is now {1}. ({2})""".format(ctx.message.author.id, digiSV.fromWV(userdata[BWEI], 'm'), digiSV.fromWV(userdata[BWEI], 'u')))
+        await ctx.send(f"<@{ctx.message.author.id}>'s base weight is now {digiSV.fromWV(userdata[BWEI], 'm')}. ({digiSV.fromWV(userdata[BWEI], 'u')})")
 
         if userdata[DISP]:
             await digisize.nickUpdate(ctx.message.author)

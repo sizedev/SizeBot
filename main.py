@@ -23,23 +23,23 @@ authtoken = authtoken[0]
 digidecimal.init()
 
 # Predefined variables.
-prefix = '&'
-description = '''SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.
-SizeBot3AndAHalf is a refactorization for SB3 and adds database support.
-Written by DigiDuncan.
-The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.'''
+prefix = "&"
+description = ("SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.\n"
+               "SizeBot3AndAHalf is a refactorization for SB3 and adds database support.\n"
+               "Written by DigiDuncan.\n"
+               "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
 initial_extensions = [
-    'cogs.change',
-    'cogs.dm',
-    'cogs.fun',
-    'cogs.mod',
-    'cogs.monika',
-    'cogs.register',
-    'cogs.roleplay',
-    'cogs.set',
-    'cogs.stats',
-    'cogs.winks',
-    'cogs.banned'
+    "cogs.change",
+    "cogs.dm",
+    "cogs.fun",
+    "cogs.mod",
+    "cogs.monika",
+    "cogs.register",
+    "cogs.roleplay",
+    "cogs.set",
+    "cogs.stats",
+    "cogs.winks",
+    "cogs.banned"
 ]
 
 # Obviously we need the banner printed in the terminal.
@@ -52,10 +52,10 @@ bot.remove_command("help")
 # Output header
 @bot.event
 async def on_ready():
-    print(fore.CYAN + 'Logged in as')
+    print(fore.CYAN + "Logged in as")
     print(bot.user.name)
     print(bot.user.id)
-    print('------' + style.RESET)
+    print("------" + style.RESET)
     await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
     df.warn("Warn test.")
     df.crit("Crit test.")
@@ -98,7 +98,7 @@ async def on_disconnect():
 
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].
-if __name__ == '__main__':
+if __name__ == "__main__":
     for extension in initial_extensions:
         # try:
         bot.load_extension(extension)

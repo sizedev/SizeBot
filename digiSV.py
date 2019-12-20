@@ -56,7 +56,7 @@ def getSVPair(s):
 
 
 def isFeetAndInchesAndIfSoFixIt(value):
-    regex = r"^(?P<feet>\d+\.?\d*(ft|foot|feet|\'))?(?P<inch>\d+\.?\d*(in|\"))?"
+    regex = r"^(?P<feet>\d+\.?\d*(ft|foot|feet|'))?(?P<inch>\d+\.?\d*(in|\"))?"
     m = re.match(regex, value, flags = re.I)
     if not m:
         return value
@@ -72,7 +72,7 @@ def isFeetAndInchesAndIfSoFixIt(value):
     return f"{totalinches}in"
 
 
-# Convert any supported height to 'size value'
+# Convert any supported height to "size value"
 def toSV(s):
     s = isFeetAndInchesAndIfSoFixIt(s)
     value, unit = getSVPair(s)
@@ -117,7 +117,7 @@ def toSV(s):
         output = Decimal(value) * Decimal(10**24)
     elif unit in ["inches", "inch", "in", "\""]:
         output = Decimal(value) * inch
-    elif unit in ["feet", "foot", "ft", "\'"]:
+    elif unit in ["feet", "foot", "ft", "'"]:
         output = Decimal(value) * foot
     elif unit in ["miles", "mile", "mi"]:
         output = Decimal(value) * mile
@@ -148,7 +148,7 @@ def toSV(s):
     return output
 
 
-# Convert 'size values' to a more readable format (metric).
+# Convert "size values" to a more readable format (metric).
 def fromSV(value, system = "m", accuracy = 2):
     value = float(value)
     output = ""
@@ -267,7 +267,7 @@ def fromSV(value, system = "m", accuracy = 2):
     return removeDecimals(output)
 
 
-# Convert any supported weight to 'weight value', or milligrams.
+# Convert any supported weight to "weight value", or milligrams.
 def toWV(s):
     value, unit = getSVPair(s)
     if value is None or unit is None:
@@ -342,7 +342,7 @@ def toWV(s):
     return output
 
 
-# Convert 'weight values' to a more readable format.
+# Convert "weight values" to a more readable format.
 def fromWV(value, system = "m", accuracy = 2):
     value = Decimal(value)
     if system == "m":
