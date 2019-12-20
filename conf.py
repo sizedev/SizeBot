@@ -17,3 +17,4 @@ enspace = "\u2002"
 printtab = enspace * 4
 
 idfilepath = "text/ids.txt"
+hexfilepath = "text/hexstring.txt"

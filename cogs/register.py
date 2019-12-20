@@ -1,8 +1,10 @@
+import random
+
 from discord.ext import commands
 from discord.utils import get
 
 import digiformatter as df
-from globalsb import readHexCode, regenHexCode, nickUpdate
+from globalsb import nickUpdate
 import conf
 import userdb
 import digiSV
@@ -22,6 +24,22 @@ async def removeUserRole(member):
         df.warn(f"Sizebot user role {conf.sizebotuser_roleid} not found in guild {member.guild.id}")
         return
     await member.remove_roles(role, reason="Unregistered as sizebot user")
+
+
+def regenHexCode():
+    # 16-char hex string gen for unregister
+    hexdigits = "1234567890abcdef"
+    hexcode = "".join(random.choice(hexdigits) for _ in range(16))
+    with open(conf.hexfilepath, "w") as file:
+        file.write(hexcode)
+    return hexcode
+
+
+def readHexCode():
+    # Read the hexcode from the file
+    with open(conf.hexfilepath, "r") as file:
+        hexcode = file.readline().rstrip()
+    return hexcode
 
 
 class RegisterCog(commands.Cog):
@@ -95,27 +113,28 @@ class RegisterCog(commands.Cog):
     async def unregister(self, ctx, code=None):
         # User file missing
         if not userdb.exists(ctx.message.author.id):
-            df.warn("User {0} not registered with SizeBot, but tried to unregister anyway.".format(ctx.message.author.id))
-            await ctx.send("""Sorry! You aren't registered with SizeBot.
-    To register, use the `&register` command.""", delete_after=5)
+            df.warn(f"User {ctx.message.author.id} not registered with SizeBot, but tried to unregister anyway.")
+            await ctx.send("Sorry! You aren't registered with SizeBot.\n"
+                           "To register, use the `&register` command.", delete_after=5)
             return
 
         if code is None:
-            regenHexCode()
-            await ctx.send("""To unregister, use the `&unregister` command and the following code.
-    `{0}`""".format(readHexCode()), delete_after=30)
+            hexcode = regenHexCode()
+            await ctx.send("To unregister, use the `&unregister` command and the following code.\n"
+                           f"`{hexcode}`", delete_after=30)
             return
 
-        if code != readHexCode():
-            df.warn("User {0} tried to unregister, but said the wrong hexcode.".format(ctx.message.author.id))
-            await ctx.send("Incorrect code. You said: `{0}`. The correct code was: `{1}`. Try again.".format(code, readHexCode()), delete_after=10)
+        hexcode = readHexCode()
+        if code != hexcode:
+            df.warn(f"User {ctx.message.author.id} tried to unregister, but said the wrong hexcode.")
+            await ctx.send(f"Incorrect code. You said: `{code}`. The correct code was: `{hexcode}`. Try again.", delete_after=10)
             return
 
         userdb.delete(ctx.message.author.id)
         await removeUserRole(ctx.message.author)
 
-        df.warn("User {0} successfully unregistered.".format(ctx.message.author.id))
-        await ctx.send("Correct code! Unregistered {0}".format(ctx.message.author.name), delete_after=5)
+        df.warn(f"User {ctx.message.author.id} successfully unregistered.")
+        await ctx.send(f"Correct code! Unregistered {ctx.message.author.name}", delete_after=5)
 
     @commands.Cog.listener()
     async def on_message(self, m):
