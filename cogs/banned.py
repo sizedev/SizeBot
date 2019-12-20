@@ -6,7 +6,7 @@ def check(ctx):
     if not isinstance(ctx.channel, discord.abc.GuildChannel):
         return False
 
-    role = discord.utils.get(ctx.author.roles, name='SizeBot_Banned')
+    role = discord.utils.get(ctx.author.roles, name = "SizeBot_Banned")
     return role is None
 
 
