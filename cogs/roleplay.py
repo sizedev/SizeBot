@@ -31,14 +31,14 @@ class RPCog(commands.Cog):
             dSides = int(dArray[1])
             dDrops = int(dArray[2])
         else:
-            await ctx.send('Format has to be in XdY or XdYdZ.')
+            await ctx.send("Format has to be in XdY or XdYdZ.")
             return
         if dSides > 1000000:
-            await ctx.send('Too many sides!')
+            await ctx.send("Too many sides!")
             df.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll a {dSides}-sided die!")
             stop = True
         if dNum > 250:
-            await ctx.send('Too many dice!')
+            await ctx.send("Too many dice!")
             df.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll {dNum} dice!")
             stop = True
         if stop:
