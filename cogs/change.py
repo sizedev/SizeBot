@@ -1,6 +1,7 @@
 import random
+from decimal import Decimal
 
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 import digiformatter as df
 import digierror as errors
@@ -9,14 +10,27 @@ from userdb import CHEI
 import digiSV
 import digisize
 
-# Slow growth tasks.
-# TODO: Get rid of asyncio tasks, replace with timed database checks.
-tasks = {}
+
+class Change:
+    def __init__(self, userid, *, addPerSec=0, mulPerSec=1):
+        self.userid = userid
+        self.addPerSec = Decimal(addPerSec)
+        self.mulPerSec = Decimal(mulPerSec)
+
+    def apply(self, seconds):
+        user = userdb.load(self.userid)
+        seconds = Decimal(seconds)
+        addPerTick = seconds * self.addPerSec
+        mulPerTick = self.mulPerTick ** seconds
+        user.height = (user.height * mulPerTick) + addPerTick
+        userdb.save()
+        digisize.nickUpdate(self.userid)
 
 
 class ChangeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.changes = {}
 
     @commands.command()
     async def change(self, ctx, style, *, amount):
@@ -36,27 +50,17 @@ class ChangeCog(commands.Cog):
         delay = ""
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) slow-changed {style}-style {amount} every {delay} minutes.")
 
-        async def slowchangetask(ctx, style, amount, delay):
-            # TODO: Implement this
-            pass
+        change = Change(ctx.message.author.id, addPerSec=0, mulPerSec=1)
 
-        bot = self.bot
-        try:
-            tasks[ctx.message.author.id].cancel()
-            del tasks[ctx.message.author.id]
-        except BaseException:
-            pass
-
-        task = bot.loop.create_task(slowchangetask(ctx, style, amount, delay))
-        tasks[ctx.message.author.id] = task
+        self.changes[ctx.message.author.id] = change
 
     @commands.command()
     async def stopchange(self, ctx):
         df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) stopped slow-changing.")
-        try:
-            tasks[ctx.message.author.id].cancel()
-            del tasks[ctx.message.author.id]
-        except BaseException:
+
+        deleted = self.changes.pop(ctx.message.author.id, None)
+
+        if deleted is None:
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
             df.warn(f"User {ctx.message.author.id} ({ctx.message.author.nick}) tried to stop slow-changing, but there didn't have a task active.")
 
@@ -85,6 +89,13 @@ They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tal
             # TODO: Randomize the italics message here.
             await ctx.send(f"""<@{ctx.message.author.id}> ate a :milk:! *I mean it said "Drink me..."*
     They shrunk {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})""")
+
+    # Slow growth task
+    # TODO: Does this restart if there are errors?
+    @tasks.loop(seconds=6)
+    async def changeTask(self):
+        for change in self.changes.values():
+            change.apply()
 
 
 # Necessary.
