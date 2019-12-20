@@ -1,4 +1,3 @@
-import io
 import random
 import decimal
 
@@ -8,7 +7,6 @@ import digiformatter as df
 import digierror as errors
 import digiSV
 import userdb
-
 import utils
 
 
@@ -23,33 +21,6 @@ decimal.setcontext(context)
 # Slow growth tasks.
 # TODO: Get rid of asyncio tasks, replace with timed database checks.
 tasks = {}
-
-
-def getID(*names):
-    # IDs are stored in text/ids.txt.
-    # The format is one ID per line, in the form {id}:{name}
-    # This file is not tracked by Git.
-    iddict = {}
-    with io.open("text/ids.txt", "r", encoding="utf-8") as idfile:
-        ids = idfile.readlines()
-    ids = [x.strip() for x in ids]
-    for line in ids:
-        iddict[line[19:]] = line[:18].lower()
-    if len(names) == 0:
-        return iddict
-    if len(names) == 1:
-        if names in iddict.keys():
-            return int(iddict[names])
-        else:
-            return 000000000000000000
-    else:
-        idlist = []
-        for name in names:
-            if name in iddict.keys():
-                idlist.append(int(iddict[name]))
-            else:
-                idlist.append(000000000000000000)
-        return tuple(idlist)
 
 
 def regenHexCode():

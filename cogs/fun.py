@@ -2,7 +2,9 @@ import asyncio
 
 from discord.ext import commands
 
-from globalsb import getID, tasks
+from globalsb import tasks
+
+import iddb
 
 
 # Commands for non-size stuff.
@@ -14,7 +16,7 @@ class FunCog(commands.Cog):
 
     @commands.command()
     async def repeat(self, ctx, delay: float, *, message: str):
-        if ctx.message.author.id != getID("DigiDuncan"):
+        if ctx.message.author.id != iddb.getID("DigiDuncan"):
             return
         await ctx.message.delete()
 
@@ -34,7 +36,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def say(self, ctx, *, message: str):
         await ctx.message.delete()
-        if ctx.message.author.id == getID("DigiDuncan"):
+        if ctx.message.author.id == iddb.getID("DigiDuncan"):
             await ctx.send(message)
 
     @commands.command()

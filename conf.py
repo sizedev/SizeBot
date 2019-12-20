@@ -15,3 +15,5 @@ banner = r"""
 sizebotuser_roleid = 562356758522101769
 enspace = "\u2002"
 printtab = enspace * 4
+
+idfilepath = "text/ids.txt"

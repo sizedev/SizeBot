@@ -1,9 +1,9 @@
 from discord.ext import commands
 
 import digiformatter as df
-from globalsb import getID
 import conf
 import userdb
+import iddb
 
 
 class ModCog(commands.Cog):
@@ -168,7 +168,7 @@ Thank you so much for being here throughout this journey!""")
     @commands.command()
     async def bug(self, ctx, *, message: str):
         df.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-        await self.bot.get_user(getID("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
+        await self.bot.get_user(iddb.getID("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
 
 
 # Necessary.
