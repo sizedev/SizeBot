@@ -1,5 +1,6 @@
 import random
 from decimal import Decimal
+import time
 
 from discord.ext import commands, tasks
 
@@ -16,12 +17,13 @@ class Change:
         self.userid = userid
         self.addPerSec = Decimal(addPerSec)
         self.mulPerSec = Decimal(mulPerSec)
+        self.lastRan = time.time()
 
-    def apply(self, seconds):
-        user = userdb.load(self.userid)
-        seconds = Decimal(seconds)
+    def apply(self):
+        seconds = Decimal(time.time())
         addPerTick = seconds * self.addPerSec
         mulPerTick = self.mulPerTick ** seconds
+        user = userdb.load(self.userid)
         user.height = (user.height * mulPerTick) + addPerTick
         userdb.save()
         digisize.nickUpdate(self.userid)
