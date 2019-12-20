@@ -2,9 +2,10 @@ import asyncio
 
 from discord.ext import commands
 
-from globalsb import tasks
-
 import iddb
+
+# TODO: Get rid of asyncio tasks, replace with timed database checks.
+tasks = {}
 
 
 # Commands for non-size stuff.

@@ -6,9 +6,12 @@ import digiformatter as df
 import digierror as errors
 import userdb
 from userdb import CHEI
-from globalsb import tasks
 import digiSV
 import digisize
+
+# Slow growth tasks.
+# TODO: Get rid of asyncio tasks, replace with timed database checks.
+tasks = {}
 
 
 class ChangeCog(commands.Cog):
@@ -19,7 +22,7 @@ class ChangeCog(commands.Cog):
     async def change(self, ctx, style, *, amount):
         # Change height.
         changereturn = digisize.changeUser(ctx.message.author.id, style, amount)
-        errors.throw(ctx, changereturn)
+        errors.throw(ctx(changereturn))
         if changereturn == errors.SUCCESS:
             userdata = userdb.load(ctx.message.author.id)
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed {style}-style {amount}.")
@@ -41,7 +44,7 @@ class ChangeCog(commands.Cog):
         try:
             tasks[ctx.message.author.id].cancel()
             del tasks[ctx.message.author.id]
-        except:
+        except BaseException:
             pass
 
         task = bot.loop.create_task(slowchangetask(ctx, style, amount, delay))
@@ -53,7 +56,7 @@ class ChangeCog(commands.Cog):
         try:
             tasks[ctx.message.author.id].cancel()
             del tasks[ctx.message.author.id]
-        except:
+        except BaseException:
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
             df.warn(f"User {ctx.message.author.id} ({ctx.message.author.nick}) tried to stop slow-changing, but there didn't have a task active.")
 
@@ -62,7 +65,7 @@ class ChangeCog(commands.Cog):
         # Eat me!
         randmult = round(random.random(2, 20), 1)
         changereturn = digisize.changeUser(ctx.message.author.id, "multiply", randmult)
-        errors.throw(ctx, changereturn)
+        errors.throw(ctx(changereturn))
         if changereturn == errors.SUCCESS:
             userdata = userdb.load(ctx.message.author.id)
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) ate a cake and multiplied {randmult}.")
@@ -76,7 +79,7 @@ They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tal
         userdata = userdb.load(ctx.message.author.id)
         randmult = round(random.random(2, 20), 1)
         changereturn = digisize.changeUser(ctx.message.author.id, "divide", randmult)
-        errors.throw(ctx, changereturn)
+        errors.throw(ctx(changereturn))
         if changereturn == errors.SUCCESS:
             df.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) drank a potion and shrunk {randmult}.")
             # TODO: Randomize the italics message here.
