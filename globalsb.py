@@ -172,7 +172,7 @@ async def nickUpdate(user):
     try:
         await user.edit(nick=newnick)
     except discord.Forbidden:
-        raise errors.NoPermissions()
+        raise errors.NoPermissionsException
 
 
 def clamp(minVal, val, maxVal):
