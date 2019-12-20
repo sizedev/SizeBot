@@ -118,13 +118,4 @@ def changeUser(userid, changestyle, amount):
     userdb.save(userdata)
 
 
-def check(ctx):
-    # Disable commands for users with the SizeBot_Banned role.
-    if not isinstance(ctx.channel, discord.abc.GuildChannel):
-        return False
-
-    role = discord.utils.get(ctx.author.roles, name='SizeBot_Banned')
-    return role is None
-
-
 df.load("Global functions loaded.")

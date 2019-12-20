@@ -8,7 +8,6 @@ from discord.ext import commands
 
 import digierror as errors
 import digiformatter as df
-from globalsb import check
 import conf
 import utils
 
@@ -36,7 +35,8 @@ initial_extensions = [
     'cogs.roleplay',
     'cogs.set',
     'cogs.stats',
-    'cogs.winks'
+    'cogs.winks',
+    'cogs.banned'
 ]
 
 # Obviously we need the banner printed in the terminal.
@@ -44,7 +44,6 @@ print(bg(24) + fg(202) + style.BOLD + conf.banner + style.RESET + " v" + conf.ve
 
 bot = commands.Bot(command_prefix=prefix, description=description)
 bot.remove_command("help")
-bot.add_check(check)
 
 
 # Output header
