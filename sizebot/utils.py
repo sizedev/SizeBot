@@ -34,6 +34,6 @@ def removeBrackets(s):
     if s.startswith(allowbrackets):
         return s
 
-    s = re.sub(r"[[]<>]", "", s)
+    s = re.sub(r"[\[\]<>]", "", s)
 
     return s
