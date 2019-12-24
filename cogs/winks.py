@@ -1,13 +1,13 @@
 from discord.ext import commands
-from globalsb import yukioid, pretty_time_delta
+from globalsb import yukioid, pretty_time_delta, digiid
 import digilogger as logger
 import re
-import datetime
+from datetime import timedelta, datetime
 
 winkpath = "../winkcount.txt"
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
-starttime = datetime.datetime(2019, 9, 15)
-milestones = [1000, 2500, 5000, 10000, 25000, 50000, 100000]
+starttime = datetime(2019, 9, 15)
+milestones = [1111, 2500, 5000, 10000, 25000, 50000, 100000]
 
 
 def getWinks():
@@ -34,16 +34,17 @@ def countWinks(s):
     return len(winkPattern.findall(s))
 
 
-async def sayMilestone(winkcount):
+async def sayMilestone(message, winkcount):
     now = datetime.today()
     timesince = now - starttime
     timeperwink = timesince / winkcount
-    await ctx.send(f""":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball:
+    await message.channel.send(f""":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball:
 It took **{pretty_time_delta(timesince.total_seconds())}** to hit this milestone!
 That's an average of **{pretty_time_delta(timeperwink.total_seconds())}** per wink!
 (That's **{winkcount / (timesince / timedelta(days = 1))}** winks/day!)
 Great winking, <@{yukioid}>!""")
-    logger.crit(f"""Yukio has winked {winkcount} times since 15 September, 2019! :wink:
+    logger.crit(f"""SEE #{message.channel.name}!
+Yukio has winked {winkcount} times since 15 September, 2019! :wink:
 It took {pretty_time_delta(timesince.total_seconds())} to hit this milestone!
 That's an average of {pretty_time_delta(timeperwink.total_seconds())} per wink!
 (That's {winkcount / (timesince / timedelta(days = 1))} winks/day!)""")
@@ -66,7 +67,9 @@ class WinksCog(commands.Cog):
 
         winkcount = addWinks(winksSeen)
         logger.msg(f"Yukio has winked {winkcount} times!")
-        if winkcount in milestones: sayMilestone(winkcount)
+        if winkcount in milestones:
+            await sayMilestone(message, winkcount)
+            await self.bot.get_user(digiid).send("MILESTONE IN #{message.channel.name}")
 
     @commands.command()
     async def winkcount(self, ctx):
