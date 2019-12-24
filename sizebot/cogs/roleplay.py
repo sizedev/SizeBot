@@ -2,7 +2,7 @@ import random
 
 from discord.ext import commands
 
-import digiformatter as df
+from sizebot import digiformatter as df
 
 
 # Commands for roleplaying.

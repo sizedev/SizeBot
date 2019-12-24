@@ -1,15 +1,15 @@
 import random
-from decimal import Decimal
 import time
 
 from discord.ext import commands, tasks
 
-import digiformatter as df
-import digierror as errors
-import userdb
-from userdb import CHEI
-import digiSV
-import digisize
+from sizebot.digidecimal import Decimal
+from sizebot import digiformatter as df
+from sizebot import digierror as errors
+from sizebot import userdb
+from sizebot.userdb import CHEI
+from sizebot import digiSV
+from sizebot import digisize
 
 
 class Change:

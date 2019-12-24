@@ -2,10 +2,10 @@
 
 import discord
 
-import digierror as errors
-import digiSV
-import userdb
-import utils
+from sizebot import digierror as errors
+from sizebot import digiSV
+from sizebot import userdb
+from sizebot import utils
 
 
 # Update users nicknames to include sizetags.

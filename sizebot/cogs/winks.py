@@ -3,13 +3,13 @@ from datetime import datetime, timedelta
 
 from discord.ext import commands
 
-import digiformatter as df
-import utils
-import iddb
+from sizebot import digiformatter as df
+from sizebot import utils
+from sizebot import iddb
 
 winkpath = "text/winkcount.txt"
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
-starttime = datetime.datetime(2019, 9, 15)
+starttime = datetime(2019, 9, 15)
 milestones = [1000, 2500, 5000, 10000, 25000, 50000, 100000]
 
 

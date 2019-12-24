@@ -3,7 +3,7 @@ from functools import reduce
 import discord
 from discord.ext import commands
 
-import digiformatter as df
+from sizebot import digiformatter as df
 
 
 def deepgetattr(obj, attr):

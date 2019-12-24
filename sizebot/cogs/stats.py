@@ -1,16 +1,16 @@
-from decimal import Decimal
-import decimal
+from decimal import InvalidOperation
 import math
 
 from discord.ext import commands
 
-import digilogger as logger
-import digiformatter as df
+from sizebot.digidecimal import Decimal
+from sizebot import digilogger as logger
+from sizebot import digiformatter as df
 # TODO: Fix this...
-import userdb
-from userdb import CHEI, BHEI, BWEI, DENS
-import conf
-import digiSV
+from sizebot import userdb
+from sizebot.userdb import CHEI, BHEI, BWEI, DENS
+from sizebot import conf
+from sizebot import digiSV
 
 # TODO: Move to units module.
 # Conversion constants.
@@ -219,25 +219,25 @@ class StatsCog(commands.Cog):
         sd = Decimal(smalluser[DENS])
         bigmult = (bch / bbh)
         smallmult = (sch / sbh)
-        bigmultcubed = (bigmult ** 3)
-        smallmultcubed = (smallmult ** 3)
-        dispbigmult = round(bigmult, 4)
-        dispsmallmult = round(smallmult, 4)
-        dispbigmultcubed = round(bigmultcubed, 4)
-        dispsmallmultcubed = round(smallmultcubed, 4)
-        bcw = bbw * (bigmult ** 3) * bd
-        scw = sbw * (smallmult ** 3) * sd
+        bigmultcubed = (bigmult ** Decimal("3"))
+        smallmultcubed = (smallmult ** Decimal("3"))
+        dispbigmult = round(bigmult, Decimal("4"))
+        dispsmallmult = round(smallmult, Decimal("4"))
+        dispbigmultcubed = round(bigmultcubed, Decimal("4"))
+        dispsmallmultcubed = round(smallmultcubed, Decimal("4"))
+        bcw = bbw * (bigmult ** Decimal("3")) * bd
+        scw = sbw * (smallmult ** Decimal("3")) * sd
         diffmult = bigmult / smallmult
         b2sh = bbh * diffmult
         s2bh = sbh / diffmult
-        b2sw = bbw * (diffmult ** 3)
-        s2bw = sbw / (diffmult ** 3)
-        bigtosmallheight = digiSV.fromSV(b2sh, "m", 3)
-        smalltobigheight = digiSV.fromSV(s2bh, "m", 3)
+        b2sw = bbw * (diffmult ** Decimal("3"))
+        s2bw = sbw / (diffmult ** Decimal("3"))
+        bigtosmallheight = digiSV.fromSV(b2sh, "m", Decimal("3"))
+        smalltobigheight = digiSV.fromSV(s2bh, "m", Decimal("3"))
         bigtosmallheightUSA = digiSV.fromSV(b2sh, "u")
         smalltobigheightUSA = digiSV.fromSV(s2bh), "u"
-        bigtosmallfoot = digiSV.fromSV(b2sh * footfactor, "m", 3)
-        smalltobigfoot = digiSV.fromSV(s2bh * footfactor, "m", 3)
+        bigtosmallfoot = digiSV.fromSV(b2sh * footfactor, "m", Decimal("3"))
+        smalltobigfoot = digiSV.fromSV(s2bh * footfactor, "m", Decimal("3"))
         bigtosmallfootUSA = digiSV.fromSV(b2sh * footfactor, "u")
         smalltobigfootUSA = digiSV.fromSV(s2bh * footfactor, "u")
         bigtosmallshoe = digiSV.toShoeSize(b2sh * footfactor / digiSV.inch)
@@ -246,31 +246,31 @@ class StatsCog(commands.Cog):
         smalltobigweight = digiSV.fromWV(s2bw, "m")
         bigtosmallweightUSA = digiSV.fromWV(b2sw, "u")
         smalltobigweightUSA = digiSV.fromWV(s2bw, "u")
-        bigtosmallfootwidth = digiSV.fromSV(b2sh * footwidthfactor, "m", 3)
-        smalltobigfootwidth = digiSV.fromSV(s2bh * footwidthfactor, "m", 3)
+        bigtosmallfootwidth = digiSV.fromSV(b2sh * footwidthfactor, "m", Decimal("3"))
+        smalltobigfootwidth = digiSV.fromSV(s2bh * footwidthfactor, "m", Decimal("3"))
         bigtosmallfootwidthUSA = digiSV.fromSV(b2sh * footwidthfactor, "u")
         smalltobigfootwidthUSA = digiSV.fromSV(s2bh * footwidthfactor, "u")
-        bigtosmallfootthick = digiSV.fromSV(b2sh * footthickfactor, "m", 3)
-        smalltobigfootthick = digiSV.fromSV(s2bh * footthickfactor, "m", 3)
+        bigtosmallfootthick = digiSV.fromSV(b2sh * footthickfactor, "m", Decimal("3"))
+        smalltobigfootthick = digiSV.fromSV(s2bh * footthickfactor, "m", Decimal("3"))
         bigtosmallfootthickUSA = digiSV.fromSV(b2sh * footthickfactor, "u")
         smalltobigfootthickUSA = digiSV.fromSV(s2bh * footthickfactor, "u")
-        bigtosmallthumb = digiSV.fromSV(b2sh * thumbfactor, "m", 3)
-        smalltobigthumb = digiSV.fromSV(s2bh * thumbfactor, "m", 3)
+        bigtosmallthumb = digiSV.fromSV(b2sh * thumbfactor, "m", Decimal("3"))
+        smalltobigthumb = digiSV.fromSV(s2bh * thumbfactor, "m", Decimal("3"))
         bigtosmallthumbUSA = digiSV.fromSV(b2sh * thumbfactor, "u")
         smalltobigthumbUSA = digiSV.fromSV(s2bh * thumbfactor, "u")
-        bigtosmallfingerprint = digiSV.fromSV(b2sh * fingerprintfactor, "m", 3)
-        smalltobigfingerprint = digiSV.fromSV(s2bh * fingerprintfactor, "m", 3)
+        bigtosmallfingerprint = digiSV.fromSV(b2sh * fingerprintfactor, "m", Decimal("3"))
+        smalltobigfingerprint = digiSV.fromSV(s2bh * fingerprintfactor, "m", Decimal("3"))
         bigtosmallfingerprintUSA = digiSV.fromSV(b2sh * fingerprintfactor, "u")
         smalltobigfingerprintUSA = digiSV.fromSV(s2bh * fingerprintfactor, "u")
-        bigtosmallhairwidth = digiSV.fromSV(b2sh * hairwidthfactor, "m", 3)
-        smalltobighairwidth = digiSV.fromSV(s2bh * hairwidthfactor, "m", 3)
+        bigtosmallhairwidth = digiSV.fromSV(b2sh * hairwidthfactor, "m", Decimal("3"))
+        smalltobighairwidth = digiSV.fromSV(s2bh * hairwidthfactor, "m", Decimal("3"))
         bigtosmallhairwidthUSA = digiSV.fromSV(b2sh * hairwidthfactor, "u")
         smalltobighairwidthUSA = digiSV.fromSV(s2bh * hairwidthfactor, "u")
-        bigtosmallpointer = digiSV.fromSV(b2sh * pointerfactor, "m", 3)
-        smalltobigpointer = digiSV.fromSV(s2bh * pointerfactor, "m", 3)
+        bigtosmallpointer = digiSV.fromSV(b2sh * pointerfactor, "m", Decimal("3"))
+        smalltobigpointer = digiSV.fromSV(s2bh * pointerfactor, "m", Decimal("3"))
         bigtosmallpointerUSA = digiSV.fromSV(b2sh * pointerfactor, "u")
         smalltobigpointerUSA = digiSV.fromSV(s2bh * pointerfactor, "u")
-        timestaller = digiSV.placeValue(round((bch / sch), 3))
+        timestaller = digiSV.placeValue(round((bch / sch), Decimal("3")))
 
         # Print compare.
         return (
@@ -312,7 +312,7 @@ class StatsCog(commands.Cog):
     @stats.error
     @logger.err2console
     async def stats_handler(self, ctx, error):
-        if isinstance(error, decimal.InvalidOperation):
+        if isinstance(error, InvalidOperation):
             await ctx.send(
                 "SizeBot cannot perform this action due to a math error.\n"
                 f"Are you too big, {ctx.message.author.id}?")

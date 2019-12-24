@@ -1,6 +1,6 @@
 import io
 
-import conf
+from sizebot import conf
 
 
 def loadIds():

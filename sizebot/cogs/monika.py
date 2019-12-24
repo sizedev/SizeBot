@@ -1,12 +1,14 @@
-import io
 import random
+
+import importlib.resources as pkg_resources
 
 from discord.ext import commands
 
-import digiformatter as df
-import iddb
+from sizebot import digiformatter as df
+from sizebot import iddb
+from sizebot import text
 
-monikalines = io.open("text/monikalines.txt", encoding = "utf-8").readlines()
+monikalines = pkg_resources.read_text(text, "monikalines.txt")
 
 
 # Easter egg

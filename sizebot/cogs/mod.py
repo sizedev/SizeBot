@@ -1,9 +1,9 @@
 from discord.ext import commands
 
-import digiformatter as df
-import conf
-import userdb
-import iddb
+from sizebot import digiformatter as df
+from sizebot import conf
+from sizebot import userdb
+from sizebot import iddb
 
 
 class ModCog(commands.Cog):

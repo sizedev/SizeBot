@@ -3,11 +3,11 @@ import random
 from discord.ext import commands
 from discord.utils import get
 
-import digiformatter as df
-import conf
-import userdb
-import digiSV
-import digisize
+from sizebot import digiformatter as df
+from sizebot import conf
+from sizebot import userdb
+from sizebot import digiSV
+from sizebot import digisize
 
 
 async def addUserRole(member):

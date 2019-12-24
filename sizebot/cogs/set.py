@@ -2,11 +2,11 @@ import random
 
 from discord.ext import commands
 
-import digiformatter as df
-import userdb
-from userdb import NICK, DISP, SPEC, CHEI, BHEI, DENS, UNIT, BWEI
-import digiSV
-import digisize
+from sizebot import digiformatter as df
+from sizebot import userdb
+from sizebot.userdb import NICK, DISP, SPEC, CHEI, BHEI, DENS, UNIT, BWEI
+from sizebot import digiSV
+from sizebot import digisize
 
 
 class SetCog(commands.Cog):

@@ -1,5 +1,6 @@
-import userdb
-from userdb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC, User
+from sizebot.digidecimal import Decimal
+from sizebot import userdb
+from sizebot.userdb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC, User
 
 
 # Load a user from the old file format
@@ -15,13 +16,13 @@ def loadLegacy(id):
     userdata.display = lines[DISP]
     if lines[CHEI] != "None":
         userdata.height = lines[CHEI]
-        userdata.height /= 10**6
+        userdata.height /= Decimal("1e6")
     if lines[BHEI] != "None":
         userdata.baseheight = lines[BHEI]
-        userdata.baseheight /= 10**6
+        userdata.baseheight /= Decimal("1e6")
     if lines[BWEI] != "None":
         userdata.baseweight = lines[BWEI]
-        userdata.baseweight /= 10**3
+        userdata.baseweight /= Decimal("1e3")
     if lines[DENS] != "None":
         userdata.density = lines[DENS]
     userdata.unitsystem = lines[UNIT]

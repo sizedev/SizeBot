@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
-from decimal import Decimal
-import digierror as errors
+
+from sizebot.digidecimal import Decimal
+from sizebot import digierror as errors
 
 # Deprecated user array constants
 NICK = 0
