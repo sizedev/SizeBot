@@ -1,38 +1,57 @@
 from pathlib import Path
 
 import appdirs
-appname = "SizeBot"
-appauthor = "DigiDuncan"
-confdir = Path(appdirs.user_data_dir(appname, appauthor))
+import toml
+
+from sizebot import utils
 
 
-# Version
-version = "3AAH.0.0.b4"
+class Config:
+    __slots__ = ["banner", "description", "version", "prefix", "prefix", "authtoken", "ids"]
 
-# ASCII art
-banner = r"""
-. _____ _        ______       _   _____ .
-./  ___(_)       | ___ \     | | |____ |.
-.\ `--. _ _______| |_/ / ___ | |_    / /.
-. `--. \ |_  / _ \ ___ \/ _ \| __|   \ \.
-./\__/ / |/ /  __/ |_/ / (_) | |_.___/ /.
-.\____/|_/___\___\____/ \___/ \__\____/ ."""
+    def __init__(self, configDict):
+        # ASCII art
+        self.banner = (r". _____ _        ______       _   _____ .""\n"
+                       r"./  ___(_)       | ___ \     | | |____ |.""\n"
+                       r".\ `--. _ _______| |_/ / ___ | |_    / /.""\n"
+                       r". `--. \ |_  / _ \ ___ \/ _ \| __|   \ \.""\n"
+                       r"./\__/ / |/ /  __/ |_/ / (_) | |_.___/ /.""\n"
+                       r".\____/|_/___\___\____/ \___/ \__\____/ .")
 
-# Constants
-sizebotuser_roleid = 562356758522101769
-enspace = "\u2002"
-printtab = enspace * 4
+        self.description = ("SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.\n"
+                            "SizeBot3AndAHalf is a refactorization for SB3 and adds database support.\n"
+                            "Written by DigiDuncan.\n"
+                            "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
 
-idfilepath = confdir / "ids.txt"
-hexfilepath = confdir / "hexstring.txt"
-authtokenpath = confdir / "authtoken.txt"
-prefix = "&"
+        # Version
+        self.version = "3AAH.0.0.b4"
 
-description = ("SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.\n"
-               "SizeBot3AndAHalf is a refactorization for SB3 and adds database support.\n"
-               "Written by DigiDuncan.\n"
-               "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
+        # Sizebot
+        self.prefix = utils.getPath(configDict, "sizebot.prefix", "&")
+
+        # Discord
+        self.authtoken = utils.getPath(configDict, "discord.authtoken", None)
+        self.ids = configDict.get("ids", dict())    # List of ids by name
+
+    def getId(self, name):
+        return self.ids.get(name, "000000000000000000")
+
+    @classmethod
+    def load(cls):
+        datadir = getDataDir()
+        confpath = datadir / "sizebot.conf"
+        print(f"Loading configuration from {confpath}")
+
+        configDict = toml.load(confpath)
+
+        return Config(configDict)
 
 
-def load():
-    print(f"Loading configuration from {confdir}")
+def getDataDir():
+    appname = "SizeBot"
+    appauthor = "DigiDuncan"
+    datadir = Path(appdirs.user_data_dir(appname, appauthor))
+    return datadir
+
+
+conf = Config.load()

@@ -37,3 +37,25 @@ def removeBrackets(s):
     s = re.sub(r"[\[\]<>]", "", s)
 
     return s
+
+
+def tryInt(val):
+    try:
+        val = int(val)
+    except ValueError:
+        pass
+    return val
+
+
+# Get a value using a path in nested dicts/lists
+# utils.getPath(myDict, "path.to.value", default=100)
+def getPath(root, path, default=None):
+    branch = root
+    components = path.split(".")
+    components = [tryInt(c) for c in components]
+    for component in components:
+        try:
+            branch = branch[component]
+        except (KeyError, IndexError):
+            return default
+    return branch

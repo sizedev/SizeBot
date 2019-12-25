@@ -5,7 +5,7 @@ from discord.ext import commands
 
 from sizebot import digiformatter as df
 from sizebot import utils
-from sizebot import iddb
+from sizebot.conf import conf
 
 winkpath = "text/winkcount.txt"
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
@@ -46,7 +46,7 @@ async def sayMilestone(channel, winkcount):
     timeperwink = timesince / winkcount
     prettytimeperwink = utils.prettyTimeDelta(timeperwink.total_seconds())
     winksperday = winkcount / (timesince / timedelta(days = 1))
-    yukioid = iddb.getID("Yukio")
+    yukioid = conf.getId("Yukio")
 
     await channel.send(f":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball\n:"
                        f"It took **{prettytimesince}** to hit this milestone!\n"
@@ -68,7 +68,7 @@ class WinksCog(commands.Cog):
     # Yukio wink count.
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.id != iddb.getID("Yukio"):
+        if message.author.id != conf.getId("Yukio"):
             return
 
         winksSeen = countWinks(message.content)

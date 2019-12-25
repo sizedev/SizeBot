@@ -4,8 +4,8 @@ import importlib.resources as pkg_resources
 
 from discord.ext import commands
 
+from sizebot.conf import conf
 from sizebot import digiformatter as df
-from sizebot import iddb
 from sizebot import text
 
 monikalines = pkg_resources.read_text(text, "monikalines.txt")
@@ -18,7 +18,7 @@ class MonikaCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, m):
-        if m.author.id == iddb.getID("SizeBot"):
+        if m.author.id == conf.getId("SizeBot"):
             return
         if "monika" not in m.content.lower():
             return

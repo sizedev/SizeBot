@@ -2,7 +2,7 @@ import asyncio
 
 from discord.ext import commands
 
-from sizebot import iddb
+from sizebot.conf import conf
 
 # TODO: Get rid of asyncio tasks, replace with timed database checks.
 tasks = {}
@@ -17,7 +17,7 @@ class FunCog(commands.Cog):
 
     @commands.command()
     async def repeat(self, ctx, delay: float, *, message: str):
-        if ctx.message.author.id != iddb.getID("DigiDuncan"):
+        if ctx.message.author.id != conf.getId("DigiDuncan"):
             return
         await ctx.message.delete()
 
@@ -37,7 +37,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def say(self, ctx, *, message: str):
         await ctx.message.delete()
-        if ctx.message.author.id == iddb.getID("DigiDuncan"):
+        if ctx.message.author.id == conf.getId("DigiDuncan"):
             await ctx.send(message)
 
     @commands.command()

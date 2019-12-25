@@ -9,7 +9,6 @@ from sizebot import digiformatter as df
 # TODO: Fix this...
 from sizebot import userdb
 from sizebot.userdb import CHEI, BHEI, BWEI, DENS
-from sizebot import conf
 from sizebot import digiSV
 
 # TODO: Move to units module.
@@ -272,42 +271,45 @@ class StatsCog(commands.Cog):
         smalltobigpointerUSA = digiSV.fromSV(s2bh * pointerfactor, "u")
         timestaller = digiSV.placeValue(round((bch / sch), Decimal("3")))
 
-        # Print compare.
+        # Print compare
+        enspace = "\u2002"
+        printtab = enspace * 4
+
         return (
             "**Comparison:**\n"
             f"{bigusertag} is really:\n"
-            f"{conf.printtab}Real Height: {digiSV.fromSV(bch, 'm', 3)} / {digiSV.fromSV(bch, 'u')} ({digiSV.placeValue(dispbigmult)}x basesize)\n"
-            f"{conf.printtab}Real Weight: {digiSV.fromWV(bcw, 'm')} / {digiSV.fromWV(bcw, 'u')}. ({digiSV.placeValue(dispbigmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {digiSV.fromSV(bch, 'm', 3)} / {digiSV.fromSV(bch, 'u')} ({digiSV.placeValue(dispbigmult)}x basesize)\n"
+            f"{printtab}Real Weight: {digiSV.fromWV(bcw, 'm')} / {digiSV.fromWV(bcw, 'u')}. ({digiSV.placeValue(dispbigmultcubed)}x basesize)\n"
             f"To {smallusertag}, {bigusertag} looks:\n"
-            f"{conf.printtab}Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
-            f"{conf.printtab}Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
-            f"{conf.printtab}Foot Length: {bigtosmallfoot} / {bigtosmallfootUSA} ({bigtosmallshoe})\n"
-            f"{conf.printtab}Foot Width: {bigtosmallfootwidth} / {bigtosmallfootwidthUSA}\n"
-            f"{conf.printtab}Toe Height: {bigtosmallfootthick} / {bigtosmallfootthickUSA}\n"
-            f"{conf.printtab}Pointer Finger Length: {bigtosmallpointer} / {bigtosmallpointerUSA}\n"
-            f"{conf.printtab}Thumb Width: {bigtosmallthumb} / {bigtosmallthumbUSA}\n"
-            f"{conf.printtab}Fingerprint Depth: {bigtosmallfingerprint} / {bigtosmallfingerprintUSA}\n"
-            f"{conf.printtab}Hair Width: {bigtosmallhairwidth} / {bigtosmallhairwidthUSA}\n"
+            f"{printtab}Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
+            f"{printtab}Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
+            f"{printtab}Foot Length: {bigtosmallfoot} / {bigtosmallfootUSA} ({bigtosmallshoe})\n"
+            f"{printtab}Foot Width: {bigtosmallfootwidth} / {bigtosmallfootwidthUSA}\n"
+            f"{printtab}Toe Height: {bigtosmallfootthick} / {bigtosmallfootthickUSA}\n"
+            f"{printtab}Pointer Finger Length: {bigtosmallpointer} / {bigtosmallpointerUSA}\n"
+            f"{printtab}Thumb Width: {bigtosmallthumb} / {bigtosmallthumbUSA}\n"
+            f"{printtab}Fingerprint Depth: {bigtosmallfingerprint} / {bigtosmallfingerprintUSA}\n"
+            f"{printtab}Hair Width: {bigtosmallhairwidth} / {bigtosmallhairwidthUSA}\n"
             "\n"
             f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
             "\n"
             f"{smallusertag} is really:\n"
-            f"{conf.printtab}Real Height: {digiSV.fromSV(sch, 'm', 3)} / {digiSV.fromSV(sch, 'u')} ({digiSV.placeValue(dispsmallmult)}x basesize)\n"
-            f"{conf.printtab}Real Weight: {digiSV.fromWV(scw, 'm')} / {digiSV.fromWV(scw, 'u')}. ({digiSV.placeValue(dispsmallmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {digiSV.fromSV(sch, 'm', 3)} / {digiSV.fromSV(sch, 'u')} ({digiSV.placeValue(dispsmallmult)}x basesize)\n"
+            f"{printtab}Real Weight: {digiSV.fromWV(scw, 'm')} / {digiSV.fromWV(scw, 'u')}. ({digiSV.placeValue(dispsmallmultcubed)}x basesize)\n"
             f"To {bigusertag}, {smallusertag} looks:\n"
-            f"{conf.printtab}Height: {smalltobigheight} / {smalltobigheightUSA}\n"
-            f"{conf.printtab}Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
-            f"{conf.printtab}Foot Length: {smalltobigfoot} / {smalltobigfootUSA} ({smalltobigshoe})\n"
-            f"{conf.printtab}Foot Width: {smalltobigfootwidth} / {smalltobigfootwidthUSA}\n"
-            f"{conf.printtab}Toe Height: {smalltobigfootthick} / {smalltobigfootthickUSA}\n"
-            f"{conf.printtab}Pointer Finger Length: {smalltobigpointer} / {smalltobigpointerUSA}\n"
-            f"{conf.printtab}Thumb Width: {smalltobigthumb} / {smalltobigthumbUSA}\n"
-            f"{conf.printtab}Fingerprint Depth: {smalltobigfingerprint} / {smalltobigfingerprintUSA}\n"
-            f"{conf.printtab}Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
+            f"{printtab}Height: {smalltobigheight} / {smalltobigheightUSA}\n"
+            f"{printtab}Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
+            f"{printtab}Foot Length: {smalltobigfoot} / {smalltobigfootUSA} ({smalltobigshoe})\n"
+            f"{printtab}Foot Width: {smalltobigfootwidth} / {smalltobigfootwidthUSA}\n"
+            f"{printtab}Toe Height: {smalltobigfootthick} / {smalltobigfootthickUSA}\n"
+            f"{printtab}Pointer Finger Length: {smalltobigpointer} / {smalltobigpointerUSA}\n"
+            f"{printtab}Thumb Width: {smalltobigthumb} / {smalltobigthumbUSA}\n"
+            f"{printtab}Fingerprint Depth: {smalltobigfingerprint} / {smalltobigfingerprintUSA}\n"
+            f"{printtab}Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
             "\n"
             f"**Base Sizes:**\n"
-            f"{conf.printtab}{bigusertag}: {digiSV.fromSV(bbh, 'm', 3)} / {digiSV.fromSV(bbh, 'u')} | {digiSV.fromWV(bbw, 'm')} / {digiSV.fromWV(bbw, 'u')}\n"
-            f"{conf.printtab}{smallusertag}: {digiSV.fromSV(sbh, 'm', 3)} / {digiSV.fromSV(sbh, 'u')} | {digiSV.fromWV(sbw, 'm')} / {digiSV.fromWV(sbw, 'u')}")
+            f"{printtab}{bigusertag}: {digiSV.fromSV(bbh, 'm', 3)} / {digiSV.fromSV(bbh, 'u')} | {digiSV.fromWV(bbw, 'm')} / {digiSV.fromWV(bbw, 'u')}\n"
+            f"{printtab}{smallusertag}: {digiSV.fromSV(sbh, 'm', 3)} / {digiSV.fromSV(sbh, 'u')} | {digiSV.fromWV(sbw, 'm')} / {digiSV.fromWV(sbw, 'u')}")
 
     @stats.error
     @logger.err2console

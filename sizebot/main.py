@@ -8,7 +8,7 @@ from discord.ext import commands
 
 from sizebot import digierror as errors
 from sizebot import digiformatter as df
-from sizebot import conf
+from sizebot.conf import conf
 from sizebot import utils
 
 
@@ -25,14 +25,6 @@ initial_extensions = [
     "sizebot.cogs.winks",
     "sizebot.cogs.banned"
 ]
-
-
-def getAuthToken():
-    # Get authtoken from file
-    with open(conf.authtokenpath) as f:
-        authtoken = f.readlines()
-    authtoken = authtoken[0].strip()
-    return authtoken
 
 
 def main():
@@ -92,12 +84,12 @@ def main():
     @bot.event
     async def on_disconnect():
         df.crit("SizeBot has been disconnected from Discord!")
-    try:
-        authtoken = getAuthToken()
-    except FileNotFoundError:
-        print(f"Authentication file not found: {conf.authtokenpath}")
+
+    if not conf.authtoken:
+        print(f"Authentication token not found")
         return
-    bot.run(authtoken)
+
+    bot.run(conf.authtoken)
 
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].
