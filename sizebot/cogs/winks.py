@@ -15,11 +15,8 @@ milestones = [1000, 2500, 5000, 10000, 25000, 50000, 100000]
 def getWinks():
     try:
         with open(conf.winkpath, "r") as f:
-            try:
-                winkcount = int(f.read())
-            except ValueError:
-                winkcount = 0
-    except FileNotFoundError:
+            winkcount = int(f.read())
+    except (FileNotFoundError, ValueError):
         winkcount = 0
     return winkcount
 
