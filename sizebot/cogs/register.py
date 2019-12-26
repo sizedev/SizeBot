@@ -35,8 +35,8 @@ class RegisterCog(commands.Cog):
     # Registers a user for SizeBot
     @commands.command()
     async def register(self, ctx, nick: str, display: str = "y", currentheight: str = "5ft10in", baseheight: str = "5ft10in", baseweight: str = "180lb", unitsystem: str = "m", species: str = None):
-        readable = "CH {0}, BH {1}, BW {2}".format(currentheight, baseheight, baseweight)
-        df.warn("New user attempt! Nickname: {0}, Display: {1}".format(nick, display))
+        readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
+        df.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
         print(readable)
 
         currentheightSV = digiSV.toSV(currentheight)
@@ -46,8 +46,9 @@ class RegisterCog(commands.Cog):
         # Already registered
         if userdb.exists(ctx.message.author.id):
             await ctx.send("Sorry! You already registered with SizeBot.\n"
-                           "To unregister, use the `&unregister` command.", delete_after = 10)
-            df.warn("User already registered on user registration: {1}.".format(ctx.message.author))
+                           "To unregister, use the `&unregister` command.",
+                           delete_after = 10)
+            df.warn(f"User already registered on user registration: {ctx.message.author}.")
             return
 
         # Invalid size value
@@ -58,12 +59,12 @@ class RegisterCog(commands.Cog):
 
         # Invalid display value
         if display.lower() not in ["y", "n"]:
-            df.warn("display was {0}, must be Y or N.".format(display))
+            df.warn(f"display was {display}, must be Y or N.")
             return
 
         # Invalid unit value
         if unitsystem.lower() not in ["m", "u"]:
-            df.warn("unitsystem was {0}, must be M or U.".format(unitsystem))
+            df.warn(f"unitsystem was {unitsystem}, must be M or U.")
             await ctx.send("Unitsystem must be `M` or `U`.", delete_after = 5)
             return
 
@@ -97,31 +98,37 @@ class RegisterCog(commands.Cog):
 
     @commands.command()
     async def unregister(self, ctx):
-        # User file missing
+        # User is not registered
         if not userdb.exists(ctx.message.author.id):
             df.warn(f"User {ctx.message.author.id} not registered with SizeBot, but tried to unregister anyway.")
             await ctx.send("Sorry! You aren't registered with SizeBot.\n"
-                           "To register, use the `&register` command.", delete_after = 5)
+                           "To register, use the `&register` command.",
+                           delete_after = 5)
             return
 
-        unregisterIcon = "❌"
-        sentMsg = await ctx.send(f"To unregister, react with {unregisterIcon}")
-        await sentMsg.add_reaction(unregisterIcon)
+        # Send a confirmation request
+        unregisterEmoji = "❌"
+        sentMsg = await ctx.send(f"To unregister, react with {unregisterEmoji}")
+        await sentMsg.add_reaction(unregisterEmoji)
 
+        # Wait for requesting user to react to sent message with unregisterEmoji
         def check(reaction, user):
             print(reaction)
             print(user)
             return reaction.message.id == sentMsg.id \
                 and user.id == ctx.message.author.id \
-                and str(reaction.emoji) == unregisterIcon
+                and str(reaction.emoji) == unregisterEmoji
 
         try:
             reaction, user = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
         except asyncio.TimeoutError:
+            # User took too long to respond
             return
         finally:
+            # User took too long OR User clicked the emoji
             await sentMsg.delete()
 
+        # Delete the user file, and remove the user role
         userdb.delete(ctx.message.author.id)
         await removeUserRole(ctx.message.author)
 
