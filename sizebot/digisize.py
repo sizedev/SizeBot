@@ -65,6 +65,33 @@ async def nickUpdate(user):
     except discord.Forbidden:
         raise errors.NoPermissionsException
 
+# Remove sizetag from user's nickname
+async def nickReset(user):
+    # webhooks
+    if user.discriminator == "0000":
+        return
+    # non-guild messages
+    if not isinstance(user, discord.Member):
+        return
+    # bots
+    if user.bot:
+        return
+    # guild owner
+    if user.id == user.guild.owner.id:
+        return
+
+    userdata = userdb.load(user.id)
+
+    # User's display setting is N. No sizetag.
+    if not userdata.display:
+        return
+
+    try:
+        await user.edit(nick = userdata.nickname)
+    except discord.Forbidden:
+        raise errors.NoPermissionsException
+
+    
 
 def changeUser(userid, changestyle, amount):
     changestyle = changestyle.lower()

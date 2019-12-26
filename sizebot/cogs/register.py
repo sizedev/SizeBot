@@ -103,9 +103,10 @@ class RegisterCog(commands.Cog):
 
     @commands.command()
     async def unregister(self, ctx):
+        user = ctx.message.author
         # User is not registered
-        if not userdb.exists(ctx.message.author.id):
-            df.warn(f"User {ctx.message.author.id} not registered with SizeBot, but tried to unregister anyway.")
+        if not userdb.exists(user.id):
+            df.warn(f"User {user.id} not registered with SizeBot, but tried to unregister anyway.")
             await ctx.send("Sorry! You aren't registered with SizeBot.\n"
                            "To register, use the `&register` command.",
                            delete_after = 5)
@@ -113,15 +114,15 @@ class RegisterCog(commands.Cog):
 
         # Send a confirmation request
         unregisterEmoji = "❌"
-        sentMsg = await ctx.send(f"To unregister, react with {unregisterEmoji}")
+        sentMsg = await ctx.send(f"To unregister, react with {unregisterEmoji}.")
         await sentMsg.add_reaction(unregisterEmoji)
 
         # Wait for requesting user to react to sent message with unregisterEmoji
-        def check(reaction, user):
+        def check(reaction, reacter):
             print(reaction)
-            print(user)
+            print(reacter)
             return reaction.message.id == sentMsg.id \
-                and user.id == ctx.message.author.id \
+                and reacter.id == user.id \
                 and str(reaction.emoji) == unregisterEmoji
 
         try:
@@ -133,12 +134,13 @@ class RegisterCog(commands.Cog):
             # User took too long OR User clicked the emoji
             await sentMsg.delete()
 
-        # Delete the user file, and remove the user role
-        userdb.delete(ctx.message.author.id)
-        await removeUserRole(ctx.message.author)
+        # remove the sizetag, delete the user file, and remove the user role
+        digisize.nickReset(user)
+        userdb.delete(user.id)
+        await removeUserRole(user)
 
-        df.warn(f"User {ctx.message.author.id} successfully unregistered.")
-        await ctx.send(f"Unregistered {ctx.message.author.name}", delete_after = 5)
+        df.warn(f"User {user.id} successfully unregistered.")
+        await ctx.send(f"Unregistered {user.name}.", delete_after = 5)
 
     @commands.Cog.listener()
     async def on_message(self, m):
