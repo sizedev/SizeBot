@@ -7,7 +7,7 @@ import discord
 from discord.ext import commands
 
 from sizebot import digierror as errors
-from sizebot import digiformatter as df
+from sizebot import digilogger as logger
 from sizebot.conf import conf
 from sizebot import utils
 
@@ -40,7 +40,7 @@ def main():
     bot.remove_command("help")
     for extension in initial_extensions:
         bot.load_extension(extension)
-    df.load("Loaded cogs.")
+    logger.trace("Loaded cogs.")
 
     @bot.event
     async def on_ready():
@@ -49,12 +49,12 @@ def main():
         print(bot.user.id)
         print("------" + style.RESET)
         await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
-        df.warn("Warn test.")
-        df.crit("Crit test.")
-        df.test("Test test.")
+        logger.warn("Warn test.")
+        logger.error("Crit test.")
+        logger.debug("debug test.")
         launchfinishtime = datetime.now()
         elapsed = launchfinishtime - launchtime
-        df.test(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.")
+        logger.debug(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.")
         print()
 
     @bot.event
@@ -69,7 +69,7 @@ def main():
         # DigiException handling
         if isinstance(error, errors.DigiException):
             log_message = str(error).format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
-            logCmd = getattr(df, error.level, df.warn)
+            logCmd = getattr(logger, error.level, logger.warn)
             logCmd(log_message)
 
             user_message = error.user_message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
@@ -82,8 +82,13 @@ def main():
         traceback.print_exception(type(error), error, error.__traceback__, file = sys.stderr)
 
     @bot.event
+    async def on_error(event, *args, **kwargs):
+        print('Ignoring exception in {}'.format(event_method), file=sys.stderr)
+        traceback.format_exc()
+
+    @bot.event
     async def on_disconnect():
-        df.crit("SizeBot has been disconnected from Discord!")
+        logger.error("SizeBot has been disconnected from Discord!")
 
     if not conf.authtoken:
         print(f"Authentication token not found")

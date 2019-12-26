@@ -2,7 +2,7 @@ import random
 
 from discord.ext import commands
 
-from sizebot import digiformatter as df
+from sizebot import digilogger as logger
 
 
 # Commands for roleplaying.
@@ -35,11 +35,11 @@ class RPCog(commands.Cog):
             return
         if dSides > 1000000:
             await ctx.send("Too many sides!")
-            df.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll a {dSides}-sided die!")
+            logger.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll a {dSides}-sided die!")
             stop = True
         if dNum > 250:
             await ctx.send("Too many dice!")
-            df.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll {dNum} dice!")
+            logger.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll {dNum} dice!")
             stop = True
         if stop:
             return
@@ -56,7 +56,7 @@ class RPCog(commands.Cog):
         sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.nick, dString, str(dTotal), str(usedrolls))
         if dropped != []:
             sendstring = sendstring + "\n~~Dropped: {0}~~".format(str(dropped))
-        df.msg(f"{ctx.message.author.id} ({ctx.message.author.nick}) rolled {dString}.")
+        logger.info(f"{ctx.message.author.id} ({ctx.message.author.nick}) rolled {dString}.")
         await ctx.send(sendstring)
 
 # Necessary.

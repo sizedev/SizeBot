@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from sizebot import digiformatter as df
+from sizebot import digilogger as logger
 from sizebot.conf import conf
 from sizebot import userdb
 
@@ -166,7 +166,7 @@ Thank you so much for being here throughout this journey!""")
 
     @commands.command()
     async def bug(self, ctx, *, message: str):
-        df.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
+        logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
         await self.bot.get_user(conf.getId("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
 
 

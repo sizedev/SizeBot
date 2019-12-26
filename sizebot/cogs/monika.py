@@ -5,7 +5,7 @@ import importlib.resources as pkg_resources
 from discord.ext import commands
 
 from sizebot.conf import conf
-from sizebot import digiformatter as df
+from sizebot import digilogger as logger
 from sizebot import text
 
 monikalines = pkg_resources.read_text(text, "monikalines.txt")
@@ -22,9 +22,9 @@ class MonikaCog(commands.Cog):
             return
         if "monika" not in m.content.lower():
             return
-        df.warn("Monika detected.")
+        logger.warn("Monika detected.")
         if random.randrange(6) == 1:
-            df.warn("Monika triggered.")
+            logger.warn("Monika triggered.")
             line = random.choice(monikalines)
             await m.channel.send(line, delete_after = 7)
 

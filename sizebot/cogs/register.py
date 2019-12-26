@@ -3,7 +3,7 @@ import asyncio
 from discord.ext import commands
 from discord.utils import get
 
-from sizebot import digiformatter as df
+from sizebot import digilogger as logger
 from sizebot.conf import conf
 from sizebot import userdb
 from sizebot import digiSV
@@ -14,7 +14,7 @@ async def addUserRole(member):
     sizebotuserroleid = conf.getId("sizebotuserrole")
     role = get(member.guild.roles, id = sizebotuserroleid)
     if role is None:
-        df.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")
+        logger.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")
         return
     await member.add_roles(role, reason = "Registered as sizebot user")
 
@@ -23,7 +23,7 @@ async def removeUserRole(member):
     sizebotuserroleid = conf.getId("sizebotuserrole")
     role = get(member.guild.roles, id = sizebotuserroleid)
     if role is None:
-        df.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")
+        logger.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")
         return
     await member.remove_roles(role, reason = "Unregistered as sizebot user")
 
@@ -36,7 +36,7 @@ class RegisterCog(commands.Cog):
     @commands.command()
     async def register(self, ctx, nick: str, display: str = "y", currentheight: str = "5ft10in", baseheight: str = "5ft10in", baseweight: str = "180lb", unitsystem: str = "m", species: str = None):
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
-        df.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
+        logger.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
         print(readable)
 
         currentheightSV = digiSV.toSV(currentheight)
@@ -48,23 +48,23 @@ class RegisterCog(commands.Cog):
             await ctx.send("Sorry! You already registered with SizeBot.\n"
                            "To unregister, use the `&unregister` command.",
                            delete_after = 10)
-            df.warn(f"User already registered on user registration: {ctx.message.author}.")
+            logger.warn(f"User already registered on user registration: {ctx.message.author}.")
             return
 
         # Invalid size value
         if (currentheightSV <= 0 or baseheightSV <= 0 or baseweightWV <= 0):
-            df.warn("Invalid size value.")
+            logger.warn("Invalid size value.")
             await ctx.send("All values must be an integer greater than zero.", delete_after = 5)
             return
 
         # Invalid display value
         if display.lower() not in ["y", "n"]:
-            df.warn(f"display was {display}, must be Y or N.")
+            logger.warn(f"display was {display}, must be Y or N.")
             return
 
         # Invalid unit value
         if unitsystem.lower() not in ["m", "u"]:
-            df.warn(f"unitsystem was {unitsystem}, must be M or U.")
+            logger.warn(f"unitsystem was {unitsystem}, must be M or U.")
             await ctx.send("Unitsystem must be `M` or `U`.", delete_after = 5)
             return
 
@@ -82,7 +82,7 @@ class RegisterCog(commands.Cog):
 
         await addUserRole(ctx.message.author)
 
-        df.warn(f"Made a new user: {ctx.message.author}!")
+        logger.warn(f"Made a new user: {ctx.message.author}!")
         print(userdata)
         await ctx.send(f"Registered <@{ctx.message.author.id}>. {readable}.", delete_after = 5)
 
@@ -106,7 +106,7 @@ class RegisterCog(commands.Cog):
         user = ctx.message.author
         # User is not registered
         if not userdb.exists(user.id):
-            df.warn(f"User {user.id} not registered with SizeBot, but tried to unregister anyway.")
+            logger.warn(f"User {user.id} not registered with SizeBot, but tried to unregister anyway.")
             await ctx.send("Sorry! You aren't registered with SizeBot.\n"
                            "To register, use the `&register` command.",
                            delete_after = 5)
@@ -139,7 +139,7 @@ class RegisterCog(commands.Cog):
         userdb.delete(user.id)
         await removeUserRole(user)
 
-        df.warn(f"User {user.id} successfully unregistered.")
+        logger.warn(f"User {user.id} successfully unregistered.")
         await ctx.send(f"Unregistered {user.name}.", delete_after = 5)
 
     @commands.Cog.listener()

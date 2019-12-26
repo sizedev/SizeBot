@@ -5,7 +5,6 @@ from discord.ext import commands
 
 from sizebot.digidecimal import Decimal
 from sizebot import digilogger as logger
-from sizebot import digiformatter as df
 # TODO: Fix this...
 from sizebot import userdb
 from sizebot.userdb import CHEI, BHEI, BWEI, DENS
@@ -160,7 +159,7 @@ class StatsCog(commands.Cog):
 
         output = userStats(user1tag, user1)
         await ctx.send(output)
-        df.msg(f"Stats for {who} sent.")
+        logger.info(f"Stats for {who} sent.")
 
     @commands.command()
     async def compare(self, ctx, who1 = None, who2 = None, who1name = None, who2name = None):
@@ -188,7 +187,7 @@ class StatsCog(commands.Cog):
 
         output = self.compareUsers(user1tag, user1, user2tag, user2)
         await ctx.send(output)
-        df.msg(f"Compared {user1} and {user2}")
+        logger.info(f"Compared {user1} and {user2}")
 
     # TODO: Clean this up.
     def compareUsers(self, user1tag, user1, user2tag, user2):
@@ -312,7 +311,6 @@ class StatsCog(commands.Cog):
             f"{printtab}{smallusertag}: {digiSV.fromSV(sbh, 'm', 3)} / {digiSV.fromSV(sbh, 'u')} | {digiSV.fromWV(sbw, 'm')} / {digiSV.fromWV(sbw, 'u')}")
 
     @stats.error
-    @logger.err2console
     async def stats_handler(self, ctx, error):
         if isinstance(error, InvalidOperation):
             await ctx.send(
@@ -322,7 +320,6 @@ class StatsCog(commands.Cog):
             await ctx.send(f"Error? {error}")
 
     @compare.error
-    @logger.err2console
     async def compare_handler(self, ctx, error):
         await ctx.send(f"Error? {error}")
 

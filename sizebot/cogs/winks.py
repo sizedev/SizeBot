@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from discord.ext import commands
 
-from sizebot import digiformatter as df
+from sizebot import digilogger as logger
 from sizebot import utils
 from sizebot.conf import conf
 
@@ -48,7 +48,7 @@ async def sayMilestone(channel, winkcount):
                        f"(That's **{winksperday}** winks/day!)\n"
                        f"Great winking, <@{yukioid}>!")
 
-    df.crit(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
+    logger.error(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
             f"It took {prettytimesince} to hit this milestone!\n"
             f"That's an average of {prettytimeperwink} per wink!\n"
             f"(That's {winksperday} winks/day!)")
@@ -70,7 +70,7 @@ class WinksCog(commands.Cog):
             return
 
         winkcount = addWinks(winksSeen)
-        df.msg(f"Yukio has winked {winkcount} times!")
+        logger.info(f"Yukio has winked {winkcount} times!")
         if winkcount in milestones:
             await sayMilestone(message.channel, winkcount)
 
@@ -78,7 +78,7 @@ class WinksCog(commands.Cog):
     async def winkcount(self, ctx):
         winkcount = getWinks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
-        df.msg(f"Wink count requested! Current count: {winkcount} times!")
+        logger.info(f"Wink count requested! Current count: {winkcount} times!")
 
 
 # Necessary

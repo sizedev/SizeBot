@@ -1,17 +1,21 @@
-import sys
-import traceback
-import functools
+import digiformatter as df
 
 
-# Error debugging
-def print_error(command, error):
-    print("Ignoring exception in command {}:".format(command), file = sys.stderr)
-    traceback.print_exception(type(error), error, error.__traceback__, file = sys.stderr)
+def trace(msg):
+    df.log("trace", msg)
 
 
-def err2console(func):
-    @functools.wraps(func)
-    async def func_wrapper(self, ctx, error):
-        print_error(ctx.command, error)
-        return await func(self, ctx, error)
-    return func_wrapper
+def debug(msg):
+    df.log("debug", msg)
+
+
+def info(msg):
+    df.log("info", msg)
+
+
+def warn(msg):
+    df.log("warn", msg)
+
+
+def error(msg):
+    df.log("error", msg)
