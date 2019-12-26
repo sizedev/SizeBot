@@ -57,7 +57,7 @@ def getSVPair(s):
 
 
 def isFeetAndInchesAndIfSoFixIt(value):
-    regex = r"^(?P<feet>\d+\.?\d*(ft|foot|feet|'))?(?P<inch>\d+\.?\d*(in|\"))?"
+    regex = r"^((?P<feet>\d+\.?\d*)(ft|foot|feet|'))?((?P<inch>\d+\.?\d*)(in|\"))?"
     m = re.match(regex, value, flags = re.I)
     if not m:
         return value
@@ -66,10 +66,10 @@ def isFeetAndInchesAndIfSoFixIt(value):
     if feetval is None and inchval in None:
         return value
     if feetval is None:
-        feetval = Decimal("0")
+        feetval = "0"
     if inchval is None:
-        inchval = Decimal("0")
-    totalinches = (feetval * Decimal("12")) + inchval
+        inchval = "0"
+    totalinches = (Decimal(feetval) * Decimal("12")) + Decimal(inchval)
     return f"{totalinches}in"
 
 
