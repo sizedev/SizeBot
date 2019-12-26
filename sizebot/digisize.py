@@ -8,17 +8,19 @@ from sizebot import userdb
 from sizebot import utils
 
 
-# Update users nicknames to include sizetags.
+# Update users nicknames to include sizetags
 async def nickUpdate(user):
+    # webhooks
     if user.discriminator == "0000":
         return
+    # non-guild messages
     if not isinstance(user, discord.Member):
         return
+    # bots
     if user.bot:
         return
-    # Don't update owner's nick, permissions error.
+    # guild owner
     if user.id == user.guild.owner.id:
-        # df.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
         return
 
     userdata = userdb.load(user.id)
@@ -44,19 +46,19 @@ async def nickUpdate(user):
     max_nick_len = 32
 
     if len(nick) > max_nick_len:
-        # User has set their nick too large. Truncate.
+        # Truncate nick is too long
         nick = nick[:max_nick_len]
 
     if len(nick) + len(sizetag) + 3 <= max_nick_len:
-        # Fit full nick and sizetag.
+        # Fit full nick and sizetag
         newnick = f"{nick} [{sizetag}]"
     elif len(sizetag) + 7 <= max_nick_len:
-        # Fit short nick and sizetag.
+        # Fit short nick and sizetag
         chars_left = max_nick_len - len(sizetag) - 4
         short_nick = nick[:chars_left]
         newnick = f"{short_nick}… [{sizetag}]"
     else:
-        # Cannot fit the new sizetag.
+        # Cannot fit the new sizetag
         newnick = nick
     try:
         await user.edit(nick = newnick)

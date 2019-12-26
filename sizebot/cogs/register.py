@@ -71,7 +71,7 @@ class RegisterCog(commands.Cog):
         userdata = userdb.User()
         userdata.id = ctx.message.author.id
         userdata.nickname = nick
-        userdata.display = display
+        userdata.display = display == "y"
         userdata.height = currentheightSV
         userdata.baseheight = baseheightSV
         userdata.baseweight = baseweightWV
@@ -85,6 +85,11 @@ class RegisterCog(commands.Cog):
         df.warn(f"Made a new user: {ctx.message.author}!")
         print(userdata)
         await ctx.send(f"Registered <@{ctx.message.author.id}>. {readable}.", delete_after = 5)
+
+        # user has display == "y" and is server owner
+        if userdata.display and userdata.id == ctx.message.author.guild.owner.id:
+            await ctx.send("I can't update a server owner's nick. You'll have to manage it manually.", delete_after = 5)
+            return
 
     @register.error
     async def register_handler(self, ctx, error):
