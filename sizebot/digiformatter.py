@@ -111,12 +111,12 @@ def timestamp():
 
 
 # Print a message at the request log level
-def log(level, message, showtime):
+def formatLog(level, message, showtime):
     formatted = ""
     if showtime:
         formatted += timestamp()
     formatted = loglevels.get(level, default) + message + style.RESET
-    print(formatted)
+    return formatted
 
 
 # Create a custom log level
@@ -127,7 +127,29 @@ def createLogLevel(name, foreval = 256, backval = 256, attrval = None):
     loglevels[name] = codes
 
 
+# Convenience methods
+def trace(message):
+    print(formatLog("trace", message))
+
+
+def debug(message):
+    print(formatLog("debug", message))
+
+
+def info(message):
+    print(formatLog("info", message))
+
+
+def warn(message):
+    print(formatLog("warn", message))
+
+
+def error(message):
+    print(formatLog("error", message))
+
 # Create a progress bar
+
+
 def createLoadBar(current, total, barlength = 50, showpercent = False):
     TWENTYFIVE = "\u2591"
     FIFTY = "\u2592"

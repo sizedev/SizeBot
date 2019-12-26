@@ -2,20 +2,20 @@ import digiformatter as df
 
 
 def trace(msg):
-    df.log("trace", msg)
+    print(df.formatLog("trace", msg))
 
 
 def debug(msg):
-    df.log("debug", msg)
+    print(df.formatLog("debug", msg))
 
 
 def info(msg):
-    df.log("info", msg)
+    print(df.formatLog("info", msg))
 
 
 def warn(msg):
-    df.log("warn", msg)
+    print(df.formatLog("warn", msg))
 
 
 def error(msg):
-    df.log("error", msg)
+    print(df.formatLog("error", msg))
