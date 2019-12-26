@@ -1,4 +1,4 @@
-import digiformatter as df
+from sizebot import digiformatter as df
 
 
 def trace(msg):
@@ -19,3 +19,7 @@ def warn(msg):
 
 def error(msg):
     print(df.formatLog("error", msg))
+
+
+def raw(msg):
+    print(msg)

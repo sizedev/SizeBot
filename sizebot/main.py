@@ -1,4 +1,3 @@
-import sys
 import traceback
 from datetime import datetime
 
@@ -8,6 +7,7 @@ from discord.ext import commands
 
 from sizebot import digierror as errors
 from sizebot import digilogger as logger
+from sizebot import digiformatter as df
 from sizebot.conf import conf
 from sizebot import utils
 
@@ -31,9 +31,7 @@ def main():
     launchtime = datetime.now()
 
     # Obviously we need the banner printed in the terminal
-    print(bg(24) + fg(202) + style.BOLD + conf.banner + " v" + conf.version + style.RESET)
-
-    conf.load()
+    logger.raw(bg(24) + fg(202) + style.BOLD + conf.banner + " v" + conf.version + style.RESET)
 
     bot = commands.Bot(command_prefix = conf.prefix, description = conf.description)
 
@@ -44,18 +42,17 @@ def main():
 
     @bot.event
     async def on_ready():
-        print(fore.CYAN + "Logged in as")
-        print(bot.user.name)
-        print(bot.user.id)
-        print("------" + style.RESET)
+        logger.raw(fore.CYAN + "Logged in as\n"
+                   f"{bot.user.name}\n"
+                   f"{bot.user.id}\n"
+                   "------" + style.RESET)
         await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
-        logger.warn("Warn test.")
-        logger.error("Crit test.")
-        logger.debug("debug test.")
+        # list all log levels
+        logger.raw("log levels: " + (" ".join(df.formatLog(level, level, False) for level in df.loglevels.keys())))
         launchfinishtime = datetime.now()
         elapsed = launchfinishtime - launchtime
         logger.debug(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.")
-        print()
+        logger.info("")
 
     @bot.event
     async def on_message(message):
@@ -78,20 +75,20 @@ def main():
             return
 
         # Default command handling
-        print(f"Ignoring exception in command {ctx.command}:", file = sys.stderr)
-        traceback.print_exception(type(error), error, error.__traceback__, file = sys.stderr)
+        logger.error(f"Ignoring exception in command {ctx.command}:")
+        logger.error(traceback.format_exception(type(error), error, error.__traceback__))
 
     @bot.event
     async def on_error(event, *args, **kwargs):
-        print('Ignoring exception in {}'.format(event_method), file=sys.stderr)
-        traceback.format_exc()
+        logger.error(f"Ignoring exception in {event}")
+        logger.error(traceback.format_exc())
 
     @bot.event
     async def on_disconnect():
         logger.error("SizeBot has been disconnected from Discord!")
 
     if not conf.authtoken:
-        print(f"Authentication token not found")
+        logger.error(f"Authentication token not found")
         return
 
     bot.run(conf.authtoken)

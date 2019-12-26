@@ -37,7 +37,7 @@ class RegisterCog(commands.Cog):
     async def register(self, ctx, nick: str, display: str = "y", currentheight: str = "5ft10in", baseheight: str = "5ft10in", baseweight: str = "180lb", unitsystem: str = "m", species: str = None):
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
         logger.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
-        print(readable)
+        logger.info(readable)
 
         currentheightSV = digiSV.toSV(currentheight)
         baseheightSV = digiSV.toSV(baseheight)
@@ -83,7 +83,7 @@ class RegisterCog(commands.Cog):
         await addUserRole(ctx.message.author)
 
         logger.warn(f"Made a new user: {ctx.message.author}!")
-        print(userdata)
+        logger.info(userdata)
         await ctx.send(f"Registered <@{ctx.message.author.id}>. {readable}.", delete_after = 5)
 
         # user has display == "y" and is server owner
@@ -119,8 +119,6 @@ class RegisterCog(commands.Cog):
 
         # Wait for requesting user to react to sent message with unregisterEmoji
         def check(reaction, reacter):
-            print(reaction)
-            print(reacter)
             return reaction.message.id == sentMsg.id \
                 and reacter.id == user.id \
                 and str(reaction.emoji) == unregisterEmoji

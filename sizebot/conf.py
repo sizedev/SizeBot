@@ -4,6 +4,7 @@ import appdirs
 import toml
 
 from sizebot import utils
+from sizebot import digilogger as logger
 
 
 class Config:
@@ -45,7 +46,7 @@ class Config:
     def load(cls):
         datadir = getDataDir()
         confpath = datadir / "sizebot.conf"
-        print(f"Loading configuration from {confpath}")
+        logger.info(f"Loading configuration from {confpath}")
 
         configDict = toml.load(confpath)
 

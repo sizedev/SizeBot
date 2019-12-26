@@ -111,7 +111,7 @@ def timestamp():
 
 
 # Print a message at the request log level
-def formatLog(level, message, showtime):
+def formatLog(level, message, showtime=False):
     formatted = ""
     if showtime:
         formatted += timestamp()
