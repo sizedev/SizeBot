@@ -1,4 +1,3 @@
-import random
 import asyncio
 
 from discord.ext import commands
@@ -9,8 +8,6 @@ from sizebot.conf import conf
 from sizebot import userdb
 from sizebot import digiSV
 from sizebot import digisize
-
-hexcode = None
 
 
 async def addUserRole(member):
@@ -29,13 +26,6 @@ async def removeUserRole(member):
         df.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")
         return
     await member.remove_roles(role, reason = "Unregistered as sizebot user")
-
-
-def regenHexCode():
-    global hexcode
-    # 16-char hex string gen for unregister
-    hexdigits = "1234567890abcdef"
-    hexcode = "".join(random.choice(hexdigits) for _ in range(16))
 
 
 class RegisterCog(commands.Cog):
