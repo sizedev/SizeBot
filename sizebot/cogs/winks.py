@@ -7,7 +7,6 @@ from sizebot import digiformatter as df
 from sizebot import utils
 from sizebot.conf import conf
 
-winkpath = "text/winkcount.txt"
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
 starttime = datetime(2019, 9, 15)
 milestones = [1000, 2500, 5000, 10000, 25000, 50000, 100000]
@@ -15,22 +14,20 @@ milestones = [1000, 2500, 5000, 10000, 25000, 50000, 100000]
 
 def getWinks():
     try:
-        with open(winkpath, "r") as f:
+        with open(conf.winkpath, "r") as f:
             try:
                 winkcount = int(f.read())
             except ValueError:
                 winkcount = 0
     except FileNotFoundError:
         winkcount = 0
-        with open(winkpath, "w") as f:
-            f.write(str(winkcount))
     return winkcount
 
 
 def addWinks(count = 1):
     winkcount = getWinks()
     winkcount += count
-    with open(winkpath, "w") as winkfile:
+    with open(conf.winkpath, "w") as winkfile:
         winkfile.write(str(winkcount))
     return winkcount
 
@@ -65,7 +62,7 @@ class WinksCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Yukio wink count.
+    # Yukio wink count
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.id != conf.getId("Yukio"):
@@ -87,6 +84,6 @@ class WinksCog(commands.Cog):
         df.msg(f"Wink count requested! Current count: {winkcount} times!")
 
 
-# Necessary.
+# Necessary
 def setup(bot):
     bot.add_cog(WinksCog(bot))

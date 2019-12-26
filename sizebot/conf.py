@@ -23,6 +23,10 @@ class Config:
                             "Written by DigiDuncan.\n"
                             "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
 
+        # File paths
+        datadir = getDataDir()
+        self.winkpath = datadir / "winkcount.txt"
+
         # Version
         self.version = "3AAH.0.0.b4"
 
