@@ -14,8 +14,8 @@ class DigiException(Exception):
 
 class UserNotFoundException(DigiException):
     def __init__(self):
-        message = "User {userid} ({usernick}) not found."
-        user_message = ("Sorry, {usernick}! You aren't registered with SizeBot.\n"
+        message = f"User {userid} ({usernick}) not found."
+        user_message = (f"Sorry, {usernick}! You aren't registered with SizeBot.\n"
                         "To register, use the `&register` command.")
         super().__init__(message, user_message)
 
