@@ -147,9 +147,12 @@ def warn(message):
 def error(message):
     print(formatLog("error", message))
 
+
+def printLog(message, level="info"):
+    print(formatLog(level, message))
+
+
 # Create a progress bar
-
-
 def createLoadBar(current, total, barlength = 50, showpercent = False):
     TWENTYFIVE = "\u2591"
     FIFTY = "\u2592"
