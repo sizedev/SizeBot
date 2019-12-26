@@ -26,6 +26,7 @@ class Config:
         # File paths
         datadir = getDataDir()
         self.winkpath = datadir / "winkcount.txt"
+        self.userdbpath = datadir / "users"
 
         # Version
         self.version = "3AAH.0.0.b4"

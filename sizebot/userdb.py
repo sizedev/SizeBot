@@ -1,6 +1,6 @@
 import json
-from pathlib import Path
 
+from sizebot.conf import conf
 from sizebot.digidecimal import Decimal
 from sizebot import digierror as errors
 
@@ -21,8 +21,6 @@ defaultdensity = Decimal("1.0")
 
 # Map the deprecated user array constants to the new names
 DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweight", "density", "unitsystem", "species"]
-
-userdbpath = Path("../users")
 
 
 class User:
@@ -128,14 +126,14 @@ class User:
 
 
 def getuserpath(userid):
-    return userdbpath / f"{id}.json"
+    return conf.userdbpath / f"{userid}.json"
 
 
 def save(userdata):
     userid = userdata.id
     if userid is None:
         errors.throw(errors.CANNOT_SAVE_WITHOUT_ID)
-    userdbpath.mkdir(exist_ok = True)
+    conf.userdbpath.mkdir(exist_ok = True)
     jsondata = userdata.toJSON()
     with open(getuserpath(userid), "w") as f:
         json.dump(jsondata, f, indent = 4)
@@ -164,5 +162,5 @@ def exists(userid):
 
 
 def count():
-    usercount = len(list(userdbpath.glob("*.json")))
+    usercount = len(list(conf.userdbpath.glob("*.json")))
     return usercount
