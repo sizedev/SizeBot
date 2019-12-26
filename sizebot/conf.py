@@ -7,7 +7,7 @@ from sizebot import utils
 
 
 class Config:
-    __slots__ = ["banner", "description", "version", "prefix", "prefix", "authtoken", "ids"]
+    __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "prefix", "prefix", "authtoken", "ids"]
 
     def __init__(self, configDict):
         # ASCII art
@@ -23,13 +23,13 @@ class Config:
                             "Written by DigiDuncan.\n"
                             "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
 
+        # Version
+        self.version = "3AAH.0.0.b4"
+
         # File paths
         datadir = getDataDir()
         self.winkpath = datadir / "winkcount.txt"
         self.userdbpath = datadir / "users"
-
-        # Version
-        self.version = "3AAH.0.0.b4"
 
         # Sizebot
         self.prefix = utils.getPath(configDict, "sizebot.prefix", "&")
