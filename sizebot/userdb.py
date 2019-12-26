@@ -132,7 +132,7 @@ def getuserpath(userid):
 def save(userdata):
     userid = userdata.id
     if userid is None:
-        errors.throw(errors.CANNOT_SAVE_WITHOUT_ID)
+        raise errors.CannotSaveWithoutIDException
     conf.userdbpath.mkdir(exist_ok = True)
     jsondata = userdata.toJSON()
     with open(getuserpath(userid), "w") as f:
