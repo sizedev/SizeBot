@@ -8,13 +8,14 @@ from colored import fore, back, style, fg, bg, attr
 os.system("")
 
 # Constants
-version = "0.3.2"
+version = "0.4.0"
 
 # Customizables
+default = fg(51)
 loglevels = {
     "trace": fg(238),
     "debug": fg(4),
-    "info": fg(51),
+    "info": default,
     "warn": fore.YELLOW,
     "error": back.RED + style.BOLD
 }
@@ -114,7 +115,7 @@ def log(level, message, showtime):
     formatted = ""
     if showtime:
         formatted += timestamp()
-    formatted = loglevels.get(level, fg(51)) + message + style.RESET
+    formatted = loglevels.get(level, default) + message + style.RESET
     print(formatted)
 
 
@@ -126,7 +127,6 @@ def createLogLevel(name, foreval = 256, backval = 256, attrval = None):
     loglevels[name] = codes
 
 
-# UNUSED
 # Create a progress bar
 def createLoadBar(current, total, barlength = 50, showpercent = False):
     TWENTYFIVE = "\u2591"
@@ -134,7 +134,7 @@ def createLoadBar(current, total, barlength = 50, showpercent = False):
     SEVENTYFIVE = "\u2593"
     FULL = "\u2588"
     shades = {
-        0: "",
+        0: " ",
         1: TWENTYFIVE,
         2: FIFTY,
         3: SEVENTYFIVE,
@@ -158,9 +158,11 @@ def createLoadBar(current, total, barlength = 50, showpercent = False):
     return barstring
 
 
-# UNUSED
 # Truncate a long string for terminal printing
-def truncate(s, trunclen = 80):
+def truncate(s, trunclen = 80, trailing = False):
     if len(s) > trunclen:
-        s = "…" + s[-(trunclen - 1):]
+        if trailing:
+            s = "…" + s[-(trunclen - 1):]
+        else:
+            s = s[(trunclen - 1):] + "…"
     return s
