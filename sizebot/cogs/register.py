@@ -9,6 +9,8 @@ from sizebot import userdb
 from sizebot import digiSV
 from sizebot import digisize
 
+hexcode = None
+
 
 async def addUserRole(member):
     sizebotuserroleid = conf.getId("sizebotuserrole")
@@ -29,19 +31,10 @@ async def removeUserRole(member):
 
 
 def regenHexCode():
+    global hexcode
     # 16-char hex string gen for unregister
     hexdigits = "1234567890abcdef"
     hexcode = "".join(random.choice(hexdigits) for _ in range(16))
-    with open(conf.hexfilepath, "w") as file:
-        file.write(hexcode)
-    return hexcode
-
-
-def readHexCode():
-    # Read the hexcode from the file
-    with open(conf.hexfilepath, "r") as file:
-        hexcode = file.readline().rstrip()
-    return hexcode
 
 
 class RegisterCog(commands.Cog):
@@ -120,13 +113,12 @@ class RegisterCog(commands.Cog):
                            "To register, use the `&register` command.", delete_after = 5)
             return
 
-        if code is None:
-            hexcode = regenHexCode()
+        if code is None or hexcode is None:
+            regenHexCode()
             await ctx.send("To unregister, use the `&unregister` command and the following code.\n"
                            f"`{hexcode}`", delete_after = 30)
             return
 
-        hexcode = readHexCode()
         if code != hexcode:
             df.warn(f"User {ctx.message.author.id} tried to unregister, but said the wrong hexcode.")
             await ctx.send(f"Incorrect code. You said: `{code}`. The correct code was: `{hexcode}`. Try again.", delete_after = 10)
