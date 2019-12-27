@@ -23,7 +23,10 @@ async def nickUpdate(user):
     if user.id == user.guild.owner.id:
         return
 
-    userdata = userdb.load(user.id)
+    try:
+        userdata = userdb.load(user.id)
+    except errors.UserNotFoundException:
+        return
 
     # User's display setting is N. No sizetag.
     if not userdata.display:
