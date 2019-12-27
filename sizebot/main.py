@@ -1,7 +1,6 @@
 import traceback
 from datetime import datetime
 
-from colored import fore, style, fg, bg
 import discord
 from discord.ext import commands
 
@@ -41,16 +40,18 @@ def main():
         logChannel = bot.get_channel(conf.logchannelid)
         logger.init(logChannel)
 
+        df.createLogLevel("banner", fgval="orange_red_1", bgval="deep_sky_blue_4b", attrval="bold")
+        df.createLogLevel("login", fgval="cyan")
         # Obviously we need the banner printed in the terminal
-        await logger.raw(bg(24) + fg(202) + style.BOLD + conf.banner + " v" + conf.version + style.RESET)
+        await logger.custom("banner", conf.banner + " v" + conf.version)
 
-        await logger.raw(fore.CYAN + "Logged in as\n"
-                         f"{bot.user.name}\n"
-                         f"{bot.user.id}\n"
-                         "------" + style.RESET)
+        await logger.custom("login",
+                            "Logged in as\n"
+                            f"{bot.user.name}\n"
+                            f"{bot.user.id}\n"
+                            "------")
         await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
-        # list all log levels
-        await logger.raw("log levels: " + (" ".join(df.formatLog(level, level, False) for level in df.loglevels.keys())))
+        df.printLogLevels()
         launchfinishtime = datetime.now()
         elapsed = launchfinishtime - launchtime
         await logger.debug(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.\n")

@@ -2,7 +2,7 @@ import os
 import math
 from time import strftime, localtime
 
-from colored import fore, back, style, fg, bg, attr
+from colored import fg, bg, attr
 
 # Activate VT-100 terminal formatting
 os.system("")
@@ -11,15 +11,15 @@ os.system("")
 version = "0.4.0"
 
 # Customizables
-default = fg(51)
+default = fg("cyan_1")
 loglevels = {
-    "trace": fg(238),
-    "debug": fg(4),
+    "trace": fg("grey_27"),
+    "debug": fg("blue"),
     "info": default,
-    "warn": fore.YELLOW,
-    "error": back.RED + style.BOLD
+    "warn": fg("yellow"),
+    "error": fg("red") + attr("bold")
 }
-timestampCodes = fg(5)
+timestampCodes = fg("magenta")
 
 linelength = 100
 timestring = "%d %b %H:%M:%S"
@@ -107,7 +107,7 @@ def overwriteLines(lines):
 # Color styling for terminal messages
 def timestamp():
     t = localtime()
-    return timestampCodes + strftime(f"{timestring} | ", t) + style.RESET
+    return timestampCodes + strftime(f"{timestring} | ", t) + attr("reset")
 
 
 # Print a message at the request log level
@@ -115,13 +115,13 @@ def formatLog(level, message, showtime=False):
     formatted = ""
     if showtime:
         formatted += timestamp()
-    formatted = loglevels.get(level, default) + message + style.RESET
+    formatted = loglevels.get(level, default) + message + attr("reset")
     return formatted
 
 
 # Create a custom log level
-def createLogLevel(name, foreval = 256, backval = 256, attrval = None):
-    codes = fg(foreval) + bg(backval)
+def createLogLevel(name, fgval = 256, bgval = 256, attrval = None):
+    codes = fg(fgval) + bg(bgval)
     if attrval is not None:
         codes += attr(attrval)
     loglevels[name] = codes
@@ -191,3 +191,8 @@ def truncate(s, trunclen = 80, trailing = False):
         else:
             s = s[(trunclen - 1):] + "…"
     return s
+
+
+def printLogLevels():
+    # list all log levels
+    print("log levels: " + (" ".join(formatLog(level, level, False) for level in loglevels.keys())))
