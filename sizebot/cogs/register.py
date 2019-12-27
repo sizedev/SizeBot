@@ -133,7 +133,7 @@ class RegisterCog(commands.Cog):
             await sentMsg.delete()
 
         # remove the sizetag, delete the user file, and remove the user role
-        digisize.nickReset(user)
+        await digisize.nickReset(user)
         userdb.delete(user.id)
         await removeUserRole(user)
 
