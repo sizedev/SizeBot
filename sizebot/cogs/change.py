@@ -41,7 +41,7 @@ class ChangeCog(commands.Cog):
         errors.throw(ctx(changereturn))
         if changereturn == errors.SUCCESS:
             userdata = userdb.load(ctx.message.author.id)
-            logger.info(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed {style}-style {amount}.")
+            await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
             await ctx.send(f"User <@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} ({digiSV.fromSV(userdata.height, 'u')}) tall.")
 
     # TODO: Switch to digisize.changeUser().
@@ -50,7 +50,7 @@ class ChangeCog(commands.Cog):
         # TODO: calculate these from rate?
         amount = ""
         delay = ""
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.nick}) slow-changed {style}-style {amount} every {delay} minutes.")
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {style}-style {amount} every {delay} minutes.")
 
         change = Change(ctx.message.author.id, addPerSec=0, mulPerSec=1)
 
@@ -58,13 +58,13 @@ class ChangeCog(commands.Cog):
 
     @commands.command()
     async def stopchange(self, ctx):
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.nick}) stopped slow-changing.")
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) stopped slow-changing.")
 
         deleted = self.changes.pop(ctx.message.author.id, None)
 
         if deleted is None:
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
-            logger.warn(f"User {ctx.message.author.id} ({ctx.message.author.nick}) tried to stop slow-changing, but there didn't have a task active.")
+            await logger.warn(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
 
     @commands.command()
     async def eatme(self, ctx):
@@ -74,7 +74,7 @@ class ChangeCog(commands.Cog):
         errors.throw(ctx(changereturn))
         if changereturn == errors.SUCCESS:
             userdata = userdb.load(ctx.message.author.id)
-            logger.info(f"User {ctx.message.author.id} ({ctx.message.author.nick}) ate a cake and multiplied {randmult}.")
+            await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) ate a cake and multiplied {randmult}.")
             # TODO: Randomize the italics message here.
             await ctx.send(f"""<@{ctx.message.author.id}> ate a :cake:! *I mean it said "Eat me..."*
 They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})""")
@@ -87,7 +87,7 @@ They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tal
         changereturn = digisize.changeUser(ctx.message.author.id, "divide", randmult)
         errors.throw(ctx(changereturn))
         if changereturn == errors.SUCCESS:
-            logger.info(f"User {ctx.message.author.id} ({ctx.message.author.nick}) drank a potion and shrunk {randmult}.")
+            await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) drank a potion and shrunk {randmult}.")
             # TODO: Randomize the italics message here.
             await ctx.send(f"""<@{ctx.message.author.id}> ate a :milk:! *I mean it said "Drink me..."*
     They shrunk {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})""")

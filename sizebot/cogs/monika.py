@@ -22,9 +22,9 @@ class MonikaCog(commands.Cog):
             return
         if "monika" not in m.content.lower():
             return
-        logger.warn("Monika detected.")
+        await logger.warn("Monika detected.")
         if random.randrange(6) == 1:
-            logger.warn("Monika triggered.")
+            await logger.warn("Monika triggered.")
             line = random.choice(monikalines)
             await m.channel.send(line, delete_after = 7)
 

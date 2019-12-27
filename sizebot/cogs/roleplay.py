@@ -35,11 +35,11 @@ class RPCog(commands.Cog):
             return
         if dSides > 1000000:
             await ctx.send("Too many sides!")
-            logger.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll a {dSides}-sided die!")
+            await logger.warn(f"{ctx.message.author.id} ({ctx.message.author.display_name}) tried to roll a {dSides}-sided die!")
             stop = True
         if dNum > 250:
             await ctx.send("Too many dice!")
-            logger.warn(f"{ctx.message.author.id} ({ctx.message.author.nick}) tried to roll {dNum} dice!")
+            await logger.warn(f"{ctx.message.author.id} ({ctx.message.author.display_name}) tried to roll {dNum} dice!")
             stop = True
         if stop:
             return
@@ -53,10 +53,10 @@ class RPCog(commands.Cog):
         dropped = rolls
         for item in usedrolls:
             dropped.remove(item)
-        sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.nick, dString, str(dTotal), str(usedrolls))
+        sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.display_name, dString, str(dTotal), str(usedrolls))
         if dropped != []:
             sendstring = sendstring + "\n~~Dropped: {0}~~".format(str(dropped))
-        logger.info(f"{ctx.message.author.id} ({ctx.message.author.nick}) rolled {dString}.")
+        await logger.info(f"{ctx.message.author.id} ({ctx.message.author.display_name}) rolled {dString}.")
         await ctx.send(sendstring)
 
 # Necessary.

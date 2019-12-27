@@ -11,13 +11,13 @@ def deepgetattr(obj, attr):
     return reduce(lambda o, a: getattr(o, a, None), attr.split("."), obj)
 
 
-def dump_message(m):
+async def dump_message(m):
     channelName = getattr(m.channel, "name", None)
     guildId = deepgetattr(m.channel, "guild.id")
     embeds = [e.to_dict() for e in m.embeds]
     if m.author.discriminator == "0000":
         return
-    logger.warn(
+    await logger.warn(
         f"Received a message from {m.author.name}#{m.author.discriminator} that wasn't a DM: {m.content}\n"
         f"    URL: {m.jump_url}\n"
         f"    Guild ID: {guildId}\n"
@@ -41,9 +41,9 @@ class DmCog(commands.Cog):
     async def on_message(self, m):
         if not isinstance(m.channel, discord.DMChannel):
             if not isinstance(m.author, discord.Member):
-                dump_message(m)
+                await dump_message(m)
             return
-        logger.info(f"DM from {m.author.name}#{m.author.discriminator}: {m.content}")
+        await logger.info(f"DM from {m.author.name}#{m.author.discriminator}: {m.content}")
 
 
 # Necessary.

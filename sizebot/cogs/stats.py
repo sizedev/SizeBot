@@ -159,7 +159,7 @@ class StatsCog(commands.Cog):
 
         output = userStats(user1tag, user1)
         await ctx.send(output)
-        logger.info(f"Stats for {who} sent.")
+        await logger.info(f"Stats for {who} sent.")
 
     @commands.command()
     async def compare(self, ctx, who1 = None, who2 = None, who1name = None, who2name = None):
@@ -187,7 +187,7 @@ class StatsCog(commands.Cog):
 
         output = self.compareUsers(user1tag, user1, user2tag, user2)
         await ctx.send(output)
-        logger.info(f"Compared {user1} and {user2}")
+        await logger.info(f"Compared {user1} and {user2}")
 
     # TODO: Clean this up.
     def compareUsers(self, user1tag, user1, user2tag, user2):

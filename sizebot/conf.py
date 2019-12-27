@@ -4,11 +4,10 @@ import appdirs
 import toml
 
 from sizebot import utils
-from sizebot import digilogger as logger
 
 
 class Config:
-    __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "prefix", "prefix", "authtoken", "ids"]
+    __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "prefix", "prefix", "authtoken", "ids", "logchannelid"]
 
     def __init__(self, configDict):
         # ASCII art
@@ -39,6 +38,10 @@ class Config:
         self.authtoken = utils.getPath(configDict, "discord.authtoken", None)
         self.ids = configDict.get("ids", dict())    # List of ids by name
 
+        self.logchannelid = utils.getPath(configDict, "discord.logchannelid", None)
+        if self.logchannelid is not None:
+            self.logchannelid = int(self.logchannelid)
+
     def getId(self, name):
         return self.ids.get(name, "000000000000000000")
 
@@ -46,7 +49,6 @@ class Config:
     def load(cls):
         datadir = getDataDir()
         confpath = datadir / "sizebot.conf"
-        logger.info(f"Loading configuration from {confpath}")
 
         configDict = toml.load(confpath)
 

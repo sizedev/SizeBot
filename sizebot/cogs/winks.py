@@ -48,7 +48,7 @@ async def sayMilestone(channel, winkcount):
                        f"(That's **{winksperday}** winks/day!)\n"
                        f"Great winking, <@{yukioid}>!")
 
-    logger.error(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
+    await logger.error(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
                  f"It took {prettytimesince} to hit this milestone!\n"
                  f"That's an average of {prettytimeperwink} per wink!\n"
                  f"(That's {winksperday} winks/day!)")
@@ -70,7 +70,7 @@ class WinksCog(commands.Cog):
             return
 
         winkcount = addWinks(winksSeen)
-        logger.info(f"Yukio has winked {winkcount} times!")
+        await logger.info(f"Yukio has winked {winkcount} times!")
         if winkcount in milestones:
             await sayMilestone(message.channel, winkcount)
 
@@ -78,7 +78,7 @@ class WinksCog(commands.Cog):
     async def winkcount(self, ctx):
         winkcount = getWinks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
-        logger.info(f"Wink count requested! Current count: {winkcount} times!")
+        await logger.info(f"Wink count requested! Current count: {winkcount} times!")
 
 
 # Necessary

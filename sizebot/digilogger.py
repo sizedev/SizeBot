@@ -1,25 +1,46 @@
 from sizebot import digiformatter as df
 
+logChannel = None
 
-def trace(msg):
+
+async def trace(msg):
     print(df.formatLog("trace", msg))
+    if logChannel is not None:
+        await logChannel.send(f"```\n{msg}\n```")
 
 
-def debug(msg):
+async def debug(msg):
     print(df.formatLog("debug", msg))
+    if logChannel is not None:
+        await logChannel.send(f"```\n{msg}\n```")
 
 
-def info(msg):
+async def info(msg):
     print(df.formatLog("info", msg))
+    if logChannel is not None:
+        await logChannel.send(f"```\n{msg}\n```")
 
 
-def warn(msg):
+async def warn(msg):
     print(df.formatLog("warn", msg))
+    if logChannel is not None:
+        await logChannel.send(f"```\n{msg}\n```")
 
 
-def error(msg):
+async def error(msg):
+    print(df.formatLog("error", msg))
+    if logChannel is not None:
+        await logChannel.send(f"```\n{msg}\n```")
+
+
+async def raw(msg):
+    print(msg)
+
+
+def syncError(msg):
     print(df.formatLog("error", msg))
 
 
-def raw(msg):
-    print(msg)
+def init(channel):
+    global logChannel
+    logChannel = channel
