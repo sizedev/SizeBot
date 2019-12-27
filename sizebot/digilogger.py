@@ -35,6 +35,8 @@ async def error(msg):
 
 async def raw(msg):
     print(msg)
+    if logChannel is not None:
+        await logChannel.send(f"```\n{msg}\n```")
 
 
 def syncError(msg):
