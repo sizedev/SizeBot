@@ -26,7 +26,8 @@ initial_extensions = [
     'cogs.roleplay',
     'cogs.set',
     'cogs.stats',
-    'cogs.winks'
+    'cogs.winks',
+    'cogs.christmas'
 ]
 
 # Obviously we need this printed in the terminal.
