@@ -66,6 +66,8 @@ async def nickUpdate(user):
         raise errors.NoPermissionsException
 
 # Remove sizetag from user's nickname
+
+
 async def nickReset(user):
     # webhooks
     if user.discriminator == "0000":
@@ -91,7 +93,6 @@ async def nickReset(user):
     except discord.Forbidden:
         raise errors.NoPermissionsException
 
-    
 
 def changeUser(userid, changestyle, amount):
     changestyle = changestyle.lower()
