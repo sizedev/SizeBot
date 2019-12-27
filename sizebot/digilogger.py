@@ -1,3 +1,4 @@
+from sizebot import utils
 from sizebot import digiformatter as df
 
 logChannel = None
@@ -26,8 +27,12 @@ async def error(msg):
 
 async def log(level, msg):
     print(df.formatLog(level, msg))
+    discordPrefix = "```\n"
+    discordSuffix = "\n```"
     if logChannel is not None:
-        await logChannel.send(f"```\n{msg}\n```")
+        msgMaxLen = 2000 - len(discordPrefix) - len(discordSuffix)
+        for msgPart in utils.grouper(msgMaxLen, msg):
+            await logChannel.send(f"```\n{msgPart}\n```")
 
 
 # Sync log functions (prints to console)

@@ -1,4 +1,5 @@
 import re
+from itertools import izip_longest
 
 
 def clamp(minVal, val, maxVal):
@@ -59,3 +60,9 @@ def getPath(root, path, default=None):
         except (KeyError, IndexError):
             return default
     return branch
+
+
+# grouper(3, "ABCDEFG", "x") --> ABC DEF Gxx
+def grouper(n, iterable, fillvalue=None):
+    args = [iter(iterable)] * n
+    return izip_longest(fillvalue=fillvalue, *args)
