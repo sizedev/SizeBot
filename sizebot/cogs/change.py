@@ -5,7 +5,6 @@ from discord.ext import commands, tasks
 
 from sizebot.digidecimal import Decimal
 from sizebot import digilogger as logger
-from sizebot import digierror as errors
 from sizebot import userdb
 from sizebot.userdb import CHEI
 from sizebot import digiSV
@@ -36,14 +35,13 @@ class ChangeCog(commands.Cog):
 
     @commands.command()
     async def change(self, ctx, style, *, amount):
-        # Change height.
-        changereturn = digisize.changeUser(ctx.message.author.id, style, amount)
-        if changereturn == errors.SUCCESS:
-            userdata = userdb.load(ctx.message.author.id)
-            await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
-            await ctx.send(f"User <@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} ({digiSV.fromSV(userdata.height, 'u')}) tall.")
+        # Change height
+        digisize.changeUser(ctx.message.author.id, style, amount)
+        userdata = userdb.load(ctx.message.author.id)
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
+        await ctx.send(f"User <@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} ({digiSV.fromSV(userdata.height, 'u')}) tall.")
 
-    # TODO: Switch to digisize.changeUser().
+    # TODO: Switch to digisize.changeUser()
     @commands.command()
     async def slowchange(self, ctx, style: str, rate: str):
         # TODO: calculate these from rate?
@@ -69,12 +67,11 @@ class ChangeCog(commands.Cog):
     async def eatme(self, ctx):
         # Eat me!
         randmult = round(random.random(2, 20), 1)
-        changereturn = digisize.changeUser(ctx.message.author.id, "multiply", randmult)
-        if changereturn == errors.SUCCESS:
-            userdata = userdb.load(ctx.message.author.id)
-            await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) ate a cake and multiplied {randmult}.")
-            # TODO: Randomize the italics message here.
-            await ctx.send(f"""<@{ctx.message.author.id}> ate a :cake:! *I mean it said "Eat me..."*
+        digisize.changeUser(ctx.message.author.id, "multiply", randmult)
+        userdata = userdb.load(ctx.message.author.id)
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) ate a cake and multiplied {randmult}.")
+        # TODO: Randomize the italics message here
+        await ctx.send(f"""<@{ctx.message.author.id}> ate a :cake:! *I mean it said "Eat me..."*
 They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})""")
 
     @commands.command()
@@ -82,11 +79,10 @@ They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tal
         # Drink me!
         userdata = userdb.load(ctx.message.author.id)
         randmult = round(random.random(2, 20), 1)
-        changereturn = digisize.changeUser(ctx.message.author.id, "divide", randmult)
-        if changereturn == errors.SUCCESS:
-            await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) drank a potion and shrunk {randmult}.")
-            # TODO: Randomize the italics message here.
-            await ctx.send(f"""<@{ctx.message.author.id}> ate a :milk:! *I mean it said "Drink me..."*
+        digisize.changeUser(ctx.message.author.id, "divide", randmult)
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) drank a potion and shrunk {randmult}.")
+        # TODO: Randomize the italics message here
+        await ctx.send(f"""<@{ctx.message.author.id}> ate a :milk:! *I mean it said "Drink me..."*
     They shrunk {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})""")
 
     # Slow growth task
