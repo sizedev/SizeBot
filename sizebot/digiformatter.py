@@ -120,8 +120,12 @@ def formatLog(level, message, showtime=False):
 
 
 # Create a custom log level
-def createLogLevel(name, fgval = 256, bgval = 256, attrval = None):
-    codes = fg(fgval) + bg(bgval)
+def createLogLevel(name, fgval = None, bgval = None, attrval = None):
+    codes = ""
+    if fgval is not None:
+        codes += fg(fgval)
+    if bgval is not None:
+        codes += bg(bgval)
     if attrval is not None:
         codes += attr(attrval)
     loglevels[name] = codes

@@ -43,13 +43,13 @@ def main():
         df.createLogLevel("banner", fgval="orange_red_1", bgval="deep_sky_blue_4b", attrval="bold")
         df.createLogLevel("login", fgval="cyan")
         # Obviously we need the banner printed in the terminal
-        await logger.custom("banner", conf.banner + " v" + conf.version)
+        await logger.log("banner", conf.banner + " v" + conf.version)
 
-        await logger.custom("login",
-                            "Logged in as\n"
-                            f"{bot.user.name}\n"
-                            f"{bot.user.id}\n"
-                            "------")
+        await logger.log("login",
+                         "Logged in as\n"
+                         f"{bot.user.name}\n"
+                         f"{bot.user.id}\n"
+                         "------")
         await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
         df.printLogLevels()
         launchfinishtime = datetime.now()
@@ -96,7 +96,7 @@ def main():
         await logger.error("SizeBot has been disconnected from Discord!")
 
     if not conf.authtoken:
-        logger.syncError(f"Authentication token not found")
+        logger.syncerror(f"Authentication token not found")
         return
 
     bot.run(conf.authtoken)

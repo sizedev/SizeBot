@@ -3,44 +3,56 @@ from sizebot import digiformatter as df
 logChannel = None
 
 
+# Async log functions (prints to console, and logChannel if set)
 async def trace(msg):
-    print(df.formatLog("trace", msg))
-    if logChannel is not None:
-        await logChannel.send(f"```\n{msg}\n```")
+    await log("trace", msg)
 
 
 async def debug(msg):
-    print(df.formatLog("debug", msg))
-    if logChannel is not None:
-        await logChannel.send(f"```\n{msg}\n```")
+    await log("debug", msg)
 
 
 async def info(msg):
-    print(df.formatLog("info", msg))
-    if logChannel is not None:
-        await logChannel.send(f"```\n{msg}\n```")
+    await log("info", msg)
 
 
 async def warn(msg):
-    print(df.formatLog("warn", msg))
-    if logChannel is not None:
-        await logChannel.send(f"```\n{msg}\n```")
+    await log("warn", msg)
 
 
 async def error(msg):
-    print(df.formatLog("error", msg))
+    await log("error", msg)
+
+
+async def log(level, msg):
+    print(df.formatLog(level, msg))
     if logChannel is not None:
         await logChannel.send(f"```\n{msg}\n```")
 
 
-async def raw(msg):
-    print(msg)
-    if logChannel is not None:
-        await logChannel.send(f"```\n{msg}\n```")
+# Sync log functions (prints to console)
+def synctrace(msg):
+    synclog("trace", msg)
 
 
-def syncError(msg):
-    print(df.formatLog("error", msg))
+def syncdebug(msg):
+    synclog("debug", msg)
+
+
+def syncinfo(msg):
+    synclog("info", msg)
+
+
+def syncwarn(msg):
+    synclog("warn", msg)
+
+
+def syncerror(msg):
+    synclog("error", msg)
+
+
+def synclog(level, msg):
+    print(df.formatLog(level, msg))
 
 
 def init(channel):
