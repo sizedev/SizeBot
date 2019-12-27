@@ -38,7 +38,6 @@ class ChangeCog(commands.Cog):
     async def change(self, ctx, style, *, amount):
         # Change height.
         changereturn = digisize.changeUser(ctx.message.author.id, style, amount)
-        errors.throw(ctx(changereturn))
         if changereturn == errors.SUCCESS:
             userdata = userdb.load(ctx.message.author.id)
             await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
@@ -71,7 +70,6 @@ class ChangeCog(commands.Cog):
         # Eat me!
         randmult = round(random.random(2, 20), 1)
         changereturn = digisize.changeUser(ctx.message.author.id, "multiply", randmult)
-        errors.throw(ctx(changereturn))
         if changereturn == errors.SUCCESS:
             userdata = userdb.load(ctx.message.author.id)
             await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) ate a cake and multiplied {randmult}.")
@@ -85,7 +83,6 @@ They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tal
         userdata = userdb.load(ctx.message.author.id)
         randmult = round(random.random(2, 20), 1)
         changereturn = digisize.changeUser(ctx.message.author.id, "divide", randmult)
-        errors.throw(ctx(changereturn))
         if changereturn == errors.SUCCESS:
             await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) drank a potion and shrunk {randmult}.")
             # TODO: Randomize the italics message here.
