@@ -64,14 +64,16 @@ def main():
 
     @bot.event
     async def on_command_error(ctx, error):
+        # Get actual error
+        err = error.original
         # DigiException handling
-        if isinstance(error, errors.DigiException):
-            log_message = str(error).format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
-            logCmd = getattr(logger, error.level, logger.warn)
+        if isinstance(err, errors.DigiException):
+            log_message = str(err).format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
+            logCmd = getattr(logger, err.level, logger.warn)
             logCmd(log_message)
 
-            user_message = error.user_message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
-            await ctx.send(user_message, delete_after = error.delete_after)
+            user_message = err.user_message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
+            await ctx.send(user_message, delete_after = err.delete_after)
 
             return
 
