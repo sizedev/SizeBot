@@ -63,6 +63,6 @@ def getPath(root, path, default=None):
 
 
 # grouper(3, "ABCDEFG", "x") --> ABC DEF Gxx
-def grouper(n, iterable, fillvalue=None):
-    args = [iter(iterable)] * n
-    return zip_longest(fillvalue=fillvalue, *args)
+def chunkStr(n, s, fillvalue=""):
+    args = [iter(s)] * n
+    return ("".join(chunk) for chunk in zip_longest(*args, fillvalue=fillvalue))

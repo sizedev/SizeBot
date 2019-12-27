@@ -31,8 +31,9 @@ async def log(level, msg):
     discordSuffix = "\n```"
     if logChannel is not None:
         msgMaxLen = 2000 - len(discordPrefix) - len(discordSuffix)
-        for msgPart in utils.grouper(msgMaxLen, msg):
-            await logChannel.send(f"```\n{msgPart}\n```")
+        for msgPart in utils.chunkStr(msgMaxLen, msg):
+            discordMessage = discordPrefix + msgPart + discordSuffix
+            await logChannel.send(discordMessage)
 
 
 # Sync log functions (prints to console)
