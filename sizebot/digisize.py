@@ -106,7 +106,7 @@ def changeUser(userid, changestyle, amount):
         changestyle = "divide"
 
     if changestyle not in ["add", "subtract", "multiply", "divide"]:
-        return
+        raise errors.ChangeMethodInvalidException(changestyle)
         # TODO: raise an error
 
     if changestyle in ["add", "subtract"]:
