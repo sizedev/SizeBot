@@ -61,16 +61,14 @@ def regenhexcode():
     hexdigits = "1234567890abcdef"
     lst = [random.choice(hexdigits) for n in range(16)]
     hexstring = "".join(lst)
-    hexfile = open("../hexstring.txt", "w")
-    hexfile.write(hexstring)
-    hexfile.close()
+    with open("../hexstring.txt", "w") as hexfile:
+        hexfile.write(hexstring)
 
 
 def readhexcode():
     # Read the hexcode from the file.
-    hexfile = open("../hexstring.txt", "r")
-    hexcode = hexfile.readlines()
-    hexfile.close()
+    with open("../hexstring.txt", "r") as hexfile:
+        hexcode = hexfile.readlines()
     return str(hexcode[0])
 
 
@@ -275,9 +273,9 @@ def write_user(user_id, content):
     # Delete userfile.
     os.remove(folder + "/users/" + user_id + ".txt")
     # Make a new userfile.
-    userfile = open(folder + "/users/" + user_id + ".txt", "w+")
-    # Write content to lines.
-    userfile.writelines(content)
+    with open(folder + "/users/" + user_id + ".txt", "w+") as userfile:
+        # Write content to lines.
+        userfile.writelines(content)
 
 
 def isFeetAndInchesAndIfSoFixIt(input):
