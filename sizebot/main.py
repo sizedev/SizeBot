@@ -77,7 +77,7 @@ def main():
 
         # Default command handling
         await logger.error(f"Ignoring exception in command {ctx.command}:")
-        await logger.error(traceback.format_exception(type(error), error, error.__traceback__))
+        await logger.error("".join(traceback.format_exception(type(error), error, error.__traceback__)))
 
     @bot.event
     async def on_error(event, *args, **kwargs):
