@@ -65,16 +65,20 @@ def main():
     @bot.event
     async def on_command_error(ctx, error):
         # Get actual error
-        err = error.original
+        err = getattr(error, "original", error)
         # DigiException handling
         if isinstance(err, errors.DigiException):
             log_message = str(err).format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
             logCmd = getattr(logger, err.level, logger.warn)
-            logCmd(log_message)
+            await logCmd(log_message)
 
             user_message = err.user_message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
             await ctx.send(user_message, delete_after = err.delete_after)
 
+            return
+
+        if isinstance(err, discord.ext.commands.errors.MissingRequiredArgument):
+            await ctx.send(str(err))
             return
 
         # Default command handling
