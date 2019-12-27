@@ -8,7 +8,6 @@ from sizebot.conf import conf
 from sizebot import userdb
 from sizebot import digiSV
 from sizebot import digisize
-from sizebot import errors
 
 
 async def addUserRole(member):
@@ -143,10 +142,7 @@ class RegisterCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, m):
-        try:
-            await digisize.nickUpdate(m.author)
-        except errors.NoPermissionsException as e:
-            logger.warn(e.message)
+        await digisize.nickUpdate(m.author)
 
 
 # Necessary

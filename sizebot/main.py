@@ -1,3 +1,4 @@
+import sys
 import traceback
 from datetime import datetime
 
@@ -88,6 +89,15 @@ def main():
 
     @bot.event
     async def on_error(event, *args, **kwargs):
+        (type, error, traceback) = sys.exc_info()
+        # Get actual error
+        err = getattr(error, "original", error)
+        # DigiException handling
+        if isinstance(err, errors.DigiException):
+            logCmd = getattr(logger, err.level, logger.warn)
+            await logCmd(str(err))
+            return
+
         await logger.error(f"Ignoring exception in {event}")
         await logger.error(traceback.format_exc())
 
