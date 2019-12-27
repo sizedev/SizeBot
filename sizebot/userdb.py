@@ -86,7 +86,16 @@ class User:
             raise ValueError(f"Invalid unitsystem: '{value}'")
         self._unitsystem = value
 
+    @property
+    def tag(self):
+        if self.id is not None:
+            tag = f"<@{self.id}>"
+        else:
+            tag = self.nickname
+        return tag
+
     # Act like an array for legacy usage
+
     def __getitem__(self, key):
         attrname = DEPRECATED_NAME_MAP[key]
         return getattr(self, attrname)

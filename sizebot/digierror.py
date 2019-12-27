@@ -65,3 +65,9 @@ class NoPermissionsException(DigiException):
     def __init__(self):
         message = "SizeBot does not have the permssions to perform this action."
         super().__init__(message, level = "error")
+
+
+class InvalidUserOrHeightException(DigiException):
+    def __init__(self):
+        message = "Sorry! I didn't recognize that user or height."
+        super().__init__(message)

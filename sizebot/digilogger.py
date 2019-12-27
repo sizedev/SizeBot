@@ -26,6 +26,7 @@ async def error(msg):
 
 
 async def log(level, msg):
+    msg = str(msg)
     print(df.formatLog(level, msg))
     discordPrefix = "```\n"
     discordSuffix = "\n```"
@@ -58,6 +59,7 @@ def syncerror(msg):
 
 
 def synclog(level, msg):
+    msg = str(msg)
     print(df.formatLog(level, msg))
 
 

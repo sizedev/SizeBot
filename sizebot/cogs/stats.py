@@ -9,6 +9,7 @@ from sizebot import digilogger as logger
 from sizebot import userdb
 from sizebot.userdb import CHEI, BHEI, BWEI, DENS
 from sizebot import digiSV
+from sizebot import errors
 
 # TODO: Move to units module.
 # Conversion constants.
@@ -24,32 +25,26 @@ hairwidthfactor = Decimal(1)  # TODO: Provide a real value
 
 
 # TODO: Move to dedicated module.
-async def getUser(ctx, user_string, fakename = None):
+async def getUser(ctx, user_string, fakename = "Raw"):
     try:
         member = await commands.MemberConverter().convert(ctx, user_string)
     except commands.errors.BadArgument:
         member = None
 
-    if fakename is None:
-        fakename = "Raw"
-
     if member:
-        usertag = f"<@{member.id}>"
+        # If a user was found, then load that userdata
         userdata = userdb.load(member.id)
     else:
-        usertag = fakename
         heightsv = digiSV.toSV(user_string)
         if heightsv is None:
-            await ctx.send(
-                "Sorry! I didn't recognize that user or height.",
-                delete_after = 5)
-            return None, None
+            raise errors.InvalidUserOrHeightException
 
+        # If a user was not found but a height was found, then create a fake user with that height
         userdata = userdb.User()
         userdata.nickname = fakename
         userdata.height = heightsv
 
-    return usertag, userdata
+    return userdata
 
 
 # TODO: Clean this up.
@@ -153,11 +148,11 @@ class StatsCog(commands.Cog):
         if who is None:
             who = str(ctx.message.author.id)
 
-        user1tag, user1 = await getUser(ctx, who)
+        user1 = await getUser(ctx, who)
         if user1 is None:
             return
 
-        output = userStats(user1tag, user1)
+        output = userStats(user1.tag, user1)
         await ctx.send(output)
         await logger.info(f"Stats for {who} sent.")
 
@@ -176,35 +171,35 @@ class StatsCog(commands.Cog):
         if who2name is None:
             who2name = "Raw 2"
 
-        user1tag, user1 = await getUser(ctx, who1, who1name)
+        user1 = await getUser(ctx, who1, who1name)
         if user1 is None:
             await ctx.send(f"{who1} is not a recognized user or size.")
             return
-        user2tag, user2 = await getUser(ctx, who2, who2name)
+        user2 = await getUser(ctx, who2, who2name)
         if user2 is None:
             await ctx.send(f"{who2} is not a recognized user or size.")
             return
 
-        output = self.compareUsers(user1tag, user1, user2tag, user2)
+        output = self.compareUsers(user1, user2)
         await ctx.send(output)
         await logger.info(f"Compared {user1} and {user2}")
 
     # TODO: Clean this up.
-    def compareUsers(self, user1tag, user1, user2tag, user2):
+    def compareUsers(self, user1, user2):
         if Decimal(user1[CHEI]) == Decimal(user2[CHEI]):
-            return f"{user1tag} and {user2tag} match 1 to 1."
+            return f"{user1.tag} and {user2.tag} match 1 to 1."
 
         # Who's taller?
         if Decimal(user1[CHEI]) > Decimal(user2[CHEI]):
             biguser = user1
-            bigusertag = user1tag
+            bigusertag = user1.tag
             smalluser = user2
-            smallusertag = user2tag
+            smallusertag = user2.tag
         else:
             biguser = user2
-            bigusertag = user2tag
+            bigusertag = user2.tag
             smalluser = user1
-            smallusertag = user1tag
+            smallusertag = user1.tag
 
         # Compare math.
         bch = Decimal(biguser[CHEI])
