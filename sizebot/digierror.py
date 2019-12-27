@@ -3,11 +3,14 @@
 # error.message will be printed when you do print(error)
 # error.user_message will be displayed to the user
 class DigiException(Exception):
-    def __init__(self, message, user_message = None, level = "warn"):
+    __slots__ = ("message", "user_message", "level", "delete_after")
+
+    def __init__(self, message, user_message = None, level = "warn", delete_after = None):
         if user_message is None:
             user_message = message
         self.delete_after = None
         self.user_message = user_message
+        self.level = level
         super().__init__(message)
 
 
