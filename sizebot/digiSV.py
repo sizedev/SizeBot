@@ -150,119 +150,120 @@ def toSV(s):
 
 
 # Convert "size values" to a more readable format (metric).
-def fromSV(value, system = "m", accuracy = Decimal("2")):
+def fromSV(value, system = "m", accuracy = 2):
+    PLACES = Decimal(10) ** -accuracy
     value = float(value)
     output = ""
     if system == "m":
         if value <= Decimal("0"):
             return "0"
         elif value < Decimal("0.000000000000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e18"), accuracy)) + "ym"
+            output = str((Decimal(value) * Decimal("1e18")).quantize(PLACES)) + "ym"
         elif value < Decimal("0.000000000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e15"), accuracy)) + "zm"
+            output = str((Decimal(value) * Decimal("1e15")).quantize(PLACES)) + "zm"
         elif value < Decimal("0.000000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e12"), accuracy)) + "am"
+            output = str((Decimal(value) * Decimal("1e12")).quantize(PLACES)) + "am"
         elif value < Decimal("0.000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e9"), accuracy)) + "fm"
+            output = str((Decimal(value) * Decimal("1e9")).quantize(PLACES)) + "fm"
         elif value < Decimal("0.000000001"):
-            output = str(round(Decimal(value) * Decimal("1e6"), accuracy)) + "pm"
+            output = str((Decimal(value) * Decimal("1e6")).quantize(PLACES)) + "pm"
         elif value < Decimal("0.0000001"):
-            output = str(round(Decimal(value) * Decimal("1e3"), accuracy)) + "nm"
+            output = str((Decimal(value) * Decimal("1e3")).quantize(PLACES)) + "nm"
         elif value < Decimal("0.00001"):
-            output = str(round(Decimal(value), accuracy)) + "µm"
+            output = str((Decimal(value)).quantize(PLACES)) + "µm"
         elif value < Decimal("0.01"):
-            output = str(round(Decimal(value) / Decimal("1e3"), accuracy)) + "mm"
+            output = str((Decimal(value) / Decimal("1e3")).quantize(PLACES)) + "mm"
         elif value < Decimal("10"):
-            output = str(round(Decimal(value) / Decimal("1e4"), accuracy)) + "cm"
+            output = str((Decimal(value) / Decimal("1e4")).quantize(PLACES)) + "cm"
         elif value < Decimal("1e3"):
-            output = str(round(Decimal(value) / Decimal("1e6"), accuracy)) + "m"
+            output = str((Decimal(value) / Decimal("1e6")).quantize(PLACES)) + "m"
         elif value < Decimal("1e6"):
-            output = str(round(Decimal(value) / Decimal("1e9"), accuracy)) + "km"
+            output = str((Decimal(value) / Decimal("1e9")).quantize(PLACES)) + "km"
         elif value < Decimal("1e9"):
-            output = str(round(Decimal(value) / Decimal("1e12"), accuracy)) + "Mm"
+            output = str((Decimal(value) / Decimal("1e12")).quantize(PLACES)) + "Mm"
         elif value < Decimal("1e12"):
-            output = str(round(Decimal(value) / Decimal("1e15"), accuracy)) + "Gm"
+            output = str((Decimal(value) / Decimal("1e15")).quantize(PLACES)) + "Gm"
         elif value < Decimal("1e15"):
-            output = str(round(Decimal(value) / Decimal("1e18"), accuracy)) + "Tm"
+            output = str((Decimal(value) / Decimal("1e18")).quantize(PLACES)) + "Tm"
         elif value < Decimal("1e18"):
-            output = str(round(Decimal(value) / Decimal("1e21"), accuracy)) + "Pm"
+            output = str((Decimal(value) / Decimal("1e21")).quantize(PLACES)) + "Pm"
         elif value < Decimal("1e21"):
-            output = str(round(Decimal(value) / Decimal("1e24"), accuracy)) + "Em"
+            output = str((Decimal(value) / Decimal("1e24")).quantize(PLACES)) + "Em"
         elif value < Decimal("1e24"):
-            output = str(round(Decimal(value) / Decimal("1e27"), accuracy)) + "Zm"
+            output = str((Decimal(value) / Decimal("1e27")).quantize(PLACES)) + "Zm"
         elif value < uni:
-            output = str(round(Decimal(value) / Decimal("1e30"), accuracy)) + "Ym"
+            output = str((Decimal(value) / Decimal("1e30")).quantize(PLACES)) + "Ym"
         elif value < uni * Decimal("1e3"):
-            output = str(round(Decimal(value) / uni, accuracy)) + "uni"
+            output = str((Decimal(value) / uni).quantize(PLACES)) + "uni"
         elif value < uni * Decimal("1e6"):
-            output = str(round(Decimal(value) / uni / Decimal("1e3"), accuracy)) + "kuni"
+            output = str((Decimal(value) / uni / Decimal("1e3")).quantize(PLACES)) + "kuni"
         elif value < uni * Decimal("1e9"):
-            output = str(round(Decimal(value) / uni / Decimal("1e6"), accuracy)) + "Muni"
+            output = str((Decimal(value) / uni / Decimal("1e6")).quantize(PLACES)) + "Muni"
         elif value < uni * Decimal("1e12"):
-            output = str(round(Decimal(value) / uni / Decimal("1e9"), accuracy)) + "Guni"
+            output = str((Decimal(value) / uni / Decimal("1e9")).quantize(PLACES)) + "Guni"
         elif value < uni * Decimal("1e15"):
-            output = str(round(Decimal(value) / uni / Decimal("1e12"), accuracy)) + "Tuni"
+            output = str((Decimal(value) / uni / Decimal("1e12")).quantize(PLACES)) + "Tuni"
         elif value < uni * Decimal("1e18"):
-            output = str(round(Decimal(value) / uni / Decimal("1e15"), accuracy)) + "Puni"
+            output = str((Decimal(value) / uni / Decimal("1e15")).quantize(PLACES)) + "Puni"
         elif value < uni * Decimal("1e21"):
-            output = str(round(Decimal(value) / uni / Decimal("1e18"), accuracy)) + "Euni"
+            output = str((Decimal(value) / uni / Decimal("1e18")).quantize(PLACES)) + "Euni"
         elif value < uni * Decimal("1e24"):
-            output = str(round(Decimal(value) / uni / Decimal("1e21"), accuracy)) + "Zuni"
+            output = str((Decimal(value) / uni / Decimal("1e21")).quantize(PLACES)) + "Zuni"
         elif value < uni * Decimal("1e27"):
-            output = str(round(Decimal(value) / uni / Decimal("1e24"), accuracy)) + "Yuni"
+            output = str((Decimal(value) / uni / Decimal("1e24")).quantize(PLACES)) + "Yuni"
         else:
             return "∞"
     elif system == "u":
         if value <= Decimal("0"):
             return "0"
         elif value < Decimal("0.000000000000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e18"), accuracy)) + "ym"
+            output = str((Decimal(value) * Decimal("1e18")).quantize(PLACES)) + "ym"
         elif value < Decimal("0.000000000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e15"), accuracy)) + "zm"
+            output = str((Decimal(value) * Decimal("1e15")).quantize(PLACES)) + "zm"
         elif value < Decimal("0.000000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e12"), accuracy)) + "am"
+            output = str((Decimal(value) * Decimal("1e12")).quantize(PLACES)) + "am"
         elif value < Decimal("0.000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e9"), accuracy)) + "fm"
+            output = str((Decimal(value) * Decimal("1e9")).quantize(PLACES)) + "fm"
         elif value < Decimal("0.000000001"):
-            output = str(round(Decimal(value) * Decimal("1e6"), accuracy)) + "pm"
+            output = str((Decimal(value) * Decimal("1e6")).quantize(PLACES)) + "pm"
         elif value < Decimal("0.000001"):
-            output = str(round(Decimal(value) * Decimal("1e3"), accuracy)) + "nm"
+            output = str((Decimal(value) * Decimal("1e3")).quantize(PLACES)) + "nm"
         elif value < Decimal("0.0001"):
-            output = str(round(Decimal(value), accuracy)) + "µm"
+            output = str((Decimal(value)).quantize(PLACES)) + "µm"
         elif value < Decimal("0.01"):
-            output = str(round(Decimal(value) / Decimal("1e3"), accuracy)) + "mm"
+            output = str((Decimal(value) / Decimal("1e3")).quantize(PLACES)) + "mm"
         elif value < foot:
-            output = str(round(Decimal(value) / inch, accuracy)) + "in"
+            output = str((Decimal(value) / inch).quantize(PLACES)) + "in"
         elif value < mile:
             feetval = math.floor(Decimal(value) / foot)
-            fulloninches = round(Decimal(value) / inch, accuracy)
+            fulloninches = (Decimal(value) / inch).quantize(PLACES)
             feettoinches = feetval * Decimal(12)
             inchval = fulloninches - feettoinches
             output = str(feetval) + "'" + str(inchval) + "\""
         elif value < au:
-            output = str(round(Decimal(value) / mile, accuracy)) + "mi"
+            output = str((Decimal(value) / mile).quantize(PLACES)) + "mi"
         elif value < ly:
-            output = str(round(Decimal(value) / au, accuracy)) + "AU"
+            output = str((Decimal(value) / au).quantize(PLACES)) + "AU"
         elif value < uni / Decimal("10"):
-            output = str(round(Decimal(value) / ly, accuracy)) + "ly"
+            output = str((Decimal(value) / ly).quantize(PLACES)) + "ly"
         elif value < uni * Decimal("1e3"):
-            output = str(round(Decimal(value) / uni, accuracy)) + "uni"
+            output = str((Decimal(value) / uni).quantize(PLACES)) + "uni"
         elif value < uni * Decimal("1e6"):
-            output = str(round(Decimal(value) / uni / Decimal(1e3), accuracy)) + "kuni"
+            output = str((Decimal(value) / uni / Decimal(1e3)).quantize(PLACES)) + "kuni"
         elif value < uni * Decimal("1e9"):
-            output = str(round(Decimal(value) / uni / Decimal(1e6), accuracy)) + "Muni"
+            output = str((Decimal(value) / uni / Decimal(1e6)).quantize(PLACES)) + "Muni"
         elif value < uni * Decimal("1e12"):
-            output = str(round(Decimal(value) / uni / Decimal(1e9), accuracy)) + "Guni"
+            output = str((Decimal(value) / uni / Decimal(1e9)).quantize(PLACES)) + "Guni"
         elif value < uni * Decimal("1e15"):
-            output = str(round(Decimal(value) / uni / Decimal(1e12), accuracy)) + "Tuni"
+            output = str((Decimal(value) / uni / Decimal(1e12)).quantize(PLACES)) + "Tuni"
         elif value < uni * Decimal("1e18"):
-            output = str(round(Decimal(value) / uni / Decimal(1e15), accuracy)) + "Puni"
+            output = str((Decimal(value) / uni / Decimal(1e15)).quantize(PLACES)) + "Puni"
         elif value < uni * Decimal("1e21"):
-            output = str(round(Decimal(value) / uni / Decimal(1e18), accuracy)) + "Euni"
+            output = str((Decimal(value) / uni / Decimal(1e18)).quantize(PLACES)) + "Euni"
         elif value < uni * Decimal("1e24"):
-            output = str(round(Decimal(value) / uni / Decimal(1e21), accuracy)) + "Zuni"
+            output = str((Decimal(value) / uni / Decimal(1e21)).quantize(PLACES)) + "Zuni"
         elif value < uni * Decimal("1e27"):
-            output = str(round(Decimal(value) / uni / Decimal(1e24), accuracy)) + "Yuni"
+            output = str((Decimal(value) / uni / Decimal(1e24)).quantize(PLACES)) + "Yuni"
         else:
             return "∞"
     return removeDecimals(output)
@@ -344,120 +345,121 @@ def toWV(s):
 
 
 # Convert "weight values" to a more readable format.
-def fromWV(value, system = "m", accuracy = Decimal("2")):
+def fromWV(value, system = "m", accuracy = 2):
+    PLACES = Decimal(10) ** -accuracy
     value = Decimal(value)
     if system == "m":
         if value <= Decimal("0"):
             return "0"
         elif value < Decimal("0.000000000000000000001"):
-            output = str(round(Decimal(value) * Decimal(1e21), accuracy)) + "yg"
+            output = str((Decimal(value) * Decimal(1e21)).quantize(PLACES)) + "yg"
         elif value < Decimal("0.000000000000000001"):
-            output = str(round(Decimal(value) * Decimal(1e18), accuracy)) + "zg"
+            output = str((Decimal(value) * Decimal(1e18)).quantize(PLACES)) + "zg"
         elif value < Decimal("0.000000000000001"):
-            output = str(round(Decimal(value) * Decimal(1e15), accuracy)) + "ag"
+            output = str((Decimal(value) * Decimal(1e15)).quantize(PLACES)) + "ag"
         elif value < Decimal("0.000000000001"):
-            output = str(round(Decimal(value) * Decimal(1e12), accuracy)) + "fg"
+            output = str((Decimal(value) * Decimal(1e12)).quantize(PLACES)) + "fg"
         elif value < Decimal("0.000000001"):
-            output = str(round(Decimal(value) * Decimal(1e9), accuracy)) + "pg"
+            output = str((Decimal(value) * Decimal(1e9)).quantize(PLACES)) + "pg"
         elif value < Decimal("0.000001"):
-            output = str(round(Decimal(value) * Decimal(1e6), accuracy)) + "ng"
+            output = str((Decimal(value) * Decimal(1e6)).quantize(PLACES)) + "ng"
         elif value < Decimal("0.001"):
-            output = str(round(Decimal(value) * Decimal(1e3), accuracy)) + "µg"
+            output = str((Decimal(value) * Decimal(1e3)).quantize(PLACES)) + "µg"
         elif value < Decimal("1"):
-            output = str(round(Decimal(value), accuracy)) + "mg"
+            output = str((Decimal(value)).quantize(PLACES)) + "mg"
         elif value < Decimal("10000"):
-            output = str(round(Decimal(value) / Decimal(1e3), accuracy)) + "g"
+            output = str((Decimal(value) / Decimal(1e3)).quantize(PLACES)) + "g"
         elif value < Decimal("1000000"):
-            output = str(round(Decimal(value) / Decimal(1e6), accuracy)) + "kg"
+            output = str((Decimal(value) / Decimal(1e6)).quantize(PLACES)) + "kg"
         elif value < Decimal("100000000"):
-            output = str(round(Decimal(value) / Decimal(1e9), accuracy)) + "t"
+            output = str((Decimal(value) / Decimal(1e9)).quantize(PLACES)) + "t"
         elif value < Decimal("100000000000"):
-            output = str(round(Decimal(value) / Decimal(1e12), accuracy)) + "kt"
+            output = str((Decimal(value) / Decimal(1e12)).quantize(PLACES)) + "kt"
         elif value < Decimal("100000000000000"):
-            output = str(round(Decimal(value) / Decimal(1e15), accuracy)) + "Mt"
+            output = str((Decimal(value) / Decimal(1e15)).quantize(PLACES)) + "Mt"
         elif value < Decimal("100000000000000000"):
-            output = str(round(Decimal(value) / Decimal(1e18), accuracy)) + "Gt"
+            output = str((Decimal(value) / Decimal(1e18)).quantize(PLACES)) + "Gt"
         elif value < Decimal("100000000000000000000"):
-            output = str(round(Decimal(value) / Decimal(1e21), accuracy)) + "Tt"
+            output = str((Decimal(value) / Decimal(1e21)).quantize(PLACES)) + "Tt"
         elif value < Decimal("100000000000000000000000"):
-            output = str(round(Decimal(value) / Decimal(1e24), accuracy)) + "Pt"
+            output = str((Decimal(value) / Decimal(1e24)).quantize(PLACES)) + "Pt"
         elif value < Decimal("100000000000000000000000000"):
-            output = str(round(Decimal(value) / Decimal(1e27), accuracy)) + "Et"
+            output = str((Decimal(value) / Decimal(1e27)).quantize(PLACES)) + "Et"
         elif value < Decimal("100000000000000000000000000000"):
-            output = str(round(Decimal(value) / Decimal(1e30), accuracy)) + "Zt"
+            output = str((Decimal(value) / Decimal(1e30)).quantize(PLACES)) + "Zt"
         elif value < Decimal("100000000000000000000000000000000"):
-            output = str(round(Decimal(value) / Decimal(1e33), accuracy)) + "Yt"
+            output = str((Decimal(value) / Decimal(1e33)).quantize(PLACES)) + "Yt"
         elif value < uniw * Decimal("1e3"):
-            output = str(round(Decimal(value) / uniw, accuracy)) + "uni"
+            output = str((Decimal(value) / uniw).quantize(PLACES)) + "uni"
         elif value < uniw * Decimal("1e6"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e3"), accuracy)) + "kuni"
+            output = str((Decimal(value) / uniw / Decimal("1e3")).quantize(PLACES)) + "kuni"
         elif value < uniw * Decimal("1e9"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e6"), accuracy)) + "Muni"
+            output = str((Decimal(value) / uniw / Decimal("1e6")).quantize(PLACES)) + "Muni"
         elif value < uniw * Decimal("1e12"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e9"), accuracy)) + "Guni"
+            output = str((Decimal(value) / uniw / Decimal("1e9")).quantize(PLACES)) + "Guni"
         elif value < uniw * Decimal("1e15"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e12"), accuracy)) + "Tuni"
+            output = str((Decimal(value) / uniw / Decimal("1e12")).quantize(PLACES)) + "Tuni"
         elif value < uniw * Decimal("1e18"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e15"), accuracy)) + "Puni"
+            output = str((Decimal(value) / uniw / Decimal("1e15")).quantize(PLACES)) + "Puni"
         elif value < uniw * Decimal("1e21"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e18"), accuracy)) + "Euni"
+            output = str((Decimal(value) / uniw / Decimal("1e18")).quantize(PLACES)) + "Euni"
         elif value < uniw * Decimal("1e24"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e21"), accuracy)) + "Zuni"
+            output = str((Decimal(value) / uniw / Decimal("1e21")).quantize(PLACES)) + "Zuni"
         elif value < uniw * Decimal("1e27"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e24"), accuracy)) + "Yuni"
+            output = str((Decimal(value) / uniw / Decimal("1e24")).quantize(PLACES)) + "Yuni"
         else:
             return "∞"
     elif system == "u":
         if value == 0:
             return "almost nothing"
         elif value < Decimal("0.000000000000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e21"), accuracy)) + "yg"
+            output = str((Decimal(value) * Decimal("1e21")).quantize(PLACES)) + "yg"
         elif value < Decimal("0.000000000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e18"), accuracy)) + "zg"
+            output = str((Decimal(value) * Decimal("1e18")).quantize(PLACES)) + "zg"
         elif value < Decimal("0.000000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e15"), accuracy)) + "ag"
+            output = str((Decimal(value) * Decimal("1e15")).quantize(PLACES)) + "ag"
         elif value < Decimal("0.000000000001"):
-            output = str(round(Decimal(value) * Decimal("1e12"), accuracy)) + "fg"
+            output = str((Decimal(value) * Decimal("1e12")).quantize(PLACES)) + "fg"
         elif value < Decimal("0.000000001"):
-            output = str(round(Decimal(value) * Decimal("1e9"), accuracy)) + "pg"
+            output = str((Decimal(value) * Decimal("1e9")).quantize(PLACES)) + "pg"
         elif value < Decimal("0.000001"):
-            output = str(round(Decimal(value) * Decimal("1e6"), accuracy)) + "ng"
+            output = str((Decimal(value) * Decimal("1e6")).quantize(PLACES)) + "ng"
         elif value < Decimal("0.001"):
-            output = str(round(Decimal(value) * Decimal("1e3"), accuracy)) + "µg"
+            output = str((Decimal(value) * Decimal("1e3")).quantize(PLACES)) + "µg"
         elif value < Decimal("1"):
-            output = str(round(Decimal(value), accuracy)) + "mg"
+            output = str((Decimal(value)).quantize(PLACES)) + "mg"
         elif value < ounce / Decimal("10"):
-            output = str(round(Decimal(value) / Decimal("1e3"), accuracy)) + "g"
+            output = str((Decimal(value) / Decimal("1e3")).quantize(PLACES)) + "g"
         elif value < pound:
-            output = str(placeValue(round(Decimal(value) / ounce, accuracy))) + "oz"
+            output = str(placeValue((Decimal(value) / ounce).quantize(PLACES))) + "oz"
         elif value < uston:
-            output = str(placeValue(round(Decimal(value) / pound, accuracy))) + "lb"
+            output = str(placeValue((Decimal(value) / pound).quantize(PLACES))) + "lb"
         elif value < earth / Decimal("10"):
-            output = str(placeValue(round(Decimal(value) / uston, accuracy))) + " US tons"
+            output = str(placeValue((Decimal(value) / uston).quantize(PLACES))) + " US tons"
         elif value < sun / Decimal("10"):
-            output = str(placeValue(round(Decimal(value) / earth, accuracy))) + " Earths"
+            output = str(placeValue((Decimal(value) / earth).quantize(PLACES))) + " Earths"
         elif value < milkyway:
-            output = str(placeValue(round(Decimal(value) / sun, accuracy))) + " Suns"
+            output = str(placeValue((Decimal(value) / sun).quantize(PLACES))) + " Suns"
         elif value < uniw:
-            output = str(placeValue(round(Decimal(value) / milkyway, accuracy))) + " Milky Ways"
+            output = str(placeValue((Decimal(value) / milkyway).quantize(PLACES))) + " Milky Ways"
         elif value < uniw * Decimal("1e3"):
-            output = str(round(Decimal(value) / uniw, accuracy)) + "uni"
+            output = str((Decimal(value) / uniw).quantize(PLACES)) + "uni"
         elif value < uniw * Decimal("1e6"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e3"), accuracy)) + "kuni"
+            output = str((Decimal(value) / uniw / Decimal("1e3")).quantize(PLACES)) + "kuni"
         elif value < uniw * Decimal("1e9"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e6"), accuracy)) + "Muni"
+            output = str((Decimal(value) / uniw / Decimal("1e6")).quantize(PLACES)) + "Muni"
         elif value < uniw * Decimal("1e12"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e9"), accuracy)) + "Guni"
+            output = str((Decimal(value) / uniw / Decimal("1e9")).quantize(PLACES)) + "Guni"
         elif value < uniw * Decimal("1e15"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e12"), accuracy)) + "Tuni"
+            output = str((Decimal(value) / uniw / Decimal("1e12")).quantize(PLACES)) + "Tuni"
         elif value < uniw * Decimal("1e18"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e15"), accuracy)) + "Puni"
+            output = str((Decimal(value) / uniw / Decimal("1e15")).quantize(PLACES)) + "Puni"
         elif value < uniw * Decimal("1e21"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e18"), accuracy)) + "Euni"
+            output = str((Decimal(value) / uniw / Decimal("1e18")).quantize(PLACES)) + "Euni"
         elif value < uniw * Decimal("1e24"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e21"), accuracy)) + "Zuni"
+            output = str((Decimal(value) / uniw / Decimal("1e21")).quantize(PLACES)) + "Zuni"
         elif value < uniw * Decimal("1e27"):
-            output = str(round(Decimal(value) / uniw / Decimal("1e24"), accuracy)) + "Yuni"
+            output = str((Decimal(value) / uniw / Decimal("1e24")).quantize(PLACES)) + "Yuni"
         else:
             return "∞"
     return removeDecimals(output)
