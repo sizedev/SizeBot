@@ -89,7 +89,7 @@ def main():
 
     @bot.event
     async def on_error(event, *args, **kwargs):
-        (type, error, traceback) = sys.exc_info()
+        (type, error, tb) = sys.exc_info()
         # Get actual error
         err = getattr(error, "original", error)
         # DigiException handling
