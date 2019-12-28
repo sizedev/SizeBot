@@ -3,7 +3,7 @@ import re
 from discord.ext import commands
 
 from sizebot.digidecimal import Decimal
-from sizebot import digierrors as errors
+from sizebot import digierror as errors
 
 # Unit constants
 # Height [meters]
@@ -408,14 +408,6 @@ def fromWV(value, system = "m", accuracy = 2):
     unit = getBestUnit(value, wvunits[system])
     formatted = unit.format(value)
     return formatted
-
-
-# Get number from string
-def getNum(s):
-    match = re.search(r"", s)   # TODO: What happened here!?
-    if match is None:
-        return None
-    return Decimal(match.group(0))
 
 
 def toShoeSize(inchval):
