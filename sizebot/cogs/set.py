@@ -27,9 +27,9 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their nick to {str(newnick)}.")
-        await ctx.send("<@{0}>'s nick is now {1}".format(ctx.message.author.id, userdata[NICK]))
+        await ctx.send("<@{0}>'s nick is now {1}".format(ctx.message.author.id, userdata.nickname))
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Change species
@@ -46,9 +46,9 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their species to {str(newtag)}.")
-        await ctx.send("<@{0}>'s species is now {1}".format(ctx.message.author.id, userdata[SPEC]))
+        await ctx.send("<@{0}>'s species is now {1}".format(ctx.message.author.id, userdata.species))
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Remove species
@@ -56,13 +56,13 @@ class SetCog(commands.Cog):
     async def clearspecies(self, ctx):
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[SPEC] = None
+        userdata.species = None
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their species.")
         await ctx.send("<@{0}>'s species is now cleared".format(ctx.message.author.id))
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Change height
@@ -85,9 +85,9 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now {str(newheight)} tall.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})")
+        await ctx.send(f"<@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} tall. ({digiSV.fromSV(userdata.height, 'u')})")
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Reset size
@@ -95,13 +95,13 @@ class SetCog(commands.Cog):
     async def resetsize(self, ctx):
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[CHEI] = userdata[BHEI]
+        userdata.height = userdata.baseheight
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) reset their size.")
         # TODO: Add user message
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Change density
@@ -114,13 +114,13 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[DENS] = newdensity
+        userdata.density = newdensity
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now {str(newdensity)}x density.")
-        await ctx.send("""<@{0}> is now {1}x density.""".format(ctx.message.author.id, userdata[DENS][:-1]))
+        await ctx.send("""<@{0}> is now {1}x density.""".format(ctx.message.author.id, userdata.density[:-1]))
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Set display mode
@@ -138,13 +138,13 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[DISP] = newdisp
+        userdata.display = newdisp
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their display to {str(newdisp)}.")
-        await ctx.send("""<@{0}>'s display is now set to {1}.""".format(ctx.message.author.id, userdata[DISP][:-1]))
+        await ctx.send("""<@{0}>'s display is now set to {1}.""".format(ctx.message.author.id, userdata.display[:-1]))
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Set measurement system
@@ -162,13 +162,13 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[UNIT] = newsys
+        userdata.unitsystem = newsys
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their system to {str(newsys)}.")
-        await ctx.send("""<@{0}>'s system is now set to {1}.'""".format(ctx.message.author.id, userdata[UNIT][:-1]))
+        await ctx.send("""<@{0}>'s system is now set to {1}.'""".format(ctx.message.author.id, userdata.unitsystem[:-1]))
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Change height to a random value
@@ -188,13 +188,13 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[CHEI] = newheight
+        userdata.height = newheight
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set a random height, and are now {str(newheight)}SV tall.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})")
+        await ctx.send(f"<@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} tall. ({digiSV.fromSV(userdata.height, 'u')})")
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Change height to a infinity
@@ -202,13 +202,13 @@ class SetCog(commands.Cog):
     async def setinf(self, ctx):
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[CHEI] = digiSV.infinity
+        userdata.height = digiSV.infinity
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now infinitely tall.")
         await ctx.send("<@{0}> is now infinitely tall.".format(ctx.message.author.id))
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Change height to a zero
@@ -216,13 +216,13 @@ class SetCog(commands.Cog):
     async def set0(self, ctx):
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[CHEI] = 0
+        userdata.height = 0
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now nothing.")
         await ctx.send("<@{0}> is now nothing.".format(ctx.message.author.id))
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Change base height
@@ -235,13 +235,13 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[BHEI] = digiSV.toSV(newbaseheight)
+        userdata.baseheight = digiSV.toSV(newbaseheight)
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base height to {str(newbaseheight)}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s base height is now {digiSV.fromSV(userdata[BHEI], 'm')}. ({digiSV.fromSV(userdata[BHEI], 'u')})")
+        await ctx.send(f"<@{ctx.message.author.id}>'s base height is now {digiSV.fromSV(userdata.baseheight, 'm')}. ({digiSV.fromSV(userdata.baseheight, 'u')})")
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
     # Change base weight
@@ -254,13 +254,13 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata[BWEI] = digiSV.toWV(newbaseweight)
+        userdata.baseweight = digiSV.toWV(newbaseweight)
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base weight to {str(newbaseweight)}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s base weight is now {digiSV.fromWV(userdata[BWEI], 'm')}. ({digiSV.fromWV(userdata[BWEI], 'u')})")
+        await ctx.send(f"<@{ctx.message.author.id}>'s base weight is now {digiSV.fromWV(userdata.baseweight, 'm')}. ({digiSV.fromWV(userdata.baseweight, 'u')})")
 
-        if userdata[DISP]:
+        if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
 

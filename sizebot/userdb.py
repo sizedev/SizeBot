@@ -20,6 +20,7 @@ defaultweight = Decimal("66760")  # grams
 defaultdensity = Decimal("1.0")
 
 # Map the deprecated user array constants to the new names
+#                      NICK        DISP       CHEI      BHEI          BWEI          DENS       UNIT          SPEC
 DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweight", "density", "unitsystem", "species"]
 
 

@@ -50,13 +50,13 @@ async def getUser(ctx, user_string, fakename = "Raw"):
 # TODO: Clean this up.
 def userStats(usertag, userid):
     userdata = userdb.load(userid)
-    # usernick = userdata[NICK]                  # TODO: Unused
-    # userdisplay = userdata[DISP]               # TODO: Unused
-    userbaseheight = Decimal(userdata[BHEI])
-    userbaseweight = Decimal(userdata[BWEI])
-    usercurrentheight = Decimal(userdata[CHEI])
-    userdensity = Decimal(userdata[DENS])
-    # userspecies = userdata[SPEC]               # TODO: Unused
+    # usernick = userdata.nickname                  # TODO: Unused
+    # userdisplay = userdata.display               # TODO: Unused
+    userbaseheight = Decimal(userdata.baseheight)
+    userbaseweight = Decimal(userdata.baseweight)
+    usercurrentheight = Decimal(userdata.height)
+    userdensity = Decimal(userdata.density)
+    # userspecies = userdata.species               # TODO: Unused
 
     multiplier = usercurrentheight / userbaseheight
     # multiplier2 = multiplier ** 2               # TODO: Unused
@@ -186,11 +186,11 @@ class StatsCog(commands.Cog):
 
     # TODO: Clean this up.
     def compareUsers(self, user1, user2):
-        if Decimal(user1[CHEI]) == Decimal(user2[CHEI]):
+        if Decimal(user1.height) == Decimal(user2.height):
             return f"{user1.tag} and {user2.tag} match 1 to 1."
 
         # Who's taller?
-        if Decimal(user1[CHEI]) > Decimal(user2[CHEI]):
+        if Decimal(user1.height) > Decimal(user2.height):
             biguser = user1
             bigusertag = user1.tag
             smalluser = user2
@@ -202,14 +202,14 @@ class StatsCog(commands.Cog):
             smallusertag = user1.tag
 
         # Compare math.
-        bch = Decimal(biguser[CHEI])
-        bbh = Decimal(biguser[BHEI])
-        sch = Decimal(smalluser[CHEI])
-        sbh = Decimal(smalluser[BHEI])
-        bbw = Decimal(biguser[BWEI])
-        sbw = Decimal(smalluser[BWEI])
-        bd = Decimal(biguser[DENS])
-        sd = Decimal(smalluser[DENS])
+        bch = Decimal(biguser.height)
+        bbh = Decimal(biguser.baseheight)
+        sch = Decimal(smalluser.height)
+        sbh = Decimal(smalluser.baseheight)
+        bbw = Decimal(biguser.baseweight)
+        sbw = Decimal(smalluser.baseweight)
+        bd = Decimal(biguser.density)
+        sd = Decimal(smalluser.density)
         bigmult = (bch / bbh)
         smallmult = (sch / sbh)
         bigmultcubed = (bigmult ** Decimal("3"))

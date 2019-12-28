@@ -72,7 +72,7 @@ class ChangeCog(commands.Cog):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) ate a cake and multiplied {randmult}.")
         # TODO: Randomize the italics message here
         await ctx.send(f"""<@{ctx.message.author.id}> ate a :cake:! *I mean it said "Eat me..."*
-They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})""")
+They multiplied {randmult}x and are now {digiSV.fromSV(userdata.height, 'm')} tall. ({digiSV.fromSV(userdata.height, 'u')})""")
 
     @commands.command()
     async def drinkme(self, ctx):
@@ -83,7 +83,7 @@ They multiplied {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tal
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) drank a potion and shrunk {randmult}.")
         # TODO: Randomize the italics message here
         await ctx.send(f"""<@{ctx.message.author.id}> ate a :milk:! *I mean it said "Drink me..."*
-    They shrunk {randmult}x and are now {digiSV.fromSV(userdata[CHEI], 'm')} tall. ({digiSV.fromSV(userdata[CHEI], 'u')})""")
+    They shrunk {randmult}x and are now {digiSV.fromSV(userdata.height, 'm')} tall. ({digiSV.fromSV(userdata.height, 'u')})""")
 
     # Slow growth task
     # TODO: Does this restart if there are errors?
