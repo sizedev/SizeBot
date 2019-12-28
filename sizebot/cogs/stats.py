@@ -51,10 +51,10 @@ def userStats(usertag, userid):
     userdata = userdb.load(userid)
     # usernick = userdata.nickname                  # TODO: Unused
     # userdisplay = userdata.display               # TODO: Unused
-    userbaseheight = Decimal(userdata.baseheight)
-    userbaseweight = Decimal(userdata.baseweight)
-    usercurrentheight = Decimal(userdata.height)
-    userdensity = Decimal(userdata.density)
+    userbaseheight = userdata.baseheight
+    userbaseweight = userdata.baseweight
+    usercurrentheight = userdata.height
+    userdensity = userdata.density
     # userspecies = userdata.species               # TODO: Unused
 
     multiplier = usercurrentheight / userbaseheight
@@ -183,13 +183,13 @@ class StatsCog(commands.Cog):
         await ctx.send(output)
         await logger.info(f"Compared {user1} and {user2}")
 
-    # TODO: Clean this up.
+    # TODO: Clean this up
     def compareUsers(self, user1, user2):
-        if Decimal(user1.height) == Decimal(user2.height):
+        if user1.height == user2.height:
             return f"{user1.tag} and {user2.tag} match 1 to 1."
 
         # Who's taller?
-        if Decimal(user1.height) > Decimal(user2.height):
+        if user1.height > user2.height:
             biguser = user1
             bigusertag = user1.tag
             smalluser = user2
@@ -200,30 +200,22 @@ class StatsCog(commands.Cog):
             smalluser = user1
             smallusertag = user1.tag
 
-        # Compare math.
-        bch = Decimal(biguser.height)
-        bbh = Decimal(biguser.baseheight)
-        sch = Decimal(smalluser.height)
-        sbh = Decimal(smalluser.baseheight)
-        bbw = Decimal(biguser.baseweight)
-        sbw = Decimal(smalluser.baseweight)
-        bd = Decimal(biguser.density)
-        sd = Decimal(smalluser.density)
-        bigmult = (bch / bbh)
-        smallmult = (sch / sbh)
+        # Compare math
+        bigmult = (biguser.height / biguser.baseheight)
+        smallmult = (smalluser.height / smalluser.baseheight)
         bigmultcubed = (bigmult ** Decimal("3"))
         smallmultcubed = (smallmult ** Decimal("3"))
         dispbigmult = round(bigmult, Decimal("4"))
         dispsmallmult = round(smallmult, Decimal("4"))
         dispbigmultcubed = round(bigmultcubed, Decimal("4"))
         dispsmallmultcubed = round(smallmultcubed, Decimal("4"))
-        bcw = bbw * (bigmult ** Decimal("3")) * bd
-        scw = sbw * (smallmult ** Decimal("3")) * sd
+        bcw = biguser.baseweight * (bigmult ** Decimal("3")) * biguser.density
+        scw = smalluser.baseweight * (smallmult ** Decimal("3")) * smalluser.density
         diffmult = bigmult / smallmult
-        b2sh = bbh * diffmult
-        s2bh = sbh / diffmult
-        b2sw = bbw * (diffmult ** Decimal("3"))
-        s2bw = sbw / (diffmult ** Decimal("3"))
+        b2sh = biguser.baseheight * diffmult
+        s2bh = smalluser.baseheight / diffmult
+        b2sw = biguser.baseweight * (diffmult ** Decimal("3"))
+        s2bw = smalluser.baseweight / (diffmult ** Decimal("3"))
         bigtosmallheight = digiSV.fromSV(b2sh, "m", Decimal("3"))
         smalltobigheight = digiSV.fromSV(s2bh, "m", Decimal("3"))
         bigtosmallheightUSA = digiSV.fromSV(b2sh, "u")
@@ -262,7 +254,7 @@ class StatsCog(commands.Cog):
         smalltobigpointer = digiSV.fromSV(s2bh * pointerfactor, "m", Decimal("3"))
         bigtosmallpointerUSA = digiSV.fromSV(b2sh * pointerfactor, "u")
         smalltobigpointerUSA = digiSV.fromSV(s2bh * pointerfactor, "u")
-        timestaller = digiSV.placeValue(round((bch / sch), Decimal("3")))
+        timestaller = digiSV.placeValue(round((biguser.height / smalluser.height), Decimal("3")))
 
         # Print compare
         enspace = "\u2002"
@@ -271,7 +263,7 @@ class StatsCog(commands.Cog):
         return (
             "**Comparison:**\n"
             f"{bigusertag} is really:\n"
-            f"{printtab}Real Height: {digiSV.fromSV(bch, 'm', 3)} / {digiSV.fromSV(bch, 'u')} ({digiSV.placeValue(dispbigmult)}x basesize)\n"
+            f"{printtab}Real Height: {digiSV.fromSV(biguser.height, 'm', 3)} / {digiSV.fromSV(biguser.height, 'u')} ({digiSV.placeValue(dispbigmult)}x basesize)\n"
             f"{printtab}Real Weight: {digiSV.fromWV(bcw, 'm')} / {digiSV.fromWV(bcw, 'u')}. ({digiSV.placeValue(dispbigmultcubed)}x basesize)\n"
             f"To {smallusertag}, {bigusertag} looks:\n"
             f"{printtab}Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
@@ -287,7 +279,7 @@ class StatsCog(commands.Cog):
             f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
             "\n"
             f"{smallusertag} is really:\n"
-            f"{printtab}Real Height: {digiSV.fromSV(sch, 'm', 3)} / {digiSV.fromSV(sch, 'u')} ({digiSV.placeValue(dispsmallmult)}x basesize)\n"
+            f"{printtab}Real Height: {digiSV.fromSV(smalluser.height, 'm', 3)} / {digiSV.fromSV(smalluser.height, 'u')} ({digiSV.placeValue(dispsmallmult)}x basesize)\n"
             f"{printtab}Real Weight: {digiSV.fromWV(scw, 'm')} / {digiSV.fromWV(scw, 'u')}. ({digiSV.placeValue(dispsmallmultcubed)}x basesize)\n"
             f"To {bigusertag}, {smallusertag} looks:\n"
             f"{printtab}Height: {smalltobigheight} / {smalltobigheightUSA}\n"
@@ -301,8 +293,8 @@ class StatsCog(commands.Cog):
             f"{printtab}Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
             "\n"
             f"**Base Sizes:**\n"
-            f"{printtab}{bigusertag}: {digiSV.fromSV(bbh, 'm', 3)} / {digiSV.fromSV(bbh, 'u')} | {digiSV.fromWV(bbw, 'm')} / {digiSV.fromWV(bbw, 'u')}\n"
-            f"{printtab}{smallusertag}: {digiSV.fromSV(sbh, 'm', 3)} / {digiSV.fromSV(sbh, 'u')} | {digiSV.fromWV(sbw, 'm')} / {digiSV.fromWV(sbw, 'u')}")
+            f"{printtab}{bigusertag}: {digiSV.fromSV(biguser.baseheight, 'm', 3)} / {digiSV.fromSV(biguser.baseheight, 'u')} | {digiSV.fromWV(biguser.baseweight, 'm')} / {digiSV.fromWV(biguser.baseweight, 'u')}\n"
+            f"{printtab}{smallusertag}: {digiSV.fromSV(smalluser.baseheight, 'm', 3)} / {digiSV.fromSV(smalluser.baseheight, 'u')} | {digiSV.fromWV(smalluser.baseweight, 'm')} / {digiSV.fromWV(smalluser.baseweight, 'u')}")
 
     @stats.error
     async def stats_handler(self, ctx, error):
