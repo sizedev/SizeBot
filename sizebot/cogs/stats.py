@@ -7,7 +7,6 @@ from sizebot.digidecimal import Decimal
 from sizebot import digilogger as logger
 # TODO: Fix this...
 from sizebot import userdb
-from sizebot.userdb import CHEI, BHEI, BWEI, DENS
 from sizebot import digiSV
 from sizebot import errors
 

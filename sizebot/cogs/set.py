@@ -4,7 +4,6 @@ from discord.ext import commands
 
 from sizebot import digilogger as logger
 from sizebot import userdb
-from sizebot.userdb import NICK, DISP, SPEC, CHEI, BHEI, DENS, UNIT, BWEI
 from sizebot import digiSV
 from sizebot import digisize
 

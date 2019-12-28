@@ -6,7 +6,6 @@ from discord.ext import commands, tasks
 from sizebot.digidecimal import Decimal
 from sizebot import digilogger as logger
 from sizebot import userdb
-from sizebot.userdb import CHEI
 from sizebot import digiSV
 from sizebot import digisize
 
