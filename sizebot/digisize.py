@@ -116,7 +116,7 @@ def changeUser(userid, changestyle, amount):
     if changestyle in ["add", "subtract"]:
         amountSV = digiSV.toSV(amount)
     elif changestyle in ["multiply", "divide"]:
-        amountVal = digiSV.getNum(amount)
+        amountVal = Decimal(amount)
         if amountVal == 1:
             raise errors.ValueIsOneException
         if amountVal == 0:

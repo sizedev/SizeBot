@@ -71,3 +71,10 @@ class InvalidUserOrHeightException(DigiException):
     def __init__(self):
         message = "Sorry! I didn't recognize that user or height."
         super().__init__(message)
+
+
+class InvalidUnitSystemException(DigiException):
+    def __init__(self, unitsystem):
+        message = f"User tried to use invalid '{unitsystem}' unit system"
+        user_message = f"'{unitsystem}' is an unrecognized unit system."
+        super().__init__(message, user_message)
