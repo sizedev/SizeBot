@@ -83,7 +83,7 @@ def toSV(s):
         output = Decimal(value) / Decimal("1e15")
     elif unitlower in ["picometers", "picometer"] or unit == "pm":
         output = Decimal(value) / Decimal("1e12")
-    elif unitlower in ["nanometers", "nanometer" or unit == "nm":
+    elif unitlower in ["nanometers", "nanometer"] or unit == "nm":
         output = Decimal(value) / Decimal("1e9")
     elif unitlower in ["micrometers", "micrometer"] or unit in ["um", "µm"]:
         output = Decimal(value) / Decimal("1e6")
@@ -170,7 +170,7 @@ def toWV(s):
         output = Decimal(value) * Decimal("1e6")
     elif unitlower in ["megagrams", "megagram", "ton", "tons", "tonnes", "tons"] or unit == ["t", "Mg"]:
         output = Decimal(value) * Decimal("1e9")
-    elif unitlower in ["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"] or unit in ["kt", "Gg"]
+    elif unitlower in ["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"] or unit in ["kt", "Gg"]:
         output = Decimal(value) * Decimal("1e12")
     elif unitlower in ["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"] or unit in ["Mt", "Tg"]:
         output = Decimal(value) * Decimal("1e15")
