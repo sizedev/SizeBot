@@ -56,7 +56,7 @@ def isFeetAndInchesAndIfSoFixIt(value):
         return value
     feetval = m.group("feet")
     inchval = m.group("inch")
-    if feetval is None and inchval in None:
+    if feetval is None and inchval is None:
         return value
     if feetval is None:
         feetval = "0"
