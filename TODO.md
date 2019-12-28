@@ -26,6 +26,7 @@
     * Custom base height/weight for raw compares
     * Create eval commad (for devs only)
     * Help command
+    * Fix &rolls ability to handle bad arguments (eg, `&roll 5d2k2`)
 * Switch some things to embeds
 * Make SizeBot respond to DMs in a helpful way
 * Separate command logic into modules
