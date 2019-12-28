@@ -1,5 +1,6 @@
 import re
 from itertools import zip_longest
+from functools import reduce
 
 
 def clamp(minVal, val, maxVal):
@@ -60,6 +61,11 @@ def getPath(root, path, default=None):
         except (KeyError, IndexError):
             return default
     return branch
+
+
+# Recurses through an attribute chain to get the ultimate value.
+def deepgetattr(obj, attr):
+    return reduce(lambda o, a: getattr(o, a, None), attr.split("."), obj)
 
 
 # grouper(3, "ABCDEFG", "x") --> ABC DEF Gxx

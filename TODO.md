@@ -13,7 +13,7 @@
     * Winks
 * Migrate legacy User constants to new User object
 * Formatting
-    * Replace .format() with f-strings
+    * ~~Replace .format() with f-strings~~
     * Fix allowbrackets
     * Fix flake8 linting to check for more issues
 * Fix Unicode handling for nicknames (if this is even possible)

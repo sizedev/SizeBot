@@ -53,14 +53,13 @@ class RPCog(commands.Cog):
         dropped = rolls
         for item in usedrolls:
             dropped.remove(item)
-        sendstring = "{0} rolled {1} and got {2}!\nDice: {3}".format(ctx.message.author.display_name, dString, str(dTotal), str(usedrolls))
+        sendstring = f"{ctx.message.author.display_name} rolled {dString} and got {dTotal}!\nDice: {usedrolls}"
         if dropped != []:
-            sendstring = sendstring + "\n~~Dropped: {0}~~".format(str(dropped))
+            sendstring = sendstring + f"\n~~Dropped: {dropped}~~"
         await logger.info(f"{ctx.message.author.id} ({ctx.message.author.display_name}) rolled {dString}.")
         await ctx.send(sendstring)
 
-# Necessary.
 
-
+# Necessary
 def setup(bot):
     bot.add_cog(RPCog(bot))

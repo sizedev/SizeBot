@@ -95,9 +95,10 @@ class RegisterCog(commands.Cog):
     async def register_handler(self, ctx, error):
         # Check if required argument is missing
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Not enough variables for `register`.\n"
-                           "Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] [M/U]`.",
-                           delete_after = 30)
+            await ctx.send(
+                "Not enough variables for `register`.\n"
+                "Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] [M/U]`.",
+                delete_after = 30)
             return
         raise error
 

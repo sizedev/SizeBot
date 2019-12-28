@@ -84,6 +84,7 @@ def main():
             return
 
         # Default command handling
+        await ctx.send("Something went wrong.")
         await logger.error(f"Ignoring exception in command {ctx.command}:")
         await logger.error("".join(traceback.format_exception(type(error), error, error.__traceback__)))
 

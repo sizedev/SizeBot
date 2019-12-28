@@ -43,7 +43,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def sing(self, ctx, *, s: str):
         await ctx.message.delete()
-        newstring = ":musical_score: *" + s + "* :musical_note:"
+        newstring = f":musical_score: *{s}* :musical_note:"
         await ctx.send(newstring)
 
 

@@ -26,7 +26,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their nick to {str(newnick)}.")
-        await ctx.send("<@{0}>'s nick is now {1}".format(ctx.message.author.id, userdata.nickname))
+        await ctx.send(f"<@{ctx.message.author.id}>'s nick is now {userdata.nickname}")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
@@ -45,7 +45,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their species to {str(newtag)}.")
-        await ctx.send("<@{0}>'s species is now {1}".format(ctx.message.author.id, userdata.species))
+        await ctx.send("<@{ctx.message.author.id}>'s species is now {userdata.species}")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
@@ -59,7 +59,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their species.")
-        await ctx.send("<@{0}>'s species is now cleared".format(ctx.message.author.id))
+        await ctx.send("<@{ctx.message.author.id}>'s species is now cleared")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
@@ -117,7 +117,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now {str(newdensity)}x density.")
-        await ctx.send("""<@{0}> is now {1}x density.""".format(ctx.message.author.id, userdata.density[:-1]))
+        await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.density}x density.")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
@@ -141,7 +141,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their display to {str(newdisp)}.")
-        await ctx.send("""<@{0}>'s display is now set to {1}.""".format(ctx.message.author.id, userdata.display[:-1]))
+        await ctx.send(f"<@{ctx.message.author.id}>'s display is now set to {userdata.display}.")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
@@ -165,7 +165,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their system to {str(newsys)}.")
-        await ctx.send("""<@{0}>'s system is now set to {1}.'""".format(ctx.message.author.id, userdata.unitsystem[:-1]))
+        await ctx.send(f"<@{ctx.message.author.id}>'s system is now set to {userdata.unitsystem}.'")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
@@ -205,7 +205,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now infinitely tall.")
-        await ctx.send("<@{0}> is now infinitely tall.".format(ctx.message.author.id))
+        await ctx.send(f"<@{ctx.message.author.id}> is now infinitely tall.")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
@@ -219,7 +219,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now nothing.")
-        await ctx.send("<@{0}> is now nothing.".format(ctx.message.author.id))
+        await ctx.send(f"<@{ctx.message.author.id}> is now nothing.")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)

@@ -1,14 +1,8 @@
-from functools import reduce
-
 import discord
 from discord.ext import commands
 
 from sizebot import digilogger as logger
-
-
-def deepgetattr(obj, attr):
-    """Recurses through an attribute chain to get the ultimate value."""
-    return reduce(lambda o, a: getattr(o, a, None), attr.split("."), obj)
+from sizebot.utils import deepgetattr
 
 
 async def dump_message(m):
