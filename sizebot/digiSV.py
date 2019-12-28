@@ -1,6 +1,8 @@
 import math
 import re
 
+from discord.ext import commands
+
 from sizebot.digidecimal import Decimal
 
 # Unit constants.
@@ -493,3 +495,11 @@ def fromShoeSize(size):
     inches = inches / Decimal("3")
     out = inches * inch
     return out
+
+
+class SV(commands.converter):
+    async def convert(self, ctx, argument):
+        heightsv = toSV(argument)
+        if heightsv is None:
+            raise commands.errors.BadArgument
+        return heightsv
