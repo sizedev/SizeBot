@@ -5,7 +5,7 @@ from discord.ext import commands
 
 from sizebot.digidecimal import Decimal
 
-# Unit constants.
+# Unit constants
 # Height [meters]
 inch = Decimal("0.0254")
 foot = inch * Decimal("12")
@@ -483,7 +483,7 @@ def toShoeSize(inchamount):
     return "Size US " + shoesize
 
 
-# Currently unused.
+# Currently unused
 def fromShoeSize(size):
     child = False
     if "c" in size.toLower():
@@ -497,7 +497,7 @@ def fromShoeSize(size):
     return out
 
 
-class SV(commands.converter):
+class SV(commands.Converter):
     async def convert(self, ctx, argument):
         heightsv = toSV(argument)
         if heightsv is None:
