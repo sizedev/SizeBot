@@ -28,6 +28,7 @@ initial_extensions = [
 
 
 def main():
+    booting = True
     launchtime = datetime.now()
 
     bot = commands.Bot(command_prefix = conf.prefix, description = conf.description)
@@ -36,8 +37,7 @@ def main():
     for extension in initial_extensions:
         bot.load_extension(extension)
 
-    @bot.event
-    async def on_ready():
+    async def on_first_ready():
         logChannel = bot.get_channel(conf.logchannelid)
         logger.init(logChannel)
 
@@ -56,6 +56,14 @@ def main():
         launchfinishtime = datetime.now()
         elapsed = launchfinishtime - launchtime
         await logger.debug(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.\n")
+
+    @bot.event
+    async def on_ready():
+        nonlocal booting
+        if booting:
+            await on_first_ready()
+            booting = False
+            return
 
     @bot.event
     async def on_message(message):
