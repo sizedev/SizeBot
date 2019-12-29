@@ -12,7 +12,7 @@ setuptools.setup(
     version="3.5.0",
     author="DigiDuncan",
     author_email="digiduncan@gmail.com",
-    description="SizeBot3, Cogs Edition, rewritten and using MariaDB.",
+    description="SizeBot3, Cogs Edition, rewritten.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/sizedev/SizeBot3AndAHalf",
