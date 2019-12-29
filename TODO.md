@@ -33,6 +33,9 @@
     * Size comparison commands
     * Dice rolling
     * Size conversion
+* Unit formatting
+    * Custom trigger points for units (millimeters triggers 1 degree of magnitude early, megameters triggers 1 degree late.)
+    * Flag some units as only input units and not display units.
 * Future proofing
     * Make module functions that make command code easy to read, work with, and make new commands.
 
