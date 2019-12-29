@@ -23,6 +23,8 @@
     * Help command
     * Implement SB3's &roll command.
 * Make SizeBot respond to DMs in a helpful way.
+    * Allow users to use DM-safe commands in DMs (about, help, bug, donate, convert, roll) [are there more?]
+    * Otherwise, tell them they have to other commands in a server.
 * Separate command logic into modules.
     * Register commands
     * Size change commands
@@ -37,8 +39,15 @@
     * Custom trigger points for units (millimeters triggers 1 degree of magnitude early, megameters triggers 1 degree late.)
     * Flag some units as only input units and not display units.
 * Basic English syntax for some commands.
+* Command metadata
+    * Can it be used in DMs?
+    * Help strings
+    * Remove brackets?
+    * etc...
 * Future proofing.
     * Make module functions that make command code easy to read, work with, and make new commands. [Digi calls this "the SizeAPI"]
+
+#### Figure out database schema.
 
 ## SizeBot4
 
