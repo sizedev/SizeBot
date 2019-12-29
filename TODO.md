@@ -16,28 +16,29 @@
 * ~~Make a custom emoji dictionary~~
 * Commands
     * Make register commands easier to use and give better use output (simpler usage and better defaults)
-    * Change the way &slowchange works (&slowchange \<rate\> \<stopcondition\>)
+    * Change the way &slowchange works (&slowchange \<rate\>)
     * Create convert command (&convert \<size\> \<new unit\>)
     * Custom base height/weight for raw compares
-    * Create eval commad (for devs only)
+    * Create eval command (for devs only)
     * Help command
-    * Fix &roll's ability to handle bad arguments (eg, `&roll 5d2k2`)
-* Make SizeBot respond to DMs in a helpful way
-* Separate command logic into modules
+    * Implement SB3's &roll command.
+* Make SizeBot respond to DMs in a helpful way.
+* Separate command logic into modules.
     * Register commands
     * Size change commands
     * Size comparison commands
-* Setup testing
+* Setup testing.
     * Register commands
     * Size change command
     * Size comparison commands
     * Dice rolling
     * Size conversion
-* Unit formatting
+* Unit formatting.
     * Custom trigger points for units (millimeters triggers 1 degree of magnitude early, megameters triggers 1 degree late.)
     * Flag some units as only input units and not display units.
-* Future proofing
-    * Make module functions that make command code easy to read, work with, and make new commands.
+* Basic English syntax for some commands.
+* Future proofing.
+    * Make module functions that make command code easy to read, work with, and make new commands. [Digi calls this "the SizeAPI"]
 
 ## SizeBot4
 
@@ -73,8 +74,6 @@
     * OR [attribute] [otheruser/othersize] [otherattribute] [size]
 * &comparensfw [user1/size1] \<user2/size2\>
 * &objectcompare \<user/size\> (&objcompare?)
-* &slowspurt [style] [rate] [delay or mindelay/maxdelay] \<stoptype\> \<stopcondition\>
-* &slowspurtrandom [style] [minspurt] [maxspurt] [mintime] [maxtime] \<stoptype\> \<stopcondition\>
 * &setother \<user\> \<attribute\> \<value\>
 * &changeother \<user\> \<attribute\> \<style\> \<amount\>
 * &whitelist/blacklist [on/off, add/remove] \<users...\>
