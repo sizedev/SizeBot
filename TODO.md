@@ -13,7 +13,7 @@
     * ~~Fix allowbrackets~~
     * ~~Fix flake8 linting to check for more issues~~
 * ~~Fix Unicode handling for nicknames (if this is even possible)~~
-* Make a custom emoji dictionary
+* ~~Make a custom emoji dictionary~~
 * Commands
     * Make register commands easier to use and give better use output (simpler usage and better defaults)
     * Change the way &slowchange works (&slowchange \<rate\> \<stopcondition\>)
