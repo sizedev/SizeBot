@@ -8,10 +8,10 @@
 * Host Sizebot Unstable on VPS
     * Setup automatic deployment of develop branch commits
 * ~~Migrate legacy User constants to new User object~~
-* Formatting
+* ~~Formatting~~
     * ~~Replace .format() with f-strings~~
     * ~~Fix allowbrackets~~
-    * Fix flake8 linting to check for more issues
+    * ~~Fix flake8 linting to check for more issues~~
 * Fix Unicode handling for nicknames (if this is even possible)
 * Make a custom emoji dictionary
 * Commands
