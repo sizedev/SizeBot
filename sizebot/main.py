@@ -9,7 +9,6 @@ from sizebot import digierror as errors
 from sizebot import digilogger as logger
 from sizebot import digiformatter as df
 from sizebot.conf import conf
-from sizebot import utils
 
 
 initial_extensions = [
@@ -69,7 +68,6 @@ def main():
     async def on_message(message):
         if message.content.startswith("&") and message.content.endswith("&"):
             return  # Ignore Tupperboxes being mistaken for commands.
-        utils.removeBrackets(message.content)
         await bot.process_commands(message)
 
     @bot.event

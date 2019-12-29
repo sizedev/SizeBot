@@ -40,8 +40,14 @@ def roundDecimalHalf(number):
     return roundDecimal(number * Decimal("2")) / Decimal("2")
 
 
+def removeBrackets(s):
+    s = re.sub(r"[\[\]<>]", "", s)
+    return s
+
+
 # Get letters from string
 def getSVPair(s):
+    s = removeBrackets(s)
     s = isFeetAndInchesAndIfSoFixIt(s)
     match = re.search(r"(\d+\.?\d*) *([a-zA-Z\'\"]+)", s)
     value, unit = None, None

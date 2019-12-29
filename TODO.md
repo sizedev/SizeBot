@@ -7,10 +7,10 @@
 * Setup develop branch
 * Host Sizebot Unstable on VPS
     * Setup automatic deployment of develop branch commits
-* Migrate legacy User constants to new User object
+* ~~Migrate legacy User constants to new User object~~
 * Formatting
     * ~~Replace .format() with f-strings~~
-    * Fix allowbrackets
+    * ~~Fix allowbrackets~~
     * Fix flake8 linting to check for more issues
 * Fix Unicode handling for nicknames (if this is even possible)
 * Make a custom emoji dictionary
@@ -38,28 +38,29 @@
 
 ## SizeBot4
 
-* Migrate to MariaDB []
+* Migrate to MariaDB
     * Make repeating tasks check the database every X time instead of asyncio tasks that are unwieldy
     * Guilds
     * Members
     * "Characters"
     * Winks
-* Switchable user profiles. [create characters, switch between them]
+* Switchable user profiles (create characters, switch between them)
 * Switch some things to embeds
 * Replace digiSV with dunit
 * Add support for multiple guilds
 * Allow users to store character pictures
-* Autostop option for slowchange.
-* Custom emojis trigger events.
-* Generate user "cards".
-* Compare yourself to objects of similar size.
-* Auto-role based on current size option. [optional for user]
-* Allow users to change other users [on, blacklist, whitelist, off]
+* Autostop option for slowchange
+* Custom emojis trigger events
+* Generate user "cards"
+* Compare yourself to objects of similar size
+* Auto-role based on current size option (optional for user)
+* Allow users to change other users (on, blacklist, whitelist, off)
 * NSFW stats<sup>?</sup>
 * More customizables
 
-### New Commands [SB4]
-* &slowspurt [&slowspurt \<rate\> \<interval\>]
+### New Commands
+
+* &slowspurt (&slowspurt \<rate\> \<interval\>)
 * &statsnsfw \<user\>
 * &statssuchthat [attribute] [size]
     * OR [attribute] [otheruser/othersize] [otherattribute]

@@ -31,16 +31,6 @@ def prettyTimeDelta(totalSeconds):
     s += f"{seconds:d} seconds"
 
 
-def removeBrackets(s):
-    allowbrackets = ("&compare", "&stats")  # TODO: Could be better.
-    if s.startswith(allowbrackets):
-        return s
-
-    s = re.sub(r"[\[\]<>]", "", s)
-
-    return s
-
-
 def tryInt(val):
     try:
         val = int(val)
