@@ -85,8 +85,11 @@ def main():
 
             return
 
-        if isinstance(err, discord.ext.commands.errors.MissingRequiredArgument):
+        if isinstance(err, commands.errors.MissingRequiredArgument):
             await ctx.send(str(err))
+            return
+
+        if isinstance(err, commands.errors.CommandNotFound):
             return
 
         # Default command handling
