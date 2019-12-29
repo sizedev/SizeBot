@@ -81,12 +81,14 @@ def main():
         err = getattr(error, "original", error)
         # DigiException handling
         if isinstance(err, errors.DigiException):
-            log_message = str(err).format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
-            logCmd = getattr(logger, err.level, logger.warn)
-            await logCmd(log_message)
+            if err.message is not None:
+                log_message = err.message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
+                logCmd = getattr(logger, err.level, logger.warn)
+                await logCmd(log_message)
 
-            user_message = err.user_message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
-            await ctx.send(user_message, delete_after = err.delete_after)
+            if err.user_message is not None:
+                user_message = err.user_message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
+                await ctx.send(user_message, delete_after = err.delete_after)
 
             return
 

@@ -5,12 +5,11 @@
 class DigiException(Exception):
     __slots__ = ("message", "user_message", "level", "delete_after")
 
-    def __init__(self, message, user_message = None, level = "warn", delete_after = None):
-        if user_message is None:
-            user_message = message
-        self.delete_after = None
+    def __init__(self, message = None, user_message = None, level = "warn", delete_after = None):
+        self.message = message
         self.user_message = user_message
         self.level = level
+        self.delete_after = None
         super().__init__(message)
 
 
@@ -43,9 +42,8 @@ class ValueIsOneException(DigiException):
 
 class ChangeMethodInvalidException(DigiException):
     def __init__(self, changemethod):
-        message = f"User {{userid}} tried to use {changemethod} change method."
         user_message = f"Sorry, {{usernick}}! {changemethod} is not a valid change method."
-        super().__init__(message, user_message)
+        super().__init__(user_message = user_message)
 
 
 class CannotSaveWithoutIDException(DigiException):
@@ -69,26 +67,29 @@ class NoPermissionsException(DigiException):
 
 class InvalidUserOrHeightException(DigiException):
     def __init__(self):
-        message = "Sorry! I didn't recognize that user or height."
-        super().__init__(message)
+        user_message = "Sorry! I didn't recognize that user or height."
+        super().__init__(user_message = user_message)
 
 
 class InvalidUnitSystemException(DigiException):
     def __init__(self, unitsystem):
-        message = f"User tried to use invalid {unitsystem!r} unit system"
         user_message = f"{unitsystem!r} is an unrecognized unit system."
-        super().__init__(message, user_message)
+        super().__init__(user_message = user_message)
 
 
 class InvalidSizeValue(DigiException):
     def __init__(self, sizevalue):
-        message = f"Unable to parse invalid {sizevalue!r} size value"
         user_message = f"{sizevalue!r} is an unrecognized size value."
-        super().__init__(message, user_message)
+        super().__init__(user_message = user_message)
 
 
 class InvalidRollException(DigiException):
     def __init__(self, dString):
-        message = f"Invalid roll string {dString!r}."
         user_message = f"Invalid roll string `{dString}`."
-        super().__init__(message, user_message)
+        super().__init__(user_message = user_message)
+
+
+class AdminPermissionException(DigiException):
+    def __init__(self):
+        message = "{usernick} tried to run an admin command."
+        super().__init__(message)
