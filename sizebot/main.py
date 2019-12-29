@@ -56,13 +56,17 @@ def main():
         elapsed = launchfinishtime - launchtime
         await logger.debug(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.\n")
 
+    async def on_reconnect_ready():
+        await logger.error("SizeBot has been reconected to Discord.")
+
     @bot.event
     async def on_ready():
         nonlocal booting
         if booting:
             await on_first_ready()
             booting = False
-            return
+        else:
+            await on_reconnect_ready()
 
     @bot.event
     async def on_message(message):
