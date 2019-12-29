@@ -36,7 +36,7 @@ class Config:
 
         # Discord
         self.authtoken = utils.getPath(configDict, "discord.authtoken", None)
-        self.admins = configDict.get("admins", [])     # List of admins
+        self.admins = configDict.get("discord.admins", [])     # List of admins
         self.ids = configDict.get("ids", dict())        # List of ids by name
         self.emoji = configDict.get("emoji", dict())    # List of emojis by name
 
