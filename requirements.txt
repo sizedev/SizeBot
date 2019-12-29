@@ -2,3 +2,4 @@ colored==1.4.2
 discord.py==1.2.5
 appdirs==1.4.3
 toml==0.10.0
+numexpr==2.7.0

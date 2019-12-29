@@ -85,3 +85,10 @@ class InvalidSizeValue(DigiException):
         message = f"Unable to parse invalid {sizevalue!r} size value"
         user_message = f"{sizevalue!r} is an unrecognized size value."
         super().__init__(message, user_message)
+
+
+class InvalidRollException(DigiException):
+    def __init__(self, dString):
+        message = f"Invalid roll string {dString!r}."
+        user_message = f"Invalid roll string `{dString}`."
+        super().__init__(message, user_message)

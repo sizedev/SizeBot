@@ -18,7 +18,7 @@ initial_extensions = [
     "sizebot.cogs.mod",
     "sizebot.cogs.monika",
     "sizebot.cogs.register",
-    "sizebot.cogs.roleplay",
+    "sizebot.cogs.roll",
     "sizebot.cogs.set",
     "sizebot.cogs.stats",
     "sizebot.cogs.winks",
