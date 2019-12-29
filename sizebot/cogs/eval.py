@@ -3,10 +3,13 @@ import numexpr
 
 from sizebot.conf import conf
 from sizebot import digilogger as logger
+from sizebot import digierror as errors
 
 
-def isAdmin(ctx):
-    return ctx.message.author.id in conf.admins
+def requireAdmin(ctx):
+    if ctx.message.author.id in conf.admins:
+        raise errors.AdminPermissionException
+    return True
 
 
 def evalexpr(expression):
@@ -18,7 +21,7 @@ class EvalCog(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    @commands.check(isAdmin)
+    @commands.check(requireAdmin)
     async def eval(self, ctx, *, evalStr):
         logger.info(f"{ctx.message.author.nick} tried to eval {evalStr!r}.")
         result = evalexpr(evalStr)
