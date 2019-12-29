@@ -75,6 +75,13 @@ class InvalidUserOrHeightException(DigiException):
 
 class InvalidUnitSystemException(DigiException):
     def __init__(self, unitsystem):
-        message = f"User tried to use invalid '{unitsystem}' unit system"
-        user_message = f"'{unitsystem}' is an unrecognized unit system."
+        message = f"User tried to use invalid {unitsystem!r} unit system"
+        user_message = f"{unitsystem!r} is an unrecognized unit system."
+        super().__init__(message, user_message)
+
+
+class InvalidSizeValue(DigiException):
+    def __init__(self, sizevalue):
+        message = f"Unable to parse invalid {sizevalue!r} size value"
+        user_message = f"{sizevalue!r} is an unrecognized size value."
         super().__init__(message, user_message)

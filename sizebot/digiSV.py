@@ -42,6 +42,7 @@ def roundDecimalHalf(number):
 
 # Get letters from string
 def getSVPair(s):
+    s = isFeetAndInchesAndIfSoFixIt(s)
     match = re.search(r"(\d+\.?\d*) *([a-zA-Z\'\"]+)", s)
     value, unit = None, None
     if match is not None:
@@ -68,10 +69,9 @@ def isFeetAndInchesAndIfSoFixIt(value):
 
 # Convert any supported height to "size value"
 def toSV(s):
-    s = isFeetAndInchesAndIfSoFixIt(s)
     value, unit = getSVPair(s)
     if value is None or unit is None:
-        return None
+        raise errors.InvalidSizeValue(s)
     unitlower = unit.lower()
     if unitlower in ["yoctometers", "yoctometer"] or unit == "ym":
         output = Decimal(value) / Decimal("1e24")
@@ -138,7 +138,7 @@ def toSV(s):
     elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "Yuni":
         output = Decimal(value) * uni * Decimal("1e24")
     else:
-        return None
+        raise errors.InvalidSizeValue(s)
     return output
 
 
@@ -146,7 +146,7 @@ def toSV(s):
 def toWV(s):
     value, unit = getSVPair(s)
     if value is None or unit is None:
-        return None
+        raise errors.InvalidSizeValue(s)
     unitlower = unit.lower()
     if unitlower in ["yoctograms", "yoctograms"] or unit == "yg":
         output = Decimal(value) / Decimal("1e24")
@@ -213,7 +213,7 @@ def toWV(s):
     elif unitlower in ["sun", "suns"]:
         output = Decimal(value) * sun
     else:
-        return None
+        raise errors.InvalidSizeValue(s)
     return output
 
 
@@ -226,7 +226,11 @@ class Unit():
     def format(self, value, accuracy):
         scaled = value / self.factor
         rounded = roundDecimal(scaled, accuracy)
-        formatted = formatDecimal(rounded) + self.symbol
+        if rounded <= 0:
+            formatted = "0"
+        else:
+            formatted = formatDecimal(rounded) + self.symbol
+
         return formatted
 
 
@@ -390,8 +394,6 @@ def getBestUnit(value, units):
 
 # Convert "size values" to a more readable format.
 def fromSV(value, system = "m", accuracy = 2):
-    if value <= 0:
-        return "0"
     if system not in svunits.keys():
         raise errors.InvalidUnitSystemException(system)
     unit = getBestUnit(value, svunits[system])
@@ -401,8 +403,6 @@ def fromSV(value, system = "m", accuracy = 2):
 
 # Convert "weight values" to a more readable format.
 def fromWV(value, system = "m", accuracy = 2):
-    if value <= 0:
-        return "0"
     if system not in wvunits.keys():
         raise errors.InvalidUnitSystemException(system)
     unit = getBestUnit(value, wvunits[system])
