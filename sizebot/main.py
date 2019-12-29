@@ -22,7 +22,8 @@ initial_extensions = [
     "sizebot.cogs.set",
     "sizebot.cogs.stats",
     "sizebot.cogs.winks",
-    "sizebot.cogs.banned"
+    "sizebot.cogs.banned",
+    "sizebot.cogs.eval"
 ]
 
 
