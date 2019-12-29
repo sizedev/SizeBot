@@ -7,7 +7,7 @@ from sizebot import utils
 
 
 class Config:
-    __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "prefix", "prefix", "authtoken", "ids", "emoji", "logchannelid"]
+    __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "prefix", "prefix", "authtoken", "admins", "ids", "emoji", "logchannelid"]
 
     def __init__(self, configDict):
         # ASCII art
@@ -36,6 +36,7 @@ class Config:
 
         # Discord
         self.authtoken = utils.getPath(configDict, "discord.authtoken", None)
+        self.admins = configDict.get("admins", [])     # List of admins
         self.ids = configDict.get("ids", dict())        # List of ids by name
         self.emoji = configDict.get("emoji", dict())    # List of emojis by name
 
