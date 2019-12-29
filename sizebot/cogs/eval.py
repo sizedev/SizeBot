@@ -7,8 +7,8 @@ from sizebot import digierror as errors
 
 
 def requireAdmin(ctx):
-    if ctx.message.author.id in conf.admins:
-        raise errors.AdminPermissionException
+    if ctx.message.author.id not in conf.admins:
+        raise commands.CommandInvokeError(errors.AdminPermissionException())
     return True
 
 
