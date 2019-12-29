@@ -13,10 +13,10 @@ class RollCog(commands.Cog):
     # Die rolling command
     @commands.command()
     async def roll(self, ctx, *, dString):
-        logger.info(f"{ctx.message.author.nick} rolled {dString} verbosely.")
+        logger.info(f"{ctx.message.author.display_name} rolled {dString} verbosely.")
         result = roller.roll(dString)
 
-        header = (f"{ctx.message.author.nick} rolled `{dString}`!\n"
+        header = (f"{ctx.message.author.display_name} rolled `{dString}`!\n"
                   f"__**TOTAL: {result.total}**__\n")
         rollstrings = []
         for i, r in enumerate(result.rolls):
@@ -34,9 +34,9 @@ class RollCog(commands.Cog):
 
     @commands.command()
     async def r(self, ctx, *, dString):
-        logger.info(f"{ctx.message.author.nick} rolled {dString} non-verbosely.")
+        logger.info(f"{ctx.message.author.display_name} rolled {dString} non-verbosely.")
         result = roller.roll(dString)
-        await ctx.send(f"{ctx.message.author.nick} rolled `{dString}` = **{result.total}**")
+        await ctx.send(f"{ctx.message.author.display_name} rolled `{dString}` = **{result.total}**")
 
 
 # Necessary

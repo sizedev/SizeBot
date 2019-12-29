@@ -23,10 +23,10 @@ class EvalCog(commands.Cog):
     @commands.command()
     @commands.check(requireAdmin)
     async def eval(self, ctx, *, evalStr):
-        logger.info(f"{ctx.message.author.nick} tried to eval {evalStr!r}.")
+        await logger.info(f"{ctx.message.author.display_name} tried to eval {evalStr!r}.")
         result = evalexpr(evalStr)
-        logger.info(f"Result: {result!r}")
-        ctx.send(f"> ```{result!r}```")
+        await logger.info(f"Result: {result!r}")
+        await ctx.send(f"> ```{result!r}```")
 
 
 # Necessary
