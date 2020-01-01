@@ -44,7 +44,8 @@
     * Help strings
     * Remove brackets?
     * etc...
-* Make DigiLogger an dDigiFormatter be imported from their seperate things instead of copy+pasting them in to the folder.
+* Make DigiLogger and DigiFormatter be imported from their seperate things instead of copy+pasting them in to the folder.
+* Sudo command?
 * Future proofing.
     * Make module functions that make command code easy to read, work with, and make new commands. [Digi calls this "the SizeAPI"]
 
