@@ -40,6 +40,11 @@ class FunCog(commands.Cog):
         newstring = ":musical_score: *" + string + "* :musical_note:"
         await ctx.send(newstring)
 
+    @commands.command()
+    async def stop(self, ctx):
+        deletethis = await ctx.send("!play stop")
+        await deletethis.delete()
+
 
 # Necessary.
 def setup(bot):
