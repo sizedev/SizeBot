@@ -1,18 +1,20 @@
 # DigiAPI
 **I'm very inventive.**
 __________
+## Terms
+
+A `Quantity` is a dUnit construct that has a value and a unit attached. In human terms, "2 meters", for example.
+
+A `Unit` is a dUnit thing that's a class with a name for the unit, a symbol, a factor, and a "trigger point".
+
+* A trigger point is at what factor should we switch to using this unit. It's usually the same as the factor but not always.
+
+
 ## dUnit
 dUnits are magical things Natalie will invent. They are basically value/unit pairs with more features.
 
-## User
-getUser(id)
-* Tries to get a SizeBot User from their Discord ID. Returns `None`<sup>?</sup> if it can't.
-
-`User.[height, baseheight, baseweight...]`
-* Get that attribute.
-
-`User.[setHeight, setBaseHeight, setBaseWeight](dUnit)`
-* Set an attribute.
+`Quantity.getBestUnit(unitlist)`
+* Called on a Quantity, give it a Unit list and picks the best one based on trigger point.
 
 ## Functions
 

@@ -104,3 +104,8 @@
 * &autorole [on/off]
 * &schedule [date/time] [command...]
 * &sudo [user] [command...]
+
+## DigiFormatter
+
+* Split into separate files for different groups of functions.
+* Define its purpose.
