@@ -83,7 +83,7 @@ ascii = r"""
 
 # Configure decimal module.
 getcontext()
-context = Context(prec=100, rounding=ROUND_HALF_EVEN, Emin=-9999999, Emax=999999,
+context = Context(prec=250, rounding=ROUND_HALF_EVEN, Emin=-9999999, Emax=999999,
                   capitals=1, clamp=0, flags=[], traps=[Overflow, DivisionByZero,
                                                         InvalidOperation])
 setcontext(context)
