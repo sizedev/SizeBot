@@ -80,6 +80,11 @@
 * NSFW stats<sup>?</sup>
 * More customizables
 * Natural language chat/help (like a virtual assistant) [needs a name]
+* Per-guild customizables
+    * Custom prefix
+    * Custom SizeBot role and SizeBot User role
+    * Custom SizeBot channel and QotD channel
+    * Turn on/off features
 
 ### New Commands
 
