@@ -338,19 +338,19 @@ def toSV(value, unit):
     if value is None or unit is None:
         return None
     unitlower = unit.lower()
-    if unitlower in ["yoctometers", "yoctometer"]:
+    if unitlower in ["yoctometers", "yoctometer"] or unit == "ym":
         output = Decimal(value) / Decimal("1E18")
-    elif unitlower in ["zeptometers", "zeptometer"]:
+    elif unitlower in ["zeptometers", "zeptometer"] or unit == "zm":
         output = Decimal(value) / Decimal("1E15")
     elif unitlower in ["attometers", "attometer"] or unit == "am":
         output = Decimal(value) / Decimal("1E12")
     elif unitlower in ["femtometers", "femtometer"] or unit == "fm":
         output = Decimal(value) / Decimal("1E9")
-    elif unitlower in ["picometers", "picometer"]:
+    elif unitlower in ["picometers", "picometer"] or unit == "pm":
         output = Decimal(value) / Decimal("1E6")
     elif unitlower in ["nanometers", "nanometer"] or unit == "nm":
         output = Decimal(value) / Decimal("1E3")
-    elif unitlower in ["micrometers", "micrometer"] or unit == "um":
+    elif unitlower in ["micrometers", "micrometer"] or unit in ["um", "µm"]:
         output = Decimal(value)
     elif unitlower in ["millimeters", "millimeter"] or unit == "mm":
         output = Decimal(value) * Decimal("1E3")
@@ -360,19 +360,19 @@ def toSV(value, unit):
         output = Decimal(value) * Decimal("1E6")
     elif unitlower in ["kilometers", "kilometer"] or unit == "km":
         output = Decimal(value) * Decimal("1E9")
-    elif unitlower in ["megameters", "megameter"]:
+    elif unitlower in ["megameters", "megameter"] or unit == "Mm":
         output = Decimal(value) * Decimal("1E12")
-    elif unitlower in ["gigameters", "gigameter"] or unit == "gm":
+    elif unitlower in ["gigameters", "gigameter"] or unit == "Gm":
         output = Decimal(value) * Decimal("1E15")
-    elif unitlower in ["terameters", "terameter"] or unit == "tm":
+    elif unitlower in ["terameters", "terameter"] or unit == "Tm":
         output = Decimal(value) * Decimal("1E18")
-    elif unitlower in ["petameters", "petameter"] or unit == "pm":
+    elif unitlower in ["petameters", "petameter"] or unit == "Pm":
         output = Decimal(value) * Decimal("1E21")
-    elif unitlower in ["exameters", "exameter"] or unit == "em":
+    elif unitlower in ["exameters", "exameter"] or unit == "Em":
         output = Decimal(value) * Decimal("1E24")
-    elif unitlower in ["zettameters", "zettameter"] or unit == "zm":
+    elif unitlower in ["zettameters", "zettameter"] or unit == "Zm":
         output = Decimal(value) * Decimal("1E27")
-    elif unitlower in ["yottameters", "yottameter"] or unit == "ym":
+    elif unitlower in ["yottameters", "yottameter"] or unit == "Ym":
         output = Decimal(value) * Decimal("1E30")
     elif unitlower in ["inches", "inch", "in", "\""]:
         output = Decimal(value) * inch
@@ -382,25 +382,25 @@ def toSV(value, unit):
         output = Decimal(value) * mile
     elif unitlower in ["lightyears", "lightyear"] or unit == "ly":
         output = Decimal(value) * ly
-    elif unitlower in ["astronomical_units", "astronomical_unit"] or unit == "au":
+    elif unitlower in ["astronomical_units", "astronomical_unit"] or unit == "AU":
         output = Decimal(value) * au
     elif unitlower in ["universes", "universe"] or unit == "uni":
         output = Decimal(value) * uni
     elif unitlower in ["kilouniverses", "kilouniverse"] or unit == "kuni":
         output = Decimal(value) * uni * Decimal("1E3")
-    elif unitlower in ["megauniverses", "megauniverse"] or unit == "muni":
+    elif unitlower in ["megauniverses", "megauniverse"] or unit == "Muni":
         output = Decimal(value) * uni * Decimal("1E6")
-    elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "guni":
+    elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "Guni":
         output = Decimal(value) * uni * Decimal("1E9")
-    elif unitlower in ["terauniverses", "terauniverse"] or unit == "tuni":
+    elif unitlower in ["terauniverses", "terauniverse"] or unit == "Tuni":
         output = Decimal(value) * uni * Decimal("1E12")
-    elif unitlower in ["petauniverses", "petauniverse"] or unit == "puni":
+    elif unitlower in ["petauniverses", "petauniverse"] or unit == "Puni":
         output = Decimal(value) * uni * Decimal("1E15")
-    elif unitlower in ["exauniverses", "exauniverse"] or unit == "euni":
+    elif unitlower in ["exauniverses", "exauniverse"] or unit == "Euni":
         output = Decimal(value) * uni * Decimal("1E18")
-    elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "zuni":
+    elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "Zuni":
         output = Decimal(value) * uni * Decimal("1E21")
-    elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "yuni":
+    elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "Yuni":
         output = Decimal(value) * uni * Decimal("1E24")
     else:
         return None
@@ -611,7 +611,7 @@ def toWV(value, unit):
         output = Decimal(value) / Decimal("1E9")
     elif unitlower in ["nanogram", "nanogram"] or unit == "ng":
         output = Decimal(value) / Decimal("1E6")
-    elif unitlower in ["microgram", "microgram"] or unit == "ug":
+    elif unitlower in ["microgram", "microgram"] or unit in ["ug", "µg"]:
         output = Decimal(value) / Decimal("1E3")
     elif unitlower in ["milligrams", "milligram"] or unit == "mg":
         output = Decimal(value)
@@ -621,39 +621,39 @@ def toWV(value, unit):
         output = Decimal(value) * Decimal("1E6")
     elif unitlower in ["megagrams", "megagram", "ton", "tons", "tonnes", "tons"] or unit == "t":
         output = Decimal(value) * Decimal("1E9")
-    elif unitlower in ["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"] or unit in ["gg", "kt"]:
+    elif unitlower in ["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"] or unit in ["Gg", "kt"]:
         output = Decimal(value) * Decimal("1E12")
-    elif unitlower in ["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"] or unit in ["tg", "mt"]:
+    elif unitlower in ["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"] or unit in ["Tg", "Mt"]:
         output = Decimal(value) * Decimal("1E15")
-    elif unitlower in ["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes"] or unit == "gt":
+    elif unitlower in ["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes"] or unit in ["Pg", "Gt"]:
         output = Decimal(value) * Decimal("1E18")
-    elif unitlower in ["exagrams", "exagram", "teratons", "teraton", "teratonnes", "teratonne"] or unit == ["eg", "tt"]:
+    elif unitlower in ["exagrams", "exagram", "teratons", "teraton", "teratonnes", "teratonne"] or unit in ["Eg", "Tt"]:
         output = Decimal(value) * Decimal("1E21")
-    elif unitlower in ["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne"] or unit == "pt":
+    elif unitlower in ["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne"] or unit in ["Zg", "Pt"]:
         output = Decimal(value) * Decimal("1E24")
-    elif unitlower in ["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne"] or unit == "et":
+    elif unitlower in ["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne"] or unit in ["Yg", "Et"]:
         output = Decimal(value) * Decimal("1E27")
-    elif unitlower in ["zettatons", "zettaton", "zettatonnes", "zettatonne"] or unit == "zt":
+    elif unitlower in ["zettatons", "zettaton", "zettatonnes", "zettatonne"] or unit == "Zt":
         output = Decimal(value) * Decimal("1E30")
-    elif unitlower in ["yottatons", "yottaton", "yottatonnes", "yottatonne"] or unit == "yt":
+    elif unitlower in ["yottatons", "yottaton", "yottatonnes", "yottatonne"] or unit == "Yt":
         output = Decimal(value) * Decimal("1E33")
     elif unitlower in ["universes", "universe"] or unit == "uni":
         output = Decimal(value) * uniw
     elif unitlower in ["kilouniverses", "kilouniverse"] or unit == "kuni":
         output = Decimal(value) * uniw * Decimal("1E3")
-    elif unitlower in ["megauniverses", "megauniverse"] or unit == "muni":
+    elif unitlower in ["megauniverses", "megauniverse"] or unit == "Muni":
         output = Decimal(value) * uniw * Decimal("1E6")
-    elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "guni":
+    elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "Guni":
         output = Decimal(value) * uniw * Decimal("1E9")
-    elif unitlower in ["terauniverses", "terauniverse"] or unit == "tuni":
+    elif unitlower in ["terauniverses", "terauniverse"] or unit == "Tuni":
         output = Decimal(value) * uniw * Decimal("1E12")
-    elif unitlower in ["petauniverses", "petauniverse"] or unit == "puni":
+    elif unitlower in ["petauniverses", "petauniverse"] or unit == "Puni":
         output = Decimal(value) * uniw * Decimal("1E15")
-    elif unitlower in ["exauniverses", "exauniverse"] or unit == "euni":
+    elif unitlower in ["exauniverses", "exauniverse"] or unit == "Euni":
         output = Decimal(value) * uniw * Decimal("1E18")
-    elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "zuni":
+    elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "Zuni":
         output = Decimal(value) * uniw * Decimal("1E21")
-    elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "yuni":
+    elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "Yuni":
         output = Decimal(value) * uniw * Decimal("1E24")
     elif unitlower in ["ounces", "ounce"] or unit == "oz":
         output = Decimal(value) * ounce
