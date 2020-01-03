@@ -320,72 +320,72 @@ def toSV(value, unit):
     value = Decimal(value)
     unitlower = unit.lower()
     if unitlower in ["yoctometers", "yoctometer"] or unit == "ym":
-        outputSV = value / Decimal("1E18")
+        valueSV = value / Decimal("1E18")
     elif unitlower in ["zeptometers", "zeptometer"] or unit == "zm":
-        outputSV = value / Decimal("1E15")
+        valueSV = value / Decimal("1E15")
     elif unitlower in ["attometers", "attometer"] or unit == "am":
-        outputSV = value / Decimal("1E12")
+        valueSV = value / Decimal("1E12")
     elif unitlower in ["femtometers", "femtometer"] or unit == "fm":
-        outputSV = value / Decimal("1E9")
+        valueSV = value / Decimal("1E9")
     elif unitlower in ["picometers", "picometer"] or unit == "pm":
-        outputSV = value / Decimal("1E6")
+        valueSV = value / Decimal("1E6")
     elif unitlower in ["nanometers", "nanometer"] or unit == "nm":
-        outputSV = value / Decimal("1E3")
+        valueSV = value / Decimal("1E3")
     elif unitlower in ["micrometers", "micrometer"] or unit in ["um", "µm"]:
-        outputSV = value
+        valueSV = value
     elif unitlower in ["millimeters", "millimeter"] or unit == "mm":
-        outputSV = value * Decimal("1E3")
+        valueSV = value * Decimal("1E3")
     elif unitlower in ["centimeters", "centimeter"] or unit == "cm":
-        outputSV = value * Decimal("1E4")
+        valueSV = value * Decimal("1E4")
     elif unitlower in ["meters", "meter"] or unit == "m":
-        outputSV = value * Decimal("1E6")
+        valueSV = value * Decimal("1E6")
     elif unitlower in ["kilometers", "kilometer"] or unit == "km":
-        outputSV = value * Decimal("1E9")
+        valueSV = value * Decimal("1E9")
     elif unitlower in ["megameters", "megameter"] or unit == "Mm":
-        outputSV = value * Decimal("1E12")
+        valueSV = value * Decimal("1E12")
     elif unitlower in ["gigameters", "gigameter"] or unit == "Gm":
-        outputSV = value * Decimal("1E15")
+        valueSV = value * Decimal("1E15")
     elif unitlower in ["terameters", "terameter"] or unit == "Tm":
-        outputSV = value * Decimal("1E18")
+        valueSV = value * Decimal("1E18")
     elif unitlower in ["petameters", "petameter"] or unit == "Pm":
-        outputSV = value * Decimal("1E21")
+        valueSV = value * Decimal("1E21")
     elif unitlower in ["exameters", "exameter"] or unit == "Em":
-        outputSV = value * Decimal("1E24")
+        valueSV = value * Decimal("1E24")
     elif unitlower in ["zettameters", "zettameter"] or unit == "Zm":
-        outputSV = value * Decimal("1E27")
+        valueSV = value * Decimal("1E27")
     elif unitlower in ["yottameters", "yottameter"] or unit == "Ym":
-        outputSV = value * Decimal("1E30")
+        valueSV = value * Decimal("1E30")
     elif unitlower in ["inches", "inch", "in", "\""]:
-        outputSV = value * inch
+        valueSV = value * inch
     elif unitlower in ["feet", "foot", "ft", "\'"]:
-        outputSV = value * foot
+        valueSV = value * foot
     elif unitlower in ["miles", "mile", "mi"]:
-        outputSV = value * mile
+        valueSV = value * mile
     elif unitlower in ["lightyears", "lightyear"] or unit == "ly":
-        outputSV = value * ly
+        valueSV = value * ly
     elif unitlower in ["astronomical_units", "astronomical_unit"] or unit == "AU":
-        outputSV = value * au
+        valueSV = value * au
     elif unitlower in ["universes", "universe"] or unit == "uni":
-        outputSV = value * uni
+        valueSV = value * uni
     elif unitlower in ["kilouniverses", "kilouniverse"] or unit == "kuni":
-        outputSV = value * uni * Decimal("1E3")
+        valueSV = value * uni * Decimal("1E3")
     elif unitlower in ["megauniverses", "megauniverse"] or unit == "Muni":
-        outputSV = value * uni * Decimal("1E6")
+        valueSV = value * uni * Decimal("1E6")
     elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "Guni":
-        outputSV = value * uni * Decimal("1E9")
+        valueSV = value * uni * Decimal("1E9")
     elif unitlower in ["terauniverses", "terauniverse"] or unit == "Tuni":
-        outputSV = value * uni * Decimal("1E12")
+        valueSV = value * uni * Decimal("1E12")
     elif unitlower in ["petauniverses", "petauniverse"] or unit == "Puni":
-        outputSV = value * uni * Decimal("1E15")
+        valueSV = value * uni * Decimal("1E15")
     elif unitlower in ["exauniverses", "exauniverse"] or unit == "Euni":
-        outputSV = value * uni * Decimal("1E18")
+        valueSV = value * uni * Decimal("1E18")
     elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "Zuni":
-        outputSV = value * uni * Decimal("1E21")
+        valueSV = value * uni * Decimal("1E21")
     elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "Yuni":
-        outputSV = value * uni * Decimal("1E24")
+        valueSV = value * uni * Decimal("1E24")
     else:
         return None
-    return outputSV
+    return valueSV
 
 
 # Convert 'size values' to a more readable format (metric to 3 decimal places)
@@ -396,7 +396,6 @@ def fromSVacc(value):
 # Convert 'size values' to a more readable format (metric)
 def fromSV(value, accuracy=2):
     value = Decimal(value)
-    output = ""
     if value <= Decimal("0"):
         return "0"
 
@@ -457,13 +456,12 @@ def fromSV(value, accuracy=2):
     else:
         return "∞"
 
-    return f"{round(trimzeroes(value) * scale, accuracy)}{unit}"
+    return f"{round(trimzeroes(value) / scale, accuracy):,}{unit}"
 
 
 # Convert 'size values' to a more readable format (USA)
 def fromSVUSA(value, accuracy=2):
     value = Decimal(value)
-    output = ""
     if value <= Decimal("0"):
         return "0"
 
@@ -488,8 +486,8 @@ def fromSVUSA(value, accuracy=2):
     elif value < mile:
         inchval = value / inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
-        roundedinchval = round(inchval, accuracy)
-        return f"{feetval}'{inchval}\""
+        roundedinchval = trimzeroes(round(inchval, accuracy))
+        return f"{feetval:,}'{roundedinchval}\""
     elif value < au:
         scale, unit = mile, "mi"
     elif value < ly:
@@ -517,7 +515,7 @@ def fromSVUSA(value, accuracy=2):
     else:
         return "∞"
 
-    return f"{round(trimzeroes(value) * scale, accuracy)}{unit}"
+    return f"{round(trimzeroes(value) / scale, accuracy):,}{unit}"
 
 
 # Convert any supported weight to 'weight value', or milligrams.
@@ -525,72 +523,72 @@ def toWV(value, unit):
     value = Decimal(value)
     unitlower = unit.lower()
     if unitlower in ["yoctograms", "yoctograms"] or unit == "yg":
-        output = value / Decimal("1E21")
+        valueWV = value / Decimal("1E21")
     elif unitlower in ["zeptograms", "zeptograms"] or unit == "zg":
-        output = value / Decimal("1E18")
+        valueWV = value / Decimal("1E18")
     elif unitlower in ["attograms", "attogram"] or unit == "ag":
-        output = value / Decimal("1E15")
+        valueWV = value / Decimal("1E15")
     elif unitlower in ["femtogram", "femtogram"] or unit == "fg":
-        output = value / Decimal("1E12")
+        valueWV = value / Decimal("1E12")
     elif unitlower in ["picogram", "picogram"] or unit == "pg":
-        output = value / Decimal("1E9")
+        valueWV = value / Decimal("1E9")
     elif unitlower in ["nanogram", "nanogram"] or unit == "ng":
-        output = value / Decimal("1E6")
+        valueWV = value / Decimal("1E6")
     elif unitlower in ["microgram", "microgram"] or unit in ["ug", "µg"]:
-        output = value / Decimal("1E3")
+        valueWV = value / Decimal("1E3")
     elif unitlower in ["milligrams", "milligram"] or unit == "mg":
-        output = value
+        valueWV = value
     elif unitlower in ["grams", "gram"] or unit == "g":
-        output = value * Decimal("1E3")
+        valueWV = value * Decimal("1E3")
     elif unitlower in ["kilograms", "kilogram"] or unit == "kg":
-        output = value * Decimal("1E6")
+        valueWV = value * Decimal("1E6")
     elif unitlower in ["megagrams", "megagram", "ton", "tons", "tonnes", "tons"] or unit == "t":
-        output = value * Decimal("1E9")
+        valueWV = value * Decimal("1E9")
     elif unitlower in ["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"] or unit in ["Gg", "kt"]:
-        output = value * Decimal("1E12")
+        valueWV = value * Decimal("1E12")
     elif unitlower in ["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"] or unit in ["Tg", "Mt"]:
-        output = value * Decimal("1E15")
+        valueWV = value * Decimal("1E15")
     elif unitlower in ["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes"] or unit in ["Pg", "Gt"]:
-        output = value * Decimal("1E18")
+        valueWV = value * Decimal("1E18")
     elif unitlower in ["exagrams", "exagram", "teratons", "teraton", "teratonnes", "teratonne"] or unit in ["Eg", "Tt"]:
-        output = value * Decimal("1E21")
+        valueWV = value * Decimal("1E21")
     elif unitlower in ["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne"] or unit in ["Zg", "Pt"]:
-        output = value * Decimal("1E24")
+        valueWV = value * Decimal("1E24")
     elif unitlower in ["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne"] or unit in ["Yg", "Et"]:
-        output = value * Decimal("1E27")
+        valueWV = value * Decimal("1E27")
     elif unitlower in ["zettatons", "zettaton", "zettatonnes", "zettatonne"] or unit == "Zt":
-        output = value * Decimal("1E30")
+        valueWV = value * Decimal("1E30")
     elif unitlower in ["yottatons", "yottaton", "yottatonnes", "yottatonne"] or unit == "Yt":
-        output = value * Decimal("1E33")
+        valueWV = value * Decimal("1E33")
     elif unitlower in ["universes", "universe"] or unit == "uni":
-        output = value * uniw
+        valueWV = value * uniw
     elif unitlower in ["kilouniverses", "kilouniverse"] or unit == "kuni":
-        output = value * uniw * Decimal("1E3")
+        valueWV = value * uniw * Decimal("1E3")
     elif unitlower in ["megauniverses", "megauniverse"] or unit == "Muni":
-        output = value * uniw * Decimal("1E6")
+        valueWV = value * uniw * Decimal("1E6")
     elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "Guni":
-        output = value * uniw * Decimal("1E9")
+        valueWV = value * uniw * Decimal("1E9")
     elif unitlower in ["terauniverses", "terauniverse"] or unit == "Tuni":
-        output = value * uniw * Decimal("1E12")
+        valueWV = value * uniw * Decimal("1E12")
     elif unitlower in ["petauniverses", "petauniverse"] or unit == "Puni":
-        output = value * uniw * Decimal("1E15")
+        valueWV = value * uniw * Decimal("1E15")
     elif unitlower in ["exauniverses", "exauniverse"] or unit == "Euni":
-        output = value * uniw * Decimal("1E18")
+        valueWV = value * uniw * Decimal("1E18")
     elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "Zuni":
-        output = value * uniw * Decimal("1E21")
+        valueWV = value * uniw * Decimal("1E21")
     elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "Yuni":
-        output = value * uniw * Decimal("1E24")
+        valueWV = value * uniw * Decimal("1E24")
     elif unitlower in ["ounces", "ounce"] or unit == "oz":
-        output = value * ounce
+        valueWV = value * ounce
     elif unitlower in ["pounds", "pound"] or unit in ["lb", "lbs"]:
-        output = value * pound
+        valueWV = value * pound
     elif unitlower in ["earth", "earths"]:
-        output = value * earth
+        valueWV = value * earth
     elif unitlower in ["sun", "suns"]:
-        output = value * sun
+        valueWV = value * sun
     else:
         return None
-    return output
+    return valueWV
 
 
 # Convert 'weight values' to a more readable format
@@ -657,7 +655,7 @@ def fromWV(value, accuracy=1):
     else:
         return "∞"
 
-    return f"{round(trimzeroes(value) * scale, accuracy)}{unit}"
+    return f"{round(trimzeroes(value) / scale, accuracy):,}{unit}"
 
 
 # Convert 'weight values' to a more readable format (USA)
@@ -716,7 +714,7 @@ def fromWVUSA(value, accuracy=1):
     else:
         return "∞"
 
-    return f"{round(trimzeroes(value) * scale, accuracy)}{unit}"
+    return f"{round(trimzeroes(value) / scale, accuracy):,}{unit}"
 
 
 def toShoeSize(footlength):
@@ -734,9 +732,8 @@ def toShoeSize(footlength):
         shoesize = "Children's " + shoesize
     return "Size US " + shoesize
 
+
 # Currently unused.
-
-
 def fromShoeSize(size):
     child = False
     if "c" in size.toLower():
