@@ -4,6 +4,22 @@ from globalsb import *
 import digilogger as logger
 
 
+def clamp(minVal, val, maxVal):
+    return max(minVal, min(val, maxVal))
+
+
+def requireUser(fn):
+    async def wrapper(self, ctx, *args, **kwargs):
+        # Change height
+        if not os.path.exists(f"{folder}/users/{ctx.message.author.id}.txt"):
+            # User file missing
+            await ctx.send("Sorry! You aren't registered with SizeBot.\n"
+                           "To register, use the `&register` command.", delete_after=5)
+            return
+        return fn(self, ctx, *args, **kwargs)
+    return wrapper
+
+
 class SetCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -178,32 +194,53 @@ class SetCog(commands.Cog):
             await ctx.send("""<@{0}>'s system is now set to {1}.'""".format(ctx.message.author.id, userarray[UNIT][:-1]))
 
     @commands.command()
-    async def setrandomheight(self, ctx, newheightmin=None, newheightmax=None):
-        # Change height.
-        if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-            # User file missing.
-            await ctx.send("""Sorry! You aren't registered with SizeBot.
-    To register, use the `&register` command.""", delete_after=5)
-        elif newheightmin is None or newheightmax is None:
-            await ctx.send("Please enter `&setheight <height>`.", delete_after=3)
-        else:
-            newheightmin = isFeetAndInchesAndIfSoFixIt(newheightmin)
-            newheightmax = isFeetAndInchesAndIfSoFixIt(newheightmax)
-            newheightminval = toSV(getnum(newheightmin), getlet(newheightmin))
-            newheightmaxval = toSV(getnum(newheightmax), getlet(newheightmax))
-            newheight = random.randint(newheightminval, newheightmaxval)
-            userarray = read_user(ctx.message.author.id)
-            userarray[CHEI] = str(newheight) + newline
-            if (float(userarray[CHEI]) > infinity):
-                logger.warn("Invalid size value.")
-                await ctx.send("Too big. x_x", delete_after=3)
-                userarray[CHEI] = str(infinity) + newline
-            write_user(ctx.message.author.id, userarray)
-            userarray = read_user(ctx.message.author.id)
-            if userarray[DISP] == "Y\n":
-                await nickupdate(ctx.message.author)
-            logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) set a random height, and are now {str(newheight)}SV tall.")
-            await ctx.send("""<@{0}> is now {1} tall. ({2})""".format(ctx.message.author.id, fromSV(userarray[CHEI]), fromSVUSA(userarray[CHEI])))
+    @requireUser
+    async def setrandomheight(self, ctx, minheightstr, maxheightstr):
+        # Parse min and max heights
+        minheightstr = isFeetAndInchesAndIfSoFixIt(minheightstr)
+        maxheightstr = isFeetAndInchesAndIfSoFixIt(maxheightstr)
+        minheightSV = toSV(getnum(maxheightstr), getlet(maxheightstr))
+        maxheightSV = toSV(getnum(maxheightstr), getlet(maxheightstr))
+
+        # Clamp min and max heights to acceptable values
+        minheightSV = clamp(0, minheightSV, infinity)
+        maxheightSV = clamp(0, maxheightSV, infinity)
+
+        # Swap values if provided in the wrong order
+        if minheightSV > maxheightSV:
+            minheightSV, maxheightSV = maxheightSV, minheightSV
+
+        precision = Decimal("1E26")
+
+        minheightlog = minheightSV.log10()
+        maxheightlog = maxheightSV.log10()
+
+        minheightintlog = (minheightlog * precision).to_integral_value()
+        maxheightintlog = (maxheightlog * precision).to_integral_value()
+
+        newheightintlog = Decimal(random.randint(minheightintlog, maxheightintlog))
+
+        newheightlog = newheightintlog / precision
+
+        newheight = Decimal("10") * newheightlog
+
+        userarray = read_user(ctx.message.author.id)
+        userarray[CHEI] = f"{newheight}\n"
+        write_user(ctx.message.author.id, userarray)
+
+        if userarray[DISP].rstrip().upper() == "Y":
+            await nickupdate(ctx.message.author)
+
+        logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) set a random height, and are now {newheight}SV tall.")
+        await ctx.send(f"<@{ctx.message.author.id}> is now {fromSV(userarray[CHEI])} tall. ({fromSVUSA(userarray[CHEI])})")
+
+    @setrandomheight.error
+    async def setrandomheight_handler(self, ctx, error):
+        # Check if required argument is missing
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Please enter `&setrandomheight [minheight] [maxheight]`.", delete_after=3)
+            return
+        raise error
 
     @commands.command()
     async def setinf(self, ctx):
