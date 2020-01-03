@@ -16,7 +16,7 @@ def requireUser(fn):
             await ctx.send("Sorry! You aren't registered with SizeBot.\n"
                            "To register, use the `&register` command.", delete_after=5)
             return
-        return fn(self, ctx, *args, **kwargs)
+        return await fn(self, ctx, *args, **kwargs)
     return wrapper
 
 
@@ -193,13 +193,13 @@ class SetCog(commands.Cog):
             logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) set their system to {str(newsys)}.")
             await ctx.send("""<@{0}>'s system is now set to {1}.'""".format(ctx.message.author.id, userarray[UNIT][:-1]))
 
-    @commands.command()
+    @commands.command("setrandomheight")
     @requireUser
     async def setrandomheight(self, ctx, minheightstr, maxheightstr):
         # Parse min and max heights
         minheightstr = isFeetAndInchesAndIfSoFixIt(minheightstr)
         maxheightstr = isFeetAndInchesAndIfSoFixIt(maxheightstr)
-        minheightSV = toSV(getnum(maxheightstr), getlet(maxheightstr))
+        minheightSV = toSV(getnum(minheightstr), getlet(minheightstr))
         maxheightSV = toSV(getnum(maxheightstr), getlet(maxheightstr))
 
         # Clamp min and max heights to acceptable values
@@ -222,7 +222,7 @@ class SetCog(commands.Cog):
 
         newheightlog = newheightintlog / precision
 
-        newheight = Decimal("10") * newheightlog
+        newheight = Decimal("10") ** newheightlog
 
         userarray = read_user(ctx.message.author.id)
         userarray[CHEI] = f"{newheight}\n"
