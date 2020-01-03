@@ -3,15 +3,16 @@ from discord.ext import commands
 from globalsb import *
 import digilogger as logger
 
+
 class SetCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
-    async def changenick(self, ctx, *, newnick = None):
-    #Change nickname.
+    async def changenick(self, ctx, *, newnick=None):
+        # Change nickname.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif newnick is None:
@@ -32,10 +33,10 @@ class SetCog(commands.Cog):
                 await nickupdate(ctx.message.author)
 
     @commands.command()
-    async def setspecies(self, ctx, *, newtag = None):
-    #Change nickname.
+    async def setspecies(self, ctx, *, newtag=None):
+        # Change nickname.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif newtag is None:
@@ -58,9 +59,9 @@ class SetCog(commands.Cog):
 
     @commands.command()
     async def clearspecies(self, ctx):
-    #Change nickname.
+        # Change nickname.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         else:
@@ -73,10 +74,10 @@ class SetCog(commands.Cog):
                 await nickupdate(ctx.message.author)
 
     @commands.command()
-    async def setheight(self, ctx, *, newheight = None):
-        #Change height.
+    async def setheight(self, ctx, *, newheight=None):
+        # Change height.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif newheight is None:
@@ -102,9 +103,9 @@ class SetCog(commands.Cog):
 
     @commands.command()
     async def resetsize(ctx):
-    #Change nickname.
+        # Change nickname.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         else:
@@ -117,11 +118,11 @@ class SetCog(commands.Cog):
                 await nickupdate(ctx.message.author)
 
     @commands.command()
-    async def setdensity(self, ctx, newdensity : float = None):
+    async def setdensity(self, ctx, newdensity: float = None):
         await ctx.message.delete()
-        #Change density.
+        # Change density.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif newdensity is None:
@@ -137,11 +138,11 @@ class SetCog(commands.Cog):
             await ctx.send("""<@{0}> is now {1}x density.""".format(ctx.message.author.id, userarray[DENS][:-1]))
 
     @commands.command()
-    async def setdisplay(self, ctx, newdisp = None):
-        #Set display mode.
+    async def setdisplay(self, ctx, newdisp=None):
+        # Set display mode.
         newdisp = newdisp.upper()
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif newdisp not in ["Y", "N"]:
@@ -157,11 +158,11 @@ class SetCog(commands.Cog):
             await ctx.send("""<@{0}>'s display is now set to {1}.""".format(ctx.message.author.id, userarray[DISP][:-1]))
 
     @commands.command()
-    async def setsystem(self, ctx, newsys = None):
-        #Set measurement system.
+    async def setsystem(self, ctx, newsys=None):
+        # Set measurement system.
         newsys = newsys.upper()
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif newsys not in ["M", "U"]:
@@ -177,10 +178,10 @@ class SetCog(commands.Cog):
             await ctx.send("""<@{0}>'s system is now set to {1}.'""".format(ctx.message.author.id, userarray[UNIT][:-1]))
 
     @commands.command()
-    async def setrandomheight(self, ctx, newheightmin = None, newheightmax = None):
-        #Change height.
+    async def setrandomheight(self, ctx, newheightmin=None, newheightmax=None):
+        # Change height.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif newheightmin is None or newheightmax is None:
@@ -225,10 +226,10 @@ class SetCog(commands.Cog):
             await nickupdate(ctx.message.author)
 
     @commands.command()
-    async def setbaseheight(self, ctx, *, newbaseheight = None):
-        #Change base height.
+    async def setbaseheight(self, ctx, *, newbaseheight=None):
+        # Change base height.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif newbaseheight is None:
@@ -245,11 +246,11 @@ class SetCog(commands.Cog):
             await ctx.send("""<@{0}>'s base height is now {1}. ({2})""".format(ctx.message.author.id, fromSV(userarray[BHEI]), fromSVUSA(userarray[BHEI])))
 
     @commands.command()
-    async def setbaseweight(self, ctx, *, newbaseweight = None):
+    async def setbaseweight(self, ctx, *, newbaseweight=None):
         await ctx.message.delete()
-        #Change base weight.
+        # Change base weight.
         if not os.path.exists(folder + '/users/' + str(ctx.message.author.id) + '.txt'):
-        #User file missing.
+            # User file missing.
             await ctx.send("""Sorry! You aren't registered with SizeBot.
     To register, use the `&register` command.""", delete_after=5)
         elif newbaseweight is None:
@@ -264,6 +265,7 @@ class SetCog(commands.Cog):
             logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) changed their base weight to {str(newbaseweight)}.")
             await ctx.send("""<@{0}>'s base weight is now {1}. ({2})""".format(ctx.message.author.id, fromWV(userarray[BWEI]), fromWVUSA(userarray[BWEI])))
 
-#Necessary.
+
+# Necessary.
 def setup(bot):
     bot.add_cog(SetCog(bot))
