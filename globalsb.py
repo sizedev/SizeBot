@@ -456,7 +456,6 @@ def fromSV(value, accuracy=2):
         scale, unit = uni * Decimal("1E24"), "Yuni"
     else:
         return "∞"
-    return output
 
     return f"{round(trimzeroes(value) * scale, accuracy)}{unit}"
 
