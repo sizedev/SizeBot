@@ -283,8 +283,8 @@ class StatsCog(commands.Cog):
         relativedefaultheight_u = fromSVUSA(relativedefaultheight)
 
         relativedefaultweight = defaultweight / defmultiplier
-        relativedefaultweight_m = fromSVacc(relativedefaultweight)
-        relativedefaultweight_u = fromSVUSA(relativedefaultweight)
+        relativedefaultweight_m = fromWV(relativedefaultweight)
+        relativedefaultweight_u = fromWVUSA(relativedefaultweight)
 
         thumbwidth = currentheight * thumbfactor
         thumbwidth_m = fromSVacc(thumbwidth)
