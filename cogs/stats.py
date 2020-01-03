@@ -25,13 +25,13 @@ pointerfactor = Decimal(1) / Decimal(17.26)
 
 
 # TODO: Move to dedicated module.
-async def get_user(ctx, user_string, fakename = None):
+async def get_user(ctx, user_string, fakename=None):
     try:
         member = await commands.MemberConverter().convert(ctx, user_string)
     except commands.errors.BadArgument:
         member = None
 
-    if fakename == None:
+    if fakename is None:
         fakename = "Raw"
 
     if member:
@@ -67,8 +67,8 @@ def load_user(userid):
     return user
 
 
-def height_to_user(height, fakename = None):
-    if fakename == None:
+def height_to_user(height, fakename=None):
+    if fakename is None:
         fakename = "Raw\n"
     else:
         fakename = fakename + "\n"
@@ -104,7 +104,7 @@ class StatsCog(commands.Cog):
         logger.msg(f"Stats for {who} sent.")
 
     @commands.command()
-    async def compare(self, ctx, who1 = None, who2 = None, who1name = None, who2name = None):
+    async def compare(self, ctx, who1=None, who2=None, who1name=None, who2name=None):
         if who2 is None:
             who2 = str(ctx.message.author.id)
 
@@ -179,8 +179,8 @@ class StatsCog(commands.Cog):
         smalltobigfoot = fromSVacc(s2bh * footfactor)
         bigtosmallfootUSA = fromSVUSA(b2sh * footfactor)
         smalltobigfootUSA = fromSVUSA(s2bh * footfactor)
-        bigtosmallshoe = toShoeSize(b2sh * footfactor / inch)
-        smalltobigshoe = toShoeSize(s2bh * footfactor / inch)
+        bigtosmallshoe = toShoeSize(b2sh * footfactor)
+        smalltobigshoe = toShoeSize(s2bh * footfactor)
         bigtosmallweight = fromWV(b2sw)
         smalltobigweight = fromWV(s2bw)
         bigtosmallweightUSA = fromWVUSA(b2sw)
@@ -248,71 +248,105 @@ class StatsCog(commands.Cog):
             f"{printtab}{bigusertag}: {fromSVacc(bbh)} / {fromSVUSA(bbh)} | {fromWV(bbw)} / {fromWVUSA(bbw)}\n"
             f"{printtab}{smallusertag}: {fromSVacc(sbh)} / {fromSVUSA(sbh)} | {fromWV(sbw)} / {fromWVUSA(sbw)}")
 
-    def user_stats(self, user1tag, user1):
-        readableheight = fromSVacc(user1[CHEI])
-        readablefootheight = fromSVacc(Decimal(user1[CHEI]) * footfactor)
-        readablefootUSAheight = fromSVUSA(Decimal(user1[CHEI]) * footfactor)
-        readablefootthick = fromSVacc(Decimal(user1[CHEI]) * footthickfactor)
-        readablefootUSAthick = fromSVUSA(Decimal(user1[CHEI]) * footthickfactor)
-        readableUSAheight = fromSVUSA(user1[CHEI])
-        userbaseh = fromSV(user1[BHEI])
-        userbasehusa = fromSVUSA(user1[BHEI])
-        userbasew = fromWV(user1[BWEI])
-        userbasewusa = fromWVUSA(user1[BWEI])
-        density = Decimal(user1[DENS])
-        multiplier = Decimal(user1[CHEI]) / Decimal(user1[BHEI])
-        basemult = Decimal(user1[CHEI]) / Decimal(defaultheight)
-        multipliercubed = multiplier**3
-        basemultcubed = basemult**3
+    def user_stats(self, usertag, user1):
+        currentheight = Decimal(user1[CHEI])
+        currentheight_m = fromSVacc(currentheight)
+        currentheight_u = fromSVUSA(currentheight)
+
+        baseheight = Decimal(user1[BHEI])
+        baseheight_m = fromSVUSA(baseheight)
+        baseheight_u = fromSV(baseheight)
+
         baseweight = Decimal(user1[BWEI])
-        weightmath = (baseweight * (multipliercubed)) * density
-        readableweight = fromWV(weightmath)
-        readableUSAweight = fromWVUSA(weightmath)
-        normalheight = fromSVacc(Decimal(defaultheight) / Decimal(basemult))
-        normalUSAheight = fromSVUSA(Decimal(defaultheight) / Decimal(basemult))
-        normalweight = fromWV(Decimal(defaultweight) / Decimal(basemultcubed))
-        normalUSAweight = fromWVUSA(Decimal(defaultweight) / Decimal(basemultcubed))
-        thumbsize = fromSVacc(Decimal(user1[CHEI]) * thumbfactor)
-        thumbsizeUSA = fromSVUSA(Decimal(user1[CHEI]) * thumbfactor)
-        footheight = Decimal(user1[CHEI]) * footfactor
-        footwidth = fromSV(Decimal(user1[CHEI]) * footwidthfactor)
-        footwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * footwidthfactor)
-        footlengthinches = Decimal(user1[CHEI]) * footfactor / inch
-        shoesize = toShoeSize(footlengthinches)
-        fingerprintdepth = fromSVacc(Decimal(user1[CHEI]) * fingerprintfactor)
-        fingerprintdepthUSA = fromSVUSA(Decimal(user1[CHEI]) * fingerprintfactor)
-        hairwidth = fromSVacc(Decimal(user1[CHEI]) * hairwidthfactor)
-        hairwidthUSA = fromSVUSA(Decimal(user1[CHEI]) * hairwidthfactor)
-        pointer = fromSVacc(Decimal(user1[CHEI]) * pointerfactor)
-        pointerUSA = fromSVUSA(Decimal(user1[CHEI]) * pointerfactor)
-        hcms = place_value(round(multiplier, 4))
-        hbms = place_value(round(basemult, 4))
-        wcms = place_value(round(multipliercubed * density, 4))
-        wbms = place_value(round(basemultcubed * density, 4))
-        if multiplier > 999999999999999:
-            hcms = "{:.2e}".format(multiplier)
-        if basemult > 999999999999999:
-            hbms = "{:.2e}".format(basemult)
-        if multipliercubed > 999999999999999:
-            wcms = "{:.2e}".format(multipliercubed * density)
-        if basemultcubed > 999999999999999:
-            wbms = "{:.2e}".format(basemultcubed * density)
+        baseweight_m = fromWV(baseweight)
+        baseweight_u = fromWVUSA(baseweight)
+
+        density = Decimal(user1[DENS])
+
+        multiplier = currentheight / baseheight
+        defmultiplier = currentheight / defaultheight
+
+        footheight = currentheight * footfactor
+        footheight_m = fromSVacc(footheight)
+        footheight_u = fromSVUSA(footheight)
+
+        toeheight = currentheight * footthickfactor
+        toeheight_m = fromSVacc(toeheight)
+        toeheight_u = fromSVUSA(toeheight)
+
+        calculatedweight = (baseweight * (multiplier ** 3)) * density
+        calculatedweight_m = fromWV(calculatedweight)
+        calculatedweight_u = fromWVUSA(calculatedweight)
+
+        relativedefaultheight = defaultheight / defmultiplier
+        relativedefaultheight_m = fromSVacc(relativedefaultheight)
+        relativedefaultheight_u = fromSVUSA(relativedefaultheight)
+
+        relativedefaultweight = defaultweight / defmultiplier
+        relativedefaultweight_m = fromSVacc(relativedefaultweight)
+        relativedefaultweight_u = fromSVUSA(relativedefaultweight)
+
+        thumbwidth = currentheight * thumbfactor
+        thumbwidth_m = fromSVacc(thumbwidth)
+        thumbwidth_u = fromSVUSA(thumbwidth)
+
+        footlength = currentheight * footfactor
+        footlength_m = fromSV(footlength)
+        footlength_u = fromSVUSA(footlength)
+
+        footwidth = currentheight * footwidthfactor
+        footwidth_m = fromSV(footwidth)
+        footwidth_u = fromSVUSA(footwidth)
+
+        shoesize = toShoeSize(footlength)
+
+        fingerprintdepth = currentheight * fingerprintfactor
+        fingerprintdepth_m = fromSVacc(fingerprintdepth)
+        fingerprintdepth_u = fromSVUSA(fingerprintdepth)
+
+        hairwidth = currentheight * hairwidthfactor
+        hairwidth_m = fromSVacc(hairwidth)
+        hairwidth_u = fromSVUSA(hairwidth)
+
+        pointer = currentheight * pointerfactor
+        pointer_m = fromSVUSA(pointer)
+        pointer_u = fromSVacc(pointer)
+
+        if multiplier > Decimal("1E15"):
+            multiplier_x = f"{multiplier:.2e}"
+        else:
+            multiplier_x = f"{multiplier:,.4}"
+
+        if defmultiplier > Decimal("1E15"):
+            defmultiplier_x = f"{defmultiplier:.2e}"
+        else:
+            defmultiplier_x = f"{defmultiplier:,.4}"
+
+        if (multiplier ** 3) > Decimal("1E15"):
+            multipliercubed_x = f"{(multiplier ** 3):.2e}"
+        else:
+            multipliercubed_x = f"{(multiplier ** 3):,.4}"
+
+        if (defmultiplier ** 3) > Decimal("1E15"):
+            defmultipliercubed_x = f"{(defmultiplier ** 3):.2e}"
+        else:
+            defmultipliercubed_x = f"{(defmultiplier ** 3):,.4}"
 
         return (
-            f"**{user1tag} Stats:**\n"
-            f"Current Height: {readableheight} / {readableUSAheight} ({hcms}x character base, {hbms}x average)\n"
-            f"Current Weight: {readableweight} / {readableUSAweight} ({wcms}x charbase, {wbms}x average)\n"
+            f"**{usertag} Stats:**\n"
+            f"Current Height: {currentheight_m} / {currentheight_u} ({multiplier_x}x character base, {defmultiplier_x}x average)\n"
+            f"Current Weight: {calculatedweight_m} / {calculatedweight_u} ({multipliercubed_x}x charbase, {defmultipliercubed_x}x average)\n"
             f"Current Density: {density}x\n"
-            f"Foot Length: {readablefootheight} / {readablefootUSAheight} ({shoesize})\n"
-            f"Foot Width: {footwidth} / {footwidthUSA}\n"
-            f"Toe Height: {readablefootthick} / {readablefootUSAthick}\n"
-            f"Pointer Finger Length: {pointer} / {pointerUSA}\n"
-            f"Thumb Width: {thumbsize} / {thumbsizeUSA}\n"
-            f"Fingerprint Depth: {fingerprintdepth} / {fingerprintdepthUSA}\n"
-            f"Hair Width: {hairwidth} / {hairwidthUSA}\n"
-            f"Size of a Normal Man (Comparative) {normalheight} / {normalUSAheight}\n"
-            f"Weight of a Normal Man (Comparative) {normalweight} / {normalUSAweight}\n"
-            f"Character Bases: {userbaseh} / {userbasehusa} | {userbasew} / {userbasewusa}")
+            f"Foot Length: {footheight_m} / {footheight_u} ({shoesize})\n"
+            f"Foot Width: {footwidth_m} / {footwidth_u}\n"
+            f"Toe Height: {toeheight_m} / {toeheight_u}\n"
+            f"Pointer Finger Length: {pointer_m} / {pointer_u}\n"
+            f"Thumb Width: {thumbwidth_m} / {thumbwidth_u}\n"
+            f"Fingerprint Depth: {fingerprintdepth_m} / {fingerprintdepth_u}\n"
+            f"Hair Width: {hairwidth_m} / {hairwidth_u}\n"
+            f"Size of a Normal Man (Comparative) {relativedefaultheight_m} / {relativedefaultheight_u}\n"
+            f"Weight of a Normal Man (Comparative) {relativedefaultweight_m} / {relativedefaultweight_u}\n"
+            f"Character Bases: {baseheight_m} / {baseheight_u} | {baseweight_m} / {baseweight_u}")
 
     @stats.error
     @logger.err2console

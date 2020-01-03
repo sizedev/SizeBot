@@ -105,29 +105,9 @@ def getlet(string):
     return match.group(0)
 
 
-# Remove decimals.
-def removedecimals(output):
-    if ".00" in output:
-        output = output.replace(".00", "")
-    elif ".10" in output:
-        output = output.replace(".10", ".1")
-    elif ".20" in output:
-        output = output.replace(".20", ".2")
-    elif ".30" in output:
-        output = output.replace(".30", ".3")
-    elif ".40" in output:
-        output = output.replace(".40", ".4")
-    elif ".50" in output:
-        output = output.replace(".50", ".5")
-    elif ".60" in output:
-        output = output.replace(".60", ".6")
-    elif ".70" in output:
-        output = output.replace(".70", ".7")
-    elif ".80" in output:
-        output = output.replace(".80", ".8")
-    elif ".90" in output:
-        output = output.replace(".90", ".9")
-    return output
+# Remove trailing zeroes from a Decimal
+def trimzeroes(d):
+    return d.normalize() + 0
 
 
 def removebrackets(string):
@@ -141,7 +121,7 @@ def round_nearest_half(number):
 
 
 def place_value(number):
-    return ("{:,}".format(number))
+    return f"{number:,}"
 
 
 def pretty_time_delta(seconds):
@@ -337,465 +317,413 @@ uniw = Decimal("3400000000000000000000000000000000000000000000000000000000000")
 def toSV(value, unit):
     if value is None or unit is None:
         return None
+    value = Decimal(value)
     unitlower = unit.lower()
     if unitlower in ["yoctometers", "yoctometer"] or unit == "ym":
-        output = Decimal(value) / Decimal("1E18")
+        outputSV = value / Decimal("1E18")
     elif unitlower in ["zeptometers", "zeptometer"] or unit == "zm":
-        output = Decimal(value) / Decimal("1E15")
+        outputSV = value / Decimal("1E15")
     elif unitlower in ["attometers", "attometer"] or unit == "am":
-        output = Decimal(value) / Decimal("1E12")
+        outputSV = value / Decimal("1E12")
     elif unitlower in ["femtometers", "femtometer"] or unit == "fm":
-        output = Decimal(value) / Decimal("1E9")
+        outputSV = value / Decimal("1E9")
     elif unitlower in ["picometers", "picometer"] or unit == "pm":
-        output = Decimal(value) / Decimal("1E6")
+        outputSV = value / Decimal("1E6")
     elif unitlower in ["nanometers", "nanometer"] or unit == "nm":
-        output = Decimal(value) / Decimal("1E3")
+        outputSV = value / Decimal("1E3")
     elif unitlower in ["micrometers", "micrometer"] or unit in ["um", "µm"]:
-        output = Decimal(value)
+        outputSV = value
     elif unitlower in ["millimeters", "millimeter"] or unit == "mm":
-        output = Decimal(value) * Decimal("1E3")
+        outputSV = value * Decimal("1E3")
     elif unitlower in ["centimeters", "centimeter"] or unit == "cm":
-        output = Decimal(value) * Decimal("1E4")
+        outputSV = value * Decimal("1E4")
     elif unitlower in ["meters", "meter"] or unit == "m":
-        output = Decimal(value) * Decimal("1E6")
+        outputSV = value * Decimal("1E6")
     elif unitlower in ["kilometers", "kilometer"] or unit == "km":
-        output = Decimal(value) * Decimal("1E9")
+        outputSV = value * Decimal("1E9")
     elif unitlower in ["megameters", "megameter"] or unit == "Mm":
-        output = Decimal(value) * Decimal("1E12")
+        outputSV = value * Decimal("1E12")
     elif unitlower in ["gigameters", "gigameter"] or unit == "Gm":
-        output = Decimal(value) * Decimal("1E15")
+        outputSV = value * Decimal("1E15")
     elif unitlower in ["terameters", "terameter"] or unit == "Tm":
-        output = Decimal(value) * Decimal("1E18")
+        outputSV = value * Decimal("1E18")
     elif unitlower in ["petameters", "petameter"] or unit == "Pm":
-        output = Decimal(value) * Decimal("1E21")
+        outputSV = value * Decimal("1E21")
     elif unitlower in ["exameters", "exameter"] or unit == "Em":
-        output = Decimal(value) * Decimal("1E24")
+        outputSV = value * Decimal("1E24")
     elif unitlower in ["zettameters", "zettameter"] or unit == "Zm":
-        output = Decimal(value) * Decimal("1E27")
+        outputSV = value * Decimal("1E27")
     elif unitlower in ["yottameters", "yottameter"] or unit == "Ym":
-        output = Decimal(value) * Decimal("1E30")
+        outputSV = value * Decimal("1E30")
     elif unitlower in ["inches", "inch", "in", "\""]:
-        output = Decimal(value) * inch
+        outputSV = value * inch
     elif unitlower in ["feet", "foot", "ft", "\'"]:
-        output = Decimal(value) * foot
+        outputSV = value * foot
     elif unitlower in ["miles", "mile", "mi"]:
-        output = Decimal(value) * mile
+        outputSV = value * mile
     elif unitlower in ["lightyears", "lightyear"] or unit == "ly":
-        output = Decimal(value) * ly
+        outputSV = value * ly
     elif unitlower in ["astronomical_units", "astronomical_unit"] or unit == "AU":
-        output = Decimal(value) * au
+        outputSV = value * au
     elif unitlower in ["universes", "universe"] or unit == "uni":
-        output = Decimal(value) * uni
+        outputSV = value * uni
     elif unitlower in ["kilouniverses", "kilouniverse"] or unit == "kuni":
-        output = Decimal(value) * uni * Decimal("1E3")
+        outputSV = value * uni * Decimal("1E3")
     elif unitlower in ["megauniverses", "megauniverse"] or unit == "Muni":
-        output = Decimal(value) * uni * Decimal("1E6")
+        outputSV = value * uni * Decimal("1E6")
     elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "Guni":
-        output = Decimal(value) * uni * Decimal("1E9")
+        outputSV = value * uni * Decimal("1E9")
     elif unitlower in ["terauniverses", "terauniverse"] or unit == "Tuni":
-        output = Decimal(value) * uni * Decimal("1E12")
+        outputSV = value * uni * Decimal("1E12")
     elif unitlower in ["petauniverses", "petauniverse"] or unit == "Puni":
-        output = Decimal(value) * uni * Decimal("1E15")
+        outputSV = value * uni * Decimal("1E15")
     elif unitlower in ["exauniverses", "exauniverse"] or unit == "Euni":
-        output = Decimal(value) * uni * Decimal("1E18")
+        outputSV = value * uni * Decimal("1E18")
     elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "Zuni":
-        output = Decimal(value) * uni * Decimal("1E21")
+        outputSV = value * uni * Decimal("1E21")
     elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "Yuni":
-        output = Decimal(value) * uni * Decimal("1E24")
+        outputSV = value * uni * Decimal("1E24")
     else:
         return None
-    return output
+    return outputSV
 
 
-# Convert 'size values' to a more readable format (metric).
-def fromSV(value):
-    value = float(value)
-    output = ""
-    if value <= Decimal("0"):
-        return "0"
-    elif value < Decimal("0.000000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E18"), 2)) + "ym"
-    elif value < Decimal("0.000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E15"), 2)) + "zm"
-    elif value < Decimal("0.000000001"):
-        output = str(round(Decimal(value) * Decimal("1E12"), 2)) + "am"
-    elif value < Decimal("0.000001"):
-        output = str(round(Decimal(value) * Decimal("1E9"), 2)) + "fm"
-    elif value < Decimal("0.001"):
-        output = str(round(Decimal(value) * Decimal("1E6"), 2)) + "pm"
-    elif value < Decimal("1"):
-        output = str(round(Decimal(value) * Decimal("1E3"), 2)) + "nm"
-    elif value < Decimal("1E2"):
-        output = str(round(Decimal(value), 2)) + "µm"
-    elif value < Decimal("1E4"):
-        output = str(round(Decimal(value) / Decimal("1E3"), 2)) + "mm"
-    elif value < Decimal("1E6"):
-        output = str(round(Decimal(value) / Decimal("1E4"), 2)) + "cm"
-    elif value < Decimal("1E9"):
-        output = str(round(Decimal(value) / Decimal("1E6"), 2)) + "m"
-    elif value < Decimal("1E12"):
-        output = str(round(Decimal(value) / Decimal("1E9"), 2)) + "km"
-    elif value < Decimal("1E15"):
-        output = str(round(Decimal(value) / Decimal("1E12"), 2)) + "Mm"
-    elif value < Decimal("1E18"):
-        output = str(round(Decimal(value) / Decimal("1E15"), 2)) + "Gm"
-    elif value < Decimal("1E21"):
-        output = str(round(Decimal(value) / Decimal("1E18"), 2)) + "Tm"
-    elif value < Decimal("1E24"):
-        output = str(round(Decimal(value) / Decimal("1E21"), 2)) + "Pm"
-    elif value < Decimal("1E27"):
-        output = str(round(Decimal(value) / Decimal("1E24"), 2)) + "Em"
-    elif value < Decimal("1E30"):
-        output = str(round(Decimal(value) / Decimal("1E27"), 2)) + "Zm"
-    elif value < uni:
-        output = str(round(Decimal(value) / Decimal("1E30"), 2)) + "Ym"
-    elif value < uni * Decimal("1E3"):
-        output = str(round(Decimal(value) / uni, 2)) + "uni"
-    elif value < uni * Decimal("1E6"):
-        output = str(round(Decimal(value) / uni / Decimal("1E3"), 2)) + "kuni"
-    elif value < uni * Decimal("1E9"):
-        output = str(round(Decimal(value) / uni / Decimal("1E6"), 2)) + "Muni"
-    elif value < uni * Decimal("1E12"):
-        output = str(round(Decimal(value) / uni / Decimal("1E9"), 2)) + "Guni"
-    elif value < uni * Decimal("1E15"):
-        output = str(round(Decimal(value) / uni / Decimal("1E12"), 2)) + "Tuni"
-    elif value < uni * Decimal("1E18"):
-        output = str(round(Decimal(value) / uni / Decimal("1E15"), 2)) + "Puni"
-    elif value < uni * Decimal("1E21"):
-        output = str(round(Decimal(value) / uni / Decimal("1E18"), 2)) + "Euni"
-    elif value < uni * Decimal("1E24"):
-        output = str(round(Decimal(value) / uni / Decimal("1E21"), 2)) + "Zuni"
-    elif value < uni * Decimal("1E27"):
-        output = str(round(Decimal(value) / uni / Decimal("1E24"), 2)) + "Yuni"
-    else:
-        return "∞"
-    return removedecimals(output)
-
-
-# Convert 'size values' to a more readable format (accurate).
+# Convert 'size values' to a more readable format (metric to 3 decimal places)
 def fromSVacc(value):
-    value = float(value)
+    return fromSV(value, 3)
+
+
+# Convert 'size values' to a more readable format (metric)
+def fromSV(value, accuracy=2):
+    value = Decimal(value)
     output = ""
     if value <= Decimal("0"):
         return "0"
-    elif value < Decimal("0.000000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E18"), 3)) + "ym"
-    elif value < Decimal("0.000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E15"), 3)) + "zm"
-    elif value < Decimal("0.000000001"):
-        output = str(round(Decimal(value) * Decimal("1E12"), 3)) + "am"
-    elif value < Decimal("0.000001"):
-        output = str(round(Decimal(value) * Decimal("1E9"), 3)) + "fm"
-    elif value < Decimal("0.001"):
-        output = str(round(Decimal(value) * Decimal("1E6"), 3)) + "pm"
-    elif value < Decimal("1"):
-        output = str(round(Decimal(value) * Decimal("1E3"), 3)) + "nm"
-    elif value < Decimal("1E3"):
-        output = str(round(Decimal(value), 3)) + "µm"
+
+    if value < Decimal("1E-15"):
+        scale, unit = Decimal("1E-18"), "ym"
+    elif value < Decimal("1E-12"):
+        scale, unit = Decimal("1E-15"), "zm"
+    elif value < Decimal("1E-9"):
+        scale, unit = Decimal("1E-12"), "am"
+    elif value < Decimal("1E-6"):
+        scale, unit = Decimal("1E-9"), "fm"
+    elif value < Decimal("1E-3"):
+        scale, unit = Decimal("1E-6"), "pm"
+    elif value < Decimal("1E0"):
+        scale, unit = Decimal("1E-3"), "nm"
+    elif value < Decimal("1E2"):
+        scale, unit = Decimal("1E0"), "µm"
     elif value < Decimal("1E4"):
-        output = str(round(Decimal(value) / Decimal("1E3"), 3)) + "mm"
+        scale, unit = Decimal("1E3"), "mm"
     elif value < Decimal("1E6"):
-        output = str(round(Decimal(value) / Decimal("1E4"), 3)) + "cm"
+        scale, unit = Decimal("1E4"), "cm"
     elif value < Decimal("1E9"):
-        output = str(round(Decimal(value) / Decimal("1E6"), 3)) + "m"
+        scale, unit = Decimal("1E6"), "m"
     elif value < Decimal("1E12"):
-        output = str(round(Decimal(value) / Decimal("1E9"), 3)) + "km"
+        scale, unit = Decimal("1E9"), "km"
     elif value < Decimal("1E15"):
-        output = str(round(Decimal(value) / Decimal("1E12"), 3)) + "Mm"
+        scale, unit = Decimal("1E12"), "Mm"
     elif value < Decimal("1E18"):
-        output = str(round(Decimal(value) / Decimal("1E15"), 3)) + "Gm"
+        scale, unit = Decimal("1E15"), "Gm"
     elif value < Decimal("1E21"):
-        output = str(round(Decimal(value) / Decimal("1E18"), 3)) + "Tm"
+        scale, unit = Decimal("1E18"), "Tm"
     elif value < Decimal("1E24"):
-        output = str(round(Decimal(value) / Decimal("1E21"), 3)) + "Pm"
+        scale, unit = Decimal("1E21"), "Pm"
     elif value < Decimal("1E27"):
-        output = str(round(Decimal(value) / Decimal("1E24"), 3)) + "Em"
+        scale, unit = Decimal("1E24"), "Em"
     elif value < Decimal("1E30"):
-        output = str(round(Decimal(value) / Decimal("1E27"), 3)) + "Zm"
+        scale, unit = Decimal("1E27"), "Zm"
     elif value < uni:
-        output = str(round(Decimal(value) / Decimal("1E30"), 3)) + "Ym"
+        scale, unit = Decimal("1E30"), "Ym"
     elif value < uni * Decimal("1E3"):
-        output = str(round(Decimal(value) / uni, 3)) + "uni"
+        scale, unit = uni, "uni"
     elif value < uni * Decimal("1E6"):
-        output = str(round(Decimal(value) / uni / Decimal("1E3"), 3)) + "kuni"
+        scale, unit = uni * Decimal("1E3"), "kuni"
     elif value < uni * Decimal("1E9"):
-        output = str(round(Decimal(value) / uni / Decimal("1E6"), 3)) + "Muni"
+        scale, unit = uni * Decimal("1E6"), "Muni"
     elif value < uni * Decimal("1E12"):
-        output = str(round(Decimal(value) / uni / Decimal("1E9"), 3)) + "Guni"
+        scale, unit = uni * Decimal("1E9"), "Guni"
     elif value < uni * Decimal("1E15"):
-        output = str(round(Decimal(value) / uni / Decimal("1E12"), 3)) + "Tuni"
+        scale, unit = uni * Decimal("1E12"), "Tuni"
     elif value < uni * Decimal("1E18"):
-        output = str(round(Decimal(value) / uni / Decimal("1E15"), 3)) + "Puni"
+        scale, unit = uni * Decimal("1E15"), "Puni"
     elif value < uni * Decimal("1E21"):
-        output = str(round(Decimal(value) / uni / Decimal("1E18"), 3)) + "Euni"
+        scale, unit = uni * Decimal("1E18"), "Euni"
     elif value < uni * Decimal("1E24"):
-        output = str(round(Decimal(value) / uni / Decimal("1E21"), 3)) + "Zuni"
+        scale, unit = uni * Decimal("1E21"), "Zuni"
     elif value < uni * Decimal("1E27"):
-        output = str(round(Decimal(value) / uni / Decimal("1E24"), 3)) + "Yuni"
+        scale, unit = uni * Decimal("1E24"), "Yuni"
     else:
         return "∞"
     return output
 
+    return f"{round(trimzeroes(value) * scale, accuracy)}{unit}"
 
-# Convert 'size values' to a more readable format (USA).
-def fromSVUSA(value):
-    value = float(value)
+
+# Convert 'size values' to a more readable format (USA)
+def fromSVUSA(value, accuracy=2):
+    value = Decimal(value)
     output = ""
     if value <= Decimal("0"):
         return "0"
-    elif value < Decimal("0.000000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E18"), 2)) + "ym"
-    elif value < Decimal("0.000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E15"), 2)) + "zm"
-    elif value < Decimal("0.000000001"):
-        output = str(round(Decimal(value) * Decimal("1E12"), 2)) + "am"
-    elif value < Decimal("0.000001"):
-        output = str(round(Decimal(value) * Decimal("1E9"), 2)) + "fm"
-    elif value < Decimal("0.001"):
-        output = str(round(Decimal(value) * Decimal("1E6"), 2)) + "pm"
-    elif value < Decimal("1"):
-        output = str(round(Decimal(value) * Decimal("1E3"), 2)) + "nm"
+
+    if value < Decimal("1E-15"):
+        scale, unit = Decimal("1E-18"), "ym"
+    elif value < Decimal("1E-12"):
+        scale, unit = Decimal("1E-15"), "zm"
+    elif value < Decimal("1E-9"):
+        scale, unit = Decimal("1E-12"), "am"
+    elif value < Decimal("1E-6"):
+        scale, unit = Decimal("1E-9"), "fm"
+    elif value < Decimal("1E-3"):
+        scale, unit = Decimal("1E-6"), "pm"
+    elif value < Decimal("1E0"):
+        scale, unit = Decimal("1E-3"), "nm"
     elif value < Decimal("1E2"):
-        output = str(round(Decimal(value), 2)) + "µm"
+        scale, unit = Decimal("1E0"), "µm"
     elif value < Decimal("1E4"):
-        output = str(round(Decimal(value) / Decimal("1E3"), 2)) + "mm"
+        scale, unit = Decimal("1E3"), "mm"
     elif value < foot:
-        output = str(round(Decimal(value) / inch, 2)) + "in"
+        scale, unit = inch, "in"
     elif value < mile:
-        feet = floor(Decimal(value) / foot)
-        fulloninches = round(Decimal(value) / inch, 2)
-        feettoinches = feet * Decimal("12")
-        inches = fulloninches - feettoinches
-        output = str(feet) + "'" + str(inches) + "\""
+        inchval = value / inch                  # convert to inches
+        feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
+        roundedinchval = round(inchval, accuracy)
+        return f"{feetval}'{inchval}\""
     elif value < au:
-        output = str(round(Decimal(value) / mile, 2)) + "mi"
+        scale, unit = mile, "mi"
     elif value < ly:
-        output = str(round(Decimal(value) / au, 2)) + "AU"
+        scale, au = mile, "AU"
     elif value < uni / 10:
-        output = str(round(Decimal(value) / ly, 2)) + "ly"
+        scale, au = ly, "ly"
     elif value < uni * Decimal("1E3"):
-        output = str(round(Decimal(value) / uni, 2)) + "uni"
+        scale, au = uni, "uni"
     elif value < uni * Decimal("1E6"):
-        output = str(round(Decimal(value) / uni / Decimal("1E3"), 2)) + "kuni"
+        scale, au = uni * Decimal("1E3"), "kuni"
     elif value < uni * Decimal("1E9"):
-        output = str(round(Decimal(value) / uni / Decimal("1E6"), 2)) + "Muni"
+        scale, au = uni * Decimal("1E6"), "Muni"
     elif value < uni * Decimal("1E12"):
-        output = str(round(Decimal(value) / uni / Decimal("1E9"), 2)) + "Guni"
+        scale, au = uni * Decimal("1E9"), "Guni"
     elif value < uni * Decimal("1E15"):
-        output = str(round(Decimal(value) / uni / Decimal("1E12"), 2)) + "Tuni"
+        scale, au = uni * Decimal("1E12"), "Tuni"
     elif value < uni * Decimal("1E18"):
-        output = str(round(Decimal(value) / uni / Decimal("1E15"), 2)) + "Puni"
+        scale, au = uni * Decimal("1E15"), "Puni"
     elif value < uni * Decimal("1E21"):
-        output = str(round(Decimal(value) / uni / Decimal("1E18"), 2)) + "Euni"
+        scale, au = uni * Decimal("1E18"), "Euni"
     elif value < uni * Decimal("1E24"):
-        output = str(round(Decimal(value) / uni / Decimal("1E21"), 2)) + "Zuni"
+        scale, au = uni * Decimal("1E21"), "Zuni"
     elif value < uni * Decimal("1E27"):
-        output = str(round(Decimal(value) / uni / Decimal("1E24"), 2)) + "Yuni"
+        scale, au = uni * Decimal("1E24"), "Yuni"
     else:
         return "∞"
-    return removedecimals(output)
+
+    return f"{round(trimzeroes(value) * scale, accuracy)}{unit}"
 
 
 # Convert any supported weight to 'weight value', or milligrams.
 def toWV(value, unit):
+    value = Decimal(value)
     unitlower = unit.lower()
     if unitlower in ["yoctograms", "yoctograms"] or unit == "yg":
-        output = Decimal(value) / Decimal("1E21")
+        output = value / Decimal("1E21")
     elif unitlower in ["zeptograms", "zeptograms"] or unit == "zg":
-        output = Decimal(value) / Decimal("1E18")
+        output = value / Decimal("1E18")
     elif unitlower in ["attograms", "attogram"] or unit == "ag":
-        output = Decimal(value) / Decimal("1E15")
+        output = value / Decimal("1E15")
     elif unitlower in ["femtogram", "femtogram"] or unit == "fg":
-        output = Decimal(value) / Decimal("1E12")
+        output = value / Decimal("1E12")
     elif unitlower in ["picogram", "picogram"] or unit == "pg":
-        output = Decimal(value) / Decimal("1E9")
+        output = value / Decimal("1E9")
     elif unitlower in ["nanogram", "nanogram"] or unit == "ng":
-        output = Decimal(value) / Decimal("1E6")
+        output = value / Decimal("1E6")
     elif unitlower in ["microgram", "microgram"] or unit in ["ug", "µg"]:
-        output = Decimal(value) / Decimal("1E3")
+        output = value / Decimal("1E3")
     elif unitlower in ["milligrams", "milligram"] or unit == "mg":
-        output = Decimal(value)
+        output = value
     elif unitlower in ["grams", "gram"] or unit == "g":
-        output = Decimal(value) * Decimal("1E3")
+        output = value * Decimal("1E3")
     elif unitlower in ["kilograms", "kilogram"] or unit == "kg":
-        output = Decimal(value) * Decimal("1E6")
+        output = value * Decimal("1E6")
     elif unitlower in ["megagrams", "megagram", "ton", "tons", "tonnes", "tons"] or unit == "t":
-        output = Decimal(value) * Decimal("1E9")
+        output = value * Decimal("1E9")
     elif unitlower in ["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"] or unit in ["Gg", "kt"]:
-        output = Decimal(value) * Decimal("1E12")
+        output = value * Decimal("1E12")
     elif unitlower in ["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"] or unit in ["Tg", "Mt"]:
-        output = Decimal(value) * Decimal("1E15")
+        output = value * Decimal("1E15")
     elif unitlower in ["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes"] or unit in ["Pg", "Gt"]:
-        output = Decimal(value) * Decimal("1E18")
+        output = value * Decimal("1E18")
     elif unitlower in ["exagrams", "exagram", "teratons", "teraton", "teratonnes", "teratonne"] or unit in ["Eg", "Tt"]:
-        output = Decimal(value) * Decimal("1E21")
+        output = value * Decimal("1E21")
     elif unitlower in ["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne"] or unit in ["Zg", "Pt"]:
-        output = Decimal(value) * Decimal("1E24")
+        output = value * Decimal("1E24")
     elif unitlower in ["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne"] or unit in ["Yg", "Et"]:
-        output = Decimal(value) * Decimal("1E27")
+        output = value * Decimal("1E27")
     elif unitlower in ["zettatons", "zettaton", "zettatonnes", "zettatonne"] or unit == "Zt":
-        output = Decimal(value) * Decimal("1E30")
+        output = value * Decimal("1E30")
     elif unitlower in ["yottatons", "yottaton", "yottatonnes", "yottatonne"] or unit == "Yt":
-        output = Decimal(value) * Decimal("1E33")
+        output = value * Decimal("1E33")
     elif unitlower in ["universes", "universe"] or unit == "uni":
-        output = Decimal(value) * uniw
+        output = value * uniw
     elif unitlower in ["kilouniverses", "kilouniverse"] or unit == "kuni":
-        output = Decimal(value) * uniw * Decimal("1E3")
+        output = value * uniw * Decimal("1E3")
     elif unitlower in ["megauniverses", "megauniverse"] or unit == "Muni":
-        output = Decimal(value) * uniw * Decimal("1E6")
+        output = value * uniw * Decimal("1E6")
     elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "Guni":
-        output = Decimal(value) * uniw * Decimal("1E9")
+        output = value * uniw * Decimal("1E9")
     elif unitlower in ["terauniverses", "terauniverse"] or unit == "Tuni":
-        output = Decimal(value) * uniw * Decimal("1E12")
+        output = value * uniw * Decimal("1E12")
     elif unitlower in ["petauniverses", "petauniverse"] or unit == "Puni":
-        output = Decimal(value) * uniw * Decimal("1E15")
+        output = value * uniw * Decimal("1E15")
     elif unitlower in ["exauniverses", "exauniverse"] or unit == "Euni":
-        output = Decimal(value) * uniw * Decimal("1E18")
+        output = value * uniw * Decimal("1E18")
     elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "Zuni":
-        output = Decimal(value) * uniw * Decimal("1E21")
+        output = value * uniw * Decimal("1E21")
     elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "Yuni":
-        output = Decimal(value) * uniw * Decimal("1E24")
+        output = value * uniw * Decimal("1E24")
     elif unitlower in ["ounces", "ounce"] or unit == "oz":
-        output = Decimal(value) * ounce
+        output = value * ounce
     elif unitlower in ["pounds", "pound"] or unit in ["lb", "lbs"]:
-        output = Decimal(value) * pound
+        output = value * pound
     elif unitlower in ["earth", "earths"]:
-        output = Decimal(value) * earth
+        output = value * earth
     elif unitlower in ["sun", "suns"]:
-        output = Decimal(value) * sun
+        output = value * sun
     else:
         return None
     return output
 
 
-# Convert 'weight values' to a more readable format.
-def fromWV(value):
+# Convert 'weight values' to a more readable format
+def fromWV(value, accuracy=1):
     value = Decimal(value)
-    if value <= 0:
+    if value <= Decimal("0"):
         return "0"
-    elif value < Decimal("0.000000000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E21"), 1)) + "yg"
-    elif value < Decimal("0.000000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E18"), 1)) + "zg"
-    elif value < Decimal("0.000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E15"), 1)) + "ag"
-    elif value < Decimal("0.000000001"):
-        output = str(round(Decimal(value) * Decimal("1E12"), 1)) + "fg"
-    elif value < Decimal("0.000001"):
-        output = str(round(Decimal(value) * Decimal("1E9"), 1)) + "pg"
-    elif value < Decimal("0.001"):
-        output = str(round(Decimal(value) * Decimal("1E6"), 1)) + "ng"
-    elif value < Decimal("1"):
-        output = str(round(Decimal(value) * Decimal("1E3"), 1)) + "µg"
-    elif value < Decimal("1000"):
-        output = str(round(Decimal(value), 1)) + "mg"
-    elif value < Decimal("10000000"):
-        output = str(round(Decimal(value) / Decimal("1E3"), 1)) + "g"
-    elif value < Decimal("1000000000"):
-        output = str(round(Decimal(value) / Decimal("1E6"), 1)) + "kg"
-    elif value < Decimal("100000000000"):
-        output = str(round(Decimal(value) / Decimal("1E9"), 1)) + "t"
-    elif value < Decimal("100000000000000"):
-        output = str(round(Decimal(value) / Decimal("1E12"), 1)) + "kt"
-    elif value < Decimal("100000000000000000"):
-        output = str(round(Decimal(value) / Decimal("1E15"), 1)) + "Mt"
-    elif value < Decimal("100000000000000000000"):
-        output = str(round(Decimal(value) / Decimal("1E18"), 1)) + "Gt"
-    elif value < Decimal("100000000000000000000000"):
-        output = str(round(Decimal(value) / Decimal("1E21"), 1)) + "Tt"
-    elif value < Decimal("100000000000000000000000000"):
-        output = str(round(Decimal(value) / Decimal("1E24"), 1)) + "Pt"
-    elif value < Decimal("100000000000000000000000000000"):
-        output = str(round(Decimal(value) / Decimal("1E27"), 1)) + "Et"
-    elif value < Decimal("100000000000000000000000000000000"):
-        output = str(round(Decimal(value) / Decimal("1E30"), 1)) + "Zt"
-    elif value < Decimal("100000000000000000000000000000000000"):
-        output = str(round(Decimal(value) / Decimal("1E33"), 1)) + "Yt"
+    if value < Decimal("1E-18"):
+        scale, unit = Decimal("1E-21"), "yg"
+    elif value < Decimal("1E-15"):
+        scale, unit = Decimal("1E-18"), "zg"
+    elif value < Decimal("1E-12"):
+        scale, unit = Decimal("1E-15"), "ag"
+    elif value < Decimal("1E-9"):
+        scale, unit = Decimal("1E-12"), "fg"
+    elif value < Decimal("1E-6"):
+        scale, unit = Decimal("1E-9"), "pg"
+    elif value < Decimal("1E-3"):
+        scale, unit = Decimal("1E-6"), "ng"
+    elif value < Decimal("1E0"):
+        scale, unit = Decimal("1E-3"), "µg"
+    elif value < Decimal("1E3"):
+        scale, unit = Decimal("1E0"), "mg"
+    elif value < Decimal("1E6"):
+        scale, unit = Decimal("1E3"), "g"
+    elif value < Decimal("1E9"):
+        scale, unit = Decimal("1E6"), "kg"
+    elif value < Decimal("1E12"):
+        scale, unit = Decimal("1E9"), "t"
+    elif value < Decimal("1E15"):
+        scale, unit = Decimal("1E12"), "kt"
+    elif value < Decimal("1E18"):
+        scale, unit = Decimal("1E15"), "Mt"
+    elif value < Decimal("1E21"):
+        scale, unit = Decimal("1E18"), "Gt"
+    elif value < Decimal("1E24"):
+        scale, unit = Decimal("1E21"), "Tt"
+    elif value < Decimal("1E27"):
+        scale, unit = Decimal("1E24"), "Pt"
+    elif value < Decimal("1E30"):
+        scale, unit = Decimal("1E27"), "Et"
+    elif value < Decimal("1E33"):
+        scale, unit = Decimal("1E30"), "Zt"
+    elif value < uniw:
+        scale, unit = Decimal("1E33"), "Yt"
     elif value < uniw * Decimal("1E3"):
-        output = str(round(Decimal(value) / uniw, 1)) + "uni"
+        scale, unit = uniw, "uni"
     elif value < uniw * Decimal("1E6"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E3"), 1)) + "kuni"
+        scale, unit = uniw * Decimal("1E3"), "kuni"
     elif value < uniw * Decimal("1E9"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E6"), 1)) + "Muni"
+        scale, unit = uniw * Decimal("1E6"), "Muni"
     elif value < uniw * Decimal("1E12"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E9"), 1)) + "Guni"
+        scale, unit = uniw * Decimal("1E9"), "Guni"
     elif value < uniw * Decimal("1E15"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E12"), 1)) + "Tuni"
+        scale, unit = uniw * Decimal("1E12"), "Tuni"
     elif value < uniw * Decimal("1E18"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E15"), 1)) + "Puni"
+        scale, unit = uniw * Decimal("1E15"), "Puni"
     elif value < uniw * Decimal("1E21"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E18"), 1)) + "Euni"
+        scale, unit = uniw * Decimal("1E18"), "Euni"
     elif value < uniw * Decimal("1E24"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E21"), 1)) + "Zuni"
+        scale, unit = uniw * Decimal("1E21"), "Zuni"
     elif value < uniw * Decimal("1E27"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E24"), 1)) + "Yuni"
+        scale, unit = uniw * Decimal("1E24"), "Yuni"
     else:
         return "∞"
-    return output
+
+    return f"{round(trimzeroes(value) * scale, accuracy)}{unit}"
 
 
-# Convert 'weight values' to a more readable format (USA).
-def fromWVUSA(value):
+# Convert 'weight values' to a more readable format (USA)
+def fromWVUSA(value, accuracy=1):
     value = Decimal(value)
     if value == 0:
         return "almost nothing"
-    elif value < Decimal("0.000000000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E21"), 1)) + "yg"
-    elif value < Decimal("0.000000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E18"), 1)) + "zg"
-    elif value < Decimal("0.000000000001"):
-        output = str(round(Decimal(value) * Decimal("1E15"), 1)) + "ag"
-    elif value < Decimal("0.000000001"):
-        output = str(round(Decimal(value) * Decimal("1E12"), 1)) + "fg"
-    elif value < Decimal("0.000001"):
-        output = str(round(Decimal(value) * Decimal("1E9"), 1)) + "pg"
-    elif value < Decimal("0.001"):
-        output = str(round(Decimal(value) * Decimal("1E6"), 1)) + "ng"
-    elif value < Decimal("1"):
-        output = str(round(Decimal(value) * Decimal("1E3"), 1)) + "µg"
-    elif value < Decimal("1000"):
-        output = str(round(Decimal(value), 1)) + "mg"
-    elif value < (ounce / 10):
-        output = str(round(Decimal(value) / Decimal("1E3"), 1)) + "g"
+    if value < Decimal("1E-18"):
+        scale, unit = Decimal("1E-21"), "yg"
+    elif value < Decimal("1E-15"):
+        scale, unit = Decimal("1E-18"), "zg"
+    elif value < Decimal("1E-12"):
+        scale, unit = Decimal("1E-15"), "ag"
+    elif value < Decimal("1E-9"):
+        scale, unit = Decimal("1E-12"), "fg"
+    elif value < Decimal("1E-6"):
+        scale, unit = Decimal("1E-9"), "pg"
+    elif value < Decimal("1E-3"):
+        scale, unit = Decimal("1E-6"), "ng"
+    elif value < Decimal("1E0"):
+        scale, unit = Decimal("1E-3"), "µg"
+    elif value < Decimal("1E3"):
+        scale, unit = Decimal("1E0"), "mg"
+    elif value < ounce / 10:
+        scale, unit = Decimal("1E3"), "g"
     elif value < pound:
-        output = str(place_value(round(Decimal(value) / ounce, 1))) + "oz"
+        scale, unit = ounce, "oz"
     elif value < uston:
-        output = str(place_value(round(Decimal(value) / pound, 1))) + "lb"
+        scale, unit = pound, "lb"
     elif value < earth / 10:
-        output = str(place_value(round(Decimal(value) / uston, 1))) + " US tons"
+        scale, unit = uston, " US tons"
     elif value < sun / 10:
-        output = str(place_value(round(Decimal(value) / earth, 1))) + " Earths"
+        scale, unit = earth, "Earths"
     elif value < milkyway:
-        output = str(place_value(round(Decimal(value) / sun, 1))) + " Suns"
+        scale, unit = sun, " Suns"
     elif value < uniw:
-        output = str(place_value(round(Decimal(value) / milkyway, 1))) + " Milky Ways"
+        scale, unit = milkyway, " Milky Ways"
     elif value < uniw * Decimal("1E3"):
-        output = str(round(Decimal(value) / uniw, 1)) + "uni"
+        scale, unit = uniw, "uni"
     elif value < uniw * Decimal("1E6"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E3"), 1)) + "kuni"
+        scale, unit = uniw / Decimal("1E3"), "kuni"
     elif value < uniw * Decimal("1E9"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E6"), 1)) + "Muni"
+        scale, unit = uniw / Decimal("1E6"), "Muni"
     elif value < uniw * Decimal("1E12"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E9"), 1)) + "Guni"
+        scale, unit = uniw / Decimal("1E9"), "Guni"
     elif value < uniw * Decimal("1E15"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E12"), 1)) + "Tuni"
+        scale, unit = uniw / Decimal("1E12"), "Tuni"
     elif value < uniw * Decimal("1E18"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E15"), 1)) + "Puni"
+        scale, unit = uniw / Decimal("1E15"), "Puni"
     elif value < uniw * Decimal("1E21"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E18"), 1)) + "Euni"
+        scale, unit = uniw / Decimal("1E18"), "Euni"
     elif value < uniw * Decimal("1E24"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E21"), 1)) + "Zuni"
+        scale, unit = uniw / Decimal("1E21"), "Zuni"
     elif value < uniw * Decimal("1E27"):
-        output = str(round(Decimal(value) / uniw / Decimal("1E24"), 1)) + "Yuni"
+        scale, unit = uniw / Decimal("1E24"), "Yuni"
     else:
         return "∞"
-    return output
+
+    return f"{round(trimzeroes(value) * scale, accuracy)}{unit}"
 
 
-def toShoeSize(inchamount):
+def toShoeSize(footlength):
     child = False
-    inches = Decimal(inchamount)
-    shoesize = 3 * inches
+    footlengthinches = Decimal(footlength / inch)
+    shoesize = 3 * footlengthinches
     shoesize = shoesize - 22
     if shoesize < 1:
         child = True
