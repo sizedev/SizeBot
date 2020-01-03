@@ -494,27 +494,27 @@ def fromSVUSA(value, accuracy=2):
     elif value < au:
         scale, unit = mile, "mi"
     elif value < ly:
-        scale, au = mile, "AU"
+        scale, unit = au, "AU"
     elif value < uni / 10:
-        scale, au = ly, "ly"
+        scale, unit = ly, "ly"
     elif value < uni * Decimal("1E3"):
-        scale, au = uni, "uni"
+        scale, unit = uni, "uni"
     elif value < uni * Decimal("1E6"):
-        scale, au = uni * Decimal("1E3"), "kuni"
+        scale, unit = uni * Decimal("1E3"), "kuni"
     elif value < uni * Decimal("1E9"):
-        scale, au = uni * Decimal("1E6"), "Muni"
+        scale, unit = uni * Decimal("1E6"), "Muni"
     elif value < uni * Decimal("1E12"):
-        scale, au = uni * Decimal("1E9"), "Guni"
+        scale, unit = uni * Decimal("1E9"), "Guni"
     elif value < uni * Decimal("1E15"):
-        scale, au = uni * Decimal("1E12"), "Tuni"
+        scale, unit = uni * Decimal("1E12"), "Tuni"
     elif value < uni * Decimal("1E18"):
-        scale, au = uni * Decimal("1E15"), "Puni"
+        scale, unit = uni * Decimal("1E15"), "Puni"
     elif value < uni * Decimal("1E21"):
-        scale, au = uni * Decimal("1E18"), "Euni"
+        scale, unit = uni * Decimal("1E18"), "Euni"
     elif value < uni * Decimal("1E24"):
-        scale, au = uni * Decimal("1E21"), "Zuni"
+        scale, unit = uni * Decimal("1E21"), "Zuni"
     elif value < uni * Decimal("1E27"):
-        scale, au = uni * Decimal("1E24"), "Yuni"
+        scale, unit = uni * Decimal("1E24"), "Yuni"
     else:
         return "∞"
 
