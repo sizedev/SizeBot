@@ -29,9 +29,9 @@ class DigiException(Exception):
 version = "3.3.7"
 
 # Defaults
-defaultheight = Decimal(1754000)  # micrometers
-defaultweight = Decimal(66760000)  # milligrams
-defaultdensity = Decimal(1.0)
+defaultheight = Decimal("1754000")  # micrometers
+defaultweight = Decimal("66760000")  # milligrams
+defaultdensity = Decimal("1.0")
 
 # Constants
 newline = "\n"
@@ -59,7 +59,7 @@ SPEC = 7
 def regenhexcode():
     # 16-char hex string gen for unregister.
     hexdigits = "1234567890abcdef"
-    lst = [random.choice(hexdigits) for n in range(16)]
+    lst = [random.choice(hexdigits) for n in len(hexdigits)]
     hexstring = "".join(lst)
     with open("../hexstring.txt", "w") as hexfile:
         hexfile.write(hexstring)
@@ -316,21 +316,21 @@ tasks = {}
 
 # Unit constants.
 # Height [micrometers]
-inch = Decimal(25400)
-foot = inch * Decimal(12)
-mile = foot * Decimal(5280)
-ly = mile * Decimal(5879000000000)
-au = Decimal(149597870700000000)
-uni = Decimal(879848000000000000000000000000000)
-infinity = Decimal(879848000000000000000000000000000000000000000000000000000000)
+inch = Decimal("25400")
+foot = inch * Decimal("12")
+mile = foot * Decimal("5280")
+ly = mile * Decimal("5879000000000")
+au = Decimal("149597870700000000")
+uni = Decimal("879848000000000000000000000000000")
+infinity = Decimal("879848000000000000000000000000000000000000000000000000000000")
 # Weight [milligrams]
-ounce = Decimal(28350)
-pound = ounce * Decimal(16)
-uston = pound * Decimal(2000)
-earth = Decimal(5972198600000000000000000000000)
-sun = Decimal(1988435000000000000000000000000000000)
-milkyway = Decimal(95000000000000000000000000000000000000000000000)
-uniw = Decimal(3400000000000000000000000000000000000000000000000000000000000)
+ounce = Decimal("28350")
+pound = ounce * Decimal("16")
+uston = pound * Decimal("2000")
+earth = Decimal("5972198600000000000000000000000")
+sun = Decimal("1988435000000000000000000000000000000")
+milkyway = Decimal("95000000000000000000000000000000000000000000000")
+uniw = Decimal("3400000000000000000000000000000000000000000000000000000000000")
 
 
 # Convert any supported height to 'size value'
@@ -411,61 +411,61 @@ def toSV(value, unit):
 def fromSV(value):
     value = float(value)
     output = ""
-    if value <= 0:
+    if value <= Decimal("0"):
         return "0"
-    elif value < 0.000000000000001:
+    elif value < Decimal("0.000000000000001"):
         output = str(round(Decimal(value) * Decimal("1E18"), 2)) + "ym"
-    elif value < 0.000000000001:
+    elif value < Decimal("0.000000000001"):
         output = str(round(Decimal(value) * Decimal("1E15"), 2)) + "zm"
-    elif value < 0.000000001:
+    elif value < Decimal("0.000000001"):
         output = str(round(Decimal(value) * Decimal("1E12"), 2)) + "am"
-    elif value < 0.000001:
+    elif value < Decimal("0.000001"):
         output = str(round(Decimal(value) * Decimal("1E9"), 2)) + "fm"
-    elif value < 0.001:
+    elif value < Decimal("0.001"):
         output = str(round(Decimal(value) * Decimal("1E6"), 2)) + "pm"
-    elif value < 1:
+    elif value < Decimal("1"):
         output = str(round(Decimal(value) * Decimal("1E3"), 2)) + "nm"
-    elif value < "1E2":
+    elif value < Decimal("1E2"):
         output = str(round(Decimal(value), 2)) + "µm"
-    elif value < "1E4":
+    elif value < Decimal("1E4"):
         output = str(round(Decimal(value) / Decimal("1E3"), 2)) + "mm"
-    elif value < "1E6":
+    elif value < Decimal("1E6"):
         output = str(round(Decimal(value) / Decimal("1E4"), 2)) + "cm"
-    elif value < "1E9":
+    elif value < Decimal("1E9"):
         output = str(round(Decimal(value) / Decimal("1E6"), 2)) + "m"
-    elif value < "1E12":
+    elif value < Decimal("1E12"):
         output = str(round(Decimal(value) / Decimal("1E9"), 2)) + "km"
-    elif value < "1E15":
+    elif value < Decimal("1E15"):
         output = str(round(Decimal(value) / Decimal("1E12"), 2)) + "Mm"
-    elif value < "1E18":
+    elif value < Decimal("1E18"):
         output = str(round(Decimal(value) / Decimal("1E15"), 2)) + "Gm"
-    elif value < "1E21":
+    elif value < Decimal("1E21"):
         output = str(round(Decimal(value) / Decimal("1E18"), 2)) + "Tm"
-    elif value < "1E24":
+    elif value < Decimal("1E24"):
         output = str(round(Decimal(value) / Decimal("1E21"), 2)) + "Pm"
-    elif value < "1E27":
+    elif value < Decimal("1E27"):
         output = str(round(Decimal(value) / Decimal("1E24"), 2)) + "Em"
-    elif value < "1E30":
+    elif value < Decimal("1E30"):
         output = str(round(Decimal(value) / Decimal("1E27"), 2)) + "Zm"
     elif value < uni:
         output = str(round(Decimal(value) / Decimal("1E30"), 2)) + "Ym"
-    elif value < uni * ("1E3"):
+    elif value < uni * Decimal("1E3"):
         output = str(round(Decimal(value) / uni, 2)) + "uni"
-    elif value < uni * ("1E6"):
+    elif value < uni * Decimal("1E6"):
         output = str(round(Decimal(value) / uni / Decimal("1E3"), 2)) + "kuni"
-    elif value < uni * ("1E9"):
+    elif value < uni * Decimal("1E9"):
         output = str(round(Decimal(value) / uni / Decimal("1E6"), 2)) + "Muni"
-    elif value < uni * ("1E12"):
+    elif value < uni * Decimal("1E12"):
         output = str(round(Decimal(value) / uni / Decimal("1E9"), 2)) + "Guni"
-    elif value < uni * ("1E15"):
+    elif value < uni * Decimal("1E15"):
         output = str(round(Decimal(value) / uni / Decimal("1E12"), 2)) + "Tuni"
-    elif value < uni * ("1E18"):
+    elif value < uni * Decimal("1E18"):
         output = str(round(Decimal(value) / uni / Decimal("1E15"), 2)) + "Puni"
-    elif value < uni * ("1E21"):
+    elif value < uni * Decimal("1E21"):
         output = str(round(Decimal(value) / uni / Decimal("1E18"), 2)) + "Euni"
-    elif value < uni * ("1E24"):
+    elif value < uni * Decimal("1E24"):
         output = str(round(Decimal(value) / uni / Decimal("1E21"), 2)) + "Zuni"
-    elif value < uni * ("1E27"):
+    elif value < uni * Decimal("1E27"):
         output = str(round(Decimal(value) / uni / Decimal("1E24"), 2)) + "Yuni"
     else:
         return "∞"
@@ -476,61 +476,61 @@ def fromSV(value):
 def fromSVacc(value):
     value = float(value)
     output = ""
-    if value <= 0:
+    if value <= Decimal("0"):
         return "0"
-    elif value < 0.000000000000001:
+    elif value < Decimal("0.000000000000001"):
         output = str(round(Decimal(value) * Decimal("1E18"), 3)) + "ym"
-    elif value < 0.000000000001:
+    elif value < Decimal("0.000000000001"):
         output = str(round(Decimal(value) * Decimal("1E15"), 3)) + "zm"
-    elif value < 0.000000001:
+    elif value < Decimal("0.000000001"):
         output = str(round(Decimal(value) * Decimal("1E12"), 3)) + "am"
-    elif value < 0.000001:
+    elif value < Decimal("0.000001"):
         output = str(round(Decimal(value) * Decimal("1E9"), 3)) + "fm"
-    elif value < 0.001:
+    elif value < Decimal("0.001"):
         output = str(round(Decimal(value) * Decimal("1E6"), 3)) + "pm"
-    elif value < 1:
+    elif value < Decimal("1"):
         output = str(round(Decimal(value) * Decimal("1E3"), 3)) + "nm"
-    elif value < "1E3":
+    elif value < Decimal("1E3"):
         output = str(round(Decimal(value), 3)) + "µm"
-    elif value < "1E4":
+    elif value < Decimal("1E4"):
         output = str(round(Decimal(value) / Decimal("1E3"), 3)) + "mm"
-    elif value < "1E6":
+    elif value < Decimal("1E6"):
         output = str(round(Decimal(value) / Decimal("1E4"), 3)) + "cm"
-    elif value < "1E9":
+    elif value < Decimal("1E9"):
         output = str(round(Decimal(value) / Decimal("1E6"), 3)) + "m"
-    elif value < "1E12":
+    elif value < Decimal("1E12"):
         output = str(round(Decimal(value) / Decimal("1E9"), 3)) + "km"
-    elif value < "1E15":
+    elif value < Decimal("1E15"):
         output = str(round(Decimal(value) / Decimal("1E12"), 3)) + "Mm"
-    elif value < "1E18":
+    elif value < Decimal("1E18"):
         output = str(round(Decimal(value) / Decimal("1E15"), 3)) + "Gm"
-    elif value < "1E21":
+    elif value < Decimal("1E21"):
         output = str(round(Decimal(value) / Decimal("1E18"), 3)) + "Tm"
-    elif value < "1E24":
+    elif value < Decimal("1E24"):
         output = str(round(Decimal(value) / Decimal("1E21"), 3)) + "Pm"
-    elif value < "1E27":
+    elif value < Decimal("1E27"):
         output = str(round(Decimal(value) / Decimal("1E24"), 3)) + "Em"
-    elif value < "1E30":
+    elif value < Decimal("1E30"):
         output = str(round(Decimal(value) / Decimal("1E27"), 3)) + "Zm"
     elif value < uni:
         output = str(round(Decimal(value) / Decimal("1E30"), 3)) + "Ym"
-    elif value < uni * ("1E3"):
+    elif value < uni * Decimal("1E3"):
         output = str(round(Decimal(value) / uni, 3)) + "uni"
-    elif value < uni * ("1E6"):
+    elif value < uni * Decimal("1E6"):
         output = str(round(Decimal(value) / uni / Decimal("1E3"), 3)) + "kuni"
-    elif value < uni * ("1E9"):
+    elif value < uni * Decimal("1E9"):
         output = str(round(Decimal(value) / uni / Decimal("1E6"), 3)) + "Muni"
-    elif value < uni * ("1E12"):
+    elif value < uni * Decimal("1E12"):
         output = str(round(Decimal(value) / uni / Decimal("1E9"), 3)) + "Guni"
-    elif value < uni * ("1E15"):
+    elif value < uni * Decimal("1E15"):
         output = str(round(Decimal(value) / uni / Decimal("1E12"), 3)) + "Tuni"
-    elif value < uni * ("1E18"):
+    elif value < uni * Decimal("1E18"):
         output = str(round(Decimal(value) / uni / Decimal("1E15"), 3)) + "Puni"
-    elif value < uni * ("1E21"):
+    elif value < uni * Decimal("1E21"):
         output = str(round(Decimal(value) / uni / Decimal("1E18"), 3)) + "Euni"
-    elif value < uni * ("1E24"):
+    elif value < uni * Decimal("1E24"):
         output = str(round(Decimal(value) / uni / Decimal("1E21"), 3)) + "Zuni"
-    elif value < uni * ("1E27"):
+    elif value < uni * Decimal("1E27"):
         output = str(round(Decimal(value) / uni / Decimal("1E24"), 3)) + "Yuni"
     else:
         return "∞"
@@ -541,30 +541,30 @@ def fromSVacc(value):
 def fromSVUSA(value):
     value = float(value)
     output = ""
-    if value <= 0:
+    if value <= Decimal("0"):
         return "0"
-    elif value < 0.000000000000001:
+    elif value < Decimal("0.000000000000001"):
         output = str(round(Decimal(value) * Decimal("1E18"), 2)) + "ym"
-    elif value < 0.000000000001:
+    elif value < Decimal("0.000000000001"):
         output = str(round(Decimal(value) * Decimal("1E15"), 2)) + "zm"
-    elif value < 0.000000001:
+    elif value < Decimal("0.000000001"):
         output = str(round(Decimal(value) * Decimal("1E12"), 2)) + "am"
-    elif value < 0.000001:
+    elif value < Decimal("0.000001"):
         output = str(round(Decimal(value) * Decimal("1E9"), 2)) + "fm"
-    elif value < 0.001:
+    elif value < Decimal("0.001"):
         output = str(round(Decimal(value) * Decimal("1E6"), 2)) + "pm"
-    elif value < 1:
+    elif value < Decimal("1"):
         output = str(round(Decimal(value) * Decimal("1E3"), 2)) + "nm"
-    elif value < "1E2":
+    elif value < Decimal("1E2"):
         output = str(round(Decimal(value), 2)) + "µm"
-    elif value < "1E4":
+    elif value < Decimal("1E4"):
         output = str(round(Decimal(value) / Decimal("1E3"), 2)) + "mm"
     elif value < foot:
         output = str(round(Decimal(value) / inch, 2)) + "in"
     elif value < mile:
         feet = floor(Decimal(value) / foot)
         fulloninches = round(Decimal(value) / inch, 2)
-        feettoinches = feet * Decimal(12)
+        feettoinches = feet * Decimal("12")
         inches = fulloninches - feettoinches
         output = str(feet) + "'" + str(inches) + "\""
     elif value < au:
@@ -573,23 +573,23 @@ def fromSVUSA(value):
         output = str(round(Decimal(value) / au, 2)) + "AU"
     elif value < uni / 10:
         output = str(round(Decimal(value) / ly, 2)) + "ly"
-    elif value < uni * ("1E3"):
+    elif value < uni * Decimal("1E3"):
         output = str(round(Decimal(value) / uni, 2)) + "uni"
-    elif value < uni * ("1E6"):
+    elif value < uni * Decimal("1E6"):
         output = str(round(Decimal(value) / uni / Decimal("1E3"), 2)) + "kuni"
-    elif value < uni * ("1E9"):
+    elif value < uni * Decimal("1E9"):
         output = str(round(Decimal(value) / uni / Decimal("1E6"), 2)) + "Muni"
-    elif value < uni * ("1E12"):
+    elif value < uni * Decimal("1E12"):
         output = str(round(Decimal(value) / uni / Decimal("1E9"), 2)) + "Guni"
-    elif value < uni * ("1E15"):
+    elif value < uni * Decimal("1E15"):
         output = str(round(Decimal(value) / uni / Decimal("1E12"), 2)) + "Tuni"
-    elif value < uni * ("1E18"):
+    elif value < uni * Decimal("1E18"):
         output = str(round(Decimal(value) / uni / Decimal("1E15"), 2)) + "Puni"
-    elif value < uni * ("1E21"):
+    elif value < uni * Decimal("1E21"):
         output = str(round(Decimal(value) / uni / Decimal("1E18"), 2)) + "Euni"
-    elif value < uni * ("1E24"):
+    elif value < uni * Decimal("1E24"):
         output = str(round(Decimal(value) / uni / Decimal("1E21"), 2)) + "Zuni"
-    elif value < uni * ("1E27"):
+    elif value < uni * Decimal("1E27"):
         output = str(round(Decimal(value) / uni / Decimal("1E24"), 2)) + "Yuni"
     else:
         return "∞"
@@ -673,61 +673,61 @@ def fromWV(value):
     value = Decimal(value)
     if value <= 0:
         return "0"
-    elif value < 0.000000000000000001:
+    elif value < Decimal("0.000000000000000001"):
         output = str(round(Decimal(value) * Decimal("1E21"), 1)) + "yg"
-    elif value < 0.000000000000001:
+    elif value < Decimal("0.000000000000001"):
         output = str(round(Decimal(value) * Decimal("1E18"), 1)) + "zg"
-    elif value < 0.000000000001:
+    elif value < Decimal("0.000000000001"):
         output = str(round(Decimal(value) * Decimal("1E15"), 1)) + "ag"
-    elif value < 0.000000001:
+    elif value < Decimal("0.000000001"):
         output = str(round(Decimal(value) * Decimal("1E12"), 1)) + "fg"
-    elif value < 0.000001:
+    elif value < Decimal("0.000001"):
         output = str(round(Decimal(value) * Decimal("1E9"), 1)) + "pg"
-    elif value < 0.001:
+    elif value < Decimal("0.001"):
         output = str(round(Decimal(value) * Decimal("1E6"), 1)) + "ng"
-    elif value < 1:
+    elif value < Decimal("1"):
         output = str(round(Decimal(value) * Decimal("1E3"), 1)) + "µg"
-    elif value < 1000:
+    elif value < Decimal("1000"):
         output = str(round(Decimal(value), 1)) + "mg"
-    elif value < 10000000:
+    elif value < Decimal("10000000"):
         output = str(round(Decimal(value) / Decimal("1E3"), 1)) + "g"
-    elif value < 1000000000:
+    elif value < Decimal("1000000000"):
         output = str(round(Decimal(value) / Decimal("1E6"), 1)) + "kg"
-    elif value < 100000000000:
+    elif value < Decimal("100000000000"):
         output = str(round(Decimal(value) / Decimal("1E9"), 1)) + "t"
-    elif value < 100000000000000:
+    elif value < Decimal("100000000000000"):
         output = str(round(Decimal(value) / Decimal("1E12"), 1)) + "kt"
-    elif value < 100000000000000000:
+    elif value < Decimal("100000000000000000"):
         output = str(round(Decimal(value) / Decimal("1E15"), 1)) + "Mt"
-    elif value < 100000000000000000000:
+    elif value < Decimal("100000000000000000000"):
         output = str(round(Decimal(value) / Decimal("1E18"), 1)) + "Gt"
-    elif value < 100000000000000000000000:
+    elif value < Decimal("100000000000000000000000"):
         output = str(round(Decimal(value) / Decimal("1E21"), 1)) + "Tt"
-    elif value < 100000000000000000000000000:
+    elif value < Decimal("100000000000000000000000000"):
         output = str(round(Decimal(value) / Decimal("1E24"), 1)) + "Pt"
-    elif value < 100000000000000000000000000000:
+    elif value < Decimal("100000000000000000000000000000"):
         output = str(round(Decimal(value) / Decimal("1E27"), 1)) + "Et"
-    elif value < 100000000000000000000000000000000:
+    elif value < Decimal("100000000000000000000000000000000"):
         output = str(round(Decimal(value) / Decimal("1E30"), 1)) + "Zt"
-    elif value < 100000000000000000000000000000000000:
+    elif value < Decimal("100000000000000000000000000000000000"):
         output = str(round(Decimal(value) / Decimal("1E33"), 1)) + "Yt"
-    elif value < uniw * ("1E3"):
+    elif value < uniw * Decimal("1E3"):
         output = str(round(Decimal(value) / uniw, 1)) + "uni"
-    elif value < uniw * ("1E6"):
+    elif value < uniw * Decimal("1E6"):
         output = str(round(Decimal(value) / uniw / Decimal("1E3"), 1)) + "kuni"
-    elif value < uniw * ("1E9"):
+    elif value < uniw * Decimal("1E9"):
         output = str(round(Decimal(value) / uniw / Decimal("1E6"), 1)) + "Muni"
-    elif value < uniw * ("1E12"):
+    elif value < uniw * Decimal("1E12"):
         output = str(round(Decimal(value) / uniw / Decimal("1E9"), 1)) + "Guni"
-    elif value < uniw * ("1E15"):
+    elif value < uniw * Decimal("1E15"):
         output = str(round(Decimal(value) / uniw / Decimal("1E12"), 1)) + "Tuni"
-    elif value < uniw * ("1E18"):
+    elif value < uniw * Decimal("1E18"):
         output = str(round(Decimal(value) / uniw / Decimal("1E15"), 1)) + "Puni"
-    elif value < uniw * ("1E21"):
+    elif value < uniw * Decimal("1E21"):
         output = str(round(Decimal(value) / uniw / Decimal("1E18"), 1)) + "Euni"
-    elif value < uniw * ("1E24"):
+    elif value < uniw * Decimal("1E24"):
         output = str(round(Decimal(value) / uniw / Decimal("1E21"), 1)) + "Zuni"
-    elif value < uniw * ("1E27"):
+    elif value < uniw * Decimal("1E27"):
         output = str(round(Decimal(value) / uniw / Decimal("1E24"), 1)) + "Yuni"
     else:
         return "∞"
@@ -739,21 +739,21 @@ def fromWVUSA(value):
     value = Decimal(value)
     if value == 0:
         return "almost nothing"
-    elif value < 0.000000000000000001:
+    elif value < Decimal("0.000000000000000001"):
         output = str(round(Decimal(value) * Decimal("1E21"), 1)) + "yg"
-    elif value < 0.000000000000001:
+    elif value < Decimal("0.000000000000001"):
         output = str(round(Decimal(value) * Decimal("1E18"), 1)) + "zg"
-    elif value < 0.000000000001:
+    elif value < Decimal("0.000000000001"):
         output = str(round(Decimal(value) * Decimal("1E15"), 1)) + "ag"
-    elif value < 0.000000001:
+    elif value < Decimal("0.000000001"):
         output = str(round(Decimal(value) * Decimal("1E12"), 1)) + "fg"
-    elif value < 0.000001:
+    elif value < Decimal("0.000001"):
         output = str(round(Decimal(value) * Decimal("1E9"), 1)) + "pg"
-    elif value < 0.001:
+    elif value < Decimal("0.001"):
         output = str(round(Decimal(value) * Decimal("1E6"), 1)) + "ng"
-    elif value < 1:
+    elif value < Decimal("1"):
         output = str(round(Decimal(value) * Decimal("1E3"), 1)) + "µg"
-    elif value < 1000:
+    elif value < Decimal("1000"):
         output = str(round(Decimal(value), 1)) + "mg"
     elif value < (ounce / 10):
         output = str(round(Decimal(value) / Decimal("1E3"), 1)) + "g"
@@ -769,23 +769,23 @@ def fromWVUSA(value):
         output = str(place_value(round(Decimal(value) / sun, 1))) + " Suns"
     elif value < uniw:
         output = str(place_value(round(Decimal(value) / milkyway, 1))) + " Milky Ways"
-    elif value < uniw * ("1E3"):
+    elif value < uniw * Decimal("1E3"):
         output = str(round(Decimal(value) / uniw, 1)) + "uni"
-    elif value < uniw * ("1E6"):
+    elif value < uniw * Decimal("1E6"):
         output = str(round(Decimal(value) / uniw / Decimal("1E3"), 1)) + "kuni"
-    elif value < uniw * ("1E9"):
+    elif value < uniw * Decimal("1E9"):
         output = str(round(Decimal(value) / uniw / Decimal("1E6"), 1)) + "Muni"
-    elif value < uniw * ("1E12"):
+    elif value < uniw * Decimal("1E12"):
         output = str(round(Decimal(value) / uniw / Decimal("1E9"), 1)) + "Guni"
-    elif value < uniw * ("1E15"):
+    elif value < uniw * Decimal("1E15"):
         output = str(round(Decimal(value) / uniw / Decimal("1E12"), 1)) + "Tuni"
-    elif value < uniw * ("1E18"):
+    elif value < uniw * Decimal("1E18"):
         output = str(round(Decimal(value) / uniw / Decimal("1E15"), 1)) + "Puni"
-    elif value < uniw * ("1E21"):
+    elif value < uniw * Decimal("1E21"):
         output = str(round(Decimal(value) / uniw / Decimal("1E18"), 1)) + "Euni"
-    elif value < uniw * ("1E24"):
+    elif value < uniw * Decimal("1E24"):
         output = str(round(Decimal(value) / uniw / Decimal("1E21"), 1)) + "Zuni"
-    elif value < uniw * ("1E27"):
+    elif value < uniw * Decimal("1E27"):
         output = str(round(Decimal(value) / uniw / Decimal("1E24"), 1)) + "Yuni"
     else:
         return "∞"

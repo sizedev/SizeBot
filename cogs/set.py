@@ -203,8 +203,8 @@ class SetCog(commands.Cog):
         maxheightSV = toSV(getnum(maxheightstr), getlet(maxheightstr))
 
         # Clamp min and max heights to acceptable values
-        minheightSV = clamp(0, minheightSV, infinity)
-        maxheightSV = clamp(0, maxheightSV, infinity)
+        minheightSV = clamp(Decimal("0"), minheightSV, infinity)
+        maxheightSV = clamp(Decimal("0"), maxheightSV, infinity)
 
         # Swap values if provided in the wrong order
         if minheightSV > maxheightSV:
