@@ -6,7 +6,7 @@ from discord.ext import commands
 
 # TODO: Fix this...
 from globalsb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC
-from globalsb import read_user, folder, getnum, getlet, isFeetAndInchesAndIfSoFixIt, place_value
+from globalsb import read_user, folder, getnum, getlet, isFeetAndInchesAndIfSoFixIt
 from globalsb import defaultheight, defaultweight, defaultdensity, inch
 from globalsb import fromSVacc, fromSVUSA, fromSV, fromWV, fromWVUSA, toShoeSize, toSV
 from globalsb import printtab
@@ -22,6 +22,13 @@ thumbfactor = Decimal(1) / Decimal(69.06)
 fingerprintfactor = Decimal(1) / Decimal(35080)
 hairwidthfactor = Decimal(1) / Decimal(23387)
 pointerfactor = Decimal(1) / Decimal(17.26)
+
+
+def fancyFormat(v):
+    if v > Decimal("1E15"):
+        return f"{v:.2e}"
+    else:
+        return f"{v:,.4}"
 
 
 # TODO: Move to dedicated module.
@@ -209,14 +216,14 @@ class StatsCog(commands.Cog):
         smalltobigpointer = fromSVacc(s2bh * pointerfactor)
         bigtosmallpointerUSA = fromSVUSA(b2sh * pointerfactor)
         smalltobigpointerUSA = fromSVUSA(s2bh * pointerfactor)
-        timestaller = place_value(round((bch / sch), 3))
+        timestaller = fancyFormat(round(bch / sch, 3))
 
         # Print compare.
         return (
             "**Comparison:**\n"
             f"{bigusertag} is really:\n"
-            f"{printtab}Real Height: {fromSVacc(bch)} / {fromSVUSA(bch)} ({place_value(dispbigmult)}x basesize)\n"
-            f"{printtab}Real Weight: {fromWV(bcw)} / {fromWVUSA(bcw)}. ({place_value(dispbigmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {fromSVacc(bch)} / {fromSVUSA(bch)} ({fancyFormat(dispbigmult)}x basesize)\n"
+            f"{printtab}Real Weight: {fromWV(bcw)} / {fromWVUSA(bcw)}. ({fancyFormat(dispbigmultcubed)}x basesize)\n"
             f"To {smallusertag}, {bigusertag} looks:\n"
             f"{printtab}Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
             f"{printtab}Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
@@ -231,8 +238,8 @@ class StatsCog(commands.Cog):
             f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
             "\n"
             f"{smallusertag} is really:\n"
-            f"{printtab}Real Height: {fromSVacc(sch)} / {fromSVUSA(sch)} ({place_value(dispsmallmult)}x basesize)\n"
-            f"{printtab}Real Weight: {fromWV(scw)} / {fromWVUSA(scw)}. ({place_value(dispsmallmultcubed)}x basesize)\n"
+            f"{printtab}Real Height: {fromSVacc(sch)} / {fromSVUSA(sch)} ({fancyFormat(dispsmallmult)}x basesize)\n"
+            f"{printtab}Real Weight: {fromWV(scw)} / {fromWVUSA(scw)}. ({fancyFormat(dispsmallmultcubed)}x basesize)\n"
             f"To {bigusertag}, {smallusertag} looks:\n"
             f"{printtab}Height: {smalltobigheight} / {smalltobigheightUSA}\n"
             f"{printtab}Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
@@ -312,30 +319,10 @@ class StatsCog(commands.Cog):
         pointer_m = fromSVUSA(pointer)
         pointer_u = fromSVacc(pointer)
 
-        if multiplier > Decimal("1E15"):
-            multiplier_x = f"{multiplier:.2e}"
-        else:
-            multiplier_x = f"{multiplier:,.4}"
-
-        if defmultiplier > Decimal("1E15"):
-            defmultiplier_x = f"{defmultiplier:.2e}"
-        else:
-            defmultiplier_x = f"{defmultiplier:,.4}"
-
-        if (multiplier ** 3) > Decimal("1E15"):
-            multipliercubed_x = f"{(multiplier ** 3):.2e}"
-        else:
-            multipliercubed_x = f"{(multiplier ** 3):,.4}"
-
-        if (defmultiplier ** 3) > Decimal("1E15"):
-            defmultipliercubed_x = f"{(defmultiplier ** 3):.2e}"
-        else:
-            defmultipliercubed_x = f"{(defmultiplier ** 3):,.4}"
-
         return (
             f"**{usertag} Stats:**\n"
-            f"Current Height: {currentheight_m} / {currentheight_u} ({multiplier_x}x character base, {defmultiplier_x}x average)\n"
-            f"Current Weight: {calculatedweight_m} / {calculatedweight_u} ({multipliercubed_x}x charbase, {defmultipliercubed_x}x average)\n"
+            f"Current Height: {currentheight_m} / {currentheight_u} ({fancyFormat(multiplier)}x character base, {fancyFormat(defmultiplier)}x average)\n"
+            f"Current Weight: {calculatedweight_m} / {calculatedweight_u} ({fancyFormat(multiplier ** 3)}x charbase, {fancyFormat(defmultiplier ** 3)}x average)\n"
             f"Current Density: {density}x\n"
             f"Foot Length: {footheight_m} / {footheight_u} ({shoesize})\n"
             f"Foot Width: {footwidth_m} / {footwidth_u}\n"

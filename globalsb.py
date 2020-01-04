@@ -727,7 +727,7 @@ def toShoeSize(footlength):
         shoesize += 12 + Decimal(1 / 3)
     if shoesize < 1:
         return "No shoes exist this small!"
-    shoesize = place_value(round_nearest_half(shoesize))
+    shoesize = f"{round_nearest_half(shoesize)}:,"
     if child:
         shoesize = "Children's " + shoesize
     return "Size US " + shoesize
