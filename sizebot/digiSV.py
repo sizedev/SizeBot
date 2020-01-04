@@ -46,7 +46,16 @@ def removeBrackets(s):
 
 
 dividers = "|".join(["/", "per", "every"])
-re_rate = re.compile(f"(P<multOrSv>.*) *({dividers}) *(P<Tv>.*)")
+stopDividers = "|".join(["until", "for", "->"])
+re_rate = re.compile(f"(P<multOrSv>.*) *({dividers}) *(P<Tv>.*) *({stopDividers} *(P<stop>.*))?")
+
+
+def tryOrNone(fn, val):
+    try:
+        result = fn(val)
+    except errors.InvalidSizeValue:
+        result = None
+    return result
 
 
 def toRate(s):
@@ -55,24 +64,40 @@ def toRate(s):
         raise errors.InvalidRateValue(s)
     multOrSvStr = match.groups("multOrSv")
     tvStr = match.groups("Tv")
-    try:
-        valueTV = toTV(tvStr)
-    except errors.InvalidSizeValue:
+    stopStr = match.groups("stop")
+
+    valueTV = tryOrNone(tvStr)
+    if valueTV is None:
         raise errors.InvalidSizeValue(s)
 
-    try:
-        valueSV = toSV(multOrSvStr)
-    except errors.InvalidSizeValue:
-        valueSV = None
-
+    valueSV = tryOrNone(toSV, multOrSvStr)
     valueMult = None
     if valueSV is None:
-        try:
-            valueMult = toMult(multOrSvStr)
-        except errors.InvalidSizeValue:
+        valueMult = tryOrNone(toMult, multOrSvStr)
+    if valueSV is None and valueMult is None:
+        raise errors.InvalidSizeValue(s)
+
+    stopSV = None
+    stopTV = None
+    if stopStr is not None:
+        stopSV = tryOrNone(toSV, stopStr)
+        if stopSV is None:
+            stopTV = tryOrNone(toTV, stopStr)
+        if stopSV is None and stopTV is None:
             raise errors.InvalidSizeValue(s)
 
-    return valueSV, valueMult, valueTV
+    if valueSV is not None:
+        addPerSec = valueSV / valueTV
+    else:
+        addPerSec = 0
+
+    if valueMult is not None:
+        mulPerSec = valueMult / valueTV
+    else:
+        mulPerSec = 1
+
+    return addPerSec, mulPerSec, stopSV, stopTV
+
 
 # Get letters from string
 def getTVPair(s):
