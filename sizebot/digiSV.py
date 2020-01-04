@@ -45,9 +45,34 @@ def removeBrackets(s):
     return s
 
 
-def toRate(s):
-    pass
+dividers = "|".join(["/", "per", "every"])
+re_rate = re.compile(f"(P<multOrSv>.*) *({dividers}) *(P<Tv>.*)")
 
+
+def toRate(s):
+    match = re.match(s)
+    if match is None:
+        raise errors.InvalidRateValue(s)
+    multOrSvStr = match.groups("multOrSv")
+    tvStr = match.groups("Tv")
+    try:
+        valueTV = toTV(tvStr)
+    except errors.InvalidSizeValue:
+        raise errors.InvalidSizeValue(s)
+
+    try:
+        valueSV = toSV(multOrSvStr)
+    except errors.InvalidSizeValue:
+        valueSV = None
+
+    valueMult = None
+    if valueSV is None:
+        try:
+            valueMult = toMult(multOrSvStr)
+        except errors.InvalidSizeValue:
+            raise errors.InvalidSizeValue(s)
+
+    return valueSV, valueMult, valueTV
 
 # Get letters from string
 def getTVPair(s):
@@ -60,11 +85,11 @@ def getTVPair(s):
 
 
 def toTV(s):
-    value, unit = getSVPair(s)
+    value, unit = getTVPair(s)
     if value is None or unit is None:
         raise errors.InvalidSizeValue(s)
     unitlower = unit.lower()
-    value = Decimal(value)    
+    value = Decimal(value)
     if unitlower in ["second", "seconds"] or unit == "s":
         scale = Decimal("1E0")
     else:
