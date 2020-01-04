@@ -11,22 +11,40 @@ from sizebot import digisize
 
 
 class Change:
-    def __init__(self, userid, *, addPerSec=0, mulPerSec=1):
+    def __init__(self, userid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None):
         self.userid = userid
-        self.addPerSec = Decimal(addPerSec)
-        self.mulPerSec = Decimal(mulPerSec)
-        self.lastRan = Decimal(time.time())
+        self.addPerSec = addPerSec
+        self.mulPerSec = mulPerSec
+        self.stopSV = stopSV
+        self.stopTV = stopTV
+        self.startTime = Decimal(time.time())
+        self.lastRan = self.startTime
 
     async def apply(self):
+        running = True
         now = Decimal(time.time())
+        if self.endtime is not None and self.endtime <= now:
+            now = self.endtime
+            running = False
         seconds = now - self.lastRan
         self.lastRan = now
-        addPerTick = seconds * self.addPerSec
+        addPerTick = self.addPerSec * seconds
         mulPerTick = self.mulPerTick ** seconds
         user = userdb.load(self.userid)
-        user.height = (user.height * mulPerTick) + addPerTick
+        newheight = (user.height * mulPerTick) + addPerTick
+        if self.stopSV is not None and ((newheight < user.height and self.stopSV >= newheight) or (newheight > user.height and self.stopSV <= newheight)):
+            newheight = self.stopSV
+            running = False
+        user.height = newheight
         userdb.save()
         await digisize.nickUpdate(self.userid)
+        return running
+
+    @property
+    def endtime(self):
+        if self.stopTV is None:
+            return None
+        return self.startTime + self.stopTV
 
 
 class ChangeCog(commands.Cog):
