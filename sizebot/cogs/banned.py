@@ -1,13 +1,16 @@
 import discord
 
 
-# Disable commands for users with the SizeBot_Banned role.
+def isBanned(member):
+    return discord.utils.get(member.roles, name = "SizeBot_Banned") is not None
+
+
+# Disable commands for users with the SizeBot_Banned role
 def check(ctx):
     if not isinstance(ctx.channel, discord.abc.GuildChannel):
         return False
 
-    role = discord.utils.get(ctx.author.roles, name = "SizeBot_Banned")
-    return role is None
+    return not isBanned(ctx.author)
 
 
 # Necessary
