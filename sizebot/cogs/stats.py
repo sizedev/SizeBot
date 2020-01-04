@@ -8,7 +8,6 @@ from discord.ext import commands
 from sizebot import digilogger as logger
 # TODO: Fix this...
 from sizebot import userdb
-from sizebot import digiSV
 from sizebot.digitypes import SV
 from sizebot import digisize
 

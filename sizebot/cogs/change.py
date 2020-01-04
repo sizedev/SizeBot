@@ -11,7 +11,9 @@ from sizebot import digisize
 
 
 class Change:
-    def __init__(self, userid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None):
+    def __init__(self, bot, userid, guildid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None):
+        self.bot = bot
+        self.guildid = guildid
         self.userid = userid
         self.addPerSec = addPerSec
         self.mulPerSec = mulPerSec
@@ -29,15 +31,17 @@ class Change:
         seconds = now - self.lastRan
         self.lastRan = now
         addPerTick = self.addPerSec * seconds
-        mulPerTick = self.mulPerTick ** seconds
-        user = userdb.load(self.userid)
-        newheight = (user.height * mulPerTick) + addPerTick
-        if self.stopSV is not None and ((newheight < user.height and self.stopSV >= newheight) or (newheight > user.height and self.stopSV <= newheight)):
+        mulPerTick = self.mulPerSec ** seconds
+        userdata = userdb.load(self.userid)
+        newheight = (userdata.height * mulPerTick) + addPerTick
+        if self.stopSV is not None and ((newheight < userdata.height and self.stopSV >= newheight) or (newheight > userdata.height and self.stopSV <= newheight)):
             newheight = self.stopSV
             running = False
-        user.height = newheight
-        userdb.save()
-        await digisize.nickUpdate(self.userid)
+        userdata.height = newheight
+        userdb.save(userdata)
+        guild = self.bot.get_guild(self.guildid)
+        member = guild.get_member(self.userid)
+        await digisize.nickUpdate(member)
         return running
 
     @property
@@ -51,6 +55,10 @@ class ChangeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.changes = dict()
+        self.changeTask.start()
+
+    def cog_unload(self):
+        self.changeTask.cancel()
 
     @commands.command()
     async def change(self, ctx, style, *, amount):
@@ -60,23 +68,20 @@ class ChangeCog(commands.Cog):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
         await ctx.send(f"User <@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} ({digiSV.fromSV(userdata.height, 'u')}) tall.")
 
-    # TODO: Switch to digisize.changeUser()
     @commands.command()
-    async def slowchange(self, ctx, style: str, rate: str):
-        # TODO: calculate these from rate?
-        amount = ""
-        delay = ""
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {style}-style {amount} every {delay} minutes.")
-
-        change = Change(ctx.message.author.id, addPerSec=0, mulPerSec=1)
-
-        self.changes[ctx.message.author.id] = change
+    async def slowchange(self, ctx, *, rateStr: str):
+        addPerSec, mulPerSec, stopSV, stopTV = digiSV.toRate(rateStr)
+        key = ctx.message.author.id, ctx.message.guild.id
+        change = Change(self.bot, ctx.message.author.id, ctx.message.guild.id, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
+        self.changes[key] = change
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {addPerSec:+}/sec and *{mulPerSec}/sec until {stopSV and digiSV.fromSV(stopSV)} for {stopTV} seconds.")
 
     @commands.command()
     async def stopchange(self, ctx):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) stopped slow-changing.")
 
-        deleted = self.changes.pop(ctx.message.author.id, None)
+        key = ctx.message.author.id, ctx.message.guild.id
+        deleted = self.changes.pop(key, None)
 
         if deleted is None:
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
@@ -110,8 +115,15 @@ class ChangeCog(commands.Cog):
     # TODO: Does this restart if there are errors?
     @tasks.loop(seconds=6)
     async def changeTask(self):
-        for change in self.changes.values():
-            await change.apply()
+        runningChanges = {}
+        for key, change in self.changes.items():
+            try:
+                running = await change.apply()
+                if running:
+                    runningChanges[key] = change
+            except Exception as e:
+                await logger.error(e)
+        self.changes = runningChanges
 
 
 # Necessary.
