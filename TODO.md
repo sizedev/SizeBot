@@ -17,7 +17,7 @@
 * ~~Make a custom emoji dictionary~~
 * Commands
     * Make register commands easier to use and give better use output (simpler usage and better defaults)
-    ~~* Change the way &slowchange works (&slowchange \<rate\>)~~
+    * ~~Change the way &slowchange works (&slowchange \<rate\>)~~
     * Create convert command (&convert \<size\> \<new unit\>)
     * Custom base height/weight for raw compares
     * Create eval command (for devs only)
