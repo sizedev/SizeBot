@@ -2,6 +2,7 @@ import re
 
 from sizebot.digidecimal import Decimal
 from sizebot import digierror as errors
+from sizebot.utils import trimzeroes
 
 # Unit constants
 # Height [meters]
@@ -20,13 +21,6 @@ earth = Decimal("5972198600000000000000000000")
 sun = Decimal("1988435000000000000000000000000000")
 milkyway = Decimal("95000000000000000000000000000000000000000000")
 uniw = Decimal("3400000000000000000000000000000000000000000000000000000000")
-
-
-# Format a Decimal to a string, removing exponents and trailing zeroes after the decimal
-def formatDecimal(d):
-    # `normalize()` removes ALL trailing zeroes, including ones before the decimal place
-    # `+ 0` readds the trailing zeroes before the decimal place, if necessary
-    return str(d.normalize() + 0)
 
 
 def roundDecimal(d, accuracy = 0):
@@ -354,7 +348,7 @@ class Unit():
         if rounded <= 0:
             formatted = "0"
         else:
-            formatted = formatDecimal(rounded) + self.symbol
+            formatted = trimzeroes(rounded) + self.symbol
 
         return formatted
 
@@ -379,7 +373,7 @@ class FeetAndInchesUnit(Unit):
         inchval = value / inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
         roundedinchval = roundDecimal(inchval, accuracy)
-        formatted = formatDecimal(feetval) + self.footsymbol + formatDecimal(roundedinchval) + self.inchsymbol
+        formatted = trimzeroes(feetval) + self.footsymbol + trimzeroes(roundedinchval) + self.inchsymbol
         return formatted
 
 
