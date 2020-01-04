@@ -61,6 +61,9 @@
 * This Points: if someone posts ^, or :this:, or similar, give a This Point to the person above (unless that person also posted a "this", in which case, give it to the person above that, etc.)
 * Future proofing.
     * Make module functions that make command code easy to read, work with, and make new commands. \[Digi calls this "the SizeAPI"\]
+* Telemetry
+    * Command usage amount
+    * Mistyped commands
 
 #### Figure out database schema.
 
