@@ -23,6 +23,7 @@
     * Create eval command (for devs only)
     * Help command
     * Implement SB3's &roll command.
+* Save/load of tasks on restart.
 * Make SizeBot respond to DMs in a helpful way.
     * Allow users to use DM-safe commands in DMs (about, help, bug, donate, convert, roll) \[are there more?\]
     * Otherwise, tell them they have to other commands in a server.
@@ -61,6 +62,9 @@
 * This Points: if someone posts ^, or :this:, or similar, give a This Point to the person above (unless that person also posted a "this", in which case, give it to the person above that, etc.)
 * Future proofing.
     * Make module functions that make command code easy to read, work with, and make new commands. \[Digi calls this "the SizeAPI"\]
+* Telemetry
+    * Command usage amount
+    * Mistyped commands
 
 #### Figure out database schema.
 
