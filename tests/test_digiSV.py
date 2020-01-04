@@ -137,3 +137,8 @@ def test_toRate_symbols_div_nostop():
 def test_toRate_2x():
     result = digiSV.toRate("8x/3s")
     assert result == (0, 2, None, None)
+
+
+def test_toRate_omitOne():
+    result = digiSV.toRate("2 meters per second")
+    assert result == (2, 1, None, None)
