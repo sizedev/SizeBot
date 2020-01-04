@@ -41,6 +41,7 @@
     * Flag some units as only input units and not display units.
     * Fix the giant if statements<sup>?</sup>
     * Make no units ambiguous. (universes, Earths, Suns...)
+    * Any value under 0.001ym gets displayed as 0 (currently not true for stats)
 * Basic English syntax for some commands.
 * Make foot length optionally customizable.
 * Command metadata
