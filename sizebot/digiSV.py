@@ -102,7 +102,7 @@ def toRate(s):
         addPerSec = 0
 
     if valueMult is not None:
-        mulPerSec = valueMult / valueTV
+        mulPerSec = valueMult ** (1 / valueTV)
     else:
         mulPerSec = 1
 
