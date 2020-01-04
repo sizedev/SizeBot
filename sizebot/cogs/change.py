@@ -76,7 +76,9 @@ class ChangeCog(commands.Cog):
     @commands.check(requireAdmin)
     async def changes(self, ctx):
         changeDump = "\n".join(str(c) for c in self.changes.values())
-        ctx.message.author.send(changeDump)
+        if not changeDump:
+            changeDump = "No changes"
+        await ctx.message.author.send("**CHANGES**\n" + changeDump)
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) dumped the running changes.")
 
     @commands.command()
