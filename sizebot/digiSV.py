@@ -74,6 +74,7 @@ def toRate(s):
 
     return valueSV, valueMult, valueTV
 
+
 # Get letters from string
 def getTVPair(s):
     s = removeBrackets(s)
@@ -90,8 +91,20 @@ def toTV(s):
         raise errors.InvalidSizeValue(s)
     unitlower = unit.lower()
     value = Decimal(value)
-    if unitlower in ["second", "seconds"] or unit == "s":
+    if unitlower in ["second", "seconds", "sec"] or unit == "s":
         scale = Decimal("1E0")
+    elif unitlower in ["minute", "minutes", "min"] or unit == "m":
+        scale = Decimal("60")
+    elif unitlower in ["hour", "hours", "hr"] or unit == "h":
+        scale = Decimal("3600")
+    elif unitlower in ["day", "days", "dy"] or unit == "d":
+        scale = Decimal("3600") * Decimal("24")
+    elif unitlower in ["week", "weeks", "wk"] or unit == "w":
+        scale = Decimal("3600") * Decimal("24") * Decimal("7")
+    elif unitlower in ["month", "months"]:
+        scale = Decimal("3600") * Decimal("24") * Decimal("30")
+    elif unitlower in ["year", "years", "yr"] or unit in ["y", "a"]:
+        scale = Decimal("3600") * Decimal("24") * Decimal("365")
     else:
         raise errors.InvalidSizeValue(s)
     return value / scale
