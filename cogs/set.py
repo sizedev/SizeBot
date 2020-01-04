@@ -231,8 +231,8 @@ class SetCog(commands.Cog):
         if userarray[DISP].rstrip().upper() == "Y":
             await nickupdate(ctx.message.author)
 
-        logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) set a random height, and are now {newheight}SV tall.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now {fromSV(userarray[CHEI])} tall. ({fromSVUSA(userarray[CHEI])})")
+        logger.msg(f"User {ctx.message.author.id} ({ctx.message.author.nick}) set a random height, and are now {fromSV(userarray[CHEI])} ({fromSVUSA(userarray[CHEI])}) tall.")
+        await ctx.send(f"<@{ctx.message.author.id}> is now {fromSV(userarray[CHEI])} ({fromSVUSA(userarray[CHEI])}) tall.")
 
     @setrandomheight.error
     async def setrandomheight_handler(self, ctx, error):
