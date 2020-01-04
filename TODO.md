@@ -65,6 +65,7 @@
 * Telemetry
     * Command usage amount
     * Mistyped commands
+* Change status on Discord to "In debugger mode!" (or similar) when running in a debugger.
 
 #### Figure out database schema.
 
