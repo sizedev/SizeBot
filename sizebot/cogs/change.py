@@ -15,10 +15,12 @@ class Change:
         self.userid = userid
         self.addPerSec = Decimal(addPerSec)
         self.mulPerSec = Decimal(mulPerSec)
-        self.lastRan = time.time()
+        self.lastRan = Decimal(time.time())
 
     async def apply(self):
-        seconds = Decimal(time.time())
+        now = Decimal(time.time())
+        seconds = self.lastRan - now
+        self.lastRan = now
         addPerTick = seconds * self.addPerSec
         mulPerTick = self.mulPerTick ** seconds
         user = userdb.load(self.userid)
@@ -30,7 +32,7 @@ class Change:
 class ChangeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.changes = {}
+        self.changes = dict()
 
     @commands.command()
     async def change(self, ctx, style, *, amount):
