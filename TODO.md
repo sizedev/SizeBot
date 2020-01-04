@@ -17,12 +17,12 @@
 * ~~Make a custom emoji dictionary~~
 * Commands
     * Make register commands easier to use and give better use output (simpler usage and better defaults)
-    * Change the way &slowchange works (&slowchange \<rate\>)
+    ~~* Change the way &slowchange works (&slowchange \<rate\>)~~
     * Create convert command (&convert \<size\> \<new unit\>)
     * Custom base height/weight for raw compares
     * Create eval command (for devs only)
     * Help command
-    * Implement SB3's &roll command.
+    ~~* Implement SB3's &roll command.~~
 * Save/load of tasks on restart.
 * Make SizeBot respond to DMs in a helpful way.
     * Allow users to use DM-safe commands in DMs (about, help, bug, donate, convert, roll) \[are there more?\]
@@ -65,6 +65,7 @@
 * Telemetry
     * Command usage amount
     * Mistyped commands
+    * How often we're hitting rate limits
 * Change status on Discord to "In debugger mode!" (or similar) when running in a debugger.
 
 #### Figure out database schema.
