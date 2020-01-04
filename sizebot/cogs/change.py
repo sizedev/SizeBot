@@ -123,6 +123,7 @@ class ChangeCog(commands.Cog):
             f"They multiplied {randmult}x and are now {digiSV.fromSV(userdata.height, 'm')} tall. ({digiSV.fromSV(userdata.height, 'u')})")
 
     @commands.command()
+    @commands.check(guildOnly)
     async def drinkme(self, ctx):
         # Drink me!
         userdata = userdb.load(ctx.message.author.id)
