@@ -3,6 +3,7 @@ from discord.ext import commands
 from sizebot import digilogger as logger
 from sizebot.conf import conf
 from sizebot import userdb
+from sizebot.checks import guildOnly
 
 
 class ModCog(commands.Cog):
