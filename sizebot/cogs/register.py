@@ -114,7 +114,7 @@ class RegisterCog(commands.Cog):
             return
 
         # Send a confirmation request
-        unregisterEmoji = "❌"
+        unregisterEmoji = "❌" # TODO: Shouldb't this be in the config?
         sentMsg = await ctx.send(f"To unregister, react with {unregisterEmoji}.")
         await sentMsg.add_reaction(unregisterEmoji)
 

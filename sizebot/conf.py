@@ -45,7 +45,7 @@ class Config:
             self.logchannelid = int(self.logchannelid)
 
     def getId(self, name):
-        return self.ids.get(name, "000000000000000000")
+        return self.ids.get(name, 000000000000000000)
 
     @classmethod
     def load(cls):

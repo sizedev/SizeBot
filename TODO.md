@@ -44,7 +44,15 @@
     * Help strings
     * Remove brackets?
     * etc...
-* Make DigiLogger an dDigiFormatter be imported from their seperate things instead of copy+pasting them in to the folder.
+* Make DigiLogger and DigiFormatter be imported from their seperate things instead of copy+pasting them in to the folder.
+* Sudo command?
+* Question of the Day
+    * Users can submit questions
+    * These get posted to a voting channel for mods only.
+    * Mods react to the submissions with emotes (:voteyes:/:voteno:)
+    * If it gets accepted, it gets added to the pool.
+    * A random question (with credit) is posted to a question of the day channel every morning.
+* Change SizeBot's name on certain special dates
 * Future proofing.
     * Make module functions that make command code easy to read, work with, and make new commands. [Digi calls this "the SizeAPI"]
 
@@ -71,6 +79,12 @@
 * Allow users to change other users (on, blacklist, whitelist, off)
 * NSFW stats<sup>?</sup>
 * More customizables
+* Natural language chat/help (like a virtual assistant) [needs a name]
+* Per-guild customizables
+    * Custom prefix
+    * Custom SizeBot role and SizeBot User role
+    * Custom SizeBot channel and QotD channel
+    * Turn on/off features
 
 ### New Commands
 
@@ -90,3 +104,8 @@
 * &autorole [on/off]
 * &schedule [date/time] [command...]
 * &sudo [user] [command...]
+
+## DigiFormatter
+
+* Split into separate files for different groups of functions.
+* Define its purpose.
