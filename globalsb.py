@@ -26,7 +26,7 @@ class DigiException(Exception):
 
 
 # Version.
-version = "3.3.7"
+version = "3.3.8"
 
 # Defaults
 defaultheight = Decimal("1754000")  # micrometers
