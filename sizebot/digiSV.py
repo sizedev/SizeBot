@@ -45,6 +45,37 @@ def removeBrackets(s):
     return s
 
 
+def toRate(s):
+    pass
+
+
+# Get letters from string
+def getTVPair(s):
+    s = removeBrackets(s)
+    match = re.search(r"(\d+\.?\d*) *([a-zA-Z]+)", s)
+    value, unit = None, None
+    if match is not None:
+        value, unit = match.group(1), match.group(2)
+    return value, unit
+
+
+def toTV(s):
+    value, unit = getSVPair(s)
+    if value is None or unit is None:
+        raise errors.InvalidSizeValue(s)
+    unitlower = unit.lower()
+    value = Decimal(value)    
+    if unitlower in ["second", "seconds"] or unit == "s":
+        scale = Decimal("1E0")
+    else:
+        raise errors.InvalidSizeValue(s)
+    return value / scale
+
+
+def toMult(s):
+    pass
+
+
 # Get letters from string
 def getSVPair(s):
     s = removeBrackets(s)
