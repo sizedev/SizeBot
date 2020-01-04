@@ -4,29 +4,18 @@ from sizebot.conf import conf
 from sizebot.digidecimal import Decimal
 from sizebot import digierror as errors
 
-# Deprecated user array constants
-NICK = 0
-DISP = 1
-CHEI = 2
-BHEI = 3
-BWEI = 4
-DENS = 5
-UNIT = 6
-SPEC = 7
-
 # Defaults
 defaultheight = Decimal("1.754")  # meters
 defaultweight = Decimal("66760")  # grams
-defaultdensity = Decimal("1.0")
 
 # Map the deprecated user array constants to the new names
-#                      NICK        DISP       CHEI      BHEI          BWEI          DENS       UNIT          SPEC
-DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweight", "density", "unitsystem", "species"]
+#                      NICK        DISP       CHEI      BHEI          BWEI          UNIT          SPEC
+DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweight", "unitsystem", "species"]
 
 
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["id", "nickname", "display", "_height", "_baseheight", "_baseweight", "_density", "_unitsystem", "species"]
+    __slots__ = ["id", "nickname", "display", "_height", "_baseheight", "_baseweight", "_unitsystem", "species"]
 
     def __init__(self):
         self.id = None
@@ -35,12 +24,11 @@ class User:
         self._height = defaultheight
         self._baseheight = defaultheight
         self._baseweight = defaultweight
-        self._density = defaultdensity
         self._unitsystem = "m"
         self.species = None
 
     def __str__(self):
-        return f"ID {self.id}, NICK {self.nickname}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, DENS {self.density}, UNIT {self.unitsystem}, SPEC {self.species}"
+        return f"ID {self.id}, NICK {self.nickname}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, UNIT {self.unitsystem}, SPEC {self.species}"
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
@@ -66,14 +54,6 @@ class User:
     @baseweight.setter
     def baseweight(self, value):
         self._baseweight = Decimal(value)
-
-    @property
-    def density(self):
-        return self._density
-
-    @density.setter
-    def density(self, value):
-        self._density = Decimal(value)
 
     # Check that unitsystem is valid and lowercase
     @property
@@ -114,7 +94,6 @@ class User:
             "height": str(self.height),
             "baseheight": str(self.baseheight),
             "baseweight": str(self.baseweight),
-            "density": str(self.density),
             "unitsystem": self.unitsystem,
             "species": self.species
         }
@@ -129,7 +108,6 @@ class User:
         userdata.height = Decimal(jsondata["height"])
         userdata.baseheight = Decimal(jsondata["baseheight"])
         userdata.baseweight = Decimal(jsondata["baseweight"])
-        userdata.density = Decimal(jsondata["density"])
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         return userdata

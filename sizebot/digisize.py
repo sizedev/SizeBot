@@ -174,8 +174,8 @@ def getComparison(userdata1, userdata2):
     dispsmallmult = round(smallmult, Decimal("4"))
     dispbigmultcubed = round(bigmultcubed, Decimal("4"))
     dispsmallmultcubed = round(smallmultcubed, Decimal("4"))
-    bcw = biguser.baseweight * (bigmult ** Decimal("3")) * biguser.density
-    scw = smalluser.baseweight * (smallmult ** Decimal("3")) * smalluser.density
+    bcw = biguser.baseweight * (bigmult ** Decimal("3"))
+    scw = smalluser.baseweight * (smallmult ** Decimal("3"))
     diffmult = bigmult / smallmult
     b2sh = biguser.baseheight * diffmult
     s2bh = smalluser.baseheight / diffmult
@@ -273,11 +273,9 @@ def getStats(userdata):
     currentheight_m = digiSV.fromSV(userdata.height, "m", 3)
     currentheight_u = digiSV.fromSV(userdata.height, "u", 3)
 
-    currentweight = userdata.baseweight * multiplier3 * userdata.density
+    currentweight = userdata.baseweight * multiplier3
     currentweight_m = digiSV.fromWV(currentweight, "m", 3)
     currentweight_u = digiSV.fromWV(currentweight, "u", 3)
-
-    printdensity = round(userdata.density, 3)
 
     defaultheightmult = userdata.height / userdb.defaultheight
     defaultweightmult = currentweight / userdb.defaultweight ** 3
@@ -318,7 +316,6 @@ def getStats(userdata):
         f"**{userdata.tag} Stats:**\n"
         f"*Current Height:*  {currentheight_m} / {currentheight_u}\n"
         f"*Current Weight:*  {currentweight_m} / {currentweight_u}\n"
-        f"*Current Density:* {printdensity}x\n"
         f"\n"
         f"Foot Length: {footlength_m} / {footlength_u}\n"
         f"Foot Width: {footwidth_m} / {footwidth_u}\n"

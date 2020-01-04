@@ -1,6 +1,15 @@
 from sizebot.digidecimal import Decimal
 from sizebot import userdb
-from sizebot.userdb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC, User
+
+# Deprecated user array constants
+NICK = 0
+DISP = 1
+CHEI = 2
+BHEI = 3
+BWEI = 4
+DENS = 5
+UNIT = 6
+SPEC = 7
 
 
 # Load a user from the old file format
@@ -10,7 +19,7 @@ def loadLegacy(id):
         lines = f.read().splitlines()
     lines = [line.strip() for line in lines]
 
-    userdata = User()
+    userdata = userdb.User()
     userdata.id = id
     userdata.nickname = lines[NICK]
     userdata.display = lines[DISP]
@@ -21,10 +30,8 @@ def loadLegacy(id):
         userdata.baseheight = lines[BHEI]
         userdata.baseheight /= Decimal("1e6")
     if lines[BWEI] != "None":
-        userdata.baseweight = lines[BWEI]
+        userdata.baseweight = lines[BWEI] * lines[DENS]     # Drop density, and instead update base weight to match
         userdata.baseweight /= Decimal("1e3")
-    if lines[DENS] != "None":
-        userdata.density = lines[DENS]
     userdata.unitsystem = lines[UNIT]
     if lines[SPEC] != "None":
         userdata.species = lines[SPEC]

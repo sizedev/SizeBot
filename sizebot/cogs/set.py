@@ -103,25 +103,6 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Change density
-    @commands.command()
-    async def setdensity(self, ctx, newdensity: float = None):
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newdensity is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <density>`.")
-            return
-
-        userdata = userdb.load(ctx.message.author.id)
-
-        userdata.density = newdensity
-        userdb.save(userdata)
-
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now {str(newdensity)}x density.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.density}x density.")
-
-        if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
-
     # Set display mode
     @commands.command()
     async def setdisplay(self, ctx, newdisp = None):
