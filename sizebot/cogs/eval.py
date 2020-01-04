@@ -1,15 +1,8 @@
 from discord.ext import commands
 import numexpr
 
-from sizebot.conf import conf
 from sizebot import digilogger as logger
-from sizebot import digierror as errors
-
-
-def requireAdmin(ctx):
-    if ctx.message.author.id not in conf.admins:
-        raise commands.CommandInvokeError(errors.AdminPermissionException())
-    return True
+from sizebot.checks import requireAdmin
 
 
 def evalexpr(expression):

@@ -8,6 +8,7 @@ from sizebot import digilogger as logger
 from sizebot import userdb
 from sizebot import digiSV
 from sizebot import digisize
+from sizebot.checks import requireAdmin
 
 
 class Change:
@@ -50,6 +51,9 @@ class Change:
             return None
         return self.startTime + self.stopTV
 
+    def __str__(self):
+        return f"gid:{self.guildid}/uid:{self.userid} {self.addPerSec:+} *{self.mulPerSec} , stop at {self.stopSV and digiSV.fromSV(self.stopSV)}, stop after {self.stopTV}s"
+
 
 class ChangeCog(commands.Cog):
     def __init__(self, bot):
@@ -67,6 +71,13 @@ class ChangeCog(commands.Cog):
         userdata = userdb.load(ctx.message.author.id)
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
         await ctx.send(f"User <@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} ({digiSV.fromSV(userdata.height, 'u')}) tall.")
+
+    @commands.command()
+    @commands.check(requireAdmin)
+    async def changes(self, ctx):
+        changeDump = "\n".join(str(c) for c in self.changes.values())
+        ctx.message.author.send(changeDump)
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) dumped the running changes.")
 
     @commands.command()
     async def slowchange(self, ctx, *, rateStr: str):
