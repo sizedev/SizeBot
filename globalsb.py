@@ -59,7 +59,7 @@ SPEC = 7
 def regenhexcode():
     # 16-char hex string gen for unregister.
     hexdigits = "1234567890abcdef"
-    lst = [random.choice(hexdigits) for n in len(hexdigits)]
+    lst = [random.choice(hexdigits) for n in range(len(hexdigits))]
     hexstring = "".join(lst)
     with open("../hexstring.txt", "w") as hexfile:
         hexfile.write(hexstring)
