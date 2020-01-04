@@ -120,10 +120,6 @@ def round_nearest_half(number):
     return round(number * 2) / 2
 
 
-def place_value(number):
-    return f"{number:,}"
-
-
 def pretty_time_delta(seconds):
     seconds = int(seconds)
     years, seconds = divmod(seconds, 86400 * 365)
@@ -456,7 +452,7 @@ def fromSV(value, accuracy=2):
     else:
         return "∞"
 
-    return f"{round(trimzeroes(value) / scale, accuracy):,}{unit}"
+    return f"{trimzeroes(round(value / scale, accuracy)):,}{unit}"
 
 
 # Convert 'size values' to a more readable format (USA)
@@ -515,7 +511,7 @@ def fromSVUSA(value, accuracy=2):
     else:
         return "∞"
 
-    return f"{round(trimzeroes(value) / scale, accuracy):,}{unit}"
+    return f"{trimzeroes(round(value / scale, accuracy)):,}{unit}"
 
 
 # Convert any supported weight to 'weight value', or milligrams.
@@ -655,7 +651,7 @@ def fromWV(value, accuracy=1):
     else:
         return "∞"
 
-    return f"{round(trimzeroes(value) / scale, accuracy):,}{unit}"
+    return f"{trimzeroes(round(value / scale, accuracy)):,}{unit}"
 
 
 # Convert 'weight values' to a more readable format (USA)
@@ -714,7 +710,7 @@ def fromWVUSA(value, accuracy=1):
     else:
         return "∞"
 
-    return f"{round(trimzeroes(value) / scale, accuracy):,}{unit}"
+    return f"{trimzeroes(round(value / scale, accuracy)):,}{unit}"
 
 
 def toShoeSize(footlength):
