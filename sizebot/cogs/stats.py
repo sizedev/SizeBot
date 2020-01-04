@@ -9,6 +9,7 @@ from sizebot import digilogger as logger
 # TODO: Fix this...
 from sizebot import userdb
 from sizebot import digiSV
+from sizebot.digitypes import SV
 from sizebot import digisize
 
 
@@ -17,7 +18,7 @@ class StatsCog(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, digiSV.SV] = None):
+    async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
         if memberOrHeight is None:
             memberOrHeight = ctx.message.author
 
@@ -29,7 +30,7 @@ class StatsCog(commands.Cog):
         await logger.info(f"Stats for {memberOrHeight} sent.")
 
     @commands.command()
-    async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, digiSV.SV] = None, memberOrHeight2: typing.Union[discord.Member, digiSV.SV] = None):
+    async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
 

@@ -1,5 +1,5 @@
-import userdb
-from userdb import SPEC, User
+from sizebot import userdb
+from sizebot.userdb import SPEC, User
 
 userdata = User()
 userdata.id = "123"

@@ -1,7 +1,5 @@
 import re
 
-from discord.ext import commands
-
 from sizebot.digidecimal import Decimal
 from sizebot import digierror as errors
 
@@ -45,13 +43,6 @@ def removeBrackets(s):
     return s
 
 
-rateDividers = "|".join(["/", "per", "every"])
-stopDividers = "|".join(["until", "for", "->"])
-addDividers = ["+", "plus", "add"]
-subDividers = ["-", "minus", "subtract", "sub"]
-re_rate = re.compile(f"(P<prefix>{'|'.join(addDividers)}{'|'.join(subDividers)})?(P<multOrSv>.*) *({rateDividers}) *(P<Tv>.*) *({stopDividers} *(P<stop>.*))?")
-
-
 def tryOrNone(fn, val):
     try:
         result = fn(val)
@@ -60,16 +51,28 @@ def tryOrNone(fn, val):
     return result
 
 
-def toRate(s):
-    match = re.match(s)
-    if match is None:
-        raise errors.InvalidRateValue(s)
-    prefix = match.groups("prefix")
-    multOrSvStr = match.groups("multOrSv")
-    tvStr = match.groups("Tv")
-    stopStr = match.groups("stop")
+re_num = "\\d+\\.?\\d*"
+re_num_unit = f"{re_num} *[A-Za-z]+"
 
-    isSub = prefix in subDividers
+
+rateDividers = "|".join(re.escape(d) for d in ("/", "per", "every"))
+stopDividers = "|".join(re.escape(d) for d in ("until", "for", "->"))
+addPrefixes = ["+", "plus", "add"]
+subPrefixes = ["-", "minus", "subtract", "sub"]
+addSubPrefixes = "|".join(re.escape(d) for d in addPrefixes + subPrefixes)
+re_rate = re.compile(f"(?P<prefix>{addSubPrefixes})? *(?P<multOrSv>.*) *({rateDividers}) *(?P<tv>{re_num_unit}) *(({stopDividers}) *(?P<stop>{re_num_unit}))?")
+
+
+def toRate(s):
+    match = re_rate.match(s)
+    if match is None:
+        raise errors.InvalidSizeValue(s)
+    prefix = match.group("prefix")
+    multOrSvStr = match.group("multOrSv")
+    tvStr = match.group("tv")
+    stopStr = match.group("stop")
+
+    isSub = prefix in subPrefixes
 
     valueSV = tryOrNone(toSV, multOrSvStr)
     valueMult = None
@@ -80,7 +83,7 @@ def toRate(s):
     if valueSV and isSub:
         valueSV = -valueSV
 
-    valueTV = tryOrNone(tvStr)
+    valueTV = tryOrNone(toTV, tvStr)
     if valueTV is None:
         raise errors.InvalidSizeValue(s)
 
@@ -143,11 +146,12 @@ def toTV(s):
 
 multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
 divPrefixes = ["/", "÷", "div", "divide"]
-re_rate = re.compile(f"(P<prefix>{'|'.join(multPrefixes)}|{'|'.join(divPrefixes)}) *(P<multValue>\\d+.?\\d*)")
+prefixes = '|'.join(re.escape(p) for p in multPrefixes + divPrefixes)
+re_mult = re.compile(f"(?P<prefix>{prefixes}) *(?P<multValue>{re_num})")
 
 
 def toMult(s):
-    match = re_rate.match(s)
+    match = re_mult.match(s)
     if match is None:
         raise errors.InvalidSizeValue(s)
     prefix = match.group("prefix")
@@ -570,11 +574,3 @@ def fromShoeSize(shoestring):
     shoeinches /= Decimal("3")
     shoesv = shoeinches * inch
     return shoesv
-
-
-class SV(commands.Converter):
-    async def convert(self, ctx, argument):
-        heightsv = toSV(argument)
-        if heightsv is None:
-            raise commands.errors.BadArgument
-        return heightsv
