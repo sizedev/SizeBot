@@ -23,6 +23,7 @@
     * Create eval command (for devs only)
     * Help command
     * Implement SB3's &roll command.
+* Save/load of tasks on restart.
 * Make SizeBot respond to DMs in a helpful way.
     * Allow users to use DM-safe commands in DMs (about, help, bug, donate, convert, roll) \[are there more?\]
     * Otherwise, tell them they have to other commands in a server.

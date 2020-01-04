@@ -132,3 +132,8 @@ def test_toRate_symbols_div_timestop():
 def test_toRate_symbols_div_nostop():
     result = digiSV.toRate("/8/3s for 10s")
     assert result == (0, Decimal(0.5), None, None)
+
+
+def test_toRate_2x():
+    result = digiSV.toRate("8x/3s")
+    assert result == (0, 2, None, None)
