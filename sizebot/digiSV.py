@@ -93,12 +93,12 @@ def toRate(s):
     if valueSV is not None:
         addPerSec = valueSV / valueTV
     else:
-        addPerSec = 0
+        addPerSec = Decimal("0")
 
     if valueMult is not None:
         mulPerSec = valueMult ** (1 / valueTV)
     else:
-        mulPerSec = 1
+        mulPerSec = Decimal("1")
 
     return addPerSec, mulPerSec, stopSV, stopTV
 
@@ -162,7 +162,7 @@ def toMult(s):
 def getSVPair(s):
     s = removeBrackets(s)
     s = isFeetAndInchesAndIfSoFixIt(s)
-    match = re.search(r"(\d+\.?\d*) *([a-zA-Z\'\"]+)", s)
+    match = re.search(r"([\-+]?\d+\.?\d*) *([a-zA-Z\'\"]+)", s)
     value, unit = None, None
     if match is not None:
         value, unit = match.group(1), match.group(2)
@@ -188,77 +188,15 @@ def isFeetAndInchesAndIfSoFixIt(value):
 
 # Convert any supported height to "size value"
 def toSV(s):
-    value, unit = getSVPair(s)
-    if value is None or unit is None:
+    value, unitStr = getSVPair(s)
+    if value is None or unitStr is None:
         raise errors.InvalidSizeValue(s)
-    unitlower = unit.lower()
-    if unitlower in ["yoctometers", "yoctometer"] or unit == "ym":
-        output = Decimal(value) / Decimal("1e24")
-    elif unitlower in ["zeptometers", "zeptometer"] or unit == "zm":
-        output = Decimal(value) / Decimal("1e21")
-    elif unitlower in ["attometers", "attometer"] or unit == "am":
-        output = Decimal(value) / Decimal("1e18")
-    elif unitlower in ["femtometers", "femtometer"] or unit == "fm":
-        output = Decimal(value) / Decimal("1e15")
-    elif unitlower in ["picometers", "picometer"] or unit == "pm":
-        output = Decimal(value) / Decimal("1e12")
-    elif unitlower in ["nanometers", "nanometer"] or unit == "nm":
-        output = Decimal(value) / Decimal("1e9")
-    elif unitlower in ["micrometers", "micrometer"] or unit in ["um", "µm"]:
-        output = Decimal(value) / Decimal("1e6")
-    elif unitlower in ["millimeters", "millimeter"] or unit == "mm":
-        output = Decimal(value) / Decimal("1e3")
-    elif unitlower in ["centimeters", "centimeter"] or unit == "cm":
-        output = Decimal(value) / Decimal("1e2")
-    elif unitlower in ["meters", "meter"] or unit == "m":
-        output = Decimal(value)
-    elif unitlower in ["kilometers", "kilometer"] or unit == "km":
-        output = Decimal(value) * Decimal("1e3")
-    elif unitlower in ["megameters", "megameter"] or unit == "Mm":
-        output = Decimal(value) * Decimal("1e6")
-    elif unitlower in ["gigameters", "gigameter"] or unit == "Gm":
-        output = Decimal(value) * Decimal("1e9")
-    elif unitlower in ["terameters", "terameter"] or unit == "Tm":
-        output = Decimal(value) * Decimal("1e12")
-    elif unitlower in ["petameters", "petameter"] or unit == "Pm":
-        output = Decimal(value) * Decimal("1e15")
-    elif unitlower in ["exameters", "exameter"] or unit == "Mm":
-        output = Decimal(value) * Decimal("1e18")
-    elif unitlower in ["zettameters", "zettameter"] or unit == "Zm":
-        output = Decimal(value) * Decimal("1e21")
-    elif unitlower in ["yottameters", "yottameter"] or unit == "Ym":
-        output = Decimal(value) * Decimal("1e24")
-    elif unitlower in ["inches", "inch", "in", "\""]:
-        output = Decimal(value) * inch
-    elif unitlower in ["feet", "foot", "ft", "'"]:
-        output = Decimal(value) * foot
-    elif unitlower in ["miles", "mile"] or unit == "mi":
-        output = Decimal(value) * mile
-    elif unitlower in ["lightyears", "lightyear"] or unit == "ly":
-        output = Decimal(value) * ly
-    elif unitlower in ["astronomical_units", "astronomical_unit"] or unit == "AU":
-        output = Decimal(value) * au
-    elif unitlower in ["universes", "universe"] or unit == "uni":
-        output = Decimal(value) * uni
-    elif unitlower in ["kilouniverses", "kilouniverse"] or unit == "kuni":
-        output = Decimal(value) * uni * Decimal("1e3")
-    elif unitlower in ["megauniverses", "megauniverse"] or unit == "Muni":
-        output = Decimal(value) * uni * Decimal("1e6")
-    elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "Guni":
-        output = Decimal(value) * uni * Decimal("1e9")
-    elif unitlower in ["terauniverses", "terauniverse"] or unit == "Tuni":
-        output = Decimal(value) * uni * Decimal("1e12")
-    elif unitlower in ["petauniverses", "petauniverse"] or unit == "Puni":
-        output = Decimal(value) * uni * Decimal("1e15")
-    elif unitlower in ["exauniverses", "exauniverse"] or unit == "Euni":
-        output = Decimal(value) * uni * Decimal("1e18")
-    elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "Zuni":
-        output = Decimal(value) * uni * Decimal("1e21")
-    elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "Yuni":
-        output = Decimal(value) * uni * Decimal("1e24")
-    else:
+    value = Decimal(value)
+    unit = getUnit(svunits, unitStr)
+    if unit is None:
         raise errors.InvalidSizeValue(s)
-    return output
+    valueSV = unit.toSV(value)
+    return valueSV
 
 
 # Convert any supported weight to "weight value", or milligrams.
@@ -338,29 +276,42 @@ def toWV(s):
 
 # Unit: Formats a value by scaling it and applying the appropriate symbol suffix
 class Unit():
-    def __init__(self, symbol, factor):
+    def __init__(self, symbol, factor, symbols=[], names=[]):
         self.symbol = symbol
         self.factor = factor
+        self.symbols = symbols                          # case sensitive symbols
+        self.names = [n.lower() for n in names]         # case insensitive names
 
     def format(self, value, accuracy):
         scaled = value / self.factor
         rounded = roundDecimal(scaled, accuracy)
-        if rounded <= 0:
+        if rounded == 0:
             formatted = "0"
         else:
             formatted = f"{trimzeroes(rounded)}{self.symbol}"
 
         return formatted
 
+    def isUnit(self, u):
+        return isinstance(u, str) and (u.lower() in self.names or u == self.symbol or u in self.symbols)
+
+    def toSV(self, v):
+        return v * self.factor
+
 
 # "Fixed" Unit: Formats to only the symbol.
 class FixedUnit(Unit):
-    def __init__(self, symbol, factor):
+    def __init__(self, symbol, factor, symbols=[], names=[]):
         self.symbol = symbol
         self.factor = factor
+        self.symbols = symbols                          # case sensitive symbols
+        self.names = [n.lower() for n in names]         # case insensitive names
 
     def format(self, value, accuracy):
         return self.symbol
+
+    def toSV(self, v):
+        return self.factor
 
 
 class FeetAndInchesUnit(Unit):
@@ -376,69 +327,119 @@ class FeetAndInchesUnit(Unit):
         formatted = f"{trimzeroes(feetval)}{self.footsymbol}{trimzeroes(roundedinchval)}{self.inchsymbol}"
         return formatted
 
+    def isUnit(self, u):
+        return u == (self.footsymbol, self.inchsymbol)
+
+    def toSV(self, v):
+        return None
+
+
+def getUnit(units, unitStr):
+    for unit in units:
+        if unit.isUnit(unitStr):
+            return unit
+    return None
+
 
 # sorted list of units
-svunits = {
+svunits = [
+    Unit("ym", Decimal("1e-24"), names=["yoctometers", "yoctometer"]),
+    Unit("zm", Decimal("1e-21"), names=["zeptometers", "zeptometer"]),
+    Unit("am", Decimal("1e-18"), names=["attometers", "attometer"]),
+    Unit("fm", Decimal("1e-15"), names=["femtometers", "femtometer"]),
+    Unit("pm", Decimal("1e-12"), names=["picometers", "picometer"]),
+    Unit("nm", Decimal("1e-9"), names=["nanometers", "nanometer"]),
+    Unit("µm", Decimal("1e-6"), names=["micrometers", "micrometer"], symbols=["um"]),
+    Unit("mm", Decimal("1e-3"), names=["millimeters", "millimeter"]),
+    Unit("in", inch, names=["inches", "inch", "in", "\""]),
+    FeetAndInchesUnit("'", "\"", foot),
+    Unit("cm", Decimal("1e-2"), names=["centimeters", "centimeter"]),
+    Unit("m", Decimal("1e0"), names=["meters", "meter"]),
+    Unit("km", Decimal("1e3"), names=["kilometers", "kilometer"]),
+    Unit("Mm", Decimal("1e6"), names=["megameters", "megameter"]),
+    Unit("Gm", Decimal("1e9"), names=["gigameters", "gigameter"]),
+    Unit("Tm", Decimal("1e12"), names=["terameters", "terameter"]),
+    Unit("Pm", Decimal("1e15"), names=["petameters", "petameter"]),
+    Unit("Em", Decimal("1e18"), names=["exameters", "exameter"]),
+    Unit("Zm", Decimal("1e21"), names=["zettameters", "zettameter"]),
+    Unit("Ym", Decimal("1e24"), names=["yottameters", "yottameter"]),
+    Unit("mi", mile, names=["miles", "mile"]),
+    Unit("ly", ly, names=["lightyears", "lightyear"]),
+    Unit("AU", au, names=["astronomical_units", "astronomical_unit"]),
+    Unit("uni", uni * Decimal("1e0"), names=["universes", "universe"]),
+    Unit("kuni", uni * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
+    Unit("Muni", uni * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
+    Unit("Guni", uni * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
+    Unit("Tuni", uni * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
+    Unit("Puni", uni * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
+    Unit("Euni", uni * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
+    Unit("Zuni", uni * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
+    Unit("Yuni", uni * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
+    FixedUnit("∞", uni * Decimal("1e27"), names=["infinite"])
+]
+
+
+svsystems = {
     "m": sorted([
-        Unit("ym", Decimal("1e-24")),
-        Unit("zm", Decimal("1e-21")),
-        Unit("am", Decimal("1e-18")),
-        Unit("fm", Decimal("1e-15")),
-        Unit("pm", Decimal("1e-12")),
-        Unit("nm", Decimal("1e-9")),
-        Unit("µm", Decimal("1e-6")),
-        Unit("mm", Decimal("1e-3")),
-        Unit("cm", Decimal("1e-2")),
-        Unit("m", Decimal("1e0")),
-        Unit("km", Decimal("1e3")),
-        Unit("Mm", Decimal("1e6")),
-        Unit("Gm", Decimal("1e9")),
-        Unit("Tm", Decimal("1e12")),
-        Unit("Pm", Decimal("1e15")),
-        Unit("Em", Decimal("1e18")),
-        Unit("Zm", Decimal("1e21")),
-        Unit("Ym", Decimal("1e24")),
-        Unit("uni", uni * Decimal("1e0")),
-        Unit("kuni", uni * Decimal("1e3")),
-        Unit("Muni", uni * Decimal("1e6")),
-        Unit("Guni", uni * Decimal("1e9")),
-        Unit("Tuni", uni * Decimal("1e12")),
-        Unit("Puni", uni * Decimal("1e15")),
-        Unit("Euni", uni * Decimal("1e18")),
-        Unit("Zuni", uni * Decimal("1e21")),
-        Unit("Yuni", uni * Decimal("1e24")),
-        FixedUnit("∞", uni * Decimal("1e27"))
+        getUnit(svunits, "ym"),
+        getUnit(svunits, "zm"),
+        getUnit(svunits, "am"),
+        getUnit(svunits, "fm"),
+        getUnit(svunits, "pm"),
+        getUnit(svunits, "nm"),
+        getUnit(svunits, "µm"),
+        getUnit(svunits, "mm"),
+        getUnit(svunits, "cm"),
+        getUnit(svunits, "m"),
+        getUnit(svunits, "km"),
+        getUnit(svunits, "Mm"),
+        getUnit(svunits, "Gm"),
+        getUnit(svunits, "Tm"),
+        getUnit(svunits, "Pm"),
+        getUnit(svunits, "Em"),
+        getUnit(svunits, "Zm"),
+        getUnit(svunits, "Ym"),
+        getUnit(svunits, "uni"),
+        getUnit(svunits, "kuni"),
+        getUnit(svunits, "Muni"),
+        getUnit(svunits, "Guni"),
+        getUnit(svunits, "Tuni"),
+        getUnit(svunits, "Puni"),
+        getUnit(svunits, "Euni"),
+        getUnit(svunits, "Zuni"),
+        getUnit(svunits, "Yuni"),
+        getUnit(svunits, "∞")
     ], key=lambda u: u.factor),
     "u": sorted([
-        Unit("ym", Decimal("1e-24")),
-        Unit("zm", Decimal("1e-21")),
-        Unit("am", Decimal("1e-18")),
-        Unit("fm", Decimal("1e-15")),
-        Unit("pm", Decimal("1e-12")),
-        Unit("nm", Decimal("1e-9")),
-        Unit("µm", Decimal("1e-6")),
-        Unit("mm", Decimal("1e-3")),
-        Unit("in", inch),
-        FeetAndInchesUnit("'", "\"", foot),
-        Unit("mi", mile),
-        Unit("AU", au),
-        Unit("ly", ly),
-        Unit("uni", uni * Decimal("1e0")),
-        Unit("kuni", uni * Decimal("1e3")),
-        Unit("Muni", uni * Decimal("1e6")),
-        Unit("Guni", uni * Decimal("1e9")),
-        Unit("Tuni", uni * Decimal("1e12")),
-        Unit("Puni", uni * Decimal("1e15")),
-        Unit("Euni", uni * Decimal("1e18")),
-        Unit("Zuni", uni * Decimal("1e21")),
-        Unit("Yuni", uni * Decimal("1e24")),
-        FixedUnit("∞", uni * Decimal("1e27"))
+        getUnit(svunits, "ym"),
+        getUnit(svunits, "zm"),
+        getUnit(svunits, "am"),
+        getUnit(svunits, "fm"),
+        getUnit(svunits, "pm"),
+        getUnit(svunits, "nm"),
+        getUnit(svunits, "µm"),
+        getUnit(svunits, "mm"),
+        getUnit(svunits, "in"),
+        getUnit(svunits, ("'", "\"")),
+        getUnit(svunits, "mi"),
+        getUnit(svunits, "AU"),
+        getUnit(svunits, "ly"),
+        getUnit(svunits, "uni"),
+        getUnit(svunits, "kuni"),
+        getUnit(svunits, "Muni"),
+        getUnit(svunits, "Guni"),
+        getUnit(svunits, "Tuni"),
+        getUnit(svunits, "Puni"),
+        getUnit(svunits, "Euni"),
+        getUnit(svunits, "Zuni"),
+        getUnit(svunits, "Yuni"),
+        getUnit(svunits, "∞")
     ], key=lambda u: u.factor)
 }
 
 
 # sorted list of units
-wvunits = {
+wvsystems = {
     "m": sorted([
         Unit("yg", Decimal("1e-24")),
         Unit("zg", Decimal("1e-21")),
@@ -513,18 +514,18 @@ def getBestUnit(value, units):
 
 # Convert "size values" to a more readable format.
 def fromSV(value, system = "m", accuracy = 2):
-    if system not in svunits.keys():
+    if system not in svsystems.keys():
         raise errors.InvalidUnitSystemException(system)
-    unit = getBestUnit(value, svunits[system])
+    unit = getBestUnit(value, svsystems[system])
     formatted = unit.format(value, accuracy)
     return formatted
 
 
 # Convert "weight values" to a more readable format.
 def fromWV(value, system = "m", accuracy = 2):
-    if system not in wvunits.keys():
+    if system not in wvsystems.keys():
         raise errors.InvalidUnitSystemException(system)
-    unit = getBestUnit(value, wvunits[system])
+    unit = getBestUnit(value, wvsystems[system])
     formatted = unit.format(value, accuracy)
     return formatted
 
