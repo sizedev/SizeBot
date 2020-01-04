@@ -6,7 +6,7 @@ from functools import reduce
 def trimzeroes(d):
     # `normalize()` removes ALL trailing zeroes, including ones before the decimal place
     # `+ 0` readds the trailing zeroes before the decimal place, if necessary
-    return str(d.normalize() + 0)
+    return d.normalize() + 0
 
 
 def clamp(minVal, val, maxVal):

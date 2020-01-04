@@ -8,6 +8,7 @@ from sizebot.conf import conf
 from sizebot import userdb
 from sizebot import digiSV
 from sizebot import digisize
+from sizebot.checks import guildOnly
 
 
 async def addUserRole(member):
@@ -34,6 +35,7 @@ class RegisterCog(commands.Cog):
 
     # Registers a user for SizeBot
     @commands.command()
+    @commands.check(guildOnly)
     async def register(self, ctx, nick: str, display: str = "y", currentheight: str = "5ft10in", baseheight: str = "5ft10in", baseweight: str = "180lb", unitsystem: str = "m", species: str = None):
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
         await logger.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
@@ -103,6 +105,7 @@ class RegisterCog(commands.Cog):
         raise error
 
     @commands.command()
+    @commands.check(guildOnly)
     async def unregister(self, ctx):
         user = ctx.message.author
         # User is not registered
@@ -114,7 +117,7 @@ class RegisterCog(commands.Cog):
             return
 
         # Send a confirmation request
-        unregisterEmoji = "❌" # TODO: Shouldb't this be in the config?
+        unregisterEmoji = "❌"  # TODO: Shouldb't this be in the config?
         sentMsg = await ctx.send(f"To unregister, react with {unregisterEmoji}.")
         await sentMsg.add_reaction(unregisterEmoji)
 

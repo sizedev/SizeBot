@@ -8,7 +8,7 @@ from sizebot import digilogger as logger
 from sizebot import userdb
 from sizebot import digiSV
 from sizebot import digisize
-from sizebot.checks import requireAdmin
+from sizebot.checks import requireAdmin, guildOnly
 from sizebot.utils import trimzeroes
 
 
@@ -66,6 +66,7 @@ class ChangeCog(commands.Cog):
         self.changeTask.cancel()
 
     @commands.command()
+    @commands.check(guildOnly)
     async def change(self, ctx, style, *, amount):
         # Change height
         digisize.changeUser(ctx.message.author.id, style, amount)
@@ -83,6 +84,7 @@ class ChangeCog(commands.Cog):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) dumped the running changes.")
 
     @commands.command()
+    @commands.check(guildOnly)
     async def slowchange(self, ctx, *, rateStr: str):
         addPerSec, mulPerSec, stopSV, stopTV = digiSV.toRate(rateStr)
         key = ctx.message.author.id, ctx.message.guild.id
@@ -91,6 +93,7 @@ class ChangeCog(commands.Cog):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {trimzeroes(addPerSec):+}/sec and *{mulPerSec}/sec until {stopSV and digiSV.fromSV(stopSV)} for {stopTV} seconds.")
 
     @commands.command()
+    @commands.check(guildOnly)
     async def stopchange(self, ctx):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) stopped slow-changing.")
 
@@ -102,6 +105,7 @@ class ChangeCog(commands.Cog):
             await logger.warn(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
 
     @commands.command()
+    @commands.check(guildOnly)
     async def eatme(self, ctx):
         # Eat me!
         randmult = round(random.random(2, 20), 1)

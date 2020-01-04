@@ -7,9 +7,6 @@ def isBanned(member):
 
 # Disable commands for users with the SizeBot_Banned role
 def check(ctx):
-    if not isinstance(ctx.channel, discord.abc.GuildChannel):
-        return False
-
     return not isBanned(ctx.author)
 
 

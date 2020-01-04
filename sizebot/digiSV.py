@@ -135,7 +135,7 @@ def toTV(s):
         scale = Decimal("3600") * Decimal("24") * Decimal("365")
     else:
         raise errors.InvalidSizeValue(s)
-    return value / scale
+    return value * scale
 
 
 multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
@@ -348,7 +348,7 @@ class Unit():
         if rounded <= 0:
             formatted = "0"
         else:
-            formatted = trimzeroes(rounded) + self.symbol
+            formatted = f"{trimzeroes(rounded)}{self.symbol}"
 
         return formatted
 
@@ -373,7 +373,7 @@ class FeetAndInchesUnit(Unit):
         inchval = value / inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
         roundedinchval = roundDecimal(inchval, accuracy)
-        formatted = trimzeroes(feetval) + self.footsymbol + trimzeroes(roundedinchval) + self.inchsymbol
+        formatted = f"{trimzeroes(feetval)}{self.footsymbol}{trimzeroes(roundedinchval)}{self.inchsymbol}"
         return formatted
 
 
