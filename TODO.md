@@ -57,6 +57,7 @@
     * If it gets accepted, it gets added to the pool.
     * A random question (with credit) is posted to a question of the day channel every morning.
 * Change SizeBot's name on certain special dates
+* This Points: if someone posts ^, or :this:, or similar, give a This Point to the person above (unless that person also posted a "this", in which case, give it to the person above that, etc.)
 * Future proofing.
     * Make module functions that make command code easy to read, work with, and make new commands. \[Digi calls this "the SizeAPI"\]
 
