@@ -143,7 +143,7 @@ def toTV(s):
 
 multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
 divPrefixes = ["/", "÷", "div", "divide"]
-re_rate = re.compile(f"(P<prefix>{'|'.join(dividers)}|{'|'.join(multPrefixes)}) *(P<multValue>\\d+.?\\d*)")
+re_rate = re.compile(f"(P<prefix>{'|'.join(multPrefixes)}|{'|'.join(divPrefixes)}) *(P<multValue>\\d+.?\\d*)")
 
 
 def toMult(s):
