@@ -45,9 +45,11 @@ def removeBrackets(s):
     return s
 
 
-dividers = "|".join(["/", "per", "every"])
+rateDividers = "|".join(["/", "per", "every"])
 stopDividers = "|".join(["until", "for", "->"])
-re_rate = re.compile(f"(P<multOrSv>.*) *({dividers}) *(P<Tv>.*) *({stopDividers} *(P<stop>.*))?")
+addDividers = ["+", "plus", "add"]
+subDividers = ["-", "minus", "subtract", "sub"]
+re_rate = re.compile(f"(P<prefix>{'|'.join(addDividers)}{'|'.join(subDividers)})?(P<multOrSv>.*) *({rateDividers}) *(P<Tv>.*) *({stopDividers} *(P<stop>.*))?")
 
 
 def tryOrNone(fn, val):
@@ -62,19 +64,24 @@ def toRate(s):
     match = re.match(s)
     if match is None:
         raise errors.InvalidRateValue(s)
+    prefix = match.groups("prefix")
     multOrSvStr = match.groups("multOrSv")
     tvStr = match.groups("Tv")
     stopStr = match.groups("stop")
 
-    valueTV = tryOrNone(tvStr)
-    if valueTV is None:
-        raise errors.InvalidSizeValue(s)
+    isSub = prefix in subDividers
 
     valueSV = tryOrNone(toSV, multOrSvStr)
     valueMult = None
     if valueSV is None:
         valueMult = tryOrNone(toMult, multOrSvStr)
     if valueSV is None and valueMult is None:
+        raise errors.InvalidSizeValue(s)
+    if valueSV and isSub:
+        valueSV = -valueSV
+
+    valueTV = tryOrNone(tvStr)
+    if valueTV is None:
         raise errors.InvalidSizeValue(s)
 
     stopSV = None
@@ -97,7 +104,6 @@ def toRate(s):
         mulPerSec = 1
 
     return addPerSec, mulPerSec, stopSV, stopTV
-
 
 
 # Get letters from string
@@ -135,8 +141,23 @@ def toTV(s):
     return value / scale
 
 
+multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
+divPrefixes = ["/", "÷", "div", "divide"]
+re_rate = re.compile(f"(P<prefix>{'|'.join(dividers)}|{'|'.join(multPrefixes)}) *(P<multValue>\\d+.?\\d*)")
+
+
 def toMult(s):
-    pass
+    match = re_rate.match(s)
+    if match is None:
+        raise errors.InvalidSizeValue(s)
+    prefix = match.group("prefix")
+    multValue = Decimal(match.group("multValue"))
+
+    isDivide = prefix in divPrefixes
+    if isDivide:
+        multValue = 1 / multValue
+
+    return multValue
 
 
 # Get letters from string
