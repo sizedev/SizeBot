@@ -1,4 +1,5 @@
 from sizebot import digiSV
+from decimal import Decimal
 
 
 def test_toMult():
@@ -43,33 +44,33 @@ def test_toRate_words_sub_nostop():
 
 
 def test_toRate_words_mult_sizestop():
-    result = digiSV.toRate("multiply 2 per 3 seconds until 12m")
+    result = digiSV.toRate("multiply 8 per 3 seconds until 12m")
     assert result == (0, 2, 12, None)
 
 
 def test_toRate_words_mult_timestop():
-    result = digiSV.toRate("times 2 per 3 seconds for 10 seconds")
+    result = digiSV.toRate("times 8 per 3 seconds for 10 seconds")
     assert result == (0, 2, None, 10)
 
 
 def test_toRate_words_mult_nostop():
-    result = digiSV.toRate("times 2 per 3 seconds")
+    result = digiSV.toRate("times 8 per 3 seconds")
     assert result == (0, 2, None, None)
 
 
 def test_toRate_words_div_sizestop():
-    result = digiSV.toRate("divide 2 per 3 seconds until 12m")
-    assert result == (0, 0.5, 12, None)
+    result = digiSV.toRate("divide 8 per 3 seconds until 12m")
+    assert result == (0, Decimal(0.5), 12, None)
 
 
 def test_toRate_words_div_timestop():
-    result = digiSV.toRate("divide 2 per 3 seconds for 10 seconds")
-    assert result == (0, 0.5, None, 10)
+    result = digiSV.toRate("divide 8 per 3 seconds for 10 seconds")
+    assert result == (0, Decimal(0.5), None, 10)
 
 
-def test_toRate_words_div_timestop():
-    result = digiSV.toRate("divide 2 per 3 seconds for 10 seconds")
-    assert result == (0, 0.5, None, None)
+def test_toRate_words_div_nostop():
+    result = digiSV.toRate("divide 8 per 3 seconds for 10 seconds")
+    assert result == (0, Decimal(0.5), None, None)
 
 
 # symbols
@@ -104,30 +105,30 @@ def test_toRate_symbols_sub_nostop():
 
 
 def test_toRate_symbols_mult_sizestop():
-    result = digiSV.toRate("x2/3s until 12m")
+    result = digiSV.toRate("x8/3s until 12m")
     assert result == (0, 2, 12, None)
 
 
 def test_toRate_symbols_mult_timestop():
-    result = digiSV.toRate("*2/3s for 10s")
+    result = digiSV.toRate("*8/3s for 10s")
     assert result == (0, 2, None, 10)
 
 
 def test_toRate_symbols_mult_nostop():
-    result = digiSV.toRate("x2/3s")
+    result = digiSV.toRate("x8/3s")
     assert result == (0, 2, None, None)
 
 
 def test_toRate_symbols_div_sizestop():
-    result = digiSV.toRate("/2/3s until 12m")
-    assert result == (0, 0.5, 12, None)
+    result = digiSV.toRate("/8/3s until 12m")
+    assert result == (0, Decimal(0.5), 12, None)
 
 
 def test_toRate_symbols_div_timestop():
-    result = digiSV.toRate("/2/3s for 10s")
-    assert result == (0, 0.5, None, 10)
+    result = digiSV.toRate("/8/3s for 10s")
+    assert result == (0, Decimal(0.5), None, 10)
 
 
-def test_toRate_symbols_div_timestop():
-    result = digiSV.toRate("/2/3s for 10s")
-    assert result == (0, 0.5, None, None)
+def test_toRate_symbols_div_nostop():
+    result = digiSV.toRate("/8/3s for 10s")
+    assert result == (0, Decimal(0.5), None, None)
