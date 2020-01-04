@@ -19,7 +19,7 @@ class Change:
 
     async def apply(self):
         now = Decimal(time.time())
-        seconds = self.lastRan - now
+        seconds = now - self.lastRan
         self.lastRan = now
         addPerTick = seconds * self.addPerSec
         mulPerTick = self.mulPerTick ** seconds
