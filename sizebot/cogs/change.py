@@ -45,7 +45,7 @@ class Change:
         if self.stopTV is None:
             return None
         return self.startTime + self.stopTV
-        
+
 
 class ChangeCog(commands.Cog):
     def __init__(self, bot):
