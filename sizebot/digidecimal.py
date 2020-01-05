@@ -18,3 +18,10 @@ def roundDecimal(d, accuracy = 0):
 
 def roundDecimalHalf(number):
     return roundDecimal(number * Decimal("2")) / Decimal("2")
+
+
+# Format a Decimal to a string, removing exponents and trailing zeroes after the decimal
+def trimzeroes(d):
+    # `normalize()` removes ALL trailing zeroes, including ones before the decimal place
+    # `+ 0` readds the trailing zeroes before the decimal place, if necessary
+    return d.normalize() + 0

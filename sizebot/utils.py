@@ -3,13 +3,6 @@ from itertools import zip_longest
 from functools import reduce
 
 
-# Format a Decimal to a string, removing exponents and trailing zeroes after the decimal
-def trimzeroes(d):
-    # `normalize()` removes ALL trailing zeroes, including ones before the decimal place
-    # `+ 0` readds the trailing zeroes before the decimal place, if necessary
-    return d.normalize() + 0
-
-
 def clamp(minVal, val, maxVal):
     return max(minVal, min(maxVal, val))
 

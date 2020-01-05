@@ -1,8 +1,8 @@
 import re
 
-from sizebot.digidecimal import Decimal, roundDecimal, roundDecimalHalf
+from sizebot.digidecimal import Decimal, roundDecimal, roundDecimalHalf, trimzeroes
 from sizebot import digierror as errors
-from sizebot.utils import trimzeroes, removeBrackets
+from sizebot.utils import removeBrackets
 
 # Unit constants
 # Height [meters]

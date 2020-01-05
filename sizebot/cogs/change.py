@@ -9,7 +9,6 @@ from sizebot import userdb
 from sizebot import digiSV
 from sizebot import digisize
 from sizebot.checks import requireAdmin, guildOnly
-from sizebot.utils import trimzeroes
 
 
 class Change:
@@ -53,7 +52,7 @@ class Change:
         return self.startTime + self.stopTV
 
     def __str__(self):
-        return f"gid:{self.guildid}/uid:{self.userid} {trimzeroes(self.addPerSec):+} *{self.mulPerSec} , stop at {self.stopSV and digiSV.fromSV(self.stopSV)}, stop after {self.stopTV}s"
+        return f"gid:{self.guildid}/uid:{self.userid} {digiSV.fromSV(self.addPerSec)} *{self.mulPerSec} , stop at {self.stopSV and digiSV.fromSV(self.stopSV)}, stop after {self.stopTV}s"
 
 
 class ChangeCog(commands.Cog):
@@ -91,7 +90,7 @@ class ChangeCog(commands.Cog):
         key = ctx.message.author.id, ctx.message.guild.id
         change = Change(self.bot, ctx.message.author.id, ctx.message.guild.id, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
         self.changes[key] = change
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {trimzeroes(addPerSec):+}/sec and *{mulPerSec}/sec until {stopSV and digiSV.fromSV(stopSV)} for {stopTV} seconds.")
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {digiSV.fromSV(addPerSec)}/sec and *{mulPerSec}/sec until {stopSV and digiSV.fromSV(stopSV)} for {stopTV} seconds.")
 
     @commands.command()
     @commands.check(guildOnly)
