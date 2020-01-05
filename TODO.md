@@ -79,7 +79,9 @@
     * Members
     * "Characters"
     * Winks
+    * "Sizepuppets"
 * Switchable user profiles (create characters, switch between them)
+* Per-user customizable "sizepuppets" (steal Tupperboxes, but with size options.) (Just puppeteer existing profiles?)
 * Switch some things to embeds
 * Replace digiSV with dunit
 * Add support for multiple guilds
