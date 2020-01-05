@@ -81,7 +81,7 @@ class SetCog(commands.Cog):
         if newheightsv > digiSV.infinity:
             await logger.warn("Invalid size value.")
             await ctx.send("Too big. x_x")
-            newheightsv = digiSV.infinity
+            newheightsv = digiSV.infinitySV
 
         userdata = userdb.load(ctx.message.author.id)
 
@@ -173,7 +173,7 @@ class SetCog(commands.Cog):
         if newheight > digiSV.infinity:
             await logger.warn("Invalid size value.")
             await ctx.send("Too big. x_x")
-            newheight = digiSV.infinity
+            newheight = digiSV.infinitySV
 
         userdata = userdb.load(ctx.message.author.id)
 
@@ -192,7 +192,7 @@ class SetCog(commands.Cog):
     async def setinf(self, ctx):
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata.height = digiSV.infinity
+        userdata.height = digiSV.infinitySV
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now infinitely tall.")

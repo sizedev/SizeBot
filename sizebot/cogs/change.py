@@ -1,7 +1,6 @@
 import random
 import time
 
-import discord.errors
 from discord.ext import commands, tasks
 
 from sizebot.digidecimal import Decimal
@@ -133,7 +132,6 @@ class ChangeCog(commands.Cog):
             f"They shrunk {randmult}x and are now {digiSV.fromSV(userdata.height, 'm')} tall. ({digiSV.fromSV(userdata.height, 'u')})")
 
     # Slow growth task
-    # TODO: Does this restart if there are errors?
     @tasks.loop(seconds=6)
     async def changeTask(self):
         runningChanges = {}

@@ -1,3 +1,4 @@
+import re
 from itertools import zip_longest
 from functools import reduce
 
@@ -68,3 +69,8 @@ def deepgetattr(obj, attr):
 def chunkStr(n, s, fillvalue=""):
     args = [iter(s)] * n
     return ("".join(chunk) for chunk in zip_longest(*args, fillvalue=fillvalue))
+
+
+def removeBrackets(s):
+    s = re.sub(r"[\[\]<>]", "", s)
+    return s

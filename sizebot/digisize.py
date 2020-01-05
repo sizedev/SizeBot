@@ -132,7 +132,7 @@ def changeUser(userid, changestyle, amount):
     elif changestyle == "divide":
         newamount = userdata.height / amountVal
 
-    userdata.height = utils.clamp(0, newamount, digiSV.infinity)
+    userdata.height = utils.clamp(0, newamount, digiSV.infinitySV)
 
     userdb.save(userdata)
 

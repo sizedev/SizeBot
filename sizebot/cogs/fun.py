@@ -3,9 +3,7 @@ import asyncio
 from discord.ext import commands
 
 from sizebot.conf import conf
-from sizebot.checks import guildOnly
 
-# TODO: Get rid of asyncio tasks, replace with timed database checks.
 tasks = {}
 
 

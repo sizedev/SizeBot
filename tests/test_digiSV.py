@@ -69,7 +69,7 @@ def test_toRate_words_div_timestop():
 
 
 def test_toRate_words_div_nostop():
-    result = digiSV.toRate("divide 8 per 3 seconds for 10 seconds")
+    result = digiSV.toRate("divide 8 per 3 seconds")
     assert result == (0, Decimal(0.5), None, None)
 
 
@@ -130,7 +130,7 @@ def test_toRate_symbols_div_timestop():
 
 
 def test_toRate_symbols_div_nostop():
-    result = digiSV.toRate("/8/3s for 10s")
+    result = digiSV.toRate("/8/3s")
     assert result == (0, Decimal(0.5), None, None)
 
 

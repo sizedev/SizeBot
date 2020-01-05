@@ -1,8 +1,8 @@
 import re
 
-from sizebot.digidecimal import Decimal
+from sizebot.digidecimal import Decimal, roundDecimal, roundDecimalHalf
 from sizebot import digierror as errors
-from sizebot.utils import trimzeroes
+from sizebot.utils import trimzeroes, removeBrackets
 
 # Unit constants
 # Height [meters]
@@ -11,267 +11,17 @@ foot = inch * Decimal("12")
 mile = foot * Decimal("5280")
 ly = mile * Decimal("5879000000000")
 au = Decimal("149597870700")
-uni = Decimal("879848000000000000000000000")
-infinity = uni * Decimal("1e27")
+uniSV = Decimal("879848000000000000000000000")
+infinitySV = uniSV * Decimal("1E27")
 # Weight [grams]
 ounce = Decimal("28.35")
 pound = ounce * Decimal("16")
 uston = pound * Decimal("2000")
-earth = Decimal("5972198600000000000000000000")
-sun = Decimal("1988435000000000000000000000000000")
-milkyway = Decimal("95000000000000000000000000000000000000000000")
-uniw = Decimal("3400000000000000000000000000000000000000000000000000000000")
-
-
-def roundDecimal(d, accuracy = 0):
-    places = Decimal("10") ** -accuracy
-    return d.quantize(places)
-
-
-def roundDecimalHalf(number):
-    return roundDecimal(number * Decimal("2")) / Decimal("2")
-
-
-def removeBrackets(s):
-    s = re.sub(r"[\[\]<>]", "", s)
-    return s
-
-
-def tryOrNone(fn, val):
-    try:
-        result = fn(val)
-    except errors.InvalidSizeValue:
-        result = None
-    return result
-
-
-re_num = "\\d+\\.?\\d*"
-re_num_unit = f"{re_num} *[A-Za-z]+"
-
-
-rateDividers = "|".join(re.escape(d) for d in ("/", "per", "every"))
-stopDividers = "|".join(re.escape(d) for d in ("until", "for", "->"))
-addPrefixes = ["+", "plus", "add"]
-subPrefixes = ["-", "minus", "subtract", "sub"]
-addSubPrefixes = "|".join(re.escape(d) for d in addPrefixes + subPrefixes)
-re_rate = re.compile(f"(?P<prefix>{addSubPrefixes})? *(?P<multOrSv>.*) *({rateDividers}) *(?P<tv>{re_num_unit}) *(({stopDividers}) *(?P<stop>{re_num_unit}))?")
-
-
-def toRate(s):
-    match = re_rate.match(s)
-    if match is None:
-        raise errors.InvalidSizeValue(s)
-    prefix = match.group("prefix")
-    multOrSvStr = match.group("multOrSv")
-    tvStr = match.group("tv")
-    stopStr = match.group("stop")
-
-    isSub = prefix in subPrefixes
-
-    valueSV = tryOrNone(toSV, multOrSvStr)
-    valueMult = None
-    if valueSV is None:
-        valueMult = tryOrNone(toMult, multOrSvStr)
-    if valueSV is None and valueMult is None:
-        raise errors.InvalidSizeValue(s)
-    if valueSV and isSub:
-        valueSV = -valueSV
-
-    valueTV = tryOrNone(toTV, tvStr)
-    if valueTV is None:
-        raise errors.InvalidSizeValue(s)
-
-    stopSV = None
-    stopTV = None
-    if stopStr is not None:
-        stopSV = tryOrNone(toSV, stopStr)
-        if stopSV is None:
-            stopTV = tryOrNone(toTV, stopStr)
-        if stopSV is None and stopTV is None:
-            raise errors.InvalidSizeValue(s)
-
-    if valueSV is not None:
-        addPerSec = valueSV / valueTV
-    else:
-        addPerSec = Decimal("0")
-
-    if valueMult is not None:
-        mulPerSec = valueMult ** (1 / valueTV)
-    else:
-        mulPerSec = Decimal("1")
-
-    return addPerSec, mulPerSec, stopSV, stopTV
-
-
-# Get letters from string
-def getTVPair(s):
-    s = removeBrackets(s)
-    match = re.search(r"(\d+\.?\d*) *([a-zA-Z]+)", s)
-    value, unit = None, None
-    if match is not None:
-        value, unit = match.group(1), match.group(2)
-    return value, unit
-
-
-def toTV(s):
-    value, unit = getTVPair(s)
-    if value is None or unit is None:
-        raise errors.InvalidSizeValue(s)
-    unitlower = unit.lower()
-    value = Decimal(value)
-    if unitlower in ["second", "seconds", "sec"] or unit == "s":
-        scale = Decimal("1E0")
-    elif unitlower in ["minute", "minutes", "min"] or unit == "m":
-        scale = Decimal("60")
-    elif unitlower in ["hour", "hours", "hr"] or unit == "h":
-        scale = Decimal("3600")
-    elif unitlower in ["day", "days", "dy"] or unit == "d":
-        scale = Decimal("3600") * Decimal("24")
-    elif unitlower in ["week", "weeks", "wk"] or unit == "w":
-        scale = Decimal("3600") * Decimal("24") * Decimal("7")
-    elif unitlower in ["month", "months"]:
-        scale = Decimal("3600") * Decimal("24") * Decimal("30")
-    elif unitlower in ["year", "years", "yr"] or unit in ["y", "a"]:
-        scale = Decimal("3600") * Decimal("24") * Decimal("365")
-    else:
-        raise errors.InvalidSizeValue(s)
-    return value * scale
-
-
-multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
-divPrefixes = ["/", "÷", "div", "divide"]
-prefixes = '|'.join(re.escape(p) for p in multPrefixes + divPrefixes)
-re_mult = re.compile(f"(?P<prefix>{prefixes}) *(?P<multValue>{re_num})")
-
-
-def toMult(s):
-    match = re_mult.match(s)
-    if match is None:
-        raise errors.InvalidSizeValue(s)
-    prefix = match.group("prefix")
-    multValue = Decimal(match.group("multValue"))
-
-    isDivide = prefix in divPrefixes
-    if isDivide:
-        multValue = 1 / multValue
-
-    return multValue
-
-
-# Get letters from string
-def getSVPair(s):
-    s = removeBrackets(s)
-    s = isFeetAndInchesAndIfSoFixIt(s)
-    match = re.search(r"([\-+]?\d+\.?\d*) *([a-zA-Z\'\"]+)", s)
-    value, unit = None, None
-    if match is not None:
-        value, unit = match.group(1), match.group(2)
-    return value, unit
-
-
-def isFeetAndInchesAndIfSoFixIt(value):
-    regex = r"^((?P<feet>\d+\.?\d*)(ft|foot|feet|'))?((?P<inch>\d+\.?\d*)(in|\"))?"
-    m = re.match(regex, value, flags = re.I)
-    if not m:
-        return value
-    feetval = m.group("feet")
-    inchval = m.group("inch")
-    if feetval is None and inchval is None:
-        return value
-    if feetval is None:
-        feetval = "0"
-    if inchval is None:
-        inchval = "0"
-    totalinches = (Decimal(feetval) * Decimal("12")) + Decimal(inchval)
-    return f"{totalinches}in"
-
-
-# Convert any supported height to "size value"
-def toSV(s):
-    value, unitStr = getSVPair(s)
-    if value is None or unitStr is None:
-        raise errors.InvalidSizeValue(s)
-    value = Decimal(value)
-    unit = getUnit(svunits, unitStr)
-    if unit is None:
-        raise errors.InvalidSizeValue(s)
-    valueSV = unit.toSV(value)
-    return valueSV
-
-
-# Convert any supported weight to "weight value", or milligrams.
-def toWV(s):
-    value, unit = getSVPair(s)
-    if value is None or unit is None:
-        raise errors.InvalidSizeValue(s)
-    unitlower = unit.lower()
-    if unitlower in ["yoctograms", "yoctograms"] or unit == "yg":
-        output = Decimal(value) / Decimal("1e24")
-    elif unitlower in ["zeptograms", "zeptograms"] or unit == "zg":
-        output = Decimal(value) / Decimal("1e21")
-    elif unitlower in ["attograms", "attogram"] or unit == "ag":
-        output = Decimal(value) / Decimal("1e18")
-    elif unitlower in ["femtogram", "femtogram"] or unit == "fg":
-        output = Decimal(value) / Decimal("1e15")
-    elif unitlower in ["picogram", "picogram"] or unit == "pg":
-        output = Decimal(value) / Decimal("1e12")
-    elif unitlower in ["nanogram", "nanogram"] or unit == "ng":
-        output = Decimal(value) / Decimal("1e9")
-    elif unitlower in ["microgram", "microgram"] or unit == "ug":
-        output = Decimal(value) / Decimal("1e6")
-    elif unitlower in ["milligrams", "milligram"] or unit == "mg":
-        output = Decimal(value)
-    elif unitlower in ["grams", "gram"] or unit == "g":
-        output = Decimal(value) * Decimal("1e3")
-    elif unitlower in ["kilograms", "kilogram"] or unit == "kg":
-        output = Decimal(value) * Decimal("1e6")
-    elif unitlower in ["megagrams", "megagram", "ton", "tons", "tonnes", "tons"] or unit == ["t", "Mg"]:
-        output = Decimal(value) * Decimal("1e9")
-    elif unitlower in ["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"] or unit in ["kt", "Gg"]:
-        output = Decimal(value) * Decimal("1e12")
-    elif unitlower in ["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"] or unit in ["Mt", "Tg"]:
-        output = Decimal(value) * Decimal("1e15")
-    elif unitlower in ["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes"] or unit in ["Gt", "Pg"]:
-        output = Decimal(value) * Decimal("1e18")
-    elif unitlower in ["exagrams", "exagram", "teratons", "teraton", "teratonnes", "teratonne"] or unit in ["Tt", "Eg"]:
-        output = Decimal(value) * Decimal("1e21")
-    elif unitlower in ["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne"] or unit in ["Pt", "Zg"]:
-        output = Decimal(value) * Decimal("1e24")
-    elif unitlower in ["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne"] or unit == ["Et", "Yg"]:
-        output = Decimal(value) * Decimal("1e27")
-    elif unitlower in ["zettatons", "zettaton", "zettatonnes", "zettatonne"] or unit == "Zt":
-        output = Decimal(value) * Decimal("1e30")
-    elif unitlower in ["yottatons", "yottaton", "yottatonnes", "yottatonne"] or unit == "Yt":
-        output = Decimal(value) * Decimal("1e33")
-    elif unitlower in ["universes", "universe"] or unit == "uni":
-        output = Decimal(value) * uniw
-    elif unitlower in ["kilouniverses", "kilouniverse"] or unit == "kuni":
-        output = Decimal(value) * uniw * Decimal("1e3")
-    elif unitlower in ["megauniverses", "megauniverse"] or unit == "Muni":
-        output = Decimal(value) * uniw * Decimal("1e6")
-    elif unitlower in ["gigauniverses", "gigauniverse"] or unit == "Guni":
-        output = Decimal(value) * uniw * Decimal("1e9")
-    elif unitlower in ["terauniverses", "terauniverse"] or unit == "Tuni":
-        output = Decimal(value) * uniw * Decimal("1e12")
-    elif unitlower in ["petauniverses", "petauniverse"] or unit == "Puni":
-        output = Decimal(value) * uniw * Decimal("1e15")
-    elif unitlower in ["exauniverses", "exauniverse"] or unit == "Euni":
-        output = Decimal(value) * uniw * Decimal("1e18")
-    elif unitlower in ["zettauniverses", "zettauniverse"] or unit == "Zuni":
-        output = Decimal(value) * uniw * Decimal("1e21")
-    elif unitlower in ["yottauniverses", "yottauniverse"] or unit == "Yuni":
-        output = Decimal(value) * uniw * Decimal("1e24")
-    elif unitlower in ["ounces", "ounce"] or unit == "oz":
-        output = Decimal(value) * ounce
-    elif unitlower in ["pounds", "pound"] or unit in ["lb", "lbs"]:
-        output = Decimal(value) * pound
-    elif unitlower in ["earth", "earths"]:
-        output = Decimal(value) * earth
-    elif unitlower in ["sun", "suns"]:
-        output = Decimal(value) * sun
-    else:
-        raise errors.InvalidSizeValue(s)
-    return output
+earth = Decimal("5.9721986E+27")
+sun = Decimal("1.988435E+33")
+milkyway = Decimal("9.5E+43")
+uniWV = Decimal("3.4E+57")
+infinityWV = uniWV * Decimal("1E27")
 
 
 # Unit: Formats a value by scaling it and applying the appropriate symbol suffix
@@ -297,6 +47,9 @@ class Unit():
 
     def toSV(self, v):
         return v * self.factor
+
+    def __lt__(self, other):
+        return self.factor < other.factor
 
 
 # "Fixed" Unit: Formats to only the symbol.
@@ -366,18 +119,55 @@ svunits = [
     Unit("mi", mile, names=["miles", "mile"]),
     Unit("ly", ly, names=["lightyears", "lightyear"]),
     Unit("AU", au, names=["astronomical_units", "astronomical_unit"]),
-    Unit("uni", uni * Decimal("1e0"), names=["universes", "universe"]),
-    Unit("kuni", uni * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
-    Unit("Muni", uni * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
-    Unit("Guni", uni * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
-    Unit("Tuni", uni * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
-    Unit("Puni", uni * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
-    Unit("Euni", uni * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
-    Unit("Zuni", uni * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
-    Unit("Yuni", uni * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
-    FixedUnit("∞", uni * Decimal("1e27"), names=["infinite"])
+    Unit("uni", uniSV * Decimal("1e0"), names=["universes", "universe"]),
+    Unit("kuni", uniSV * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
+    Unit("Muni", uniSV * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
+    Unit("Guni", uniSV * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
+    Unit("Tuni", uniSV * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
+    Unit("Puni", uniSV * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
+    Unit("Euni", uniSV * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
+    Unit("Zuni", uniSV * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
+    Unit("Yuni", uniSV * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
+    FixedUnit("∞", Decimal(infinitySV), names=["infinite", "infinity"])
 ]
 
+wvunits = [
+    Unit("yg", Decimal("1e-24"), names=["yoctograms", "yoctograms"]),
+    Unit("zg", Decimal("1e-21"), names=["zeptograms", "zeptograms"]),
+    Unit("ag", Decimal("1e-18"), names=["attograms", "attogram"]),
+    Unit("fg", Decimal("1e-15"), names=["femtogram", "femtogram"]),
+    Unit("pg", Decimal("1e-12"), names=["picogram", "picogram"]),
+    Unit("ng", Decimal("1e-9"), names=["nanogram", "nanogram"]),
+    Unit("µg", Decimal("1e-6"), names=["microgram", "microgram"]),
+    Unit("mg", Decimal("1e-3"), names=["milligrams", "milligram"]),
+    Unit("g", Decimal("1e0"), names=["grams", "gram"]),
+    Unit("oz", ounce, names=["kilograms", "kilogram"]),
+    Unit("lb", pound, names=["pounds", "pound"], symbols=["lbs"]),
+    Unit("kg", Decimal("1e3"), names=["kilograms", "kilogram"]),
+    Unit(" US tons", uston),
+    Unit("t", Decimal("1e6"), names=["megagrams", "megagram", "ton", "tons", "tonnes", "tons"]),
+    Unit("kt", Decimal("1e9"), names=["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"]),
+    Unit("Mt", Decimal("1e12"), names=["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"]),
+    Unit("Gt", Decimal("1e15"), names=["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes"]),
+    Unit("Tt", Decimal("1e18"), names=["exagrams", "exagram", "teratons", "teraton", "teratonnes", "teratonne"]),
+    Unit("Pt", Decimal("1e21"), names=["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne"]),
+    Unit("Et", Decimal("1e24"), names=["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne"]),
+    Unit("Zt", Decimal("1e27"), names=["zettatons", "zettaton", "zettatonnes", "zettatonne"]),
+    Unit("Yt", Decimal("1e30"), names=["yottatons", "yottaton", "yottatonnes", "yottatonne"]),
+    Unit(" Earths", earth, names=["earth", "earths"]),
+    Unit(" Suns", sun, names=["sun", "suns"]),
+    Unit(" Milky Ways", milkyway),
+    Unit("uni", uniWV * Decimal("1e0"), names=["universes", "universe"]),
+    Unit("kuni", uniWV * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
+    Unit("Muni", uniWV * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
+    Unit("Guni", uniWV * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
+    Unit("Tuni", uniWV * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
+    Unit("Puni", uniWV * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
+    Unit("Euni", uniWV * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
+    Unit("Zuni", uniWV * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
+    Unit("Yuni", uniWV * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
+    FixedUnit("∞", Decimal(infinityWV), names=["infinite", "infinity"])
+]
 
 svsystems = {
     "m": sorted([
@@ -409,7 +199,7 @@ svsystems = {
         getUnit(svunits, "Zuni"),
         getUnit(svunits, "Yuni"),
         getUnit(svunits, "∞")
-    ], key=lambda u: u.factor),
+    ]),
     "u": sorted([
         getUnit(svunits, "ym"),
         getUnit(svunits, "zm"),
@@ -434,71 +224,251 @@ svsystems = {
         getUnit(svunits, "Zuni"),
         getUnit(svunits, "Yuni"),
         getUnit(svunits, "∞")
-    ], key=lambda u: u.factor)
+    ])
 }
-
 
 # sorted list of units
 wvsystems = {
     "m": sorted([
-        Unit("yg", Decimal("1e-24")),
-        Unit("zg", Decimal("1e-21")),
-        Unit("ag", Decimal("1e-18")),
-        Unit("fg", Decimal("1e-15")),
-        Unit("pg", Decimal("1e-12")),
-        Unit("ng", Decimal("1e-9")),
-        Unit("µg", Decimal("1e-6")),
-        Unit("mg", Decimal("1e-3")),
-        Unit("g", Decimal("1e0")),
-        Unit("kg", Decimal("1e3")),
-        Unit("t", Decimal("1e6")),
-        Unit("kt", Decimal("1e9")),
-        Unit("Mt", Decimal("1e12")),
-        Unit("Gt", Decimal("1e15")),
-        Unit("Tt", Decimal("1e18")),
-        Unit("Pt", Decimal("1e21")),
-        Unit("Et", Decimal("1e24")),
-        Unit("Zt", Decimal("1e27")),
-        Unit("Yt", Decimal("1e30")),
-        Unit("uni", uniw * Decimal("1e0")),
-        Unit("kuni", uniw * Decimal("1e3")),
-        Unit("Muni", uniw * Decimal("1e6")),
-        Unit("Guni", uniw * Decimal("1e9")),
-        Unit("Tuni", uniw * Decimal("1e12")),
-        Unit("Puni", uniw * Decimal("1e15")),
-        Unit("Euni", uniw * Decimal("1e18")),
-        Unit("Zuni", uniw * Decimal("1e21")),
-        Unit("Yuni", uniw * Decimal("1e24")),
-        FixedUnit("∞", uniw * Decimal("1e27"))
-    ], key=lambda u: u.factor),
+        getUnit(wvunits, "yg"),
+        getUnit(wvunits, "zg"),
+        getUnit(wvunits, "ag"),
+        getUnit(wvunits, "fg"),
+        getUnit(wvunits, "pg"),
+        getUnit(wvunits, "ng"),
+        getUnit(wvunits, "µg"),
+        getUnit(wvunits, "mg"),
+        getUnit(wvunits, "g"),
+        getUnit(wvunits, "kg"),
+        getUnit(wvunits, "t"),
+        getUnit(wvunits, "kt"),
+        getUnit(wvunits, "Mt"),
+        getUnit(wvunits, "Gt"),
+        getUnit(wvunits, "Tt"),
+        getUnit(wvunits, "Pt"),
+        getUnit(wvunits, "Et"),
+        getUnit(wvunits, "Zt"),
+        getUnit(wvunits, "Yt"),
+        getUnit(wvunits, "uni"),
+        getUnit(wvunits, "kuni"),
+        getUnit(wvunits, "Muni"),
+        getUnit(wvunits, "Guni"),
+        getUnit(wvunits, "Tuni"),
+        getUnit(wvunits, "Puni"),
+        getUnit(wvunits, "Euni"),
+        getUnit(wvunits, "Zuni"),
+        getUnit(wvunits, "Yuni"),
+        getUnit(wvunits, "∞"),
+    ]),
     "u": sorted([
-        Unit("yg", Decimal("1e-24")),
-        Unit("zg", Decimal("1e-21")),
-        Unit("ag", Decimal("1e-18")),
-        Unit("fg", Decimal("1e-15")),
-        Unit("pg", Decimal("1e-12")),
-        Unit("ng", Decimal("1e-9")),
-        Unit("µg", Decimal("1e-6")),
-        Unit("mg", Decimal("1e-3")),
-        Unit("g", Decimal("1e0")),
-        Unit("oz", ounce),
-        Unit("lb", pound),
-        Unit(" US tons", uston),
-        Unit(" Earths", earth),
-        Unit(" Suns", sun),
-        Unit(" Milky Ways", milkyway),
-        Unit("uni", uniw * Decimal("1e0")),
-        Unit("kuni", uniw * Decimal("1e3")),
-        Unit("Muni", uniw * Decimal("1e6")),
-        Unit("Guni", uniw * Decimal("1e9")),
-        Unit("Tuni", uniw * Decimal("1e12")),
-        Unit("Puni", uniw * Decimal("1e15")),
-        Unit("Euni", uniw * Decimal("1e18")),
-        Unit("Zuni", uniw * Decimal("1e21")),
-        Unit("Yuni", uniw * Decimal("1e24")),
-        FixedUnit("∞", uniw * Decimal("1e27"))
-    ], key=lambda u: u.factor)
+        getUnit(wvunits, "yg"),
+        getUnit(wvunits, "zg"),
+        getUnit(wvunits, "ag"),
+        getUnit(wvunits, "fg"),
+        getUnit(wvunits, "pg"),
+        getUnit(wvunits, "ng"),
+        getUnit(wvunits, "µg"),
+        getUnit(wvunits, "mg"),
+        getUnit(wvunits, "g"),
+        getUnit(wvunits, "oz"),
+        getUnit(wvunits, "lb"),
+        getUnit(wvunits, " US tons"),
+        getUnit(wvunits, "earths"),
+        getUnit(wvunits, "sun"),
+        getUnit(wvunits, " Milky Ways"),
+        getUnit(wvunits, "uni"),
+        getUnit(wvunits, "kuni"),
+        getUnit(wvunits, "Muni"),
+        getUnit(wvunits, "Guni"),
+        getUnit(wvunits, "Tuni"),
+        getUnit(wvunits, "Puni"),
+        getUnit(wvunits, "Euni"),
+        getUnit(wvunits, "Zuni"),
+        getUnit(wvunits, "Yuni"),
+        getUnit(wvunits, "∞"),
+    ])
 }
+
+
+def tryOrNone(fn, val):
+    try:
+        result = fn(val)
+    except errors.InvalidSizeValue:
+        result = None
+    return result
+
+
+re_num = "\\d+\\.?\\d*"
+re_num_unit = f"{re_num} *[A-Za-z]+"
+re_opnum_unit = f"({re_num})? *[A-Za-z]+"
+
+
+rateDividers = "|".join(re.escape(d) for d in ("/", "per", "every"))
+stopDividers = "|".join(re.escape(d) for d in ("until", "for", "->"))
+addPrefixes = ["+", "plus", "add"]
+subPrefixes = ["-", "minus", "subtract", "sub"]
+addSubPrefixes = "|".join(re.escape(d) for d in addPrefixes + subPrefixes)
+re_rate = re.compile(f"(?P<prefix>{addSubPrefixes})? *(?P<multOrSv>.*) *({rateDividers}) *(?P<tv>{re_opnum_unit}) *(({stopDividers}) *(?P<stop>{re_opnum_unit}))?")
+
+
+def toRate(s):
+    match = re_rate.match(s)
+    if match is None:
+        raise errors.InvalidSizeValue(s)
+    prefix = match.group("prefix")
+    multOrSvStr = match.group("multOrSv")
+    tvStr = match.group("tv")
+    stopStr = match.group("stop")
+
+    isSub = prefix in subPrefixes
+
+    valueSV = tryOrNone(toSV, multOrSvStr)
+    valueMult = None
+    if valueSV is None:
+        valueMult = tryOrNone(toMult, multOrSvStr)
+    if valueSV is None and valueMult is None:
+        raise errors.InvalidSizeValue(s)
+    if valueSV and isSub:
+        valueSV = -valueSV
+
+    valueTV = tryOrNone(toTV, tvStr)
+    if valueTV is None:
+        raise errors.InvalidSizeValue(s)
+
+    stopSV = None
+    stopTV = None
+    if stopStr is not None:
+        stopSV = tryOrNone(toSV, stopStr)
+        if stopSV is None:
+            stopTV = tryOrNone(toTV, stopStr)
+        if stopSV is None and stopTV is None:
+            raise errors.InvalidSizeValue(s)
+
+    if valueSV is not None:
+        addPerSec = valueSV / valueTV
+    else:
+        addPerSec = Decimal("0")
+
+    if valueMult is not None:
+        mulPerSec = valueMult ** (1 / valueTV)
+    else:
+        mulPerSec = Decimal("1")
+
+    return addPerSec, mulPerSec, stopSV, stopTV
+
+
+# Get letters from string
+def getTVPair(s):
+    s = removeBrackets(s)
+    match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"]+)", s)
+    value = None
+    unit = None
+    if match is not None:
+        value = match.group("value")
+        unit = match.group("unit")
+    return value, unit
+
+
+def toTV(s):
+    value, unit = getTVPair(s)
+    if unit is None:
+        raise errors.InvalidSizeValue(s)
+    if value is None:
+        value = Decimal("1")
+    unitlower = unit.lower()
+    value = Decimal(value)
+    if unitlower in ["second", "seconds", "sec"] or unit == "s":
+        scale = Decimal("1E0")
+    elif unitlower in ["minute", "minutes", "min"] or unit == "m":
+        scale = Decimal("60")
+    elif unitlower in ["hour", "hours", "hr"] or unit == "h":
+        scale = Decimal("3600")
+    elif unitlower in ["day", "days", "dy"] or unit == "d":
+        scale = Decimal("3600") * Decimal("24")
+    elif unitlower in ["week", "weeks", "wk"] or unit == "w":
+        scale = Decimal("3600") * Decimal("24") * Decimal("7")
+    elif unitlower in ["month", "months"]:
+        scale = Decimal("3600") * Decimal("24") * Decimal("30")
+    elif unitlower in ["year", "years", "yr"] or unit in ["y", "a"]:
+        scale = Decimal("3600") * Decimal("24") * Decimal("365")
+    else:
+        raise errors.InvalidSizeValue(s)
+    return value * scale
+
+
+multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
+divPrefixes = ["/", "÷", "div", "divide"]
+prefixes = '|'.join(re.escape(p) for p in multPrefixes + divPrefixes)
+suffixes = '|'.join(re.escape(p) for p in ["x", "X"])
+re_mult = re.compile(f"(?P<prefix>{prefixes})? *(?P<multValue>{re_num}) *(?P<suffix>{suffixes})?")
+
+
+def toMult(s):
+    match = re_mult.match(s)
+    if match is None:
+        raise errors.InvalidSizeValue(s)
+    prefix = match.group("prefix") or match.group("suffix")
+    multValue = Decimal(match.group("multValue"))
+
+    isDivide = prefix in divPrefixes
+    if isDivide:
+        multValue = 1 / multValue
+
+    return multValue
+
+
+def isFeetAndInchesAndIfSoFixIt(value):
+    regex = r"^((?P<feet>\d+\.?\d*)(ft|foot|feet|'))?((?P<inch>\d+\.?\d*)(in|\"))?"
+    m = re.match(regex, value, flags = re.I)
+    if not m:
+        return value
+    feetval = m.group("feet")
+    inchval = m.group("inch")
+    if feetval is None and inchval is None:
+        return value
+    if feetval is None:
+        feetval = "0"
+    if inchval is None:
+        inchval = "0"
+    totalinches = (Decimal(feetval) * Decimal("12")) + Decimal(inchval)
+    return f"{totalinches}in"
+
+
+# Get letters from string
+def getSVPair(s):
+    s = removeBrackets(s)
+    s = isFeetAndInchesAndIfSoFixIt(s)
+    match = re.search(r"(?P<value>[\-+]?\d+\.?\d*) *(?P<unit>[a-zA-Z\'\"]+)", s)
+    value, unit = None, None
+    if match is not None:
+        value, unit = match.group("value"), match.group("unit")
+    return value, unit
+
+
+# Convert any supported height to "size value"
+def toSV(s):
+    value, unitStr = getSVPair(s)
+    if value is None or unitStr is None:
+        raise errors.InvalidSizeValue(s)
+    value = Decimal(value)
+    unit = getUnit(svunits, unitStr)
+    if unit is None:
+        raise errors.InvalidSizeValue(s)
+    valueSV = unit.toSV(value)
+    return valueSV
+
+
+# Convert any supported weight to "weight value", or milligrams
+def toWV(s):
+    value, unitStr = getSVPair(s)
+    if value is None or unitStr is None:
+        raise errors.InvalidSizeValue(s)
+    value = Decimal(value)
+    unit = getUnit(wvunits, unitStr)
+    if unit is None:
+        raise errors.InvalidSizeValue(s)
+    valueWV = unit.toSV(value)
+    return valueWV
 
 
 # Try to find the best fitting unit, picking the largest unit if all units are too small
