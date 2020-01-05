@@ -43,6 +43,7 @@
     * Fix the giant if statements<sup>?</sup>
     * Make no units ambiguous. (universes, Earths, Suns...)
     * Any value under 0.001ym gets displayed as 0 (currently not true for stats)
+    * Make sure users can't have heights below "zero" (sub-0.001ym) or above infinity.
 * Basic English syntax for some commands.
 * Make foot length optionally customizable.
 * Command metadata
