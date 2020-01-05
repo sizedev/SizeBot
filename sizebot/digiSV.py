@@ -486,7 +486,7 @@ def getBestUnit(value, units):
 def fromSV(value, system = "m", accuracy = 2):
     if system not in svsystems.keys():
         raise errors.InvalidUnitSystemException(system)
-    unit = getBestUnit(value, svsystems[system])
+    unit = getBestUnit(abs(value), svsystems[system])
     formatted = unit.format(value, accuracy)
     return formatted
 
@@ -495,7 +495,7 @@ def fromSV(value, system = "m", accuracy = 2):
 def fromWV(value, system = "m", accuracy = 2):
     if system not in wvsystems.keys():
         raise errors.InvalidUnitSystemException(system)
-    unit = getBestUnit(value, wvsystems[system])
+    unit = getBestUnit(abs(value), wvsystems[system])
     formatted = unit.format(value, accuracy)
     return formatted
 

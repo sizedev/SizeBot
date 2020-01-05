@@ -142,3 +142,23 @@ def test_toRate_2x():
 def test_toRate_omitOne():
     result = digiSV.toRate("2 meters per second")
     assert result == (2, 1, None, None)
+
+
+def test_negative_toSV():
+    result = digiSV.toSV("-12m")
+    assert result == Decimal("-12")
+
+
+def test_negative_fromSV():
+    result = digiSV.fromSV(Decimal("-12"))
+    assert result == "-12m"
+
+    
+def test_negative_toWV():
+    result = digiSV.toWV("-12kg")
+    assert result == Decimal("-12000")
+
+
+def test_negative_fromWV():
+    result = digiSV.fromWV(Decimal("-12000"))
+    assert result == "-12kg"
