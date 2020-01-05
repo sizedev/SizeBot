@@ -78,10 +78,7 @@ class ChangeCog(commands.Cog):
     @commands.command()
     @commands.check(requireAdmin)
     async def changes(self, ctx):
-        try:
-            await ctx.message.delete()
-        except discord.errors.Forbidden:
-            pass
+        await ctx.message.delete(delay=0)
         changeDump = "\n".join(str(c) for c in self.changes.values())
         if not changeDump:
             changeDump = "No changes"

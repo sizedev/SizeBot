@@ -12,7 +12,7 @@ class ModCog(commands.Cog):
 
     @commands.command()
     async def heightunits(self, ctx):
-        await ctx.message.delete()
+        await ctx.message.delete(delay=0)
         await ctx.send(
             f"<@{ctx.message.author.id}>, **Accepted Units**\n"
             "*Height*\n"
@@ -52,7 +52,7 @@ class ModCog(commands.Cog):
 
     @commands.command()
     async def weightunits(self, ctx):
-        await ctx.message.delete()
+        await ctx.message.delete(delay=0)
         await ctx.send(
             f"<@{ctx.message.author.id}>, **Accepted Units**\n"
             "*Weight*\n"
@@ -93,7 +93,7 @@ class ModCog(commands.Cog):
 
     @commands.command()
     async def help(self, ctx, what: str = None):
-        await ctx.message.delete()
+        await ctx.message.delete(delay=0)
         if what is None:
             await ctx.send(
                 f"<@{ctx.message.author.id}>, **Help Topics**\n"
@@ -136,7 +136,7 @@ class ModCog(commands.Cog):
 
     @commands.command()
     async def about(self, ctx):
-        await ctx.message.delete()
+        await ctx.message.delete(delay=0)
         await ctx.send(
             "```\n"
             f"{conf.banner}\n"
@@ -167,7 +167,7 @@ class ModCog(commands.Cog):
 
     @commands.command()
     async def donate(self, ctx):
-        await ctx.message.delete()
+        await ctx.message.delete(delay=0)
         await ctx.send(
             f"<@{ctx.message.author.id}>\n"
             "SizeBot is coded (mainly) by DigiDuncan, and for absolutely free.\n"
