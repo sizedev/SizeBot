@@ -78,7 +78,7 @@ class SetCog(commands.Cog):
             return
 
         newheightsv = digiSV.toSV(newheight)
-        if newheightsv > digiSV.infinity:
+        if newheightsv > digiSV.infinitySV:
             await logger.warn("Invalid size value.")
             await ctx.send("Too big. x_x")
             newheightsv = digiSV.infinitySV
@@ -170,7 +170,7 @@ class SetCog(commands.Cog):
         newheightminSV = digiSV.toSV(newheightmin)
         newheightmaxSV = digiSV.toSV(newheightmax)
         newheight = random.randint(newheightminSV, newheightmaxSV)
-        if newheight > digiSV.infinity:
+        if newheight > digiSV.infinitySV:
             await logger.warn("Invalid size value.")
             await ctx.send("Too big. x_x")
             newheight = digiSV.infinitySV
