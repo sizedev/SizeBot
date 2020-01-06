@@ -28,13 +28,7 @@ async def error(msg):
 async def log(level, msg):
     msg = str(msg)
     print(df.formatLog(level, msg))
-    discordPrefix = "```\n"
-    discordSuffix = "\n```"
-    if logChannel is not None:
-        msgMaxLen = 2000 - len(discordPrefix) - len(discordSuffix)
-        for msgPart in utils.chunkStr(msgMaxLen, msg):
-            discordMessage = discordPrefix + msgPart + discordSuffix
-            await logChannel.send(discordMessage)
+    await utils.sendMessage(logChannel, msg)
 
 
 # Sync log functions (prints to console)

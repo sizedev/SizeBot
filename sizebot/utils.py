@@ -67,3 +67,12 @@ def chunkStr(n, s, fillvalue=""):
 def removeBrackets(s):
     s = re.sub(r"[\[\]<>]", "", s)
     return s
+
+
+async def sendMessage(dst, msg, maxlen=2000):
+    discordPrefix = "```\n"
+    discordSuffix = "\n```"
+    maxlen -= len(discordPrefix) + len(discordSuffix)
+    for msgPart in chunkStr(maxlen, msg):
+        partToSend = discordPrefix + msgPart + discordSuffix
+        await dst.send(partToSend)
