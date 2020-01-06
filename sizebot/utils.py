@@ -97,7 +97,7 @@ def pformat(name, value):
 
 # return a list of an object's attributes, with type notation
 def pdir(o):
-    return [pformat(n, v) for n, v in ddir(o)]
+    return [pformat(n, v) for n, v in ddir(o).items()]
 
 
 # return a dictionary of an object's attributes
