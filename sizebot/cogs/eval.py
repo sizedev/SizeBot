@@ -13,7 +13,7 @@ def strHelp(topic):
 
 
 async def runEval(ctx, evalStr):
-    glb = {"__builtins__": {"print": print, "dir": dir, "help": help}, "pydoc": pydoc, "ctx": ctx, "logger": logger, "digiSV": digiSV}
+    glb = {"__builtins__": {"print": print, "dir": dir, "help": strHelp}, "pydoc": pydoc, "ctx": ctx, "logger": logger, "digiSV": digiSV}
     loc = {}
 
     evalLines = evalStr.split("\n")
