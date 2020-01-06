@@ -5,8 +5,8 @@ from sizebot.checks import requireAdmin
 
 
 async def runEval(ctx, evalStr):
-    glb = {"__builtins__": {"print": print}}
-    loc = {"ctx": ctx}
+    glb = {"__builtins__": {"print": print, "dir": dir}, "ctx": ctx}
+    loc = {}
     exec(
         "async def __ex():"
         f"    return {evalStr}",
