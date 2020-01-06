@@ -1,6 +1,8 @@
 import builtins
 import pydoc
 
+import discord
+
 from sizebot import digilogger as logger
 from sizebot import digiSV
 import sizebot.utils
@@ -37,7 +39,7 @@ def getEvalGlobals():
     evalBuiltins.update(custom_builtins)
 
     # Collect all libraries to include
-    evalImports = {"pydoc": pydoc, "logger": logger, "digiSV": digiSV, "utils": sizebot.utils, "pdir": sizebot.utils.pdir}
+    evalImports = {"discord": discord, "logger": logger, "digiSV": digiSV, "utils": sizebot.utils, "pdir": sizebot.utils.pdir}
 
     evalGlobals = {"__builtins__": evalBuiltins}
     evalGlobals.update(evalImports)
@@ -46,11 +48,19 @@ def getEvalGlobals():
 
 
 # Build a wrapping async function that lets the eval command run multiple lines, and return the result of the last line
-def buildEvalWrapper(evalStr):
+def buildEvalWrapper(evalStr, returnValue = True):
     evalLines = evalStr.split("\n")
-    evalLines[-1] = "return " + evalLines[-1]
+    if returnValue:
+        evalLines[-1] = "return " + evalLines[-1]
     evalWrapperStr = "async def __ex():\n" + "".join(f"\n    {line}" for line in evalLines)
-    evalWrapper = compile(evalWrapperStr, "<eval>", "exec")
+    try:
+        evalWrapper = compile(evalWrapperStr, "<eval>", "exec")
+    except SyntaxError:
+        # If we get a syntax error, maybe it's because someone is trying to do an assignment on the last line? Might as well try it without a return statement and see if it works.
+        if returnValue:
+            return buildEvalWrapper(evalStr, False)
+        raise
+
     return evalWrapper
 
 

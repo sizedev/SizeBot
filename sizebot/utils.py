@@ -1,3 +1,4 @@
+import inspect
 import traceback
 import re
 from itertools import zip_longest
@@ -84,6 +85,8 @@ def formatTraceback(err):
 
 
 def pformat(name, value):
+    if value is None:
+        return f"{name}?"
     if callable(value):
         return f"{name}()"
     if isinstance(value, (list, tuple)):
@@ -102,4 +105,5 @@ def pdir(o):
 
 # return a dictionary of an object's attributes
 def ddir(o):
-    return {n: getattr(o, n) for n in dir(o) if not n.startswith("_")}
+    return {n: v for n, v in inspect.getmembers(o) if not n.startswith("_")}
+    # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
