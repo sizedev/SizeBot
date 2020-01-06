@@ -153,7 +153,7 @@ def test_negative_fromSV():
     result = digiSV.fromSV(Decimal("-12"))
     assert result == "-12m"
 
-    
+
 def test_negative_toWV():
     result = digiSV.toWV("-12kg")
     assert result == Decimal("-12000")
@@ -162,3 +162,8 @@ def test_negative_toWV():
 def test_negative_fromWV():
     result = digiSV.fromWV(Decimal("-12000"))
     assert result == "-12kg"
+
+
+def test_feetinch_noinchunit():
+    result = digiSV.toSV("5ft8")
+    assert result == Decimal("1.7272")
