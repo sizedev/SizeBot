@@ -14,7 +14,7 @@ class RollCog(commands.Cog):
     # Die rolling command
     @commands.command()
     async def roll(self, ctx, *, dString):
-        logger.info(f"{ctx.message.author.display_name} rolled {dString} verbosely.")
+        await logger.info(f"{ctx.message.author.display_name} rolled {dString} verbosely.")
         result = roller.roll(dString)
 
         header = (f"{ctx.message.author.display_name} rolled `{dString}`!\n"
@@ -35,7 +35,7 @@ class RollCog(commands.Cog):
 
     @commands.command()
     async def r(self, ctx, *, dString):
-        logger.info(f"{ctx.message.author.display_name} rolled {dString} non-verbosely.")
+        await logger.info(f"{ctx.message.author.display_name} rolled {dString} non-verbosely.")
         result = roller.roll(dString)
         await ctx.send(f"{ctx.message.author.display_name} rolled `{dString}` = **{result.total}**")
 
