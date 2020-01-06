@@ -692,25 +692,32 @@ def fromWVUSA(value, accuracy=1):
     elif value < uniw * Decimal("1E3"):
         scale, unit = uniw, "uni"
     elif value < uniw * Decimal("1E6"):
-        scale, unit = uniw / Decimal("1E3"), "kuni"
+        scale, unit = uniw * Decimal("1E3"), "kuni"
     elif value < uniw * Decimal("1E9"):
-        scale, unit = uniw / Decimal("1E6"), "Muni"
+        scale, unit = uniw * Decimal("1E6"), "Muni"
     elif value < uniw * Decimal("1E12"):
-        scale, unit = uniw / Decimal("1E9"), "Guni"
+        scale, unit = uniw * Decimal("1E9"), "Guni"
     elif value < uniw * Decimal("1E15"):
-        scale, unit = uniw / Decimal("1E12"), "Tuni"
+        scale, unit = uniw * Decimal("1E12"), "Tuni"
     elif value < uniw * Decimal("1E18"):
-        scale, unit = uniw / Decimal("1E15"), "Puni"
+        scale, unit = uniw * Decimal("1E15"), "Puni"
     elif value < uniw * Decimal("1E21"):
-        scale, unit = uniw / Decimal("1E18"), "Euni"
+        scale, unit = uniw * Decimal("1E18"), "Euni"
     elif value < uniw * Decimal("1E24"):
-        scale, unit = uniw / Decimal("1E21"), "Zuni"
+        scale, unit = uniw * Decimal("1E21"), "Zuni"
     elif value < uniw * Decimal("1E27"):
-        scale, unit = uniw / Decimal("1E24"), "Yuni"
+        scale, unit = uniw * Decimal("1E24"), "Yuni"
     else:
         return "∞"
 
     return f"{trimzeroes(round(value / scale, accuracy)):,}{unit}"
+
+
+def shoeFormat(v):
+    if v > Decimal("1E15"):
+        return f"{v:.2e}"
+    else:
+        return f"{v:,.1}"
 
 
 def toShoeSize(footlength):
@@ -723,7 +730,7 @@ def toShoeSize(footlength):
         shoesize += 12 + Decimal(1 / 3)
     if shoesize < 1:
         return "No shoes exist this small!"
-    shoesize = f"{round_nearest_half(shoesize)}:,"
+    shoesize = f"{shoeFormat(round_nearest_half(shoesize))}"
     if child:
         shoesize = "Children's " + shoesize
     return "Size US " + shoesize

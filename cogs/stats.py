@@ -316,8 +316,8 @@ class StatsCog(commands.Cog):
         hairwidth_u = fromSVUSA(hairwidth)
 
         pointer = currentheight * pointerfactor
-        pointer_m = fromSVUSA(pointer)
-        pointer_u = fromSVacc(pointer)
+        pointer_m = fromSVacc(pointer)
+        pointer_u = fromSVUSA(pointer)
 
         return (
             f"**{usertag} Stats:**\n"
