@@ -1,3 +1,4 @@
+import traceback
 import re
 from itertools import zip_longest
 from functools import reduce
@@ -76,3 +77,7 @@ async def sendMessage(dst, msg, maxlen=2000):
     for msgPart in chunkStr(maxlen, msg):
         partToSend = discordPrefix + msgPart + discordSuffix
         await dst.send(partToSend)
+
+
+def formatTraceback(err):
+    return "".join(traceback.format_exception(type(err), err, err.__traceback__))

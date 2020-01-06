@@ -1,5 +1,4 @@
 import sys
-import traceback
 from datetime import datetime
 
 import discord
@@ -9,7 +8,7 @@ from sizebot import digierror as errors
 from sizebot import digilogger as logger
 from sizebot import digiformatter as df
 from sizebot.conf import conf
-
+from sizebot.utils import formatTraceback
 
 initial_extensions = [
     "sizebot.cogs.change",
@@ -102,11 +101,11 @@ def main():
         # Default command handling
         await ctx.send("Something went wrong.")
         await logger.error(f"Ignoring exception in command {ctx.command}:")
-        await logger.error("".join(traceback.format_exception(type(error), error, error.__traceback__)))
+        await logger.error(formatTraceback(error))
 
     @bot.event
     async def on_error(event, *args, **kwargs):
-        (type, error, tb) = sys.exc_info()
+        _, error, _ = sys.exc_info()
         # Get actual error
         err = getattr(error, "original", error)
         # DigiException handling
@@ -116,7 +115,7 @@ def main():
             return
 
         await logger.error(f"Ignoring exception in {event}")
-        await logger.error(traceback.format_exc())
+        await logger.error(formatTraceback(error))
 
     @bot.event
     async def on_disconnect():
