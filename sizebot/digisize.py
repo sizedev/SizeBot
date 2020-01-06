@@ -280,7 +280,7 @@ def getStats(userdata):
     currentweight_u = digiSV.fromWV(currentweight, "u", 3)
 
     defaultheightmult = userdata.height / userdb.defaultheight
-    defaultweightmult = currentweight / userdb.defaultweight ** 3
+    defaultweightmult = (currentweight / userdb.defaultweight) ** 3
 
     footlength = userdata.height * footfactor
     footlength_m = digiSV.fromSV(footlength, "m", 3)
