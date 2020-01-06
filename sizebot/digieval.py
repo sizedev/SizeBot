@@ -1,5 +1,6 @@
 import builtins
 import pydoc
+import asyncio
 
 import discord
 
@@ -31,37 +32,55 @@ def strHelp(topic):
 # Construct a globals dict for eval
 @cachedCopy
 def getEvalGlobals():
-    # Collect all safe builtins to include (whitelist)
-    # Removed builtins: breakpoint, classmethod, compile, eval, exec, help, input, memoryview, open, print, staticmethod, super
-    safeBuiltins = ["abs", "all", "any", "ascii", "bin", "bool", "bytearray", "bytes", "callable", "chr", "complex", "delattr", "dict", "dir", "divmod", "enumerate", "filter", "float", "format", "frozenset", "getattr", "globals", "hasattr", "hash", "hex", "id", "int", "isinstance", "issubclass", "iter", "len", "list", "locals", "map", "max", "min", "next", "object", "oct", "ord", "pow", "property", "range", "repr", "reversed", "round", "set", "setattr", "slice", "sorted", "str", "sum", "tuple", "type", "vars", "zip", "__import__"]
-    custom_builtins = {"help": strHelp}
-    evalBuiltins = {b: getattr(builtins, b) for b in safeBuiltins}
-    evalBuiltins.update(custom_builtins)
+    # Create a dict of builtins, excluding any in the blacklist
+    blacklist = [
+        "breakpoint",
+        "classmethod",
+        "compile",
+        "eval",
+        "exec",
+        "help",
+        "input",
+        "memoryview",
+        "open",
+        "print",
+        "staticmethod",
+        "super",
+        "__import__"
+    ]
+    evalBuiltins = {n: (v if n not in blacklist else None) for n, v in vars(builtins).items()}
 
-    # Collect all libraries to include
-    evalImports = {"discord": discord, "logger": logger, "digiSV": digiSV, "utils": sizebot.utils, "pdir": sizebot.utils.pdir}
-
-    evalGlobals = {"__builtins__": evalBuiltins}
-    evalGlobals.update(evalImports)
+    evalGlobals = {
+        "__builtins__": evalBuiltins,
+        "help": strHelp,
+        "discord": discord,
+        "logger": logger,
+        "digiSV": digiSV,
+        "utils": sizebot.utils,
+        "pdir": sizebot.utils.pdir,
+        "asyncio": asyncio
+    }
 
     return evalGlobals
 
 
 # Build a wrapping async function that lets the eval command run multiple lines, and return the result of the last line
-def buildEvalWrapper(evalStr, returnValue = True):
+def buildEvalWrapper(evalStr, addReturn = True):
     evalLines = evalStr.split("\n")
-    if returnValue:
+    if evalLines[-1].startswith(" "):
+        addReturn = False
+    if addReturn:
         evalLines[-1] = "return " + evalLines[-1]
-    evalWrapperStr = "async def __ex():\n" + "".join(f"\n    {line}" for line in evalLines)
+    evalWrapperStr = "async def __ex():" + "".join(f"\n  {line}" for line in evalLines)
     try:
         evalWrapper = compile(evalWrapperStr, "<eval>", "exec")
     except SyntaxError:
         # If we get a syntax error, maybe it's because someone is trying to do an assignment on the last line? Might as well try it without a return statement and see if it works.
-        if returnValue:
+        if addReturn:
             return buildEvalWrapper(evalStr, False)
         raise
 
-    return evalWrapper
+    return evalWrapper, evalWrapperStr
 
 
 async def runEval(ctx, evalStr):
@@ -71,7 +90,9 @@ async def runEval(ctx, evalStr):
     # Add ctx to the globals
     evalGlobals["ctx"] = ctx
 
-    evalWrapper = buildEvalWrapper(evalStr)
+    evalWrapper, evalWrapperStr = buildEvalWrapper(evalStr)
+
+    await logger.debug(f"Executing eval:\n{evalWrapperStr}")
 
     exec(
         evalWrapper,

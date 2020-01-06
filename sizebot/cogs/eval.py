@@ -26,7 +26,7 @@ class EvalCog(commands.Cog):
                 result = await runEval(ctx, evalStr)
             except Exception as err:
                 await logger.error("eval error:\n" + utils.formatTraceback(err))
-                await ctx.send(f"⚠️ ` {str(err)} `")
+                await ctx.send(f"⚠️ ` {utils.formatError(err)} `")
                 return
             finally:
                 # Remove wait message when done
@@ -47,7 +47,7 @@ class EvalCog(commands.Cog):
                 await runEval(ctx, evalStr, returnValue = False)
             except Exception as err:
                 await logger.error("eval error:\n" + utils.formatTraceback(err))
-                await ctx.message.author.send(f"⚠️ ` {str(err)} `")
+                await ctx.message.author.send(f"⚠️ ` {utils.formatError(err)} `")
 
 
 # Necessary

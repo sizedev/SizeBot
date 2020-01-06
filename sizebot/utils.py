@@ -107,3 +107,7 @@ def pdir(o):
 def ddir(o):
     return {n: v for n, v in inspect.getmembers(o) if not n.startswith("_")}
     # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
+
+
+def formatErr(err):
+    return str(err) or f"{err.__class__.__module__}.{err.__class__.__name__}"
