@@ -8,8 +8,12 @@ from sizebot import digiSV
 from sizebot import utils
 
 
+def strHelp(topic):
+    return pydoc.render_doc(topic)
+
+
 async def runEval(ctx, evalStr):
-    glb = {"__builtins__": {"print": print, "dir": dir}, "pydoc": pydoc, "ctx": ctx, "logger": logger, "digiSV": digiSV}
+    glb = {"__builtins__": {"print": print, "dir": dir, "help": help}, "pydoc": pydoc, "ctx": ctx, "logger": logger, "digiSV": digiSV}
     loc = {}
 
     evalLines = evalStr.split("\n")
