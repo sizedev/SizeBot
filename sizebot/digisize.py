@@ -268,8 +268,10 @@ def getStats(userdata):
 
     baseheight_m = digiSV.fromSV(userdata.baseheight, "m", 3)
     baseheight_u = digiSV.fromSV(userdata.baseheight, "u", 3)
+
     baseweight_m = digiSV.fromWV(userdata.baseweight, "m", 3)
     baseweight_u = digiSV.fromWV(userdata.baseweight, "u", 3)
+
     currentheight_m = digiSV.fromSV(userdata.height, "m", 3)
     currentheight_u = digiSV.fromSV(userdata.height, "u", 3)
 
@@ -280,35 +282,49 @@ def getStats(userdata):
     defaultheightmult = userdata.height / userdb.defaultheight
     defaultweightmult = currentweight / userdb.defaultweight ** 3
 
-    footlength_m = digiSV.fromSV(userdata.height * footfactor, "m", 3)
-    footlength_u = digiSV.fromSV(userdata.height * footfactor, "u", 3)
+    footlength = userdata.height * footfactor
+    footlength_m = digiSV.fromSV(footlength, "m", 3)
+    footlength_u = digiSV.fromSV(footlength, "u", 3)
 
-    footwidth_m = digiSV.fromSV(userdata.height * footwidthfactor, "m", 3)
-    footwidth_u = digiSV.fromSV(userdata.height * footwidthfactor, "u", 3)
-    toeheight_m = digiSV.fromSV(userdata.height * toeheightfactor, "m", 3)
-    toeheight_u = digiSV.fromSV(userdata.height * toeheightfactor, "u", 3)
+    footwidth = userdata.height * footwidthfactor
+    footwidth_m = digiSV.fromSV(footwidth, "m", 3)
+    footwidth_u = digiSV.fromSV(footwidth, "u", 3)
 
-    pointer_m = digiSV.fromSV(userdata.height * pointerfactor, "m", 3)
-    pointer_u = digiSV.fromSV(userdata.height * pointerfactor, "u", 3)
-    thumb_m = digiSV.fromSV(userdata.height * thumbfactor, "m", 3)
-    thumb_u = digiSV.fromSV(userdata.height * thumbfactor, "u", 3)
-    fingerprint_m = digiSV.fromSV(userdata.height * fingerprintfactor, "m", 3)
-    fingerprint_u = digiSV.fromSV(userdata.height * fingerprintfactor, "u", 3)
+    toeheight = userdata.height * toeheightfactor
+    toeheight_m = digiSV.fromSV(toeheight, "m", 3)
+    toeheight_u = digiSV.fromSV(toeheight, "u", 3)
 
-    hair_m = digiSV.fromSV(userdata.height * hairfactor, "m", 3)
-    hair_u = digiSV.fromSV(userdata.height * hairfactor, "u", 3)
+    pointer = userdata.height * pointerfactor
+    pointer_m = digiSV.fromSV(pointer, "m", 3)
+    pointer_u = digiSV.fromSV(pointer, "u", 3)
 
-    normalheightcomp_m = digiSV.fromSV(userdb.defaultheight / defaultheightmult, "m", 3)
-    normalheightcomp_u = digiSV.fromSV(userdb.defaultheight / defaultheightmult, "u", 3)
-    normalweightcomp_m = digiSV.fromWV(userdb.defaultweight / defaultweightmult, "m", 3)
+    thumb = userdata.height * thumbfactor
+    thumb_m = digiSV.fromSV(thumb, "m", 3)
+    thumb_u = digiSV.fromSV(thumb, "u", 3)
 
-    tallerheight = max(userdata.height, userdb.defaultheight)
-    smallerheight = min(userdata.height, userdb.defaultheight)
+    fingerprint = userdata.height * fingerprintfactor
+    fingerprint_m = digiSV.fromSV(fingerprint, "m", 3)
+    fingerprint_u = digiSV.fromSV(fingerprint, "u", 3)
+
+    hair = userdata.height * hairfactor
+    hair_m = digiSV.fromSV(hair, "m", 3)
+    hair_u = digiSV.fromSV(hair, "u", 3)
+
+    normalheightcomp = userdb.defaultheight / defaultheightmult
+    normalheightcomp_m = digiSV.fromSV(normalheightcomp, "m", 3)
+    normalheightcomp_u = digiSV.fromSV(normalheightcomp, "u", 3)
+
+    normalweightcomp = userdb.defaultweight / defaultweightmult
+    normalweightcomp_m = digiSV.fromWV(normalweightcomp, "m", 3)
+    normalweightcomp_u = digiSV.fromWV(normalweightcomp, "u", 3)
+
     if userdata.height >= userdb.defaultheight:
         lookdirection = "down"
     else:
         lookdirection = "up"
 
+    tallerheight = max(userdata.height, userdb.defaultheight)
+    smallerheight = min(userdata.height, userdb.defaultheight)
     # This is disgusting, but it works!
     lookangle = str(round(math.degrees(math.atan((tallerheight - smallerheight) / (tallerheight / 2))), 0)).split(".")[0]
 
@@ -326,7 +342,7 @@ def getStats(userdata):
         f"Hair Width: {hair_m} / {hair_u}\n"
         f"\n"
         f"Size of a Normal Man (Comparative): {normalheightcomp_m} / {normalheightcomp_u}\n"
-        f"Weight of a Normal Man (Comparative): {normalweightcomp_m} / {normalheightcomp_u}\n"
+        f"Weight of a Normal Man (Comparative): {normalweightcomp_m} / {normalweightcomp_u}\n"
         f"To look {lookdirection} at a average human, you'd have to look {lookdirection} {lookangle}°.\n"
         f"\n"
         f"Character Bases: {baseheight_m} / {baseheight_u} | {baseweight_m} / {baseweight_u}"
