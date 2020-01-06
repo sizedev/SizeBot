@@ -418,12 +418,11 @@ def toMult(s):
 
 
 def isFeetAndInchesAndIfSoFixIt(value):
-    regex = r"^((?P<feet>\d+\.?\d*)(ft|foot|feet|'))?((?P<inch>\d+\.?\d*)(in|\"))?"
+    regex = r"^(?P<feet>\d+\.?\d*)(ft|foot|feet|')(?P<inch>\d+\.?\d*)(in|\")?"
     m = re.match(regex, value, flags = re.I)
     if not m:
         return value
-    feetval = m.group("feet")
-    inchval = m.group("inch")
+    feetval, inchval = m.group("feet"), m.group("inch")
     if feetval is None and inchval is None:
         return value
     if feetval is None:
