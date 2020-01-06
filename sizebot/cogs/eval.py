@@ -1,12 +1,13 @@
 from discord.ext import commands
-import numexpr
 
 from sizebot import digilogger as logger
 from sizebot.checks import requireAdmin
 
 
-def evalexpr(expression):
-    return numexpr.evaluate(expression, local_dict={}, global_dict={})
+def runEval(ctx, evalStr):
+    glb = {"__builtins__": {"print": print}}
+    loc = {"ctx": ctx}
+    return eval(evalStr, glb, loc)
 
 
 class EvalCog(commands.Cog):
@@ -17,7 +18,13 @@ class EvalCog(commands.Cog):
     @commands.check(requireAdmin)
     async def eval(self, ctx, *, evalStr):
         await logger.info(f"{ctx.message.author.display_name} tried to eval {evalStr!r}.")
-        result = evalexpr(evalStr)
+        try:
+            result = runEval(ctx, evalStr)
+        except Exception as err:
+            print(err)
+            await logger.info(f"Error: {err!r}")
+            await ctx.send(f"> **ERROR:** `{err!r}`")
+            return
         await logger.info(f"Result: {result!r}")
         await ctx.send(f"> ```{result!r}```")
 
