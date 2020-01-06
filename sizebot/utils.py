@@ -81,3 +81,25 @@ async def sendMessage(dst, msg, maxlen=2000):
 
 def formatTraceback(err):
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
+
+
+def pformat(name, value):
+    if callable(value):
+        return f"{name}()"
+    if isinstance(value, (list, tuple)):
+        return f"{name}[]"
+    if isinstance(value, set):
+        return f"{name}{{}}"
+    if isinstance(value, dict):
+        return f"{name}{{:}}"
+    return name
+
+
+# return a list of an object's attributes, with type notation
+def pdir(o):
+    return [pformat(n, v) for n, v in ddir(o)]
+
+
+# return a dictionary of an object's attributes
+def ddir(o):
+    return {n: getattr(o, n) for n in dir(o) if not n.startswith("_")}

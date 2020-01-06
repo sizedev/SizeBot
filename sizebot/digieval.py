@@ -3,6 +3,7 @@ import pydoc
 
 from sizebot import digilogger as logger
 from sizebot import digiSV
+import sizebot.utils
 
 
 # Decorator that calls the wrapper function the first time it's called, and returns copies of the cached result on all later calls
@@ -36,12 +37,12 @@ def getEvalGlobals():
     evalBuiltins.update(custom_builtins)
 
     # Collect all libraries to include
-    evalLibraries = {"pydoc": pydoc, "logger": logger, "digiSV": digiSV}
+    evalImports = {"pydoc": pydoc, "logger": logger, "digiSV": digiSV, "utils": sizebot.utils, "pdir": sizebot.utils.pdir}
 
     evalGlobals = {"__builtins__": evalBuiltins}
-    evalGlobals.update(evalLibraries)
+    evalGlobals.update(evalImports)
 
-    return evalBuiltins
+    return evalGlobals
 
 
 # Build a wrapping async function that lets the eval command run multiple lines, and return the result of the last line
