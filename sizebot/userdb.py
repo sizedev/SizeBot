@@ -3,6 +3,7 @@ import json
 from sizebot.conf import conf
 from sizebot.digidecimal import Decimal
 from sizebot import digierror as errors
+from digiSV import infinitySV, infinityWV
 
 # Defaults
 defaultheight = Decimal("1.754")  # meters
@@ -37,7 +38,7 @@ class User:
 
     @height.setter
     def height(self, value):
-        self._height = Decimal(value)
+        self._height = utils.clamp(0, Decimal(value), infinitySV)
 
     @property
     def baseheight(self):
@@ -45,7 +46,7 @@ class User:
 
     @baseheight.setter
     def baseheight(self, value):
-        self._baseheight = Decimal(value)
+        self._baseheight = utils.clamp(0, Decimal(value), infinitySV)
 
     @property
     def baseweight(self):
@@ -53,7 +54,7 @@ class User:
 
     @baseweight.setter
     def baseweight(self, value):
-        self._baseweight = Decimal(value)
+        self._baseweight = utils.clamp(0, Decimal(value), infinityWV)
 
     # Check that unitsystem is valid and lowercase
     @property
