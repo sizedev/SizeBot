@@ -3,7 +3,8 @@ import json
 from sizebot.conf import conf
 from sizebot.digidecimal import Decimal
 from sizebot import digierror as errors
-from digiSV import infinitySV, infinityWV
+from sizebot.digiSV import infinitySV, infinityWV
+from sizebot import utils
 
 # Defaults
 defaultheight = Decimal("1.754")  # meters
