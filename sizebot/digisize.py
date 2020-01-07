@@ -214,7 +214,7 @@ class PersonComparison:
         return embed
 
 
-class PersonStats():
+class PersonStats:
     # Conversion constants
     footfactor = Decimal("1") / Decimal("7")
     footwidthfactor = footfactor / Decimal("2.5")
