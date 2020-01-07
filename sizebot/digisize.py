@@ -2,13 +2,13 @@ import math
 
 import discord
 
+from sizebot.conf import conf
 from sizebot.digidecimal import Decimal, roundDecimalHalf
 from sizebot import digierror as errors
 from sizebot.digiSV import SV, WV
 from sizebot import userdb
 from sizebot.userdb import defaultheight, defaultweight
 from sizebot import utils
-from conf import Config
 
 
 # Update users nicknames to include sizetags
@@ -271,7 +271,7 @@ class PersonStats:
 
     def toEmbed(self):
         embed = discord.Embed(title=f"Stats for {self.tag}", description="sent by *Name of Sender*", color=0x31eff9)
-        embed.set_author(name=f"SizeBot {Config.version}")
+        embed.set_author(name=f"SizeBot {conf.version}")
         embed.add_field(name="Current Height", value=f"{self.height:.3m} / {self.height:.3u}", inline=True)
         embed.add_field(name="Current Weight", value=f"{self.weight:.3m} / {self.weight:.3u}", inline=True)
         embed.add_field(name="Foot Length", value=f"{self.footlength:.3m} / {self.footlength:.3u}", inline=True)
