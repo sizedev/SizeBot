@@ -57,8 +57,7 @@ def getEvalGlobals():
         "logger": logger,
         "digiSV": digiSV,
         "utils": sizebot.utils,
-        "pdir": sizebot.utils.pdir,
-        "asyncio": asyncio
+        "pdir": sizebot.utils.pdir
     }
 
     return evalGlobals
