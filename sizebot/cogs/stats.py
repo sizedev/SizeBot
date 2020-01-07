@@ -26,7 +26,9 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(memberOrHeight)
 
         stats = digisize.PersonStats(userdata)
-        await ctx.send(embed = stats.toEmbed())
+        embedtosend = stats.toEmbed()
+        embedtosend.description = f"Sent by *{ctx.message.author.nick}*"
+        await ctx.send(embed = embedtosend)
 
         await logger.info(f"Stats for {memberOrHeight} sent.")
 
