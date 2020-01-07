@@ -1,5 +1,7 @@
-from sizebot import digiSV
 from decimal import Decimal
+
+from sizebot import digiSV
+from sizebot.digiSV import SV, WV, TV
 
 
 def test_toMult():
@@ -7,8 +9,8 @@ def test_toMult():
     assert result == 2
 
 
-def test_toTV():
-    result = digiSV.toTV("3 seconds")
+def test_TV_parse():
+    result = TV.parse("3 seconds")
     assert result == 3
 
 
@@ -121,17 +123,17 @@ def test_toRate_symbols_mult_nostop():
 
 def test_toRate_symbols_div_sizestop():
     result = digiSV.toRate("/8/3s until 12m")
-    assert result == (0, Decimal(0.5), 12, None)
+    assert result == (0, Decimal("0.5"), 12, None)
 
 
 def test_toRate_symbols_div_timestop():
     result = digiSV.toRate("/8/3s for 10s")
-    assert result == (0, Decimal(0.5), None, 10)
+    assert result == (0, Decimal("0.5"), None, 10)
 
 
 def test_toRate_symbols_div_nostop():
     result = digiSV.toRate("/8/3s")
-    assert result == (0, Decimal(0.5), None, None)
+    assert result == (0, Decimal("0.5"), None, None)
 
 
 def test_toRate_2x():
@@ -144,26 +146,27 @@ def test_toRate_omitOne():
     assert result == (2, 1, None, None)
 
 
-def test_negative_toSV():
-    result = digiSV.toSV("-12m")
-    assert result == Decimal("-12")
+def test_negative_SV_parse():
+    result = SV.parse("-12m")
+    assert result == SV("-12")
 
 
-def test_negative_fromSV():
-    result = digiSV.fromSV(Decimal("-12"))
+def test_negative_SV_format():
+
+    result = f"{SV('-12'):m}"
     assert result == "-12m"
 
 
-def test_negative_toWV():
-    result = digiSV.toWV("-12kg")
-    assert result == Decimal("-12000")
+def test_negative_WV_parse():
+    result = WV.parse("-12kg")
+    assert result == WV("-12000")
 
 
-def test_negative_fromWV():
-    result = digiSV.fromWV(Decimal("-12000"))
+def test_negative_WV_format():
+    result = f"{WV('-12000'):m}"
     assert result == "-12kg"
 
 
 def test_feetinch_noinchunit():
-    result = digiSV.toSV("5ft8")
-    assert result == Decimal("1.7272")
+    result = SV.parse("5ft8")
+    assert result == SV("1.7272")

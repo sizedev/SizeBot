@@ -8,7 +8,7 @@ from discord.ext import commands
 from sizebot import digilogger as logger
 # TODO: Fix this...
 from sizebot import userdb
-from sizebot.digitypes import SV
+from sizebot.digiSV import SV
 from sizebot import digisize
 from sizebot.checks import guildOnly
 
@@ -25,8 +25,8 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(memberOrHeight)
 
-        output = digisize.getStats(userdata)
-        await ctx.send(output)
+        stats = digisize.PersonStats(userdata)
+        await ctx.send(stats)
 
         await logger.info(f"Stats for {memberOrHeight} sent.")
 
@@ -44,8 +44,8 @@ class StatsCog(commands.Cog):
         userdata1 = getUserdata(memberOrHeight1, "Raw 1")
         userdata2 = getUserdata(memberOrHeight2, "Raw 2")
 
-        output = digisize.getComparison(userdata1, userdata2)
-        await ctx.send(output)
+        comparison = digisize.PersonComparison(userdata1, userdata2)
+        await ctx.send(comparison)
 
         await logger.info(f"Compared {userdata1} and {userdata2}")
 

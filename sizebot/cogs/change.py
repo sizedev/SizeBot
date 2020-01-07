@@ -52,7 +52,7 @@ class Change:
         return self.startTime + self.stopTV
 
     def __str__(self):
-        return f"gid:{self.guildid}/uid:{self.userid} {digiSV.fromSV(self.addPerSec)} *{self.mulPerSec} , stop at {self.stopSV and digiSV.fromSV(self.stopSV)}, stop after {self.stopTV}s"
+        return f"gid:{self.guildid}/uid:{self.userid} {self.addPerSec} *{self.mulPerSec} , stop at {self.stopSV}, stop after {self.stopTV}s"
 
 
 class ChangeCog(commands.Cog):
@@ -71,7 +71,7 @@ class ChangeCog(commands.Cog):
         digisize.changeUser(ctx.message.author.id, style, amount)
         userdata = userdb.load(ctx.message.author.id)
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
-        await ctx.send(f"User <@{ctx.message.author.id}> is now {digiSV.fromSV(userdata.height, 'm')} ({digiSV.fromSV(userdata.height, 'u')}) tall.")
+        await ctx.send(f"User <@{ctx.message.author.id}> is now {userdata.height:m} ({userdata.height:u}) tall.")
 
     @commands.command()
     @commands.check(requireAdmin)
@@ -90,7 +90,7 @@ class ChangeCog(commands.Cog):
         key = ctx.message.author.id, ctx.message.guild.id
         change = Change(self.bot, ctx.message.author.id, ctx.message.guild.id, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
         self.changes[key] = change
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {digiSV.fromSV(addPerSec)}/sec and *{mulPerSec}/sec until {stopSV and digiSV.fromSV(stopSV)} for {stopTV} seconds.")
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commands.command()
     @commands.check(guildOnly)
@@ -115,7 +115,7 @@ class ChangeCog(commands.Cog):
         # TODO: Randomize the italics message here
         await ctx.send(
             f"<@{ctx.message.author.id}> ate a :cake:! *I mean it said \"Eat me...\"*\n"
-            f"They multiplied {randmult}x and are now {digiSV.fromSV(userdata.height, 'm')} tall. ({digiSV.fromSV(userdata.height, 'u')})")
+            f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
     @commands.command()
     @commands.check(guildOnly)
@@ -128,7 +128,7 @@ class ChangeCog(commands.Cog):
         # TODO: Randomize the italics message here
         await ctx.send(
             f"<@{ctx.message.author.id}> ate a :milk:! *I mean it said \"Drink me...\"*\n"
-            f"They shrunk {randmult}x and are now {digiSV.fromSV(userdata.height, 'm')} tall. ({digiSV.fromSV(userdata.height, 'u')})")
+            f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
     # Slow growth task
     @tasks.loop(seconds=6)

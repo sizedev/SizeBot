@@ -2,10 +2,11 @@ import math
 
 import discord
 
-from sizebot.digidecimal import Decimal
+from sizebot.digidecimal import Decimal, roundDecimalHalf
 from sizebot import digierror as errors
-from sizebot import digiSV
+from sizebot.digiSV import SV, WV
 from sizebot import userdb
+from sizebot.userdb import defaultheight, defaultweight
 from sizebot import utils
 
 
@@ -40,7 +41,7 @@ async def nickUpdate(user):
     species = userdata.species
 
     if userdata.unitsystem in ["m", "u"]:
-        sizetag = digiSV.fromSV(height, userdata.unitsystem)
+        sizetag = format(height, userdata.unitsystem)
     else:
         sizetag = ""
 
@@ -113,7 +114,7 @@ def changeUser(userid, changestyle, amount):
         # TODO: raise an error
 
     if changestyle in ["add", "subtract"]:
-        amountSV = digiSV.toSV(amount)
+        amountSV = SV.parse(amount)
     elif changestyle in ["multiply", "divide"]:
         amountVal = Decimal(amount)
         if amountVal == 1:
@@ -132,218 +133,145 @@ def changeUser(userid, changestyle, amount):
     elif changestyle == "divide":
         newamount = userdata.height / amountVal
 
-    userdata.height = utils.clamp(0, newamount, digiSV.infinitySV)
+    userdata.height = utils.clamp(0, newamount, SV.infinity)
 
     userdb.save(userdata)
 
 
-# Conversion constants
-footfactor = Decimal(1) / Decimal(7)
-footwidthfactor = footfactor / Decimal(2.5)
-toeheightfactor = Decimal(1) / Decimal(65)
-thumbfactor = Decimal(1) / Decimal(69.06)
-fingerprintfactor = Decimal(1) / Decimal(35080)
-hairfactor = Decimal(1) / Decimal(23387)
-pointerfactor = Decimal(1) / Decimal(17.26)
-footthickfactor = Decimal(1)  # TODO: Provide a real value
-hairwidthfactor = Decimal(1)  # TODO: Provide a real value
+class PersonComparison:
+    def __init__(self, userdata1, userdata2):
+        bigUserdata = userdata1 if userdata1.height > userdata2.height else userdata2
+        smallUserdata = userdata2 if userdata2.height > userdata1.height else userdata1
+        self.big = PersonStats(bigUserdata)
+        self.small = PersonStats(smallUserdata)
+        self.multiplier = self.big.height / self.small.height
+
+        bigToSmallUserdata = userdb.User()
+        bigToSmallUserdata.height = bigUserdata.height * self.multiplier
+        bigToSmallUserdata.baseweight = bigUserdata.baseweight * self.multiplier
+        self.bigToSmall = PersonStats(bigToSmallUserdata)
+
+        smallToBigUserdata = userdb.User()
+        smallToBigUserdata.height = smallUserdata.height / self.multiplier
+        smallToBigUserdata.baseweight = smallUserdata.baseweight / self.multiplier
+        self.smallToBig = PersonStats(smallToBigUserdata)
+
+    def __str__(self):
+        # Print compare
+        enspace = "\u2002"
+        printtab = enspace * 4
+        return (
+            "**Comparison:**\n"
+            f"{self.big.tag} is really:\n"
+            f"{printtab}Real Height: {self.big.height:.3m} / {self.big.height:.3u} ({self.big.basemultiplier:,}x basesize)\n"
+            f"{printtab}Real Weight: {self.big.weight:.3m} / {self.big.weight:.3u}. ({self.big.basemultiplier ** 3:,}x basesize)\n"
+            f"To {self.small.tag}, {self.big.tag} looks:\n"
+            f"{printtab}Height: {self.bigToSmall.height:.3m} / {self.bigToSmall.height:.3u}\n"
+            f"{printtab}Weight: {self.bigToSmall.weight:.3m} / {self.bigToSmall.weight:.3u}\n"
+            f"{printtab}Foot Length: {self.bigToSmall.footlength:.3m} / {self.bigToSmall.footlength:.3u} ({self.bigToSmall.shoesize})\n"
+            f"{printtab}Foot Width: {self.bigToSmall.footwidth:.3m} / {self.bigToSmall.footwidth:.3u}\n"
+            f"{printtab}Toe Height: {self.bigToSmall.toeheight:.3m} / {self.bigToSmall.toeheight:.3u}\n"
+            f"{printtab}Pointer Finger Length: {self.bigToSmall.pointerlength:.3m} / {self.bigToSmall.pointerlength:.3u}\n"
+            f"{printtab}Thumb Width: {self.bigToSmall.thumbwidth:.3m} / {self.bigToSmall.thumbwidth:.3u}\n"
+            f"{printtab}Fingerprint Depth: {self.bigToSmall.fingerprintdepth:.3m} / {self.bigToSmall.fingerprintdepth:.3u}\n"
+            f"{printtab}Hair Width: {self.bigToSmall.hairwidth:.3m} / {self.bigToSmall.hairwidth:.3u}\n"
+            "\n"
+            f"{self.big.tag} is {self.multiplier:,.3}x taller than {self.small.tag}.\n"
+            "\n"
+            f"{self.small.tag} is really:\n"
+            f"{printtab}Real Height: {self.small.height:.3m} / {self.small.height:u} ({self.small.basemultiplier:,}x basesize)\n"
+            f"{printtab}Real Weight: {self.small.weight:.3m} / {self.small.weight:.3u}. ({self.small.basemultiplier ** 3:,}x basesize)\n"
+            f"To {self.big.tag}, {self.small.tag} looks:\n"
+            f"{printtab}Height: {self.smallToBig.height:.3m} / {self.smallToBig.height:.3u}\n"
+            f"{printtab}Weight: {self.smallToBig.weight:.3m} / {self.smallToBig.weight:.3u}\n"
+            f"{printtab}Foot Length: {self.smallToBig.footlength:.3m} / {self.smallToBig.footlength:.3u} ({self.smallToBig.shoesize})\n"
+            f"{printtab}Foot Width: {self.smallToBig.footwidth:.3m} / {self.smallToBig.footwidth:.3u}\n"
+            f"{printtab}Toe Height: {self.smallToBig.toeheight:.3m} / {self.smallToBig.toeheight:.3u}\n"
+            f"{printtab}Pointer Finger Length: {self.smallToBig.pointerlength:.3m} / {self.smallToBig.pointerlength:.3u}\n"
+            f"{printtab}Thumb Width: {self.smallToBig.thumbwidth:.3m} / {self.smallToBig.thumbwidth:.3u}\n"
+            f"{printtab}Fingerprint Depth: {self.smallToBig.fingerprintdepth:.3m} / {self.smallToBig.fingerprintdepth:.3u}\n"
+            f"{printtab}Hair Width: {self.smallToBig.hairwidth:.3m} / {self.smallToBig.hairwidth:.3u}\n"
+            "\n"
+            f"**Base Sizes:**\n"
+            f"{printtab}{self.big.tag}: {self.big.baseheight:.3m} / {self.big.baseheight:.3u} | {self.big.baseweight:.3m} / {self.big.baseweight:.3u}\n"
+            f"{printtab}{self.small.tag}: {self.small.baseheight:.3m} / {self.small.baseheight:.3u} | {self.small.baseweight:.3m} / {self.small.baseweight:.3u}"
+        )
 
 
-def getComparison(userdata1, userdata2):
-    if userdata1.height == userdata2.height:
-        return f"{userdata1.tag} and {userdata2.tag} match 1 to 1."
+class PersonStats():
+    # Conversion constants
+    footfactor = Decimal("1") / Decimal("7")
+    footwidthfactor = footfactor / Decimal("2.5")
+    toeheightfactor = Decimal("1") / Decimal("65")
+    thumbfactor = Decimal("1") / Decimal("69.06")
+    fingerprintfactor = Decimal("1") / Decimal("35080")
+    hairfactor = Decimal("1") / Decimal("23387")
+    pointerfactor = Decimal("1") / Decimal("17.26")
+    footthickfactor = Decimal("1")  # TODO: Provide a real value
+    hairwidthfactor = Decimal("1")  # TODO: Provide a real value
 
-    # Who's taller?
-    if userdata1.height > userdata2.height:
-        biguser = userdata1
-        bigusertag = userdata1.tag
-        smalluser = userdata2
-        smallusertag = userdata2.tag
-    else:
-        biguser = userdata2
-        bigusertag = userdata2.tag
-        smalluser = userdata1
-        smallusertag = userdata1.tag
+    def __init__(self, userdata):
+        self.tag = userdata.tag
+        self.height = userdata.height
+        self.baseheight = userdata.baseheight
+        self.basemultiplier = self.height / self.baseheight
+        self.baseweight = userdata.baseweight
+        self.weight = WV(self.baseweight * self.basemultiplier ** 3)
+        self.footlength = SV(self.height * self.footfactor)
+        self.shoesize = formatShoeSize(self.footlength)
+        self.footwidth = SV(self.height * self.footwidthfactor)
+        self.toeheight = SV(self.height * self.toeheightfactor)
+        self.pointerlength = SV(self.height * self.pointerfactor)
+        self.thumbwidth = SV(self.height * self.thumbfactor)
+        self.fingerprintdepth = SV(self.height * self.fingerprintfactor)
+        self.hairwidth = SV(self.height * self.hairfactor)
 
-    # Compare math
-    bigmult = (biguser.height / biguser.baseheight)
-    smallmult = (smalluser.height / smalluser.baseheight)
-    bigmultcubed = (bigmult ** Decimal("3"))
-    smallmultcubed = (smallmult ** Decimal("3"))
-    dispbigmult = round(bigmult, Decimal("4"))
-    dispsmallmult = round(smallmult, Decimal("4"))
-    dispbigmultcubed = round(bigmultcubed, Decimal("4"))
-    dispsmallmultcubed = round(smallmultcubed, Decimal("4"))
-    bcw = biguser.baseweight * (bigmult ** Decimal("3"))
-    scw = smalluser.baseweight * (smallmult ** Decimal("3"))
-    diffmult = bigmult / smallmult
-    b2sh = biguser.baseheight * diffmult
-    s2bh = smalluser.baseheight / diffmult
-    b2sw = biguser.baseweight * (diffmult ** Decimal("3"))
-    s2bw = smalluser.baseweight / (diffmult ** Decimal("3"))
-    bigtosmallheight = digiSV.fromSV(b2sh, "m", Decimal("3"))
-    smalltobigheight = digiSV.fromSV(s2bh, "m", Decimal("3"))
-    bigtosmallheightUSA = digiSV.fromSV(b2sh, "u")
-    smalltobigheightUSA = digiSV.fromSV(s2bh), "u"
-    bigtosmallfoot = digiSV.fromSV(b2sh * footfactor, "m", Decimal("3"))
-    smalltobigfoot = digiSV.fromSV(s2bh * footfactor, "m", Decimal("3"))
-    bigtosmallfootUSA = digiSV.fromSV(b2sh * footfactor, "u")
-    smalltobigfootUSA = digiSV.fromSV(s2bh * footfactor, "u")
-    bigtosmallshoe = digiSV.toShoeSize(b2sh * footfactor / digiSV.inch)
-    smalltobigshoe = digiSV.toShoeSize(s2bh * footfactor / digiSV.inch)
-    bigtosmallweight = digiSV.fromWV(b2sw, "m")
-    smalltobigweight = digiSV.fromWV(s2bw, "m")
-    bigtosmallweightUSA = digiSV.fromWV(b2sw, "u")
-    smalltobigweightUSA = digiSV.fromWV(s2bw, "u")
-    bigtosmallfootwidth = digiSV.fromSV(b2sh * footwidthfactor, "m", Decimal("3"))
-    smalltobigfootwidth = digiSV.fromSV(s2bh * footwidthfactor, "m", Decimal("3"))
-    bigtosmallfootwidthUSA = digiSV.fromSV(b2sh * footwidthfactor, "u")
-    smalltobigfootwidthUSA = digiSV.fromSV(s2bh * footwidthfactor, "u")
-    bigtosmallfootthick = digiSV.fromSV(b2sh * footthickfactor, "m", Decimal("3"))
-    smalltobigfootthick = digiSV.fromSV(s2bh * footthickfactor, "m", Decimal("3"))
-    bigtosmallfootthickUSA = digiSV.fromSV(b2sh * footthickfactor, "u")
-    smalltobigfootthickUSA = digiSV.fromSV(s2bh * footthickfactor, "u")
-    bigtosmallthumb = digiSV.fromSV(b2sh * thumbfactor, "m", Decimal("3"))
-    smalltobigthumb = digiSV.fromSV(s2bh * thumbfactor, "m", Decimal("3"))
-    bigtosmallthumbUSA = digiSV.fromSV(b2sh * thumbfactor, "u")
-    smalltobigthumbUSA = digiSV.fromSV(s2bh * thumbfactor, "u")
-    bigtosmallfingerprint = digiSV.fromSV(b2sh * fingerprintfactor, "m", Decimal("3"))
-    smalltobigfingerprint = digiSV.fromSV(s2bh * fingerprintfactor, "m", Decimal("3"))
-    bigtosmallfingerprintUSA = digiSV.fromSV(b2sh * fingerprintfactor, "u")
-    smalltobigfingerprintUSA = digiSV.fromSV(s2bh * fingerprintfactor, "u")
-    bigtosmallhairwidth = digiSV.fromSV(b2sh * hairwidthfactor, "m", Decimal("3"))
-    smalltobighairwidth = digiSV.fromSV(s2bh * hairwidthfactor, "m", Decimal("3"))
-    bigtosmallhairwidthUSA = digiSV.fromSV(b2sh * hairwidthfactor, "u")
-    smalltobighairwidthUSA = digiSV.fromSV(s2bh * hairwidthfactor, "u")
-    bigtosmallpointer = digiSV.fromSV(b2sh * pointerfactor, "m", Decimal("3"))
-    smalltobigpointer = digiSV.fromSV(s2bh * pointerfactor, "m", Decimal("3"))
-    bigtosmallpointerUSA = digiSV.fromSV(b2sh * pointerfactor, "u")
-    smalltobigpointerUSA = digiSV.fromSV(s2bh * pointerfactor, "u")
-    timestaller = digiSV.placeValue(round((biguser.height / smalluser.height), Decimal("3")))
+        self.avgheightcomp = SV(defaultheight / self.basemultiplier)
+        self.avgweightcomp = WV(defaultweight / self.basemultiplier ** 3)
+        self.avglookdirection = "down" if self.height >= defaultheight else "up"
+        # angle the smaller person must look up if they are standing half of the taller person's height away
+        heightdiff = abs(userdata.height - defaultheight)
+        viewdistance = max(userdata.height, defaultheight) / 2
+        self.avglookangle = math.degrees(math.atan(heightdiff / viewdistance))
 
-    # Print compare
-    enspace = "\u2002"
-    printtab = enspace * 4
-
-    return (
-        "**Comparison:**\n"
-        f"{bigusertag} is really:\n"
-        f"{printtab}Real Height: {digiSV.fromSV(biguser.height, 'm', 3)} / {digiSV.fromSV(biguser.height, 'u')} ({digiSV.placeValue(dispbigmult)}x basesize)\n"
-        f"{printtab}Real Weight: {digiSV.fromWV(bcw, 'm')} / {digiSV.fromWV(bcw, 'u')}. ({digiSV.placeValue(dispbigmultcubed)}x basesize)\n"
-        f"To {smallusertag}, {bigusertag} looks:\n"
-        f"{printtab}Height: {bigtosmallheight} / {bigtosmallheightUSA}\n"
-        f"{printtab}Weight: {bigtosmallweight} / {bigtosmallweightUSA}\n"
-        f"{printtab}Foot Length: {bigtosmallfoot} / {bigtosmallfootUSA} ({bigtosmallshoe})\n"
-        f"{printtab}Foot Width: {bigtosmallfootwidth} / {bigtosmallfootwidthUSA}\n"
-        f"{printtab}Toe Height: {bigtosmallfootthick} / {bigtosmallfootthickUSA}\n"
-        f"{printtab}Pointer Finger Length: {bigtosmallpointer} / {bigtosmallpointerUSA}\n"
-        f"{printtab}Thumb Width: {bigtosmallthumb} / {bigtosmallthumbUSA}\n"
-        f"{printtab}Fingerprint Depth: {bigtosmallfingerprint} / {bigtosmallfingerprintUSA}\n"
-        f"{printtab}Hair Width: {bigtosmallhairwidth} / {bigtosmallhairwidthUSA}\n"
-        "\n"
-        f"{bigusertag} is {timestaller}x taller than {smallusertag}.\n"
-        "\n"
-        f"{smallusertag} is really:\n"
-        f"{printtab}Real Height: {digiSV.fromSV(smalluser.height, 'm', 3)} / {digiSV.fromSV(smalluser.height, 'u')} ({digiSV.placeValue(dispsmallmult)}x basesize)\n"
-        f"{printtab}Real Weight: {digiSV.fromWV(scw, 'm')} / {digiSV.fromWV(scw, 'u')}. ({digiSV.placeValue(dispsmallmultcubed)}x basesize)\n"
-        f"To {bigusertag}, {smallusertag} looks:\n"
-        f"{printtab}Height: {smalltobigheight} / {smalltobigheightUSA}\n"
-        f"{printtab}Weight: {smalltobigweight} / {smalltobigweightUSA}\n"
-        f"{printtab}Foot Length: {smalltobigfoot} / {smalltobigfootUSA} ({smalltobigshoe})\n"
-        f"{printtab}Foot Width: {smalltobigfootwidth} / {smalltobigfootwidthUSA}\n"
-        f"{printtab}Toe Height: {smalltobigfootthick} / {smalltobigfootthickUSA}\n"
-        f"{printtab}Pointer Finger Length: {smalltobigpointer} / {smalltobigpointerUSA}\n"
-        f"{printtab}Thumb Width: {smalltobigthumb} / {smalltobigthumbUSA}\n"
-        f"{printtab}Fingerprint Depth: {smalltobigfingerprint} / {smalltobigfingerprintUSA}\n"
-        f"{printtab}Hair Width: {smalltobighairwidth} / {smalltobighairwidthUSA}\n"
-        "\n"
-        f"**Base Sizes:**\n"
-        f"{printtab}{bigusertag}: {digiSV.fromSV(biguser.baseheight, 'm', 3)} / {digiSV.fromSV(biguser.baseheight, 'u')} | {digiSV.fromWV(biguser.baseweight, 'm')} / {digiSV.fromWV(biguser.baseweight, 'u')}\n"
-        f"{printtab}{smallusertag}: {digiSV.fromSV(smalluser.baseheight, 'm', 3)} / {digiSV.fromSV(smalluser.baseheight, 'u')} | {digiSV.fromWV(smalluser.baseweight, 'm')} / {digiSV.fromWV(smalluser.baseweight, 'u')}")
+    def __str__(self):
+        return (
+            f"**{self.tag} Stats:**\n"
+            f"*Current Height:*  {self.height:.3m} / {self.height:.3u}\n"
+            f"*Current Weight:*  {self.weight:.3m} / {self.weight:.3u}\n"
+            f"\n"
+            f"Foot Length: {self.footlength:.3m} / {self.footlength:.3u}\n"
+            f"Foot Width: {self.footwidth:.3m} / {self.footwidth:.3u}\n"
+            f"Toe Height: {self.toeheight:.3m} / {self.toeheight:.3u}\n"
+            f"Pointer Finger Length: {self.pointerlength:.3m} / {self.pointerlength:.3u}\n"
+            f"Thumb Width: {self.thumbwidth:.3m} / {self.thumbwidth:.3u}\n"
+            f"Fingerprint Depth: {self.fingerprintdepth:.3m} / {self.fingerprintdepth:.3u}\n"
+            f"Hair Width: {self.hairwidth:.3m} / {self.hairwidth:.3u}\n"
+            f"\n"
+            f"Size of a Normal Man (Comparative): {self.avgheightcomp:.3m} / {self.avgheightcomp:.3u}\n"
+            f"Weight of a Normal Man (Comparative): {self.avgweightcomp:.3u} / {self.avgweightcomp:.3u}\n"
+            f"To look {self.avglookdirection} at a average human, you'd have to look {self.avglookdirection} {self.avglookangle:.0f}°.\n"
+            f"\n"
+            f"Character Bases: {self.baseheight:.3m} / {self.baseheight:.3u} | {self.baseweight:.3m} / {self.baseweight:.3u}"
+        )
 
 
 def getStats(userdata):
-    multiplier = userdata.height / userdata.baseheight
-    multiplier3 = multiplier ** 3
+    return PersonStats(userdata)
 
-    baseheight_m = digiSV.fromSV(userdata.baseheight, "m", 3)
-    baseheight_u = digiSV.fromSV(userdata.baseheight, "u", 3)
 
-    baseweight_m = digiSV.fromWV(userdata.baseweight, "m", 3)
-    baseweight_u = digiSV.fromWV(userdata.baseweight, "u", 3)
-
-    currentheight_m = digiSV.fromSV(userdata.height, "m", 3)
-    currentheight_u = digiSV.fromSV(userdata.height, "u", 3)
-
-    currentweight = userdata.baseweight * multiplier3
-    currentweight_m = digiSV.fromWV(currentweight, "m", 3)
-    currentweight_u = digiSV.fromWV(currentweight, "u", 3)
-
-    defaultheightmult = userdata.height / userdb.defaultheight
-    defaultweightmult = (currentweight / userdb.defaultweight) ** 3
-
-    footlength = userdata.height * footfactor
-    footlength_m = digiSV.fromSV(footlength, "m", 3)
-    footlength_u = digiSV.fromSV(footlength, "u", 3)
-
-    footwidth = userdata.height * footwidthfactor
-    footwidth_m = digiSV.fromSV(footwidth, "m", 3)
-    footwidth_u = digiSV.fromSV(footwidth, "u", 3)
-
-    toeheight = userdata.height * toeheightfactor
-    toeheight_m = digiSV.fromSV(toeheight, "m", 3)
-    toeheight_u = digiSV.fromSV(toeheight, "u", 3)
-
-    pointer = userdata.height * pointerfactor
-    pointer_m = digiSV.fromSV(pointer, "m", 3)
-    pointer_u = digiSV.fromSV(pointer, "u", 3)
-
-    thumb = userdata.height * thumbfactor
-    thumb_m = digiSV.fromSV(thumb, "m", 3)
-    thumb_u = digiSV.fromSV(thumb, "u", 3)
-
-    fingerprint = userdata.height * fingerprintfactor
-    fingerprint_m = digiSV.fromSV(fingerprint, "m", 3)
-    fingerprint_u = digiSV.fromSV(fingerprint, "u", 3)
-
-    hair = userdata.height * hairfactor
-    hair_m = digiSV.fromSV(hair, "m", 3)
-    hair_u = digiSV.fromSV(hair, "u", 3)
-
-    normalheightcomp = userdb.defaultheight / defaultheightmult
-    normalheightcomp_m = digiSV.fromSV(normalheightcomp, "m", 3)
-    normalheightcomp_u = digiSV.fromSV(normalheightcomp, "u", 3)
-
-    normalweightcomp = userdb.defaultweight / defaultweightmult
-    normalweightcomp_m = digiSV.fromWV(normalweightcomp, "m", 3)
-    normalweightcomp_u = digiSV.fromWV(normalweightcomp, "u", 3)
-
-    if userdata.height >= userdb.defaultheight:
-        lookdirection = "down"
+def formatShoeSize(footlength):
+    footlengthinches = Decimal(footlength / SV.inch)
+    shoesizeNum = (3 * footlengthinches) - 22
+    prefix = ""
+    if shoesizeNum < 1:
+        prefix = "Children's "
+        shoesizeNum += 12 + Decimal(1) / Decimal(3)
+    if shoesizeNum < 1:
+        return "No shoes exist this small!"
+    if shoesizeNum > Decimal("1E15"):
+        formatSpec = ".2e"
     else:
-        lookdirection = "up"
-
-    tallerheight = max(userdata.height, userdb.defaultheight)
-    smallerheight = min(userdata.height, userdb.defaultheight)
-    # This is disgusting, but it works!
-    lookangle = str(round(math.degrees(math.atan((tallerheight - smallerheight) / (tallerheight / 2))), 0)).split(".")[0]
-
-    return (
-        f"**{userdata.tag} Stats:**\n"
-        f"*Current Height:*  {currentheight_m} / {currentheight_u}\n"
-        f"*Current Weight:*  {currentweight_m} / {currentweight_u}\n"
-        f"\n"
-        f"Foot Length: {footlength_m} / {footlength_u}\n"
-        f"Foot Width: {footwidth_m} / {footwidth_u}\n"
-        f"Toe Height: {toeheight_m} / {toeheight_u}\n"
-        f"Pointer Finger Length: {pointer_m} / {pointer_u}\n"
-        f"Thumb Width: {thumb_m} / {thumb_u}\n"
-        f"Fingerprint Depth: {fingerprint_m} / {fingerprint_u}\n"
-        f"Hair Width: {hair_m} / {hair_u}\n"
-        f"\n"
-        f"Size of a Normal Man (Comparative): {normalheightcomp_m} / {normalheightcomp_u}\n"
-        f"Weight of a Normal Man (Comparative): {normalweightcomp_m} / {normalweightcomp_u}\n"
-        f"To look {lookdirection} at a average human, you'd have to look {lookdirection} {lookangle}°.\n"
-        f"\n"
-        f"Character Bases: {baseheight_m} / {baseheight_u} | {baseweight_m} / {baseweight_u}"
-    )
+        formatSpec = ",.1"
+    shoesize = format(roundDecimalHalf(shoesizeNum), formatSpec)
+    return f"Size US {prefix}{shoesize}"

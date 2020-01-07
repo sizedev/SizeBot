@@ -6,7 +6,7 @@ from discord.utils import get
 from sizebot import digilogger as logger
 from sizebot.conf import conf
 from sizebot import userdb
-from sizebot import digiSV
+from sizebot.digiSV import SV, WV
 from sizebot import digisize
 from sizebot.checks import guildOnly
 
@@ -41,9 +41,9 @@ class RegisterCog(commands.Cog):
         await logger.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
         await logger.info(readable)
 
-        currentheightSV = digiSV.toSV(currentheight)
-        baseheightSV = digiSV.toSV(baseheight)
-        baseweightWV = digiSV.toWV(baseweight)
+        currentheightSV = SV.parse(currentheight)
+        baseheightSV = SV.parse(baseheight)
+        baseweightWV = WV.parse(baseweight)
 
         # Already registered
         if userdb.exists(ctx.message.author.id):

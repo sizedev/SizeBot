@@ -1,14 +1,13 @@
 import json
 
 from sizebot.conf import conf
-from sizebot.digidecimal import Decimal
 from sizebot import digierror as errors
-from sizebot.digiSV import infinitySV, infinityWV
+from sizebot.digiSV import SV, WV
 from sizebot import utils
 
 # Defaults
-defaultheight = Decimal("1.754")  # meters
-defaultweight = Decimal("66760")  # grams
+defaultheight = SV("1.754")  # meters
+defaultweight = WV("66760")  # grams
 
 # Map the deprecated user array constants to the new names
 #                      NICK        DISP       CHEI      BHEI          BWEI          UNIT          SPEC
@@ -39,7 +38,7 @@ class User:
 
     @height.setter
     def height(self, value):
-        self._height = utils.clamp(0, Decimal(value), infinitySV)
+        self._height = utils.clamp(0, SV(value), SV.infinity)
 
     @property
     def baseheight(self):
@@ -47,7 +46,7 @@ class User:
 
     @baseheight.setter
     def baseheight(self, value):
-        self._baseheight = utils.clamp(0, Decimal(value), infinitySV)
+        self._baseheight = utils.clamp(0, SV(value), SV.infinity)
 
     @property
     def baseweight(self):
@@ -55,7 +54,7 @@ class User:
 
     @baseweight.setter
     def baseweight(self, value):
-        self._baseweight = utils.clamp(0, Decimal(value), infinityWV)
+        self._baseweight = utils.clamp(0, WV(value), WV.infinity)
 
     # Check that unitsystem is valid and lowercase
     @property
@@ -107,9 +106,9 @@ class User:
         userdata.id = jsondata["id"]
         userdata.nickname = jsondata["nickname"]
         userdata.display = jsondata["display"]
-        userdata.height = Decimal(jsondata["height"])
-        userdata.baseheight = Decimal(jsondata["baseheight"])
-        userdata.baseweight = Decimal(jsondata["baseweight"])
+        userdata.height = SV(jsondata["height"])
+        userdata.baseheight = SV(jsondata["baseheight"])
+        userdata.baseweight = WV(jsondata["baseweight"])
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         return userdata

@@ -1,4 +1,7 @@
 import decimal
+import random
+
+__all__ = ["Decimal", "roundDecimal", "roundDecimalHalf", "trimzeroes"]
 
 Decimal = decimal.Decimal
 
@@ -25,3 +28,28 @@ def trimzeroes(d):
     # `normalize()` removes ALL trailing zeroes, including ones before the decimal place
     # `+ 0` readds the trailing zeroes before the decimal place, if necessary
     return d.normalize() + 0
+
+
+# Generate a logarithmically scaled random number
+def randrangelog(minval, maxval, precision=26):
+    minval = Decimal(minval)
+    maxval = Decimal(maxval)
+    prec = Decimal("10") ** precision
+
+    # Swap values if provided in the wrong order
+    if minval > maxval:
+        minval, maxval = maxval, minval
+
+    minlog = minval.log10()
+    maxlog = maxval.log10()
+
+    minintlog = (minlog * prec).to_integral_value()
+    maxintlog = (maxlog * prec).to_integral_value()
+
+    newintlog = Decimal(random.randint(minintlog, maxintlog))
+
+    newlog = newintlog / precision
+
+    newval = Decimal("10") ** newlog
+
+    return newval
