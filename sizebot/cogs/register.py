@@ -48,15 +48,14 @@ class RegisterCog(commands.Cog):
         # Already registered
         if userdb.exists(ctx.message.author.id):
             await ctx.send("Sorry! You already registered with SizeBot.\n"
-                           "To unregister, use the `&unregister` command.",
-                           delete_after = 10)
+                           "To unregister, use the `&unregister` command.")
             await logger.warn(f"User already registered on user registration: {ctx.message.author}.")
             return
 
         # Invalid size value
         if (currentheightSV <= 0 or baseheightSV <= 0 or baseweightWV <= 0):
             await logger.warn("Invalid size value.")
-            await ctx.send("All values must be an integer greater than zero.", delete_after = 5)
+            await ctx.send("All values must be an integer greater than zero.")
             return
 
         # Invalid display value
@@ -67,7 +66,7 @@ class RegisterCog(commands.Cog):
         # Invalid unit value
         if unitsystem.lower() not in ["m", "u"]:
             await logger.warn(f"unitsystem was {unitsystem}, must be M or U.")
-            await ctx.send("Unitsystem must be `M` or `U`.", delete_after = 5)
+            await ctx.send("Unitsystem must be `M` or `U`.")
             return
 
         userdata = userdb.User()
@@ -86,11 +85,11 @@ class RegisterCog(commands.Cog):
 
         await logger.warn(f"Made a new user: {ctx.message.author}!")
         await logger.info(userdata)
-        await ctx.send(f"Registered <@{ctx.message.author.id}>. {readable}.", delete_after = 5)
+        await ctx.send(f"Registered <@{ctx.message.author.id}>. {readable}.")
 
         # user has display == "y" and is server owner
         if userdata.display and userdata.id == ctx.message.author.guild.owner.id:
-            await ctx.send("I can't update a server owner's nick. You'll have to manage it manually.", delete_after = 5)
+            await ctx.send("I can't update a server owner's nick. You'll have to manage it manually.")
             return
 
     @register.error
@@ -99,8 +98,7 @@ class RegisterCog(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
                 "Not enough variables for `register`.\n"
-                "Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] [M/U]`.",
-                delete_after = 30)
+                "Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] [M/U]`.")
             return
         raise error
 
@@ -112,8 +110,7 @@ class RegisterCog(commands.Cog):
         if not userdb.exists(user.id):
             await logger.warn(f"User {user.id} not registered with SizeBot, but tried to unregister anyway.")
             await ctx.send("Sorry! You aren't registered with SizeBot.\n"
-                           "To register, use the `&register` command.",
-                           delete_after = 5)
+                           "To register, use the `&register` command.")
             return
 
         # Send a confirmation request
@@ -142,7 +139,7 @@ class RegisterCog(commands.Cog):
         await removeUserRole(user)
 
         await logger.warn(f"User {user.id} successfully unregistered.")
-        await ctx.send(f"Unregistered {user.name}.", delete_after = 5)
+        await ctx.send(f"Unregistered {user.name}.")
 
     @commands.Cog.listener()
     async def on_message(self, m):

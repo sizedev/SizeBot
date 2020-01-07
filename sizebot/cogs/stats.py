@@ -40,7 +40,7 @@ class StatsCog(commands.Cog):
 
         # TODO: Handle this in an error handler
         if memberOrHeight1 is None:
-            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.", delete_after = 5)
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
         userdata1 = getUserdata(memberOrHeight1, "Raw 1")
