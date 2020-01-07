@@ -197,6 +197,21 @@ class PersonComparison:
             f"{printtab}{self.small.tag}: {self.small.baseheight:.3m} / {self.small.baseheight:.3u} | {self.small.baseweight:.3m} / {self.small.baseweight:.3u}"
         )
 
+    def toEmbed(self):
+        embed = discord.Embed(title="Stats for DigiDuncan [5'8\"]", description="sent by Name of Sender", color=0x31eff9)
+        embed.set_author(name="SizeBot 3.5")
+        embed.add_field(name="Current Height", value="1.727m / 5'8\"", inline=True)
+        embed.add_field(name="Current Weight", value="63.746kg / 140.534lb", inline=True)
+        embed.add_field(name="Foot Length", value="24.674cm / 9.714in", inline=True)
+        embed.add_field(name="Foot Width", value="9.87cm / 3.886in", inline=True)
+        embed.add_field(name="Toe Height", value="2.657cm / 1.046in", inline=True)
+        embed.add_field(name="Pointer Finger Length", value="10.007cm / 3.94in", inline=True)
+        embed.add_field(name="Thumb Width", value="2.501cm / 25.01mm", inline=True)
+        embed.add_field(name="Fingerprint Depth", value="49.236µm / 49.236µm", inline=True)
+        embed.add_field(name="Hair Width", value="73.853µm / 73.853µm", inline=True)
+        embed.set_footer(text="An average human would look 1.781m (5'10.127\"), and weigh XXXkg (XXXlb) to you. You'd have to look up 2° to see them.")
+        return embed
+
 
 class PersonStats():
     # Conversion constants
@@ -254,6 +269,21 @@ class PersonStats():
             f"\n"
             f"Character Bases: {self.baseheight:.3m} / {self.baseheight:.3u} | {self.baseweight:.3m} / {self.baseweight:.3u}"
         )
+
+    def toEmbed(self):
+        embed = discord.Embed(title="Stats for DigiDuncan [5'8\"]", description="sent by Name of Sender", color=0x31eff9)
+        embed.set_author(name="SizeBot 3.5")
+        embed.add_field(name="Current Height", value="1.727m / 5'8\"", inline=True)
+        embed.add_field(name="Current Weight", value="63.746kg / 140.534lb", inline=True)
+        embed.add_field(name="Foot Length", value="24.674cm / 9.714in", inline=True)
+        embed.add_field(name="Foot Width", value="9.87cm / 3.886in", inline=True)
+        embed.add_field(name="Toe Height", value="2.657cm / 1.046in", inline=True)
+        embed.add_field(name="Pointer Finger Length", value="10.007cm / 3.94in", inline=True)
+        embed.add_field(name="Thumb Width", value="2.501cm / 25.01mm", inline=True)
+        embed.add_field(name="Fingerprint Depth", value="49.236µm / 49.236µm", inline=True)
+        embed.add_field(name="Hair Width", value="73.853µm / 73.853µm", inline=True)
+        embed.set_footer(text="An average human would look 1.781m (5'10.127\"), and weigh XXXkg (XXXlb) to you. You'd have to look up 2° to see them.")
+        return embed
 
 
 def getStats(userdata):
