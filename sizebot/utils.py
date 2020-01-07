@@ -109,5 +109,5 @@ def ddir(o):
     # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
 
 
-def formatErr(err):
+def formatError(err):
     return str(err) or f"{err.__class__.__module__}.{err.__class__.__name__}"
