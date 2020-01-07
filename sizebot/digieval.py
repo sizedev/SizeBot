@@ -1,6 +1,5 @@
 import builtins
 import pydoc
-import asyncio
 
 import discord
 
@@ -26,7 +25,7 @@ def cachedCopy(fn):
 
 
 def strHelp(topic):
-    return pydoc.render_doc(topic)
+    return pydoc.plain(pydoc.render_doc(topic))
 
 
 # Construct a globals dict for eval
