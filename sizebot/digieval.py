@@ -4,7 +4,7 @@ import pydoc
 import discord
 
 from sizebot import digilogger as logger
-from sizebot import digiSV
+from sizebot.digiSV import Rate, Mult, SV, WV, TV
 import sizebot.utils
 
 
@@ -54,7 +54,7 @@ def getEvalGlobals():
         "help": strHelp,
         "discord": discord,
         "logger": logger,
-        "digiSV": digiSV,
+        "Rate": Rate, "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
         "utils": sizebot.utils,
         "pdir": sizebot.utils.pdir
     }

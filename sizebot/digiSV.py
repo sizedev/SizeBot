@@ -2,142 +2,96 @@ import re
 
 from sizebot.digidecimal import Decimal, roundDecimal, trimzeroes
 from sizebot import digierror as errors
-from sizebot.utils import removeBrackets
+from sizebot.utils import removeBrackets, re_num, parseSpec, buildSpec, tryOrNone
+
+__all__ = ["Rate", "Mult", "SV", "WV", "TV"]
 
 
-def tryOrNone(fn, val):
-    try:
-        result = fn(val)
-    except errors.InvalidSizeValue:
-        result = None
-    return result
+class Rate():
+    """Rate"""
+    re_num_unit = f"{re_num} *[A-Za-z]+"
+    re_opnum_unit = f"({re_num})? *[A-Za-z]+"
 
+    rateDividers = "|".join(re.escape(d) for d in ("/", "per", "every"))
+    stopDividers = "|".join(re.escape(d) for d in ("until", "for", "->"))
+    addPrefixes = ["+", "plus", "add"]
+    subPrefixes = ["-", "minus", "subtract", "sub"]
+    addSubPrefixes = "|".join(re.escape(d) for d in addPrefixes + subPrefixes)
+    re_rate = re.compile(f"(?P<prefix>{addSubPrefixes})? *(?P<multOrSv>.*) *({rateDividers}) *(?P<tv>{re_opnum_unit}) *(({stopDividers}) *(?P<stop>{re_opnum_unit}))?")
 
-re_num = "\\d+\\.?\\d*"
-re_num_unit = f"{re_num} *[A-Za-z]+"
-re_opnum_unit = f"({re_num})? *[A-Za-z]+"
+    @classmethod
+    def parseRate(cls, s):
+        match = cls.re_rate.match(s)
+        if match is None:
+            raise errors.InvalidSizeValue(s)
+        prefix = match.group("prefix")
+        multOrSvStr = match.group("multOrSv")
+        tvStr = match.group("tv")
+        stopStr = match.group("stop")
 
+        isSub = prefix in cls.subPrefixes
 
-rateDividers = "|".join(re.escape(d) for d in ("/", "per", "every"))
-stopDividers = "|".join(re.escape(d) for d in ("until", "for", "->"))
-addPrefixes = ["+", "plus", "add"]
-subPrefixes = ["-", "minus", "subtract", "sub"]
-addSubPrefixes = "|".join(re.escape(d) for d in addPrefixes + subPrefixes)
-re_rate = re.compile(f"(?P<prefix>{addSubPrefixes})? *(?P<multOrSv>.*) *({rateDividers}) *(?P<tv>{re_opnum_unit}) *(({stopDividers}) *(?P<stop>{re_opnum_unit}))?")
+        valueSV = tryOrNone(SV.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
+        valueMult = None
+        if valueSV is None:
+            valueMult = tryOrNone(Mult.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
+        if valueSV is None and valueMult is None:
+            raise errors.InvalidSizeValue(s)
+        if valueSV and isSub:
+            valueSV = -valueSV
 
-
-def toRate(s):
-    match = re_rate.match(s)
-    if match is None:
-        raise errors.InvalidSizeValue(s)
-    prefix = match.group("prefix")
-    multOrSvStr = match.group("multOrSv")
-    tvStr = match.group("tv")
-    stopStr = match.group("stop")
-
-    isSub = prefix in subPrefixes
-
-    valueSV = tryOrNone(SV.parse, multOrSvStr)
-    valueMult = None
-    if valueSV is None:
-        valueMult = tryOrNone(toMult, multOrSvStr)
-    if valueSV is None and valueMult is None:
-        raise errors.InvalidSizeValue(s)
-    if valueSV and isSub:
-        valueSV = -valueSV
-
-    valueTV = tryOrNone(TV.parse, tvStr)
-    if valueTV is None:
-        raise errors.InvalidSizeValue(s)
-
-    stopSV = None
-    stopTV = None
-    if stopStr is not None:
-        stopSV = tryOrNone(SV.parse, stopStr)
-        if stopSV is None:
-            stopTV = tryOrNone(TV.parse, stopStr)
-        if stopSV is None and stopTV is None:
+        valueTV = tryOrNone(TV.parse, tvStr, ignore=errors.InvalidSizeValue)
+        if valueTV is None:
             raise errors.InvalidSizeValue(s)
 
-    if valueSV is not None:
-        addPerSec = valueSV / valueTV
-    else:
-        addPerSec = Decimal("0")
+        stopSV = None
+        stopTV = None
+        if stopStr is not None:
+            stopSV = tryOrNone(SV.parse, stopStr, ignore=errors.InvalidSizeValue)
+            if stopSV is None:
+                stopTV = tryOrNone(TV.parse, stopStr, ignore=errors.InvalidSizeValue)
+            if stopSV is None and stopTV is None:
+                raise errors.InvalidSizeValue(s)
 
-    if valueMult is not None:
-        mulPerSec = valueMult ** (1 / valueTV)
-    else:
-        mulPerSec = Decimal("1")
+        if valueSV is not None:
+            addPerSec = valueSV / valueTV
+        else:
+            addPerSec = Decimal("0")
 
-    return addPerSec, mulPerSec, stopSV, stopTV
+        if valueMult is not None:
+            mulPerSec = valueMult ** (1 / valueTV)
+        else:
+            mulPerSec = Decimal("1")
 
-
-multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
-divPrefixes = ["/", "÷", "div", "divide"]
-prefixes = '|'.join(re.escape(p) for p in multPrefixes + divPrefixes)
-suffixes = '|'.join(re.escape(p) for p in ["x", "X"])
-re_mult = re.compile(f"(?P<prefix>{prefixes})? *(?P<multValue>{re_num}) *(?P<suffix>{suffixes})?")
-
-
-def toMult(s):
-    match = re_mult.match(s)
-    if match is None:
-        raise errors.InvalidSizeValue(s)
-    prefix = match.group("prefix") or match.group("suffix")
-    multValue = Decimal(match.group("multValue"))
-
-    isDivide = prefix in divPrefixes
-    if isDivide:
-        multValue = 1 / multValue
-
-    return multValue
+        return addPerSec, mulPerSec, stopSV, stopTV
 
 
-formatSpecRe = re.compile(r"""\A
-(?:
-   (?P<fill>.)?
-   (?P<align>[<>=^])
-)?
-(?P<sign>[-+ ])?
-(?P<zeropad>0)?
-(?P<minimumwidth>(?!0)\d+)?
-(?P<thousands_sep>,)?
-(?:\.(?P<precision>0|(?!0)\d+))?
-(?P<type>[a-zA-Z%])?
-\Z
-""", re.VERBOSE)
+class Mult():
+    """Mult"""
+    multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
+    divPrefixes = ["/", "÷", "div", "divide"]
+    prefixes = '|'.join(re.escape(p) for p in multPrefixes + divPrefixes)
+    suffixes = '|'.join(re.escape(p) for p in ["x", "X"])
+    re_mult = re.compile(f"(?P<prefix>{prefixes})? *(?P<multValue>{re_num}) *(?P<suffix>{suffixes})?")
 
+    @classmethod
+    def parse(cls, s):
+        match = cls.re_mult.match(s)
+        if match is None:
+            raise errors.InvalidSizeValue(s)
+        prefix = match.group("prefix") or match.group("suffix")
+        multValue = Decimal(match.group("multValue"))
 
-def parseSpec(spec):
-    m = formatSpecRe.match(spec)
-    if m is None:
-        raise ValueError("Invalid format specifier: " + spec)
-    return m.groupdict()
+        isDivide = prefix in cls.divPrefixes
+        if isDivide:
+            multValue = 1 / multValue
 
-
-def buildSpec(formatDict):
-    spec = ""
-    if formatDict["align"] is not None:
-        if formatDict["fill"] is not None:
-            spec += formatDict["fill"]
-        spec += formatDict["align"]
-    if formatDict["sign"] is not None:
-        spec += formatDict["sign"]
-    if formatDict["zeropad"] is not None:
-        spec += formatDict["zeropad"]
-    if formatDict["minimumwidth"] is not None:
-        spec += formatDict["minimumwidth"]
-    if formatDict["thousands_sep"] is not None:
-        spec += formatDict["thousands_sep"]
-    if formatDict["precision"] is not None:
-        spec += "." + formatDict["precision"]
-    if formatDict["type"] is not None:
-        spec += "." + formatDict["type"]
-    return spec
+        return multValue
 
 
 # Unit: Formats a value by scaling it and applying the appropriate symbol suffix
 class Unit():
+    """Unit"""
     def __init__(self, symbol, factor, symbols=[], names=[]):
         self.symbol = symbol
         self.factor = factor
@@ -166,6 +120,7 @@ class Unit():
 
 # "Fixed" Unit: Formats to only the symbol.
 class FixedUnit(Unit):
+    """Unit that only formats to a single symbol"""
     def format(self, value, accuracy, spec):
         return self.symbol
 
@@ -174,6 +129,7 @@ class FixedUnit(Unit):
 
 
 class FeetAndInchesUnit(Unit):
+    """Unit for handling feet and inches"""
     def __init__(self, footsymbol, inchsymbol, factor):
         self.footsymbol = footsymbol
         self.inchsymbol = inchsymbol
@@ -194,6 +150,7 @@ class FeetAndInchesUnit(Unit):
 
 
 class UnitRegistry():
+    """Unit Registry"""
     def __init__(self, units):
         self._units = units
 
@@ -211,6 +168,7 @@ class UnitRegistry():
 
 
 class SystemRegistry():
+    """System Registry"""
     def __init__(self, units, unitnames):
         self._units = sorted(units[name] for name in unitnames)
 
@@ -227,6 +185,7 @@ class SystemRegistry():
 
 
 class UnitValue(Decimal):
+    """Unit Value"""
     def __format__(self, spec):
         value = Decimal(self)
         formatDict = parseSpec(spec)
@@ -269,6 +228,7 @@ class UnitValue(Decimal):
 
 
 class SV(UnitValue):
+    """Size Value (length)"""
     # Length Constants [meters]
     inch = Decimal("0.0254")
     foot = inch * Decimal("12")
@@ -400,6 +360,7 @@ class SV(UnitValue):
 
 
 class WV(UnitValue):
+    """Weight Value (mass)"""
     # Weight Constants [grams]
     ounce = Decimal("28.35")
     pound = ounce * Decimal("16")
@@ -520,6 +481,7 @@ class WV(UnitValue):
 
 
 class TV(UnitValue):
+    """Time Value"""
     second = Decimal("1")
     minute = Decimal("60")
     hour = minute * Decimal("60")

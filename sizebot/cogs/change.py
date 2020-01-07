@@ -86,7 +86,7 @@ class ChangeCog(commands.Cog):
     @commands.command()
     @commands.check(guildOnly)
     async def slowchange(self, ctx, *, rateStr: str):
-        addPerSec, mulPerSec, stopSV, stopTV = digiSV.toRate(rateStr)
+        addPerSec, mulPerSec, stopSV, stopTV = digiSV.parseRate(rateStr)
         key = ctx.message.author.id, ctx.message.guild.id
         change = Change(self.bot, ctx.message.author.id, ctx.message.guild.id, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
         self.changes[key] = change

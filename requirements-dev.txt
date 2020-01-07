@@ -2,4 +2,3 @@
 pytest==5.3.1
 flake8==3.7.9
 autopep8==1.4.4
-flake8-todo==0.7
