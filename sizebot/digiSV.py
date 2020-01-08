@@ -314,6 +314,7 @@ class SV(UnitValue):
         Unit(symbol="µm", factor=Decimal("1e-6"), name="micrometer", namePlural="micrometers", symbols=["um"]),
         Unit(symbol="mm", factor=Decimal("1e-3"), name="millimeter", namePlural="millimeters"),
         Unit(symbol="in", factor=inch, name="inch", namePlural="inches", symbols=["\""]),
+        Unit(symbol="ft", factor=foot, name="foot", namePlural="feet", symbols=["'"]),
         FeetAndInchesUnit("'", "\"", foot),
         Unit(symbol="cm", factor=Decimal("1e-2"), name="centimeter", namePlural="centimeters"),
         Unit(symbol="m", factor=Decimal("1e0"), name="meter", namePlural="meters"),
