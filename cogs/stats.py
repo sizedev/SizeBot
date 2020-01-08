@@ -281,7 +281,7 @@ class StatsCog(commands.Cog):
         toeheight_m = fromSVacc(toeheight)
         toeheight_u = fromSVUSA(toeheight)
 
-        calculatedweight = (baseweight * (multiplier ** 3)) * density
+        calculatedweight = (baseweight * multiplier ** 3) * density
         calculatedweight_m = fromWV(calculatedweight)
         calculatedweight_u = fromWVUSA(calculatedweight)
 
@@ -289,7 +289,7 @@ class StatsCog(commands.Cog):
         relativedefaultheight_m = fromSVacc(relativedefaultheight)
         relativedefaultheight_u = fromSVUSA(relativedefaultheight)
 
-        relativedefaultweight = defaultweight / defmultiplier
+        relativedefaultweight = defaultweight / defmultiplier ** 3
         relativedefaultweight_m = fromWV(relativedefaultweight)
         relativedefaultweight_u = fromWVUSA(relativedefaultweight)
 
