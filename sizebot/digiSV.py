@@ -2,7 +2,7 @@ import re
 
 from sizebot.digidecimal import Decimal, roundDecimal, trimzeroes
 from sizebot import digierror as errors
-from sizebot.utils import removeBrackets, re_num, parseSpec, buildSpec, tryOrNone
+from sizebot.utils import removeBrackets, re_num, parseSpec, buildSpec, tryOrNone, iset
 
 __all__ = ["Rate", "Mult", "SV", "WV", "TV"]
 
@@ -92,24 +92,55 @@ class Mult():
 # Unit: Formats a value by scaling it and applying the appropriate symbol suffix
 class Unit():
     """Unit"""
-    def __init__(self, symbol, factor, symbols=[], names=[]):
-        self.symbol = symbol
-        self.factor = factor
-        self.symbols = symbols                          # case sensitive symbols
-        self.names = [n.lower() for n in names]         # case insensitive names
 
-    def format(self, value, accuracy=2, spec=""):
+    def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[]):
+        self.factor = factor
+
+        self.symbol = symbol
+        self.name = name
+        self.namePlural = namePlural
+
+        self.symbols = set(symbols)     # case sensitive symbols
+        if symbol is not None:
+            self.symbols.add(symbol)
+
+        self.names = iset(names)        # case insensitive names
+        if name is not None:
+            self.names.add(name)
+        if namePlural is not None:
+            self.names.add(namePlural)
+
+    def format(self, value, accuracy=2, spec="", preferName=False):
         scaled = value / self.factor
         rounded = trimzeroes(roundDecimal(scaled, accuracy))
+        formattedValue = format(rounded, spec)
+
         if rounded == 0:
-            formatted = "0"
+            return "0"
+        
+        if preferName:
+            if self.namePlural is not None and abs(rounded) == 1:
+                formatted = f"{formattedValue} {self.namePlural}"
+            elif self.name is not None:
+                formatted = f"{formattedValue} {self.name}"                
+            elif self.symbol is not None:
+                formatted = f"{formattedValue}{self.symbol}"
+            else:
+                formatted = formattedValue
         else:
-            formatted = f"{format(rounded, spec)}{self.symbol}"
+            if self.symbol is not None:
+                formatted = f"{formattedValue}{self.symbol}"
+            elif self.namePlural is not None and abs(rounded) == 1:
+                formatted = f"{formattedValue} {self.namePlural}"
+            elif self.name is not None:
+                formatted = f"{formattedValue} {self.name}"
+            else:
+                formatted = formattedValue
 
         return formatted
 
     def isUnit(self, u):
-        return isinstance(u, str) and (u.lower() in self.names or u == self.symbol or u in self.symbols)
+        return isinstance(u, str) and (u in self.names or u in self.symbols)
 
     def toUnitValue(self, v):
         return v * self.factor
@@ -121,6 +152,7 @@ class Unit():
 # "Fixed" Unit: Formats to only the symbol.
 class FixedUnit(Unit):
     """Unit that only formats to a single symbol"""
+
     def format(self, value, accuracy, spec):
         return self.symbol
 
@@ -130,6 +162,7 @@ class FixedUnit(Unit):
 
 class FeetAndInchesUnit(Unit):
     """Unit for handling feet and inches"""
+
     def __init__(self, footsymbol, inchsymbol, factor):
         self.footsymbol = footsymbol
         self.inchsymbol = inchsymbol
@@ -151,6 +184,7 @@ class FeetAndInchesUnit(Unit):
 
 class UnitRegistry():
     """Unit Registry"""
+
     def __init__(self, units):
         self._units = units
 
@@ -158,7 +192,7 @@ class UnitRegistry():
         try:
             return next(unit for unit in self._units if unit.isUnit(key))
         except StopIteration:
-            return None
+            raise KeyError(key)
 
     def __getattr__(self, name):
         return self[name]
@@ -169,8 +203,10 @@ class UnitRegistry():
 
 class SystemRegistry():
     """System Registry"""
+
     def __init__(self, units, unitnames):
-        self._units = sorted(units[name] for name in unitnames)
+        systemunits = [units[name] for name in unitnames]
+        self._units = sorted(systemunits)
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
     def getBestUnit(self, value):
@@ -186,6 +222,7 @@ class SystemRegistry():
 
 class UnitValue(Decimal):
     """Unit Value"""
+
     def __format__(self, spec):
         value = Decimal(self)
         formatDict = parseSpec(spec)
@@ -199,8 +236,20 @@ class UnitValue(Decimal):
             formatDict["precision"] = None
             numspec = buildSpec(formatDict)
 
-            units = (self._systems[s].getBestUnit(value) for s in systems)
-            formatted = " / ".join(unit.format(value, accuracy, numspec) for unit in units)
+            formattedUnits = []
+            for s in systems:
+                preferName = s.upper() == s
+                system = self._systems[s.casefold()]
+                unit = system.getBestUnit(value)
+                formattedUnits.append(unit.format(value, accuracy, numspec, preferName))
+
+            # Remove duplicates
+            uniqUnits = []
+            for u in formattedUnits:
+                if u not in uniqUnits:
+                    uniqUnits.append(u)
+            formatted = " / ".join(uniqUnits)
+            
         else:
             formatted = format(value, spec)
 
@@ -239,39 +288,41 @@ class SV(UnitValue):
     infinity = uniSV * Decimal("1E27")
     # SV units
     _units = UnitRegistry([
-        Unit("ym", Decimal("1e-24"), names=["yoctometers", "yoctometer"]),
-        Unit("zm", Decimal("1e-21"), names=["zeptometers", "zeptometer"]),
-        Unit("am", Decimal("1e-18"), names=["attometers", "attometer"]),
-        Unit("fm", Decimal("1e-15"), names=["femtometers", "femtometer"]),
-        Unit("pm", Decimal("1e-12"), names=["picometers", "picometer"]),
-        Unit("nm", Decimal("1e-9"), names=["nanometers", "nanometer"]),
-        Unit("µm", Decimal("1e-6"), names=["micrometers", "micrometer"], symbols=["um"]),
-        Unit("mm", Decimal("1e-3"), names=["millimeters", "millimeter"]),
-        Unit("in", inch, names=["inches", "inch", "in", "\""]),
+        Unit(symbol="ym", factor=Decimal("1e-24"), names=["yoctometers", "yoctometer"]),
+        Unit(symbol="zm", factor=Decimal("1e-21"), names=["zeptometers", "zeptometer"]),
+        Unit(symbol="am", factor=Decimal("1e-18"), names=["attometers", "attometer"]),
+        Unit(symbol="fm", factor=Decimal("1e-15"), names=["femtometers", "femtometer"]),
+        Unit(symbol="pm", factor=Decimal("1e-12"), names=["picometers", "picometer"]),
+        Unit(symbol="nm", factor=Decimal("1e-9"), names=["nanometers", "nanometer"]),
+        Unit(symbol="µm", factor=Decimal("1e-6"), names=["micrometers", "micrometer"], symbols=["um"]),
+        Unit(symbol="mm", factor=Decimal("1e-3"), names=["millimeters", "millimeter"]),
+        Unit(symbol="in", factor=inch, names=["inches", "inch", "in", "\""]),
         FeetAndInchesUnit("'", "\"", foot),
-        Unit("cm", Decimal("1e-2"), names=["centimeters", "centimeter"]),
-        Unit("m", Decimal("1e0"), names=["meters", "meter"]),
-        Unit("km", Decimal("1e3"), names=["kilometers", "kilometer"]),
-        Unit("Mm", Decimal("1e6"), names=["megameters", "megameter"]),
-        Unit("Gm", Decimal("1e9"), names=["gigameters", "gigameter"]),
-        Unit("Tm", Decimal("1e12"), names=["terameters", "terameter"]),
-        Unit("Pm", Decimal("1e15"), names=["petameters", "petameter"]),
-        Unit("Em", Decimal("1e18"), names=["exameters", "exameter"]),
-        Unit("Zm", Decimal("1e21"), names=["zettameters", "zettameter"]),
-        Unit("Ym", Decimal("1e24"), names=["yottameters", "yottameter"]),
-        Unit("mi", mile, names=["miles", "mile"]),
-        Unit("ly", ly, names=["lightyears", "lightyear"]),
-        Unit("AU", au, names=["astronomical_units", "astronomical_unit"]),
-        Unit("uni", uniSV * Decimal("1e0"), names=["universes", "universe"]),
-        Unit("kuni", uniSV * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
-        Unit("Muni", uniSV * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
-        Unit("Guni", uniSV * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
-        Unit("Tuni", uniSV * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
-        Unit("Puni", uniSV * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
-        Unit("Euni", uniSV * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
-        Unit("Zuni", uniSV * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
-        Unit("Yuni", uniSV * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
-        FixedUnit("∞", Decimal(infinity), names=["infinite", "infinity"])
+        Unit(symbol="cm", factor=Decimal("1e-2"), names=["centimeters", "centimeter"]),
+        Unit(symbol="m", factor=Decimal("1e0"), names=["meters", "meter"]),
+        Unit(symbol="km", factor=Decimal("1e3"), names=["kilometers", "kilometer"]),
+        Unit(symbol="Mm", factor=Decimal("1e6"), names=["megameters", "megameter"]),
+        Unit(symbol="Gm", factor=Decimal("1e9"), names=["gigameters", "gigameter"]),
+        Unit(symbol="Tm", factor=Decimal("1e12"), names=["terameters", "terameter"]),
+        Unit(symbol="Pm", factor=Decimal("1e15"), names=["petameters", "petameter"]),
+        Unit(symbol="Em", factor=Decimal("1e18"), names=["exameters", "exameter"]),
+        Unit(symbol="Zm", factor=Decimal("1e21"), names=["zettameters", "zettameter"]),
+        Unit(symbol="Ym", factor=Decimal("1e24"), names=["yottameters", "yottameter"]),
+        Unit(symbol="mi", factor=mile, names=["miles", "mile"]),
+        Unit(symbol="ly", factor=ly, names=["lightyears", "lightyear"]),
+        Unit(symbol="AU", factor=au, names=["astronomical_units", "astronomical_unit"]),
+        Unit(symbol="uni", factor=uniSV * Decimal("1e0"), names=["universes", "universe"]),
+        Unit(symbol="kuni", factor=uniSV * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
+        Unit(symbol="Muni", factor=uniSV * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
+        Unit(symbol="Guni", factor=uniSV * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
+        Unit(symbol="Tuni", factor=uniSV * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
+        Unit(symbol="Puni", factor=uniSV * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
+        Unit(symbol="Euni", factor=uniSV * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
+        Unit(symbol="Zuni", factor=uniSV * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
+        Unit(symbol="Yuni", factor=uniSV * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
+        FixedUnit(symbol="∞", factor=Decimal(infinity), names=["infinite", "infinity"]),
+        Unit(factor=Decimal("0.0856"), name="credit card", namePlural="credit cards"),
+        Unit(factor=Decimal("0.0856"), name="Natalie", namePlural="Natalies")
     ])
     # SV systems
     _systems = {
@@ -329,6 +380,10 @@ class SV(UnitValue):
             "Zuni",
             "Yuni",
             "∞"
+        ]),
+        "o": SystemRegistry(_units, [
+            "credit card",
+            "Natalie"
         ])
     }
 
@@ -372,41 +427,41 @@ class WV(UnitValue):
     infinity = uniWV * Decimal("1E27")
     # WV units
     _units = UnitRegistry([
-        Unit("yg", Decimal("1e-24"), names=["yoctograms", "yoctograms"]),
-        Unit("zg", Decimal("1e-21"), names=["zeptograms", "zeptograms"]),
-        Unit("ag", Decimal("1e-18"), names=["attograms", "attogram"]),
-        Unit("fg", Decimal("1e-15"), names=["femtogram", "femtogram"]),
-        Unit("pg", Decimal("1e-12"), names=["picogram", "picogram"]),
-        Unit("ng", Decimal("1e-9"), names=["nanogram", "nanogram"]),
-        Unit("µg", Decimal("1e-6"), names=["microgram", "microgram"]),
-        Unit("mg", Decimal("1e-3"), names=["milligrams", "milligram"]),
-        Unit("g", Decimal("1e0"), names=["grams", "gram"]),
-        Unit("oz", ounce, names=["kilograms", "kilogram"]),
-        Unit("lb", pound, names=["pounds", "pound"], symbols=["lbs"]),
-        Unit("kg", Decimal("1e3"), names=["kilograms", "kilogram"]),
-        Unit(" US tons", uston),
-        Unit("t", Decimal("1e6"), names=["megagrams", "megagram", "ton", "tons", "tonnes", "tons"]),
-        Unit("kt", Decimal("1e9"), names=["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"]),
-        Unit("Mt", Decimal("1e12"), names=["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"]),
-        Unit("Gt", Decimal("1e15"), names=["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes"]),
-        Unit("Tt", Decimal("1e18"), names=["exagrams", "exagram", "teratons", "teraton", "teratonnes", "teratonne"]),
-        Unit("Pt", Decimal("1e21"), names=["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne"]),
-        Unit("Et", Decimal("1e24"), names=["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne"]),
-        Unit("Zt", Decimal("1e27"), names=["zettatons", "zettaton", "zettatonnes", "zettatonne"]),
-        Unit(" Earths", earth, names=["earth", "earths"]),
-        Unit("Yt", Decimal("1e30"), names=["yottatons", "yottaton", "yottatonnes", "yottatonne"]),
-        Unit(" Suns", sun, names=["sun", "suns"]),
-        Unit(" Milky Ways", milkyway),
-        Unit("uni", uniWV * Decimal("1e0"), names=["universes", "universe"]),
-        Unit("kuni", uniWV * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
-        Unit("Muni", uniWV * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
-        Unit("Guni", uniWV * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
-        Unit("Tuni", uniWV * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
-        Unit("Puni", uniWV * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
-        Unit("Euni", uniWV * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
-        Unit("Zuni", uniWV * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
-        Unit("Yuni", uniWV * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
-        FixedUnit("∞", Decimal(infinity), names=["infinite", "infinity"])
+        Unit(symbol="yg", factor=Decimal("1e-24"), names=["yoctograms", "yoctograms"]),
+        Unit(symbol="zg", factor=Decimal("1e-21"), names=["zeptograms", "zeptograms"]),
+        Unit(symbol="ag", factor=Decimal("1e-18"), names=["attograms", "attogram"]),
+        Unit(symbol="fg", factor=Decimal("1e-15"), names=["femtogram", "femtogram"]),
+        Unit(symbol="pg", factor=Decimal("1e-12"), names=["picogram", "picogram"]),
+        Unit(symbol="ng", factor=Decimal("1e-9"), names=["nanogram", "nanogram"]),
+        Unit(symbol="µg", factor=Decimal("1e-6"), names=["microgram", "microgram"]),
+        Unit(symbol="mg", factor=Decimal("1e-3"), names=["milligrams", "milligram"]),
+        Unit(symbol="g", factor=Decimal("1e0"), names=["grams", "gram"]),
+        Unit(symbol="oz", factor=ounce, names=["kilograms", "kilogram"]),
+        Unit(symbol="lb", factor=pound, names=["pounds", "pound"], symbols=["lbs"]),
+        Unit(symbol="kg", factor=Decimal("1e3"), names=["kilograms", "kilogram"]),
+        Unit(symbol=" US tons", factor=uston),
+        Unit(symbol="t", factor=Decimal("1e6"), names=["megagrams", "megagram", "ton", "tons", "tonnes", "tons"]),
+        Unit(symbol="kt", factor=Decimal("1e9"), names=["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"]),
+        Unit(symbol="Mt", factor=Decimal("1e12"), names=["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"]),
+        Unit(symbol="Gt", factor=Decimal("1e15"), names=["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes"]),
+        Unit(symbol="Tt", factor=Decimal("1e18"), names=["exagrams", "exagram", "teratons", "teraton", "teratonnes", "teratonne"]),
+        Unit(symbol="Pt", factor=Decimal("1e21"), names=["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne"]),
+        Unit(symbol="Et", factor=Decimal("1e24"), names=["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne"]),
+        Unit(symbol="Zt", factor=Decimal("1e27"), names=["zettatons", "zettaton", "zettatonnes", "zettatonne"]),
+        Unit(symbol=" Earths", factor=earth, names=["earth", "earths"]),
+        Unit(symbol="Yt", factor=Decimal("1e30"), names=["yottatons", "yottaton", "yottatonnes", "yottatonne"]),
+        Unit(symbol=" Suns", factor=sun, names=["sun", "suns"]),
+        Unit(symbol=" Milky Ways", factor=milkyway),
+        Unit(symbol="uni", factor=uniWV * Decimal("1e0"), names=["universes", "universe"]),
+        Unit(symbol="kuni", factor=uniWV * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
+        Unit(symbol="Muni", factor=uniWV * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
+        Unit(symbol="Guni", factor=uniWV * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
+        Unit(symbol="Tuni", factor=uniWV * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
+        Unit(symbol="Puni", factor=uniWV * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
+        Unit(symbol="Euni", factor=uniWV * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
+        Unit(symbol="Zuni", factor=uniWV * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
+        Unit(symbol="Yuni", factor=uniWV * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
+        FixedUnit(symbol="∞", factor=Decimal(infinity), names=["infinite", "infinity"])
     ])
     # WV systems
     _systems = {
@@ -490,13 +545,13 @@ class TV(UnitValue):
     month = day * Decimal("30")
     year = day * Decimal("365")
     _units = UnitRegistry([
-        Unit("s", second, names=["second", "seconds", "sec"]),
-        Unit("m", minute, names=["minute", "minutes", "min"]),
-        Unit("h", hour, names=["hour", "hours", "hr"]),
-        Unit("d", day, names=["day", "days", "dy"]),
-        Unit("w", week, names=["week", "weeks", "wk"]),
-        Unit(None, month, names=["month", "months"]),
-        Unit("a", year, names=["year", "years", "yr"], symbols=["y"])
+        Unit(symbol="s", name="second", namePlural="seconds", factor=second, symbols=["sec"]),
+        Unit(symbol="m", name="minute", namePlural="minutes", factor=minute, symbols=["min"]),
+        Unit(symbol="h", name="hour", namePlural="hours", factor=hour, symbols=["hr"]),
+        Unit(symbol="d", name="day", namePlural="days", factor=day, symbols=["dy"]),
+        Unit(symbol="w", name="week", namePlural="weeks", factor=week, symbols=["wk"]),
+        Unit(name="month", namePlural="", factor=month, names=["months"]),
+        Unit(symbol="a", name="year", namePlural="years", factor=year, symbols=["y", "yr"])
     ])
     _systems = {
         "m": SystemRegistry(_units, [

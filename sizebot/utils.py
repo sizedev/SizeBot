@@ -177,3 +177,25 @@ def tryOrNone(fn, *args, ignore=(), **kwargs):
     except ignore:
         result = None
     return result
+
+
+class iset(set):
+    def __init__(self, iterable):
+        iterable = (i.casefold() for i in iterable)
+        super().__init__(iterable)
+
+    def add(self, item):
+        item = item.casefold()
+        return super().add(item)
+
+    def __contains__(self, item):
+        item = item.casefold()
+        return super().__contains__(item)
+
+    def discard(self, item):
+        item = item.casefold()
+        return super().discard(item)
+
+    def remove(self, item):
+        item = item.casefold()
+        return super().remove(item)
