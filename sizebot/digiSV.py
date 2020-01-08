@@ -117,12 +117,12 @@ class Unit():
 
         if rounded == 0:
             return "0"
-        
+
         if preferName:
             if self.namePlural is not None and abs(rounded) == 1:
                 formatted = f"{formattedValue} {self.namePlural}"
             elif self.name is not None:
-                formatted = f"{formattedValue} {self.name}"                
+                formatted = f"{formattedValue} {self.name}"
             elif self.symbol is not None:
                 formatted = f"{formattedValue}{self.symbol}"
             else:
@@ -249,7 +249,7 @@ class UnitValue(Decimal):
                 if u not in uniqUnits:
                     uniqUnits.append(u)
             formatted = " / ".join(uniqUnits)
-            
+
         else:
             formatted = format(value, spec)
 
