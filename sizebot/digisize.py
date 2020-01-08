@@ -251,39 +251,39 @@ class PersonStats:
     def __str__(self):
         return (
             f"**{self.tag} Stats:**\n"
-            f"*Current Height:*  {self.height:.3mu}\n"
-            f"*Current Weight:*  {self.weight:.3mu}\n"
+            f"*Current Height:*  {self.height:,.3mu}\n"
+            f"*Current Weight:*  {self.weight:,.3mu}\n"
             f"\n"
-            f"Foot Length: {self.footlength:.3mu}\n"
-            f"Foot Width: {self.footwidth:.3mu}\n"
-            f"Toe Height: {self.toeheight:.3mu}\n"
-            f"Pointer Finger Length: {self.pointerlength:.3mu}\n"
-            f"Thumb Width: {self.thumbwidth:.3mu}\n"
-            f"Fingerprint Depth: {self.fingerprintdepth:.3mu}\n"
-            f"Hair Width: {self.hairwidth:.3mu}\n"
+            f"Foot Length: {self.footlength:,.3mu}\n"
+            f"Foot Width: {self.footwidth:,.3mu}\n"
+            f"Toe Height: {self.toeheight:,.3mu}\n"
+            f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
+            f"Thumb Width: {self.thumbwidth:,.3mu}\n"
+            f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
+            f"Hair Width: {self.hairwidth:,.3mu}\n"
             f"\n"
-            f"Size of a Normal Man (Comparative): {self.avgheightcomp:.3mu}\n"
-            f"Weight of a Normal Man (Comparative): {self.avgweightcomp:.3mu}\n"
+            f"Size of a Normal Man (Comparative): {self.avgheightcomp:,.3mu}\n"
+            f"Weight of a Normal Man (Comparative): {self.avgweightcomp:,.3mu}\n"
             f"To look {self.avglookdirection} at a average human, you'd have to look {self.avglookdirection} {self.avglookangle:.0f}°.\n"
             f"\n"
-            f"Character Bases: {self.baseheight:.3mu} | {self.baseweight:.3mu}"
+            f"Character Bases: {self.baseheight:,.3mu} | {self.baseweight:,.3mu}"
         )
 
     def toEmbed(self):
         embed = discord.Embed(title=f"Stats for {self.tag}", description="sent by *Name of Sender*", color=0x31eff9)
         embed.set_author(name=f"SizeBot {conf.version}")
-        embed.add_field(name="Current Height", value=f"{self.height:.3mu}", inline=True)
-        embed.add_field(name="Current Weight", value=f"{self.weight:.3mu}", inline=True)
-        embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}", inline=True)
-        embed.add_field(name="Foot Width", value=f"{self.footwidth:.3mu}", inline=True)
-        embed.add_field(name="Toe Height", value=f"{self.toeheight:.3mu}", inline=True)
-        embed.add_field(name="Pointer Finger Length", value=f"{self.pointerlength:.3mu}", inline=True)
-        embed.add_field(name="Thumb Width", value=f"{self.thumbwidth:.3mu}", inline=True)
-        embed.add_field(name="Fingerprint Depth", value=f"{self.fingerprintdepth:.3mu}", inline=True)
-        embed.add_field(name="Hair Width", value=f"{self.hairwidth:.3mu}", inline=True)
+        embed.add_field(name="Current Height", value=f"{self.height:,.3mu}", inline=True)
+        embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}", inline=True)
+        embed.add_field(name="Foot Length", value=f"{self.footlength:,.3mu}", inline=True)
+        embed.add_field(name="Foot Width", value=f"{self.footwidth:,.3mu}", inline=True)
+        embed.add_field(name="Toe Height", value=f"{self.toeheight:,.3mu}", inline=True)
+        embed.add_field(name="Pointer Finger Length", value=f"{self.pointerlength:,.3mu}", inline=True)
+        embed.add_field(name="Thumb Width", value=f"{self.thumbwidth:,.3mu}", inline=True)
+        embed.add_field(name="Fingerprint Depth", value=f"{self.fingerprintdepth:,.3mu}", inline=True)
+        embed.add_field(name="Hair Width", value=f"{self.hairwidth:,.3mu}", inline=True)
         embed.add_field(name="\u200b", value="\u200b", inline=False)
-        embed.add_field(name="Character Bases", value=f"{self.baseheight:.3mu} | {self.baseweight:.3mu}", inline=False)
-        embed.set_footer(text=f"An average human would look {self.avgheightcomp:.3mu}, and weigh {self.avgweightcomp:.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
+        embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
+        embed.set_footer(text=f"An average human would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
         return embed
 
 
