@@ -117,7 +117,7 @@ class Unit():
 
         if rounded == 0:
             return "0"
-        
+
         single = abs(rounded) == 1
         if single:
             if self.name is not None:
@@ -129,7 +129,7 @@ class Unit():
                 name = self.namePlural
             else:
                 name = self.name
-                
+
         if preferName:
             if name is not None:
                 formatted = f"{formattedValue} {name}"
@@ -257,7 +257,7 @@ class UnitValue(Decimal):
                 if u not in uniqUnits:
                     uniqUnits.append(u)
             formatted = " / ".join(uniqUnits)
-            
+
         else:
             formatted = format(value, spec)
 
