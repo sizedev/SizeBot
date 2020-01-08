@@ -415,7 +415,8 @@ class SV(UnitValue):
         Unit(factor=Decimal("0.01905"), name="penny", namePlural="pennies"),
         Unit(factor=Decimal("0.01791"), name="dime", namePlural="dimes"),
         Unit(factor=Decimal("0.3"), name="vinyl record", namePlural="vinyl records", names=["record", "records"]),
-        Unit(factor=Decimal("0.1905"), name="stair", namePlural="stairs")
+        Unit(factor=Decimal("0.1905"), name="stair", namePlural="stairs"),
+        Unit(factor=Decimal("0.762"), name="fire hydrant", namePlural="fire hydrants", names=["hydrant", "hydrants"])
     ])
     # SV systems
     _systems = {
