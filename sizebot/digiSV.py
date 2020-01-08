@@ -118,11 +118,21 @@ class Unit():
         if rounded == 0:
             return "0"
         
+        single = abs(rounded) == 1
+        if single:
+            if self.name is not None:
+                name = self.name
+            else:
+                name = self.namePlural
+        else:
+            if self.namePlural is not None:
+                name = self.namePlural
+            else:
+                name = self.name
+                
         if preferName:
-            if self.namePlural is not None and abs(rounded) == 1:
-                formatted = f"{formattedValue} {self.namePlural}"
-            elif self.name is not None:
-                formatted = f"{formattedValue} {self.name}"                
+            if name is not None:
+                formatted = f"{formattedValue} {name}"
             elif self.symbol is not None:
                 formatted = f"{formattedValue}{self.symbol}"
             else:
@@ -130,10 +140,8 @@ class Unit():
         else:
             if self.symbol is not None:
                 formatted = f"{formattedValue}{self.symbol}"
-            elif self.namePlural is not None and abs(rounded) == 1:
-                formatted = f"{formattedValue} {self.namePlural}"
-            elif self.name is not None:
-                formatted = f"{formattedValue} {self.name}"
+            elif name is not None:
+                formatted = f"{formattedValue} {name}"
             else:
                 formatted = formattedValue
 
