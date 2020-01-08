@@ -562,7 +562,8 @@ class SV(UnitValue):
             "penny",
             "dime",
             "vinyl record",
-            "stair"
+            "stair",
+            "hydrant"
         ])
     }
 
