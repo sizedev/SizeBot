@@ -112,7 +112,20 @@ def ddir(o):
 
 
 def formatError(err):
-    return str(err) or f"{err.__class__.__module__}.{err.__class__.__name__}"
+
+    moduleName = err.__class__.__module__
+    if moduleName == "builtins":
+        moduleName = ""
+    if moduleName:
+        moduleName = f"{moduleName}."
+
+    className = err.__class__.__name__
+
+    errMessage = str(err)
+    if errMessage:
+        errMessage = f": {errMessage}"
+
+    return f"{moduleName}{className}{errMessage}"
 
 
 formatSpecRe = re.compile(r"""\A

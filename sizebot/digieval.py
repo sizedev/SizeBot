@@ -1,8 +1,9 @@
 import builtins
-import pydoc
+import pydoc_data.topics
 
 import discord
 
+from sizebot.digidecimal import Decimal
 from sizebot import digilogger as logger
 from sizebot.digiSV import Rate, Mult, SV, WV, TV
 import sizebot.utils
@@ -52,6 +53,7 @@ def getEvalGlobals():
     evalGlobals = {
         "__builtins__": evalBuiltins,
         "help": strHelp,
+        "Decimal": Decimal,
         "discord": discord,
         "logger": logger,
         "Rate": Rate, "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
