@@ -48,7 +48,9 @@ class StatsCog(commands.Cog):
         userdata2 = getUserdata(memberOrHeight2, "Raw 2")
 
         comparison = digisize.PersonComparison(userdata1, userdata2)
-        await ctx.send(embed = comparison.toEmbed())
+        embedtosend = comparison.toEmbed()
+        embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
+        await ctx.send(embed = embedtosend)
 
         await logger.info(f"Compared {userdata1} and {userdata2}")
 

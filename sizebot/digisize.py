@@ -199,7 +199,7 @@ class PersonComparison:
         )
 
     def toEmbed(self):
-        embed = discord.Embed(title="Stats for DigiDuncan [5'8\"]", description="sent by Name of Sender", color=0x31eff9)
+        embed = discord.Embed(title="Stats for DigiDuncan [5'8\"]", color=0x31eff9)
         embed.set_author(name="SizeBot 3.5")
         embed.add_field(name="Current Height", value="1.727m / 5'8\"", inline=True)
         embed.add_field(name="Current Weight", value="63.746kg / 140.534lb", inline=True)
@@ -271,7 +271,7 @@ class PersonStats:
         )
 
     def toEmbed(self):
-        embed = discord.Embed(title=f"Stats for {self.nickname}", description="sent by *Name of Sender*", color=0x31eff9)
+        embed = discord.Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
         embed.set_author(name=f"SizeBot {conf.version}")
         embed.add_field(name="Current Height", value=format(self.height, ",.3mu"), inline=True)
         embed.add_field(name="Current Weight", value=format(self.weight, ",.3mu"), inline=True)
