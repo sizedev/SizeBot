@@ -61,6 +61,18 @@ class StatsCog(commands.Cog):
         else:
             raise error
 
+    @commands.command()
+    @commands.check(guildOnly)
+    async def objcompare(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
+        if memberOrHeight is None:
+            memberOrHeight = ctx.message.author
+
+        userdata = getUserdata(memberOrHeight)
+        userheight = userdata.height
+
+        await ctx.send(f"{userdata.tag} ir really {userdata.height:,.3mu}, or {userheight:,.1O}")
+        await logger.info(f"Sent object comparison for {userdata.nickname}.")
+
 
 def getUserdata(memberOrSV, nickname = "Raw"):
     if isinstance(memberOrSV, discord.Member):
