@@ -281,7 +281,7 @@ class PersonStats:
         embed.add_field(name="Thumb Width", value=f"{self.thumbwidth:.3m} / {self.thumbwidth:.3u}", inline=True)
         embed.add_field(name="Fingerprint Depth", value=f"{self.fingerprintdepth:.3m} / {self.fingerprintdepth:.3u}", inline=True)
         embed.add_field(name="Hair Width", value=f"{self.hairwidth:.3m} / {self.hairwidth:.3u}", inline=True)
-        embed.add_field(name="", value="", inline=False)
+        embed.add_field(name="\u200b", value="\u200b", inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:.3m} / {self.baseheight:.3u} | {self.baseweight:.3m} / {self.baseweight:.3u}", inline=False)
         embed.set_footer(text=f"An average human would look {self.avgheightcomp:.3m} ({self.avgheightcomp:.3u}), and weigh {self.avgweightcomp:.3u} / {self.avgweightcomp:.3u} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
         return embed
