@@ -190,17 +190,17 @@ class UnitValue(Decimal):
         value = Decimal(self)
         formatDict = parseSpec(spec)
 
-        system = formatDict["type"]
+        systems = formatDict["type"] or ""
 
-        if system in self._systems.keys():
+        if all(s in self._systems.keys() for s in systems):
             accuracy = formatDict["precision"] or 2
             accuracy = int(accuracy)
             formatDict["type"] = None
             formatDict["precision"] = None
             numspec = buildSpec(formatDict)
 
-            unit = self._systems[system].getBestUnit(value)
-            formatted = unit.format(value, accuracy, numspec)
+            units = (self._systems[s].getBestUnit(value) for s in systems)
+            formatted = " / ".join(unit.format(value, accuracy, numspec) for unit in units)
         else:
             formatted = format(value, spec)
 
