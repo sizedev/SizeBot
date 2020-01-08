@@ -225,6 +225,7 @@ class PersonStats:
     pointerfactor = Decimal("1") / Decimal("17.26")
 
     def __init__(self, userdata):
+        self.nickname = userdata.nickname
         self.tag = userdata.tag
         self.height = userdata.height
         self.baseheight = userdata.baseheight
@@ -270,7 +271,7 @@ class PersonStats:
         )
 
     def toEmbed(self):
-        embed = discord.Embed(title=f"Stats for {self.tag}", description="sent by *Name of Sender*", color=0x31eff9)
+        embed = discord.Embed(title=f"Stats for {self.nickname}", description="sent by *Name of Sender*", color=0x31eff9)
         embed.set_author(name=f"SizeBot {conf.version}")
         embed.add_field(name="Current Height", value=format(self.height, ",.3mu"), inline=True)
         embed.add_field(name="Current Weight", value=format(self.weight, ",.3mu"), inline=True)
