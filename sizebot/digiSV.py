@@ -161,7 +161,7 @@ class Unit():
 class FixedUnit(Unit):
     """Unit that only formats to a single symbol"""
 
-    def format(self, value, accuracy, spec):
+    def format(self, value, accuracy, spec, preferName=False):
         return self.symbol
 
     def toUnitValue(self, v):
@@ -176,7 +176,7 @@ class FeetAndInchesUnit(Unit):
         self.inchsymbol = inchsymbol
         self.factor = factor
 
-    def format(self, value, accuracy, spec):
+    def format(self, value, accuracy, spec, preferName=False):
         inchval = value / SV.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
         roundedinchval = roundDecimal(inchval, accuracy)
@@ -237,7 +237,7 @@ class UnitValue(Decimal):
 
         systems = formatDict["type"] or ""
 
-        if all(s in self._systems.keys() for s in systems):
+        if all(s.casefold() in self._systems.keys() for s in systems):
             accuracy = formatDict["precision"] or 2
             accuracy = int(accuracy)
             formatDict["type"] = None
@@ -296,38 +296,38 @@ class SV(UnitValue):
     infinity = uniSV * Decimal("1E27")
     # SV units
     _units = UnitRegistry([
-        Unit(symbol="ym", factor=Decimal("1e-24"), names=["yoctometers", "yoctometer"]),
-        Unit(symbol="zm", factor=Decimal("1e-21"), names=["zeptometers", "zeptometer"]),
-        Unit(symbol="am", factor=Decimal("1e-18"), names=["attometers", "attometer"]),
-        Unit(symbol="fm", factor=Decimal("1e-15"), names=["femtometers", "femtometer"]),
-        Unit(symbol="pm", factor=Decimal("1e-12"), names=["picometers", "picometer"]),
-        Unit(symbol="nm", factor=Decimal("1e-9"), names=["nanometers", "nanometer"]),
-        Unit(symbol="µm", factor=Decimal("1e-6"), names=["micrometers", "micrometer"], symbols=["um"]),
-        Unit(symbol="mm", factor=Decimal("1e-3"), names=["millimeters", "millimeter"]),
-        Unit(symbol="in", factor=inch, names=["inches", "inch", "in", "\""]),
+        Unit(symbol="ym", factor=Decimal("1e-24"), name="yoctometer", namePlural="yoctometers"),
+        Unit(symbol="zm", factor=Decimal("1e-21"), name="zeptometer", namePlural="zeptometers"),
+        Unit(symbol="am", factor=Decimal("1e-18"), name="attometer", namePlural="attometers"),
+        Unit(symbol="fm", factor=Decimal("1e-15"), name="femtometer", namePlural="femtometers"),
+        Unit(symbol="pm", factor=Decimal("1e-12"), name="picometer", namePlural="picometers"),
+        Unit(symbol="nm", factor=Decimal("1e-9"), name="nanometer", namePlural="nanometers"),
+        Unit(symbol="µm", factor=Decimal("1e-6"), name="micrometer", namePlural="micrometers", symbols=["um"]),
+        Unit(symbol="mm", factor=Decimal("1e-3"), name="millimeter", namePlural="millimeters"),
+        Unit(symbol="in", factor=inch, name="inche", namePlural="inches", symbols=["\""]),
         FeetAndInchesUnit("'", "\"", foot),
-        Unit(symbol="cm", factor=Decimal("1e-2"), names=["centimeters", "centimeter"]),
-        Unit(symbol="m", factor=Decimal("1e0"), names=["meters", "meter"]),
-        Unit(symbol="km", factor=Decimal("1e3"), names=["kilometers", "kilometer"]),
-        Unit(symbol="Mm", factor=Decimal("1e6"), names=["megameters", "megameter"]),
-        Unit(symbol="Gm", factor=Decimal("1e9"), names=["gigameters", "gigameter"]),
-        Unit(symbol="Tm", factor=Decimal("1e12"), names=["terameters", "terameter"]),
-        Unit(symbol="Pm", factor=Decimal("1e15"), names=["petameters", "petameter"]),
-        Unit(symbol="Em", factor=Decimal("1e18"), names=["exameters", "exameter"]),
-        Unit(symbol="Zm", factor=Decimal("1e21"), names=["zettameters", "zettameter"]),
-        Unit(symbol="Ym", factor=Decimal("1e24"), names=["yottameters", "yottameter"]),
-        Unit(symbol="mi", factor=mile, names=["miles", "mile"]),
-        Unit(symbol="ly", factor=ly, names=["lightyears", "lightyear"]),
-        Unit(symbol="AU", factor=au, names=["astronomical_units", "astronomical_unit"]),
-        Unit(symbol="uni", factor=uniSV * Decimal("1e0"), names=["universes", "universe"]),
-        Unit(symbol="kuni", factor=uniSV * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
-        Unit(symbol="Muni", factor=uniSV * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
-        Unit(symbol="Guni", factor=uniSV * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
-        Unit(symbol="Tuni", factor=uniSV * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
-        Unit(symbol="Puni", factor=uniSV * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
-        Unit(symbol="Euni", factor=uniSV * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
-        Unit(symbol="Zuni", factor=uniSV * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
-        Unit(symbol="Yuni", factor=uniSV * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
+        Unit(symbol="cm", factor=Decimal("1e-2"), name="centimeter", namePlural="centimeters"),
+        Unit(symbol="m", factor=Decimal("1e0"), name="meter", namePlural="meters"),
+        Unit(symbol="km", factor=Decimal("1e3"), name="kilometer", namePlural="kilometers"),
+        Unit(symbol="Mm", factor=Decimal("1e6"), name="megameter", namePlural="megameters"),
+        Unit(symbol="Gm", factor=Decimal("1e9"), name="gigameter", namePlural="gigameters"),
+        Unit(symbol="Tm", factor=Decimal("1e12"), name="terameter", namePlural="terameters"),
+        Unit(symbol="Pm", factor=Decimal("1e15"), name="petameter", namePlural="petameters"),
+        Unit(symbol="Em", factor=Decimal("1e18"), name="exameter", namePlural="exameters"),
+        Unit(symbol="Zm", factor=Decimal("1e21"), name="zettameter", namePlural="zettameters"),
+        Unit(symbol="Ym", factor=Decimal("1e24"), name="yottameter", namePlural="yottameters"),
+        Unit(symbol="mi", factor=mile, name="mile", namePlural="miles"),
+        Unit(symbol="ly", factor=ly, name="lightyear", namePlural="lightyears"),
+        Unit(symbol="AU", factor=au, name="astronomical_unit", namePlural="astronomical_units"),
+        Unit(symbol="uni", factor=uniSV * Decimal("1e0"), name="universe", namePlural="universes"),
+        Unit(symbol="kuni", factor=uniSV * Decimal("1e3"), name="kilouniverse", namePlural="kilouniverses"),
+        Unit(symbol="Muni", factor=uniSV * Decimal("1e6"), name="megauniverse", namePlural="megauniverses"),
+        Unit(symbol="Guni", factor=uniSV * Decimal("1e9"), name="gigauniverse", namePlural="gigauniverses"),
+        Unit(symbol="Tuni", factor=uniSV * Decimal("1e12"), name="terauniverse", namePlural="terauniverses"),
+        Unit(symbol="Puni", factor=uniSV * Decimal("1e15"), name="petauniverse", namePlural="petauniverses"),
+        Unit(symbol="Euni", factor=uniSV * Decimal("1e18"), name="exauniverse", namePlural="exauniverses"),
+        Unit(symbol="Zuni", factor=uniSV * Decimal("1e21"), name="zettauniverse", namePlural="zettauniverses"),
+        Unit(symbol="Yuni", factor=uniSV * Decimal("1e24"), name="yottauniverse", namePlural="yottauniverses"),
         FixedUnit(symbol="∞", factor=Decimal(infinity), names=["infinite", "infinity"]),
         Unit(factor=Decimal("0.0856"), name="credit card", namePlural="credit cards"),
         Unit(factor=Decimal("0.0856"), name="Natalie", namePlural="Natalies")
