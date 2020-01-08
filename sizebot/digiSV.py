@@ -1,4 +1,5 @@
 import re
+import collections
 
 from sizebot.digidecimal import Decimal, roundDecimal, trimzeroes
 from sizebot import digierror as errors
@@ -156,6 +157,10 @@ class Unit():
     def __lt__(self, other):
         return self.factor < other.factor
 
+    @property
+    def id(self):
+        return self.symbol or self.name or self.namePlural
+
 
 # "Fixed" Unit: Formats to only the symbol.
 class FixedUnit(Unit):
@@ -190,7 +195,7 @@ class FeetAndInchesUnit(Unit):
         return None
 
 
-class UnitRegistry():
+class UnitRegistry(collections.abc.Mapping):
     """Unit Registry"""
 
     def __init__(self, units):
@@ -202,11 +207,15 @@ class UnitRegistry():
         except StopIteration:
             raise KeyError(key)
 
-    def __getattr__(self, name):
-        return self[name]
-
     def __contains__(self, name):
         return self[name] is not None
+
+    def __iter__(self):
+        return iter(unit.id for unit in self._units)
+
+    def __len__(self):
+        return len(self._units)
+
 
 
 class SystemRegistry():
@@ -214,18 +223,18 @@ class SystemRegistry():
 
     def __init__(self, units, unitnames):
         systemunits = [units[name] for name in unitnames]
-        self._units = sorted(systemunits)
+        self._systemunits = sorted(systemunits)
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
     def getBestUnit(self, value):
         value = abs(value)
         # Pair each unit with the unit following it
-        for unit, nextunit in zip(self._units[:-1], self._units[1:]):
+        for unit, nextunit in zip(self._systemunits[:-1], self._systemunits[1:]):
             # If we're smaller than the next unit's lowest value, then just use this unit
             if value < nextunit.factor:
                 return unit
         # If we're too big for all the units, just use the biggest possible unit
-        return self._units[-1]
+        return self._systemunits[-1]
 
 
 class UnitValue(Decimal):
@@ -269,7 +278,7 @@ class UnitValue(Decimal):
         if value is None or unitStr is None:
             raise errors.InvalidSizeValue(s)
         value = Decimal(value)
-        unit = cls._units[unitStr]
+        unit = cls._units.get(unitStr, None)
         if unit is None:
             raise errors.InvalidSizeValue(s)
         unitValue = unit.toUnitValue(value)
