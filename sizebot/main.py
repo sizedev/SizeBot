@@ -12,7 +12,6 @@ from sizebot.utils import formatTraceback
 
 initial_extensions = [
     "sizebot.cogs.change",
-    "sizebot.cogs.dm",
     "sizebot.cogs.fun",
     "sizebot.cogs.mod",
     "sizebot.cogs.monika",
