@@ -730,8 +730,8 @@ class TV(UnitValue):
         Unit(symbol="h", name="hour", namePlural="hours", factor=hour, symbols=["hr"]),
         Unit(symbol="d", name="day", namePlural="days", factor=day, symbols=["dy"]),
         Unit(symbol="w", name="week", namePlural="weeks", factor=week, symbols=["wk"]),
-        Unit(name="month", namePlural="", factor=month, names=["months"]),
-        Unit(symbol="a", name="year", namePlural="years", factor=year, symbols=["y", "yr"])
+        Unit(name="month", namePlural="months", factor=month),
+        Unit(symbol="y", name="year", namePlural="years", factor=year, symbols=["a", "yr"])
     ])
     _systems = {
         "m": SystemRegistry(_units, [
