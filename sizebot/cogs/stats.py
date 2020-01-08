@@ -70,7 +70,7 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(memberOrHeight)
         userheight = userdata.height
 
-        await ctx.send(f"{userdata.tag} ir really {userdata.height:,.3mu}, or {userheight:,.1O}")
+        await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or **{userheight:,.1O}**.")
         await logger.info(f"Sent object comparison for {userdata.nickname}.")
 
 
