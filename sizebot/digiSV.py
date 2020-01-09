@@ -452,7 +452,7 @@ class SV(UnitValue):
             SystemUnit("cm"),
             SystemUnit("m"),
             SystemUnit("km"),
-            SystemUnit("Mm", trigger=Decimal("1e-7"),
+            SystemUnit("Mm", trigger=Decimal("1e-7")),
             SystemUnit("Gm"),
             SystemUnit("Tm"),
             SystemUnit("Pm"),
