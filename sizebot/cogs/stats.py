@@ -4,6 +4,7 @@ from decimal import InvalidOperation
 
 import discord
 from discord.ext import commands
+from sizebot.discordplus import commandsplus
 
 from sizebot import digilogger as logger
 # TODO: Fix this...
@@ -17,7 +18,7 @@ class StatsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
         if memberOrHeight is None:
@@ -33,7 +34,7 @@ class StatsCog(commands.Cog):
 
         await logger.info(f"Stats for {memberOrHeight} sent.")
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         if memberOrHeight2 is None:
@@ -64,7 +65,7 @@ class StatsCog(commands.Cog):
         else:
             raise error
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def objcompare(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
         if memberOrHeight is None:
@@ -87,6 +88,5 @@ def getUserdata(memberOrSV, nickname = "Raw"):
     return userdata
 
 
-# Necessary
 def setup(bot):
     bot.add_cog(StatsCog(bot))

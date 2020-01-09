@@ -1,4 +1,5 @@
 from discord.ext import commands
+from sizebot.discordplus import commandsplus
 
 from sizebot import digilogger as logger
 from sizebot.conf import conf
@@ -9,7 +10,7 @@ class ModCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commandsplus.command()
     async def heightunits(self, ctx):
         await ctx.message.delete(delay=0)
         await ctx.send(
@@ -49,7 +50,7 @@ class ModCog(commands.Cog):
             "└─────────────────────────┴───────────────────────────┘\n"
             "```")
 
-    @commands.command()
+    @commandsplus.command()
     async def weightunits(self, ctx):
         await ctx.message.delete(delay=0)
         await ctx.send(
@@ -90,7 +91,7 @@ class ModCog(commands.Cog):
             "└─────────────────────────┴───────────────────────────┘\n"
             "```")
 
-    @commands.command()
+    @commandsplus.command()
     async def help(self, ctx, what: str = None):
         await ctx.message.delete(delay=0)
         if what is None:
@@ -133,7 +134,7 @@ class ModCog(commands.Cog):
                 "bug\n"
                 "```\n")
 
-    @commands.command()
+    @commandsplus.command()
     async def about(self, ctx):
         await ctx.message.delete(delay=0)
         await ctx.send(
@@ -164,7 +165,7 @@ class ModCog(commands.Cog):
             "\n"
             f"Version {conf.version} | 19 Jul 2019")
 
-    @commands.command()
+    @commandsplus.command()
     async def donate(self, ctx):
         await ctx.message.delete(delay=0)
         await ctx.send(
@@ -175,12 +176,11 @@ class ModCog(commands.Cog):
             "SizeBot has been a passion project coded over a period of two years and learning a lot of Python along the way.\n"
             "Thank you so much for being here throughout this journey!")
 
-    @commands.command()
+    @commandsplus.command()
     async def bug(self, ctx, *, message: str):
         await logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
         await self.bot.get_user(conf.getId("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
 
 
-# Necessary.
 def setup(bot):
     bot.add_cog(ModCog(bot))

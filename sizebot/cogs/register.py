@@ -2,6 +2,7 @@ import asyncio
 
 from discord.ext import commands
 from discord.utils import get
+from sizebot.discordplus import commandsplus
 
 from sizebot import digilogger as logger
 from sizebot.conf import conf
@@ -33,10 +34,10 @@ class RegisterCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Registers a user for SizeBot
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def register(self, ctx, nick: str, display: str = "y", currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
+        """Registers a user for SizeBot"""
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
         await logger.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
         await logger.info(readable)
@@ -98,7 +99,7 @@ class RegisterCog(commands.Cog):
             return
         raise error
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def unregister(self, ctx):
         user = ctx.message.author
@@ -149,6 +150,5 @@ class RegisterCog(commands.Cog):
         await digisize.nickUpdate(m.author)
 
 
-# Necessary
 def setup(bot):
     bot.add_cog(RegisterCog(bot))

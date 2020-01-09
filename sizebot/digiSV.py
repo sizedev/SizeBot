@@ -90,9 +90,8 @@ class Mult():
         return multValue
 
 
-# Unit: Formats a value by scaling it and applying the appropriate symbol suffix
 class Unit():
-    """Unit"""
+    """Formats a value by scaling it and applying the appropriate symbol suffix"""
 
     def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[]):
         self.factor = factor
@@ -162,7 +161,6 @@ class Unit():
         return self.symbol or self.name or self.namePlural
 
 
-# "Fixed" Unit: Formats to only the symbol.
 class FixedUnit(Unit):
     """Unit that only formats to a single symbol"""
 
@@ -215,7 +213,6 @@ class UnitRegistry(collections.abc.Mapping):
 
     def __len__(self):
         return len(self._units)
-
 
 
 class SystemRegistry():

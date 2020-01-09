@@ -23,15 +23,15 @@ def roundDecimalHalf(number):
     return roundDecimal(number * Decimal("2")) / Decimal("2")
 
 
-# Format a Decimal to a string, removing exponents and trailing zeroes after the decimal
 def trimzeroes(d):
+    """Remove any trailing zeroes after the decimal place from a Decimal"""
     # `normalize()` removes ALL trailing zeroes, including ones before the decimal place
-    # `+ 0` readds the trailing zeroes before the decimal place, if necessary
+    # `+ 0` re-adds the trailing zeroes before the decimal place, if necessary
     return d.normalize() + 0
 
 
-# Generate a logarithmically scaled random number
 def randrangelog(minval, maxval, precision=26):
+    """Generate a logarithmically scaled random number"""
     minval = Decimal(minval)
     maxval = Decimal(maxval)
     prec = Decimal("10") ** precision

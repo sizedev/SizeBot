@@ -156,8 +156,8 @@ def printLog(message, level="info"):
     print(formatLog(level, message))
 
 
-# Create a progress bar
 def createLoadBar(current, total, barlength = 50, showpercent = False):
+    """Create a progress bar"""
     TWENTYFIVE = "\u2591"
     FIFTY = "\u2592"
     SEVENTYFIVE = "\u2593"
@@ -198,5 +198,5 @@ def truncate(s, trunclen = 80, trailing = False):
 
 
 def printLogLevels():
-    # list all log levels
+    """list all log levels"""
     print("log levels: " + (" ".join(formatLog(level, level, False) for level in loglevels.keys())))
