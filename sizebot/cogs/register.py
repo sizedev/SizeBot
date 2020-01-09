@@ -112,15 +112,18 @@ class RegisterCog(commands.Cog):
             return
 
         # Send a confirmation request
-        unregisterEmoji = "❌"  # TODO: Shouldn't this be in the config?
+        unregisterEmoji = "✔️"  # TODO: Shouldn't this be in the config?
+        cancelEmoji = "❌"  # TODO: Shouldn't this be in the config?
         sentMsg = await ctx.send(f"To unregister, react with {unregisterEmoji}.")
         await sentMsg.add_reaction(unregisterEmoji)
+        await sentMsg.add_reaction(cancelEmoji)
 
-        # Wait for requesting user to react to sent message with unregisterEmoji
+        # Wait for requesting user to react to sent message with unregisterEmoji or cancelEmoji
         def check(reaction, reacter):
             return reaction.message.id == sentMsg.id \
                 and reacter.id == user.id \
-                and str(reaction.emoji) == unregisterEmoji
+                and (str(reaction.emoji) == unregisterEmoji
+                     or str(reaction.emoji) == cancelEmoji)
 
         try:
             reaction, user = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
@@ -130,6 +133,10 @@ class RegisterCog(commands.Cog):
         finally:
             # User took too long OR User clicked the emoji
             await sentMsg.delete()
+
+        # if the reaction isn't the right one, stop.
+        if reaction != unregisterEmoji:
+            return
 
         # remove the sizetag, delete the user file, and remove the user role
         await digisize.nickReset(user)
