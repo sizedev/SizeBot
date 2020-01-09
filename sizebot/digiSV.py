@@ -613,6 +613,8 @@ class SV(UnitValue):
         totalinches = (Decimal(feetval) * Decimal("12")) + Decimal(inchval)
         return f"{totalinches}in"
 
+    def __repr__(self):
+        return f"SV('{self}')"
 
 class WV(UnitValue):
     """Weight Value (mass)"""
@@ -734,6 +736,8 @@ class WV(UnitValue):
             value, unit = match.group("value"), match.group("unit")
         return value, unit
 
+    def __repr__(self):
+        return f"WV('{self}')"
 
 class TV(UnitValue):
     """Time Value"""
@@ -775,3 +779,7 @@ class TV(UnitValue):
         if value is None:
             value = "1"
         return value, unit
+
+    def __repr__(self):
+        return f"TV('{self}')"
+    
