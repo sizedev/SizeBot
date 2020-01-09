@@ -243,7 +243,7 @@ class UnitValue(Decimal):
 
         systems = formatDict["type"] or ""
 
-        if all(s.casefold() in self._systems.keys() for s in systems):
+        if systems and all(s.casefold() in self._systems.keys() for s in systems):
             accuracy = formatDict["precision"] or 2
             accuracy = int(accuracy)
             formatDict["type"] = None
