@@ -11,8 +11,9 @@ from sizebot import text
 monikalines = pkg_resources.read_text(text, "monikalines.txt")
 
 
-# Easter egg
 class MonikaCog(commands.Cog):
+    """Easter egg"""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -29,6 +30,5 @@ class MonikaCog(commands.Cog):
             await m.channel.send(line, delete_after = 7)
 
 
-# Necessary.
 def setup(bot):
     bot.add_cog(MonikaCog(bot))

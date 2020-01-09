@@ -67,7 +67,7 @@ class ChangeCog(commands.Cog):
     @commands.command()
     @commands.check(guildOnly)
     async def change(self, ctx, style, *, amount):
-        # Change height
+        """Change height"""
         digisize.changeUser(ctx.message.author.id, style, amount)
         userdata = userdb.load(ctx.message.author.id)
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
@@ -107,7 +107,7 @@ class ChangeCog(commands.Cog):
     @commands.command()
     @commands.check(guildOnly)
     async def eatme(self, ctx):
-        # Eat me!
+        """Eat me!"""
         randmult = round(random.random(2, 20), 1)
         digisize.changeUser(ctx.message.author.id, "multiply", randmult)
         userdata = userdb.load(ctx.message.author.id)
@@ -120,7 +120,7 @@ class ChangeCog(commands.Cog):
     @commands.command()
     @commands.check(guildOnly)
     async def drinkme(self, ctx):
-        # Drink me!
+        """Drink me!"""
         userdata = userdb.load(ctx.message.author.id)
         randmult = round(random.random(2, 20), 1)
         digisize.changeUser(ctx.message.author.id, "divide", randmult)
@@ -130,9 +130,9 @@ class ChangeCog(commands.Cog):
             f"<@{ctx.message.author.id}> ate a :milk:! *I mean it said \"Drink me...\"*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
-    # Slow growth task
     @tasks.loop(seconds=6)
     async def changeTask(self):
+        """Slow growth task"""
         runningChanges = {}
         for key, change in self.changes.items():
             try:
@@ -144,6 +144,5 @@ class ChangeCog(commands.Cog):
         self.changes = runningChanges
 
 
-# Necessary.
 def setup(bot):
     bot.add_cog(ChangeCog(bot))

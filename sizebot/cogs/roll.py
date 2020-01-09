@@ -4,16 +4,14 @@ from sizebot import digilogger as logger
 from sizebot import roller
 
 
-# Commands for dice rolling
-#
-# Commands: roll, r
 class RollCog(commands.Cog):
+    """Commands for dice rolling"""
     def __init__(self, bot):
         self.bot = bot
 
-    # Die rolling command
     @commands.command()
     async def roll(self, ctx, *, dString):
+        """Verbose die rolling command"""
         await logger.info(f"{ctx.message.author.display_name} rolled {dString} verbosely.")
         result = roller.roll(dString)
 
@@ -35,11 +33,11 @@ class RollCog(commands.Cog):
 
     @commands.command()
     async def r(self, ctx, *, dString):
+        """Simplfied die rolling command"""
         await logger.info(f"{ctx.message.author.display_name} rolled {dString} non-verbosely.")
         result = roller.roll(dString)
         await ctx.send(f"{ctx.message.author.display_name} rolled `{dString}` = **{result.total}**")
 
 
-# Necessary
 def setup(bot):
     bot.add_cog(RollCog(bot))

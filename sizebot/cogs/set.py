@@ -13,10 +13,10 @@ class SetCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Change nickname
     @commands.command()
     @commands.check(guildOnly)
     async def changenick(self, ctx, *, newnick = None):
+        """Change nickname"""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newnick is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <newnick>`.")
@@ -33,10 +33,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Change species
     @commands.command()
     @commands.check(guildOnly)
     async def setspecies(self, ctx, *, newtag = None):
+        """Change species"""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newtag is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <newtag>`.")
@@ -53,10 +53,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Remove species
     @commands.command()
     @commands.check(guildOnly)
     async def clearspecies(self, ctx):
+        """Remove species"""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.species = None
@@ -68,10 +68,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Change height
     @commands.command()
     @commands.check(guildOnly)
     async def setheight(self, ctx, *, newheight = None):
+        """Change height"""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newheight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
@@ -94,10 +94,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Reset size
     @commands.command()
     @commands.check(guildOnly)
     async def resetsize(self, ctx):
+        """Reset size"""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.height = userdata.baseheight
@@ -109,10 +109,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Set display mode
     @commands.command()
     @commands.check(guildOnly)
     async def setdisplay(self, ctx, newdisp = None):
+        """Set display mode"""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newdisp is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N]`.")
@@ -134,10 +134,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Set measurement system
     @commands.command()
     @commands.check(guildOnly)
     async def setsystem(self, ctx, newsys = None):
+        """Set measurement system"""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newsys is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/m]`.")
@@ -159,10 +159,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Change height to a random value
     @commands.command()
     @commands.check(guildOnly)
     async def setrandomheight(self, ctx, minheight = None, maxheight = None):
+        """Change height to a random value"""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if minheight is None or maxheight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
@@ -184,10 +184,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Change height to a infinity
     @commands.command()
     @commands.check(guildOnly)
     async def setinf(self, ctx):
+        """Change height to infinity"""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.height = SV.infinity
@@ -199,10 +199,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Change height to a zero
     @commands.command()
     @commands.check(guildOnly)
     async def set0(self, ctx):
+        """Change height to a zero"""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.height = 0
@@ -214,10 +214,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Change base height
     @commands.command()
     @commands.check(guildOnly)
     async def setbaseheight(self, ctx, *, newbaseheight = None):
+        """Change base height"""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newbaseheight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
@@ -234,10 +234,10 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    # Change base weight
     @commands.command()
     @commands.check(guildOnly)
     async def setbaseweight(self, ctx, *, newbaseweight = None):
+        """Change base weight"""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newbaseweight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <weight>`.")
@@ -255,6 +255,5 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
 
-# Necessary
 def setup(bot):
     bot.add_cog(SetCog(bot))

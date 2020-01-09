@@ -9,8 +9,8 @@ from sizebot.digiSV import Rate, Mult, SV, WV, TV
 import sizebot.utils
 
 
-# Decorator that calls the wrapper function the first time it's called, and returns copies of the cached result on all later calls
 def cachedCopy(fn):
+    """Decorator that calls the wrapper function the first time it's called, and returns copies of the cached result on all later calls"""
     isCached = False
     r = None
 
@@ -29,9 +29,9 @@ def strHelp(topic):
     return pydoc.plain(pydoc.render_doc(topic))
 
 
-# Construct a globals dict for eval
 @cachedCopy
 def getEvalGlobals():
+    """Construct a globals dict for eval"""
     # Create a dict of builtins, excluding any in the blacklist
     blacklist = [
         "breakpoint",
@@ -64,8 +64,8 @@ def getEvalGlobals():
     return evalGlobals
 
 
-# Build a wrapping async function that lets the eval command run multiple lines, and return the result of the last line
 def buildEvalWrapper(evalStr, addReturn = True):
+    """Build a wrapping async function that lets the eval command run multiple lines, and return the result of the last line"""
     evalLines = evalStr.split("\n")
     if evalLines[-1].startswith(" "):
         addReturn = False

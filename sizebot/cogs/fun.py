@@ -7,10 +7,9 @@ from sizebot.conf import conf
 tasks = {}
 
 
-# Commands for non-size stuff.
-#
-# Commands:
 class FunCog(commands.Cog):
+    """Commands for non-size stuff"""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -46,6 +45,5 @@ class FunCog(commands.Cog):
         await ctx.send(newstring)
 
 
-# Necessary.
 def setup(bot):
     bot.add_cog(FunCog(bot))

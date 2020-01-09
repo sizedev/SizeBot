@@ -33,10 +33,10 @@ class RegisterCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Registers a user for SizeBot
     @commands.command()
     @commands.check(guildOnly)
     async def register(self, ctx, nick: str, display: str = "y", currentheight: str = "5ft10in", baseheight: str = "5ft10in", baseweight: str = "180lb", unitsystem: str = "m", species: str = None):
+        """Registers a user for SizeBot"""
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
         await logger.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
         await logger.info(readable)
@@ -146,6 +146,5 @@ class RegisterCog(commands.Cog):
         await digisize.nickUpdate(m.author)
 
 
-# Necessary
 def setup(bot):
     bot.add_cog(RegisterCog(bot))

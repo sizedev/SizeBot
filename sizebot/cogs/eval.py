@@ -50,6 +50,5 @@ class EvalCog(commands.Cog):
                 await ctx.message.author.send(f"⚠️ ` {utils.formatError(err)} `")
 
 
-# Necessary
 def setup(bot):
     bot.add_cog(EvalCog(bot))

@@ -72,8 +72,8 @@ async def nickUpdate(user):
         raise errors.NoPermissionsException
 
 
-# Remove sizetag from user's nickname
 async def nickReset(user):
+    """Remove sizetag from user's nickname"""
     # webhooks
     if user.discriminator == "0000":
         return

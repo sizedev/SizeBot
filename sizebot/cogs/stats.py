@@ -87,6 +87,5 @@ def getUserdata(memberOrSV, nickname = "Raw"):
     return userdata
 
 
-# Necessary
 def setup(bot):
     bot.add_cog(StatsCog(bot))

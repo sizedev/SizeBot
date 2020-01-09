@@ -43,9 +43,9 @@ def tryInt(val):
     return val
 
 
-# Get a value using a path in nested dicts/lists
-# utils.getPath(myDict, "path.to.value", default=100)
 def getPath(root, path, default=None):
+    """Get a value using a path in nested dicts/lists"""
+    """utils.getPath(myDict, "path.to.value", default=100)"""
     branch = root
     components = path.split(".")
     components = [tryInt(c) for c in components]
@@ -57,13 +57,13 @@ def getPath(root, path, default=None):
     return branch
 
 
-# Recurses through an attribute chain to get the ultimate value.
 def deepgetattr(obj, attr):
+    """Recurses through an attribute chain to get the ultimate value."""
     return reduce(lambda o, a: getattr(o, a, None), attr.split("."), obj)
 
 
-# grouper(3, "ABCDEFG", "x") --> ABC DEF Gxx
 def chunkStr(n, s, fillvalue=""):
+    """grouper(3, "ABCDEFG", "x") --> ABC DEF Gxx"""
     args = [iter(s)] * n
     return ("".join(chunk) for chunk in zip_longest(*args, fillvalue=fillvalue))
 
@@ -100,13 +100,13 @@ def pformat(name, value):
     return name
 
 
-# return a list of an object's attributes, with type notation
 def pdir(o):
+    """return a list of an object's attributes, with type notation"""
     return [pformat(n, v) for n, v in ddir(o).items()]
 
 
-# return a dictionary of an object's attributes
 def ddir(o):
+    """return a dictionary of an object's attributes"""
     return {n: v for n, v in inspect.getmembers(o) if not n.startswith("_")}
     # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
 

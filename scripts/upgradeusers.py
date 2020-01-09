@@ -12,8 +12,8 @@ UNIT = 6
 SPEC = 7
 
 
-# Load a user from the old file format
 def loadLegacy(id):
+    """Load a user from the old file format"""
     with open(userdb.userdbpath / f"{id}.txt", "r") as f:
         # Make array of lines from file.
         lines = f.read().splitlines()

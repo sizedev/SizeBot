@@ -181,6 +181,5 @@ class ModCog(commands.Cog):
         await self.bot.get_user(conf.getId("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
 
 
-# Necessary.
 def setup(bot):
     bot.add_cog(ModCog(bot))
