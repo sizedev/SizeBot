@@ -11,20 +11,24 @@ class Config:
 
     def __init__(self, configDict):
         # ASCII art
-        self.banner = (r". _____ _        ______       _   _____ .""\n"
-                       r"./  ___(_)       | ___ \     | | |____ |.""\n"
-                       r".\ `--. _ _______| |_/ / ___ | |_    / /.""\n"
-                       r". `--. \ |_  / _ \ ___ \/ _ \| __|   \ \.""\n"
-                       r"./\__/ / |/ /  __/ |_/ / (_) | |_.___/ /.""\n"
-                       r".\____/|_/___\___\____/ \___/ \__\____/ .")
+        self.banner = (r"   _____ _         ____        _   ____   _____ ""\n"
+                       r"  / ____(_)       |  _ \      | | |___ \ | ____|""\n"
+                       r" | (___  _ _______| |_) | ___ | |_  __) || |__  ""\n"
+                       r"  \___ \| |_  / _ \  _ < / _ \| __||__ < |___ \ ""\n"
+                       r"  ____) | |/ /  __/ |_) | (_) | |_ ___) | ___) |""\n"
+                       r" |_____/|_/___\___|____/ \___/ \__|____(_)____/ ""\n"
+                       r"                                                ")
 
         self.description = ("SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.\n"
-                            "SizeBot3AndAHalf is a refactorization for SB3 and adds database support.\n"
+                            "SizeBot3AndAHalf is a refactorization for SB3 and adds various features.\n"
                             "Written by DigiDuncan.\n"
                             "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
 
         # Version
-        self.version = "3AAH.0.0.b4"
+        # Release versions: major.minor.revision
+        # Testing version: major.minor.revision.YYwWWx
+        # (where w is literally a w, and where x is a letter, starting with a.)
+        self.version = "3.5.0.20w02a"
 
         # File paths
         datadir = getDataDir()
