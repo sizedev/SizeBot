@@ -232,7 +232,11 @@ class PersonStats:
         self.basemultiplier = self.height / self.baseheight
         self.baseweight = userdata.baseweight
         self.weight = WV(self.baseweight * self.basemultiplier ** 3)
-        self.footlength = SV(self.height * self.footfactor)
+        self.footlength = userdata.footlength
+        if self.footlength is None:
+            self.footlength = SV(self.height * self.footfactor)
+        else:
+            self.footlength = userdata.footlength
         self.shoesize = formatShoeSize(self.footlength)
         self.footwidth = SV(self.height * self.footwidthfactor)
         self.toeheight = SV(self.height * self.toeheightfactor)
@@ -288,6 +292,7 @@ class PersonStats:
         return embed
 
 
+# Legacy code.
 def getStats(userdata):
     return PersonStats(userdata)
 

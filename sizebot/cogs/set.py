@@ -255,6 +255,33 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
+    # TODO: Make this accept shoe size as an input.
+    @commandsplus.command()
+    @commands.check(guildOnly)
+    async def setfoot(self, ctx, *, newfoot = None):
+        """Change height"""
+        # TODO: Move this to an error handler for MissingRequiredArgument
+        if newfoot is None:
+            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [length]`.")
+            return
+
+        newfootsv = SV.parse(newfoot)
+        if newfootsv > SV.infinity:
+            await logger.warn("Invalid size value.")
+            await ctx.send("Too big. x_x")
+            newfootsv = SV.infinity
+
+        userdata = userdb.load(ctx.message.author.id)
+
+        userdata.footlength = newfootsv
+        userdb.save(userdata)
+
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name})'s foot is now {userdata.footlength:m} long.")
+        await ctx.send(f"<@{ctx.message.author.id}>'s foot is now {userdata.footlength:mu} long.")
+
+        if userdata.display:
+            await digisize.nickUpdate(ctx.message.author)
+
 
 def setup(bot):
     bot.add_cog(SetCog(bot))

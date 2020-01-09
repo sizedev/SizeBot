@@ -1,4 +1,5 @@
 import json
+from digidecimal import Decimal
 
 from sizebot.conf import conf
 from sizebot import digierror as errors
@@ -25,11 +26,12 @@ class User:
         self._height = defaultheight
         self._baseheight = defaultheight
         self._baseweight = defaultweight
+        self._footlength = None
         self._unitsystem = "m"
         self.species = None
 
     def __str__(self):
-        return f"ID {self.id}, NICK {self.nickname}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, UNIT {self.unitsystem}, SPEC {self.species}"
+        return f"ID {self.id}, NICK {self.nickname}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, UNIT {self.unitsystem}, SPEC {self.species}"
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
@@ -47,6 +49,17 @@ class User:
     @baseheight.setter
     def baseheight(self, value):
         self._baseheight = utils.clamp(0, SV(value), SV.infinity)
+
+    @property
+    def footlength(self):
+        return self._footlength
+
+    @footlength.setter
+    def footlength(self, value):
+        if value is None:
+            self._footlenth = None
+            return
+        self._footlength = utils.clamp(0, SV(value), SV.infinity)
 
     @property
     def baseweight(self):
@@ -95,6 +108,7 @@ class User:
             "height": str(self.height),
             "baseheight": str(self.baseheight),
             "baseweight": str(self.baseweight),
+            "footlength": None if self.footlength is None else str(self.footlength),
             "unitsystem": self.unitsystem,
             "species": self.species
         }
@@ -106,9 +120,10 @@ class User:
         userdata.id = jsondata["id"]
         userdata.nickname = jsondata["nickname"]
         userdata.display = jsondata["display"]
-        userdata.height = SV(jsondata["height"])
-        userdata.baseheight = SV(jsondata["baseheight"])
-        userdata.baseweight = WV(jsondata["baseweight"])
+        userdata.height = jsondata["height"]
+        userdata.baseheight = jsondata["baseheight"]
+        userdata.baseweight = jsondata["baseweight"]
+        userdata.footlength = jsondata.get("footlength")
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         return userdata
