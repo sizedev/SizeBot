@@ -591,7 +591,7 @@ class SV(UnitValue):
     def getUnitValuePair(cls, s):
         s = removeBrackets(s)
         s = cls.isFeetAndInchesAndIfSoFixIt(s)
-        match = re.search(r"(?P<value>[\-+]?\d+\.?\d*) *(?P<unit>[a-zA-Z\'\"]+)", s)
+        match = re.search(r"(?P<value>[\-+]?\d+\.?\d*) *(?P<unit>[a-zA-Z\'\" ]+)", s)
         value, unit = None, None
         if match is not None:
             value, unit = match.group("value"), match.group("unit")
