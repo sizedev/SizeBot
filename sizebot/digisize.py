@@ -288,10 +288,6 @@ class PersonStats:
         return embed
 
 
-def getStats(userdata):
-    return PersonStats(userdata)
-
-
 def formatShoeSize(footlength):
     footlengthinches = Decimal(footlength / SV.inch)
     shoesizeNum = (3 * footlengthinches) - 22
