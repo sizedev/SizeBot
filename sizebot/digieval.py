@@ -1,5 +1,4 @@
 import builtins
-import pydoc_data.topics
 
 import discord
 
@@ -25,10 +24,6 @@ def cachedCopy(fn):
     return wrapper
 
 
-def strHelp(topic):
-    return pydoc.plain(pydoc.render_doc(topic))
-
-
 @cachedCopy
 def getEvalGlobals():
     """Construct a globals dict for eval"""
@@ -52,7 +47,7 @@ def getEvalGlobals():
 
     evalGlobals = {
         "__builtins__": evalBuiltins,
-        "help": strHelp,
+        "help": sizebot.utils.strHelp,
         "Decimal": Decimal,
         "discord": discord,
         "logger": logger,

@@ -1,3 +1,4 @@
+import pydoc
 import inspect
 import traceback
 import re
@@ -199,3 +200,7 @@ class iset(set):
     def remove(self, item):
         item = item.casefold()
         return super().remove(item)
+
+
+def strHelp(topic):
+    return pydoc.plain(pydoc.render_doc(topic))
