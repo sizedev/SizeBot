@@ -36,14 +36,10 @@ class RegisterCog(commands.Cog):
     # Registers a user for SizeBot
     @commands.command()
     @commands.check(guildOnly)
-    async def register(self, ctx, nick: str, display: str = "y", currentheight: str = "5ft10in", baseheight: str = "5ft10in", baseweight: str = "180lb", unitsystem: str = "m", species: str = None):
+    async def register(self, ctx, nick: str, display: str = "y", currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
         await logger.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
         await logger.info(readable)
-
-        currentheightSV = SV.parse(currentheight)
-        baseheightSV = SV.parse(baseheight)
-        baseweightWV = WV.parse(baseweight)
 
         # Already registered
         if userdb.exists(ctx.message.author.id):
@@ -53,7 +49,7 @@ class RegisterCog(commands.Cog):
             return
 
         # Invalid size value
-        if (currentheightSV <= 0 or baseheightSV <= 0 or baseweightWV <= 0):
+        if (currentheight <= 0 or baseheight <= 0 or baseweight <= 0):
             await logger.warn("Invalid size value.")
             await ctx.send("All values must be an integer greater than zero.")
             return
@@ -73,9 +69,9 @@ class RegisterCog(commands.Cog):
         userdata.id = ctx.message.author.id
         userdata.nickname = nick
         userdata.display = display == "y"
-        userdata.height = currentheightSV
-        userdata.baseheight = baseheightSV
-        userdata.baseweight = baseweightWV
+        userdata.height = currentheight
+        userdata.baseheight = baseheight
+        userdata.baseweight = baseweight
         userdata.unitsystem = unitsystem
         userdata.species = species
 
