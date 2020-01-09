@@ -155,7 +155,7 @@ class Unit():
         return v * self.factor
 
     def __lt__(self, other):
-        return self.factor < other.factor
+        return self.triggerpoint < other.triggerpoint
 
     @property
     def id(self):
