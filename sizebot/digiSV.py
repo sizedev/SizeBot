@@ -93,9 +93,8 @@ class Mult():
 class Unit():
     """Formats a value by scaling it and applying the appropriate symbol suffix"""
 
-    def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[], triggerpoint=None):
+    def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[]):
         self.factor = factor
-        self._triggerpoint = triggerpoint
 
         self.symbol = symbol
         self.name = name
@@ -121,15 +120,9 @@ class Unit():
 
         single = abs(rounded) == 1
         if single:
-            if self.name is not None:
-                name = self.name
-            else:
-                name = self.namePlural
+            name = self.name or self.namePlural
         else:
-            if self.namePlural is not None:
-                name = self.namePlural
-            else:
-                name = self.name
+            name = self.namePlural or self.name
 
         if preferName:
             if name is not None:
@@ -148,24 +141,15 @@ class Unit():
 
         return formatted
 
-    def isUnit(self, u):
-        return isinstance(u, str) and (u in self.names or u in self.symbols)
-
     def toUnitValue(self, v):
         return v * self.factor
 
-    def __lt__(self, other):
-        return self.triggerpoint < other.triggerpoint
+    def isUnit(self, u):
+        return isinstance(u, str) and (u in self.names or u in self.symbols)
 
     @property
     def id(self):
         return self.symbol or self.name or self.namePlural
-
-    @property
-    def triggerpoint(self):
-        if self._triggerpoint is not None:
-            return self._triggerpoint
-        return self.factor
 
 
 class FixedUnit(Unit):
@@ -225,20 +209,42 @@ class UnitRegistry(collections.abc.Mapping):
 class SystemRegistry():
     """System Registry"""
 
-    def __init__(self, units, unitnames):
-        systemunits = [units[name] for name in unitnames]
+    def __init__(self, units, systemunits):
+        for sunit in systemunits:
+            sunit.load(units)
         self._systemunits = sorted(systemunits)
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
     def getBestUnit(self, value):
         value = abs(value)
         # Pair each unit with the unit following it
-        for unit, nextunit in zip(self._systemunits[:-1], self._systemunits[1:]):
+        for sunit, nextsunit in zip(self._systemunits[:-1], self._systemunits[1:]):
             # If we're smaller than the next unit's lowest value, then just use this unit
-            if value < next.triggerpoint:
-                return unit
+            if value < nextsunit.trigger:
+                return sunit.unit
         # If we're too big for all the units, just use the biggest possible unit
-        return self._systemunits[-1]
+        return self._systemunits[-1].unit
+
+
+class SystemUnit():
+    """System Units"""
+
+    def __init__(self, unitname, trigger=None):
+        self.unitname = unitname
+        self._trigger = trigger
+        self.unit = None
+
+    def load(self, units):
+        self.unit = units[self.unitname]
+
+    @property
+    def trigger(self):
+        if self._trigger is not None:
+            return self._trigger
+        return self.unit.factor
+
+    def __lt__(self, other):
+        return self.trigger < other.trigger
 
 
 class UnitValue(Decimal):
@@ -435,149 +441,149 @@ class SV(UnitValue):
     # SV systems
     _systems = {
         "m": SystemRegistry(_units, [
-            "ym",
-            "zm",
-            "am",
-            "fm",
-            "pm",
-            "nm",
-            "µm",
-            "mm",
-            "cm",
-            "m",
-            "km",
-            "Mm",
-            "Gm",
-            "Tm",
-            "Pm",
-            "Em",
-            "Zm",
-            "Ym",
-            "uni",
-            "kuni",
-            "Muni",
-            "Guni",
-            "Tuni",
-            "Puni",
-            "Euni",
-            "Zuni",
-            "Yuni",
-            "∞"
+            SystemUnit("ym"),
+            SystemUnit("zm"),
+            SystemUnit("am"),
+            SystemUnit("fm"),
+            SystemUnit("pm"),
+            SystemUnit("nm"),
+            SystemUnit("µm"),
+            SystemUnit("mm", trigger=Decimal("1e-4")),
+            SystemUnit("cm"),
+            SystemUnit("m"),
+            SystemUnit("km"),
+            SystemUnit("Mm", trigger=Decimal("1e-7"),
+            SystemUnit("Gm"),
+            SystemUnit("Tm"),
+            SystemUnit("Pm"),
+            SystemUnit("Em"),
+            SystemUnit("Zm"),
+            SystemUnit("Ym"),
+            SystemUnit("uni"),
+            SystemUnit("kuni"),
+            SystemUnit("Muni"),
+            SystemUnit("Guni"),
+            SystemUnit("Tuni"),
+            SystemUnit("Puni"),
+            SystemUnit("Euni"),
+            SystemUnit("Zuni"),
+            SystemUnit("Yuni"),
+            SystemUnit("∞")
         ]),
         "u": SystemRegistry(_units, [
-            "ym",
-            "zm",
-            "am",
-            "fm",
-            "pm",
-            "nm",
-            "µm",
-            "mm",
-            "in",
-            ("'", "\""),
-            "mi",
-            "AU",
-            "ly",
-            "uni",
-            "kuni",
-            "Muni",
-            "Guni",
-            "Tuni",
-            "Puni",
-            "Euni",
-            "Zuni",
-            "Yuni",
-            "∞"
+            SystemUnit("ym"),
+            SystemUnit("zm"),
+            SystemUnit("am"),
+            SystemUnit("fm"),
+            SystemUnit("pm"),
+            SystemUnit("nm"),
+            SystemUnit("µm"),
+            SystemUnit("mm", trigger=Decimal("1e-4")),
+            SystemUnit("in", trigger=inch / Decimal("10")),
+            SystemUnit(("'", "\"")),
+            SystemUnit("mi"),
+            SystemUnit("AU"),
+            SystemUnit("ly"),
+            SystemUnit("uni"),
+            SystemUnit("kuni"),
+            SystemUnit("Muni"),
+            SystemUnit("Guni"),
+            SystemUnit("Tuni"),
+            SystemUnit("Puni"),
+            SystemUnit("Euni"),
+            SystemUnit("Zuni"),
+            SystemUnit("Yuni"),
+            SystemUnit("∞")
         ]),
         "o": SystemRegistry(_units, [
-            "credit card",
-            "can of soda",
-            "Barbie",
-            "font point",
-            "pencil",
-            "story",
-            "human hair",
-            "football field",
-            "keyboard key",
-            "door key",
-            "fruit loop",
-            "hairpin",
-            "Q-tip",
-            "toothbrush",
-            "Post-it note",
-            "dice",
-            "AA battery",
-            "paperclip",
-            "staple",
-            "bottlecap",
-            "city block",
-            "bullet vibe",
-            "city bus",
-            "train car",
-            "boeing 747",
-            "cruise ship",
-            "2-lane road width",
-            "sidewalk width",
-            "thickness of a sheet of paper",
-            "statue of liberty",
-            "falcon heavy",
-            "crayon",
-            "scotch tape width",
-            "duct tape width",
-            "lightbulb",
-            "tea light",
-            "chopstick",
-            "safety pin",
-            "band-aid",
-            "Zippo lighter",
-            "audio cassette",
-            "VHS tape",
-            "CD",
-            "SD card",
-            "MicroSD card",
-            "egg",
-            "Empire State Building",
-            "doorknob height",
-            "guitar lengths",
-            "doorway height",
-            "countertop height",
-            "fridge height",
-            "bed length",
-            "juice box",
-            "coffee mug",
-            "baseball",
-            "basketball",
-            "golf ball",
-            "soccer ball",
-            "Eiffel Tower",
-            "pin",
-            "pinhead",
-            "ant",
-            "grain of rice",
-            "Rubik's cube",
-            "apple",
-            "banana",
-            "railway track width",
-            "beach ball",
-            "Leaning Tower of Pisa",
-            "Big Ben",
-            "lego brick",
-            "lego minifig",
-            "Earth",
-            "Sun",
-            "moon",
-            "Solo cup",
-            "light pole",
-            "letter paper",
-            "grain of sand",
-            "drop of water",
-            "swimming pool",
-            "quarter",
-            "penny",
-            "dime",
-            "vinyl record",
-            "stair",
-            "hydrant"
+            SystemUnit("credit card"),
+            SystemUnit("can of soda"),
+            SystemUnit("Barbie"),
+            SystemUnit("font point"),
+            SystemUnit("pencil"),
+            SystemUnit("story"),
+            SystemUnit("human hair"),
+            SystemUnit("football field"),
+            SystemUnit("keyboard key"),
+            SystemUnit("door key"),
+            SystemUnit("fruit loop"),
+            SystemUnit("hairpin"),
+            SystemUnit("Q-tip"),
+            SystemUnit("toothbrush"),
+            SystemUnit("Post-it note"),
+            SystemUnit("dice"),
+            SystemUnit("AA battery"),
+            SystemUnit("paperclip"),
+            SystemUnit("staple"),
+            SystemUnit("bottlecap"),
+            SystemUnit("city block"),
+            SystemUnit("bullet vibe"),
+            SystemUnit("city bus"),
+            SystemUnit("train car"),
+            SystemUnit("boeing 747"),
+            SystemUnit("cruise ship"),
+            SystemUnit("2-lane road width"),
+            SystemUnit("sidewalk width"),
+            SystemUnit("thickness of a sheet of paper"),
+            SystemUnit("statue of liberty"),
+            SystemUnit("falcon heavy"),
+            SystemUnit("crayon"),
+            SystemUnit("scotch tape width"),
+            SystemUnit("duct tape width"),
+            SystemUnit("lightbulb"),
+            SystemUnit("tea light"),
+            SystemUnit("chopstick"),
+            SystemUnit("safety pin"),
+            SystemUnit("band-aid"),
+            SystemUnit("Zippo lighter"),
+            SystemUnit("audio cassette"),
+            SystemUnit("VHS tape"),
+            SystemUnit("CD"),
+            SystemUnit("SD card"),
+            SystemUnit("MicroSD card"),
+            SystemUnit("egg"),
+            SystemUnit("Empire State Building"),
+            SystemUnit("doorknob height"),
+            SystemUnit("guitar lengths"),
+            SystemUnit("doorway height"),
+            SystemUnit("countertop height"),
+            SystemUnit("fridge height"),
+            SystemUnit("bed length"),
+            SystemUnit("juice box"),
+            SystemUnit("coffee mug"),
+            SystemUnit("baseball"),
+            SystemUnit("basketball"),
+            SystemUnit("golf ball"),
+            SystemUnit("soccer ball"),
+            SystemUnit("Eiffel Tower"),
+            SystemUnit("pin"),
+            SystemUnit("pinhead"),
+            SystemUnit("ant"),
+            SystemUnit("grain of rice"),
+            SystemUnit("Rubik's cube"),
+            SystemUnit("apple"),
+            SystemUnit("banana"),
+            SystemUnit("railway track width"),
+            SystemUnit("beach ball"),
+            SystemUnit("Leaning Tower of Pisa"),
+            SystemUnit("Big Ben"),
+            SystemUnit("lego brick"),
+            SystemUnit("lego minifig"),
+            SystemUnit("Earth"),
+            SystemUnit("Sun"),
+            SystemUnit("moon"),
+            SystemUnit("Solo cup"),
+            SystemUnit("light pole"),
+            SystemUnit("letter paper"),
+            SystemUnit("grain of sand"),
+            SystemUnit("drop of water"),
+            SystemUnit("swimming pool"),
+            SystemUnit("quarter"),
+            SystemUnit("penny"),
+            SystemUnit("dime"),
+            SystemUnit("vinyl record"),
+            SystemUnit("stair"),
+            SystemUnit("hydrant")
         ])
     }
 
@@ -660,62 +666,62 @@ class WV(UnitValue):
     # WV systems
     _systems = {
         "m": SystemRegistry(_units, [
-            "yg",
-            "zg",
-            "ag",
-            "fg",
-            "pg",
-            "ng",
-            "µg",
-            "mg",
-            "g",
-            "kg",
-            "t",
-            "kt",
-            "Mt",
-            "Gt",
-            "Tt",
-            "Pt",
-            "Et",
-            "Zt",
-            "Yt",
-            "uni",
-            "kuni",
-            "Muni",
-            "Guni",
-            "Tuni",
-            "Puni",
-            "Euni",
-            "Zuni",
-            "Yuni",
-            "∞",
+            SystemUnit("yg"),
+            SystemUnit("zg"),
+            SystemUnit("ag"),
+            SystemUnit("fg"),
+            SystemUnit("pg"),
+            SystemUnit("ng"),
+            SystemUnit("µg"),
+            SystemUnit("mg"),
+            SystemUnit("g"),
+            SystemUnit("kg"),
+            SystemUnit("t"),
+            SystemUnit("kt"),
+            SystemUnit("Mt"),
+            SystemUnit("Gt"),
+            SystemUnit("Tt"),
+            SystemUnit("Pt"),
+            SystemUnit("Et"),
+            SystemUnit("Zt"),
+            SystemUnit("Yt"),
+            SystemUnit("uni"),
+            SystemUnit("kuni"),
+            SystemUnit("Muni"),
+            SystemUnit("Guni"),
+            SystemUnit("Tuni"),
+            SystemUnit("Puni"),
+            SystemUnit("Euni"),
+            SystemUnit("Zuni"),
+            SystemUnit("Yuni"),
+            SystemUnit("∞"),
         ]),
         "u": SystemRegistry(_units, [
-            "yg",
-            "zg",
-            "ag",
-            "fg",
-            "pg",
-            "ng",
-            "µg",
-            "mg",
-            "g",
-            "oz",
-            "lb",
-            " US tons",
-            "earths",
-            "sun",
-            " Milky Ways",
-            "uni",
-            "kuni",
-            "Muni",
-            "Guni",
-            "Tuni",
-            "Puni",
-            "Euni",
-            "Zuni",
-            "Yuni",
-            "∞",
+            SystemUnit("yg"),
+            SystemUnit("zg"),
+            SystemUnit("ag"),
+            SystemUnit("fg"),
+            SystemUnit("pg"),
+            SystemUnit("ng"),
+            SystemUnit("µg"),
+            SystemUnit("mg"),
+            SystemUnit("g"),
+            SystemUnit("oz"),
+            SystemUnit("lb"),
+            SystemUnit(" US tons"),
+            SystemUnit("earths"),
+            SystemUnit("sun"),
+            SystemUnit(" Milky Ways"),
+            SystemUnit("uni"),
+            SystemUnit("kuni"),
+            SystemUnit("Muni"),
+            SystemUnit("Guni"),
+            SystemUnit("Tuni"),
+            SystemUnit("Puni"),
+            SystemUnit("Euni"),
+            SystemUnit("Zuni"),
+            SystemUnit("Yuni"),
+            SystemUnit("∞"),
         ])
     }
 
@@ -749,13 +755,13 @@ class TV(UnitValue):
     ])
     _systems = {
         "m": SystemRegistry(_units, [
-            "seconds",
-            "minutes",
-            "hours",
-            "days",
-            "weeks",
-            "months",
-            "years"
+            SystemUnit("seconds"),
+            SystemUnit("minutes"),
+            SystemUnit("hours"),
+            SystemUnit("days"),
+            SystemUnit("weeks"),
+            SystemUnit("months"),
+            SystemUnit("years")
         ])
     }
 
