@@ -58,6 +58,7 @@ class RegisterCog(commands.Cog):
         # Invalid display value
         if display.lower() not in ["y", "n"]:
             await logger.warn(f"display was {display}, must be Y or N.")
+            await ctx.send(f"display was {display}, must be Y or N.")
             return
 
         # Invalid unit value
