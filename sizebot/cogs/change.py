@@ -2,6 +2,7 @@ import random
 import time
 
 from discord.ext import commands, tasks
+from sizebot.discordplus import commandsplus
 
 from sizebot.digidecimal import Decimal
 from sizebot import digilogger as logger
@@ -64,7 +65,7 @@ class ChangeCog(commands.Cog):
     def cog_unload(self):
         self.changeTask.cancel()
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def change(self, ctx, style, *, amount):
         """Change height"""
@@ -73,7 +74,7 @@ class ChangeCog(commands.Cog):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
         await ctx.send(f"User <@{ctx.message.author.id}> is now {userdata.height:m} ({userdata.height:u}) tall.")
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(requireAdmin)
     async def changes(self, ctx):
         await ctx.message.delete(delay=0)
@@ -83,7 +84,7 @@ class ChangeCog(commands.Cog):
         await ctx.message.author.send("**CHANGES**\n" + changeDump)
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) dumped the running changes.")
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def slowchange(self, ctx, *, rateStr: str):
         addPerSec, mulPerSec, stopSV, stopTV = digiSV.parseRate(rateStr)
@@ -92,7 +93,7 @@ class ChangeCog(commands.Cog):
         self.changes[key] = change
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def stopchange(self, ctx):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) stopped slow-changing.")
@@ -104,7 +105,7 @@ class ChangeCog(commands.Cog):
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
             await logger.warn(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def eatme(self, ctx):
         """Eat me!"""
@@ -117,7 +118,7 @@ class ChangeCog(commands.Cog):
             f"<@{ctx.message.author.id}> ate a :cake:! *I mean it said \"Eat me...\"*\n"
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def drinkme(self, ctx):
         """Drink me!"""

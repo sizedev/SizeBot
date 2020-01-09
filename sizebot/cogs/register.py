@@ -2,6 +2,7 @@ import asyncio
 
 from discord.ext import commands
 from discord.utils import get
+from sizebot.discordplus import commandsplus
 
 from sizebot import digilogger as logger
 from sizebot.conf import conf
@@ -33,7 +34,7 @@ class RegisterCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def register(self, ctx, nick: str, display: str = "y", currentheight: str = "5ft10in", baseheight: str = "5ft10in", baseweight: str = "180lb", unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot"""
@@ -102,7 +103,7 @@ class RegisterCog(commands.Cog):
             return
         raise error
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def unregister(self, ctx):
         user = ctx.message.author

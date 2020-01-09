@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from sizebot.discordplus import commandsplus
 
 from sizebot import utils
 from sizebot import digilogger as logger
@@ -11,7 +12,7 @@ class EvalCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(requireAdmin)
     async def eval(self, ctx, *, evalStr):
         await logger.info(f"{ctx.message.author.display_name} tried to eval {evalStr!r}.")
@@ -35,7 +36,7 @@ class EvalCog(commands.Cog):
 
         await utils.sendMessage(ctx, f"{result}")
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(requireAdmin)
     async def evil(self, ctx, *, evalStr):
         await ctx.message.delete(delay = 0)

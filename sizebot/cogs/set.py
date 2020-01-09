@@ -1,4 +1,5 @@
 from discord.ext import commands
+from sizebot.discordplus import commandsplus
 
 from sizebot import digilogger as logger
 from sizebot import userdb
@@ -13,7 +14,7 @@ class SetCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def changenick(self, ctx, *, newnick = None):
         """Change nickname"""
@@ -33,7 +34,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def setspecies(self, ctx, *, newtag = None):
         """Change species"""
@@ -53,7 +54,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def clearspecies(self, ctx):
         """Remove species"""
@@ -68,7 +69,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def setheight(self, ctx, *, newheight = None):
         """Change height"""
@@ -94,7 +95,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def resetsize(self, ctx):
         """Reset size"""
@@ -109,7 +110,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def setdisplay(self, ctx, newdisp = None):
         """Set display mode"""
@@ -134,7 +135,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def setsystem(self, ctx, newsys = None):
         """Set measurement system"""
@@ -159,7 +160,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def setrandomheight(self, ctx, minheight = None, maxheight = None):
         """Change height to a random value"""
@@ -184,7 +185,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def setinf(self, ctx):
         """Change height to infinity"""
@@ -199,7 +200,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def set0(self, ctx):
         """Change height to a zero"""
@@ -214,7 +215,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def setbaseheight(self, ctx, *, newbaseheight = None):
         """Change base height"""
@@ -234,7 +235,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commands.command()
+    @commandsplus.command()
     @commands.check(guildOnly)
     async def setbaseweight(self, ctx, *, newbaseweight = None):
         """Change base weight"""

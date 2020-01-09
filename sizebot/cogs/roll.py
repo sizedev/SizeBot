@@ -1,4 +1,5 @@
 from discord.ext import commands
+from sizebot.discordplus import commandsplus
 
 from sizebot import digilogger as logger
 from sizebot import roller
@@ -9,7 +10,7 @@ class RollCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commandsplus.command()
     async def roll(self, ctx, *, dString):
         """Verbose die rolling command"""
         await logger.info(f"{ctx.message.author.display_name} rolled {dString} verbosely.")
@@ -31,7 +32,7 @@ class RollCog(commands.Cog):
 
         await ctx.send(sendstring)
 
-    @commands.command()
+    @commandsplus.command()
     async def r(self, ctx, *, dString):
         """Simplfied die rolling command"""
         await logger.info(f"{ctx.message.author.display_name} rolled {dString} non-verbosely.")

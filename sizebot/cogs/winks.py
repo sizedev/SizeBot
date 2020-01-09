@@ -2,6 +2,7 @@ import re
 from datetime import datetime, timedelta
 
 from discord.ext import commands
+from sizebot.discordplus import commandsplus
 
 from sizebot import digilogger as logger
 from sizebot import utils
@@ -73,7 +74,7 @@ class WinksCog(commands.Cog):
         if winkcount in milestones:
             await sayMilestone(message.channel, winkcount)
 
-    @commands.command()
+    @commandsplus.command()
     async def winkcount(self, ctx):
         winkcount = getWinks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
