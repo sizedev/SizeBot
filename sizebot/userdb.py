@@ -38,7 +38,7 @@ class User:
 
     @height.setter
     def height(self, value):
-        self._height = utils.clamp(0, SV(value), SV.infinity)
+        self._height = SV(utils.clamp(0, SV(value), SV.infinity))
 
     @property
     def baseheight(self):
@@ -46,7 +46,7 @@ class User:
 
     @baseheight.setter
     def baseheight(self, value):
-        self._baseheight = utils.clamp(0, SV(value), SV.infinity)
+        self._baseheight = SV(utils.clamp(0, SV(value), SV.infinity))
 
     @property
     def baseweight(self):
@@ -54,7 +54,7 @@ class User:
 
     @baseweight.setter
     def baseweight(self, value):
-        self._baseweight = utils.clamp(0, WV(value), WV.infinity)
+        self._baseweight = WV(utils.clamp(0, WV(value), WV.infinity))
 
     # Check that unitsystem is valid and lowercase
     @property
