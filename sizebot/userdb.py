@@ -17,7 +17,7 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["id", "nickname", "display", "_height", "_baseheight", "_baseweight", "_unitsystem", "species"]
+    __slots__ = ["id", "nickname", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_unitsystem", "species"]
 
     def __init__(self):
         self.id = None
