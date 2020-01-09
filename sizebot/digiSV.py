@@ -93,8 +93,9 @@ class Mult():
 class Unit():
     """Formats a value by scaling it and applying the appropriate symbol suffix"""
 
-    def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[]):
+    def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[], triggerpoint=None):
         self.factor = factor
+        self._triggerpoint = triggerpoint
 
         self.symbol = symbol
         self.name = name
@@ -159,6 +160,12 @@ class Unit():
     @property
     def id(self):
         return self.symbol or self.name or self.namePlural
+
+    @property
+    def triggerpoint(self):
+        if self._triggerpoint is not None:
+            return self._triggerpoint
+        return self.factor
 
 
 class FixedUnit(Unit):
@@ -228,7 +235,7 @@ class SystemRegistry():
         # Pair each unit with the unit following it
         for unit, nextunit in zip(self._systemunits[:-1], self._systemunits[1:]):
             # If we're smaller than the next unit's lowest value, then just use this unit
-            if value < nextunit.factor:
+            if value < next.triggerpoint:
                 return unit
         # If we're too big for all the units, just use the biggest possible unit
         return self._systemunits[-1]
