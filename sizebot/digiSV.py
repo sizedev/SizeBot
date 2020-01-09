@@ -411,7 +411,7 @@ class SV(UnitValue):
         Unit(factor=Decimal("0.12"), name="CD", namePlural="CDs"),
         Unit(factor=Decimal("0.032"), name="SD card", namePlural="SD cards"),
         Unit(factor=Decimal("0.015"), name="MicroSD card", namePlural="MicroSD cards"),
-        Unit(factor=Decimal("0.05312"), name="egg", namePlural="eggs"),
+        Unit(factor=Decimal("0.06"), name="egg", namePlural="eggs"),
         Unit(factor=Decimal("443.1792"), name="Empire State Building", namePlural="Empire State Buildings"),
         Unit(factor=Decimal("0.864"), name="doorknob height", namePlural="doorknob heights"),
         Unit(factor=Decimal("0.9652"), name="guitar length", namePlural="guitar lengths", names=["guitar", "guitars"]),
