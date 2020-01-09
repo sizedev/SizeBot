@@ -1,4 +1,3 @@
-
 import typing
 from decimal import InvalidOperation
 
@@ -52,6 +51,8 @@ class StatsCog(commands.Cog):
         embedtosend = comparison.toEmbed()
         embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
         await ctx.send(embed = embedtosend)
+
+        await ctx.send(comparison.url)
 
         await logger.info(f"Compared {userdata1} and {userdata2}")
 

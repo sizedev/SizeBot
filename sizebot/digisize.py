@@ -1,9 +1,10 @@
+from urllib.parse import quote
 import math
 
 import discord
 
 from sizebot.conf import conf
-from sizebot.digidecimal import Decimal, roundDecimalHalf
+from sizebot.digidecimal import Decimal, roundDecimalHalf, roundDecimal
 from sizebot import digierror as errors
 from sizebot.digiSV import SV, WV
 from sizebot import userdb
@@ -141,8 +142,7 @@ def changeUser(userid, changestyle, amount):
 
 class PersonComparison:
     def __init__(self, userdata1, userdata2):
-        bigUserdata = userdata1 if userdata1.height > userdata2.height else userdata2
-        smallUserdata = userdata2 if userdata2.height > userdata1.height else userdata1
+        smallUserdata, bigUserdata = utils.minmax(userdata1, userdata2)
         self.big = PersonStats(bigUserdata)
         self.small = PersonStats(smallUserdata)
         self.multiplier = self.big.height / self.small.height
@@ -212,6 +212,15 @@ class PersonComparison:
         embed.add_field(name="Hair Width", value="73.853µm / 73.853µm", inline=True)
         embed.set_footer(text="An average human would look 1.781m (5'10.127\"), and weigh XXXkg (XXXlb) to you. You'd have to look up 2° to see them.")
         return embed
+
+    @property
+    def url(self):
+        safeSmallNick = quote(self.small.nickname, safe=" ").replace(" ", "-")
+        smallCm = roundDecimal(self.small.height*100, 1)
+        safeBigNick = quote(self.big.nickname, safe=" ").replace(" ", "-")
+        bigCm = roundDecimal(self.big.height*100, 1)
+        compUrl = f"http://www.mrinitialman.com/OddsEnds/Sizes/compsizes.xhtml?{safeSmallNick}~male~{smallCm}_{safeBigNick}~male~{bigCm}"
+        return compUrl
 
 
 class PersonStats:

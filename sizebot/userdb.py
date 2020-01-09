@@ -127,6 +127,9 @@ class User:
         userdata.species = jsondata["species"]
         return userdata
 
+    def __lt__(self, other):
+        return self.height < other.height
+
 
 def getuserpath(userid):
     return conf.userdbpath / f"{userid}.json"

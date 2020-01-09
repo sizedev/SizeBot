@@ -204,3 +204,10 @@ class iset(set):
 
 def strHelp(topic):
     return pydoc.plain(pydoc.render_doc(topic))
+
+
+def minmax(first, second):
+    small, big = first, second
+    if small > big:
+        small, big = big, small
+    return small, big

@@ -666,7 +666,7 @@ class WV(UnitValue):
         Unit(factor=Decimal("1e15"), symbol="Gt", name="petagram", namePlural="petagrams", names=["gigatons", "gigaton", "gigatonnes", "gigatonne"]),
         Unit(factor=Decimal("1e18"), symbol="Tt", name="exagram", namePlural="exagrams", names=["teratons", "teraton", "teratonnes", "teratonne"]),
         Unit(factor=Decimal("1e21"), symbol="Pt", name="zettagram", namePlural="zettagrams", names=["petatons", "petaton", "petatonnes", "petatonne"]),
-        Unit(factor=Decimal("1e24"), symbol="Et", name="yottagram", namePlural="yottagrams", names=[ "exatons", "exaton", "exatonnes", "exatonne"]),
+        Unit(factor=Decimal("1e24"), symbol="Et", name="yottagram", namePlural="yottagrams", names=["exatons", "exaton", "exatonnes", "exatonne"]),
         Unit(factor=Decimal("1e27"), symbol="Zt", name="zettaton", namePlural="zettatons", names=["zettatonnes", "zettatonne"]),
         Unit(factor=earth, name="Earth", namePlural="Earths"),
         Unit(factor=Decimal("1e30"), symbol="Yt", name="yottaton", namePlural="yottatons", names=["yottatonnes", "yottatonne"]),
