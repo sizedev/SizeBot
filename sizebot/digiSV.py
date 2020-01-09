@@ -153,6 +153,15 @@ class Unit():
     def id(self):
         return self.symbol or self.name or self.namePlural
 
+    def __str__(self):
+        if self.name and self.symbol:
+            return f"{self.name} ({self.symbol})"
+        if self.name:
+            return self.name
+        if self.symbol:
+            return self.symbol
+        return "?"
+
 
 class FixedUnit(Unit):
     """Unit that only formats to a single symbol"""
