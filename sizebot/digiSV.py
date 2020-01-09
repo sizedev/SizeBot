@@ -93,6 +93,8 @@ class Mult():
 class Unit():
     """Formats a value by scaling it and applying the appropriate symbol suffix"""
 
+    hidden = False
+
     def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[]):
         self.factor = factor
 
@@ -154,13 +156,16 @@ class Unit():
         return self.symbol or self.name or self.namePlural
 
     def __str__(self):
-        if self.name and self.symbol:
-            return f"{self.name} ({self.symbol})"
-        if self.name:
-            return self.name
-        if self.symbol:
-            return self.symbol
+        if self.name is not None and self.symbol is not None:
+            return f"{self.name.strip()} ({self.symbol.strip()})"
+        if self.name is not None:
+            return self.name.strip()
+        if self.symbol is not None:
+            return self.symbol.strip()
         return "?"
+
+    def __lt__(self, other):
+        return self.factor < other.factor
 
 
 class FixedUnit(Unit):
@@ -175,6 +180,7 @@ class FixedUnit(Unit):
 
 class FeetAndInchesUnit(Unit):
     """Unit for handling feet and inches"""
+    hidden = True
 
     def __init__(self, footsymbol, inchsymbol, factor):
         self.footsymbol = footsymbol
@@ -211,7 +217,7 @@ class UnitRegistry(collections.abc.Mapping):
         return self[name] is not None
 
     def __iter__(self):
-        return iter(unit.id for unit in self._units)
+        return iter(unit for unit in self._units if not unit.hidden)
 
     def __len__(self):
         return len(self._units)
@@ -641,41 +647,41 @@ class WV(UnitValue):
     infinity = uniWV * Decimal("1E27")
     # WV units
     _units = UnitRegistry([
-        Unit(symbol="yg", factor=Decimal("1e-24"), names=["yoctograms", "yoctograms"]),
-        Unit(symbol="zg", factor=Decimal("1e-21"), names=["zeptograms", "zeptograms"]),
-        Unit(symbol="ag", factor=Decimal("1e-18"), names=["attograms", "attogram"]),
-        Unit(symbol="fg", factor=Decimal("1e-15"), names=["femtogram", "femtogram"]),
-        Unit(symbol="pg", factor=Decimal("1e-12"), names=["picogram", "picogram"]),
-        Unit(symbol="ng", factor=Decimal("1e-9"), names=["nanogram", "nanogram"]),
-        Unit(symbol="µg", factor=Decimal("1e-6"), names=["microgram", "microgram"]),
-        Unit(symbol="mg", factor=Decimal("1e-3"), names=["milligrams", "milligram"]),
-        Unit(symbol="g", factor=Decimal("1e0"), names=["grams", "gram"]),
-        Unit(symbol="oz", factor=ounce, names=["kilograms", "kilogram"]),
-        Unit(symbol="lb", factor=pound, names=["pounds", "pound"], symbols=["lbs"]),
-        Unit(symbol="kg", factor=Decimal("1e3"), names=["kilograms", "kilogram"]),
-        Unit(symbol=" US tons", factor=uston),
-        Unit(symbol="t", factor=Decimal("1e6"), names=["megagrams", "megagram", "ton", "tons", "tonnes", "tons"]),
-        Unit(symbol="kt", factor=Decimal("1e9"), names=["gigagrams", "gigagram", "kilotons", "kiloton", "kilotonnes", "kilotonne"]),
-        Unit(symbol="Mt", factor=Decimal("1e12"), names=["teragrams", "teragram", "megatons", "megaton", "megatonnes", "megatonne"]),
-        Unit(symbol="Gt", factor=Decimal("1e15"), names=["petagrams", "petagram", "gigatons", "gigaton", "gigatonnes", "gigatonnes"]),
-        Unit(symbol="Tt", factor=Decimal("1e18"), names=["exagrams", "exagram", "teratons", "teraton", "teratonnes", "teratonne"]),
-        Unit(symbol="Pt", factor=Decimal("1e21"), names=["zettagrams", "zettagram", "petatons", "petaton", "petatonnes", "petatonne"]),
-        Unit(symbol="Et", factor=Decimal("1e24"), names=["yottagrams", "yottagram", "exatons", "exaton", "exatonnes", "exatonne"]),
-        Unit(symbol="Zt", factor=Decimal("1e27"), names=["zettatons", "zettaton", "zettatonnes", "zettatonne"]),
-        Unit(symbol=" Earths", factor=earth, names=["earth", "earths"]),
-        Unit(symbol="Yt", factor=Decimal("1e30"), names=["yottatons", "yottaton", "yottatonnes", "yottatonne"]),
-        Unit(symbol=" Suns", factor=sun, names=["sun", "suns"]),
-        Unit(symbol=" Milky Ways", factor=milkyway),
-        Unit(symbol="uni", factor=uniWV * Decimal("1e0"), names=["universes", "universe"]),
-        Unit(symbol="kuni", factor=uniWV * Decimal("1e3"), names=["kilouniverses", "kilouniverse"]),
-        Unit(symbol="Muni", factor=uniWV * Decimal("1e6"), names=["megauniverses", "megauniverse"]),
-        Unit(symbol="Guni", factor=uniWV * Decimal("1e9"), names=["gigauniverses", "gigauniverse"]),
-        Unit(symbol="Tuni", factor=uniWV * Decimal("1e12"), names=["terauniverses", "terauniverse"]),
-        Unit(symbol="Puni", factor=uniWV * Decimal("1e15"), names=["petauniverses", "petauniverse"]),
-        Unit(symbol="Euni", factor=uniWV * Decimal("1e18"), names=["exauniverses", "exauniverse"]),
-        Unit(symbol="Zuni", factor=uniWV * Decimal("1e21"), names=["zettauniverses", "zettauniverse"]),
-        Unit(symbol="Yuni", factor=uniWV * Decimal("1e24"), names=["yottauniverses", "yottauniverse"]),
-        FixedUnit(symbol="∞", factor=Decimal(infinity), names=["infinite", "infinity"])
+        Unit(factor=Decimal("1e-24"), symbol="yg", name="yoctogram", namePlural="yoctograms"),
+        Unit(factor=Decimal("1e-21"), symbol="zg", name="zeptogram", namePlural="zeptograms"),
+        Unit(factor=Decimal("1e-18"), symbol="ag", name="attogram", namePlural="attograms"),
+        Unit(factor=Decimal("1e-15"), symbol="fg", name="femtogram", namePlural="femtograms"),
+        Unit(factor=Decimal("1e-12"), symbol="pg", name="picogram", namePlural="picograms"),
+        Unit(factor=Decimal("1e-9"), symbol="ng", name="nanogram", namePlural="nanograms"),
+        Unit(factor=Decimal("1e-6"), symbol="µg", name="microgram", namePlural="micrograms"),
+        Unit(factor=Decimal("1e-3"), symbol="mg", name="milligram", namePlural="milligrams"),
+        Unit(factor=Decimal("1e0"), symbol="g", name="gram", namePlural="grams"),
+        Unit(factor=ounce, symbol="oz", name="kilogram", namePlural="kilograms"),
+        Unit(factor=pound, symbol="lb", name="pound", namePlural="pounds", symbols=["lbs"]),
+        Unit(factor=Decimal("1e3"), symbol="kg", name="kilogram", namePlural="kilograms"),
+        Unit(factor=uston, name="US tons"),
+        Unit(factor=Decimal("1e6"), symbol="t", name="megagram", namePlural="megagrams", names=["ton", "tons", "tonne", "tonnes"]),
+        Unit(factor=Decimal("1e9"), symbol="kt", name="gigagram", namePlural="gigagrams", names=["kilotons", "kiloton", "kilotonnes", "kilotonne"]),
+        Unit(factor=Decimal("1e12"), symbol="Mt", name="teragram", namePlural="teragrams", names=["megatons", "megaton", "megatonnes", "megatonne"]),
+        Unit(factor=Decimal("1e15"), symbol="Gt", name="petagram", namePlural="petagrams", names=["gigatons", "gigaton", "gigatonnes", "gigatonne"]),
+        Unit(factor=Decimal("1e18"), symbol="Tt", name="exagram", namePlural="exagrams", names=["teratons", "teraton", "teratonnes", "teratonne"]),
+        Unit(factor=Decimal("1e21"), symbol="Pt", name="zettagram", namePlural="zettagrams", names=["petatons", "petaton", "petatonnes", "petatonne"]),
+        Unit(factor=Decimal("1e24"), symbol="Et", name="yottagram", namePlural="yottagrams", names=[ "exatons", "exaton", "exatonnes", "exatonne"]),
+        Unit(factor=Decimal("1e27"), symbol="Zt", name="zettaton", namePlural="zettatons", names=["zettatonnes", "zettatonne"]),
+        Unit(factor=earth, name="Earth", namePlural="Earths"),
+        Unit(factor=Decimal("1e30"), symbol="Yt", name="yottaton", namePlural="yottatons", names=["yottatonnes", "yottatonne"]),
+        Unit(factor=sun, name="Sun", namePlural="Suns"),
+        Unit(factor=milkyway, name="Milky Ways"),
+        Unit(factor=uniWV * Decimal("1e0"), symbol="uni", name="universe", namePlural="universes"),
+        Unit(factor=uniWV * Decimal("1e3"), symbol="kuni", name="kilouniverse", namePlural="kilouniverses"),
+        Unit(factor=uniWV * Decimal("1e6"), symbol="Muni", name="megauniverse", namePlural="megauniverses"),
+        Unit(factor=uniWV * Decimal("1e9"), symbol="Guni", name="gigauniverse", namePlural="gigauniverses"),
+        Unit(factor=uniWV * Decimal("1e12"), symbol="Tuni", name="terauniverse", namePlural="terauniverses"),
+        Unit(factor=uniWV * Decimal("1e15"), symbol="Puni", name="petauniverse", namePlural="petauniverses"),
+        Unit(factor=uniWV * Decimal("1e18"), symbol="Euni", name="exauniverse", namePlural="exauniverses"),
+        Unit(factor=uniWV * Decimal("1e21"), symbol="Zuni", name="zettauniverse", namePlural="zettauniverses"),
+        Unit(factor=uniWV * Decimal("1e24"), symbol="Yuni", name="yottauniverse", namePlural="yottauniverses"),
+        FixedUnit(factor=Decimal(infinity), symbol="∞", name="infinity", names=["infinite"])
     ])
     # WV systems
     _systems = {

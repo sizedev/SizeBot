@@ -67,7 +67,7 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command()
     @commands.check(guildOnly)
-    async def objcompare(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
+    async def objcompare(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
         if memberOrHeight is None:
             memberOrHeight = ctx.message.author
 
