@@ -21,7 +21,7 @@ class Rate():
     re_rate = re.compile(f"(?P<prefix>{addSubPrefixes})? *(?P<multOrSv>.*) *({rateDividers}) *(?P<tv>{re_opnum_unit}) *(({stopDividers}) *(?P<stop>{re_opnum_unit}))?")
 
     @classmethod
-    def parseRate(cls, s):
+    def parse(cls, s):
         match = cls.re_rate.match(s)
         if match is None:
             raise errors.InvalidSizeValue(s)
@@ -100,15 +100,15 @@ class Unit():
         self.name = name
         self.namePlural = namePlural
 
-        self.symbols = set(symbols)     # case sensitive symbols
+        self.symbols = {s.strip() for s in symbols}  # case sensitive symbols
         if symbol is not None:
-            self.symbols.add(symbol)
+            self.symbols.add(symbol.strip())
 
-        self.names = iset(names)        # case insensitive names
+        self.names = iset(n.strip() for n in names)        # case insensitive names
         if name is not None:
-            self.names.add(name)
+            self.names.add(name.strip())
         if namePlural is not None:
-            self.names.add(namePlural)
+            self.names.add(namePlural.strip())
 
     def format(self, value, accuracy=2, spec="", preferName=False):
         scaled = value / self.factor
@@ -145,6 +145,8 @@ class Unit():
         return v * self.factor
 
     def isUnit(self, u):
+        if isinstance(u, str):
+            u = u.strip()
         return isinstance(u, str) and (u in self.names or u in self.symbols)
 
     @property
@@ -616,6 +618,7 @@ class SV(UnitValue):
     def __repr__(self):
         return f"SV('{self}')"
 
+
 class WV(UnitValue):
     """Weight Value (mass)"""
     # Weight Constants [grams]
@@ -739,6 +742,7 @@ class WV(UnitValue):
     def __repr__(self):
         return f"WV('{self}')"
 
+
 class TV(UnitValue):
     """Time Value"""
     second = Decimal("1")
@@ -782,4 +786,3 @@ class TV(UnitValue):
 
     def __repr__(self):
         return f"TV('{self}')"
-    

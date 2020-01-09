@@ -1,5 +1,4 @@
 import json
-from sizebot.digidecimal import Decimal
 
 from sizebot.conf import conf
 from sizebot import digierror as errors

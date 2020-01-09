@@ -7,7 +7,7 @@ from sizebot.discordplus import commandsplus
 from sizebot.digidecimal import Decimal
 from sizebot import digilogger as logger
 from sizebot import userdb
-from sizebot import digiSV
+from sizebot.digiSV import Rate
 from sizebot import digisize
 from sizebot.checks import requireAdmin, guildOnly
 
@@ -87,7 +87,7 @@ class ChangeCog(commands.Cog):
     @commandsplus.command()
     @commands.check(guildOnly)
     async def slowchange(self, ctx, *, rateStr: str):
-        addPerSec, mulPerSec, stopSV, stopTV = digiSV.parseRate(rateStr)
+        addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(rateStr)
         key = ctx.message.author.id, ctx.message.guild.id
         change = Change(self.bot, ctx.message.author.id, ctx.message.guild.id, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
         self.changes[key] = change

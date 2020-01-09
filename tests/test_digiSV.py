@@ -1,11 +1,10 @@
 from decimal import Decimal
 
-from sizebot import digiSV
-from sizebot.digiSV import SV, WV, TV
+from sizebot.digiSV import SV, WV, TV, Mult, Rate
 
 
 def test_parseMult():
-    result = digiSV.parseMult("times 2")
+    result = Mult.parse("times 2")
     assert result == 2
 
 
@@ -16,133 +15,133 @@ def test_TV_parse():
 
 # returns (add amount per second, mult amount per second, size stop, time stop)
 def test_parseRate_words_add_sizestop():
-    result = digiSV.parseRate("add 6m per 3 seconds until 12m")
+    result = Rate.parse("add 6m per 3 seconds until 12m")
     assert result == (2, 1, 12, None)
 
 
 def test_parseRate_words_add_timestop():
-    result = digiSV.parseRate("add 6m per 3 seconds for 10 seconds")
+    result = Rate.parse("add 6m per 3 seconds for 10 seconds")
     assert result == (2, 1, None, 10)
 
 
 def test_parseRate_words_add_nostop():
-    result = digiSV.parseRate("add 6m per 3 seconds")
+    result = Rate.parse("add 6m per 3 seconds")
     assert result == (2, 1, None, None)
 
 
 def test_parseRate_words_sub_sizestop():
-    result = digiSV.parseRate("subtract 6m per 3 seconds until 12m")
+    result = Rate.parse("subtract 6m per 3 seconds until 12m")
     assert result == (-2, 1, 12, None)
 
 
 def test_parseRate_words_sub_timestop():
-    result = digiSV.parseRate("subtract 6m per 3 seconds for 10 seconds")
+    result = Rate.parse("subtract 6m per 3 seconds for 10 seconds")
     assert result == (-2, 1, None, 10)
 
 
 def test_parseRate_words_sub_nostop():
-    result = digiSV.parseRate("subtract 6m per 3 seconds")
+    result = Rate.parse("subtract 6m per 3 seconds")
     assert result == (-2, 1, None, None)
 
 
 def test_parseRate_words_mult_sizestop():
-    result = digiSV.parseRate("multiply 8 per 3 seconds until 12m")
+    result = Rate.parse("multiply 8 per 3 seconds until 12m")
     assert result == (0, 2, 12, None)
 
 
 def test_parseRate_words_mult_timestop():
-    result = digiSV.parseRate("times 8 per 3 seconds for 10 seconds")
+    result = Rate.parse("times 8 per 3 seconds for 10 seconds")
     assert result == (0, 2, None, 10)
 
 
 def test_parseRate_words_mult_nostop():
-    result = digiSV.parseRate("times 8 per 3 seconds")
+    result = Rate.parse("times 8 per 3 seconds")
     assert result == (0, 2, None, None)
 
 
 def test_parseRate_words_div_sizestop():
-    result = digiSV.parseRate("divide 8 per 3 seconds until 12m")
+    result = Rate.parse("divide 8 per 3 seconds until 12m")
     assert result == (0, Decimal(0.5), 12, None)
 
 
 def test_parseRate_words_div_timestop():
-    result = digiSV.parseRate("divide 8 per 3 seconds for 10 seconds")
+    result = Rate.parse("divide 8 per 3 seconds for 10 seconds")
     assert result == (0, Decimal(0.5), None, 10)
 
 
 def test_parseRate_words_div_nostop():
-    result = digiSV.parseRate("divide 8 per 3 seconds")
+    result = Rate.parse("divide 8 per 3 seconds")
     assert result == (0, Decimal(0.5), None, None)
 
 
 # symbols
 def test_parseRate_symbols_add_sizestop():
-    result = digiSV.parseRate("6m/3s until 12m")
+    result = Rate.parse("6m/3s until 12m")
     assert result == (2, 1, 12, None)
 
 
 def test_parseRate_symbols_add_timestop():
-    result = digiSV.parseRate("add 6m/3s for 10 seconds")
+    result = Rate.parse("add 6m/3s for 10 seconds")
     assert result == (2, 1, None, 10)
 
 
 def test_parseRate_symbols_add_nostop():
-    result = digiSV.parseRate("6m/3s")
+    result = Rate.parse("6m/3s")
     assert result == (2, 1, None, None)
 
 
 def test_parseRate_symbols_sub_sizestop():
-    result = digiSV.parseRate("-6m/3s until 12m")
+    result = Rate.parse("-6m/3s until 12m")
     assert result == (-2, 1, 12, None)
 
 
 def test_parseRate_symbols_sub_timestop():
-    result = digiSV.parseRate("-6m/3s->10s")
+    result = Rate.parse("-6m/3s->10s")
     assert result == (-2, 1, None, 10)
 
 
 def test_parseRate_symbols_sub_nostop():
-    result = digiSV.parseRate("-6m/3s")
+    result = Rate.parse("-6m/3s")
     assert result == (-2, 1, None, None)
 
 
 def test_parseRate_symbols_mult_sizestop():
-    result = digiSV.parseRate("x8/3s until 12m")
+    result = Rate.parse("x8/3s until 12m")
     assert result == (0, 2, 12, None)
 
 
 def test_parseRate_symbols_mult_timestop():
-    result = digiSV.parseRate("*8/3s for 10s")
+    result = Rate.parse("*8/3s for 10s")
     assert result == (0, 2, None, 10)
 
 
 def test_parseRate_symbols_mult_nostop():
-    result = digiSV.parseRate("x8/3s")
+    result = Rate.parse("x8/3s")
     assert result == (0, 2, None, None)
 
 
 def test_parseRate_symbols_div_sizestop():
-    result = digiSV.parseRate("/8/3s until 12m")
+    result = Rate.parse("/8/3s until 12m")
     assert result == (0, Decimal("0.5"), 12, None)
 
 
 def test_parseRate_symbols_div_timestop():
-    result = digiSV.parseRate("/8/3s for 10s")
+    result = Rate.parse("/8/3s for 10s")
     assert result == (0, Decimal("0.5"), None, 10)
 
 
 def test_parseRate_symbols_div_nostop():
-    result = digiSV.parseRate("/8/3s")
+    result = Rate.parse("/8/3s")
     assert result == (0, Decimal("0.5"), None, None)
 
 
 def test_parseRate_2x():
-    result = digiSV.parseRate("8x/3s")
+    result = Rate.parse("8x/3s")
     assert result == (0, 2, None, None)
 
 
 def test_parseRate_omitOne():
-    result = digiSV.parseRate("2 meters per second")
+    result = Rate.parse("2 meters per second")
     assert result == (2, 1, None, None)
 
 
