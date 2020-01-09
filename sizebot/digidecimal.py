@@ -19,8 +19,24 @@ def roundDecimal(d, accuracy = 0):
     return d.quantize(places)
 
 
+# Legacy support.
 def roundDecimalHalf(number):
-    return roundDecimal(number * Decimal("2")) / Decimal("2")
+    return roundDecimalFraction(number, 2)
+
+
+def roundDecimalFraction(number, denominator):
+    return roundDecimal(number * Decimal(str(denominator))) / Decimal(str(denominator))
+
+
+eighths = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
+
+
+def toEighths(number):
+    roundednumber = roundDecimalFraction(number, 8)
+    whole, part = divmod(roundednumber, 1)
+    abspart = abs(part)
+    numerator = abspart * 8
+    return f"{whole}{eighths[int(numerator)]}"
 
 
 def trimzeroes(d):
