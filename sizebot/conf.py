@@ -7,7 +7,7 @@ from sizebot import utils
 
 
 class Config:
-    __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "prefix", "prefix", "authtoken", "admins", "ids", "emoji", "logchannelid"]
+    __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "telemetrypath", "prefix", "prefix", "authtoken", "admins", "ids", "emoji", "logchannelid"]
 
     def __init__(self, configDict):
         # ASCII art
@@ -30,6 +30,7 @@ class Config:
         datadir = getDataDir()
         self.winkpath = datadir / "winkcount.txt"
         self.userdbpath = datadir / "users"
+        self.telemetrypath = datadir / "telemetry.json"
 
         # Sizebot
         self.prefix = utils.getPath(configDict, "sizebot.prefix", "&")

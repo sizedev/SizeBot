@@ -5,6 +5,7 @@ from discord.ext import commands
 from sizebot import digierror as errors
 from sizebot import digilogger as logger
 from sizebot.utils import formatTraceback
+from sizebot.telemetry import Telemetry
 
 
 def setup(bot):
@@ -30,6 +31,9 @@ def setup(bot):
             return
 
         if isinstance(err, commands.errors.CommandNotFound):
+            telem = Telemetry.load()
+            telem.incrementUnknown(str(ctx.invoked_with))
+            telem = telem.save()
             return
 
         # Default command handling
