@@ -1,7 +1,7 @@
 import re
 import collections
 
-from sizebot.digidecimal import Decimal, roundDecimal, trimZeroes
+from sizebot.digidecimal import Decimal, roundDecimal, trimZeroes, toFraction
 from sizebot import digierror as errors
 from sizebot.utils import removeBrackets, re_num, parseSpec, buildSpec, tryOrNone, iset
 
@@ -95,7 +95,8 @@ class Unit():
 
     hidden = False
 
-    def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[]):
+    def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[], fractional=False):
+        self.fractional = fractional
         self.factor = factor
 
         self.symbol = symbol
@@ -112,10 +113,15 @@ class Unit():
         if namePlural is not None:
             self.names.add(namePlural.strip())
 
-    def format(self, value, accuracy=2, spec="", preferName=False):
+    def format(self, value, accuracy=2, spec="", preferName=False, useFractional=False):
         scaled = value / self.factor
-        rounded = trimZeroes(roundDecimal(scaled, accuracy))
-        formattedValue = format(rounded, spec)
+        useFractional = useFractional and self.fractional
+        if useFractional:
+            rounded = trimZeroes(scaled)
+            formattedValue = toFraction(rounded, 8, spec)
+        else:
+            rounded = trimZeroes(roundDecimal(scaled, accuracy))
+            formattedValue = format(rounded, spec)
 
         if rounded == 0:
             return "0"
@@ -171,7 +177,7 @@ class Unit():
 class FixedUnit(Unit):
     """Unit that only formats to a single symbol"""
 
-    def format(self, value, accuracy, spec, preferName=False):
+    def format(self, value, accuracy=2, spec="", preferName=False, useFractional=False):
         return self.symbol
 
     def toUnitValue(self, v):
@@ -187,11 +193,16 @@ class FeetAndInchesUnit(Unit):
         self.inchsymbol = inchsymbol
         self.factor = factor
 
-    def format(self, value, accuracy, spec, preferName=False):
+    def format(self, value, accuracy=2, spec="", preferName=False, useFractional=False):
         inchval = value / SV.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
-        roundedinchval = roundDecimal(inchval, accuracy)
-        formatted = f"{trimZeroes(feetval)}{self.footsymbol}{trimZeroes(roundedinchval)}{self.inchsymbol}"
+        if useFractional:
+            roundedinchval = trimZeroes(roundDecimal(inchval, accuracy))
+            formattedInch = toFraction(roundedinchval, 8, spec)
+        else:
+            rounded = trimZeroes(scaled)
+            formattedInch = format(rounded, spec)
+        formatted = f"{trimZeroes(feetval)}{self.footsymbol}{formattedInch}{self.inchsymbol}"
         return formatted
 
     def isUnit(self, u):
@@ -276,6 +287,7 @@ class UnitValue(Decimal):
         if systems and all(s.casefold() in self._systems.keys() for s in systems):
             accuracy = formatDict["precision"] or 2
             accuracy = int(accuracy)
+            useFractional = formatDict["fractional"] == "%"
             formatDict["type"] = None
             formatDict["precision"] = None
             numspec = buildSpec(formatDict)
@@ -285,7 +297,7 @@ class UnitValue(Decimal):
                 preferName = s.upper() == s
                 system = self._systems[s.casefold()]
                 unit = system.getBestUnit(value)
-                formattedUnits.append(unit.format(value, accuracy, numspec, preferName))
+                formattedUnits.append(unit.format(value, accuracy, numspec, preferName, useFractional))
 
             # Remove duplicates
             uniqUnits = []
@@ -340,7 +352,7 @@ class SV(UnitValue):
         Unit(symbol="nm", factor=Decimal("1e-9"), name="nanometer", namePlural="nanometers"),
         Unit(symbol="µm", factor=Decimal("1e-6"), name="micrometer", namePlural="micrometers", symbols=["um"]),
         Unit(symbol="mm", factor=Decimal("1e-3"), name="millimeter", namePlural="millimeters"),
-        Unit(symbol="in", factor=inch, name="inch", namePlural="inches", symbols=["\""]),
+        Unit(symbol="in", factor=inch, name="inch", namePlural="inches", symbols=["\""], fractional=True),
         Unit(symbol="ft", factor=foot, name="foot", namePlural="feet", symbols=["'"]),
         FeetAndInchesUnit("'", "\"", foot),
         Unit(symbol="cm", factor=Decimal("1e-2"), name="centimeter", namePlural="centimeters"),

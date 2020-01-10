@@ -1,5 +1,6 @@
 import decimal
 import random
+from sizebot.utils import parseSpec, buildSpec
 
 __all__ = ["Decimal", "roundDecimal", "roundDecimalHalf", "trimZeroes", "toEighths", "randrangelog"]
 
@@ -29,14 +30,16 @@ def roundDecimalFraction(number, denominator):
     return rounded
 
 
-def toFraction(number, denom=8):
+def toFraction(number, denom=8, spec=""):
     if denom not in [2, 4, 8]:
         raise ValueError("Bad denominator")
-
+    parsedSpec = parseSpec(spec)
+    parsedSpec["precision"] = None
+    spec = buildSpec(parsedSpec)
     eighths = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
     roundednumber = roundDecimalFraction(number, denom)
     whole, part = divmod(roundednumber, 1)
-    whole = trimZeroes(whole)
+    whole = format(trimZeroes(whole), spec)
     abspart = abs(part)
     numerator = abspart * len(eighths)
     return f"{whole}{eighths[int(numerator)]}"

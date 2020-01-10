@@ -139,7 +139,8 @@ formatSpecRe = re.compile(r"""\A
 (?P<minimumwidth>(?!0)\d+)?
 (?P<thousands_sep>,)?
 (?:\.(?P<precision>0|(?!0)\d+))?
-(?P<type>[a-zA-Z%]{1,2})?
+(?P<type>[a-zA-Z]{1,2})?
+(?P<fractional>%)?
 \Z
 """, re.VERBOSE)
 
