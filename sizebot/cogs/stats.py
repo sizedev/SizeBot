@@ -35,6 +35,19 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command()
     @commands.check(guildOnly)
+    async def statstxt(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
+        if memberOrHeight is None:
+            memberOrHeight = ctx.message.author
+
+        userdata = getUserdata(memberOrHeight)
+
+        stats = digisize.PersonStats(userdata)
+        await ctx.send(str(stats))
+
+        await logger.info(f"Stats for {memberOrHeight} sent.")
+
+    @commandsplus.command()
+    @commands.check(guildOnly)
     async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
@@ -53,6 +66,25 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = embedtosend)
 
         await ctx.send(f"Visual Comparison: {comparison.url}")
+
+        await logger.info(f"Compared {userdata1} and {userdata2}")
+
+    @commandsplus.command()
+    @commands.check(guildOnly)
+    async def comparetxt(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+        if memberOrHeight2 is None:
+            memberOrHeight2 = ctx.message.author
+
+        # TODO: Handle this in an error handler
+        if memberOrHeight1 is None:
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
+            return
+
+        userdata1 = getUserdata(memberOrHeight1, "Raw 1")
+        userdata2 = getUserdata(memberOrHeight2, "Raw 2")
+
+        comparison = digisize.PersonComparison(userdata1, userdata2)
+        await ctx.send(str(comparison))
 
         await logger.info(f"Compared {userdata1} and {userdata2}")
 
