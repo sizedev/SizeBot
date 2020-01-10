@@ -1,7 +1,7 @@
 import re
 import collections
 
-from sizebot.digidecimal import Decimal, roundDecimal, trimzeroes
+from sizebot.digidecimal import Decimal, roundDecimal, trimZeroes
 from sizebot import digierror as errors
 from sizebot.utils import removeBrackets, re_num, parseSpec, buildSpec, tryOrNone, iset
 
@@ -114,7 +114,7 @@ class Unit():
 
     def format(self, value, accuracy=2, spec="", preferName=False):
         scaled = value / self.factor
-        rounded = trimzeroes(roundDecimal(scaled, accuracy))
+        rounded = trimZeroes(roundDecimal(scaled, accuracy))
         formattedValue = format(rounded, spec)
 
         if rounded == 0:
@@ -191,7 +191,7 @@ class FeetAndInchesUnit(Unit):
         inchval = value / SV.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
         roundedinchval = roundDecimal(inchval, accuracy)
-        formatted = f"{trimzeroes(feetval)}{self.footsymbol}{trimzeroes(roundedinchval)}{self.inchsymbol}"
+        formatted = f"{trimZeroes(feetval)}{self.footsymbol}{trimZeroes(roundedinchval)}{self.inchsymbol}"
         return formatted
 
     def isUnit(self, u):

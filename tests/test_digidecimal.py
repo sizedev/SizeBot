@@ -27,18 +27,18 @@ def test_toEighths():
     assert result == "2⅛"
 
 
-def test_toEights_noFraction():
-    result = digidecimal.toEights(Decimal("2.01"))
+def test_toEighths_noFraction():
+    result = digidecimal.toEighths(Decimal("2.01"))
     assert result == "2"
 
 
 def test_trimZeros():
-    result = digidecimal.trimZeros(Decimal("100.00"))
+    result = digidecimal.trimZeroes(Decimal("100.00"))
     result = str(result)
     assert result == "100"
 
 
 def test_trimZeros_E():
-    result = digidecimal.trimZeros(Decimal("1E2"))
+    result = digidecimal.trimZeroes(Decimal("1E2"))
     result = str(result)
     assert result == "100"

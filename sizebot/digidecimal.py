@@ -1,7 +1,7 @@
 import decimal
 import random
 
-__all__ = ["Decimal", "roundDecimal", "roundDecimalHalf", "trimzeroes"]
+__all__ = ["Decimal", "roundDecimal", "roundDecimalHalf", "trimZeroes", "toEighths", "randrangelog"]
 
 Decimal = decimal.Decimal
 
@@ -19,7 +19,7 @@ def roundDecimal(d, accuracy = 0):
     return d.quantize(places)
 
 
-# Legacy support.
+# Legacy support
 def roundDecimalHalf(number):
     return roundDecimalFraction(number, 2)
 
@@ -28,10 +28,8 @@ def roundDecimalFraction(number, denominator):
     return roundDecimal(number * Decimal(str(denominator))) / Decimal(str(denominator))
 
 
-eighths = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
-
-
 def toEighths(number):
+    eighths = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
     roundednumber = roundDecimalFraction(number, 8)
     whole, part = divmod(roundednumber, 1)
     abspart = abs(part)
@@ -39,7 +37,7 @@ def toEighths(number):
     return f"{whole}{eighths[int(numerator)]}"
 
 
-def trimzeroes(d):
+def trimZeroes(d):
     """Remove any trailing zeroes after the decimal place from a Decimal"""
     # `normalize()` removes ALL trailing zeroes, including ones before the decimal place
     # `+ 0` re-adds the trailing zeroes before the decimal place, if necessary
