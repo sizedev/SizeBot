@@ -200,8 +200,8 @@ class FeetAndInchesUnit(Unit):
             roundedinchval = trimZeroes(roundDecimal(inchval, accuracy))
             formattedInch = toFraction(roundedinchval, 8, spec)
         else:
-            rounded = trimZeroes(scaled)
-            formattedInch = format(rounded, spec)
+            roundedinchval = trimZeroes(inchval)
+            formattedInch = format(roundedinchval, spec)
         formatted = f"{trimZeroes(feetval)}{self.footsymbol}{formattedInch}{self.inchsymbol}"
         return formatted
 
