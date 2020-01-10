@@ -215,6 +215,7 @@ class PersonComparison:
                                            f"{emojis['compareBigCenter']} is {self.multiplier:,.3}x taller than {emojis['compareSmallCenter']}."),
                               color=0x31eff9)
         embed.set_author(name=f"SizeBot {conf.version}")
+        embed.set_thumbnail(url = compareicon)
         embed.add_field(name="Height", value=(f"{emojis['comparebig']}{self.bigToSmall.height:.3mu}\n"
                                               f"{emojis['comparesmall']}{self.smallToBig.height:.3mu}"), inline=True)
         embed.add_field(name="Weight", value=(f"{emojis['comparebig']}{self.bigToSmall.weight:.3mu}\n"
