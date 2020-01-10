@@ -3,7 +3,7 @@ from decimal import Decimal
 from sizebot.digiSV import SV, WV, TV, Mult, Rate
 
 
-def test_parseMult():
+def test_Mult_parse():
     result = Mult.parse("times 2")
     assert result == 2
 
@@ -151,7 +151,6 @@ def test_negative_SV_parse():
 
 
 def test_negative_SV_format():
-
     result = f"{SV('-12'):m}"
     assert result == "-12m"
 

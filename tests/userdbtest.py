@@ -1,3 +1,5 @@
+# TODO: Make this into a real test.
+
 from sizebot import userdb
 from sizebot.userdb import SPEC, User
 
