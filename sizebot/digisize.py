@@ -4,7 +4,7 @@ import math
 import discord
 
 from sizebot.conf import conf
-from sizebot.digidecimal import Decimal, roundDecimalHalf, roundDecimal, trimZeroes
+from sizebot.digidecimal import Decimal, toFraction, roundDecimal, trimZeroes
 from sizebot import digierror as errors
 from sizebot.digiSV import SV, WV
 from sizebot import userdb
@@ -233,8 +233,8 @@ class PersonComparison:
             f"{emojis['comparebig']}{self.bigToSmall.weight:.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.weight:.3mu}"), inline=True)
         embed.add_field(name="Foot Length", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.footlength:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.footlength:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.footlength:.3mu} ({self.bigToSmall.shoesize})\n"
+            f"{emojis['comparesmall']}{self.smallToBig.footlength:.3mu} ({self.smallToBig.shoesize})"), inline=True)
         embed.add_field(name="Foot Width", value=(
             f"{emojis['comparebig']}{self.bigToSmall.footwidth:.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.footwidth:.3mu}"), inline=True)
@@ -312,7 +312,7 @@ class PersonStats:
             f"*Current Height:*  {self.height:,.3mu}\n"
             f"*Current Weight:*  {self.weight:,.3mu}\n"
             f"\n"
-            f"Foot Length: {self.footlength:,.3mu}\n"
+            f"Foot Length: {self.footlength:,.3mu} ({self.shoesize})\n"
             f"Foot Width: {self.footwidth:,.3mu}\n"
             f"Toe Height: {self.toeheight:,.3mu}\n"
             f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
@@ -332,7 +332,7 @@ class PersonStats:
         embed.set_author(name=f"SizeBot {conf.version}")
         embed.add_field(name="Current Height", value=format(self.height, ",.3mu"), inline=True)
         embed.add_field(name="Current Weight", value=format(self.weight, ",.3mu"), inline=True)
-        embed.add_field(name="Foot Length", value=format(self.footlength, ",.3mu"), inline=True)
+        embed.add_field(name="Foot Length", value=format(self.footlength, ",.3mu") + f" ({self.shoesize})", inline=True)
         embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
         embed.add_field(name="Pointer Finger Length", value=format(self.pointerlength, ",.3mu"), inline=True)
