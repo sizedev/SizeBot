@@ -25,7 +25,8 @@ def roundDecimalHalf(number):
 
 
 def roundDecimalFraction(number, denominator):
-    return roundDecimal(number * Decimal(str(denominator))) / Decimal(str(denominator))
+    rounded = roundDecimal(number * Decimal(denominator)) / Decimal(denominator)
+    return rounded
 
 
 def toFraction(number, denom=8):
@@ -35,6 +36,7 @@ def toFraction(number, denom=8):
     eighths = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
     roundednumber = roundDecimalFraction(number, denom)
     whole, part = divmod(roundednumber, 1)
+    whole = trimZeroes(whole)
     abspart = abs(part)
     numerator = abspart * len(eighths)
     return f"{whole}{eighths[int(numerator)]}"
