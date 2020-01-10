@@ -213,18 +213,19 @@ class PersonComparison:
 
     def toEmbed(self):
         embed = discord.Embed(title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
-                              description=(
-                                  f"{emojis['comparebigcenter']} {self.big.nickname}\n"
-                                  f"{emojis['blank']}{emojis['blank']} **Height:** {self.big.height:.3mu}\n"
-                                  f"{emojis['blank']}{emojis['blank']} **Weight:** {self.big.weight:.3mu}\n"
-                                  f"{emojis['comparesmallcenter']} {self.small.nickname}\n"
-                                  f"{emojis['blank']}{emojis['blank']} **Height:** {self.small.height:.3mu}\n"
-                                  f"{emojis['blank']}{emojis['blank']} **Weight:** {self.small.weight:.3mu}\n"
+                              description="",
+                              color=0x31eff9,
+                              url=self.url)
+        embed.set_author(name=f"SizeBot {conf.version}", icon_url=compareicon)
+        embed.add_field(name=f"{emojis['comparebigcenter']} **{self.big.nickname}**", value=(
+            f"{emojis['blank']}{emojis['blank']} **Height:** {self.big.height:.3mu}\n"
+            f"{emojis['blank']}{emojis['blank']} **Weight:** {self.big.weight:.3mu}\n"), inline=True)
+        embed.add_field(name=f"{emojis['comparesmallcenter']} **{self.small.nickname}**", value=(
+            f"{emojis['blank']}{emojis['blank']} **Height:** {self.small.height:.3mu}\n"
+            f"{emojis['blank']}{emojis['blank']} **Weight:** {self.small.weight:.3mu}\n"), inline=True)
+        embed.add_field(name="\u200b", value=(
                                   f"{emojis['comparebigcenter']} looks like {emojis['comparebig']} to {emojis['comparesmallcenter']}\n"
-                                  f"{emojis['comparesmallcenter']} looks like {emojis['comparesmall']} to {emojis['comparebigcenter']}"),
-                              color=0x31eff9)
-        embed.set_author(name=f"SizeBot {conf.version}")
-        # embed.set_thumbnail(url = compareicon)
+                                  f"{emojis['comparesmallcenter']} looks like {emojis['comparesmall']} to {emojis['comparebigcenter']}"), inline=False)
         embed.add_field(name="Height", value=(
             f"{emojis['comparebig']}{self.bigToSmall.height:.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.height:.3mu}"), inline=True)
