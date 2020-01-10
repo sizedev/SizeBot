@@ -209,9 +209,9 @@ class PersonComparison:
         )
 
     def toEmbed(self):
-        embed = discord.Embed(title=f"Comparison of {self.big.name} and {self.small.name}",
-                              description=(f"{emojis['compareBigCenter']} {self.big.name}: {self.big.height:.3mu} | {self.big.weight:.3mu}\n"
-                                           f"{emojis['compareSmallCenter']} {self.small.name}: {self.small.height:.3mu} | {self.small.weight:.3mu}\n"
+        embed = discord.Embed(title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
+                              description=(f"{emojis['compareBigCenter']} {self.big.nickname}: {self.big.height:.3mu} | {self.big.weight:.3mu}\n"
+                                           f"{emojis['compareSmallCenter']} {self.small.nickname}: {self.small.height:.3mu} | {self.small.weight:.3mu}\n"
                                            f"{emojis['compareBigCenter']} is {self.multiplier:,.3}x taller than {emojis['compareSmallCenter']}."),
                               color=0x31eff9)
         embed.set_author(name=f"SizeBot {conf.version}")
