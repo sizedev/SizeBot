@@ -122,8 +122,9 @@ class RegisterCog(commands.Cog):
         def check(reaction, reacter):
             return reaction.message.id == sentMsg.id \
                 and reacter.id == user.id \
-                and (str(reaction.emoji) == unregisterEmoji
-                     or str(reaction.emoji) == cancelEmoji)
+                and (
+                    str(reaction.emoji) == unregisterEmoji
+                    or str(reaction.emoji) == cancelEmoji)
 
         try:
             reaction, user = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
