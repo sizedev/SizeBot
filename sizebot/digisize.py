@@ -164,8 +164,8 @@ class PersonComparison:
         return (
             "**Comparison:**\n"
             f"{self.big.tag} is really:\n"
-            f"{printtab}Real Height: {self.big.height:.3mu} ({self.big.basemultiplier:,}x basesize)\n"
-            f"{printtab}Real Weight: {self.big.weight:.3mu}. ({self.big.basemultiplier ** 3:,}x basesize)\n"
+            f"{printtab}Real Height: {self.big.height:.3mu} ({self.big.basemultiplier:,.3}x basesize)\n"
+            f"{printtab}Real Weight: {self.big.weight:.3mu}. ({self.big.basemultiplier ** 3:,.3}x basesize)\n"
             f"To {self.small.tag}, {self.big.tag} looks:\n"
             f"{printtab}Height: {self.bigToSmall.height:.3mu}\n"
             f"{printtab}Weight: {self.bigToSmall.weight:.3mu}\n"
@@ -180,8 +180,8 @@ class PersonComparison:
             f"{self.big.tag} is {self.multiplier:,.3}x taller than {self.small.tag}.\n"
             "\n"
             f"{self.small.tag} is really:\n"
-            f"{printtab}Real Height: {self.small.height:.3mu} ({self.small.basemultiplier:,}x basesize)\n"
-            f"{printtab}Real Weight: {self.small.weight:.3mu}. ({self.small.basemultiplier ** 3:,}x basesize)\n"
+            f"{printtab}Real Height: {self.small.height:.3mu} ({self.small.basemultiplier:,.3}x basesize)\n"
+            f"{printtab}Real Weight: {self.small.weight:.3mu}. ({self.small.basemultiplier ** 3:,.3}x basesize)\n"
             f"To {self.big.tag}, {self.small.tag} looks:\n"
             f"{printtab}Height: {self.smallToBig.height:.3mu}\n"
             f"{printtab}Weight: {self.smallToBig.weight:.3mu}\n"
@@ -194,7 +194,7 @@ class PersonComparison:
             f"{printtab}Hair Width: {self.smallToBig.hairwidth:.3mu}\n"
             "\n"
             f"**Base Sizes:**\n"
-            f"{printtab}{self.big.tag}: {self.big.baseheight:.3m3u} | {self.big.baseweight:.3mu}\n"
+            f"{printtab}{self.big.tag}: {self.big.baseheight:.3mu} | {self.big.baseweight:.3mu}\n"
             f"{printtab}{self.small.tag}: {self.small.baseheight:.3mu} | {self.small.baseweight:.3mu}"
         )
 
