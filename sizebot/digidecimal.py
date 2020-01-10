@@ -28,13 +28,20 @@ def roundDecimalFraction(number, denominator):
     return roundDecimal(number * Decimal(str(denominator))) / Decimal(str(denominator))
 
 
-def toEighths(number):
+def toFraction(number, denom=8):
+    if denom not in [2, 4, 8]:
+        raise ValueError("Bad denominator")
+
     eighths = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
-    roundednumber = roundDecimalFraction(number, 8)
+    roundednumber = roundDecimalFraction(number, denom)
     whole, part = divmod(roundednumber, 1)
     abspart = abs(part)
-    numerator = abspart * 8
+    numerator = abspart * len(eighths)
     return f"{whole}{eighths[int(numerator)]}"
+
+
+def toEighths(number):
+    return toFraction(number, 8)
 
 
 def trimZeroes(d):
