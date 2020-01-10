@@ -51,6 +51,7 @@ class StatsCog(commands.Cog):
         embedtosend = comparison.toEmbed()
         embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
         await ctx.send(embed = embedtosend)
+        await ctx.send(comparison)
 
         await ctx.send(comparison.url)
 
