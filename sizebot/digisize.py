@@ -289,7 +289,7 @@ class PersonStats:
         if userdata.footlength is None:
             self.footlength = SV(self.height * self.footfactor)
         else:
-            self.footlength = userdata.footlength / self.viewscale
+            self.footlength = SV(userdata.footlength / self.viewscale)
         self.shoesize = formatShoeSize(self.footlength)
         self.footwidth = SV(self.height * self.footwidthfactor)
         self.toeheight = SV(self.height * self.toeheightfactor)
@@ -332,7 +332,7 @@ class PersonStats:
         embed.set_author(name=f"SizeBot {conf.version}")
         embed.add_field(name="Current Height", value=format(self.height, ",.3mu"), inline=True)
         embed.add_field(name="Current Weight", value=format(self.weight, ",.3mu"), inline=True)
-        embed.add_field(name="Foot Length", value=format(self.footlength, ",.3mu") + f" ({self.shoesize})", inline=True)
+        embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu} ({self.shoesize})", inline=True)
         embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
         embed.add_field(name="Pointer Finger Length", value=format(self.pointerlength, ",.3mu"), inline=True)
@@ -347,7 +347,7 @@ class PersonStats:
 
 def formatShoeSize(footlength):
     footlengthinches = Decimal(footlength / SV.inch)
-    shoesizeNum = (3 * footlengthinches) - 22
+    shoesizeNum = (3 * (footlengthinches + (Decimal(1) / Decimal(3)))) - 24
     prefix = ""
     if shoesizeNum < 1:
         prefix = "Children's "
