@@ -1,4 +1,3 @@
-import discord.utils
 import pydoc
 import inspect
 import traceback
@@ -74,7 +73,6 @@ def chunkStr(s, n):
 
 
 def chunkMsg(m, *, maxlen=2000, prefix="```\n", suffix="\n```"):
-    m = discord.utils.escape_markdown(m)
     for chunk in chunkStr(m, maxlen - len(prefix) - len(suffix)):
         yield prefix + chunk + suffix
 
