@@ -169,7 +169,7 @@ def buildSpec(formatDict):
     if formatDict["precision"] is not None:
         spec += "." + formatDict["precision"]
     if formatDict["type"] is not None:
-        spec += "." + formatDict["type"]
+        spec += formatDict["type"]
     return spec
 
 
