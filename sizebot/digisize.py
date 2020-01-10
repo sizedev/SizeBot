@@ -11,12 +11,15 @@ from sizebot import userdb
 from sizebot.userdb import defaultheight, defaultweight
 from sizebot import utils
 
-emojis = {"compare" : "<:Compare:665019546289176597>",
-          "comparebig" : "<:CompareBig:665019546847019031>",
-          "comparesmall" : "<:CompareSmall:665019546780041286>",
-          "comparesmallbig" : "<:CompareSmallBig:665019546490503180>",
-          "comparebigcenter" : "<:CompareBigCenter:665021475475947520>",
-          "comparesmallcenter" : "<:CompareSmallCenter:665021475375415306>"}
+emojis = {
+    "compare" : "<:Compare:665019546289176597>",
+    "comparebig" : "<:CompareBig:665019546847019031>",
+    "comparesmall" : "<:CompareSmall:665019546780041286>",
+    "comparesmallbig" : "<:CompareSmallBig:665019546490503180>",
+    "comparebigcenter" : "<:CompareBigCenter:665021475475947520>",
+    "comparesmallcenter" : "<:CompareSmallCenter:665021475375415306>",
+    "blank": "<:blank:665063842866397185>"
+}
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
 
@@ -210,31 +213,48 @@ class PersonComparison:
 
     def toEmbed(self):
         embed = discord.Embed(title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
-                              description=(f"{emojis['comparebigcenter']} {self.big.nickname}: {self.big.height:.3mu} | {self.big.weight:.3mu}\n"
-                                           f"{emojis['comparesmallcenter']} {self.small.nickname}: {self.small.height:.3mu} | {self.small.weight:.3mu}\n"
-                                           f"{emojis['comparebigcenter']} is {self.multiplier:,.3}x taller than {emojis['comparesmallcenter']}."),
+                              description=(
+                                  f"{emojis['comparebigcenter']} {self.big.nickname}\n"
+                                  f"{emojis['blank']}{emojis['blank']} **Height:** {self.big.height:.3mu}\n"
+                                  f"{emojis['blank']}{emojis['blank']} **Weight:** {self.big.weight:.3mu}\n"
+                                  f"{emojis['comparesmallcenter']} {self.small.nickname}\n"
+                                  f"{emojis['blank']}{emojis['blank']} **Height:** {self.small.height:.3mu}\n"
+                                  f"{emojis['blank']}{emojis['blank']} **Weight:** {self.small.weight:.3mu}\n"
+                                  f"{emojis['comparebigcenter']} looks like {emojis['comparebig']} to {emojis['comparesmallcenter']}\n"
+                                  f"{emojis['comparesmallcenter']} looks like {emojis['comparesmall']} to {emojis['comparebigcenter']}"),
                               color=0x31eff9)
         embed.set_author(name=f"SizeBot {conf.version}")
-        embed.set_thumbnail(url = compareicon)
-        embed.add_field(name="Height", value=(f"{emojis['comparebig']}{self.bigToSmall.height:.3mu}\n"
-                                              f"{emojis['comparesmall']}{self.smallToBig.height:.3mu}"), inline=True)
-        embed.add_field(name="Weight", value=(f"{emojis['comparebig']}{self.bigToSmall.weight:.3mu}\n"
-                                              f"{emojis['comparesmall']}{self.smallToBig.weight:.3mu}"), inline=True)
-        embed.add_field(name="Foot Length", value=(f"{emojis['comparebig']}{self.bigToSmall.footlength:.3mu}\n"
-                                                   f"{emojis['comparesmall']}{self.smallToBig.footlength:.3mu}"), inline=True)
-        embed.add_field(name="Foot Width", value=(f"{emojis['comparebig']}{self.bigToSmall.footwidth:.3mu}\n"
-                                                  f"{emojis['comparesmall']}{self.smallToBig.footwidth:.3mu}"), inline=True)
-        embed.add_field(name="Toe Height", value=(f"{emojis['comparebig']}{self.bigToSmall.toeheigh:.3mut}\n"
-                                                  f"{emojis['comparesmall']}{self.smallToBig.toeheight:.3mu}"), inline=True)
-        embed.add_field(name="Pointer Finger Length", value=(f"{emojis['comparebig']}{self.bigToSmall.pointerlength:.3mu}\n"
-                                                             f"{emojis['comparesmall']}{self.smallToBig.pointerlength:.3mu}"), inline=True)
-        embed.add_field(name="Thumb Width", value=(f"{emojis['comparebig']}{self.bigToSmall.thumbwidth:.3mu}\n"
-                                                   f"{emojis['comparesmall']}{self.smallToBig.thumbwidth:.3mu}"), inline=True)
-        embed.add_field(name="Fingerprint Depth", value=(f"{emojis['comparebig']}{self.bigToSmall.fingerprintdepth:.3mu}\n"
-                                                         f"{emojis['comparesmall']}{self.smallToBig.fingerprintdepth:.3mu}"), inline=True)
-        embed.add_field(name="Hair Width", value=(f"{emojis['comparebig']}{self.bigToSmall.hairwidth:.3mu}\n"
-                                                  f"{emojis['comparesmall']}{self.smallToBig.hairwidth:.3mu}"), inline=True)
-        embed.set_footer(text=f"{emojis['comparesmallcenter']} would have to look {self.lookdirection} {self.lookangle:.0f}° at {emojis['comparebigcenter']}")
+        # embed.set_thumbnail(url = compareicon)
+        embed.add_field(name="Height", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.height:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.height:.3mu}"), inline=True)
+        embed.add_field(name="Weight", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.weight:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.weight:.3mu}"), inline=True)
+        embed.add_field(name="Foot Length", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.footlength:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.footlength:.3mu}"), inline=True)
+        embed.add_field(name="Foot Width", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.footwidth:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.footwidth:.3mu}"), inline=True)
+        embed.add_field(name="Toe Height", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.toeheight:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.toeheight:.3mu}"), inline=True)
+        embed.add_field(name="Pointer Finger Length", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.pointerlength:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.pointerlength:.3mu}"), inline=True)
+        embed.add_field(name="Thumb Width", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.thumbwidth:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.thumbwidth:.3mu}"), inline=True)
+        embed.add_field(name="Fingerprint Depth", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.fingerprintdepth:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.fingerprintdepth:.3mu}"), inline=True)
+        embed.add_field(name="Hair Width", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.hairwidth:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.hairwidth:.3mu}"), inline=True)
+        embed.set_footer(text=(
+            f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
+            f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}."))
         return embed
 
     @property
@@ -347,4 +367,4 @@ def look(height1, height2):
     heightdiff = abs(height1 - height2)
     viewdistance = max(height1, height2) / 2
     lookangle = math.degrees(math.atan(heightdiff / viewdistance))
-    return lookdirection, lookangle
+    return lookangle, lookdirection

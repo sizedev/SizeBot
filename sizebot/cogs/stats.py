@@ -49,11 +49,10 @@ class StatsCog(commands.Cog):
 
         comparison = digisize.PersonComparison(userdata1, userdata2)
         embedtosend = comparison.toEmbed()
-        embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
+        embedtosend.description = f"Requested by *{ctx.message.author.display_name}*\n\n{embedtosend.description}"
         await ctx.send(embed = embedtosend)
-        await ctx.send(comparison)
 
-        await ctx.send(comparison.url)
+        await ctx.send(f"Visual Comparison: {comparison.url}")
 
         await logger.info(f"Compared {userdata1} and {userdata2}")
 
