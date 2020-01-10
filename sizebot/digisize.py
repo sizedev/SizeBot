@@ -11,6 +11,14 @@ from sizebot import userdb
 from sizebot.userdb import defaultheight, defaultweight
 from sizebot import utils
 
+emojis = {"compare" : "<:Compare:665019546289176597>",
+          "comparebig" : "<:CompareBig:665019546847019031>",
+          "comparesmall" : "<:CompareSmall:665019546780041286>",
+          "comparesmallbig" : "<:CompareSmallBig:665019546490503180>",
+          "comparebigcenter" : "<:CompareBigCenter:665021475475947520>",
+          "comparesmallcenter" : "<:CompareSmallCenter:665021475375415306>"}
+compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
+
 
 # Update users nicknames to include sizetags
 async def nickUpdate(user):
@@ -157,6 +165,8 @@ class PersonComparison:
         smallToBigUserdata.baseweight = smallUserdata.baseweight / self.multiplier
         self.smallToBig = PersonStats(smallToBigUserdata)
 
+        self.lookangle, self.lookdirection = look(self.small.height, self.big.height)
+
     def __str__(self):
         # Print compare
         enspace = "\u2002"
@@ -199,18 +209,31 @@ class PersonComparison:
         )
 
     def toEmbed(self):
-        embed = discord.Embed(title="Stats for DigiDuncan [5'8\"]", color=0x31eff9)
-        embed.set_author(name="SizeBot 3.5")
-        embed.add_field(name="Current Height", value="1.727m / 5'8\"", inline=True)
-        embed.add_field(name="Current Weight", value="63.746kg / 140.534lb", inline=True)
-        embed.add_field(name="Foot Length", value="24.674cm / 9.714in", inline=True)
-        embed.add_field(name="Foot Width", value="9.87cm / 3.886in", inline=True)
-        embed.add_field(name="Toe Height", value="2.657cm / 1.046in", inline=True)
-        embed.add_field(name="Pointer Finger Length", value="10.007cm / 3.94in", inline=True)
-        embed.add_field(name="Thumb Width", value="2.501cm / 25.01mm", inline=True)
-        embed.add_field(name="Fingerprint Depth", value="49.236µm / 49.236µm", inline=True)
-        embed.add_field(name="Hair Width", value="73.853µm / 73.853µm", inline=True)
-        embed.set_footer(text="An average human would look 1.781m (5'10.127\"), and weigh XXXkg (XXXlb) to you. You'd have to look up 2° to see them.")
+        embed = discord.Embed(title=f"Comparison of {self.big.name} and {self.small.name}",
+                              description=(f"{emojis['compareBigCenter']} {self.big.name}: {self.big.height:.3mu} | {self.big.weight:.3mu}\n"
+                                           f"{emojis['compareSmallCenter']} {self.small.name}: {self.small.height:.3mu} | {self.small.weight:.3mu}\n"
+                                           f"{emojis['compareBigCenter']} is {self.multiplier:,.3}x taller than {emojis['compareSmallCenter']}."),
+                              color=0x31eff9)
+        embed.set_author(name=f"SizeBot {conf.version}")
+        embed.add_field(name="Height", value=(f"{emojis['comparebig']}{self.bigToSmall.height:.3mu}\n"
+                                              f"{emojis['comparesmall']}{self.smallToBig.height:.3mu}"), inline=True)
+        embed.add_field(name="Weight", value=(f"{emojis['comparebig']}{self.bigToSmall.weight:.3mu}\n"
+                                              f"{emojis['comparesmall']}{self.smallToBig.weight:.3mu}"), inline=True)
+        embed.add_field(name="Foot Length", value=(f"{emojis['comparebig']}{self.bigToSmall.footlength:.3mu}\n"
+                                                   f"{emojis['comparesmall']}{self.smallToBig.footlength:.3mu}"), inline=True)
+        embed.add_field(name="Foot Width", value=(f"{emojis['comparebig']}{self.bigToSmall.footwidth:.3mu}\n"
+                                                  f"{emojis['comparesmall']}{self.smallToBig.footwidth:.3mu}"), inline=True)
+        embed.add_field(name="Toe Height", value=(f"{emojis['comparebig']}{self.bigToSmall.toeheigh:.3mut}\n"
+                                                  f"{emojis['comparesmall']}{self.smallToBig.toeheight:.3mu}"), inline=True)
+        embed.add_field(name="Pointer Finger Length", value=(f"{emojis['comparebig']}{self.bigToSmall.pointerlength:.3mu}\n"
+                                                             f"{emojis['comparesmall']}{self.smallToBig.pointerlength:.3mu}"), inline=True)
+        embed.add_field(name="Thumb Width", value=(f"{emojis['comparebig']}{self.bigToSmall.thumbwidth:.3mu}\n"
+                                                   f"{emojis['comparesmall']}{self.smallToBig.thumbwidth:.3mu}"), inline=True)
+        embed.add_field(name="Fingerprint Depth", value=(f"{emojis['comparebig']}{self.bigToSmall.fingerprintdepth:.3mu}\n"
+                                                         f"{emojis['comparesmall']}{self.smallToBig.fingerprintdepth:.3mu}"), inline=True)
+        embed.add_field(name="Hair Width", value=(f"{emojis['comparebig']}{self.bigToSmall.hairwidth:.3mu}\n"
+                                                  f"{emojis['comparesmall']}{self.smallToBig.hairwidth:.3mu}"), inline=True)
+        embed.set_footer(text=f"{emojis['comparesmall']} would have to look {self.lookdirection} {self.lookangle:.0f}° at {emojis['comparebig']}")
         return embed
 
     @property
@@ -315,3 +338,12 @@ def formatShoeSize(footlength):
     rounded = roundDecimalHalf(shoesizeNum)
     shoesize = format(rounded, formatSpec)
     return f"Size US {prefix}{shoesize}"
+
+
+def look(height1, height2):
+    lookdirection = "down" if height1 >= height2 else "up"
+    # angle the smaller person must look up if they are standing half of the taller person's height away
+    heightdiff = abs(height1 - height2)
+    viewdistance = max(height1, height2) / 2
+    lookangle = math.degrees(math.atan(heightdiff / viewdistance))
+    return lookdirection, lookangle
