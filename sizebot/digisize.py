@@ -164,38 +164,38 @@ class PersonComparison:
         return (
             "**Comparison:**\n"
             f"{self.big.tag} is really:\n"
-            f"{printtab}Real Height: {self.big.height:.3m} / {self.big.height:.3u} ({self.big.basemultiplier:,}x basesize)\n"
-            f"{printtab}Real Weight: {self.big.weight:.3m} / {self.big.weight:.3u}. ({self.big.basemultiplier ** 3:,}x basesize)\n"
+            f"{printtab}Real Height: {self.big.height:.3mu} ({self.big.basemultiplier:,}x basesize)\n"
+            f"{printtab}Real Weight: {self.big.weight:.3mu}. ({self.big.basemultiplier ** 3:,}x basesize)\n"
             f"To {self.small.tag}, {self.big.tag} looks:\n"
-            f"{printtab}Height: {self.bigToSmall.height:.3m} / {self.bigToSmall.height:.3u}\n"
-            f"{printtab}Weight: {self.bigToSmall.weight:.3m} / {self.bigToSmall.weight:.3u}\n"
-            f"{printtab}Foot Length: {self.bigToSmall.footlength:.3m} / {self.bigToSmall.footlength:.3u} ({self.bigToSmall.shoesize})\n"
-            f"{printtab}Foot Width: {self.bigToSmall.footwidth:.3m} / {self.bigToSmall.footwidth:.3u}\n"
-            f"{printtab}Toe Height: {self.bigToSmall.toeheight:.3m} / {self.bigToSmall.toeheight:.3u}\n"
-            f"{printtab}Pointer Finger Length: {self.bigToSmall.pointerlength:.3m} / {self.bigToSmall.pointerlength:.3u}\n"
-            f"{printtab}Thumb Width: {self.bigToSmall.thumbwidth:.3m} / {self.bigToSmall.thumbwidth:.3u}\n"
-            f"{printtab}Fingerprint Depth: {self.bigToSmall.fingerprintdepth:.3m} / {self.bigToSmall.fingerprintdepth:.3u}\n"
-            f"{printtab}Hair Width: {self.bigToSmall.hairwidth:.3m} / {self.bigToSmall.hairwidth:.3u}\n"
+            f"{printtab}Height: {self.bigToSmall.height:.3mu}\n"
+            f"{printtab}Weight: {self.bigToSmall.weight:.3mu}\n"
+            f"{printtab}Foot Length: {self.bigToSmall.footlength:.3mu} ({self.bigToSmall.shoesize})\n"
+            f"{printtab}Foot Width: {self.bigToSmall.footwidth:.3mu}\n"
+            f"{printtab}Toe Height: {self.bigToSmall.toeheight:.3mu}\n"
+            f"{printtab}Pointer Finger Length: {self.bigToSmall.pointerlength:.3mu}\n"
+            f"{printtab}Thumb Width: {self.bigToSmall.thumbwidth:.3mu}\n"
+            f"{printtab}Fingerprint Depth: {self.bigToSmall.fingerprintdepth:.3mu}\n"
+            f"{printtab}Hair Width: {self.bigToSmall.hairwidth:.3mu}\n"
             "\n"
             f"{self.big.tag} is {self.multiplier:,.3}x taller than {self.small.tag}.\n"
             "\n"
             f"{self.small.tag} is really:\n"
-            f"{printtab}Real Height: {self.small.height:.3m} / {self.small.height:u} ({self.small.basemultiplier:,}x basesize)\n"
-            f"{printtab}Real Weight: {self.small.weight:.3m} / {self.small.weight:.3u}. ({self.small.basemultiplier ** 3:,}x basesize)\n"
+            f"{printtab}Real Height: {self.small.height:.3mu} ({self.small.basemultiplier:,}x basesize)\n"
+            f"{printtab}Real Weight: {self.small.weight:.3mu}. ({self.small.basemultiplier ** 3:,}x basesize)\n"
             f"To {self.big.tag}, {self.small.tag} looks:\n"
-            f"{printtab}Height: {self.smallToBig.height:.3m} / {self.smallToBig.height:.3u}\n"
-            f"{printtab}Weight: {self.smallToBig.weight:.3m} / {self.smallToBig.weight:.3u}\n"
-            f"{printtab}Foot Length: {self.smallToBig.footlength:.3m} / {self.smallToBig.footlength:.3u} ({self.smallToBig.shoesize})\n"
-            f"{printtab}Foot Width: {self.smallToBig.footwidth:.3m} / {self.smallToBig.footwidth:.3u}\n"
-            f"{printtab}Toe Height: {self.smallToBig.toeheight:.3m} / {self.smallToBig.toeheight:.3u}\n"
-            f"{printtab}Pointer Finger Length: {self.smallToBig.pointerlength:.3m} / {self.smallToBig.pointerlength:.3u}\n"
-            f"{printtab}Thumb Width: {self.smallToBig.thumbwidth:.3m} / {self.smallToBig.thumbwidth:.3u}\n"
-            f"{printtab}Fingerprint Depth: {self.smallToBig.fingerprintdepth:.3m} / {self.smallToBig.fingerprintdepth:.3u}\n"
-            f"{printtab}Hair Width: {self.smallToBig.hairwidth:.3m} / {self.smallToBig.hairwidth:.3u}\n"
+            f"{printtab}Height: {self.smallToBig.height:.3mu}\n"
+            f"{printtab}Weight: {self.smallToBig.weight:.3mu}\n"
+            f"{printtab}Foot Length: {self.smallToBig.footlength:.3mu} ({self.smallToBig.shoesize})\n"
+            f"{printtab}Foot Width: {self.smallToBig.footwidth:.3mu}\n"
+            f"{printtab}Toe Height: {self.smallToBig.toeheight:.3mu}\n"
+            f"{printtab}Pointer Finger Length: {self.smallToBig.pointerlength:.3mu}\n"
+            f"{printtab}Thumb Width: {self.smallToBig.thumbwidth:.3mu}\n"
+            f"{printtab}Fingerprint Depth: {self.smallToBig.fingerprintdepth:.3mu}\n"
+            f"{printtab}Hair Width: {self.smallToBig.hairwidth:.3mu}\n"
             "\n"
             f"**Base Sizes:**\n"
-            f"{printtab}{self.big.tag}: {self.big.baseheight:.3m} / {self.big.baseheight:.3u} | {self.big.baseweight:.3m} / {self.big.baseweight:.3u}\n"
-            f"{printtab}{self.small.tag}: {self.small.baseheight:.3m} / {self.small.baseheight:.3u} | {self.small.baseweight:.3m} / {self.small.baseweight:.3u}"
+            f"{printtab}{self.big.tag}: {self.big.baseheight:.3m3u} | {self.big.baseweight:.3mu}\n"
+            f"{printtab}{self.small.tag}: {self.small.baseheight:.3mu} | {self.small.baseweight:.3mu}"
         )
 
     def toEmbed(self):
@@ -216,9 +216,9 @@ class PersonComparison:
     @property
     def url(self):
         safeSmallNick = quote(self.small.nickname, safe=" ").replace(" ", "-")
-        smallCm = roundDecimal(self.small.height*100, 1)
+        smallCm = roundDecimal(self.small.height * 100, 1)
         safeBigNick = quote(self.big.nickname, safe=" ").replace(" ", "-")
-        bigCm = roundDecimal(self.big.height*100, 1)
+        bigCm = roundDecimal(self.big.height * 100, 1)
         compUrl = f"http://www.mrinitialman.com/OddsEnds/Sizes/compsizes.xhtml?{safeSmallNick}~male~{smallCm}_{safeBigNick}~male~{bigCm}"
         return compUrl
 

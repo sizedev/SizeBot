@@ -36,9 +36,11 @@ def test_toQuarters():
     result = digidecimal.toFraction(Decimal("2.25"), 4)
     assert result == "2¼"
 
+
 def test_toQuarters_125():
     result = digidecimal.toFraction(Decimal("2.126"), 4)
     assert result == "2¼"
+
 
 def test_toQuarters_noFraction():
     result = digidecimal.toFraction(Decimal("2.01"), 4)
