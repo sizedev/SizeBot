@@ -159,13 +159,13 @@ class PersonComparison:
         self.multiplier = self.big.height / self.small.height
 
         bigToSmallUserdata = userdb.User()
-        bigToSmallUserdata.height = bigUserdata.height * self.multiplier
-        bigToSmallUserdata.baseweight = bigUserdata.baseweight * self.multiplier
+        bigToSmallUserdata.height = bigUserdata.height / self.small.multiplier
+        bigToSmallUserdata.baseweight = bigUserdata.baseweight / self.small.multiplier
         self.bigToSmall = PersonStats(bigToSmallUserdata)
 
         smallToBigUserdata = userdb.User()
-        smallToBigUserdata.height = smallUserdata.height / self.multiplier
-        smallToBigUserdata.baseweight = smallUserdata.baseweight / self.multiplier
+        smallToBigUserdata.height = smallUserdata.height / self.big.multiplier
+        smallToBigUserdata.baseweight = smallUserdata.baseweight / self.big.multiplier
         self.smallToBig = PersonStats(smallToBigUserdata)
 
         self.lookangle, self.lookdirection = look(self.small.height, self.big.height)
