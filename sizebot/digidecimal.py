@@ -40,6 +40,8 @@ def toFraction(number, denom=8, spec=""):
     roundednumber = roundDecimalFraction(number, denom)
     whole, part = divmod(roundednumber, 1)
     whole = format(trimZeroes(whole), spec)
+    if whole == "0":
+        whole = ""
     abspart = abs(part)
     numerator = abspart * len(eighths)
     return f"{whole}{eighths[int(numerator)]}"
