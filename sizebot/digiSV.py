@@ -197,10 +197,10 @@ class FeetAndInchesUnit(Unit):
         inchval = value / SV.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
         if useFractional:
-            roundedinchval = trimZeroes(roundDecimal(inchval, accuracy))
+            roundedinchval = trimZeroes(inchval)
             formattedInch = toFraction(roundedinchval, 8, spec)
         else:
-            roundedinchval = trimZeroes(inchval)
+            roundedinchval = trimZeroes(roundDecimal(inchval, accuracy))
             formattedInch = format(roundedinchval, spec)
         formatted = f"{trimZeroes(feetval)}{self.footsymbol}{formattedInch}{self.inchsymbol}"
         return formatted
