@@ -224,8 +224,8 @@ class PersonComparison:
             f"{emojis['blank']}{emojis['blank']} **Height:** {self.small.height:.3mu}\n"
             f"{emojis['blank']}{emojis['blank']} **Weight:** {self.small.weight:.3mu}\n"), inline=True)
         embed.add_field(name="\u200b", value=(
-                                  f"{emojis['comparebigcenter']} looks like {emojis['comparebig']} to {emojis['comparesmallcenter']}\n"
-                                  f"{emojis['comparesmallcenter']} looks like {emojis['comparesmall']} to {emojis['comparebigcenter']}"), inline=False)
+            f"{emojis['comparebigcenter']} looks like {emojis['comparebig']} to {emojis['comparesmallcenter']}\n"
+            f"{emojis['comparesmallcenter']} looks like {emojis['comparesmall']} to {emojis['comparebigcenter']}"), inline=False)
         embed.add_field(name="Height", value=(
             f"{emojis['comparebig']}{self.bigToSmall.height:.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.height:.3mu}"), inline=True)
@@ -286,9 +286,10 @@ class PersonStats:
         self.viewscale = self.baseheight / self.height
         self.baseweight = userdata.baseweight
         self.weight = WV(self.baseweight / (self.viewscale ** 3))
-        self.footlength = userdata.footlength
-        if self.footlength is None:
+        if userdata.footlength is None:
             self.footlength = SV(self.height * self.footfactor)
+        else:
+            self.footlength = userdata.footlength / self.viewscale
         self.shoesize = formatShoeSize(self.footlength)
         self.footwidth = SV(self.height * self.footwidthfactor)
         self.toeheight = SV(self.height * self.toeheightfactor)
