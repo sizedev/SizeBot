@@ -34,7 +34,8 @@ class EvalCog(commands.Cog):
                 if waitMsg:
                     await waitMsg.delete(delay=0)
 
-        await utils.sendMessage(ctx, f"{result}")
+        for m in utils.chunkMsg(str(result)):
+            await ctx.send(m)
 
     @commandsplus.command()
     @commands.check(requireAdmin)

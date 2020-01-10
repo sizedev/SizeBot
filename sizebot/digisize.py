@@ -12,12 +12,12 @@ from sizebot.userdb import defaultheight, defaultweight
 from sizebot import utils
 
 emojis = {
-    "compare" : "<:Compare:665019546289176597>",
-    "comparebig" : "<:CompareBig:665019546847019031>",
-    "comparesmall" : "<:CompareSmall:665019546780041286>",
-    "comparesmallbig" : "<:CompareSmallBig:665019546490503180>",
-    "comparebigcenter" : "<:CompareBigCenter:665021475475947520>",
-    "comparesmallcenter" : "<:CompareSmallCenter:665021475375415306>",
+    "compare": "<:Compare:665019546289176597>",
+    "comparebig": "<:CompareBig:665019546847019031>",
+    "comparesmall": "<:CompareSmall:665019546780041286>",
+    "comparesmallbig": "<:CompareSmallBig:665019546490503180>",
+    "comparebigcenter": "<:CompareBigCenter:665021475475947520>",
+    "comparesmallcenter": "<:CompareSmallCenter:665021475375415306>",
     "blank": "<:blank:665063842866397185>"
 }
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"

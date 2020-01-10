@@ -28,7 +28,8 @@ async def error(msg):
 async def log(level, msg):
     msg = str(msg)
     print(df.formatLog(level, msg))
-    await utils.sendMessage(logChannel, msg)
+    for m in utils.chunkMsg(msg):
+        await logChannel.send(m)
 
 
 # Sync log functions (prints to console)

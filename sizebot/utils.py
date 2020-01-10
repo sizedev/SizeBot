@@ -1,8 +1,8 @@
+import discord.utils
 import pydoc
 import inspect
 import traceback
 import re
-from itertools import zip_longest
 from functools import reduce
 
 re_num = "\\d+\\.?\\d*"
@@ -63,24 +63,25 @@ def deepgetattr(obj, attr):
     return reduce(lambda o, a: getattr(o, a, None), attr.split("."), obj)
 
 
-def chunkStr(n, s, fillvalue=""):
-    """grouper(3, "ABCDEFG", "x") --> ABC DEF Gxx"""
-    args = [iter(s)] * n
-    return ("".join(chunk) for chunk in zip_longest(*args, fillvalue=fillvalue))
+def chunkStr(s, n):
+    """chunkStr(3, "ABCDEFG") --> ['ABC', 'DEF', 'G']"""
+    if s == 0:
+        return [""]
+    while len(s) > 0:
+        chunk = s[:n]
+        s = s[n:]
+        yield chunk
+
+
+def chunkMsg(m, *, maxlen=2000, prefix="```\n", suffix="\n```"):
+    m = discord.utils.escape_markdown(m)
+    for chunk in chunkStr(m, maxlen - prefix - suffix):
+        yield prefix + chunk + suffix
 
 
 def removeBrackets(s):
     s = re.sub(r"[\[\]<>]", "", s)
     return s
-
-
-async def sendMessage(dst, msg, maxlen=2000):
-    discordPrefix = "```\n"
-    discordSuffix = "\n```"
-    maxlen -= len(discordPrefix) + len(discordSuffix)
-    for msgPart in chunkStr(maxlen, msg):
-        partToSend = discordPrefix + msgPart + discordSuffix
-        await dst.send(partToSend)
 
 
 def formatTraceback(err):

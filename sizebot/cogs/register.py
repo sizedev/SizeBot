@@ -124,7 +124,8 @@ class RegisterCog(commands.Cog):
                 and reacter.id == user.id \
                 and (
                     str(reaction.emoji) == unregisterEmoji
-                    or str(reaction.emoji) == cancelEmoji)
+                    or str(reaction.emoji) == cancelEmoji
+                )
 
         try:
             reaction, user = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
