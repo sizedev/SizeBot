@@ -210,9 +210,9 @@ class PersonComparison:
 
     def toEmbed(self):
         embed = discord.Embed(title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
-                              description=(f"{emojis['compareBigCenter']} {self.big.nickname}: {self.big.height:.3mu} | {self.big.weight:.3mu}\n"
-                                           f"{emojis['compareSmallCenter']} {self.small.nickname}: {self.small.height:.3mu} | {self.small.weight:.3mu}\n"
-                                           f"{emojis['compareBigCenter']} is {self.multiplier:,.3}x taller than {emojis['compareSmallCenter']}."),
+                              description=(f"{emojis['comparebigcenter']} {self.big.nickname}: {self.big.height:.3mu} | {self.big.weight:.3mu}\n"
+                                           f"{emojis['comparesmallcenter']} {self.small.nickname}: {self.small.height:.3mu} | {self.small.weight:.3mu}\n"
+                                           f"{emojis['comparebigcenter']} is {self.multiplier:,.3}x taller than {emojis['comparesmallcenter']}."),
                               color=0x31eff9)
         embed.set_author(name=f"SizeBot {conf.version}")
         embed.set_thumbnail(url = compareicon)
@@ -234,7 +234,7 @@ class PersonComparison:
                                                          f"{emojis['comparesmall']}{self.smallToBig.fingerprintdepth:.3mu}"), inline=True)
         embed.add_field(name="Hair Width", value=(f"{emojis['comparebig']}{self.bigToSmall.hairwidth:.3mu}\n"
                                                   f"{emojis['comparesmall']}{self.smallToBig.hairwidth:.3mu}"), inline=True)
-        embed.set_footer(text=f"{emojis['comparesmall']} would have to look {self.lookdirection} {self.lookangle:.0f}° at {emojis['comparebig']}")
+        embed.set_footer(text=f"{emojis['comparesmallcenter']} would have to look {self.lookdirection} {self.lookangle:.0f}° at {emojis['comparebigcenter']}")
         return embed
 
     @property
