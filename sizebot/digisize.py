@@ -334,8 +334,9 @@ def formatShoeSize(footlength):
     if shoesizeNum > Decimal("1E15"):
         formatSpec = ".2e"
     else:
-        formatSpec = ",.1"
-    shoesize = format(roundDecimalHalf(shoesizeNum), formatSpec)
+        formatSpec = ",.1f"
+    rounded = roundDecimalHalf(shoesizeNum)
+    shoesize = format(rounded, formatSpec)
     return f"Size US {prefix}{shoesize}"
 
 
