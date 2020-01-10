@@ -16,7 +16,7 @@ class ModCog(commands.Cog):
     async def heightunits(self, ctx):
         units = "\n".join(str(u) for u in sorted(SV._units))
         embed = discord.Embed(title="Units")
-        embed.add_field(title="Height", value=units)
+        embed.add_field(name="Height", value=units)
         await ctx.send(embed=embed)
 
     @commandsplus.command()
