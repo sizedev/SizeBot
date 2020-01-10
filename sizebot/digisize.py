@@ -4,7 +4,7 @@ import math
 import discord
 
 from sizebot.conf import conf
-from sizebot.digidecimal import Decimal, roundDecimalHalf, roundDecimal
+from sizebot.digidecimal import Decimal, roundDecimalHalf, roundDecimal, trimZeroes
 from sizebot import digierror as errors
 from sizebot.digiSV import SV, WV
 from sizebot import userdb
@@ -159,13 +159,13 @@ class PersonComparison:
         self.multiplier = self.big.height / self.small.height
 
         bigToSmallUserdata = userdb.User()
-        bigToSmallUserdata.height = bigUserdata.height / self.small.multiplier
-        bigToSmallUserdata.baseweight = bigUserdata.baseweight / self.small.multiplier
+        bigToSmallUserdata.height = bigUserdata.height * self.small.viewscale
+        bigToSmallUserdata.baseweight = bigUserdata.baseweight * self.small.viewscale
         self.bigToSmall = PersonStats(bigToSmallUserdata)
 
         smallToBigUserdata = userdb.User()
-        smallToBigUserdata.height = smallUserdata.height / self.big.multiplier
-        smallToBigUserdata.baseweight = smallUserdata.baseweight / self.big.multiplier
+        smallToBigUserdata.height = smallUserdata.height * self.big.viewscale
+        smallToBigUserdata.baseweight = smallUserdata.baseweight * self.big.viewscale
         self.smallToBig = PersonStats(smallToBigUserdata)
 
         self.lookangle, self.lookdirection = look(self.small.height, self.big.height)
@@ -177,8 +177,8 @@ class PersonComparison:
         return (
             "**Comparison:**\n"
             f"{self.big.tag} is really:\n"
-            f"{printtab}Real Height: {self.big.height:.3mu} ({self.big.basemultiplier:,.3}x basesize)\n"
-            f"{printtab}Real Weight: {self.big.weight:.3mu}. ({self.big.basemultiplier ** 3:,.3}x basesize)\n"
+            f"{printtab}Real Height: {self.big.height:.3mu} ({trimZeroes(1/self.big.viewscale):,.3}x scale)\n"
+            f"{printtab}Real Weight: {self.big.weight:.3mu}. ({trimZeroes(1/(self.big.viewscale ** 3)):,.3}x scale)\n"
             f"To {self.small.tag}, {self.big.tag} looks:\n"
             f"{printtab}Height: {self.bigToSmall.height:.3mu}\n"
             f"{printtab}Weight: {self.bigToSmall.weight:.3mu}\n"
@@ -193,8 +193,8 @@ class PersonComparison:
             f"{self.big.tag} is {self.multiplier:,.3}x taller than {self.small.tag}.\n"
             "\n"
             f"{self.small.tag} is really:\n"
-            f"{printtab}Real Height: {self.small.height:.3mu} ({self.small.basemultiplier:,.3}x basesize)\n"
-            f"{printtab}Real Weight: {self.small.weight:.3mu}. ({self.small.basemultiplier ** 3:,.3}x basesize)\n"
+            f"{printtab}Real Height: {self.small.height:.3mu} ({trimZeroes(1/self.small.viewscale):,.3}x scale)\n"
+            f"{printtab}Real Weight: {self.small.weight:.3mu}. ({trimZeroes(1/(self.small.viewscale ** 3)):,.3}x scale)\n"
             f"To {self.big.tag}, {self.small.tag} looks:\n"
             f"{printtab}Height: {self.smallToBig.height:.3mu}\n"
             f"{printtab}Weight: {self.smallToBig.weight:.3mu}\n"
@@ -282,9 +282,9 @@ class PersonStats:
         self.tag = userdata.tag
         self.height = userdata.height
         self.baseheight = userdata.baseheight
-        self.basemultiplier = self.height / self.baseheight
+        self.viewscale = self.baseheight / self.height
         self.baseweight = userdata.baseweight
-        self.weight = WV(self.baseweight * self.basemultiplier ** 3)
+        self.weight = WV(self.baseweight / (self.viewscale ** 3))
         self.footlength = userdata.footlength
         if self.footlength is None:
             self.footlength = SV(self.height * self.footfactor)
@@ -296,8 +296,8 @@ class PersonStats:
         self.fingerprintdepth = SV(self.height * self.fingerprintfactor)
         self.hairwidth = SV(self.height * self.hairfactor)
 
-        self.avgheightcomp = SV(defaultheight / self.basemultiplier)
-        self.avgweightcomp = WV(defaultweight / self.basemultiplier ** 3)
+        self.avgheightcomp = SV(defaultheight * self.viewscale)
+        self.avgweightcomp = WV(defaultweight * self.viewscale ** 3)
         self.avglookdirection = "down" if self.height >= defaultheight else "up"
         # angle the smaller person must look up if they are standing half of the taller person's height away
         heightdiff = abs(userdata.height - defaultheight)
