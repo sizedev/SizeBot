@@ -347,7 +347,7 @@ class PersonStats:
 
 def formatShoeSize(footlength):
     footlengthinches = Decimal(footlength / SV.inch)
-    shoesizeNum = (3 * (footlengthinches + (Decimal(1) / Decimal(3)))) - 24
+    shoesizeNum = (3 * (footlengthinches + (Decimal(2) / Decimal(3)))) - 24
     prefix = ""
     if shoesizeNum < 1:
         prefix = "Children's "
