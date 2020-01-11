@@ -14,16 +14,16 @@ class ModCog(commands.Cog):
         self.bot = bot
 
     @commandsplus.command()
-    async def heightunits(self, ctx):
-        units = "\n".join(str(u) for u in sorted(SV._units))
-        embed = discord.Embed(title="Units")
-        for u in chunkLines(units, chunklen=1024):
-            embed.add_field(name="Height", value=u)
-        await ctx.send(embed=embed)
+    async def units(self, ctx):
+        heightunits = "\n".join(str(u) for u in sorted(SV._units))
+        weightunits = "\n".join(str(u) for u in sorted(WV._units))
 
-    @commandsplus.command()
-    async def weightunits(self, ctx):
-        await ctx.send("```" + ("\n".join(str(u) for u in sorted(WV._units))) + "```")
+        embed = discord.Embed(title="Units")
+        for u in chunkLines(heightunits, chunklen=500):
+            embed.add_field(name="Height", value=u)
+        for u in chunkLines(weightunits, chunklen=500):
+            embed.add_field(name="Weight", value=u)
+        await ctx.send(embed=embed)
 
     @commandsplus.command()
     async def help(self, ctx, what: str = None):
