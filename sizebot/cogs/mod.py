@@ -1,4 +1,5 @@
 import math
+from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -31,6 +32,7 @@ class ModCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    # TODO: Make this dynamic.
     @commandsplus.command()
     async def help(self, ctx, what: str = None):
         await ctx.message.delete(delay=0)
@@ -76,6 +78,7 @@ class ModCog(commands.Cog):
 
     @commandsplus.command()
     async def about(self, ctx):
+        now = datetime.now()
         await ctx.message.delete(delay=0)
         await ctx.send(
             "```\n"
@@ -84,13 +87,13 @@ class ModCog(commands.Cog):
         await ctx.send(
             f"<@{ctx.message.author.id}>\n"
             "***SizeBot3 by DigiDuncan***\n"
-            "*A big program for big people.*\n"
+            "*A big program for big people.*\n"  # TODO: Change this slogan.
             "**Written for** *the Size Haven server* and **adapted for** *Size Matters*\n"
             "**Slogan** *by Twitchy*\n"
             "**Additional equations** *by Benyovski and Arceus3251*\n"
             "**Coding Assistance** *by Natalie*\n"
             "**Alpha Tested** *by AWK_*\n"
-            "**Beta Tested** *by Speedbird 001, worstgender, Arceus3251*\n"
+            "**Beta Tested** *by Speedbird 001, worstgender, Arceus3251, and Kelly*\n"
             "**written in** *Python 3.7 with discord.py rewrite*\n"
             "**written with** *Atom*\n"
             "**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server*\n"
@@ -103,17 +106,17 @@ class ModCog(commands.Cog):
             "\"Um... I like it?\" -- *Goddess Syn*\n"
             "\"I am the only person who has accidentally turned my fetish into a tech support job.\" -- *DigiDuncan*\n"
             "\n"
-            f"Version {conf.version} | 19 Jul 2019")
+            f"Version {conf.version} | {now.strftime('%d %b %Y')}")
 
     @commandsplus.command()
     async def donate(self, ctx):
         await ctx.message.delete(delay=0)
         await ctx.send(
             f"<@{ctx.message.author.id}>\n"
-            "SizeBot is coded (mainly) by DigiDuncan, and for absolutely free.\n"
+            "SizeBot is coded (mainly) and hosted by DigiDuncan, and for absolutely free.\n"
             "However, if you wish to contribute to DigiDuncan directly, you can do so here:\n"
             "https://ko-fi.com/DigiDuncan\n"
-            "SizeBot has been a passion project coded over a period of two years and learning a lot of Python along the way.\n"
+            "SizeBot has been a passion project coded over a period of three years and learning a lot of Python along the way.\n"
             "Thank you so much for being here throughout this journey!")
 
     @commandsplus.command()

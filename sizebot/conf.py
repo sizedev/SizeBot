@@ -26,9 +26,7 @@ class Config:
 
         # Version
         # Release versions: major.minor.revision
-        # Testing version: major.minor.revision.YYwWWx
-        # (where w is literally a w, and where x is a letter, starting with a.)
-        self.version = "3.5.0.20w02a"
+        self.version = "3.5.0.alpha"
 
         # File paths
         datadir = getDataDir()
