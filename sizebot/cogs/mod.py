@@ -123,7 +123,7 @@ class ModCog(commands.Cog):
 
     @commandsplus.command()
     async def ping(self, ctx):
-        await ctx.send('Pong! {0}'.format(round(self.bot.latency, 1)))
+        await ctx.send('Pong! :ping_pong: {0}s'.format(round(self.bot.latency, 3)))
 
 
 def setup(bot):
