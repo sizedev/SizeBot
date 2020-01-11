@@ -62,6 +62,12 @@ def deepgetattr(obj, attr):
     return reduce(lambda o, a: getattr(o, a, None), attr.split("."), obj)
 
 
+def chunkList(lst, chunklen):
+    while lst:
+        yield lst[:chunklen]
+        lst = lst[chunklen:]
+
+
 def chunkStr(s, chunklen, prefix="", suffix=""):
     """chunkStr(3, "ABCDEFG") --> ['ABC', 'DEF', 'G']"""
     innerlen = chunklen - len(prefix) - len(suffix)

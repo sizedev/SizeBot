@@ -1,3 +1,5 @@
+import math
+
 import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
@@ -6,7 +8,7 @@ from sizebot import digilogger as logger
 from sizebot.conf import conf
 from sizebot import userdb
 from sizebot.digiSV import SV, WV
-from sizebot.utils import chunkLines
+from sizebot.utils import chunkList
 
 
 class ModCog(commands.Cog):
@@ -15,14 +17,18 @@ class ModCog(commands.Cog):
 
     @commandsplus.command()
     async def units(self, ctx):
-        heightunits = "\n".join(str(u) for u in sorted(SV._units))
-        weightunits = "\n".join(str(u) for u in sorted(WV._units))
+        heightunits = [str(u) for u in sorted(SV._units)]
+        weightunits = [str(u) for u in sorted(WV._units)]
 
         embed = discord.Embed(title="Units")
-        for u in chunkLines(heightunits, chunklen=500):
-            embed.add_field(name="Height", value=u)
-        for u in chunkLines(weightunits, chunklen=500):
-            embed.add_field(name="Weight", value=u)
+
+        for n, units in enumerate(chunkList(heightunits, math.ceil(len(heightunits) / 3))):
+
+            embed.add_field(name="Height" if n == 0 else "\u200b", value="\n".join(units))
+
+        for n, units in enumerate(chunkList(weightunits, math.ceil(len(weightunits) / 3))):
+            embed.add_field(name="Weight" if n == 0 else "\u200b", value="\n".join(units))
+
         await ctx.send(embed=embed)
 
     @commandsplus.command()
