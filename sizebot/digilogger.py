@@ -1,5 +1,3 @@
-from discord.utils import escape_markdown
-
 from sizebot import utils
 from sizebot import digiformatter as df
 
@@ -27,12 +25,10 @@ async def error(*args, **kwargs):
     await log("error", *args, **kwargs)
 
 
-async def log(level, msg, escapeMarkdown=True):
+async def log(level, msg):
     msg = str(msg)
     print(df.formatLog(level, msg))
-    if escapeMarkdown:
-        escapedMsg = escape_markdown(msg)
-    for m in utils.chunkMsg(escapedMsg, escapeMarkdown):
+    for m in utils.chunkMsg(msg.replace("```", r"\`\`\`")):
         await logChannel.send(m)
 
 

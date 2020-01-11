@@ -62,19 +62,45 @@ def deepgetattr(obj, attr):
     return reduce(lambda o, a: getattr(o, a, None), attr.split("."), obj)
 
 
-def chunkStr(s, n):
+def chunkStr(s, chunklen, prefix="", suffix=""):
     """chunkStr(3, "ABCDEFG") --> ['ABC', 'DEF', 'G']"""
-    if s == 0:
-        return [""]
+    innerlen = chunklen - len(prefix) - len(suffix)
+    if innerlen <= 0:
+        raise ValueError("Cannot fit prefix and suffix within chunklen")
+
+    if not s:
+        return prefix + s + suffix
+
     while len(s) > 0:
-        chunk = s[:n]
-        s = s[n:]
-        yield chunk
-
-
-def chunkMsg(m, *, maxlen=2000, prefix="```\n", suffix="\n```"):
-    for chunk in chunkStr(m, maxlen - len(prefix) - len(suffix)):
+        chunk = s[:innerlen]
+        s = s[innerlen:]
         yield prefix + chunk + suffix
+
+
+def chunkMsg(m):
+    return chunkStr(m, chunklen=2000, prefix="```\n", suffix="\n```")
+
+
+def chunkLines(s, chunklen):
+    """Split a string into groups of lines that don't go over the chunklen. Individual lines longer the chunklen will be split"""
+    lines = s.split("\n")
+
+    linesout = []
+    while lines:
+        linesout.append(lines.pop())
+        if len("\n".join(linesout)) > chunklen:
+            if len(linesout) == 1:
+                line = linesout.pop()
+                spitline = line[chunklen:]
+                lines.append(spitline)
+                eatline = line[:chunklen]
+                linesout.append(eatline)
+            else:
+                lines.append(linesout.pop())
+            yield "\n".join(linesout)
+            linesout = []
+    if linesout:
+        yield "\n".join(linesout)
 
 
 def removeBrackets(s):

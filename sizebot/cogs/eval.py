@@ -34,7 +34,7 @@ class EvalCog(commands.Cog):
                 if waitMsg:
                     await waitMsg.delete(delay=0)
 
-        for m in utils.chunkMsg(str(result)):
+        for m in utils.chunkMsg(str(result).replace("```", r"\`\`\`")):
             await ctx.send(m)
 
     @commandsplus.command()

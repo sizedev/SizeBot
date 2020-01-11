@@ -6,7 +6,7 @@ from sizebot import digilogger as logger
 from sizebot.conf import conf
 from sizebot import userdb
 from sizebot.digiSV import SV, WV
-from sizebot.utils import chunkMsg
+from sizebot.utils import chunkLines
 
 
 class ModCog(commands.Cog):
@@ -17,7 +17,7 @@ class ModCog(commands.Cog):
     async def heightunits(self, ctx):
         units = "\n".join(str(u) for u in sorted(SV._units))
         embed = discord.Embed(title="Units")
-        for u in chunkMsg(units, maxlen=1024, prefix="", suffix=""):
+        for u in chunkLines(units, chunklen=1024):
             embed.add_field(name="Height", value=u)
         await ctx.send(embed=embed)
 
