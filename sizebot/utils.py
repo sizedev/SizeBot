@@ -87,16 +87,14 @@ def chunkLines(s, chunklen):
 
     linesout = []
     while lines:
-        linesout.append(lines.pop())
+        linesout.append(lines.pop(0))
         if len("\n".join(linesout)) > chunklen:
             if len(linesout) == 1:
                 line = linesout.pop()
-                spitline = line[chunklen:]
-                lines.append(spitline)
-                eatline = line[:chunklen]
-                linesout.append(eatline)
+                lines.insert(0, line[chunklen:])
+                linesout.append(line[:chunklen])
             else:
-                lines.append(linesout.pop())
+                lines.insert(0, linesout.pop())
             yield "\n".join(linesout)
             linesout = []
     if linesout:
