@@ -121,6 +121,10 @@ class ModCog(commands.Cog):
         await logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
         await self.bot.get_user(conf.getId("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
 
+    @commandsplus.command()
+    async def ping(self, ctx):
+        await ctx.send('Pong! {0}'.format(round(self.bot.latency, 1)))
+
 
 def setup(bot):
     bot.add_cog(ModCog(bot))
