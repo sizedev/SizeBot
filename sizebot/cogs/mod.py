@@ -45,7 +45,7 @@ class ModCog(commands.Cog):
             name = f"[{cmd.name}|{'|'.join(cmd.aliases)}]"
         else:
             name = cmd.name
-        signature = f".{name} {cmd.signature}"
+        signature = f"{ctx.prefix}{name} {cmd.signature}"
 
         if cmd.description:
             desc = cmd.description + "\n\n" + cmd.help
@@ -55,7 +55,7 @@ class ModCog(commands.Cog):
         embed = discord.Embed(
             title=f"{signature}",
             description=desc
-        ).set_author(name=f"{name} help")
+        ).set_author(name=f"Help")
 
         await ctx.send(embed=embed)
 
