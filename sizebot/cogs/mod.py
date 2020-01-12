@@ -50,7 +50,7 @@ class ModCog(commands.Cog):
         embed = discord.Embed(
             title=f"{signature}",
             description=cmd.description or ""
-        ).set_author(title="{name} Help")
+        ).set_author(name="{name} Help")
 
         await ctx.send(embed=embed)
 
