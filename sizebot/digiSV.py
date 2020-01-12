@@ -343,15 +343,15 @@ class UnitValue(Decimal):
     def getUnitValuePair(cls, s):
         raise NotImplementedError
 
-    def toBestUnit(self, sys, *args, **kwargs):
+    def toBestUnit(self, sysname, *args, **kwargs):
         value = Decimal(self)
-        system = self._systems[sys]
+        system = self._systems[sysname]
         unit = system.getBestUnit(value)
         return unit.format(value, *args, **kwargs)
 
-    def toGoodUnit(self, sys, *args, **kwargs):
+    def toGoodUnit(self, sysname, *args, **kwargs):
         value = Decimal(self)
-        system = self._systems[sys]
+        system = self._systems[sysname]
         unit = system.getGoodUnit(value)
         return unit.format(value, *args, **kwargs)
 
