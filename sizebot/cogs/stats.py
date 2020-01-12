@@ -107,7 +107,7 @@ class StatsCog(commands.Cog):
 
         goodheight = userdata.height.toGoodUnit('o', accuracy=2, preferName=True)
         tmp = goodheight.split()
-        tmp[0] = roundDecimalFraction(Decimal(tmp[0]), 4)
+        tmp[0] = toFraction(Decimal(tmp[0]), 4)
         goodheightout = " ".join(tmp)
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or **{goodheightout}**.")
