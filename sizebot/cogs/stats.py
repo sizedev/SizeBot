@@ -113,6 +113,24 @@ class StatsCog(commands.Cog):
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or **{goodheightout}**.")
         await logger.info(f"Sent object comparison for {userdata.nickname}.")
 
+    @commandsplus.command()
+    @commands.check(guildOnly)
+    async def reversestats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
+        if memberOrHeight is None:
+            memberOrHeight = ctx.message.author
+
+        userdata = getUserdata(memberOrHeight)
+        userheight = userdata.avgheightcomp
+        compdata = getUserdata(userheight)
+
+        stats = digisize.PersonStats(compdata)
+        embedtosend = stats.toEmbed()
+        if ctx.message.author.id != userdata.id:
+            embedtosend.description = f"Reverse stats for {userdata.nickname}*\n*Requested by *{ctx.message.author.display_name}*"
+        await ctx.send(embed = embedtosend)
+
+        await logger.info(f"Stats for {memberOrHeight} sent.")
+
 
 def getUserdata(memberOrSV, nickname = "Raw"):
     if isinstance(memberOrSV, discord.Member):
