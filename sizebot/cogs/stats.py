@@ -11,7 +11,7 @@ from sizebot import userdb
 from sizebot.digiSV import SV
 from sizebot import digisize
 from sizebot.checks import guildOnly
-from sizebot.digidecimal import roundDecimalFraction, Decimal
+from sizebot.digidecimal import toFraction, Decimal
 
 
 class StatsCog(commands.Cog):
