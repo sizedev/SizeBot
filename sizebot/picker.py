@@ -10,7 +10,7 @@ def isGood(n):
 
 
 def getCloseUnitsWithLimit(val, limit, units):
-    return [u for u in units if 1 <= round(val / u.factor) <= limit and isGood(val)]
+    return [u for u in units if 1 <= round(val / u.factor) <= limit and isGood(val / u.factor)]
 
 
 def getRandomCloseUnit(val, units):
