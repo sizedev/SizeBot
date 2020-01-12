@@ -115,11 +115,14 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command()
     @commands.check(guildOnly)
-    async def reversestats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
-        if memberOrHeight is None:
-            memberOrHeight = ctx.message.author
+    async def lookat(self, ctx, what):
+        await logger.info(f"{ctx.message.author.display_name} looked at {what}.")
 
-        userdata = getUserdata(memberOrHeight)
+        if what not in ["person", "man", "average", "average person", "average man"]:
+            await ctx.send(f"Sorry, *{what}* is not a valid object.")
+            return
+
+        userdata = getUserdata(ctx.message.author)
         userstats = digisize.PersonStats(userdata)
         userheight = userstats.avgheightcomp
         compdata = getUserdata(userheight)
@@ -129,8 +132,6 @@ class StatsCog(commands.Cog):
         if ctx.message.author.id != userdata.id:
             embedtosend.description = f"Reverse stats for {userdata.nickname}*\n*Requested by *{ctx.message.author.display_name}*"
         await ctx.send(embed = embedtosend)
-
-        await logger.info(f"Stats for {memberOrHeight} sent.")
 
 
 def getUserdata(memberOrSV, nickname = "Raw"):
