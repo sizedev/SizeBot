@@ -10,9 +10,13 @@ class RollCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command()
+    @commandsplus.command(description="This description shows up first", usage="4d4 + 3d6 - 2")
     async def roll(self, ctx, *, dString):
-        """Verbose die rolling command"""
+        """Verbose die rolling command
+        
+        This command is used to roll some dice.
+        Example: .roll 4d4 + 3d6 - 2
+        """
         await logger.info(f"{ctx.message.author.display_name} rolled {dString} verbosely.")
         result = roller.roll(dString)
 
@@ -34,7 +38,7 @@ class RollCog(commands.Cog):
 
     @commandsplus.command()
     async def r(self, ctx, *, dString):
-        """Simplfied die rolling command"""
+        """Simplified die rolling command"""
         await logger.info(f"{ctx.message.author.display_name} rolled {dString} non-verbosely.")
         result = roller.roll(dString)
         await ctx.send(f"{ctx.message.author.display_name} rolled `{dString}` = **{result.total}**")
