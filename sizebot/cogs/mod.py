@@ -41,21 +41,20 @@ class ModCog(commands.Cog):
         await ctx.send(embed=embed)
 
     async def send_command_help(self, ctx, cmd):
-        if len(cmd.aliases) > 0:
-            name = f"[{cmd.name}|{'|'.join(cmd.aliases)}]"
-        else:
-            name = cmd.name
-        signature = f"{ctx.prefix}{name} {cmd.signature}"
+        signature = f"{ctx.prefix}{cmd.name} {cmd.signature}"
 
+        description = ""
         if cmd.description:
-            desc = cmd.description + "\n\n" + cmd.help
-        else:
-            desc = cmd.help
+            description += cmd.description + "\n\n"
+        description += cmd.help
 
         embed = discord.Embed(
-            title=f"{signature}",
-            description=desc
+            title=signature,
+            description=description
         ).set_author(name=f"Help")
+
+        if cmd.aliases:
+            embed.add_field(name="**Aliases:**", value=", ".join(cmd.aliases), inline=False)
 
         await ctx.send(embed=embed)
 
