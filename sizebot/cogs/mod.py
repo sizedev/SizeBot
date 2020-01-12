@@ -36,7 +36,7 @@ class ModCog(commands.Cog):
         embed = discord.Embed(title="Help")
 
         commands = sorted((c for c in bot.commands if not c.hidden), key=lambda c: c.name)
-        commandLines = "\n".join(f"{c.name} {c.short_doc}" for c in commands)
+        commandLines = "\n".join(f"{c.name} - {c.short_doc}" for c in commands)
         embed.add_field(name="Commands", value=commandLines)
         await ctx.send(embed=embed)
 
