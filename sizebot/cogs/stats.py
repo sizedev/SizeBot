@@ -11,6 +11,7 @@ from sizebot import userdb
 from sizebot.digiSV import SV
 from sizebot import digisize
 from sizebot.checks import guildOnly
+from sizebot.digidecimal import roundDecimalFraction, Decimal
 
 
 class StatsCog(commands.Cog):
@@ -104,7 +105,12 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(memberOrHeight)
 
-        await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or **{userdata.height.toGoodUnit('o', accuracy=0, preferName=True)}**.")
+        goodheight = userdata.height.toGoodUnit('o', accuracy=2, preferName=True)
+        tmp = goodheight.split()
+        tmp[0] = roundDecimalFraction(Decimal(tmp[0]), 4)
+        goodheightout = " ".join(tmp)
+
+        await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or **{goodheightout}**.")
         await logger.info(f"Sent object comparison for {userdata.nickname}.")
 
 
