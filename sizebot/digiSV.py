@@ -4,6 +4,7 @@ import collections
 from sizebot.digidecimal import Decimal, roundDecimal, trimZeroes, toFraction
 from sizebot import digierror as errors
 from sizebot.utils import removeBrackets, re_num, parseSpec, buildSpec, tryOrNone, iset
+from sizebot.picker import getRandomCloseUnit
 
 __all__ = ["Rate", "Mult", "SV", "WV", "TV"]
 
@@ -253,6 +254,13 @@ class SystemRegistry():
         # If we're too big for all the units, just use the biggest possible unit
         return self._systemunits[-1].unit
 
+    # Try to find the best fitting unit, picking the largest unit if all units are too small
+    def getGoodUnit(self, value):
+        systemunit = getRandomCloseUnit(value, self._systemunits)
+        if systemunit is None:
+            return self.getBestUnit(value)
+        return systemunit.unit
+
 
 class SystemUnit():
     """System Units"""
@@ -266,10 +274,14 @@ class SystemUnit():
         self.unit = units[self.unitname]
 
     @property
+    def factor(self):
+        return self.unit.factor
+
+    @property
     def trigger(self):
         if self._trigger is not None:
             return self._trigger
-        return self.unit.factor
+        return self.factor
 
     def __lt__(self, other):
         return self.trigger < other.trigger
@@ -330,6 +342,18 @@ class UnitValue(Decimal):
     @classmethod
     def getUnitValuePair(cls, s):
         raise NotImplementedError
+
+    def toBestUnit(self, sys, *args, **kwargs):
+        value = Decimal(self)
+        system = self._systems[sys]
+        unit = system.getBestUnit(value)
+        return unit.format(value, *args, **kwargs)
+
+    def toGoodUnit(self, sys, *args, **kwargs):
+        value = Decimal(self)
+        system = self._systems[sys]
+        unit = system.getGoodUnit(value)
+        return unit.format(value, *args, **kwargs)
 
 
 class SV(UnitValue):
@@ -465,7 +489,8 @@ class SV(UnitValue):
         Unit(factor=Decimal("0.01791"), name="dime", namePlural="dimes"),
         Unit(factor=Decimal("0.3"), name="vinyl record", namePlural="vinyl records", names=["record", "records"]),
         Unit(factor=Decimal("0.1905"), name="stair", namePlural="stairs"),
-        Unit(factor=Decimal("0.762"), name="fire hydrant", namePlural="fire hydrants", names=["hydrant", "hydrants"])
+        Unit(factor=Decimal("0.762"), name="fire hydrant", namePlural="fire hydrants", names=["hydrant", "hydrants"]),
+        Unit(factor=Decimal("0.027"), name="grape", namePlural="grapes")
     ])
     # SV systems
     _systems = {
