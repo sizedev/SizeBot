@@ -120,7 +120,8 @@ class StatsCog(commands.Cog):
             memberOrHeight = ctx.message.author
 
         userdata = getUserdata(memberOrHeight)
-        userheight = userdata.avgheightcomp
+        userstats = digisize.PersonStats(userdata)
+        userheight = userstats.avgheightcomp
         compdata = getUserdata(userheight)
 
         stats = digisize.PersonStats(compdata)
