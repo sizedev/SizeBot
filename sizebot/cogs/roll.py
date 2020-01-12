@@ -7,15 +7,23 @@ from sizebot import roller
 
 class RollCog(commands.Cog):
     """Commands for dice rolling"""
+
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(aliases=["dice", "calc"], description="This description shows up first", usage="4d4 + 3d6 - 2")
+    @commandsplus.command(
+        aliases=["dice", "calc"],
+        description="This description shows up first",
+        usage="[dice]d[sides]")
     async def roll(self, ctx, *, dString):
         """Verbose die rolling command
-        
+
         This command is used to roll some dice.
-        Example: .roll 4d4 + 3d6 - 2
+
+        You can choose to keep or drop some of the dice:
+        For example:
+            4d6d1 will roll 4 six-sided dice, and  ignore the result of the lowest die
+            5d4k2 will roll 5 4-sided dice, and keep the results of the 2 highest dice
         """
         await logger.info(f"{ctx.message.author.display_name} rolled {dString} verbosely.")
         result = roller.roll(dString)
