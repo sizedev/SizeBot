@@ -32,49 +32,41 @@ class ModCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    # TODO: Make this dynamic.
+    async def send_bot_help(self, ctx, bot):
+        embed = discord.Embed(title="Help")
+
+        commands = sorted((c for c in bot.commands if not c.hidden), key=lambda c: c.name)
+        commandLines = "\n".join(f"{c.name} {c.short_doc}" for c in commands)
+        embed.add_field(name="Commands", value=commandLines)
+        await ctx.send(embed=embed)
+
+    async def send_command_help(self, ctx, cmd):
+        if len(cmd.aliases) > 0:
+            name = f"[{cmd.name}|{'|'.join(cmd.aliases)}]"
+        else:
+            name = cmd.name
+        signature = f".{name} {cmd.signature}"
+
+        embed = discord.Embed(
+            title=f"{signature}",
+            description=cmd.description or ""
+        ).set_author(title="{name} Help")
+
+        await ctx.send(embed=embed)
+
     @commandsplus.command()
-    async def help(self, ctx, what: str = None):
-        await ctx.message.delete(delay=0)
-        if what is None:
-            await ctx.send(
-                f"<@{ctx.message.author.id}>, **Help Topics**\n"
-                "***☞*** *`[]` indicates a required parameter, `<>` indicates an optional parameter.*\n"
-                "\n"
-                "*Commands*\n"
-                "```\n"
-                "register \"[nickname]\" [Y/N]† [current height] [base height] [base weight] [U/M]†† \"<species>\"```\n"
-                "*† Indicates whether you want SizeBot to automatically set and continue to manage your nickname and sizetag.*\n"
-                "*†† Indicates which system to use for your sizetag. U = US, M = metric.*\n"
-                "```\n"
-                "unregister\n"
-                "stats <user/size>\n"
-                "change [x,/,+,-] [value]\n"
-                "setheight [height]\n"
-                "set0\n"
-                "setinf\n"
-                "setbaseheight [height]\n"
-                "setbaseweight [weight]\n"
-                "setrandomheight [minheight] [maxheight]\n"
-                "slowchange [x,/,+,-] [amount] [delay]\n"
-                "stopchange\n"
-                "roll XdY\n"
-                "changenick [nick]\n"
-                "setspecies [species]\n"
-                "clearspecies\n"
-                "setdisplay [Y/N]\n"
-                "setsystem [M/U]\n"
-                "compare [user/size 1] <user/size 2>\n"
-                "sing [string]```\n"
-                "\n"
-                "*Other Topics*\n"
-                "```\n"
-                "heightunits\n"
-                "weightunits\n"
-                "about\n"
-                "donate\n"
-                "bug\n"
-                "```\n")
+    async def help(self, ctx, cmdName: str = None):
+        bot = ctx.bot
+        if cmdName is None:
+            await self.send_bot_help(ctx, bot)
+            return
+
+        cmd = bot.all_commands.get(cmdName)
+        if cmd:
+            await self.send_command_help(ctx, cmd)
+            return
+
+        await ctx.send(f"Unrecognized command: {cmdName}")
 
     @commandsplus.command()
     async def about(self, ctx):
