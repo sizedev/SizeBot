@@ -10,7 +10,7 @@ class RollCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(description="This description shows up first", usage="4d4 + 3d6 - 2")
+    @commandsplus.command(aliases=["dice", "calc"], description="This description shows up first", usage="4d4 + 3d6 - 2")
     async def roll(self, ctx, *, dString):
         """Verbose die rolling command
         
