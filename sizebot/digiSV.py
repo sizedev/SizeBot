@@ -419,7 +419,7 @@ class Dimension(Decimal):
         system = cls._systems.get(systemname)
         if system is None:
             system = SystemRegistry(cls)
-            cls._systems = system
+            cls._systems[systemname] = system
         return system
 
 
