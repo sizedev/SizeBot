@@ -248,10 +248,7 @@ def removeCodeBlock(s):
         tmp = s.split("\n")
         del tmp[0]
         del tmp[1]
-        return "\n".join(tmp)
-    if s.startswith("```") and s.endswith("```"):
-        tmp = s.split("\n")
-        del tmp[0]
+        del tmp[-1]
         return "\n".join(tmp)
     if s.startswith("`") and s.endswith("`"):
         return s[1:-1]
