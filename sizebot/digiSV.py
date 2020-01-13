@@ -361,13 +361,22 @@ class UnitValue(Decimal):
         return unit.format(value, *args, **kwargs)
 
     @classmethod
+    async def loadFromFile(cls, filename):
+        try:
+            fileJson = json.loads(pkg_resources.read_text(units_dir, filename))
+        except FileNotFoundError:
+            await logger.error(f"Error loading {filename}")
+            return
+        cls.loadFromJson(fileJson)
+
+    @classmethod
     def loadFromJson(cls, json):
         cls._units = UnitRegistry([Unit(**u) for u in json["units"]])
         cls._systems = {
             name: SystemRegistry(cls._units, [SystemUnit(**u) for u in systemunits])
             for name, systemunits in json["systems"].items()
         }
-
+        
 
 class SV(UnitValue):
     """Size Value (length in meters)"""
@@ -444,30 +453,17 @@ class TV(UnitValue):
         return f"TV('{self}')"
 
 
-def loadUnitsFile(filename):
+def loadJsonFile(filename):
     try:
         unitsJson = json.loads(pkg_resources.read_text(units_dir, filename))
     except FileNotFoundError:
-        logger.syncerror(f"Error loading {filename}")
         unitsJson = None
     return unitsJson
 
 
-def initialize():
-    svJson = loadUnitsFile("sv.json")
-    wvJson = loadUnitsFile("wv.json")
-    tvJson = loadUnitsFile("tv.json")
+async def init():
+    await SV.loadFromFile("sv.json")
+    await WV.loadFromFile("wv.json")
+    await TV.loadFromFile("tv.json")
 
-    if svJson is not None:
-        SV.loadFromJson(svJson)
-
-    if wvJson is not None:
-        WV.loadFromJson(wvJson)
-
-    if tvJson is not None:
-        TV.loadFromJson(tvJson)
-
-    objectsJson = loadUnitsFile("objects.json")
-
-
-initialize()
+    objectsJson = loadJsonFile("objects.json")
