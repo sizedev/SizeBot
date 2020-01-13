@@ -113,9 +113,19 @@ class StatsCog(commands.Cog):
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or **{goodheightout}**.")
         await logger.info(f"Sent object comparison for {userdata.nickname}.")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["look", "examine"],
+        usage = "[object]"
+    )
     @commands.check(guildOnly)
     async def lookat(self, ctx, what):
+        """See what an object looks like to you.
+
+        Used to see how an object would look at your scale.
+        Examples:
+        &lookat man
+        &look book
+        &examine building"""
         await logger.info(f"{ctx.message.author.display_name} looked at {what}.")
 
         if what not in ["person", "man", "average", "average person", "average man"]:
