@@ -7,6 +7,7 @@ from sizebot.digidecimal import Decimal, roundDecimal, trimZeroes, toFraction
 from sizebot import digierror as errors
 from sizebot.utils import removeBrackets, re_num, parseSpec, buildSpec, tryOrNone, iset
 from sizebot.picker import getRandomCloseUnit
+import sizebot.digilogger as logger
 
 from sizebot import units as units_dir
 
@@ -370,8 +371,8 @@ class UnitValue(Decimal):
 
 class SV(UnitValue):
     """Size Value (length in meters)"""
-    _units = None
-    _systems = None
+    _units = []
+    _systems = {}
 
     @classmethod
     def getUnitValuePair(cls, s):
@@ -405,8 +406,8 @@ class SV(UnitValue):
 
 class WV(UnitValue):
     """Weight Value (mass in grams)"""
-    _units = None
-    _systems = None
+    _units = []
+    _systems = {}
 
     @classmethod
     def getUnitValuePair(cls, s):
@@ -423,8 +424,8 @@ class WV(UnitValue):
 
 class TV(UnitValue):
     """Time Value (time in seconds)"""
-    _units = None
-    _systems = None
+    _units = []
+    _systems = {}
 
     @classmethod
     def getUnitValuePair(cls, s):
@@ -441,15 +442,30 @@ class TV(UnitValue):
         return f"TV('{self}')"
 
 
-def initialize():
-    svJson = json.loads(pkg_resources.read_text(units_dir, "sv.json"))
-    wvJson = json.loads(pkg_resources.read_text(units_dir, "wv.json"))
-    tvJson = json.loads(pkg_resources.read_text(units_dir, "tv.json"))
-    objectsJson = json.loads(pkg_resources.read_text(units_dir, "objects.json"))
+def loadUnitsFile(filename):
+    try:
+        unitsJson = json.loads(pkg_resources.read_text(units_dir, filename))
+    except FileNotFoundError:
+        logger.syncerror(f"Error loading {filename}")
+        unitsJson = None
+    return unitsJson
 
-    SV.loadFromJson(svJson)
-    WV.loadFromJson(wvJson)
-    TV.loadFromJson(tvJson)
+
+def initialize():
+    svJson = loadUnitsFile("sv.json")
+    wvJson = loadUnitsFile("wv.json")
+    tvJson = loadUnitsFile("tv.json")
+
+    if svJson is not None:
+        SV.loadFromJson(svJson)
+
+    if wvJson is not None:
+        WV.loadFromJson(wvJson)
+
+    if tvJson is not None:
+        TV.loadFromJson(tvJson)
+
+    objectsJson = loadUnitsFile("objects.json")
 
 
 initialize()
