@@ -12,7 +12,7 @@ class AdminCog(commands.Cog):
     @commands.check(requireAdmin)
     async def stop(self, ctx):
         await ctx.send("Stopping SizeBot")
-        ctx.bot.close()
+        await ctx.bot.close()
 
 
 def setup(bot):
