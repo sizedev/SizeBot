@@ -106,7 +106,6 @@ class ModCog(commands.Cog):
     @commandsplus.command()
     async def about(self, ctx):
         now = datetime.now()
-        await ctx.message.delete(delay=0)
         await ctx.send(
             "```\n"
             f"{conf.banner}\n"
@@ -136,7 +135,6 @@ class ModCog(commands.Cog):
 
     @commandsplus.command()
     async def donate(self, ctx):
-        await ctx.message.delete(delay=0)
         await ctx.send(
             f"<@{ctx.message.author.id}>\n"
             "SizeBot is coded (mainly) and hosted by DigiDuncan, and for absolutely free.\n"
