@@ -11,6 +11,23 @@ from sizebot import userdb
 from sizebot.digiSV import SV, WV
 from sizebot.utils import chunkList
 
+# name
+# description
+#     The message prefixed into the default help command.
+# help = inspect.cleandoc(self.__doc__)
+#     The long help text for the command.
+# brief
+#     The short help text for the command.
+# short_doc = self.brief or help.split("\n")[0]
+#     Gets the “short” documentation of a command.
+# usage = ""
+#     A replacement for arguments in the default help text.
+# signature
+#     Returns a POSIX-like signature useful for help command output.
+# hidden = False
+#     If True, the default help command does not show this in the help output.
+# aliases = []
+
 
 class HelpCog(commands.Cog):
     def __init__(self, bot):
