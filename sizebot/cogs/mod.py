@@ -43,10 +43,12 @@ class ModCog(commands.Cog):
     async def send_command_help(self, ctx, cmd):
         signature = f"{ctx.prefix}{cmd.name} {cmd.signature}"
 
-        description = ""
+        descriptionParts = []
         if cmd.description:
-            description += cmd.description + "\n\n"
-        description += cmd.help
+            descriptionParts.append(cmd.description)
+        if cmd.help:
+            descriptionParts.append(cmd.help)
+        description = "\n\n".join(descriptionParts)
 
         embed = discord.Embed(
             title=signature,
