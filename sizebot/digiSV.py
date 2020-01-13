@@ -246,16 +246,15 @@ class UnitRegistry(collections.abc.Mapping):
 class SystemRegistry():
     """System Registry"""
 
-    def __init__(self, dimension, systemunits=[]):
+    def __init__(self, dimension):
         self.dimension = dimension
-        self._systemunits = systemunits
-
-        for sunit in self._systemunits:
-            sunit.load(self.dimension._units)
-        self._systemunits = sorted(self._systemunits)
+        self._systemunits = []
+        self.isSorted = False
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
     def getBestUnit(self, value):
+        if not self.isSorted:
+            self._systemunits.sort()
         value = abs(value)
         # Pair each unit with the unit following it
         for sunit, nextsunit in zip(self._systemunits[:-1], self._systemunits[1:]):
@@ -267,15 +266,17 @@ class SystemRegistry():
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
     def getGoodUnit(self, value):
+        if not self.isSorted:
+            self._systemunits.sort()
         systemunit = getRandomCloseUnit(value, self._systemunits)
         if systemunit is None:
             return self.getBestUnit(value)
         return systemunit.unit
 
     def addSystemUnit(self, systemunit):
+        self.isSorted = False
         self._systemunits.append(systemunit)
         systemunit.load(self.dimension._units)
-        self._systemunits = sorted(self._systemunits)
 
 
 class SystemUnit():
@@ -394,11 +395,6 @@ class Dimension(Decimal):
             for u in systemunits:
                 cls.addSystemUnitFromJson(systemname, **u)
 
-        cls._systems = {
-            name: SystemRegistry(cls._units, [SystemUnit(**u) for u in systemunits])
-            for name, systemunits in json["systems"].items()
-        }
-
     @classmethod
     def addUnitFromJson(cls, **kwargs):
         unit = Unit(**kwargs)
@@ -422,7 +418,7 @@ class Dimension(Decimal):
     def getOrAddSystem(cls, systemname):
         system = cls._systems.get(systemname)
         if system is None:
-            system = SystemRegistry()
+            system = SystemRegistry(cls)
             cls._systems = system
         return system
 
