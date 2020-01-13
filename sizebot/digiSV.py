@@ -155,7 +155,7 @@ class Unit():
 
         return formatted
 
-    def toUnitValue(self, v):
+    def toBaseUnit(self, v):
         return v * self.factor
 
     def isUnit(self, u):
@@ -186,7 +186,7 @@ class FixedUnit(Unit):
     def format(self, value, accuracy=2, spec="", preferName=False, useFractional=False):
         return self.symbol
 
-    def toUnitValue(self, v):
+    def toBaseUnit(self, v):
         return self.factor
 
 
@@ -214,15 +214,15 @@ class FeetAndInchesUnit(Unit):
     def isUnit(self, u):
         return u == ("'", "\"")
 
-    def toUnitValue(self, v):
+    def toBaseUnit(self, v):
         return None
 
 
 class UnitRegistry(collections.abc.Mapping):
     """Unit Registry"""
 
-    def __init__(self, units):
-        self._units = units
+    def __init__(self):
+        self._units = []
 
     def __getitem__(self, key):
         try:
@@ -239,14 +239,20 @@ class UnitRegistry(collections.abc.Mapping):
     def __len__(self):
         return len(self._units)
 
+    def addUnit(self, unit):
+        self._units.append(unit)
+
 
 class SystemRegistry():
     """System Registry"""
 
-    def __init__(self, units, systemunits):
-        for sunit in systemunits:
-            sunit.load(units)
-        self._systemunits = sorted(systemunits)
+    def __init__(self, dimension, systemunits=[]):
+        self.dimension = dimension
+        self._systemunits = systemunits
+
+        for sunit in self._systemunits:
+            sunit.load(self.dimension._units)
+        self._systemunits = sorted(self._systemunits)
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
     def getBestUnit(self, value):
@@ -265,6 +271,11 @@ class SystemRegistry():
         if systemunit is None:
             return self.getBestUnit(value)
         return systemunit.unit
+
+    def addSystemUnit(self, systemunit):
+        self._systemunits.append(systemunit)
+        systemunit.load(self.dimension._units)
+        self._systemunits = sorted(self._systemunits)
 
 
 class SystemUnit():
@@ -292,8 +303,8 @@ class SystemUnit():
         return self.trigger < other.trigger
 
 
-class UnitValue(Decimal):
-    """Unit Value"""
+class Dimension(Decimal):
+    """Dimension"""
 
     def __format__(self, spec):
         value = Decimal(self)
@@ -330,22 +341,22 @@ class UnitValue(Decimal):
 
     @classmethod
     def parse(cls, s):
-        value, unitStr = cls.getUnitValuePair(s)
+        value, unitStr = cls.Quantity(s)
         if value is None or unitStr is None:
             raise errors.InvalidSizeValue(s)
         value = Decimal(value)
         unit = cls._units.get(unitStr, None)
         if unit is None:
             raise errors.InvalidSizeValue(s)
-        unitValue = unit.toUnitValue(value)
-        return cls(unitValue)
+        baseUnit = unit.toBaseUnit(value)
+        return cls(baseUnit)
 
     @classmethod
     async def convert(cls, ctx, argument):
         return cls.parse(argument)
 
     @classmethod
-    def getUnitValuePair(cls, s):
+    def getQuantityPair(cls, s):
         raise NotImplementedError
 
     def toBestUnit(self, sysname, *args, **kwargs):
@@ -360,6 +371,12 @@ class UnitValue(Decimal):
         unit = system.getGoodUnit(value)
         return unit.format(value, *args, **kwargs)
 
+    def toUnit(self, sysname, unitname, *args, **kwargs):
+        value = Decimal(self)
+        system = self._systems[sysname]
+        unit = system[unitname]
+        return unit.format(value, *args, **kwargs)
+
     @classmethod
     async def loadFromFile(cls, filename):
         try:
@@ -371,21 +388,53 @@ class UnitValue(Decimal):
 
     @classmethod
     def loadFromJson(cls, json):
-        cls._units = UnitRegistry([Unit(**u) for u in json["units"]])
+        for u in json["units"]:
+            cls.addUnitFromJson(**u)
+        for systemname, systemunits in json["systems"].items():
+            for u in systemunits:
+                cls.addSystemUnitFromJson(systemname, **u)
+
         cls._systems = {
             name: SystemRegistry(cls._units, [SystemUnit(**u) for u in systemunits])
             for name, systemunits in json["systems"].items()
         }
 
+    @classmethod
+    def addUnitFromJson(cls, **kwargs):
+        unit = Unit(**kwargs)
+        cls.addUnit(unit)
 
-class SV(UnitValue):
+    @classmethod
+    def addUnit(cls, unit):
+        cls._units.addUnit(unit)
+
+    @classmethod
+    def addSystemUnitFromJson(cls, systemname, **kwargs):
+        systemunit = SystemUnit(**kwargs)
+        cls.addSystemUnit(cls, systemname, systemunit)
+
+    @classmethod
+    def addSystemUnit(cls, systemname, systemunit):
+        system = cls.getOrAddSystem(systemname)
+        system.addSystemUnit(systemunit)
+
+    @classmethod
+    def getOrAddSystem(cls, systemname):
+        system = cls._systems.get(systemname)
+        if system is None:
+            system = SystemRegistry()
+            cls._systems = system
+        return system
+
+
+class SV(Dimension):
     """Size Value (length in meters)"""
-    _units = []
+    _units = UnitRegistry()
     _systems = {}
     infinity = Decimal("8.79848e53")
 
     @classmethod
-    def getUnitValuePair(cls, s):
+    def getQuantityPair(cls, s):
         s = removeBrackets(s)
         s = cls.isFeetAndInchesAndIfSoFixIt(s)
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*) *(?P<unit>[a-zA-Z\'\" ]+)", s)
@@ -414,14 +463,14 @@ class SV(UnitValue):
         return f"SV('{self}')"
 
 
-class WV(UnitValue):
+class WV(Dimension):
     """Weight Value (mass in grams)"""
-    _units = []
+    _units = UnitRegistry()
     _systems = {}
     infinity = Decimal("3.4e84")
 
     @classmethod
-    def getUnitValuePair(cls, s):
+    def getQuantityPair(cls, s):
         s = removeBrackets(s)
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*) *(?P<unit>[a-zA-Z\'\"]+)", s)
         value, unit = None, None
@@ -433,13 +482,13 @@ class WV(UnitValue):
         return f"WV('{self}')"
 
 
-class TV(UnitValue):
+class TV(Dimension):
     """Time Value (time in seconds)"""
-    _units = []
+    _units = UnitRegistry()
     _systems = {}
 
     @classmethod
-    def getUnitValuePair(cls, s):
+    def getQuantityPair(cls, s):
         s = removeBrackets(s)
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z]+)", s)
         value, unit = None, None
