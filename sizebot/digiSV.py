@@ -373,6 +373,7 @@ class SV(UnitValue):
     """Size Value (length in meters)"""
     _units = []
     _systems = {}
+    infinity = Decimal("8.79848e53")
 
     @classmethod
     def getUnitValuePair(cls, s):
@@ -408,6 +409,7 @@ class WV(UnitValue):
     """Weight Value (mass in grams)"""
     _units = []
     _systems = {}
+    infinity = Decimal("8.79848e53")
 
     @classmethod
     def getUnitValuePair(cls, s):
@@ -426,6 +428,7 @@ class TV(UnitValue):
     """Time Value (time in seconds)"""
     _units = []
     _systems = {}
+    infinity = Decimal("3.4e84")
 
     @classmethod
     def getUnitValuePair(cls, s):
