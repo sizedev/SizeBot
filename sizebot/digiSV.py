@@ -376,7 +376,7 @@ class UnitValue(Decimal):
             name: SystemRegistry(cls._units, [SystemUnit(**u) for u in systemunits])
             for name, systemunits in json["systems"].items()
         }
-        
+
 
 class SV(UnitValue):
     """Size Value (length in meters)"""
