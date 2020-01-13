@@ -1,0 +1,89 @@
+{
+    "units": [
+        {
+            "factor": "1e0",
+            "symbol": "s",
+            "name": "second",
+            "namePlural": "seconds",
+            "symbols": [
+                "sec"
+            ]
+        },
+        {
+            "factor": "6e1",
+            "symbol": "m",
+            "name": "minute",
+            "namePlural": "minutes",
+            "symbols": [
+                "min"
+            ]
+        },
+        {
+            "factor": "3.6e3",
+            "symbol": "h",
+            "name": "hour",
+            "namePlural": "hours",
+            "symbols": [
+                "hr"
+            ]
+        },
+        {
+            "factor": "8.64e4",
+            "symbol": "d",
+            "name": "day",
+            "namePlural": "days",
+            "symbols": [
+                "dy"
+            ]
+        },
+        {
+            "factor": "6.048e5",
+            "symbol": "w",
+            "name": "week",
+            "namePlural": "weeks",
+            "symbols": [
+                "wk"
+            ]
+        },
+        {
+            "factor": "2.592e6",
+            "name": "month",
+            "namePlural": "months"
+        },
+        {
+            "factor": "3.1536e7",
+            "symbol": "y",
+            "name": "year",
+            "namePlural": "years",
+            "symbols": [
+                "a",
+                "yr"
+            ]
+        }
+    ],
+    "systems": {
+        "m": [
+            {
+                "unit": "seconds"
+            },
+            {
+                "unit": "minutes"
+            },
+            {
+                "unit": "hours"
+            },
+            {
+                "unit": "days"
+            },
+            {
+                "unit": "weeks"
+            },
+            {
+                "unit": "months"
+            },
+            {
+                "unit": "years"
+            }
+        ]
+    }
+}
