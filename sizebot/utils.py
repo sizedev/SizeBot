@@ -241,3 +241,13 @@ def minmax(first, second):
     if small > big:
         small, big = big, small
     return small, big
+
+
+def removeCodeBlock(s):
+    if s.startswith("```") and s.endswith("```"):
+        tmp = s.split("\n")
+        del tmp[0]
+        return "\n".join(tmp)
+    if s.startswith("`") and s.endswith("`"):
+        return s[1:-1]
+    return s

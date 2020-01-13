@@ -18,9 +18,24 @@ class StatsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["stat"],
+        usage = "<user/height>"
+    )
     @commands.check(guildOnly)
     async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
+        """User stats command.
+
+        Get tons of user stats about yourself, a user, or a raw height.
+        Stats: current height, current weight, base height, base weight,
+        foot length, foot width, toe height, pointer finger length, thumb width,
+        fingerprint depth, hair width, multiplier.
+
+        Examples:
+        `&stats` (defaults to stats about you.)
+        `&stats @User`
+        `&stats 10ft`
+        """
         if memberOrHeight is None:
             memberOrHeight = ctx.message.author
 
@@ -34,9 +49,23 @@ class StatsCog(commands.Cog):
 
         await logger.info(f"Stats for {memberOrHeight} sent.")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<user or height>"
+    )
     @commands.check(guildOnly)
     async def statstxt(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
+        """User stats command, raw text version.
+
+        Get tons of user stats about yourself, a user, or a raw height.
+        Stats: current height, current weight, base height, base weight,
+        foot length, foot width, toe height, pointer finger length, thumb width,
+        fingerprint depth, hair width, multiplier.
+
+        Examples:
+        `&statstxt` (defaults to stats about you.)
+        `&statstxt @User`
+        `&statstxt 10ft`
+        """
         if memberOrHeight is None:
             memberOrHeight = ctx.message.author
 
@@ -97,9 +126,14 @@ class StatsCog(commands.Cog):
         else:
             raise error
 
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["objectcompare", "objcomp"],
+        usage = ""
+    )
     @commands.check(guildOnly)
     async def objcompare(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
+        """See how tall you are in comparison to an object.
+        """
         if memberOrHeight is None:
             memberOrHeight = ctx.message.author
 
@@ -123,9 +157,9 @@ class StatsCog(commands.Cog):
 
         Used to see how an object would look at your scale.
         Examples:
-        &lookat man
-        &look book
-        &examine building"""
+        `&lookat man`
+        `&look book`
+        `&examine building`"""
         await logger.info(f"{ctx.message.author.display_name} looked at {what}.")
 
         if what not in ["person", "man", "average", "average person", "average man"]:

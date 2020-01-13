@@ -6,6 +6,7 @@ from sizebot import utils
 from sizebot import digilogger as logger
 from sizebot.checks import requireAdmin
 from sizebot.digieval import runEval
+from sizebot.utils import removeCodeBlock
 
 
 class EvalCog(commands.Cog):
@@ -15,6 +16,8 @@ class EvalCog(commands.Cog):
     @commandsplus.command()
     @commands.check(requireAdmin)
     async def eval(self, ctx, *, evalStr):
+        evalStr = removeCodeBlock(evalStr)
+
         await logger.info(f"{ctx.message.author.display_name} tried to eval {evalStr!r}.")
 
         # Show user that bot is busy doing something
@@ -41,6 +44,8 @@ class EvalCog(commands.Cog):
     @commands.check(requireAdmin)
     async def evil(self, ctx, *, evalStr):
         await ctx.message.delete(delay = 0)
+
+        evalStr = removeCodeBlock(evalStr)
 
         await logger.info(f"{ctx.message.author.display_name} tried to quietly eval {evalStr!r}.")
 
