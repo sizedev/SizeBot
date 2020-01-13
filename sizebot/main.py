@@ -20,7 +20,7 @@ initial_extensions = [
     "sizebot.cogs.banned",
     "sizebot.cogs.eval",
     "sizebot.cogs.errorhandler",
-    "sizebot.cogs.admin"    
+    "sizebot.cogs.admin"
 ]
 
 
