@@ -10,7 +10,7 @@ from sizebot.conf import conf
 initial_extensions = [
     "sizebot.cogs.change",
     "sizebot.cogs.fun",
-    "sizebot.cogs.mod",
+    "sizebot.cogs.help",
     "sizebot.cogs.monika",
     "sizebot.cogs.register",
     "sizebot.cogs.roll",
@@ -19,7 +19,8 @@ initial_extensions = [
     "sizebot.cogs.winks",
     "sizebot.cogs.banned",
     "sizebot.cogs.eval",
-    "sizebot.cogs.errorhandler"
+    "sizebot.cogs.errorhandler",
+    "sizebot.cogs.admin"    
 ]
 
 
