@@ -257,3 +257,17 @@ def removeCodeBlock(s):
     if s.startswith("`") and s.endswith("`"):
         return s[1:-1]
     return s
+
+
+def removeCodeBlockByNatalie(s):
+    re_codeblock = re.compile(r"^\s*```(.*)```\s*$", re.DOTALL)
+    s_nocodeblock = re.sub(re_codeblock, r"\1", s)
+    if s_nocodeblock != s:
+        return s_nocodeblock
+
+    re_miniblock = re.compile(r"^\s*`(.*)`\s*$", re.DOTALL)
+    s_nominiblock = re.sub(re_miniblock, r"\1", s)
+    if s_nominiblock != s:
+        return s_nominiblock
+
+    return s
