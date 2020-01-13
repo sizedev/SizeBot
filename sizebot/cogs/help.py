@@ -12,7 +12,7 @@ from sizebot.digiSV import SV, WV
 from sizebot.utils import chunkList
 
 
-class ModCog(commands.Cog):
+class HelpCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -32,7 +32,7 @@ class ModCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    async def send_bot_help(self, ctx, bot):
+    async def send_bot_help(self, ctx):
         """Sends help summary
 
         Help
@@ -46,7 +46,7 @@ class ModCog(commands.Cog):
 
         embed = discord.Embed(title="Help")
 
-        commands = sorted((c for c in bot.commands if not c.hidden), key=lambda c: c.name)
+        commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
         commandLines = "\n".join(c.name + (f" - {c.short_doc}" if c.short_doc else "") for c in commands)
         embed.add_field(name="Commands", value=commandLines)
         await ctx.send(embed=embed)
@@ -154,4 +154,4 @@ class ModCog(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(ModCog(bot))
+    bot.add_cog(HelpCog(bot))
