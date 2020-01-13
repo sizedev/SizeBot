@@ -407,7 +407,7 @@ class Dimension(Decimal):
     @classmethod
     def addSystemUnitFromJson(cls, systemname, **kwargs):
         systemunit = SystemUnit(**kwargs)
-        cls.addSystemUnit(cls, systemname, systemunit)
+        cls.addSystemUnit(systemname, systemunit)
 
     @classmethod
     def addSystemUnit(cls, systemname, systemunit):
