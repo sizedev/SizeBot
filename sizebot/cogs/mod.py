@@ -84,8 +84,13 @@ class ModCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commandsplus.command()
+    @commandsplus.command(description="[description]", usage="[usage]", aliases=["helpme", "wtf"])
     async def help(self, ctx, cmdName: str = None):
+        """[cmd.help[0]]
+
+        [cmd.help[2]]
+        [cmd.help[3]]
+        """
         bot = ctx.bot
         if cmdName is None:
             await self.send_bot_help(ctx, bot)
