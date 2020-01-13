@@ -448,26 +448,28 @@ def loadUnitsFile(filename):
     try:
         unitsJson = json.loads(pkg_resources.read_text(units_dir, filename))
     except FileNotFoundError:
-        logger.syncerror(f"Error loading {filename}")
         unitsJson = None
     return unitsJson
 
 
-def initialize():
+async def init():
     svJson = loadUnitsFile("sv.json")
     wvJson = loadUnitsFile("wv.json")
     tvJson = loadUnitsFile("tv.json")
 
     if svJson is not None:
         SV.loadFromJson(svJson)
+    else:
+        await logger.error(f"Error loading sv.json")
 
     if wvJson is not None:
-        WV.loadFromJson(wvJson)
+        await WV.loadFromJson(wvJson)
+    else:
+        logger.error(f"Error loading wv.json")
 
     if tvJson is not None:
-        TV.loadFromJson(tvJson)
+        await TV.loadFromJson(tvJson)
+    else:
+        logger.error(f"Error loading tv.json")
 
     objectsJson = loadUnitsFile("objects.json")
-
-
-initialize()

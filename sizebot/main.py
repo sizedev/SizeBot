@@ -3,6 +3,7 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 
+from sizebot import digiSV
 from sizebot import digilogger as logger
 from sizebot import digiformatter as df
 from sizebot.conf import conf
@@ -37,6 +38,7 @@ def main():
     async def on_first_ready():
         logChannel = bot.get_channel(conf.logchannelid)
         logger.init(logChannel)
+        await digiSV.init()
 
         df.createLogLevel("banner", fgval="orange_red_1", bgval="deep_sky_blue_4b", attrval="bold")
         df.createLogLevel("login", fgval="cyan")
