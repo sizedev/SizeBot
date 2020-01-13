@@ -260,7 +260,7 @@ def removeCodeBlock(s):
 
 
 def removeCodeBlockByNatalie(s):
-    re_codeblock = re.compile(r"^\s*```(.*)```\s*$", re.DOTALL)
+    re_codeblock = re.compile(r"^\s*```(?:python)?(.*)```\s*$", re.DOTALL)
     s_nocodeblock = re.sub(re_codeblock, r"\1", s)
     if s_nocodeblock != s:
         return s_nocodeblock
