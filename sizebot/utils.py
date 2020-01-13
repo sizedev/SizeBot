@@ -244,22 +244,6 @@ def minmax(first, second):
 
 
 def removeCodeBlock(s):
-    if s.startswith("```") and s.endswith("\n```"):
-        tmp = s.split("\n")
-        del tmp[0]
-        del tmp[-1]
-        return "\n".join(tmp)
-    if s.startswith("```") and s.endswith("```"):
-        tmp = s.split("\n")
-        del tmp[0]
-        tmp[-1] = tmp[-1][:-3]
-        return "\n".join(tmp)
-    if s.startswith("`") and s.endswith("`"):
-        return s[1:-1]
-    return s
-
-
-def removeCodeBlockByNatalie(s):
     re_codeblock = re.compile(r"^\s*```(?:python)?(.*)```\s*$", re.DOTALL)
     s_nocodeblock = re.sub(re_codeblock, r"\1", s)
     if s_nocodeblock != s:
