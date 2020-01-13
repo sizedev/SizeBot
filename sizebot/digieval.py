@@ -61,7 +61,7 @@ def getEvalGlobals():
 
 def buildEvalWrapper(evalStr, addReturn = True):
     """Build a wrapping async function that lets the eval command run multiple lines, and return the result of the last line"""
-    evalLines = evalStr.split("\n")
+    evalLines = evalStr.rstrip().split("\n")
     if evalLines[-1].startswith(" "):
         addReturn = False
     if addReturn:
