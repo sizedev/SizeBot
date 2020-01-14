@@ -49,7 +49,7 @@ class HelpCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    async def send_bot_help(self, ctx):
+    async def send_summary_help(self, ctx):
         """Sends help summary
 
         Help
@@ -110,7 +110,7 @@ class HelpCog(commands.Cog):
         """
         bot = ctx.bot
         if cmdName is None:
-            await self.send_bot_help(ctx, bot)
+            await self.send_summary_help(ctx)
             return
 
         cmd = bot.all_commands.get(cmdName)
