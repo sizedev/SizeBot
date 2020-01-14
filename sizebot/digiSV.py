@@ -195,9 +195,9 @@ class FeetAndInchesUnit(Unit):
     hidden = True
 
     def __init__(self):
-        inch = Decimal("0.0254")
-        foot = inch * Decimal("12")
-        self.factor = foot
+        self.inch = Decimal("0.0254")
+        self.foot = self.inch * Decimal("12")
+        self.factor = self.foot
 
     def format(self, value, accuracy=2, spec="", preferName=False, useFractional=False):
         inchval = value / self.inch                  # convert to inches
