@@ -7,6 +7,7 @@ from sizebot import digiSV, digiobj
 from sizebot import digilogger as logger
 from sizebot import digiformatter as df
 from sizebot.conf import conf
+from sizebot import status
 
 initial_extensions = [
     "sizebot.cogs.change",
@@ -56,6 +57,7 @@ def main():
         launchfinishtime = datetime.now()
         elapsed = launchfinishtime - launchtime
         await logger.debug(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.\n")
+        status.ready()
 
     async def on_reconnect_ready():
         await logger.error("SizeBot has been reconected to Discord.")
@@ -80,6 +82,7 @@ def main():
     @bot.event
     async def on_disconnect():
         logger.syncerror("SizeBot has been disconnected from Discord!")
+        status.stopping()
 
     if not conf.authtoken:
         logger.syncerror(f"Authentication token not found")
