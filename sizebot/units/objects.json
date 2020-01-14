@@ -606,10 +606,10 @@
         "name": "fridge",
         "length": "1.7399",
         "weight": "136078",
-        "namePlural": "fridge",
+        "namePlural": "fridges",
         "names": [
-            "fridge",
-            "fridges"
+            "refrigerator",
+            "refigerator"
         ]
     },
     {
@@ -625,7 +625,7 @@
         "name": "bed",
         "length": "2.032",
         "weight": "73028.4",
-        "namePlural": "bed",
+        "namePlural": "beds",
         "names": [
             "bed",
             "beds"
@@ -830,6 +830,53 @@
         "names": [
             "washington",
             "washgintons"
+        ]
+    },
+    {
+        "name": "bowling alley",
+        "length": "18.288",
+        "namePlural": "bowling alleys"
+    },
+    {
+        "name": "double decker bus",
+        "length": "4.5",
+        "weight": "25885610",
+        "namePlural": "double decker buses",
+        "names": [
+            "bus",
+            "buses",
+            "double-decker bus",
+            "double-decker buses"
+        ]
+    },
+    {
+        "name": "ferris wheel",
+        "length": "100",
+        "weight": "7257480"
+    },
+    {
+        "name": "Grand Canyon",
+        "length": "1828.8",
+        "namePlural": "Grand Canyons",
+        "names": [
+            "canyon",
+            "canyons"
+        ]
+    },
+    {
+        "name": "redwood tree",
+        "length": "60.96",
+        "weight": "725747792",
+        "namePlural": "redwood trees"
+    },
+    {
+        "name": "humpback whale",
+        "length": "16",
+        "weight": "30000000",
+        "namePlural": "humpback whales",
+        "names": [
+            "whale",
+            "whales"
         ]
     }
 ]
