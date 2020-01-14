@@ -136,6 +136,7 @@ class User:
         return {
             "id": self.id,
             "nickname": self.nickname,
+            "gender": self.gender,
             "display": self.display,
             "height": str(self.height),
             "baseheight": str(self.baseheight),
@@ -151,6 +152,7 @@ class User:
         userdata = User()
         userdata.id = jsondata["id"]
         userdata.nickname = jsondata["nickname"]
+        userdata.gender = jsondata.get("gender")
         userdata.display = jsondata["display"]
         userdata.height = jsondata["height"]
         userdata.baseheight = jsondata["baseheight"]
