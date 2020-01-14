@@ -1,5 +1,6 @@
 import json
 
+from sizebot.digidecimal import Decimal
 from sizebot.conf import conf
 from sizebot import digierror as errors
 from sizebot.digiSV import SV, WV
@@ -68,6 +69,10 @@ class User:
     def baseweight(self, value):
         self._baseweight = WV(utils.clamp(0, WV(value), WV.infinity))
 
+    @property
+    def weight(self):
+        return self.baseweight * (self.viewscale ** Decimal("3"))
+
     # Check that unitsystem is valid and lowercase
     @property
     def unitsystem(self):
@@ -79,6 +84,11 @@ class User:
         if value not in ["m", "u"]:
             raise ValueError(f"Invalid unitsystem: '{value}'")
         self._unitsystem = value
+
+    @property
+    def viewscale(self):
+        """How scaled up the world looks to this user"""
+        return self.baseheight / self.height
 
     @property
     def tag(self):
