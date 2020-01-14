@@ -189,7 +189,7 @@ class PersonComparison:
             f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:.3mu}\n"
             f"\tHair Width: {self.bigToSmall.hairwidth:.3mu}\n"
             "\n"
-            f"{self.big.tag} is {fixZeroes(self.multiplier)}x taller than {self.small.tag}.\n"
+            f"{self.big.tag} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.tag}.\n"
             "\n"
             f"{self.small.tag} is really:\n"
             f"\tReal Height: {self.small.height:.3mu} ({fixZeroes(1/self.small.viewscale):,.3}x scale)\n"
@@ -258,7 +258,7 @@ class PersonComparison:
             f"{emojis['comparesmall']}{self.smallToBig.hairwidth:.3mu}"), inline=True)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
-            f"{self.big.nickname} is {fixZeroes(self.multiplier)}x taller than {self.small.nickname}."))
+            f"{self.big.nickname} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.nickname}."))
         return embed
 
     @property
