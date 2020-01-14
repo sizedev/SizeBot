@@ -283,7 +283,7 @@ class PersonStats:
         self.baseheight = userdata.baseheight
         self.viewscale = self.baseheight / self.height
         self.baseweight = userdata.baseweight
-        self.weight = WV(self.baseweight / (self.viewscale ** 3))
+        self.weight = userdata.weight
         if userdata.footlength is None:
             self.footlength = SV(self.height * self.footfactor)
         else:
