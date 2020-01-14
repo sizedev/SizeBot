@@ -78,6 +78,13 @@ class User:
             raise ValueError(f"Unrecognized gender: '{value}'")
 
     @property
+    def autogender(self):
+        if self.gender:
+            return self.gender
+        # TODO: Search the roles for a gender.
+        return "male"
+
+    @property
     def baseweight(self):
         return self._baseweight
 
