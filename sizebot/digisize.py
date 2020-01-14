@@ -264,10 +264,18 @@ class PersonComparison:
     @property
     def url(self):
         safeSmallNick = quote(self.small.nickname, safe=" ").replace(" ", "-")
+        smallGender = "male"
         smallCm = roundDecimal(self.small.height * 100, 1)
         safeBigNick = quote(self.big.nickname, safe=" ").replace(" ", "-")
+        bigGender = "male"
         bigCm = roundDecimal(self.big.height * 100, 1)
-        compUrl = f"http://www.mrinitialman.com/OddsEnds/Sizes/compsizes.xhtml?{safeSmallNick}~male~{smallCm}_{safeBigNick}~male~{bigCm}"
+
+        if safeSmallNick.lower() in ["natalie", "kelly"]:
+            smallGender = "female"
+        if safeBigNick.lower() in ["natalie", "kelly"]:
+            bigGender = "female"
+
+        compUrl = f"http://www.mrinitialman.com/OddsEnds/Sizes/compsizes.xhtml?{safeSmallNick}~{smallGender}~{smallCm}_{safeBigNick}~{bigGender}~{bigCm}"
         return compUrl
 
 
