@@ -1,10 +1,835 @@
 [
     {
+        "name": "E. coli",
+        "length": "0.000007",
+        "weight": "1e-12",
+        "namePlural": "E. coli"
+    },
+    {
+        "name": "human hair",
+        "length": "0.00005",
+        "weight": "0.00062",
+        "namePlural": "hair widths",
+        "names": [
+            "hair"
+        ]
+    },
+    {
+        "name": "thickness of a sheet of paper",
+        "length": "0.0001",
+        "namePlural": "thicknesses of a sheet of paper"
+    },
+    {
+        "name": "font point",
+        "length": "0.000352778",
+        "namePlural": "font points"
+    },
+    {
+        "name": "grain of sand",
+        "length": "0.001",
+        "weight": "0.00005",
+        "namePlural": "grains of sand",
+        "names": [
+            "sand"
+        ]
+    },
+    {
+        "name": "pinhead",
+        "length": "0.002",
+        "namePlural": "pinheads"
+    },
+    {
+        "name": "drop of water",
+        "length": "0.002",
+        "weight": "0.05",
+        "namePlural": "drops of water",
+        "names": [
+            "water drops",
+            "water drop",
+            "drop",
+            "drops"
+        ]
+    },
+    {
+        "name": "grain of rice",
+        "length": "0.006",
+        "weight": "0.029",
+        "namePlural": "grains of rice",
+        "names": [
+            "rive grains",
+            "rive grain",
+            "grain",
+            "grains",
+            "rice"
+        ]
+    },
+    {
+        "name": "lego brick",
+        "length": "0.0096",
+        "weight": "1.152",
+        "namePlural": "lego bricks",
+        "names": [
+            "lego",
+            "legos"
+        ]
+    },
+    {
+        "name": "staple",
+        "length": "0.01",
+        "weight": "0.0323995",
+        "namePlural": "staples"
+    },
+    {
+        "name": "ant",
+        "length": "0.01",
+        "weight": "0.0025",
+        "namePlural": "ants"
+    },
+    {
+        "name": "keyboard key",
+        "length": "0.015",
+        "weight": "0.91",
+        "namePlural": "keyboard keys"
+    },
+    {
+        "name": "fruit loop",
+        "length": "0.015",
+        "weight": "0.24",
+        "namePlural": "fruit loops"
+    },
+    {
+        "name": "MicroSD card",
+        "length": "0.015",
+        "weight": "0.25",
+        "namePlural": "MicroSD cards"
+    },
+    {
+        "name": "dime",
+        "length": "0.01791",
+        "weight": "2.268",
+        "namePlural": "dimes"
+    },
+    {
+        "name": "USB dongle",
+        "length": "0.019",
+        "weight": "1.77",
+        "namePlural": "USB dongles",
+        "names": [
+            "Logitech USB",
+            "Logitech USBs",
+            "dongle",
+            "dongles"
+        ]
+    },
+    {
+        "name": "scotch tape width",
+        "length": "0.01905",
+        "namePlural": "Scotch tape widths",
+        "names": [
+            "tape width",
+            "tape widths"
+        ]
+    },
+    {
+        "name": "penny",
+        "length": "0.01905",
+        "weight": "2.5",
+        "namePlural": "pennies"
+    },
+    {
+        "name": "dice",
+        "length": "0.02",
+        "weight": "3.714285",
+        "names": [
+            "die"
+        ]
+    },
+    {
+        "name": "push pin",
+        "length": "0.023",
+        "weight": "0.41",
+        "namePlural": "push pins"
+    },
+    {
+        "name": "quarter",
+        "length": "0.02426",
+        "weight": "5.67",
+        "namePlural": "quarters"
+    },
+    {
+        "name": "piece of popcorn",
+        "length": "0.025",
+        "weight": "0.19",
+        "namePlural": "pieces of popcorn",
+        "names": [
+            "popcorn",
+            "popcorns"
+        ]
+    },
+    {
+        "name": "safety pin",
+        "length": "0.028575",
+        "weight": "0.31",
+        "namePlural": "safety pins"
+    },
+    {
+        "name": "bottlecap",
+        "length": "0.029718",
+        "weight": "2",
+        "namePlural": "bottlecaps",
+        "names": [
+            "cap",
+            "caps"
+        ]
+    },
+    {
+        "name": "SD card",
+        "length": "0.032",
+        "weight": "2",
+        "namePlural": "SD cards"
+    },
+    {
+        "name": "pin",
+        "length": "0.034",
+        "weight": "28.3495",
+        "namePlural": "pins",
+        "names": [
+            "needle",
+            "needles",
+            "sewing needle",
+            "sewing needles"
+        ]
+    },
+    {
+        "name": "paperclip",
+        "length": "0.034925",
+        "weight": "0.5",
+        "namePlural": "paperclips"
+    },
+    {
+        "name": "tea light",
+        "length": "0.038",
+        "weight": "9.071847",
+        "namePlural": "tea lights"
+    },
+    {
+        "name": "poker chip",
+        "length": "0.039",
+        "weight": "10",
+        "namePlural": "poker chips"
+    },
+    {
+        "name": "lego minifig",
+        "length": "0.04",
+        "weight": "3",
+        "namePlural": "lego minifigs",
+        "names": [
+            "minifig",
+            "minifigs"
+        ]
+    },
+    {
+        "name": "golf ball",
+        "length": "0.04267",
+        "weight": "45.93",
+        "namePlural": "golf balls"
+    },
+    {
+        "name": "door key",
+        "length": "0.045",
+        "weight": "14",
+        "namePlural": "door keys",
+        "names": [
+            "key",
+            "keys"
+        ]
+    },
+    {
+        "name": "duct tape width",
+        "length": "0.049",
+        "namePlural": "duct tape widths"
+    },
+    {
+        "name": "AA battery",
+        "length": "0.049784",
+        "weight": "31",
+        "namePlural": "AA batteries",
+        "names": [
+            "battery",
+            "batteries"
+        ]
+    },
+    {
+        "name": "hairpin",
+        "length": "0.0508",
+        "weight": "0.70873808",
+        "namePlural": "hairpins",
+        "names": [
+            "bobby pin",
+            "bobby pins"
+        ]
+    },
+    {
+        "name": "bullet vibe",
+        "length": "0.053",
+        "weight": "45.3592",
+        "namePlural": "bullet vibes"
+    },
+    {
+        "name": "egg",
+        "length": "0.05312",
+        "weight": "48.1942",
+        "namePlural": "eggs"
+    },
+    {
+        "name": "flash drive",
+        "length": "0.0568",
+        "weight": "5.102914",
+        "namePlural": "flash drives",
+        "names": [
+            "USB stick",
+            "USB sticks",
+            "thumb drive",
+            "thumb drives"
+        ]
+    },
+    {
+        "name": "Rubik's cube",
+        "length": "0.057",
+        "weight": "84.6",
+        "namePlural": "Rubik's cubes"
+    },
+    {
+        "name": "Zippo lighter",
+        "length": "0.060325",
+        "weight": "56.699",
+        "namePlural": "Zippo lighters",
+        "names": [
+            "lighter",
+            "lighters"
+        ]
+    },
+    {
+        "name": "toothpick",
+        "length": "0.065",
+        "weight": "0.1",
+        "namePlural": "toothpicks"
+    },
+    {
+        "name": "baseball",
+        "length": "0.0745",
+        "weight": "149",
+        "namePlural": "baseballs"
+    },
+    {
+        "name": "apple",
+        "length": "0.075",
+        "weight": "85",
+        "namePlural": "apples"
+    },
+    {
+        "name": "Q-tip",
+        "length": "0.076",
+        "weight": "0.408233133",
+        "namePlural": "Q-tips",
+        "names": [
+            "cotton swab",
+            "swab",
+            "cotton swabs",
+            "swabs"
+        ]
+    },
+    {
+        "name": "Post-it note",
+        "length": "0.0762",
+        "weight": "0.015",
+        "namePlural": "Post-it notes"
+    },
+    {
+        "name": "band-aid",
+        "length": "0.0762",
+        "weight": "0.48194189",
+        "namePlural": "band-aids",
+        "names": [
+            "bandage",
+            "bandages"
+        ]
+    },
+    {
         "name": "credit card",
-        "namePlural": "credit cards",
-        "height": "5.395e-2",
-        "width": "8.56e-2",
-        "depth": "7.6e-4",
-        "weight": "5"
+        "length": "0.0856",
+        "weight": "5",
+        "namePlural": "credit cards"
+    },
+    {
+        "name": "playing card",
+        "length": "0.088",
+        "weight": "1.8",
+        "namePlural": "playing cards",
+        "names": [
+            "card",
+            "card"
+        ]
+    },
+    {
+        "name": "crayon",
+        "length": "0.092075",
+        "weight": "5",
+        "namePlural": "crayons"
+    },
+    {
+        "name": "coffee mug",
+        "length": "0.095",
+        "weight": "368.544",
+        "namePlural": "coffee mugs",
+        "names": [
+            "mug",
+            "mugs"
+        ]
+    },
+    {
+        "name": "audio cassette",
+        "length": "0.1005",
+        "weight": "40.53982",
+        "namePlural": "audio cassettes",
+        "names": [
+            "cassette",
+            "cassettes"
+        ]
+    },
+    {
+        "name": "juice box",
+        "length": "0.1056386",
+        "weight": "170.097",
+        "namePlural": "juice boxes"
+    },
+    {
+        "name": "Solo cup",
+        "length": "0.10795",
+        "weight": "255.146",
+        "namePlural": "Solo cups",
+        "names": [
+            "cup",
+            "cups"
+        ]
+    },
+    {
+        "name": "lightbulb",
+        "length": "0.11",
+        "weight": "34",
+        "namePlural": "lightbulbs"
+    },
+    {
+        "name": "CD",
+        "length": "0.12",
+        "weight": "113.398",
+        "namePlural": "CDs"
+    },
+    {
+        "name": "computer mouse",
+        "length": "0.12",
+        "weight": "127.573",
+        "namePlural": "computer mice"
+    },
+    {
+        "name": "can of soda",
+        "length": "0.122682",
+        "weight": "368.7",
+        "namePlural": "cans of soda",
+        "names": [
+            "can",
+            "cans"
+        ]
+    },
+    {
+        "name": "iPhone",
+        "length": "0.1436",
+        "weight": "173.998",
+        "namePlural": "iPhones",
+        "names": [
+            "phone",
+            "phones",
+            "cell phone",
+            "cell phones"
+        ]
+    },
+    {
+        "name": "toothbrush",
+        "length": "0.1778",
+        "weight": "20",
+        "namePlural": "toothbrushes"
+    },
+    {
+        "name": "VHS tape",
+        "length": "0.187",
+        "weight": "198.447",
+        "namePlural": "VHS tapes",
+        "names": [
+            "video tape",
+            "video tapes"
+        ]
+    },
+    {
+        "name": "pencil",
+        "length": "0.1905",
+        "weight": "42.5243",
+        "namePlural": "pencils",
+        "names": [
+            "pen",
+            "pens"
+        ]
+    },
+    {
+        "name": "banana",
+        "length": "0.1905",
+        "weight": "120",
+        "namePlural": "bananas"
+    },
+    {
+        "name": "stair",
+        "length": "0.1905",
+        "namePlural": "stairs"
+    },
+    {
+        "name": "remote",
+        "length": "0.2032",
+        "weight": "680.389",
+        "namePlural": "remotes"
+    },
+    {
+        "name": "soccer ball",
+        "length": "0.22",
+        "weight": "450",
+        "namePlural": "soccer balls",
+        "names": [
+            "football",
+            "footballs"
+        ]
+    },
+    {
+        "name": "spoon",
+        "length": "0.223",
+        "weight": "45.3592",
+        "namePlural": "spoons"
+    },
+    {
+        "name": "chopstick",
+        "length": "0.23",
+        "weight": "4.72492052",
+        "namePlural": "chopsticks"
+    },
+    {
+        "name": "cat",
+        "length": "0.24",
+        "weight": "4500",
+        "namePlural": "cats"
+    },
+    {
+        "name": "basketball",
+        "length": "0.240538",
+        "weight": "623.69",
+        "namePlural": "basketballs"
+    },
+    {
+        "name": "shoe",
+        "length": "0.2504",
+        "weight": "272.155",
+        "namePlural": "shoes"
+    },
+    {
+        "name": "letter paper",
+        "length": "0.2794",
+        "weight": "4.5",
+        "namePlural": "letter papers",
+        "names": [
+            "paper",
+            "papers"
+        ]
+    },
+    {
+        "name": "Barbie",
+        "length": "0.2921",
+        "weight": "205.534",
+        "namePlural": "Barbies",
+        "names": [
+            "doll",
+            "dolls"
+        ]
+    },
+    {
+        "name": "vinyl record",
+        "length": "0.3",
+        "weight": "100",
+        "namePlural": "vinyl records",
+        "names": [
+            "record",
+            "records"
+        ]
+    },
+    {
+        "name": "beach ball",
+        "length": "0.508",
+        "weight": "110",
+        "namePlural": "beach balls"
+    },
+    {
+        "name": "doorknob height",
+        "length": "0.864",
+        "namePlural": "doorknob heights"
+    },
+    {
+        "name": "countertop height",
+        "length": "0.9144",
+        "namePlural": "countertop heights"
+    },
+    {
+        "name": "guitar length",
+        "length": "0.9652",
+        "weight": "4000",
+        "namePlural": "guitar lengths",
+        "names": [
+            "guitar",
+            "guitars"
+        ]
+    },
+    {
+        "name": "sidewalk width",
+        "length": "1.2192",
+        "namePlural": "sidewalk widths"
+    },
+    {
+        "name": "railway track width",
+        "length": "1.4351",
+        "namePlural": "railway track widths"
+    },
+    {
+        "name": "fridge",
+        "length": "1.7399",
+        "weight": "136078",
+        "namePlural": "fridge",
+        "names": [
+            "fridge",
+            "fridges"
+        ]
+    },
+    {
+        "name": "doorway height",
+        "length": "2.032",
+        "namePlural": "doorway heights",
+        "names": [
+            "doorway",
+            "doorways"
+        ]
+    },
+    {
+        "name": "bed",
+        "length": "2.032",
+        "weight": "73028.4",
+        "namePlural": "bed",
+        "names": [
+            "bed",
+            "beds"
+        ]
+    },
+    {
+        "name": "elephant",
+        "length": "3.048",
+        "weight": "5896700.8",
+        "namePlural": "elephants"
+    },
+    {
+        "name": "light pole",
+        "length": "3.5052",
+        "weight": "326587",
+        "namePlural": "light poles"
+    },
+    {
+        "name": "story",
+        "length": "4.3",
+        "namePlural": "stories"
+    },
+    {
+        "name": "car",
+        "length": "4.5",
+        "weight": "1814369",
+        "namePlural": "cars"
+    },
+    {
+        "name": "2-lane road width",
+        "length": "6",
+        "namePlural": "2-lane road widths",
+        "names": [
+            "road width",
+            "road widths"
+        ]
+    },
+    {
+        "name": "giraffe",
+        "length": "6.75",
+        "weight": "1032500",
+        "namePlural": "giraffes"
+    },
+    {
+        "name": "city bus",
+        "length": "13.716",
+        "weight": "14514956",
+        "namePlural": "city buses",
+        "names": [
+            "bus",
+            "buses"
+        ]
+    },
+    {
+        "name": "train car",
+        "length": "16.1798",
+        "weight": "25400000",
+        "namePlural": "train cars"
+    },
+    {
+        "name": "swimming pool",
+        "length": "50",
+        "weight": "2499999748",
+        "namePlural": "swimming pools",
+        "names": [
+            "pool",
+            "pools"
+        ]
+    },
+    {
+        "name": "Leaning Tower of Pisa",
+        "length": "56.6928",
+        "weight": "13154200000",
+        "namePlural": "Leaning Tower of Pisas"
+    },
+    {
+        "name": "falcon heavy",
+        "length": "70",
+        "weight": "1420651303",
+        "namePlural": "Falcon Heavys",
+        "names": [
+            "rocket",
+            "rockets"
+        ]
+    },
+    {
+        "name": "boeing 747",
+        "length": "70.7136",
+        "weight": "183523473",
+        "namePlural": "Boeing 747s",
+        "names": [
+            "747",
+            "747s"
+        ]
+    },
+    {
+        "name": "city block",
+        "length": "80",
+        "namePlural": "city blocks",
+        "names": [
+            "block",
+            "blocks"
+        ]
+    },
+    {
+        "name": "statue of liberty",
+        "length": "93",
+        "weight": "204116566",
+        "namePlural": "Statue of Libertys",
+        "names": [
+            "lady liberty",
+            "lady libertys",
+            "lady liberties",
+            "statue of liberties"
+        ]
+    },
+    {
+        "name": "Big Ben",
+        "length": "96.012",
+        "namePlural": "Big Bens"
+    },
+    {
+        "name": "football field",
+        "length": "109.728",
+        "namePlural": "football fields",
+        "names": [
+            "field",
+            "fields"
+        ]
+    },
+    {
+        "name": "Eiffel Tower",
+        "length": "324.0024",
+        "weight": "9162570000",
+        "namePlural": "Eiffel Towers",
+        "names": [
+            "eiffel",
+            "eiffels"
+        ]
+    },
+    {
+        "name": "cruise ship",
+        "length": "360",
+        "weight": "90718500000",
+        "namePlural": "cruise ships"
+    },
+    {
+        "name": "Empire State Building",
+        "length": "443.1792",
+        "weight": "331122400000",
+        "namePlural": "Empire State Buildings"
+    },
+    {
+        "name": "Mount Everest",
+        "length": "8848",
+        "weight": "161932476090000000",
+        "namePlural": "Mount Everests",
+        "names": [
+            "everest",
+            "everests",
+            "mountain",
+            "mountains"
+        ]
+    },
+    {
+        "name": "moon",
+        "length": "3474200",
+        "weight": "7.35e+25",
+        "namePlural": "moons"
+    },
+    {
+        "name": "Australia",
+        "length": "4000000",
+        "namePlural": "Australias"
+    },
+    {
+        "name": "Earth",
+        "length": "12742000",
+        "weight": "5.972000000000001e+27",
+        "namePlural": "Earths"
+    },
+    {
+        "name": "Sun",
+        "length": "1391000000",
+        "weight": "1.989e+33",
+        "namePlural": "Suns"
+    },
+    {
+        "name": "Kármán line",
+        "length": "100000",
+        "namePlural": "Kármán lines",
+        "names": [
+            "karman line",
+            "karman lines"
+        ]
+    },
+    {
+        "name": "Washington monument",
+        "length": "169.164",
+        "weight": "82421400000",
+        "namePlural": "Washington monument",
+        "names": [
+            "washington",
+            "washgintons"
+        ]
     }
 ]
