@@ -343,9 +343,12 @@ class Dimension(Decimal):
     @classmethod
     def parse(cls, s):
         value, unitStr = cls.getQuantityPair(s)
-        if value is None or unitStr is None:
+        if value is None and unitStr is None:
             raise errors.InvalidSizeValue(s)
-        value = Decimal(value)
+        if value is None:
+            value = Decimal("1")
+        else:
+            value = Decimal(value)
         unit = cls._units.get(unitStr, None)
         if unit is None:
             raise errors.InvalidSizeValue(s)
@@ -433,7 +436,7 @@ class SV(Dimension):
     def getQuantityPair(cls, s):
         s = removeBrackets(s)
         s = cls.isFeetAndInchesAndIfSoFixIt(s)
-        match = re.search(r"(?P<value>[\-+]?\d+\.?\d*) *(?P<unit>[a-zA-Z\'\" ]+)", s)
+        match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\" ]+)", s)
         value, unit = None, None
         if match is not None:
             value, unit = match.group("value"), match.group("unit")
@@ -468,7 +471,7 @@ class WV(Dimension):
     @classmethod
     def getQuantityPair(cls, s):
         s = removeBrackets(s)
-        match = re.search(r"(?P<value>[\-+]?\d+\.?\d*) *(?P<unit>[a-zA-Z\'\"]+)", s)
+        match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"]+)", s)
         value, unit = None, None
         if match is not None:
             value, unit = match.group("value"), match.group("unit")
