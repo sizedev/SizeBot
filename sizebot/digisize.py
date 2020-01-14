@@ -338,8 +338,8 @@ class PersonStats:
             f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
             f"Hair Width: {self.hairwidth:,.3mu}\n"
             f"\n"
-            f"Size of a Normal Man (Comparative): {self.avgheightcomp:,.3mu}\n"
-            f"Weight of a Normal Man (Comparative): {self.avgweightcomp:,.3mu}\n"
+            f"Size of a Normal Person (Comparative): {self.avgheightcomp:,.3mu}\n"
+            f"Weight of a Normal Person (Comparative): {self.avgweightcomp:,.3mu}\n"
             f"To look {self.avglookdirection} at a average human, you'd have to look {self.avglookdirection} {self.avglookangle:.0f}°.\n"
             f"\n"
             f"Character Bases: {self.baseheight:,.3mu} | {self.baseweight:,.3mu}"
@@ -360,7 +360,7 @@ class PersonStats:
         embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="\u200b", value="\u200b", inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
-        embed.set_footer(text=f"An average human would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
+        embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
         return embed
 
 
