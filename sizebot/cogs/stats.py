@@ -167,7 +167,7 @@ class StatsCog(commands.Cog):
         `&examine building`"""
         await logger.info(f"{ctx.message.author.display_name} looked at {what}.")
 
-        if what not in ["person", "man", "average", "average person", "average man"]:
+        if what not in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             await ctx.send(f"Sorry, *{what}* is not a valid object.")
             return
 
