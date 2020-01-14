@@ -71,7 +71,7 @@ class User:
 
     @property
     def weight(self):
-        return self.baseweight * (self.viewscale ** Decimal("3"))
+        return WV(self.baseweight * (self.viewscale ** Decimal("3")))
 
     # Check that unitsystem is valid and lowercase
     @property
