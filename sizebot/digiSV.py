@@ -194,7 +194,7 @@ class FeetAndInchesUnit(Unit):
     """Unit for handling feet and inches"""
     hidden = True
 
-    def __init__(self, footsymbol, inchsymbol, factor):
+    def __init__(self):
         inch = Decimal("0.0254")
         foot = inch * Decimal("12")
         self.factor = foot
@@ -211,11 +211,11 @@ class FeetAndInchesUnit(Unit):
         formatted = f"{trimZeroes(feetval)}'{formattedInch}\""
         return formatted
 
-    def isUnit(self, u):
-        return u == ("'", "\"")
-
     def toBaseUnit(self, v):
         return None
+
+    def isUnit(self, u):
+        return u == ("'", "\"")
 
 
 class UnitRegistry(collections.abc.Mapping):
@@ -508,5 +508,7 @@ def loadJsonFile(filename):
 
 async def init():
     await SV.loadFromFile("sv.json")
+    SV.addUnit(FeetAndInchesUnit())
+    SV.addSystemUnit(systemname="u", systemunit=SystemUnit(unit=("'", "\"")))
     await WV.loadFromFile("wv.json")
     await TV.loadFromFile("tv.json")
