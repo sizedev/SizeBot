@@ -14,11 +14,11 @@ class DigiObject:
         self.name = name
         self.namePlural = namePlural
         self.names = names
-        self.length = length
-        self.height = height
-        self.width = width
-        self.depth = depth
-        self.weight = weight
+        self.length = length and SV(length)
+        self.height = height and SV(length)
+        self.width = width and SV(length)
+        self.depth = depth and SV(length)
+        self.weight = weight and WV(length)
 
     @classmethod
     def fromJson(cls, objJson):
