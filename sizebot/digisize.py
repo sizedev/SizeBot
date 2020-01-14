@@ -333,7 +333,7 @@ class PersonStats:
         embed.set_author(name=f"SizeBot {conf.version}")
         embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({fixZeroes(self.averageheightmult):,.3}x average height)", inline=True)
         embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({fixZeroes(self.averageweightmult):,.3}x average weight)", inline=True)
-        embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu} ({self.shoesize})", inline=True)
+        embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
         embed.add_field(name="Pointer Finger Length", value=format(self.pointerlength, ",.3mu"), inline=True)
