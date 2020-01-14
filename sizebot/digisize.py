@@ -185,6 +185,7 @@ class PersonComparison:
             f"\tToe Height: {self.bigToSmall.toeheight:.3mu}\n"
             f"\tPointer Finger Length: {self.bigToSmall.pointerlength:.3mu}\n"
             f"\tThumb Width: {self.bigToSmall.thumbwidth:.3mu}\n"
+            f"\tNail Thickness: {self.bigToSmall.nailthickness:.3mu}\n"
             f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:.3mu}\n"
             f"\tHair Width: {self.bigToSmall.hairwidth:.3mu}\n"
             "\n"
@@ -201,6 +202,7 @@ class PersonComparison:
             f"\tToe Height: {self.smallToBig.toeheight:.3mu}\n"
             f"\tPointer Finger Length: {self.smallToBig.pointerlength:.3mu}\n"
             f"\tThumb Width: {self.smallToBig.thumbwidth:.3mu}\n"
+            f"\tNail Thickness: {self.smallToBig.nailthickness:.3mu}\n"
             f"\tFingerprint Depth: {self.smallToBig.fingerprintdepth:.3mu}\n"
             f"\tHair Width: {self.smallToBig.hairwidth:.3mu}\n"
             "\n"
@@ -245,6 +247,9 @@ class PersonComparison:
         embed.add_field(name="Thumb Width", value=(
             f"{emojis['comparebig']}{self.bigToSmall.thumbwidth:.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.thumbwidth:.3mu}"), inline=True)
+        embed.add_field(name="Nail Thickness", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.nailthickness:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.nailthickness:.3mu}"), inline=True)
         embed.add_field(name="Fingerprint Depth", value=(
             f"{emojis['comparebig']}{self.bigToSmall.fingerprintdepth:.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.fingerprintdepth:.3mu}"), inline=True)
@@ -320,6 +325,7 @@ class PersonStats:
             f"Toe Height: {self.toeheight:,.3mu}\n"
             f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
             f"Thumb Width: {self.thumbwidth:,.3mu}\n"
+            f"Nail Thickness: {self.nailthickness:,.3mu}\n"
             f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
             f"Hair Width: {self.hairwidth:,.3mu}\n"
             f"\n"
@@ -340,6 +346,7 @@ class PersonStats:
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
         embed.add_field(name="Pointer Finger Length", value=format(self.pointerlength, ",.3mu"), inline=True)
         embed.add_field(name="Thumb Width", value=format(self.thumbwidth, ",.3mu"), inline=True)
+        embed.add_field(name="Nail Thickness", value=format(self.nailthickness, ",.3mu"), inline=True)
         embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
         embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="\u200b", value="\u200b", inline=False)
