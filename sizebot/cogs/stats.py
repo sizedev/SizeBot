@@ -144,7 +144,12 @@ class StatsCog(commands.Cog):
         tmp[0] = toFraction(Decimal(tmp[0]), 4)
         goodheightout = " ".join(tmp)
 
-        await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or **{goodheightout}**.")
+        goodweight = userdata.weight.toGoodUnit('o', accuracy=2, preferName=True)
+        tmp2 = goodweight.split()
+        tmp2[0] = toFraction(Decimal(tmp[0]), 4)
+        goodweightout = " ".join(tmp2)
+
+        await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
         await logger.info(f"Sent object comparison for {userdata.nickname}.")
 
     @commandsplus.command(
