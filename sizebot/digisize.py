@@ -344,7 +344,9 @@ class PersonStats:
 
 
 def formatShoeSize(footlength):
-    footlengthinches = Decimal(footlength / SV.inch)
+    # Inch in meters
+    inch = Decimal("0.0254")
+    footlengthinches = Decimal(footlength / inch)
     shoesizeNum = (3 * (footlengthinches + (Decimal(2) / Decimal(3)))) - 24
     prefix = ""
     if shoesizeNum < 1:

@@ -200,7 +200,7 @@ class FeetAndInchesUnit(Unit):
         self.factor = foot
 
     def format(self, value, accuracy=2, spec="", preferName=False, useFractional=False):
-        inchval = value / SV.inch                  # convert to inches
+        inchval = value / self.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
         if useFractional:
             roundedinchval = trimZeroes(inchval)
