@@ -38,7 +38,7 @@ class HelpCog(commands.Cog):
         heightunits = [str(u) for u in sorted(SV._units)]
         weightunits = [str(u) for u in sorted(WV._units)]
 
-        embed = discord.Embed(title="Units")
+        embed = discord.Embed(title=f"Units [SizeBot {conf.version}]")
 
         for n, units in enumerate(chunkList(heightunits, math.ceil(len(heightunits) / 3))):
 
