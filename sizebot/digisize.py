@@ -331,8 +331,8 @@ class PersonStats:
     def toEmbed(self):
         embed = discord.Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
         embed.set_author(name=f"SizeBot {conf.version}")
-        embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({fixZeroes(self.averageheightmult):,.}x average height)", inline=True)
-        embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({fixZeroes(self.averageweightmult):,.}x average weight)", inline=True)
+        embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({fixZeroes(self.averageheightmult):,}x average height)", inline=True)
+        embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({fixZeroes(self.averageweightmult):,}x average weight)", inline=True)
         embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu} ({self.shoesize})", inline=True)
         embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
