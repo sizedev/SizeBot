@@ -43,7 +43,7 @@ def loadObjJson(fileJson):
         objects.append(DigiObject.fromJson(objJson))
 
 
-def init():
+async def init():
     loadObjFile("objects.json")
     for o in objects:
         o.addToUnits()
