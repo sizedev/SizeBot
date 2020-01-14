@@ -14,9 +14,11 @@ class SetCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["changenick", "nick"]
+    )
     @commands.check(guildOnly)
-    async def changenick(self, ctx, *, newnick = None):
+    async def setnick(self, ctx, *, newnick = None):
         """Change nickname"""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newnick is None:
@@ -95,7 +97,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["resetheight", "reset"]
+    )
     @commands.check(guildOnly)
     async def resetsize(self, ctx):
         """Reset size"""
@@ -278,6 +282,23 @@ class SetCog(commands.Cog):
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.message.author.id}>'s foot is now {userdata.footlength:mu} long.")
+
+        if userdata.display:
+            await digisize.nickUpdate(ctx.message.author)
+
+    @commandsplus.command(
+        aliases = ["clearfoot"]
+    )
+    @commands.check(guildOnly)
+    async def resetfoot(self, ctx):
+        """Remove species"""
+        userdata = userdb.load(ctx.message.author.id)
+
+        userdata.footlength = None
+        userdb.save(userdata)
+
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their custom foot length.")
+        await ctx.send("<@{ctx.message.author.id}>'s foot length is now default.")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
