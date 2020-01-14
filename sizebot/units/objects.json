@@ -1,3 +1,11 @@
 [
-    
+    {
+        "name": "credit card",
+        "namePlural": "credit cards",
+        "names": [""],
+        "height": "5.395e-2",
+        "width": "8.56e-2",
+        "depth": "7.6e-4",
+        "weight": "5"
+    }
 ]

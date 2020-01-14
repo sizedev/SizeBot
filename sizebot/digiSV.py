@@ -510,5 +510,3 @@ async def init():
     await SV.loadFromFile("sv.json")
     await WV.loadFromFile("wv.json")
     await TV.loadFromFile("tv.json")
-
-    objectsJson = loadJsonFile("objects.json")
