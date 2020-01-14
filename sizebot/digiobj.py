@@ -24,7 +24,7 @@ class DigiObject:
         return cls(**objJson)
 
     def addToUnits(self):
-        SV.addUnit(Unit(factor=self.height, name=self.name, namePlural=self.namePlural, names=self.names))
+        SV.addUnit(Unit(factor=self.width, name=self.name, namePlural=self.namePlural, names=self.names))
         SV.addSystemUnit("o", SystemUnit(self.name))
         WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural, names=self.names))
         WV.addSystemUnit("o", SystemUnit(self.name))

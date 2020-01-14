@@ -203,11 +203,6 @@
             "namePlural": "yottauniverses"
         },
         {
-            "factor": "0.0856",
-            "name": "credit card",
-            "namePlural": "credit cards"
-        },
-        {
             "factor": "0.122682",
             "name": "can of soda",
             "namePlural": "cans of soda",
@@ -970,9 +965,6 @@
             }
         ],
         "o": [
-            {
-                "unit": "credit card"
-            },
             {
                 "unit": "can of soda"
             },
