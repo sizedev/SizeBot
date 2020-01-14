@@ -18,7 +18,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def setnick(self, ctx, *, newnick = None):
-        """Change nickname"""
+        """Change nickname."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newnick is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <newnick>`.")
@@ -38,7 +38,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def setspecies(self, ctx, *, newtag = None):
-        """Change species"""
+        """Change species."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newtag is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <newtag>`.")
@@ -58,7 +58,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def clearspecies(self, ctx):
-        """Remove species"""
+        """Remove species."""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.species = None
@@ -73,7 +73,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def setheight(self, ctx, *, newheight = None):
-        """Change height"""
+        """Change height."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newheight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
@@ -101,7 +101,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def resetsize(self, ctx):
-        """Reset size"""
+        """Reset size."""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.height = userdata.baseheight
@@ -116,7 +116,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def setdisplay(self, ctx, newdisp = None):
-        """Set display mode"""
+        """Set display mode."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newdisp is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N]`.")
@@ -141,7 +141,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def setsystem(self, ctx, newsys = None):
-        """Set measurement system"""
+        """Set measurement system."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newsys is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/m]`.")
@@ -166,7 +166,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def setrandomheight(self, ctx, minheight = None, maxheight = None):
-        """Change height to a random value"""
+        """Change height to a random value."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if minheight is None or maxheight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
@@ -191,7 +191,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def setinf(self, ctx):
-        """Change height to infinity"""
+        """Change height to infinity."""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.height = SV.infinity
@@ -206,7 +206,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def set0(self, ctx):
-        """Change height to a zero"""
+        """Change height to a zero."""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.height = 0
@@ -221,7 +221,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def setbaseheight(self, ctx, *, newbaseheight = None):
-        """Change base height"""
+        """Change base height."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newbaseheight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
@@ -241,7 +241,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def setbaseweight(self, ctx, *, newbaseweight = None):
-        """Change base weight"""
+        """Change base weight."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newbaseweight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <weight>`.")
@@ -262,7 +262,7 @@ class SetCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def setfoot(self, ctx, *, newfoot = None):
-        """Change height"""
+        """Change height."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newfoot is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [length]`.")
@@ -290,7 +290,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def resetfoot(self, ctx):
-        """Remove species"""
+        """Remove foot length."""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.footlength = None
@@ -298,6 +298,50 @@ class SetCog(commands.Cog):
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their custom foot length.")
         await ctx.send("<@{ctx.message.author.id}>'s foot length is now default.")
+
+        if userdata.display:
+            await digisize.nickUpdate(ctx.message.author)
+
+    @commandsplus.command(
+        usage = "[male/female]"
+    )
+    @commands.guild_only()
+    async def setgender(self, ctx, newgender = None):
+        """Set gender."""
+        # TODO: Move this to an error handler for MissingRequiredArgument
+        if newgender is None:
+            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [male/female]`.")
+            return
+
+        newgender = newgender.lower()
+        if newgender not in ["male", "female"]:
+            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [male/female]`.")
+            return
+
+        userdata = userdb.load(ctx.message.author.id)
+
+        userdata.gender = newgender
+        userdb.save(userdata)
+
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their gender to {userdata.gender}.")
+        await ctx.send(f"<@{ctx.message.author.id}>'s gender is now set to {userdata.gender}.'")
+
+        if userdata.display:
+            await digisize.nickUpdate(ctx.message.author)
+
+    @commandsplus.command(
+        aliases = ["cleargender"]
+    )
+    @commands.guild_only()
+    async def resetgender(self, ctx):
+        """Reset gender."""
+        userdata = userdb.load(ctx.message.author.id)
+
+        userdata.gender = None
+        userdb.save(userdata)
+
+        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) reset their gender.")
+        await ctx.send(f"<@{ctx.message.author.id}>'s gender is now reset.'")
 
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
