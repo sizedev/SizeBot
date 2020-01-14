@@ -342,7 +342,7 @@ class Dimension(Decimal):
 
     @classmethod
     def parse(cls, s):
-        value, unitStr = cls.Quantity(s)
+        value, unitStr = cls.getQuantityPair(s)
         if value is None or unitStr is None:
             raise errors.InvalidSizeValue(s)
         value = Decimal(value)
