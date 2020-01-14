@@ -61,7 +61,7 @@ class HelpCog(commands.Cog):
         ...
         """
 
-        embed = discord.Embed(title="Help")
+        embed = discord.Embed(title=f"Help [SizeBot {conf.version}]")
 
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
         commandLines = "\n".join(c.name + (f" - {c.short_doc}" if c.short_doc else "") for c in commands)
@@ -92,7 +92,7 @@ class HelpCog(commands.Cog):
         description = "\n\n".join(descriptionParts)
 
         embed = discord.Embed(
-            title=signature,
+            title=signature + f" [SizeBot {conf.version}]",
             description=description
         ).set_author(name=f"Help")
 
