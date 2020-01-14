@@ -5,7 +5,6 @@ from sizebot import digilogger as logger
 from sizebot import userdb
 from sizebot.digiSV import SV, WV
 from sizebot import digisize
-from sizebot.checks import guildOnly
 from sizebot.utils import clamp
 import sizebot.digidecimal as digidecimal
 
@@ -17,7 +16,7 @@ class SetCog(commands.Cog):
     @commandsplus.command(
         aliases = ["changenick", "nick"]
     )
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setnick(self, ctx, *, newnick = None):
         """Change nickname"""
         # TODO: Move this to an error handler for MissingRequiredArgument
@@ -37,7 +36,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setspecies(self, ctx, *, newtag = None):
         """Change species"""
         # TODO: Move this to an error handler for MissingRequiredArgument
@@ -57,7 +56,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def clearspecies(self, ctx):
         """Remove species"""
         userdata = userdb.load(ctx.message.author.id)
@@ -72,7 +71,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setheight(self, ctx, *, newheight = None):
         """Change height"""
         # TODO: Move this to an error handler for MissingRequiredArgument
@@ -100,7 +99,7 @@ class SetCog(commands.Cog):
     @commandsplus.command(
         aliases = ["resetheight", "reset"]
     )
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def resetsize(self, ctx):
         """Reset size"""
         userdata = userdb.load(ctx.message.author.id)
@@ -115,7 +114,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setdisplay(self, ctx, newdisp = None):
         """Set display mode"""
         # TODO: Move this to an error handler for MissingRequiredArgument
@@ -140,7 +139,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setsystem(self, ctx, newsys = None):
         """Set measurement system"""
         # TODO: Move this to an error handler for MissingRequiredArgument
@@ -165,7 +164,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setrandomheight(self, ctx, minheight = None, maxheight = None):
         """Change height to a random value"""
         # TODO: Move this to an error handler for MissingRequiredArgument
@@ -190,7 +189,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setinf(self, ctx):
         """Change height to infinity"""
         userdata = userdb.load(ctx.message.author.id)
@@ -205,7 +204,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def set0(self, ctx):
         """Change height to a zero"""
         userdata = userdb.load(ctx.message.author.id)
@@ -220,7 +219,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setbaseheight(self, ctx, *, newbaseheight = None):
         """Change base height"""
         # TODO: Move this to an error handler for MissingRequiredArgument
@@ -240,7 +239,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setbaseweight(self, ctx, *, newbaseweight = None):
         """Change base weight"""
         # TODO: Move this to an error handler for MissingRequiredArgument
@@ -261,7 +260,7 @@ class SetCog(commands.Cog):
 
     # TODO: Make this accept shoe size as an input.
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def setfoot(self, ctx, *, newfoot = None):
         """Change height"""
         # TODO: Move this to an error handler for MissingRequiredArgument
@@ -289,7 +288,7 @@ class SetCog(commands.Cog):
     @commandsplus.command(
         aliases = ["clearfoot"]
     )
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def resetfoot(self, ctx):
         """Remove species"""
         userdata = userdb.load(ctx.message.author.id)

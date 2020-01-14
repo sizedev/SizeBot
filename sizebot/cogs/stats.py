@@ -10,7 +10,6 @@ from sizebot import digilogger as logger
 from sizebot import userdb
 from sizebot.digiSV import SV
 from sizebot import digisize
-from sizebot.checks import guildOnly
 from sizebot.digidecimal import toFraction, Decimal
 
 
@@ -22,7 +21,7 @@ class StatsCog(commands.Cog):
         aliases = ["stat"],
         usage = "<user/height>"
     )
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
         """User stats command.
 
@@ -52,7 +51,7 @@ class StatsCog(commands.Cog):
     @commandsplus.command(
         usage = "<user or height>"
     )
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def statstxt(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
         """User stats command, raw text version.
 
@@ -77,7 +76,7 @@ class StatsCog(commands.Cog):
         await logger.info(f"Stats for {memberOrHeight} sent.")
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
@@ -98,7 +97,7 @@ class StatsCog(commands.Cog):
         await logger.info(f"Compared {userdata1} and {userdata2}")
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def comparetxt(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
@@ -130,7 +129,7 @@ class StatsCog(commands.Cog):
         aliases = ["objectcompare", "objcomp"],
         usage = ""
     )
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def objcompare(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
         """See how tall you are in comparison to an object.
         """
@@ -156,7 +155,7 @@ class StatsCog(commands.Cog):
         aliases = ["look", "examine"],
         usage = "[object]"
     )
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def lookat(self, ctx, what):
         """See what an object looks like to you.
 

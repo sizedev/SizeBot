@@ -9,7 +9,7 @@ from sizebot import digilogger as logger
 from sizebot import userdb
 from sizebot.digiSV import Rate
 from sizebot import digisize
-from sizebot.checks import requireAdmin, guildOnly
+from sizebot.checks import requireAdmin
 
 
 class Change:
@@ -66,7 +66,7 @@ class ChangeCog(commands.Cog):
         self.changeTask.cancel()
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def change(self, ctx, style, *, amount):
         """Change height"""
         digisize.changeUser(ctx.message.author.id, style, amount)
@@ -85,7 +85,7 @@ class ChangeCog(commands.Cog):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) dumped the running changes.")
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def slowchange(self, ctx, *, rateStr: str):
         addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(rateStr)
         key = ctx.message.author.id, ctx.message.guild.id
@@ -94,7 +94,7 @@ class ChangeCog(commands.Cog):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def stopchange(self, ctx):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) stopped slow-changing.")
 
@@ -106,7 +106,7 @@ class ChangeCog(commands.Cog):
             await logger.warn(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def eatme(self, ctx):
         """Eat me!"""
         randmult = round(random.random(2, 20), 1)
@@ -119,7 +119,7 @@ class ChangeCog(commands.Cog):
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def drinkme(self, ctx):
         """Drink me!"""
         userdata = userdb.load(ctx.message.author.id)

@@ -12,12 +12,6 @@ def requireAdmin(ctx):
     return True
 
 
-def guildOnly(ctx):
-    member = ctx.author
-    isMember = isinstance(member, discord.Member)
-    return isMember
-
-
 def denyGuildBan(ctx):
     member = ctx.author
     isMember = isinstance(member, discord.Member)

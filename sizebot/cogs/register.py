@@ -9,7 +9,6 @@ from sizebot.conf import conf
 from sizebot import userdb
 from sizebot.digiSV import SV, WV
 from sizebot import digisize
-from sizebot.checks import guildOnly
 
 
 async def addUserRole(member):
@@ -35,7 +34,7 @@ class RegisterCog(commands.Cog):
         self.bot = bot
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def register(self, ctx, nick: str, display: str = "y", currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot"""
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
@@ -101,7 +100,7 @@ class RegisterCog(commands.Cog):
         raise error
 
     @commandsplus.command()
-    @commands.check(guildOnly)
+    @commands.guild_only()
     async def unregister(self, ctx):
         user = ctx.message.author
         # User is not registered
