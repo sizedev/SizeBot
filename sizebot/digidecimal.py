@@ -2,7 +2,7 @@ import decimal
 import random
 from sizebot.utils import parseSpec, buildSpec
 
-__all__ = ["Decimal", "roundDecimal", "roundDecimalHalf", "trimZeroes", "toEighths", "randrangelog"]
+__all__ = ["Decimal", "roundDecimal", "roundDecimalHalf", "fixZeroes", "toEighths", "randrangelog"]
 
 Decimal = decimal.Decimal
 
@@ -39,7 +39,7 @@ def toFraction(number, denom=8, spec=""):
     eighths = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
     roundednumber = roundDecimalFraction(number, denom)
     whole, part = divmod(roundednumber, 1)
-    whole = format(trimZeroes(whole), spec)
+    whole = format(fixZeroes(whole), spec)
     if whole == "0":
         if part == 0:
             return "0"
@@ -56,7 +56,7 @@ def toEighths(number):
     return toFraction(number, 8)
 
 
-def trimZeroes(d):
+def fixZeroes(d):
     """Remove any trailing zeroes after the decimal place from a Decimal"""
     # `normalize()` removes ALL trailing zeroes, including ones before the decimal place
     # `+ 0` re-adds the trailing zeroes before the decimal place, if necessary

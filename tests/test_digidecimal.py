@@ -48,12 +48,12 @@ def test_toQuarters_noFraction():
 
 
 def test_trimZeros():
-    result = digidecimal.trimZeroes(Decimal("100.00"))
+    result = digidecimal.fixZeroes(Decimal("100.00"))
     result = str(result)
     assert result == "100"
 
 
 def test_trimZeros_E():
-    result = digidecimal.trimZeroes(Decimal("1E2"))
+    result = digidecimal.fixZeroes(Decimal("1E2"))
     result = str(result)
     assert result == "100"

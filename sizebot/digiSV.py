@@ -3,7 +3,7 @@ import re
 import collections
 import importlib.resources as pkg_resources
 
-from sizebot.digidecimal import Decimal, roundDecimal, trimZeroes, toFraction
+from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes, toFraction
 from sizebot import digierror as errors
 from sizebot.utils import removeBrackets, re_num, parseSpec, buildSpec, tryOrNone, iset
 from sizebot.picker import getRandomCloseUnit
@@ -123,10 +123,10 @@ class Unit():
         scaled = value / self.factor
         useFractional = useFractional and self.fractional
         if useFractional:
-            rounded = trimZeroes(scaled)
+            rounded = fixZeroes(scaled)
             formattedValue = toFraction(rounded, 8, spec)
         else:
-            rounded = trimZeroes(roundDecimal(scaled, accuracy))
+            rounded = fixZeroes(roundDecimal(scaled, accuracy))
             formattedValue = format(rounded, spec)
 
         if rounded == 0:
@@ -203,12 +203,12 @@ class FeetAndInchesUnit(Unit):
         inchval = value / self.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
         if useFractional:
-            roundedinchval = trimZeroes(inchval)
+            roundedinchval = fixZeroes(inchval)
             formattedInch = toFraction(roundedinchval, 8, spec)
         else:
-            roundedinchval = trimZeroes(roundDecimal(inchval, accuracy))
+            roundedinchval = fixZeroes(roundDecimal(inchval, accuracy))
             formattedInch = format(roundedinchval, spec)
-        formatted = f"{trimZeroes(feetval)}'{formattedInch}\""
+        formatted = f"{fixZeroes(feetval)}'{formattedInch}\""
         return formatted
 
     def toBaseUnit(self, v):

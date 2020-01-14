@@ -4,7 +4,7 @@ import math
 import discord
 
 from sizebot.conf import conf
-from sizebot.digidecimal import Decimal, toFraction, roundDecimal, trimZeroes
+from sizebot.digidecimal import Decimal, toFraction, roundDecimal, fixZeroes
 from sizebot import digierror as errors
 from sizebot.digiSV import SV, WV
 from sizebot import userdb
@@ -175,8 +175,8 @@ class PersonComparison:
         return (
             "**Comparison:**\n"
             f"{self.big.tag} is really:\n"
-            f"\tReal Height: {self.big.height:.3mu} ({trimZeroes(1/self.big.viewscale):,.3}x scale)\n"
-            f"\tReal Weight: {self.big.weight:.3mu}. ({trimZeroes(1/(self.big.viewscale ** 3)):,.3}x scale)\n"
+            f"\tReal Height: {self.big.height:.3mu} ({fixZeroes(1/self.big.viewscale):,.3}x scale)\n"
+            f"\tReal Weight: {self.big.weight:.3mu}. ({fixZeroes(1/(self.big.viewscale ** 3)):,.3}x scale)\n"
             f"To {self.small.tag}, {self.big.tag} looks:\n"
             f"\tHeight: {self.bigToSmall.height:.3mu}\n"
             f"\tWeight: {self.bigToSmall.weight:.3mu}\n"
@@ -188,11 +188,11 @@ class PersonComparison:
             f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:.3mu}\n"
             f"\tHair Width: {self.bigToSmall.hairwidth:.3mu}\n"
             "\n"
-            f"{self.big.tag} is {trimZeroes(self.multiplier)}x taller than {self.small.tag}.\n"
+            f"{self.big.tag} is {fixZeroes(self.multiplier)}x taller than {self.small.tag}.\n"
             "\n"
             f"{self.small.tag} is really:\n"
-            f"\tReal Height: {self.small.height:.3mu} ({trimZeroes(1/self.small.viewscale):,.3}x scale)\n"
-            f"\tReal Weight: {self.small.weight:.3mu}. ({trimZeroes(1/(self.small.viewscale ** 3)):,.3}x scale)\n"
+            f"\tReal Height: {self.small.height:.3mu} ({fixZeroes(1/self.small.viewscale):,.3}x scale)\n"
+            f"\tReal Weight: {self.small.weight:.3mu}. ({fixZeroes(1/(self.small.viewscale ** 3)):,.3}x scale)\n"
             f"To {self.big.tag}, {self.small.tag} looks:\n"
             f"\tHeight: {self.smallToBig.height:.3mu}\n"
             f"\tWeight: {self.smallToBig.weight:.3mu}\n"
@@ -253,7 +253,7 @@ class PersonComparison:
             f"{emojis['comparesmall']}{self.smallToBig.hairwidth:.3mu}"), inline=True)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
-            f"{self.big.nickname} is {trimZeroes(self.multiplier)}x taller than {self.small.nickname}."))
+            f"{self.big.nickname} is {fixZeroes(self.multiplier)}x taller than {self.small.nickname}."))
         return embed
 
     @property
