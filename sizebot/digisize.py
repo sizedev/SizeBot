@@ -275,6 +275,7 @@ class PersonStats:
     fingerprintfactor = Decimal("1") / Decimal("35080")
     hairfactor = Decimal("1") / Decimal("23387")
     pointerfactor = Decimal("1") / Decimal("17.26")
+    nailthickfactor = Decimal("1") / Decimal("2920")
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -295,6 +296,7 @@ class PersonStats:
         self.thumbwidth = SV(self.height * self.thumbfactor)
         self.fingerprintdepth = SV(self.height * self.fingerprintfactor)
         self.hairwidth = SV(self.height * self.hairfactor)
+        self.nailthickness = SV(self.height * self.nailthickfactor)
 
         self.avgheightcomp = SV(defaultheight * self.viewscale)
         self.avgweightcomp = WV(defaultweight * self.viewscale ** 3)
