@@ -24,10 +24,19 @@ class DigiObject:
         return cls(**objJson)
 
     def addToUnits(self):
-        SV.addUnit(Unit(factor=self.width, name=self.name, namePlural=self.namePlural, names=self.names))
-        SV.addSystemUnit("o", SystemUnit(self.name))
-        WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural, names=self.names))
-        WV.addSystemUnit("o", SystemUnit(self.name))
+        if self.width is not None:
+            SV.addUnit(Unit(factor=self.width, name=self.name, namePlural=self.namePlural, names=self.names))
+            SV.addSystemUnit("o", SystemUnit(self.name))
+        elif self.height is not None:
+            SV.addUnit(Unit(factor=self.height, name=self.name, namePlural=self.namePlural, names=self.names))
+            SV.addSystemUnit("o", SystemUnit(self.name))
+        elif self.depth is not None:
+            SV.addUnit(Unit(factor=self.depth, name=self.name, namePlural=self.namePlural, names=self.names))
+            SV.addSystemUnit("o", SystemUnit(self.name))
+
+        if self.weight is not None:
+            WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural, names=self.names))
+            WV.addSystemUnit("o", SystemUnit(self.name))
 
 
 def loadObjFile(filename):

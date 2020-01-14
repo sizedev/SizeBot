@@ -101,7 +101,7 @@ class Unit():
 
     hidden = False
 
-    def __init__(self, factor=Decimal("1"), symbol=None, name=None, namePlural=None, symbols=[], names=[], fractional=False):
+    def __init__(self, factor="1", symbol=None, name=None, namePlural=None, symbols=[], names=[], fractional=False):
         self.fractional = fractional
         self.factor = Decimal(factor)
 
