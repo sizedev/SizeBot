@@ -10,10 +10,11 @@ objects = []
 class DigiObject:
     objects = []
 
-    def __init__(self, name, namePlural=None, names=[], height=None, width=None, depth=None, weight=None):
+    def __init__(self, name, namePlural=None, names=[], length=None, height=None, width=None, depth=None, weight=None):
         self.name = name
         self.namePlural = namePlural
         self.names = names
+        self.length = length
         self.height = height
         self.width = width
         self.depth = depth
@@ -24,6 +25,9 @@ class DigiObject:
         return cls(**objJson)
 
     def addToUnits(self):
+        if self.length is not None:
+            SV.addUnit(Unit(factor=self.length, name=self.name, namePlural=self.namePlural, names=self.names))
+            SV.addSystemUnit("o", SystemUnit(self.name))
         if self.width is not None:
             SV.addUnit(Unit(factor=self.width, name=self.name, namePlural=self.namePlural, names=self.names))
             SV.addSystemUnit("o", SystemUnit(self.name))
