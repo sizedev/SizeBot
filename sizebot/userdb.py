@@ -17,11 +17,14 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["id", "nickname", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_unitsystem", "species"]
+    __slots__ = ["id", "nickname", "gender", "display", "_height",
+                 "_baseheight", "_baseweight", "_footlength",
+                 "_unitsystem", "species"]
 
     def __init__(self):
         self.id = None
         self.nickname = None
+        self._gender = None
         self.display = True
         self._height = defaultheight
         self._baseheight = defaultheight
@@ -31,7 +34,7 @@ class User:
         self.species = None
 
     def __str__(self):
-        return f"ID {self.id}, NICK {self.nickname}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, UNIT {self.unitsystem}, SPEC {self.species}"
+        return f"ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, UNIT {self.unitsystem}, SPEC {self.species}"
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
@@ -60,6 +63,19 @@ class User:
             self._footlength = None
             return
         self._footlength = utils.clamp(0, SV(value), SV.infinity)
+
+    @property
+    def gender(self):
+        return self._gender
+
+    @gender.setter
+    def gender(self, value):
+        if value is None:
+            self._gender = None
+            return
+        value = value.lower()
+        if value not in ["male", "female"]:
+            raise ValueError(f"Unrecognized gender: '{value}'")
 
     @property
     def baseweight(self):
