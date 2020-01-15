@@ -10,7 +10,7 @@ from sizebot import digilogger as logger
 from sizebot import conf
 from sizebot import userdb
 from sizebot.digiSV import SV, WV
-from sizebot.utils import chunkList
+from sizebot.utils import chunkList, chunkLines
 
 # name
 # description
@@ -67,7 +67,9 @@ class HelpCog(commands.Cog):
 
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
         commandLines = "\n".join(c.name + (f" - {c.short_doc}" if c.short_doc else "") for c in commands)
-        embed.add_field(name="Commands", value=commandLines)
+        for n, lines in enumerate(chunkLines(commandLines, 1024)):
+            embed.add_field(name="Commands" if n == 0 else "\u200b", value=lines, inline=True)
+        await logger.info(commandLines)
         await ctx.send(embed=embed)
 
     async def send_command_help(self, ctx, cmd):
