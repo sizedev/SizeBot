@@ -25,7 +25,7 @@ class ChangeCog(commands.Cog):
     )
     @commands.guild_only()
     async def change(self, ctx, style, *, amount):
-        """Change height"""
+        """Change height."""
         userid = ctx.author.id
 
         digisize.changeUser(userid, style, amount)
@@ -54,6 +54,13 @@ class ChangeCog(commands.Cog):
     )
     @commands.guild_only()
     async def slowchange(self, ctx, *, rateStr: str):
+        """Change your height steadily over time.
+
+        Set how fast or slow you'd like to change, and when you'd like to stop.
+        Examples:
+        `&slowchange 1m/s`
+        `&slowchange 1m/s until 10m`
+        `&slowchange 1m/s for 1h`"""
         userid = ctx.author.id
         guildid = ctx.guild.id
 
@@ -67,6 +74,7 @@ class ChangeCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def stopchange(self, ctx):
+        """Stop a currently active slow change."""
         userid = ctx.author.id
         guildid = ctx.guild.id
 
@@ -82,7 +90,9 @@ class ChangeCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def eatme(self, ctx):
-        """Eat me!"""
+        """Eat me!
+
+        Increases your height by a random amount between 2x and 20x."""
         userid = ctx.author.id
 
         randmult = round(random.random(2, 20), 1)
@@ -98,7 +108,9 @@ class ChangeCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def drinkme(self, ctx):
-        """Drink me!"""
+        """Drink me!
+
+        Decreases your height by a random amount between 2x and 20x."""
         userid = ctx.author.id
 
         userdata = userdb.load(userid)

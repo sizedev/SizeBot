@@ -103,6 +103,7 @@ class RegisterCog(commands.Cog):
     @commandsplus.command()
     @commands.guild_only()
     async def unregister(self, ctx):
+        """Unregister your SizeBot profile."""
         user = ctx.message.author
         # User is not registered
         if not userdb.exists(user.id):

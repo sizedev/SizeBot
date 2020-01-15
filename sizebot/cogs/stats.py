@@ -80,6 +80,7 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+        """Compare two users' size."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
 
@@ -103,6 +104,7 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def comparetxt(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+        """Compare two users' size, raw text version."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
 
@@ -134,8 +136,7 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def objcompare(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
-        """See how tall you are in comparison to an object.
-        """
+        """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.message.author
 

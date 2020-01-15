@@ -10,7 +10,7 @@ tasks = {}
 
 
 class FunCog(commands.Cog):
-    """Commands for non-size stuff"""
+    """Commands for non-size stuff."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -52,6 +52,7 @@ class FunCog(commands.Cog):
         usage = "<message>"
     )
     async def sing(self, ctx, *, s: str):
+        """Make SizeBot sing a message!"""
         await ctx.message.delete(delay=0)
         newstring = f":musical_score: *{s}* :musical_note:"
         await ctx.send(newstring)

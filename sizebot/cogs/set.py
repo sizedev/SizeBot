@@ -178,7 +178,10 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def setrandomheight(self, ctx, minheight = None, maxheight = None):
-        """Change height to a random value."""
+        """Change height to a random value.
+
+        Sets your height to a height between `minheight` and `maxheight`.
+        Weighted on a logarithmic curve."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if minheight is None or maxheight is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
@@ -308,7 +311,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def resetfoot(self, ctx):
-        """Remove foot length."""
+        """Remove custom foot length."""
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.footlength = None
@@ -325,7 +328,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def setgender(self, ctx, gender):
-        """Set gender"""
+        """Set gender."""
 
         user = ctx.author
 
@@ -368,7 +371,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def resetgender(self, ctx):
-        """Reset gender"""
+        """Reset gender."""
 
         user = ctx.author
 

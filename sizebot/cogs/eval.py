@@ -18,6 +18,7 @@ class EvalCog(commands.Cog):
     )
     @commands.check(requireAdmin)
     async def eval(self, ctx, *, evalStr):
+        """Evaluate a Python expression."""
         evalStr = removeCodeBlock(evalStr)
 
         await logger.info(f"{ctx.message.author.display_name} tried to eval {evalStr!r}.")
@@ -47,6 +48,7 @@ class EvalCog(commands.Cog):
     )
     @commands.check(requireAdmin)
     async def evil(self, ctx, *, evalStr):
+        """Evaluate a Python expression, but evilly."""
         await ctx.message.delete(delay = 0)
 
         evalStr = removeCodeBlock(evalStr)

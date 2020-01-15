@@ -8,9 +8,12 @@ class AdminCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command()
+    @commandsplus.command(
+        hidden = True
+    )
     @commands.check(requireAdmin)
     async def stop(self, ctx):
+        """RIP SizeBot."""
         await ctx.send("Stopping SizeBot")
         await ctx.bot.close()
 

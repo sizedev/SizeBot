@@ -35,6 +35,7 @@ class HelpCog(commands.Cog):
 
     @commandsplus.command()
     async def units(self, ctx):
+        """Get a list of the various units SizeBot accepts."""
         heightunits = [str(u) for u in sorted(SV._units)]
         weightunits = [str(u) for u in sorted(WV._units)]
 
@@ -50,7 +51,7 @@ class HelpCog(commands.Cog):
         await ctx.send(embed=embed)
 
     async def send_summary_help(self, ctx):
-        """Sends help summary
+        """Sends help summary.
 
         Help
 
@@ -69,7 +70,7 @@ class HelpCog(commands.Cog):
         await ctx.send(embed=embed)
 
     async def send_command_help(self, ctx, cmd):
-        """Sends help for a command
+        """Sends help for a command.
 
         Help
 
@@ -152,6 +153,7 @@ class HelpCog(commands.Cog):
 
     @commandsplus.command()
     async def donate(self, ctx):
+        """Give some monetary love to your favorite bot developer!"""
         await ctx.send(
             f"<@{ctx.message.author.id}>\n"
             "SizeBot is coded (mainly) and hosted by DigiDuncan, and for absolutely free.\n"
@@ -164,11 +166,23 @@ class HelpCog(commands.Cog):
         usage = "<message>"
     )
     async def bug(self, ctx, *, message: str):
+        """Tell the devs there's an issue with SizeBot."""
         await logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-        await self.bot.get_user(conf.getId("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")
+        await self.bot.get_user(conf.getId("DigiDuncan")).send(f"Bug report from <@{ctx.message.author.id}>: {message}")
+
+        @commandsplus.command(
+            usage = "<message>"
+        )
+        async def suggest(self, ctx, *, message: str):
+            """Suggest a feature for SizeBot!"""
+            await logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
+            await self.bot.get_user(conf.getId("DigiDuncan")).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
 
     @commandsplus.command()
     async def ping(self, ctx):
+        """Pong!
+
+        Check SizeBot's current latency."""
         await ctx.send('Pong! :ping_pong: {0}s'.format(round(self.bot.latency, 3)))
 
 
