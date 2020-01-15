@@ -3,7 +3,7 @@ import math
 
 import discord
 
-from sizebot.conf import conf
+from sizebot import __version__
 from sizebot.digidecimal import Decimal, toFraction, roundDecimal, fixZeroes
 from sizebot import digierror as errors
 from sizebot.digiSV import SV, WV
@@ -219,7 +219,7 @@ class PersonComparison:
                               description="",
                               color=0x31eff9,
                               url=self.url)
-        embed.set_author(name=f"SizeBot {conf.version}", icon_url=compareicon)
+        embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
         embed.add_field(name=f"{emojis['comparebigcenter']} **{self.big.nickname}**", value=(
             f"{emojis['blank']}{emojis['blank']} **Height:** {self.big.height:.3mu}\n"
             f"{emojis['blank']}{emojis['blank']} **Weight:** {self.big.weight:.3mu}\n"), inline=True)
@@ -363,7 +363,7 @@ class PersonStats:
 
     def toEmbed(self):
         embed = discord.Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
-        embed.set_author(name=f"SizeBot {conf.version}")
+        embed.set_author(name=f"SizeBot {__version__}")
         embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({fixZeroes(self.averageheightmult):,.3}x average height)", inline=True)
         embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({fixZeroes(self.averageweightmult):,.3}x average weight)", inline=True)
         embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)

@@ -5,29 +5,38 @@ import toml
 
 from sizebot import utils
 
+# ASCII art
+banner = (
+    r"   _____ _         ____        _   ____   _____ ""\n"
+    r"  / ____(_)       |  _ \      | | |___ \ | ____|""\n"
+    r" | (___  _ _______| |_) | ___ | |_  __) || |__  ""\n"
+    r"  \___ \| |_  / _ \  _ < / _ \| __||__ < |___ \ ""\n"
+    r"  ____) | |/ /  __/ |_) | (_) | |_ ___) | ___) |""\n"
+    r" |_____/|_/___\___|____/ \___/ \__|____(_)____/ ""\n"
+    r"                                                ")
+description = (
+    "SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.\n"
+    "SizeBot3AndAHalf is a refactorization for SB3 and adds various features.\n"
+    "Written by DigiDuncan.\n"
+    "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
+# Version
+# Release versions: major.minor.revision
+winkpath = None
+userdbpath = None
+telemetrypath = None
+changespath = None
+prefix = None
+authtoken = None
+admins = None
+ids = None
+emoji = None
+logchannelid = None
+
 
 class Config:
     __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "telemetrypath", "changespath", "prefix", "prefix", "authtoken", "admins", "ids", "emoji", "logchannelid"]
 
     def __init__(self, configDict):
-        # ASCII art
-        self.banner = (r"   _____ _         ____        _   ____   _____ ""\n"
-                       r"  / ____(_)       |  _ \      | | |___ \ | ____|""\n"
-                       r" | (___  _ _______| |_) | ___ | |_  __) || |__  ""\n"
-                       r"  \___ \| |_  / _ \  _ < / _ \| __||__ < |___ \ ""\n"
-                       r"  ____) | |/ /  __/ |_) | (_) | |_ ___) | ___) |""\n"
-                       r" |_____/|_/___\___|____/ \___/ \__|____(_)____/ ""\n"
-                       r"                                                ")
-
-        self.description = ("SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.\n"
-                            "SizeBot3AndAHalf is a refactorization for SB3 and adds various features.\n"
-                            "Written by DigiDuncan.\n"
-                            "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
-
-        # Version
-        # Release versions: major.minor.revision
-        self.version = "3.5.0.alpha"
-
         # File paths
         datadir = getDataDir()
         self.winkpath = datadir / "winkcount.txt"

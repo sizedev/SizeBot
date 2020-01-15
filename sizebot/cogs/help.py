@@ -5,6 +5,7 @@ import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
+from sizebot import __version__
 from sizebot import digilogger as logger
 from sizebot.conf import conf
 from sizebot import userdb
@@ -38,7 +39,7 @@ class HelpCog(commands.Cog):
         heightunits = [str(u) for u in sorted(SV._units)]
         weightunits = [str(u) for u in sorted(WV._units)]
 
-        embed = discord.Embed(title=f"Units [SizeBot {conf.version}]")
+        embed = discord.Embed(title=f"Units [SizeBot {__version__}]")
 
         for n, units in enumerate(chunkList(heightunits, math.ceil(len(heightunits) / 3))):
 
@@ -61,7 +62,7 @@ class HelpCog(commands.Cog):
         ...
         """
 
-        embed = discord.Embed(title=f"Help [SizeBot {conf.version}]")
+        embed = discord.Embed(title=f"Help [SizeBot {__version__}]")
 
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
         commandLines = "\n".join(c.name + (f" - {c.short_doc}" if c.short_doc else "") for c in commands)
@@ -92,7 +93,7 @@ class HelpCog(commands.Cog):
         description = "\n\n".join(descriptionParts)
 
         embed = discord.Embed(
-            title=signature + f" [SizeBot {conf.version}]",
+            title=signature + f" [SizeBot {__version__}]",
             description=description
         ).set_author(name=f"Help")
 
@@ -148,7 +149,7 @@ class HelpCog(commands.Cog):
             "\"Um... I like it?\" -- *Goddess Syn*\n"
             "\"I am the only person who has accidentally turned my fetish into a tech support job.\" -- *DigiDuncan*\n"
             "\n"
-            f"Version {conf.version} | {now.strftime('%d %b %Y')}")
+            f"Version {__version__} | {now.strftime('%d %b %Y')}")
 
     @commandsplus.command()
     async def donate(self, ctx):

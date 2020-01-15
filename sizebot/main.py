@@ -3,6 +3,7 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 
+from sizebot import __version__
 from sizebot import digiSV, digiobj
 from sizebot import digilogger as logger
 from sizebot import digiformatter as df
@@ -45,7 +46,7 @@ def main():
         df.createLogLevel("banner", fgval="orange_red_1", bgval="deep_sky_blue_4b", attrval="bold")
         df.createLogLevel("login", fgval="cyan")
         # Obviously we need the banner printed in the terminal
-        await logger.log("banner", conf.banner + " v" + conf.version)
+        await logger.log("banner", conf.banner + " v" + __version__)
 
         await logger.log("login",
                          "Logged in as\n"
