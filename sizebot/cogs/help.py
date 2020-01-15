@@ -124,8 +124,10 @@ class HelpCog(commands.Cog):
 
         await ctx.send(f"Unrecognized command: {cmdName}")
 
-    @commandsplus.command()
+    @commandsplus.command(
+    )
     async def about(self, ctx):
+        """Get the credits and some facts about SizeBot."""
         now = datetime.now()
         await ctx.send(
             "```\n"
