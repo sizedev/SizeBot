@@ -44,7 +44,7 @@ class Command(commands.Command):
 
     @property
     def summary(self):
-        return f"**{self.name}**\n{self.short_doc or ''}"
+        return self.short_doc or f"{self.name} {self.signature}"
 
 
 def command(name=None, cls=None, **attrs):
