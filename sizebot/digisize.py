@@ -183,11 +183,13 @@ class PersonComparison:
             f"\tFoot Length: {self.bigToSmall.footlength:.3mu} ({self.bigToSmall.shoesize})\n"
             f"\tFoot Width: {self.bigToSmall.footwidth:.3mu}\n"
             f"\tToe Height: {self.bigToSmall.toeheight:.3mu}\n"
+            f"\tShoeprint Depth: {self.bigToSmall.shoeprintdepth:.3mu}\n"
             f"\tPointer Finger Length: {self.bigToSmall.pointerlength:.3mu}\n"
             f"\tThumb Width: {self.bigToSmall.thumbwidth:.3mu}\n"
             f"\tNail Thickness: {self.bigToSmall.nailthickness:.3mu}\n"
             f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:.3mu}\n"
             f"\tHair Width: {self.bigToSmall.hairwidth:.3mu}\n"
+            f"\tEye Width: {self.bigToSmall.eyewidth:.3mu}\n"
             "\n"
             f"{self.big.tag} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.tag}.\n"
             "\n"
@@ -200,11 +202,13 @@ class PersonComparison:
             f"\tFoot Length: {self.smallToBig.footlength:.3mu} ({self.smallToBig.shoesize})\n"
             f"\tFoot Width: {self.smallToBig.footwidth:.3mu}\n"
             f"\tToe Height: {self.smallToBig.toeheight:.3mu}\n"
+            f"\tShoeprint Depth: {self.smallToBig.shoeprintdepth:.3mu}\n"
             f"\tPointer Finger Length: {self.smallToBig.pointerlength:.3mu}\n"
             f"\tThumb Width: {self.smallToBig.thumbwidth:.3mu}\n"
             f"\tNail Thickness: {self.smallToBig.nailthickness:.3mu}\n"
             f"\tFingerprint Depth: {self.smallToBig.fingerprintdepth:.3mu}\n"
             f"\tHair Width: {self.smallToBig.hairwidth:.3mu}\n"
+            f"\tEye Width: {self.smallToBig.eyewidth:.3mu}\n"
             "\n"
             f"**Base Sizes:**\n"
             f"\t{self.big.tag}: {self.big.baseheight:.3mu} | {self.big.baseweight:.3mu}\n"
@@ -241,6 +245,9 @@ class PersonComparison:
         embed.add_field(name="Toe Height", value=(
             f"{emojis['comparebig']}{self.bigToSmall.toeheight:.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.toeheight:.3mu}"), inline=True)
+        embed.add_field(name="Shoeprint Depth", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.shoeprintdepth:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.shoeprintdepth:.3mu}"), inline=True)
         embed.add_field(name="Pointer Finger Length", value=(
             f"{emojis['comparebig']}{self.bigToSmall.pointerlength:.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.pointerlength:.3mu}"), inline=True)
@@ -256,6 +263,9 @@ class PersonComparison:
         embed.add_field(name="Hair Width", value=(
             f"{emojis['comparebig']}{self.bigToSmall.hairwidth:.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.hairwidth:.3mu}"), inline=True)
+        embed.add_field(name="Eye Width", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.eyewidth:.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.eyewidth:.3mu}"), inline=True)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.nickname}."))
@@ -336,11 +346,13 @@ class PersonStats:
             f"Foot Length: {self.footlength:,.3mu} ({self.shoesize})\n"
             f"Foot Width: {self.footwidth:,.3mu}\n"
             f"Toe Height: {self.toeheight:,.3mu}\n"
+            f"Shoeprint Depth: {self.shoeprintdepth:,.3mu}"
             f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
             f"Thumb Width: {self.thumbwidth:,.3mu}\n"
             f"Nail Thickness: {self.nailthickness:,.3mu}\n"
             f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
             f"Hair Width: {self.hairwidth:,.3mu}\n"
+            f"Eye Width: {self.eyewidth:,.3mu}"
             f"\n"
             f"Size of a Normal Person (Comparative): {self.avgheightcomp:,.3mu}\n"
             f"Weight of a Normal Person (Comparative): {self.avgweightcomp:,.3mu}\n"
@@ -357,11 +369,13 @@ class PersonStats:
         embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
+        embed.add_field(name="Shoeprint Depth", value=format(self.shoeprintdepth, ",.3mu"), inline=True)
         embed.add_field(name="Pointer Finger Length", value=format(self.pointerlength, ",.3mu"), inline=True)
         embed.add_field(name="Thumb Width", value=format(self.thumbwidth, ",.3mu"), inline=True)
         embed.add_field(name="Nail Thickness", value=format(self.nailthickness, ",.3mu"), inline=True)
         embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
         embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
+        embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="\u200b", value="\u200b", inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
