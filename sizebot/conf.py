@@ -72,3 +72,6 @@ def load():
 
 def getId(self, name):
     return ids.get(name, 000000000000000000)
+
+
+load()
