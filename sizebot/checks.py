@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-from sizebot.conf import conf
+from sizebot import conf
 from sizebot import digierror as errors
 
 

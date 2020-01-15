@@ -6,61 +6,6 @@ import toml
 from sizebot import utils
 
 
-class Config:
-    __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "telemetrypath", "changespath", "prefix", "prefix", "authtoken", "admins", "ids", "emoji", "logchannelid"]
-
-    def __init__(self, configDict):
-        # ASCII art
-        self.banner = (r"   _____ _         ____        _   ____   _____ ""\n"
-                       r"  / ____(_)       |  _ \      | | |___ \ | ____|""\n"
-                       r" | (___  _ _______| |_) | ___ | |_  __) || |__  ""\n"
-                       r"  \___ \| |_  / _ \  _ < / _ \| __||__ < |___ \ ""\n"
-                       r"  ____) | |/ /  __/ |_) | (_) | |_ ___) | ___) |""\n"
-                       r" |_____/|_/___\___|____/ \___/ \__|____(_)____/ ""\n"
-                       r"                                                ")
-
-        self.description = ("SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.\n"
-                            "SizeBot3AndAHalf is a refactorization for SB3 and adds various features.\n"
-                            "Written by DigiDuncan.\n"
-                            "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
-
-        # Version
-        # Release versions: major.minor.revision
-        self.version = "3.5.0.alpha"
-
-        # File paths
-        datadir = getDataDir()
-        self.winkpath = datadir / "winkcount.txt"
-        self.userdbpath = datadir / "users"
-        self.telemetrypath = datadir / "telemetry.json"
-        self.changespath = datadir / "changes.json"
-
-        # Sizebot
-        self.prefix = utils.getPath(configDict, "sizebot.prefix", "&")
-
-        # Discord
-        self.authtoken = utils.getPath(configDict, "discord.authtoken", None)
-        self.admins = utils.getPath(configDict, "discord.admins", [])     # List of admins
-        self.ids = configDict.get("ids", dict())        # List of ids by name
-        self.emoji = configDict.get("emoji", dict())    # List of emojis by name
-
-        self.logchannelid = utils.getPath(configDict, "discord.logchannelid", None)
-        if self.logchannelid is not None:
-            self.logchannelid = int(self.logchannelid)
-
-    def getId(self, name):
-        return self.ids.get(name, 000000000000000000)
-
-    @classmethod
-    def load(cls):
-        datadir = getDataDir()
-        confpath = datadir / "sizebot.conf"
-
-        configDict = toml.load(confpath)
-
-        return Config(configDict)
-
-
 def getDataDir():
     appname = "SizeBot"
     appauthor = "DigiDuncan"
@@ -68,4 +13,62 @@ def getDataDir():
     return datadir
 
 
-conf = Config.load()
+# ASCII art
+banner = (
+    r"   _____ _         ____        _   ____   _____ ""\n"
+    r"  / ____(_)       |  _ \      | | |___ \ | ____|""\n"
+    r" | (___  _ _______| |_) | ___ | |_  __) || |__  ""\n"
+    r"  \___ \| |_  / _ \  _ < / _ \| __||__ < |___ \ ""\n"
+    r"  ____) | |/ /  __/ |_) | (_) | |_ ___) | ___) |""\n"
+    r" |_____/|_/___\___|____/ \___/ \__|____(_)____/ ""\n"
+    r"                                                ")
+description = (
+    "SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.\n"
+    "SizeBot3AndAHalf is a refactorization for SB3 and adds various features.\n"
+    "Written by DigiDuncan.\n"
+    "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
+winkpath = None
+userdbpath = None
+telemetrypath = None
+changespath = None
+prefix = "&"
+authtoken = None
+admins = []             # List of admins
+ids = dict()            # List of ids by name
+emoji = dict()          # List of emojis by name
+logchannelid = None
+
+# File paths
+datadir = getDataDir()
+winkpath = datadir / "winkcount.txt"
+userdbpath = datadir / "users"
+telemetrypath = datadir / "telemetry.json"
+changespath = datadir / "changes.json"
+confpath = datadir / "sizebot.conf"
+
+
+def load():
+    global prefix, authtoken, admins, ids, emoji, logchannelid
+    configDict = toml.load(confpath)
+
+    # Sizebot
+    if utils.hasPath(configDict, "sizebot.prefix"):
+        prefix = utils.getPath(configDict, "sizebot.prefix")
+
+    # Discord
+    if utils.hasPath(configDict, "discord.authtoken"):
+        authtoken = utils.getPath(configDict, "discord.authtoken")
+    if utils.hasPath(configDict, "discord.admins"):
+        admins = utils.getPath(configDict, "discord.admins")
+    if "ids" in configDict:
+        ids = configDict["ids"]
+    if "emoji" in configDict:
+        emoji = configDict["emoji"]
+
+    logchannelid = utils.getPath(configDict, "discord.logchannelid")
+    if logchannelid is not None:
+        logchannelid = int(logchannelid)
+
+
+def getId(self, name):
+    return ids.get(name, 000000000000000000)

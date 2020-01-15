@@ -3,7 +3,7 @@ import asyncio
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot.conf import conf
+from sizebot import conf
 from sizebot.checks import requireAdmin
 
 tasks = {}

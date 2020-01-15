@@ -6,7 +6,7 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import digilogger as logger
 from sizebot import utils
-from sizebot.conf import conf
+from sizebot import conf
 
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
 starttime = datetime(2019, 9, 15)

@@ -1,6 +1,6 @@
 import json
 
-from sizebot.conf import conf
+from sizebot import conf
 
 
 class Telemetry():
