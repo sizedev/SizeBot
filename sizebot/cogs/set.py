@@ -7,7 +7,7 @@ from sizebot.digiSV import SV, WV
 from sizebot import digisize
 from sizebot.utils import clamp
 import sizebot.digidecimal as digidecimal
-from sizebot.digierror import errors
+from sizebot import digierror as errors
 
 
 class SetCog(commands.Cog):
