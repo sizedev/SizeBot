@@ -18,7 +18,8 @@ def getRequirements():
 
 def getVersion():
     version = None
-    with open(Path(__file__).parent().resolve() / "sizebot" / "init.py", "r") as fp:
+    path = Path(__file__).parent().resolve() / "sizebot" / "init.py"
+    with open(path, "r") as fp:
         version_file = fp.read()
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
     if version_match:
