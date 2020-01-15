@@ -174,44 +174,48 @@ class PersonComparison:
         return (
             "**Comparison:**\n"
             f"{self.big.tag} is really:\n"
-            f"\tReal Height: {self.big.height:.3mu} ({fixZeroes(1/self.big.viewscale):,.3}x scale)\n"
-            f"\tReal Weight: {self.big.weight:.3mu}. ({fixZeroes(1/(self.big.viewscale ** 3)):,.3}x scale)\n"
+            f"\tReal Height: {self.big.height:,.3mu} ({fixZeroes(1/self.big.viewscale):,.3}x scale)\n"
+            f"\tReal Weight: {self.big.weight:,.3mu}. ({fixZeroes(1/(self.big.viewscale ** 3)):,.3}x scale)\n"
             f"To {self.small.tag}, {self.big.tag} looks:\n"
-            f"\tHeight: {self.bigToSmall.height:.3mu}\n"
-            f"\tWeight: {self.bigToSmall.weight:.3mu}\n"
-            f"\tFoot Length: {self.bigToSmall.footlength:.3mu} ({self.bigToSmall.shoesize})\n"
-            f"\tFoot Width: {self.bigToSmall.footwidth:.3mu}\n"
-            f"\tToe Height: {self.bigToSmall.toeheight:.3mu}\n"
-            f"\tShoeprint Depth: {self.bigToSmall.shoeprintdepth:.3mu}\n"
-            f"\tPointer Finger Length: {self.bigToSmall.pointerlength:.3mu}\n"
-            f"\tThumb Width: {self.bigToSmall.thumbwidth:.3mu}\n"
-            f"\tNail Thickness: {self.bigToSmall.nailthickness:.3mu}\n"
-            f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:.3mu}\n"
-            f"\tHair Width: {self.bigToSmall.hairwidth:.3mu}\n"
-            f"\tEye Width: {self.bigToSmall.eyewidth:.3mu}\n"
+            f"\tHeight: {self.bigToSmall.height:,.3mu}\n"
+            f"\tWeight: {self.bigToSmall.weight:,.3mu}\n"
+            f"\tFoot Length: {self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
+            f"\tFoot Width: {self.bigToSmall.footwidth:,.3mu}\n"
+            f"\tToe Height: {self.bigToSmall.toeheight:,.3mu}\n"
+            f"\tShoeprint Depth: {self.bigToSmall.shoeprintdepth:,.3mu}\n"
+            f"\tPointer Finger Length: {self.bigToSmall.pointerlength:,.3mu}\n"
+            f"\tThumb Width: {self.bigToSmall.thumbwidth:,.3mu}\n"
+            f"\tNail Thickness: {self.bigToSmall.nailthickness:,.3mu}\n"
+            f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:,.3mu}\n"
+            f"\tHair Width: {self.bigToSmall.hairwidth:,.3mu}\n"
+            f"\tEye Width: {self.bigToSmall.eyewidth:,.3mu}\n"
+            f"\tWalk Speed: {self.bigToSmall.walkspeed,:.3mu}\n"
+            f"\tRun Speed: {self.bigToSmall.runspeed:,.3mu}\n"
             "\n"
             f"{self.big.tag} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.tag}.\n"
             "\n"
             f"{self.small.tag} is really:\n"
-            f"\tReal Height: {self.small.height:.3mu} ({fixZeroes(1/self.small.viewscale):,.3}x scale)\n"
-            f"\tReal Weight: {self.small.weight:.3mu}. ({fixZeroes(1/(self.small.viewscale ** 3)):,.3}x scale)\n"
+            f"\tReal Height: {self.small.height:,.3mu} ({fixZeroes(1/self.small.viewscale):,.3}x scale)\n"
+            f"\tReal Weight: {self.small.weight:,.3mu}. ({fixZeroes(1/(self.small.viewscale ** 3)):,.3}x scale)\n"
             f"To {self.big.tag}, {self.small.tag} looks:\n"
-            f"\tHeight: {self.smallToBig.height:.3mu}\n"
-            f"\tWeight: {self.smallToBig.weight:.3mu}\n"
-            f"\tFoot Length: {self.smallToBig.footlength:.3mu} ({self.smallToBig.shoesize})\n"
-            f"\tFoot Width: {self.smallToBig.footwidth:.3mu}\n"
-            f"\tToe Height: {self.smallToBig.toeheight:.3mu}\n"
-            f"\tShoeprint Depth: {self.smallToBig.shoeprintdepth:.3mu}\n"
-            f"\tPointer Finger Length: {self.smallToBig.pointerlength:.3mu}\n"
-            f"\tThumb Width: {self.smallToBig.thumbwidth:.3mu}\n"
-            f"\tNail Thickness: {self.smallToBig.nailthickness:.3mu}\n"
-            f"\tFingerprint Depth: {self.smallToBig.fingerprintdepth:.3mu}\n"
-            f"\tHair Width: {self.smallToBig.hairwidth:.3mu}\n"
-            f"\tEye Width: {self.smallToBig.eyewidth:.3mu}\n"
+            f"\tHeight: {self.smallToBig.height:,.3mu}\n"
+            f"\tWeight: {self.smallToBig.weight:,.3mu}\n"
+            f"\tFoot Length: {self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})\n"
+            f"\tFoot Width: {self.smallToBig.footwidth:,.3mu}\n"
+            f"\tToe Height: {self.smallToBig.toeheight:,.3mu}\n"
+            f"\tShoeprint Depth: {self.smallToBig.shoeprintdepth:,.3mu}\n"
+            f"\tPointer Finger Length: {self.smallToBig.pointerlength:,.3mu}\n"
+            f"\tThumb Width: {self.smallToBig.thumbwidth:,.3mu}\n"
+            f"\tNail Thickness: {self.smallToBig.nailthickness:,.3mu}\n"
+            f"\tFingerprint Depth: {self.smallToBig.fingerprintdepth:,.3mu}\n"
+            f"\tHair Width: {self.smallToBig.hairwidth:,.3mu}\n"
+            f"\tEye Width: {self.smallToBig.eyewidth:,.3mu}\n"
+            f"\tWalk Speed: {self.smallToBig.walkspeed:,.3m}/h ({self.smallToBig.walkspeed:,.3u}/h)\n"
+            f"\tRun Speed: {self.smallToBig.runspeed:,.3m}/h ({self.smallToBig.runspeed:,.3m}/h)\n"
             "\n"
             f"**Base Sizes:**\n"
-            f"\t{self.big.tag}: {self.big.baseheight:.3mu} | {self.big.baseweight:.3mu}\n"
-            f"\t{self.small.tag}: {self.small.baseheight:.3mu} | {self.small.baseweight:.3mu}"
+            f"\t{self.big.tag}: {self.big.baseheight:,.3mu} | {self.big.baseweight:,.3mu}\n"
+            f"\t{self.small.tag}: {self.small.baseheight:,.3mu} | {self.small.baseweight:,.3mu}"
         ).replace("\t", "\u2002" * 4)
 
     def toEmbed(self):
@@ -221,50 +225,56 @@ class PersonComparison:
                               url=self.url)
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
         embed.add_field(name=f"{emojis['comparebigcenter']} **{self.big.nickname}**", value=(
-            f"{emojis['blank']}{emojis['blank']} **Height:** {self.big.height:.3mu}\n"
-            f"{emojis['blank']}{emojis['blank']} **Weight:** {self.big.weight:.3mu}\n"), inline=True)
+            f"{emojis['blank']}{emojis['blank']} **Height:** {self.big.height:,.3mu}\n"
+            f"{emojis['blank']}{emojis['blank']} **Weight:** {self.big.weight:,.3mu}\n"), inline=True)
         embed.add_field(name=f"{emojis['comparesmallcenter']} **{self.small.nickname}**", value=(
-            f"{emojis['blank']}{emojis['blank']} **Height:** {self.small.height:.3mu}\n"
-            f"{emojis['blank']}{emojis['blank']} **Weight:** {self.small.weight:.3mu}\n"), inline=True)
+            f"{emojis['blank']}{emojis['blank']} **Height:** {self.small.height:,.3mu}\n"
+            f"{emojis['blank']}{emojis['blank']} **Weight:** {self.small.weight:,.3mu}\n"), inline=True)
         embed.add_field(name="\u200b", value=(
             f"{emojis['comparebigcenter']} looks like {emojis['comparebig']} to {emojis['comparesmallcenter']}\n"
             f"{emojis['comparesmallcenter']} looks like {emojis['comparesmall']} to {emojis['comparebigcenter']}"), inline=False)
         embed.add_field(name="Height", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.height:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.height:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.height:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.height:,.3mu}"), inline=True)
         embed.add_field(name="Weight", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.weight:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.weight:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.weight:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.weight:,.3mu}"), inline=True)
         embed.add_field(name="Foot Length", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.footlength:.3mu} ({self.bigToSmall.shoesize})\n"
-            f"{emojis['comparesmall']}{self.smallToBig.footlength:.3mu} ({self.smallToBig.shoesize})"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
+            f"{emojis['comparesmall']}{self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})"), inline=True)
         embed.add_field(name="Foot Width", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.footwidth:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.footwidth:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.footwidth:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.footwidth:,.3mu}"), inline=True)
         embed.add_field(name="Toe Height", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.toeheight:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.toeheight:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.toeheight:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.toeheight:,.3mu}"), inline=True)
         embed.add_field(name="Shoeprint Depth", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.shoeprintdepth:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.shoeprintdepth:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.shoeprintdepth:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.shoeprintdepth:,.3mu}"), inline=True)
         embed.add_field(name="Pointer Finger Length", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.pointerlength:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.pointerlength:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.pointerlength:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.pointerlength:,.3mu}"), inline=True)
         embed.add_field(name="Thumb Width", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.thumbwidth:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.thumbwidth:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.thumbwidth:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.thumbwidth:,.3mu}"), inline=True)
         embed.add_field(name="Nail Thickness", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.nailthickness:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.nailthickness:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.nailthickness:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.nailthickness:,.3mu}"), inline=True)
         embed.add_field(name="Fingerprint Depth", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.fingerprintdepth:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.fingerprintdepth:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.fingerprintdepth:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.fingerprintdepth:,.3mu}"), inline=True)
         embed.add_field(name="Hair Width", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.hairwidth:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.hairwidth:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.hairwidth:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.hairwidth:,.3mu}"), inline=True)
         embed.add_field(name="Eye Width", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.eyewidth:.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.eyewidth:.3mu}"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.eyewidth:,.3mu}\n"
+            f"{emojis['comparesmall']}{self.smallToBig.eyewidth:,.3mu}"), inline=True)
+        embed.add_field(name="Walk Speed", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.walkspeed:,.3m}/h ({self.bigToSmall.walkspeed:,.3u}/h)\n"
+            f"{emojis['comparesmall']}{self.smallToBig.walkspeed:,.3m}/h ({self.smallToBig.walkspeed:,.3u}/h)"), inline=True)
+        embed.add_field(name="Run Speed", value=(
+            f"{emojis['comparebig']}{self.bigToSmall.runspeed:,.3m}/h ({self.bigToSmall.runspeed:,.3u}/h)\n"
+            f"{emojis['comparesmall']}{self.smallToBig.runspeed:,.3m}/h ({self.smallToBig.runspeed:,.3u}/h)"), inline=True)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.nickname}."))
@@ -301,6 +311,8 @@ class PersonStats:
     nailthickfactor = Decimal("1") / Decimal("2920")
     shoeprintfactor = Decimal("1") / Decimal("135")
     eyewidthfactor = Decimal("1") / Decimal("73.083")
+    walkperhourfactor = Decimal("1") * Decimal("43600")
+    runperhourfactor = Decimal("1") * Decimal("130800")
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -337,6 +349,9 @@ class PersonStats:
         self.averageheightmult = self.height / defaultheight
         self.averageweightmult = self.weight / defaultweight
 
+        self.walkperhour = self.height * self.walkperhourfactor
+        self.runperhour = self.height * self.runperhourfactor
+
     def __str__(self):
         return (
             f"**{self.tag} Stats:**\n"
@@ -352,7 +367,9 @@ class PersonStats:
             f"Nail Thickness: {self.nailthickness:,.3mu}\n"
             f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
             f"Hair Width: {self.hairwidth:,.3mu}\n"
-            f"Eye Width: {self.eyewidth:,.3mu}"
+            f"Eye Width: {self.eyewidth:,.3mu}\n"
+            f"Walk Speed: {self.walkperhour:,.1m}/h ({self.walkperhour:,.1u}/h)\n"
+            f"Run Speed: {self.runperhour:,.1m}/h ({self.runperhour:,.1u}/h)\n"
             f"\n"
             f"Size of a Normal Person (Comparative): {self.avgheightcomp:,.3mu}\n"
             f"Weight of a Normal Person (Comparative): {self.avgweightcomp:,.3mu}\n"
@@ -376,6 +393,8 @@ class PersonStats:
         embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
         embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
+        embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1m}/h ({self.walkperhour:,.1u}/h)", inline=True)
+        embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1m}/h ({self.runperhour:,.1u}/h)", inline=True)
         embed.add_field(name="\u200b", value="\u200b", inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
