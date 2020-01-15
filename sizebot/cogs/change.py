@@ -44,9 +44,9 @@ class ChangeCog(commands.Cog):
         changeDump = changes.formatSummary()
 
         if not changeDump:
-            changeDump = "No changes"
+            changeDump = "No active changes"
 
-        await ctx.author.send("**CHANGES**\n" + changeDump)
+        await ctx.author.send("**ACTIVE CHANGES**\n" + changeDump)
         await logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the running changes.")
 
     @commandsplus.command(
@@ -61,6 +61,7 @@ class ChangeCog(commands.Cog):
 
         changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
 
+        # TODO: Add user message
         await logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commandsplus.command()
@@ -75,6 +76,7 @@ class ChangeCog(commands.Cog):
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
             await logger.warn(f"User {ctx.author.id} ({ctx.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
         else:
+            # TODO: Add user message
             await logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) stopped slow-changing.")
 
     @commandsplus.command()
