@@ -70,7 +70,7 @@ def load():
         logchannelid = int(logchannelid)
 
 
-def getId(self, name):
+def getId(name):
     return ids.get(name, 000000000000000000)
 
 
