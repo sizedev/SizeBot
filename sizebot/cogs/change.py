@@ -65,7 +65,9 @@ class ChangeCog(commands.Cog):
     def cog_unload(self):
         self.changeTask.cancel()
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<x,-,/,+> <amount>"
+    )
     @commands.guild_only()
     async def change(self, ctx, style, *, amount):
         """Change height"""
@@ -74,7 +76,9 @@ class ChangeCog(commands.Cog):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed {style}-style {amount}.")
         await ctx.send(f"User <@{ctx.message.author.id}> is now {userdata.height:m} ({userdata.height:u}) tall.")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        hidden = True
+    )
     @commands.check(requireAdmin)
     async def changes(self, ctx):
         await ctx.message.delete(delay=0)
@@ -84,7 +88,9 @@ class ChangeCog(commands.Cog):
         await ctx.message.author.send("**CHANGES**\n" + changeDump)
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) dumped the running changes.")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<rate>"
+    )
     @commands.guild_only()
     async def slowchange(self, ctx, *, rateStr: str):
         addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(rateStr)

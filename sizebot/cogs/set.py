@@ -15,7 +15,8 @@ class SetCog(commands.Cog):
         self.bot = bot
 
     @commandsplus.command(
-        aliases = ["changenick", "nick"]
+        aliases = ["changenick", "nick"],
+        usage = "<nick>"
     )
     @commands.guild_only()
     async def setnick(self, ctx, *, newnick = None):
@@ -36,7 +37,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<species>"
+    )
     @commands.guild_only()
     async def setspecies(self, ctx, *, newtag = None):
         """Change species."""
@@ -71,7 +74,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<height>"
+    )
     @commands.guild_only()
     async def setheight(self, ctx, *, newheight = None):
         """Change height."""
@@ -114,7 +119,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<Y/N>"
+    )
     @commands.guild_only()
     async def setdisplay(self, ctx, newdisp = None):
         """Set display mode."""
@@ -139,7 +146,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<M/U>"
+    )
     @commands.guild_only()
     async def setsystem(self, ctx, newsys = None):
         """Set measurement system."""
@@ -164,7 +173,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<minheight> <maxheight>"
+    )
     @commands.guild_only()
     async def setrandomheight(self, ctx, minheight = None, maxheight = None):
         """Change height to a random value."""
@@ -219,7 +230,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<height>"
+    )
     @commands.guild_only()
     async def setbaseheight(self, ctx, *, newbaseheight = None):
         """Change base height."""
@@ -239,7 +252,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<weight>"
+    )
     @commands.guild_only()
     async def setbaseweight(self, ctx, *, newbaseweight = None):
         """Change base weight."""
@@ -260,10 +275,12 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     # TODO: Make this accept shoe size as an input.
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<length>"
+    )
     @commands.guild_only()
     async def setfoot(self, ctx, *, newfoot = None):
-        """Change height."""
+        """Change custom foot length."""
         # TODO: Move this to an error handler for MissingRequiredArgument
         if newfoot is None:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [length]`.")
@@ -287,7 +304,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
-        aliases = ["clearfoot"]
+        aliases = ["clearfoot", "unsetfoot"]
     )
     @commands.guild_only()
     async def resetfoot(self, ctx):
@@ -303,7 +320,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command(usage = "[male/female]")
+    @commandsplus.command(
+        usage = "<male/female/none>"
+    )
     @commands.guild_only()
     async def setgender(self, ctx, gender):
         """Set gender"""
@@ -344,7 +363,9 @@ class SetCog(commands.Cog):
             raise errors.ArgumentException(ctx)
         raise error
 
-    @commandsplus.command(aliases = ["cleargender", "unsetgender"])
+    @commandsplus.command(
+        aliases = ["cleargender", "unsetgender"]
+    )
     @commands.guild_only()
     async def resetgender(self, ctx):
         """Reset gender"""

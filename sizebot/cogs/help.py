@@ -160,7 +160,9 @@ class HelpCog(commands.Cog):
             "SizeBot has been a passion project coded over a period of three years and learning a lot of Python along the way.\n"
             "Thank you so much for being here throughout this journey!")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<message>"
+    )
     async def bug(self, ctx, *, message: str):
         await logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
         await self.bot.get_user(conf.getId("DigiDuncan")).send(f"<@{ctx.message.author.id}>: {message}")

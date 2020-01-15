@@ -13,7 +13,9 @@ class EvalCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command()
+    @commandsplus.command(
+        hidden = True
+    )
     @commands.check(requireAdmin)
     async def eval(self, ctx, *, evalStr):
         evalStr = removeCodeBlock(evalStr)
@@ -40,7 +42,9 @@ class EvalCog(commands.Cog):
         for m in utils.chunkMsg(str(result).replace("```", r"\`\`\`")):
             await ctx.send(m)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        hidden = True
+    )
     @commands.check(requireAdmin)
     async def evil(self, ctx, *, evalStr):
         await ctx.message.delete(delay = 0)

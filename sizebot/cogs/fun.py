@@ -14,7 +14,10 @@ class FunCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command()
+    @commandsplus.command(
+        hidden = True
+    )
+    @commands.check(requireAdmin)
     async def repeat(self, ctx, delay: float, *, message: str):
         if ctx.message.author.id != conf.getId("DigiDuncan"):
             return
@@ -27,19 +30,26 @@ class FunCog(commands.Cog):
         task = self.bot.loop.create_task(repeatTask())
         tasks[ctx.message.author.id] = task
 
-    @commandsplus.command()
+    @commandsplus.command(
+        hidden = True
+    )
+    @commands.check(requireAdmin)
     async def stoprepeat(self, ctx):
         await ctx.message.delete(delay=0)
         tasks[ctx.message.author.id].cancel()
         del tasks[ctx.message.author.id]
 
-    @commandsplus.command()
+    @commandsplus.command(
+        hidden = True
+    )
     async def say(self, ctx, *, message: str):
         await ctx.message.delete(delay=0)
         if ctx.message.author.id == conf.getId("DigiDuncan"):
             await ctx.send(message)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "<message>"
+    )
     async def sing(self, ctx, *, s: str):
         await ctx.message.delete(delay=0)
         newstring = f":musical_score: *{s}* :musical_note:"

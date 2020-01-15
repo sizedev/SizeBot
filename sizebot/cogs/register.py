@@ -33,6 +33,7 @@ class RegisterCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    # TODO: Change the way this works.
     @commandsplus.command()
     @commands.guild_only()
     async def register(self, ctx, nick: str, display: str = "y", currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):

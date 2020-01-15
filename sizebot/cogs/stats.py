@@ -19,7 +19,7 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["stat"],
-        usage = "<user/height>"
+        usage = "[user/height]"
     )
     @commands.guild_only()
     async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
@@ -49,7 +49,7 @@ class StatsCog(commands.Cog):
         await logger.info(f"Stats for {memberOrHeight} sent.")
 
     @commandsplus.command(
-        usage = "<user or height>"
+        usage = "[user/height]"
     )
     @commands.guild_only()
     async def statstxt(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
@@ -75,7 +75,9 @@ class StatsCog(commands.Cog):
 
         await logger.info(f"Stats for {memberOrHeight} sent.")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "[user/height] <user/height>"
+    )
     @commands.guild_only()
     async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         if memberOrHeight2 is None:
@@ -96,7 +98,9 @@ class StatsCog(commands.Cog):
 
         await logger.info(f"Compared {userdata1} and {userdata2}")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = "[user/height] <user/height>"
+    )
     @commands.guild_only()
     async def comparetxt(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         if memberOrHeight2 is None:
@@ -126,8 +130,7 @@ class StatsCog(commands.Cog):
             raise error
 
     @commandsplus.command(
-        aliases = ["objectcompare", "objcomp"],
-        usage = ""
+        aliases = ["objectcompare", "objcomp"]
     )
     @commands.guild_only()
     async def objcompare(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
