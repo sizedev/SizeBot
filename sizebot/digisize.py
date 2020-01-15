@@ -210,8 +210,8 @@ class PersonComparison:
             f"\tFingerprint Depth: {self.smallToBig.fingerprintdepth:,.3mu}\n"
             f"\tHair Width: {self.smallToBig.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.smallToBig.eyewidth:,.3mu}\n"
-            f"\tWalk Speed: {self.smallToBig.walkspeed:,.3m}/h ({self.smallToBig.walkspeed:,.3u}/h)\n"
-            f"\tRun Speed: {self.smallToBig.runspeed:,.3m}/h ({self.smallToBig.runspeed:,.3m}/h)\n"
+            f"\tWalk Speed: {self.smallToBig.walkspeed:,.1M} per hour ({self.smallToBig.walkspeed:,.1U} per hour)\n"
+            f"\tRun Speed: {self.smallToBig.runspeed:,.1M} per hour ({self.smallToBig.runspeed:,.1U} per hour)\n"
             "\n"
             f"**Base Sizes:**\n"
             f"\t{self.big.tag}: {self.big.baseheight:,.3mu} | {self.big.baseweight:,.3mu}\n"
@@ -270,11 +270,11 @@ class PersonComparison:
             f"{emojis['comparebig']}{self.bigToSmall.eyewidth:,.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.eyewidth:,.3mu}"), inline=True)
         embed.add_field(name="Walk Speed", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.walkspeed:,.3m}/h ({self.bigToSmall.walkspeed:,.3u}/h)\n"
-            f"{emojis['comparesmall']}{self.smallToBig.walkspeed:,.3m}/h ({self.smallToBig.walkspeed:,.3u}/h)"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.walkspeed:,.1M} per hour ({self.bigToSmall.walkspeed:,.1U} per hour)\n"
+            f"{emojis['comparesmall']}{self.smallToBig.walkspeed:,.1M} per hour ({self.smallToBig.walkspeed:,.1U} per hour)"), inline=True)
         embed.add_field(name="Run Speed", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.runspeed:,.3m}/h ({self.bigToSmall.runspeed:,.3u}/h)\n"
-            f"{emojis['comparesmall']}{self.smallToBig.runspeed:,.3m}/h ({self.smallToBig.runspeed:,.3u}/h)"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.runspeed:,.1M} per hour ({self.bigToSmall.runspeed:,.1U} per hour)\n"
+            f"{emojis['comparesmall']}{self.smallToBig.runspeed:,.1M} per hour ({self.smallToBig.runspeed:,.1U} per hour)"), inline=True)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.nickname}."))
@@ -350,8 +350,8 @@ class PersonStats:
         defaultwalkspeed = SV.parse("2.5mi")
         defaultrunspeed = SV.parse("7.5mi")
 
-        self.walkperhour = SV(defaultwalkspeed / self.averageheightmult)
-        self.runperhour = SV(defaultrunspeed / self.averageheightmult)
+        self.walkperhour = SV(defaultwalkspeed * self.averageheightmult)
+        self.runperhour = SV(defaultrunspeed * self.averageheightmult)
 
     def __str__(self):
         return (
@@ -369,8 +369,8 @@ class PersonStats:
             f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
             f"Hair Width: {self.hairwidth:,.3mu}\n"
             f"Eye Width: {self.eyewidth:,.3mu}\n"
-            f"Walk Speed: {self.walkperhour:,.1m}/h ({self.walkperhour:,.1u}/h)\n"
-            f"Run Speed: {self.runperhour:,.1m}/h ({self.runperhour:,.1u}/h)\n"
+            f"Walk Speed: {self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)\n"
+            f"Run Speed: {self.runperhour:,.1M} per hour ({self.runperhour:,.1U} per hour)\n"
             f"\n"
             f"Size of a Normal Person (Comparative): {self.avgheightcomp:,.3mu}\n"
             f"Weight of a Normal Person (Comparative): {self.avgweightcomp:,.3mu}\n"
@@ -394,8 +394,8 @@ class PersonStats:
         embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
         embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
-        embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1m}/h ({self.walkperhour:,.1u}/h)", inline=True)
-        embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1m}/h ({self.runperhour:,.1u}/h)", inline=True)
+        embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)", inline=True)
+        embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour ({self.runperhour:,.1U} per hour)", inline=True)
         embed.add_field(name="\u200b", value="\u200b", inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
