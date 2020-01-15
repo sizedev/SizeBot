@@ -5,6 +5,14 @@ import toml
 
 from sizebot import utils
 
+
+def getDataDir():
+    appname = "SizeBot"
+    appauthor = "DigiDuncan"
+    datadir = Path(appdirs.user_data_dir(appname, appauthor))
+    return datadir
+
+
 # ASCII art
 banner = (
     r"   _____ _         ____        _   ____   _____ ""\n"
@@ -19,62 +27,48 @@ description = (
     "SizeBot3AndAHalf is a refactorization for SB3 and adds various features.\n"
     "Written by DigiDuncan.\n"
     "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
-# Version
-# Release versions: major.minor.revision
 winkpath = None
 userdbpath = None
 telemetrypath = None
 changespath = None
-prefix = None
+prefix = "&"
 authtoken = None
-admins = None
-ids = None
-emoji = None
+admins = []             # List of admins
+ids = dict()            # List of ids by name
+emoji = dict()          # List of emojis by name
 logchannelid = None
 
-
-class Config:
-    __slots__ = ["banner", "description", "version", "winkpath", "userdbpath", "telemetrypath", "changespath", "prefix", "prefix", "authtoken", "admins", "ids", "emoji", "logchannelid"]
-
-    def __init__(self, configDict):
-        # File paths
-        datadir = getDataDir()
-        self.winkpath = datadir / "winkcount.txt"
-        self.userdbpath = datadir / "users"
-        self.telemetrypath = datadir / "telemetry.json"
-        self.changespath = datadir / "changes.json"
-
-        # Sizebot
-        self.prefix = utils.getPath(configDict, "sizebot.prefix", "&")
-
-        # Discord
-        self.authtoken = utils.getPath(configDict, "discord.authtoken", None)
-        self.admins = utils.getPath(configDict, "discord.admins", [])     # List of admins
-        self.ids = configDict.get("ids", dict())        # List of ids by name
-        self.emoji = configDict.get("emoji", dict())    # List of emojis by name
-
-        self.logchannelid = utils.getPath(configDict, "discord.logchannelid", None)
-        if self.logchannelid is not None:
-            self.logchannelid = int(self.logchannelid)
-
-    def getId(self, name):
-        return self.ids.get(name, 000000000000000000)
-
-    @classmethod
-    def load(cls):
-        datadir = getDataDir()
-        confpath = datadir / "sizebot.conf"
-
-        configDict = toml.load(confpath)
-
-        return Config(configDict)
+# File paths
+datadir = getDataDir()
+winkpath = datadir / "winkcount.txt"
+userdbpath = datadir / "users"
+telemetrypath = datadir / "telemetry.json"
+changespath = datadir / "changes.json"
+confpath = datadir / "sizebot.conf"
 
 
-def getDataDir():
-    appname = "SizeBot"
-    appauthor = "DigiDuncan"
-    datadir = Path(appdirs.user_data_dir(appname, appauthor))
-    return datadir
+def load():
+    global prefix, authtoken, admins, ids, emoji, logchannelid
+    configDict = toml.load(confpath)
+
+    # Sizebot
+    if utils.hasPath(configDict, "sizebot.prefix"):
+        prefix = utils.getPath(configDict, "sizebot.prefix")
+
+    # Discord
+    if utils.hasPath(configDict, "discord.authtoken"):
+        authtoken = utils.getPath(configDict, "discord.authtoken")
+    if utils.hasPath(configDict, "discord.admins"):
+        admins = utils.getPath(configDict, "discord.admins")
+    if "ids" in configDict:
+        ids = configDict["ids"]
+    if "emoji" in configDict:
+        emoji = configDict["emoji"]
+
+    logchannelid = utils.getPath(configDict, "discord.logchannelid")
+    if logchannelid is not None:
+        logchannelid = int(logchannelid)
 
 
-conf = Config.load()
+def getId(self, name):
+    return ids.get(name, 000000000000000000)

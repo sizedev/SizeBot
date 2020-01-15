@@ -7,7 +7,7 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import __version__
 from sizebot import digilogger as logger
-from sizebot.conf import conf
+from sizebot import conf
 from sizebot import userdb
 from sizebot.digiSV import SV, WV
 from sizebot.utils import chunkList

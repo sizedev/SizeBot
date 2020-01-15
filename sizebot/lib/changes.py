@@ -6,7 +6,7 @@ from sizebot import digilogger as logger
 from sizebot import userdb
 from sizebot.digiSV import SV, TV
 from sizebot import digisize
-from sizebot.conf import conf
+from sizebot import conf
 
 
 _activeChanges = {}

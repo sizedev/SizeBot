@@ -43,6 +43,20 @@ def tryInt(val):
     return val
 
 
+def hasPath(root, path):
+    """Get a value using a path in nested dicts/lists"""
+    """utils.getPath(myDict, "path.to.value", default=100)"""
+    branch = root
+    components = path.split(".")
+    components = [tryInt(c) for c in components]
+    for component in components:
+        try:
+            branch = branch[component]
+        except (KeyError, IndexError):
+            return False
+    return True
+
+
 def getPath(root, path, default=None):
     """Get a value using a path in nested dicts/lists"""
     """utils.getPath(myDict, "path.to.value", default=100)"""
