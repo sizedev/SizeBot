@@ -21,7 +21,7 @@ class Decimal(decimal.Decimal):
         fractional = formatDict["fractional"]
         formatDict["fractional"] = None
         try:
-            denom = fractional[1]
+            denom = int(fractional[1])
         except IndexError:
             denom = 8
 

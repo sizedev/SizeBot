@@ -3,7 +3,7 @@ import re
 import collections
 import importlib.resources as pkg_resources
 
-from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes, toFraction, parseSpec, buildSpec
+from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes, parseSpec, buildSpec
 from sizebot import digierror as errors
 from sizebot.utils import removeBrackets, re_num, tryOrNone, iset
 from sizebot.picker import getRandomCloseUnit
@@ -210,26 +210,21 @@ class FeetAndInchesUnit(Unit):
 
     def __init__(self):
         self.inch = Decimal("0.0254")
-        self.foot = self.inch * Decimal("12")
-        self.factor = self.foot
+        foot = self.inch * Decimal("12")
+        self.factor = foot
+        self.symbol = ("'", "\"")
 
-    def format(self, value, accuracy=2, spec="", preferName=False, useFractional=False):
+    def format(self, value, spec="", preferName=False):
         inchval = value / self.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
-        if useFractional:
-            roundedinchval = fixZeroes(inchval)
-            formattedInch = toFraction(roundedinchval, 8, spec)
-        else:
-            roundedinchval = fixZeroes(roundDecimal(inchval, accuracy))
-            formattedInch = format(roundedinchval, spec)
-        formatted = f"{fixZeroes(feetval)}'{formattedInch}\""
+        formatted = f"{feetval:{spec}}'{inchval:{spec}}\""
         return formatted
 
     def toBaseUnit(self, v):
         return None
 
     def isUnit(self, u):
-        return u == ("'", "\"")
+        return u == self.symbol
 
 
 class UnitRegistry(collections.abc.Mapping):

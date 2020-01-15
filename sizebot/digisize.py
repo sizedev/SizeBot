@@ -4,7 +4,7 @@ import math
 import discord
 
 from sizebot import __version__
-from sizebot.digidecimal import Decimal, toFraction, roundDecimal, fixZeroes
+from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes
 from sizebot import digierror as errors
 from sizebot.digiSV import SV, WV
 from sizebot import userdb
@@ -413,10 +413,7 @@ def formatShoeSize(footlength):
         shoesizeNum += 12 + Decimal(1) / Decimal(3)
     if shoesizeNum < 1:
         return "No shoes exist this small!"
-    if shoesizeNum > Decimal("1E15"):
-        shoesize = format(shoesizeNum, ".2e")
-    else:
-        shoesize = toFraction(shoesizeNum, 2, ",f")
+    shoesize = format(shoesizeNum, ",.2%2")
     return f"Size US {prefix}{shoesize}"
 
 

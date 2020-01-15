@@ -10,7 +10,7 @@ from sizebot import digilogger as logger
 from sizebot import userdb
 from sizebot.digiSV import SV
 from sizebot import digisize
-from sizebot.digidecimal import toFraction, Decimal
+from sizebot.digidecimal import Decimal
 
 
 class StatsCog(commands.Cog):
@@ -144,12 +144,12 @@ class StatsCog(commands.Cog):
 
         goodheight = userdata.height.toGoodUnit('o', accuracy=2, preferName=True)
         tmp = goodheight.split()
-        tmp[0] = toFraction(Decimal(tmp[0]), 4)
+        tmp[0] = format(Decimal(tmp[0]), "%4")
         goodheightout = " ".join(tmp)
 
         goodweight = userdata.weight.toGoodUnit('o', accuracy=2, preferName=True)
         tmp2 = goodweight.split()
-        tmp2[0] = toFraction(Decimal(tmp2[0]), 4)
+        tmp2[0] = format(Decimal(tmp2[0]), "%4")
         goodweightout = " ".join(tmp2)
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
