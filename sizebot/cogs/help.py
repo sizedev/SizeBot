@@ -43,7 +43,6 @@ class HelpCog(commands.Cog):
         embed = discord.Embed(title=f"Units [SizeBot {__version__}]")
 
         for n, units in enumerate(chunkList(heightunits, math.ceil(len(heightunits) / 3))):
-
             embed.add_field(name="Height" if n == 0 else "\u200b", value="\n".join(units))
 
         for n, units in enumerate(chunkList(weightunits, math.ceil(len(weightunits) / 3))):
@@ -66,10 +65,11 @@ class HelpCog(commands.Cog):
         embed = discord.Embed(title=f"Help [SizeBot {__version__}]")
 
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
-        commandLines = "\n".join(c.name + (f" - {c.short_doc}" if c.short_doc else "") for c in commands)
-        for n, lines in enumerate(chunkLines(commandLines, 1024)):
-            embed.add_field(name="Commands" if n == 0 else "\u200b", value=lines, inline=True)
-        await logger.info(commandLines)
+
+        for n, fieldCommands in enumerate(chunkList(commands, math.ceil(len(commands) / 2))):
+            fieldCommandsStr = "\n".join(f"**{c.name}**\n{c.summary or '-'}" for c in fieldCommands)
+            embed.add_field(name="Commands" if n == 0 else "\u200b", value=fieldCommandsStr, inline=True)
+
         await ctx.send(embed=embed)
 
     async def send_command_help(self, ctx, cmd):
