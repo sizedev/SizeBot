@@ -68,7 +68,7 @@ class HelpCog(commands.Cog):
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
         commandLines = "\n".join(c.name + (f" - {c.short_doc}" if c.short_doc else "") for c in commands)
         for n, lines in enumerate(chunkLines(commandLines, 1024)):
-            embed.add_field(name="Commands" if n == 0 else "\u200b", value=lines, inline=False)
+            embed.add_field(name="Commands" if n == 0 else "\u200b", value=lines, inline=True)
         await logger.info(commandLines)
         await ctx.send(embed=embed)
 
