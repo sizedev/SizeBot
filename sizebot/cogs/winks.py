@@ -74,7 +74,9 @@ class WinksCog(commands.Cog):
         if winkcount in milestones:
             await sayMilestone(message.channel, winkcount)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        hidden = True
+    )
     async def winkcount(self, ctx):
         winkcount = getWinks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
