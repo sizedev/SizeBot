@@ -93,3 +93,9 @@ class AdminPermissionException(DigiException):
     def __init__(self):
         message = "{usernick} tried to run an admin command."
         super().__init__(message)
+
+
+class ArgumentException(DigiException):
+    def __init__(self, ctx):
+        message = f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.usage}`."
+        super().__init__(message)

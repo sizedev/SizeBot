@@ -74,15 +74,16 @@ class User:
             self._gender = None
             return
         value = value.lower()
-        if value not in ["male", "female"]:
+        if value not in ["m", "f"]:
             raise ValueError(f"Unrecognized gender: '{value}'")
+        self._gender = value
 
     @property
     def autogender(self):
         if self.gender:
             return self.gender
         # TODO: Search the roles for a gender.
-        return "male"
+        return "m"
 
     @property
     def baseweight(self):
