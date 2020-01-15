@@ -100,7 +100,7 @@ class Change:
         except FileNotFoundError:
             changesJson = []
         for changeJson in changesJson:
-            Change.load(**changeJson)
+            Change.load(bot, **changeJson)
 
     @classmethod
     def saveFile(cls, filename):
