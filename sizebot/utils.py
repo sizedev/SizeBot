@@ -172,50 +172,6 @@ def formatError(err):
     return f"{moduleName}{className}{errMessage}"
 
 
-formatSpecRe = re.compile(r"""\A
-(?:
-   (?P<fill>.)?
-   (?P<align>[<>=^])
-)?
-(?P<sign>[-+ ])?
-(?P<zeropad>0)?
-(?P<minimumwidth>(?!0)\d+)?
-(?P<thousands_sep>,)?
-(?:\.(?P<precision>0|(?!0)\d+))?
-(?P<type>[a-zA-Z]{1,2})?
-(?P<fractional>%)?
-\Z
-""", re.VERBOSE)
-
-
-def parseSpec(spec):
-    m = formatSpecRe.match(spec)
-    if m is None:
-        raise ValueError("Invalid format specifier: " + spec)
-    return m.groupdict()
-
-
-def buildSpec(formatDict):
-    spec = ""
-    if formatDict["align"] is not None:
-        if formatDict["fill"] is not None:
-            spec += formatDict["fill"]
-        spec += formatDict["align"]
-    if formatDict["sign"] is not None:
-        spec += formatDict["sign"]
-    if formatDict["zeropad"] is not None:
-        spec += formatDict["zeropad"]
-    if formatDict["minimumwidth"] is not None:
-        spec += formatDict["minimumwidth"]
-    if formatDict["thousands_sep"] is not None:
-        spec += formatDict["thousands_sep"]
-    if formatDict["precision"] is not None:
-        spec += "." + formatDict["precision"]
-    if formatDict["type"] is not None:
-        spec += formatDict["type"]
-    return spec
-
-
 def tryOrNone(fn, *args, ignore=(), **kwargs):
     try:
         result = fn(*args, **kwargs)

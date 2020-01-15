@@ -1,10 +1,8 @@
+import re
 import decimal
 import random
-from sizebot.utils import parseSpec, buildSpec
 
-__all__ = ["Decimal", "roundDecimal", "roundDecimalHalf", "fixZeroes", "toEighths", "randrangelog"]
-
-Decimal = decimal.Decimal
+__all__ = ["Decimal", "roundDecimal", "fixZeroes", "randRangeLog", "parseSpec", "buildSpec"]
 
 # Configure decimal module
 decimal.getcontext()
@@ -15,45 +13,109 @@ context = decimal.Context(
 decimal.setcontext(context)
 
 
+class Decimal(decimal.Decimal):
+    def __format__(self, spec):
+        value = decimal.Decimal(self)
+        formatDict = parseSpec(spec)
+
+        fractional = formatDict["fractional"]
+        formatDict["fractional"] = None
+        try:
+            denom = fractional[1]
+        except IndexError:
+            denom = 8
+
+        if Decimal("1e-10") < value < Decimal("1e10"):
+            fraction = ""
+            if fractional:
+                formatDict["precision"] = "0"
+                value, fraction = splitFraction(value, denom)
+
+            formatDict["type"] = "f"
+            numspec = buildSpec(formatDict)
+            formatted = format(fixZeroes(value), numspec)
+
+            if fraction:
+                if formatted == "0":
+                    formatted = ""
+                formatted += fraction
+        else:
+            formatDict["type"] = "e"
+            numspec = buildSpec(formatDict)
+            formatted = format(fixZeroes(value), numspec)
+
+        return formatted
+
+
+formatSpecRe = re.compile(r"""\A
+(?:
+   (?P<fill>.)?
+   (?P<align>[<>=^])
+)?
+(?P<sign>[-+ ])?
+(?P<zeropad>0)?
+(?P<minimumwidth>(?!0)\d+)?
+(?P<thousands_sep>,)?
+(?:\.(?P<precision>0|(?!0)\d+))?
+(?P<type>[a-zA-Z]{1,2})?
+(?P<fractional>%\d?)?
+\Z
+""", re.VERBOSE)
+
+
+def parseSpec(spec):
+    m = formatSpecRe.match(spec)
+    if m is None:
+        raise ValueError("Invalid format specifier: " + spec)
+    return m.groupdict()
+
+
+def buildSpec(formatDict):
+    spec = ""
+    if formatDict["align"] is not None:
+        if formatDict["fill"] is not None:
+            spec += formatDict["fill"]
+        spec += formatDict["align"]
+    if formatDict["sign"] is not None:
+        spec += formatDict["sign"]
+    if formatDict["zeropad"] is not None:
+        spec += formatDict["zeropad"]
+    if formatDict["minimumwidth"] is not None:
+        spec += formatDict["minimumwidth"]
+    if formatDict["thousands_sep"] is not None:
+        spec += formatDict["thousands_sep"]
+    if formatDict["precision"] is not None:
+        spec += "." + formatDict["precision"]
+    if formatDict["type"] is not None:
+        spec += formatDict["type"]
+    if formatDict["fractional"] is not None:
+        spec += formatDict["fractional"]
+    return spec
+
+
 def roundDecimal(d, accuracy = 0):
-    places = Decimal("10") ** -accuracy
+    places = decimal.Decimal("10") ** -accuracy
     return d.quantize(places)
 
 
-# Legacy support
-def roundDecimalHalf(number):
-    return roundDecimalFraction(number, 2)
-
-
 def roundDecimalFraction(number, denominator):
-    rounded = roundDecimal(number * Decimal(denominator)) / Decimal(denominator)
+    rounded = roundDecimal(number * decimal.Decimal(denominator)) / decimal.Decimal(denominator)
     return rounded
 
 
-def toFraction(number, denom=8, spec=""):
+def splitFraction(value, denom=8):
     if denom not in [2, 4, 8]:
         raise ValueError("Bad denominator")
-    parsedSpec = parseSpec(spec)
-    parsedSpec["precision"] = None
-    spec = buildSpec(parsedSpec)
-    eighths = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
-    roundednumber = roundDecimalFraction(number, denom)
+    fractionStrings = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
+
+    negative = value < 0
+    value = abs(value)
+    roundednumber = roundDecimalFraction(value, denom)
     whole, part = divmod(roundednumber, 1)
-    whole = format(fixZeroes(whole), spec)
-    if whole == "0":
-        if part == 0:
-            return "0"
-        if part < 0:
-            whole = "-"
-        else:
-            whole = ""
-    abspart = abs(part)
-    numerator = abspart * len(eighths)
-    return f"{whole}{eighths[int(numerator)]}"
-
-
-def toEighths(number):
-    return toFraction(number, 8)
+    if negative:
+        whole = -whole
+    fraction = fractionStrings[int(part * len(fractionStrings))]
+    return whole, fraction
 
 
 def fixZeroes(d):
@@ -71,11 +133,11 @@ def fixZeroes(d):
     return d.normalize() + 0
 
 
-def randrangelog(minval, maxval, precision=26):
+def randRangeLog(minval, maxval, precision=26):
     """Generate a logarithmically scaled random number"""
-    minval = Decimal(minval)
-    maxval = Decimal(maxval)
-    prec = Decimal("10") ** precision
+    minval = decimal.Decimal(minval)
+    maxval = decimal.Decimal(maxval)
+    prec = decimal.Decimal("10") ** precision
 
     # Swap values if provided in the wrong order
     if minval > maxval:
@@ -87,10 +149,10 @@ def randrangelog(minval, maxval, precision=26):
     minintlog = (minlog * prec).to_integral_value()
     maxintlog = (maxlog * prec).to_integral_value()
 
-    newintlog = Decimal(random.randint(minintlog, maxintlog))
+    newintlog = decimal.Decimal(random.randint(minintlog, maxintlog))
 
     newlog = newintlog / precision
 
-    newval = Decimal("10") ** newlog
+    newval = decimal.Decimal("10") ** newlog
 
     return newval

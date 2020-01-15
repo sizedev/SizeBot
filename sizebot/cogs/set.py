@@ -190,7 +190,7 @@ class SetCog(commands.Cog):
         minheightSV = clamp(0, SV.parse(minheight), SV.infinity)
         maxheightSV = clamp(0, SV.parse(maxheight), SV.infinity)
 
-        newheightSV = digidecimal.randrangelog(minheightSV, maxheightSV)
+        newheightSV = digidecimal.randRangeLog(minheightSV, maxheightSV)
 
         userdata = userdb.load(ctx.message.author.id)
 

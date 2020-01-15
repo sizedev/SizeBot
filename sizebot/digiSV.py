@@ -3,15 +3,31 @@ import re
 import collections
 import importlib.resources as pkg_resources
 
-from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes, toFraction
+from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes, toFraction, parseSpec, buildSpec
 from sizebot import digierror as errors
-from sizebot.utils import removeBrackets, re_num, parseSpec, buildSpec, tryOrNone, iset
+from sizebot.utils import removeBrackets, re_num, tryOrNone, iset
 from sizebot.picker import getRandomCloseUnit
 import sizebot.digilogger as logger
 
 from sizebot import units as units_dir
 
 __all__ = ["Rate", "Mult", "SV", "WV", "TV"]
+
+
+formatSpecRe = re.compile(r"""\A
+(?:
+   (?P<fill>.)?
+   (?P<align>[<>=^])
+)?
+(?P<sign>[-+ ])?
+(?P<zeropad>0)?
+(?P<minimumwidth>(?!0)\d+)?
+(?P<thousands_sep>,)?
+(?:\.(?P<precision>0|(?!0)\d+))?
+(?P<type>[a-zA-Z]{1,2})?
+(?P<fractional>%)?
+\Z
+""", re.VERBOSE)
 
 
 class Rate():
@@ -119,20 +135,18 @@ class Unit():
         if namePlural is not None:
             self.names.add(namePlural.strip())
 
-    def format(self, value, accuracy=2, spec="", preferName=False, useFractional=False):
-        scaled = value / self.factor
-        useFractional = useFractional and self.fractional
-        if useFractional:
-            rounded = fixZeroes(scaled)
-            formattedValue = toFraction(rounded, 8, spec)
-        else:
-            rounded = fixZeroes(roundDecimal(scaled, accuracy))
-            formattedValue = format(rounded, spec)
+    def format(self, value, spec="", preferName=False):
+        scaled = Decimal(value / self.factor)
+        if not self.fractional:
+            formatDict = parseSpec(spec)
+            formatDict["fractional"] = None
+            spec = buildSpec(formatDict)
+        formattedValue = format(scaled, spec)
 
-        if rounded == 0:
-            return "0"
+        if formattedValue == "0":
+            return formattedValue
 
-        single = abs(rounded) == 1
+        single = formattedValue in ["-1", "1"]
         if single:
             name = self.name or self.namePlural
         else:
@@ -314,11 +328,7 @@ class Dimension(Decimal):
         systems = formatDict["type"] or ""
 
         if systems and all(s.casefold() in self._systems.keys() for s in systems):
-            accuracy = formatDict["precision"] or 2
-            accuracy = int(accuracy)
-            useFractional = formatDict["fractional"] == "%"
             formatDict["type"] = None
-            formatDict["precision"] = None
             numspec = buildSpec(formatDict)
 
             formattedUnits = []
@@ -326,7 +336,7 @@ class Dimension(Decimal):
                 preferName = s.upper() == s
                 system = self._systems[s.casefold()]
                 unit = system.getBestUnit(value)
-                formattedUnits.append(unit.format(value, accuracy, numspec, preferName, useFractional))
+                formattedUnits.append(unit.format(value, numspec, preferName))
 
             # Remove duplicates
             uniqUnits = []

@@ -10,7 +10,7 @@ from sizebot import digilogger as logger
 from sizebot import conf
 from sizebot import userdb
 from sizebot.digiSV import SV, WV
-from sizebot.utils import chunkList, chunkLines
+from sizebot.utils import chunkList
 
 # name
 # description

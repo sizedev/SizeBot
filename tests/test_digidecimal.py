@@ -22,16 +22,6 @@ def test_roundDecimalFraction():
     assert result == Decimal("2.125")
 
 
-def test_toEighths():
-    result = digidecimal.toEighths(Decimal("2.125"))
-    assert result == "2⅛"
-
-
-def test_toEighths_noFraction():
-    result = digidecimal.toEighths(Decimal("2.01"))
-    assert result == "2"
-
-
 def test_toQuarters():
     result = digidecimal.toFraction(Decimal("2.25"), 4)
     assert result == "2¼"
