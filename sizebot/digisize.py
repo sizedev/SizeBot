@@ -124,7 +124,6 @@ def changeUser(userid, changestyle, amount):
 
     if changestyle not in ["add", "subtract", "multiply", "divide"]:
         raise errors.ChangeMethodInvalidException(changestyle)
-        # TODO: raise an error
 
     if changestyle in ["add", "subtract"]:
         amountSV = SV.parse(amount)
@@ -274,10 +273,10 @@ class PersonComparison:
     @property
     def url(self):
         safeSmallNick = quote(self.small.nickname, safe=" ").replace(" ", "-")
-        smallGender = "male"
+        smallGender = self.small.autogender
         smallCm = roundDecimal(self.small.height * 100, 1)
         safeBigNick = quote(self.big.nickname, safe=" ").replace(" ", "-")
-        bigGender = "male"
+        bigGender = self.big.autogender
         bigCm = roundDecimal(self.big.height * 100, 1)
 
         if safeSmallNick.lower() in ["natalie", "kelly"]:
