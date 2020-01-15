@@ -311,8 +311,8 @@ class PersonStats:
     nailthickfactor = Decimal("1") / Decimal("2920")
     shoeprintfactor = Decimal("1") / Decimal("135")
     eyewidthfactor = Decimal("1") / Decimal("73.083")
-    walkperhourfactor = Decimal("1") * Decimal("43600")
-    runperhourfactor = Decimal("1") * Decimal("130800")
+    defaultwalkspeed = SV.parse("2.5mi")
+    defaultrunspeed = SV.parse("7.5mi")
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -349,8 +349,8 @@ class PersonStats:
         self.averageheightmult = self.height / defaultheight
         self.averageweightmult = self.weight / defaultweight
 
-        self.walkperhour = SV(self.height * self.walkperhourfactor)
-        self.runperhour = SV(self.height * self.runperhourfactor)
+        self.walkperhour = SV(self.defaultwalkspeed / self.viewscale)
+        self.runperhour = SV(self.defaultrunspeed / self.viewscale)
 
     def __str__(self):
         return (
