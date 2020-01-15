@@ -68,7 +68,7 @@ class HelpCog(commands.Cog):
 
         for n, fieldCommands in enumerate(chunkList(commands, math.ceil(len(commands) / 2))):
             fieldCommandsStr = "\n".join(c.summary for c in fieldCommands)
-            embed.add_field(name="Commands" if n == 0 else "\u200b", value=fieldCommandsStr, inline=False)
+            embed.add_field(name="Commands" if n == 0 else "\u200b", value=fieldCommandsStr, inline=True)
 
         await ctx.send(embed=embed)
 
