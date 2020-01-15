@@ -17,15 +17,14 @@ def getRequirements():
 
 
 def getVersion():
-    version = None
     path = Path(__file__).parent.resolve() / "sizebot" / "__init__.py"
     with open(path, "r") as fp:
         version_file = fp.read()
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
-    if version_match:
-        version = version_match.group(1)
-    if version is None:
+    if not version_match:
         raise RuntimeError("Unable to find version string.")
+    version = version_match.group(1)
+    return version
 
 
 setuptools.setup(
