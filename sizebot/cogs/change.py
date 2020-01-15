@@ -1,5 +1,6 @@
 import random
 import time
+import json
 
 from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus
@@ -7,22 +8,25 @@ from sizebot.discordplus import commandsplus
 from sizebot.digidecimal import Decimal
 from sizebot import digilogger as logger
 from sizebot import userdb
-from sizebot.digiSV import Rate
+from sizebot.digiSV import Rate, SV, TV
 from sizebot import digisize
 from sizebot.checks import requireAdmin
+from sizebot import conf
 
 
 class Change:
-    def __init__(self, bot, userid, guildid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None):
+    changes = {}
+
+    def __init__(self, bot, userid, guildid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None, startTime=None, lastRan=None):
         self.bot = bot
-        self.guildid = guildid
         self.userid = userid
-        self.addPerSec = addPerSec
-        self.mulPerSec = mulPerSec
-        self.stopSV = stopSV
-        self.stopTV = stopTV
-        self.startTime = Decimal(time.time())
-        self.lastRan = self.startTime
+        self.guildid = guildid
+        self.addPerSec = addPerSec and SV(addPerSec)
+        self.mulPerSec = mulPerSec and Decimal(mulPerSec)
+        self.stopSV = stopSV and SV(stopSV)
+        self.stopTV = stopTV and TV(stopTV)
+        self.startTime = startTime and Decimal(startTime)
+        self.lastRan = lastRan and Decimal(lastRan)
 
     async def apply(self):
         running = True
@@ -55,11 +59,60 @@ class Change:
     def __str__(self):
         return f"gid:{self.guildid}/uid:{self.userid} {self.addPerSec} *{self.mulPerSec} , stop at {self.stopSV}, stop after {self.stopTV}s"
 
+    @classmethod
+    def start(cls, bot, userid, guildid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None):
+        """Start a new change task"""
+        startTime = Decimal(time.time())
+        lastRan = startTime
+        cls.load(bot, userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV, startTime=startTime, lastRan=lastRan)
+        cls.saveFile(conf.changespath)
+
+    @classmethod
+    def load(cls, bot, userid, guildid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None, startTime=None, lastRan=None):
+        """Load a change task into memory"""
+        cls.changes[userid, guildid] = Change(bot, userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV, startTime=startTime, lastRan=lastRan)
+
+    @classmethod
+    def stop(cls, userid, guildid):
+        """Stop a running change task"""
+        deleted = cls.changes.pop((userid, guildid), None)
+        cls.saveFile(conf.changespath)
+        return deleted
+
+    def toJson(self):
+        return {
+            "userid": self.userid,
+            "guildid": self.guildid,
+            "addPerSec": self.addPerSec and str(self.addPerSec),
+            "mulPerSec": self.mulPerSec and str(self.mulPerSec),
+            "stopSV": self.stopSV and str(self.stopSV),
+            "stopTV": self.stopTV and str(self.stopTV),
+            "startTime": self.startTime and str(self.startTime),
+            "lastRan": self.lastRan and str(self.lastRan)
+        }
+
+    @classmethod
+    def loadFile(cls, bot, filename):
+        """Load all change tasks from a file"""
+        try:
+            with open(filename, "r") as f:
+                changesJson = json.load(f)
+        except FileNotFoundError:
+            changesJson = []
+        for changeJson in changesJson:
+            Change.load(**changeJson)
+
+    @classmethod
+    def saveFile(cls, filename):
+        """Save all change tasks to a file"""
+        changesJson = [c.toJson() for c in cls.changes]
+        with open(filename, "w") as f:
+            json.dump(changesJson, f)
+
 
 class ChangeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.changes = dict()
         self.changeTask.start()
 
     def cog_unload(self):
@@ -82,7 +135,7 @@ class ChangeCog(commands.Cog):
     @commands.check(requireAdmin)
     async def changes(self, ctx):
         await ctx.message.delete(delay=0)
-        changeDump = "\n".join(str(c) for c in self.changes.values())
+        changeDump = "\n".join(str(c) for c in Change.changes.values())
         if not changeDump:
             changeDump = "No changes"
         await ctx.message.author.send("**CHANGES**\n" + changeDump)
@@ -94,9 +147,7 @@ class ChangeCog(commands.Cog):
     @commands.guild_only()
     async def slowchange(self, ctx, *, rateStr: str):
         addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(rateStr)
-        key = ctx.message.author.id, ctx.message.guild.id
-        change = Change(self.bot, ctx.message.author.id, ctx.message.guild.id, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
-        self.changes[key] = change
+        Change.start(self.bot, ctx.message.author.id, ctx.message.guild.id, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commandsplus.command()
@@ -104,8 +155,7 @@ class ChangeCog(commands.Cog):
     async def stopchange(self, ctx):
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) stopped slow-changing.")
 
-        key = ctx.message.author.id, ctx.message.guild.id
-        deleted = self.changes.pop(key, None)
+        deleted = Change.stop(ctx.message.author.id, ctx.message.guild.id)
 
         if deleted is None:
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
@@ -141,15 +191,17 @@ class ChangeCog(commands.Cog):
     async def changeTask(self):
         """Slow growth task"""
         runningChanges = {}
-        for key, change in self.changes.items():
+        for key, change in Change.changes.items():
             try:
                 running = await change.apply()
                 if running:
                     runningChanges[key] = change
             except Exception as e:
                 await logger.error(e)
-        self.changes = runningChanges
+        Change.changes = runningChanges
+        Change.saveFile(conf.changespath)
 
 
 def setup(bot):
+    Change.loadFile(bot, conf.changespath)
     bot.add_cog(ChangeCog(bot))
