@@ -354,7 +354,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(user)
 
         await logger.info(f"User {user.id} ({user.display_name}) set their gender to {userdata.gender}.")
-        await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.'")
+        await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.")
 
     @setgender.error
     async def setgender_handler(self, ctx, error):
@@ -380,7 +380,7 @@ class SetCog(commands.Cog):
             await digisize.nickUpdate(user)
 
         await logger.info(f"User {user.id} ({user.display_name}) reset their gender.")
-        await ctx.send(f"<@{user.id}>'s gender is now reset.'")
+        await ctx.send(f"<@{user.id}>'s gender is now reset.")
 
 
 def setup(bot):
