@@ -11,7 +11,7 @@ from sizebot import userdb
 from sizebot.digiSV import Rate, SV, TV
 from sizebot import digisize
 from sizebot.checks import requireAdmin
-from sizebot import conf
+from sizebot.conf import conf
 
 
 class Change:
