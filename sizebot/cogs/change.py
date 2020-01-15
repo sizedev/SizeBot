@@ -105,7 +105,7 @@ class Change:
     @classmethod
     def saveFile(cls, filename):
         """Save all change tasks to a file"""
-        changesJson = [c.toJson() for c in cls.changes]
+        changesJson = [c.toJson() for c in cls.changes.values()]
         with open(filename, "w") as f:
             json.dump(changesJson, f)
 
