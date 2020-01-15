@@ -44,10 +44,7 @@ class Command(commands.Command):
 
     @property
     def summary(self):
-        summary = f"**{self.name}**"
-        if self.short_doc:
-            summary += f"\n{self.short_doc}"
-        return summary
+        return f"**{self.name}**\n{self.short_doc or ''}"
 
 
 def command(name=None, cls=None, **attrs):
