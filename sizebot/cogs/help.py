@@ -66,9 +66,9 @@ class HelpCog(commands.Cog):
 
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
 
-        for n, fieldCommands in enumerate(chunkList(commands, math.ceil(len(commands) / 3))):
+        for n, fieldCommands in enumerate(chunkList(commands, math.ceil(len(commands) / 2))):
             fieldCommandsStr = "\n".join(c.summary for c in fieldCommands)
-            embed.add_field(name="Commands" if n == 0 else "\u200b", value=fieldCommandsStr, inline=True)
+            embed.add_field(name="Commands" if n == 0 else "\u200b", value=fieldCommandsStr, inline=False)
 
         await ctx.send(embed=embed)
 
