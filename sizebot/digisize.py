@@ -349,8 +349,8 @@ class PersonStats:
         self.averageheightmult = self.height / defaultheight
         self.averageweightmult = self.weight / defaultweight
 
-        self.walkperhour = self.height * self.walkperhourfactor
-        self.runperhour = self.height * self.runperhourfactor
+        self.walkperhour = SV(self.height * self.walkperhourfactor)
+        self.runperhour = SV(self.height * self.runperhourfactor)
 
     def __str__(self):
         return (
