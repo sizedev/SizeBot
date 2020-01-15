@@ -42,12 +42,6 @@ class Command(commands.Command):
         if not handled:
             ctx.bot.dispatch("command_error", ctx, error)
 
-    default_short_doc = "-"
-
-    @property
-    def summary(self):
-        return self.short_doc or self.default_short_doc
-
 
 def command(name=None, cls=None, **attrs):
     """A decorator that transforms a function into a :class:`.Command`
