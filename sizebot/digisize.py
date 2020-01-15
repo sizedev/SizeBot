@@ -289,6 +289,8 @@ class PersonStats:
     hairfactor = Decimal("1") / Decimal("23387")
     pointerfactor = Decimal("1") / Decimal("17.26")
     nailthickfactor = Decimal("1") / Decimal("2920")
+    shoeprintfactor = Decimal("1") / Decimal("135")
+    eyewidthfactor = Decimal("1") / Decimal("73.083")
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -306,11 +308,13 @@ class PersonStats:
         self.shoesize = formatShoeSize(self.footlength)
         self.footwidth = SV(self.height * self.footwidthfactor)
         self.toeheight = SV(self.height * self.toeheightfactor)
+        self.shoeprintdepth = SV(self.height * self.toeheightfactor)
         self.pointerlength = SV(self.height * self.pointerfactor)
         self.thumbwidth = SV(self.height * self.thumbfactor)
         self.fingerprintdepth = SV(self.height * self.fingerprintfactor)
         self.hairwidth = SV(self.height * self.hairfactor)
         self.nailthickness = SV(self.height * self.nailthickfactor)
+        self.eyewidth = SV(self.height * self.eyewidthfactor)
 
         self.avgheightcomp = SV(defaultheight * self.viewscale)
         self.avgweightcomp = WV(defaultweight * self.viewscale ** 3)
