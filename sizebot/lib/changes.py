@@ -86,7 +86,7 @@ async def apply(bot):
     runningChanges = {}
     for key, change in _activeChanges.items():
         try:
-            running = change.apply(bot)
+            running = await change.apply(bot)
             if running:
                 runningChanges[key] = change
         except Exception as e:
