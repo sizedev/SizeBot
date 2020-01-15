@@ -7,6 +7,7 @@ from sizebot import digilogger as logger
 from sizebot.digiSV import Rate, Mult, SV, WV, TV
 from sizebot.digiobj import objects
 import sizebot.utils
+from sizebot import userdb
 
 
 def cachedCopy(fn):
@@ -55,7 +56,8 @@ def getEvalGlobals():
         "Rate": Rate, "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
         "objects": objects,
         "utils": sizebot.utils,
-        "pdir": sizebot.utils.pdir
+        "pdir": sizebot.utils.pdir,
+        "userdb": userdb
     }
 
     return evalGlobals
