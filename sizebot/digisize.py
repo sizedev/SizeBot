@@ -350,8 +350,8 @@ class PersonStats:
         defaultwalkspeed = SV.parse("2.5mi")
         defaultrunspeed = SV.parse("7.5mi")
 
-        self.walkperhour = SV(defaultwalkspeed / self.viewscale)
-        self.runperhour = SV(defaultrunspeed / self.viewscale)
+        self.walkperhour = SV(defaultwalkspeed / self.averageheightmult)
+        self.runperhour = SV(defaultrunspeed / self.averageheightmult)
 
     def __str__(self):
         return (
