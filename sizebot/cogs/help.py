@@ -135,7 +135,7 @@ class HelpCog(commands.Cog):
             "**Coding Assistance** *by Natalie*\n"
             "**Additional equations** *by Benyovski and Arceus3251*\n"
             "**Alpha Tested** *by AWK_*\n"
-            "**Beta Tested** *by Speedbird 001, worstgender, Arceus3251, and Kelly*\n"
+            "**Beta Tested** *by Kelly, worstgender, and Arceus3251.*\n"
             "**written in** *Python 3.7 with discord.py rewrite*\n"
             "**written with** *Atom* and *Visual Studio Code*\n"
             "**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
