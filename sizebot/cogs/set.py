@@ -7,6 +7,7 @@ from sizebot.digiSV import SV, WV
 from sizebot import digisize
 from sizebot.utils import clamp
 import sizebot.digidecimal as digidecimal
+from sizebot.digierror import errors
 
 
 class SetCog(commands.Cog):
@@ -302,49 +303,63 @@ class SetCog(commands.Cog):
         if userdata.display:
             await digisize.nickUpdate(ctx.message.author)
 
-    @commandsplus.command(
-        usage = "[male/female]"
-    )
+    @commandsplus.command(usage = "[male/female]")
     @commands.guild_only()
-    async def setgender(self, ctx, newgender = None):
-        """Set gender."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newgender is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [male/female]`.")
-            return
+    async def setgender(self, ctx, gender):
+        """Set gender"""
 
-        newgender = newgender.lower()
-        if newgender not in ["male", "female"]:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [male/female]`.")
-            return
+        user = ctx.author
 
-        userdata = userdb.load(ctx.message.author.id)
+        gendermap = {
+            "m": "m",
+            "male": "m",
+            "man": "m",
+            "boy": "m",
+            "f": "f",
+            "female": "f",
+            "woman": "f",
+            "girl": "f",
+            "none": None,
+            None: None
+        }
+        try:
+            gender = gendermap[gender]
+        except KeyError:
+            raise errors.ArgumentException(ctx)
 
-        userdata.gender = newgender
+        userdata = userdb.load(user.id)
+        userdata.gender = gender
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their gender to {userdata.gender}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s gender is now set to {userdata.gender}.'")
-
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(user)
 
-    @commandsplus.command(
-        aliases = ["cleargender"]
-    )
+        await logger.info(f"User {user.id} ({user.display_name}) set their gender to {userdata.gender}.")
+        await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.'")
+
+    @setgender.error
+    async def setgender_handler(self, ctx, error):
+        # Check if required argument is missing
+        if isinstance(error, commands.MissingRequiredArgument):
+            raise errors.ArgumentException(ctx)
+        raise error
+
+    @commandsplus.command(aliases = ["cleargender", "unsetgender"])
     @commands.guild_only()
     async def resetgender(self, ctx):
-        """Reset gender."""
-        userdata = userdb.load(ctx.message.author.id)
+        """Reset gender"""
 
+        user = ctx.author
+
+        userdata = userdb.load(user.id)
         userdata.gender = None
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) reset their gender.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s gender is now reset.'")
-
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await digisize.nickUpdate(user)
+
+        await logger.info(f"User {user.id} ({user.display_name}) reset their gender.")
+        await ctx.send(f"<@{user.id}>'s gender is now reset.'")
 
 
 def setup(bot):
