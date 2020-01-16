@@ -7,23 +7,23 @@ logChannel = None
 
 # Async log functions (prints to console, and logChannel if set)
 async def trace(message, **kwargs):
-    log(message, level="trace", **kwargs)
+    await log(message, level="trace", **kwargs)
 
 
 async def debug(message, **kwargs):
-    log(message, level="debug", **kwargs)
+    await log(message, level="debug", **kwargs)
 
 
 async def info(message, **kwargs):
-    log(message, level="info", **kwargs)
+    await log(message, level="info", **kwargs)
 
 
 async def warn(message, **kwargs):
-    log(message, level="warn", **kwargs)
+    await log(message, level="warn", **kwargs)
 
 
 async def error(message, **kwargs):
-    log(message, level="error", **kwargs)
+    await log(message, level="error", **kwargs)
 
 
 async def log(message, level="info"):
