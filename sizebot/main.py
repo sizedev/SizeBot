@@ -24,7 +24,8 @@ initial_extensions = [
     "sizebot.cogs.eval",
     "sizebot.cogs.errorhandler",
     "sizebot.cogs.admin",
-    "sizebot.cogs.run"
+    "sizebot.cogs.run",
+    "sizebot.cogs.keypad"
 ]
 
 
@@ -62,7 +63,7 @@ def main():
         status.ready()
 
     async def on_reconnect_ready():
-        await logger.error("SizeBot has been reconected to Discord.")
+        await logger.error("SizeBot has been reconnected to Discord.")
 
     @bot.event
     async def on_ready():
@@ -87,7 +88,7 @@ def main():
         status.stopping()
 
     if not conf.authtoken:
-        logger.syncerror(f"Authentication token not found")
+        logger.syncerror(f"Authentication token not found!")
         return
 
     bot.run(conf.authtoken)
