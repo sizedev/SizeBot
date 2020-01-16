@@ -217,7 +217,12 @@ class FeetAndInchesUnit(Unit):
     def format(self, value, spec="", preferName=False):
         inchval = value / self.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
-        formatted = f"{Decimal(feetval):{spec}}'{Decimal(inchval):{spec}}\""
+
+        feetFormatDict = parseSpec(spec)
+        feetFormatDict["precision"] = 0
+        feetSpec = buildSpec(feetFormatDict)
+
+        formatted = f"{Decimal(feetval):{feetSpec}}'{Decimal(inchval):{spec}}\""
         return formatted
 
     def toBaseUnit(self, v):
