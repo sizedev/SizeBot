@@ -26,15 +26,16 @@ class Decimal(decimal.Decimal):
             dSpec.type = "e"
 
         if dSpec.type == "f" and dSpec.fractional:
+            dSpec.precision = None
             try:
                 denom = int(dSpec.fractional[1])
             except IndexError:
                 denom = 8
-            dSpec.precision = "0"
             value, fraction = splitFraction(value, denom)
 
-        if dSpec.precision:
+        if dSpec.precision is not None:
             value = roundDecimal(value, int(dSpec.precision))
+            dSpec.precision = None
 
         dSpec.fractional = None
         numspec = str(dSpec)
