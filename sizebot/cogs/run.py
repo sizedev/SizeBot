@@ -71,6 +71,10 @@ class Runner:
 class RunCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.runTask.start()
+
+    def cog_unload(self):
+        self.runTask.cancel()
 
     @commandsplus.command(
         hidden = True
@@ -81,7 +85,7 @@ class RunCog(commands.Cog):
         Runner.start(ctx.channel.id, msg.id, duration=duration, nyan=nyan)
 
     @tasks.loop(seconds=1)
-    async def changeTask(self):
+    async def runTask(self):
         global runners
         runners = [r for r in runners if await r.step(self.bot)]
 
