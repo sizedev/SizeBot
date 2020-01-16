@@ -48,7 +48,7 @@ class Runner:
 
     @property
     def running(self):
-        return self.progress >= Decimal(1)
+        return self.progress <= Decimal(1)
 
     @property
     def endtime(self):
