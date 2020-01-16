@@ -43,10 +43,10 @@ class FunCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
+    @commands.check(requireAdmin)
     async def say(self, ctx, *, message: str):
         await ctx.message.delete(delay=0)
-        if ctx.message.author.id == conf.getId("DigiDuncan"):
-            await ctx.send(message)
+        await ctx.send(message)
 
     @commandsplus.command(
         usage = "<message>"
