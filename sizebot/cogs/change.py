@@ -6,7 +6,7 @@ from sizebot.discordplus import commandsplus
 from sizebot import logger
 from sizebot import userdb
 from sizebot.digiSV import Rate
-from sizebot import digisize
+from sizebot.lib import proportions
 from sizebot.checks import requireAdmin
 from sizebot.lib import changes
 
@@ -28,7 +28,7 @@ class ChangeCog(commands.Cog):
         """Change height."""
         userid = ctx.author.id
 
-        digisize.changeUser(userid, style, amount)
+        proportions.changeUser(userid, style, amount)
         userdata = userdb.load(userid)
 
         await logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
@@ -96,7 +96,7 @@ class ChangeCog(commands.Cog):
         userid = ctx.author.id
 
         randmult = round(random.random(2, 20), 1)
-        digisize.changeUser(userid, "multiply", randmult)
+        proportions.changeUser(userid, "multiply", randmult)
         userdata = userdb.load(userid)
 
         # TODO: Randomize the italics message here
@@ -115,7 +115,7 @@ class ChangeCog(commands.Cog):
 
         userdata = userdb.load(userid)
         randmult = round(random.random(2, 20), 1)
-        digisize.changeUser(ctx.author.id, "divide", randmult)
+        proportions.changeUser(ctx.author.id, "divide", randmult)
 
         # TODO: Randomize the italics message here
         await ctx.send(

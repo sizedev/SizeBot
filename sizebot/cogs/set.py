@@ -4,7 +4,7 @@ from sizebot.discordplus import commandsplus
 from sizebot import logger
 from sizebot import userdb
 from sizebot.digiSV import SV, WV
-from sizebot import digisize
+from sizebot.lib import proportions
 from sizebot.utils import clamp
 import sizebot.digidecimal as digidecimal
 from sizebot import digierror as errors
@@ -35,7 +35,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}>'s nick is now {userdata.nickname}")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         usage = "<species>"
@@ -57,7 +57,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}>'s species is now {userdata.species}")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
     @commands.guild_only()
@@ -72,7 +72,7 @@ class SetCog(commands.Cog):
         await ctx.send("<@{ctx.message.author.id}>'s species is now cleared")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         usage = "<height>"
@@ -100,7 +100,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:m} tall. ({userdata.height:u})")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         aliases = ["resetheight", "reset"]
@@ -117,7 +117,7 @@ class SetCog(commands.Cog):
         # TODO: Add user message
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         usage = "<Y/N>"
@@ -144,7 +144,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}>'s display is now set to {userdata.display}.")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         usage = "<M/U>"
@@ -171,7 +171,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}>'s system is now set to {userdata.unitsystem}.'")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         usage = "<minheight> <maxheight>"
@@ -201,7 +201,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:m} tall. ({userdata.height:u})")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
     @commands.guild_only()
@@ -216,7 +216,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}> is now infinitely tall.")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command()
     @commands.guild_only()
@@ -231,7 +231,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}> is now nothing.")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         usage = "<height>"
@@ -253,7 +253,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}>'s base height is now {userdata.baseheight:m}. ({userdata.baseheight:u})")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         usage = "<weight>"
@@ -275,7 +275,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}>'s base weight is now {userdata.baseweight:m}. ({userdata.baseweight:u})")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     # TODO: Make this accept shoe size as an input.
     @commandsplus.command(
@@ -304,7 +304,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.message.author.id}>'s foot is now {userdata.footlength:mu} long.")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         aliases = ["clearfoot", "unsetfoot"]
@@ -321,7 +321,7 @@ class SetCog(commands.Cog):
         await ctx.send("<@{ctx.message.author.id}>'s foot length is now default.")
 
         if userdata.display:
-            await digisize.nickUpdate(ctx.message.author)
+            await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
         usage = "<male/female/none>"
@@ -354,7 +354,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         if userdata.display:
-            await digisize.nickUpdate(user)
+            await proportions.nickUpdate(user)
 
         await logger.info(f"User {user.id} ({user.display_name}) set their gender to {userdata.gender}.")
         await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.")
@@ -380,7 +380,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         if userdata.display:
-            await digisize.nickUpdate(user)
+            await proportions.nickUpdate(user)
 
         await logger.info(f"User {user.id} ({user.display_name}) reset their gender.")
         await ctx.send(f"<@{user.id}>'s gender is now reset.")

@@ -8,7 +8,7 @@ from sizebot import logger
 from sizebot import conf
 from sizebot import userdb
 from sizebot.digiSV import SV, WV
-from sizebot import digisize
+from sizebot.lib import proportions
 
 
 async def addUserRole(member):
@@ -142,7 +142,7 @@ class RegisterCog(commands.Cog):
             return
 
         # remove the sizetag, delete the user file, and remove the user role
-        await digisize.nickReset(user)
+        await proportions.nickReset(user)
         userdb.delete(user.id)
         await removeUserRole(user)
 
@@ -151,7 +151,7 @@ class RegisterCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, m):
-        await digisize.nickUpdate(m.author)
+        await proportions.nickUpdate(m.author)
 
 
 def setup(bot):

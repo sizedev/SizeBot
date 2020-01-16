@@ -5,7 +5,7 @@ from sizebot.digidecimal import Decimal
 from sizebot import logger
 from sizebot import userdb
 from sizebot.digiSV import SV, TV
-from sizebot import digisize
+from sizebot.lib import proportions
 from sizebot import conf
 
 
@@ -42,7 +42,7 @@ class Change:
         userdb.save(userdata)
         guild = bot.get_guild(self.guildid)
         member = guild.get_member(self.userid)
-        await digisize.nickUpdate(member)
+        await proportions.nickUpdate(member)
         return running
 
     @property

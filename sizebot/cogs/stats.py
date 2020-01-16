@@ -9,7 +9,7 @@ from sizebot import logger
 # TODO: Fix this...
 from sizebot import userdb
 from sizebot.digiSV import SV
-from sizebot import digisize
+from sizebot.lib import proportions
 from sizebot.digidecimal import Decimal
 
 
@@ -40,7 +40,7 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(memberOrHeight)
 
-        stats = digisize.PersonStats(userdata)
+        stats = proportions.PersonStats(userdata)
         embedtosend = stats.toEmbed()
         if ctx.message.author.id != userdata.id:
             embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
@@ -70,7 +70,7 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(memberOrHeight)
 
-        stats = digisize.PersonStats(userdata)
+        stats = proportions.PersonStats(userdata)
         await ctx.send(str(stats))
 
         await logger.info(f"Stats for {memberOrHeight} sent.")
@@ -92,7 +92,7 @@ class StatsCog(commands.Cog):
         userdata1 = getUserdata(memberOrHeight1, "Raw 1")
         userdata2 = getUserdata(memberOrHeight2, "Raw 2")
 
-        comparison = digisize.PersonComparison(userdata1, userdata2)
+        comparison = proportions.PersonComparison(userdata1, userdata2)
         embedtosend = comparison.toEmbed()
         embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
         await ctx.send(embed = embedtosend)
@@ -116,7 +116,7 @@ class StatsCog(commands.Cog):
         userdata1 = getUserdata(memberOrHeight1, "Raw 1")
         userdata2 = getUserdata(memberOrHeight2, "Raw 2")
 
-        comparison = digisize.PersonComparison(userdata1, userdata2)
+        comparison = proportions.PersonComparison(userdata1, userdata2)
         await ctx.send(str(comparison))
 
         await logger.info(f"Compared {userdata1} and {userdata2}")
@@ -175,11 +175,11 @@ class StatsCog(commands.Cog):
             return
 
         userdata = getUserdata(ctx.message.author)
-        userstats = digisize.PersonStats(userdata)
+        userstats = proportions.PersonStats(userdata)
         userheight = userstats.avgheightcomp
         compdata = getUserdata(userheight)
 
-        stats = digisize.PersonStats(compdata)
+        stats = proportions.PersonStats(compdata)
         embedtosend = stats.toEmbed()
         if ctx.message.author.id != userdata.id:
             embedtosend.description = f"Reverse stats for {userdata.nickname}*\n*Requested by *{ctx.message.author.display_name}*"
