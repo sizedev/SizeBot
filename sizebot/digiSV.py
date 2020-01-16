@@ -6,7 +6,7 @@ import importlib.resources as pkg_resources
 from sizebot.digidecimal import Decimal, DecimalSpec
 from sizebot import digierror as errors
 from sizebot.utils import removeBrackets, re_num, tryOrNone, iset
-from sizebot.picker import getRandomCloseUnit
+from sizebot.lib.picker import getRandomCloseUnit
 from sizebot import logger
 
 from sizebot import units as units_dir
