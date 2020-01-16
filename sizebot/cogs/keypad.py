@@ -36,8 +36,8 @@ class KeypadCog(commands.Cog):
         def check(reaction, reacter):
             return reaction.message.id == outputmsg.id \
                 and reacter.id == author.id \
-                and str(reaction.emoji) in inputdict.keys() or \
-                str(reaction.emoji) == clearemoji
+                and (str(reaction.emoji) in inputdict.keys() or \
+                str(reaction.emoji) == clearemoji)
 
         for emoji in inputdict.keys():
             await outputmsg.add_reaction(emoji)
