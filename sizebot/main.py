@@ -48,13 +48,8 @@ def main():
         styles.create("banner", fg="orange_red_1", bg="deep_sky_blue_4b", attr="bold")
         styles.create("login", fg="cyan")
         # Obviously we need the banner printed in the terminal
-        await logger.log("banner", conf.banner + " v" + __version__)
-
-        await logger.log("login",
-                         "Logged in as\n"
-                         f"{bot.user.name}\n"
-                         f"{bot.user.id}\n"
-                         "------")
+        await logger.log(conf.banner + " v" + __version__, level="banner")
+        await logger.log("Logged in as: {bot.user.name} ({bot.user.id})\n------", level="login")
         await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
         print(styles)
         launchfinishtime = datetime.now()
