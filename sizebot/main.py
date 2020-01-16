@@ -5,8 +5,8 @@ from discord.ext import commands
 from digiformatter import styles
 
 from sizebot import __version__
-from sizebot import logger, conf, status
-from sizebot.lib import units, objs
+from sizebot import logger, conf
+from sizebot.lib import units, objs, status
 
 initial_extensions = [
     "sizebot.cogs.change",
