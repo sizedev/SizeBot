@@ -1,2 +1,2 @@
-include sizebot/text/*.txt
-include sizebot/units/*.json
+include sizebot/data/*.txt
+include sizebot/data/*.json
