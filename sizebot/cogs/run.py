@@ -77,7 +77,7 @@ class RunCog(commands.Cog):
     )
     async def run(self, ctx, duration: TV, mode: str = ""):
         nyan = mode == "nyan"
-        Runner.start(ctx.channel.id, ctx.message.id, duration, nyan)
+        Runner.start(ctx.channel.id, ctx.message.id, duration=duration, nyan=nyan)
 
     @tasks.loop(seconds=1)
     async def changeTask(self):
