@@ -3,7 +3,7 @@ import asyncio
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot.checks import requireAdmin
+from sizebot.lib.checks import requireAdmin
 
 inputdict = {"1️⃣": "1",
              "2️⃣": "2",

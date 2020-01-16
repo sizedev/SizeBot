@@ -7,7 +7,7 @@ from sizebot import logger
 from sizebot import userdb
 from sizebot.digiSV import Rate
 from sizebot.lib import proportions
-from sizebot.checks import requireAdmin
+from sizebot.lib.checks import requireAdmin
 from sizebot.lib import changes
 
 

@@ -4,7 +4,7 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import utils
 from sizebot import logger
-from sizebot.checks import requireAdmin
+from sizebot.lib.checks import requireAdmin
 from sizebot.lib.eval import runEval
 from sizebot.utils import removeCodeBlock
 

@@ -1,4 +1,4 @@
-from sizebot.checks import denyGuildBan
+from sizebot.lib.checks import denyGuildBan
 
 
 def setup(bot):
