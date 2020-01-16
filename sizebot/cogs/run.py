@@ -43,12 +43,12 @@ class Runner:
     @property
     def progress(self):
         """Progress 0.0-1.0"""
-        now = Decimal(time.time())
+        now = Decimal(time())
         return max(Decimal(0), self.endtime - now) / self.duration
 
     @property
     def running(self):
-        now = Decimal(time.time())
+        now = Decimal(time())
         return self.endtime >= now
 
     @property
@@ -63,7 +63,7 @@ class Runner:
 
     @classmethod
     def start(cls, channelId, messageId, *, duration, nyan):
-        startTime = Decimal(time.time())
+        startTime = Decimal(time())
         runner = cls(channelId, messageId, startTime=startTime, duration=duration, nyan=nyan)
         runners.append(runner)
 
