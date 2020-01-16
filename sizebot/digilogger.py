@@ -1,4 +1,4 @@
-from digiformatter import styles
+from digiformatter import logger
 
 from sizebot import utils
 
@@ -28,7 +28,7 @@ async def error(message, **kwargs):
 
 async def log(message, level="info"):
     message = str(message)
-    styles.print(message, style=level)
+    logger.log(message, level=level)
     for m in utils.chunkMsg(message.replace("```", r"\`\`\`")):
         await logChannel.send(m)
 
@@ -56,7 +56,7 @@ def syncerror(message, **kwargs):
 
 def synclog(message, level="info"):
     message = str(message)
-    styles.print(message, style=level)
+    logger.log(message, level=level)
 
 
 def init(channel):
