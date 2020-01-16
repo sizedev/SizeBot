@@ -2,7 +2,7 @@ import sys
 
 from discord.ext import commands
 
-from sizebot import digierror as errors
+from sizebot.lib import errors
 from sizebot import logger
 from sizebot.utils import formatTraceback
 from sizebot.lib.telemetry import Telemetry

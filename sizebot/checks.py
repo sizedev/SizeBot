@@ -3,7 +3,7 @@ from discord.ext import commands
 
 
 from sizebot import conf
-from sizebot import digierror as errors
+from sizebot.lib import errors
 
 
 def requireAdmin(ctx):

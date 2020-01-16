@@ -3,7 +3,7 @@ import re
 
 import numexpr
 
-from sizebot import digierror as errors
+from sizebot.lib import errors
 
 
 def evalmath(expression):
