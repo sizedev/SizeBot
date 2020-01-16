@@ -15,35 +15,35 @@ decimal.setcontext(context)
 
 class Decimal(decimal.Decimal):
     def __format__(self, spec):
-        value = decimal.Decimal(self)
+        value = fixZeroes(decimal.Decimal(self))
         dSpec = DecimalSpec.parse(spec)
 
-        fractional = dSpec.fractional
-        dSpec.fractional = None
+        fraction = ""
 
         if Decimal("1e-10") < value < Decimal("1e10"):
-            fraction = ""
-            if fractional:
-                try:
-                    denom = fractional and int(fractional[1])
-                except IndexError:
-                    denom = 8
-                dSpec.precision = "0"
-                value, fraction = splitFraction(value, denom)
-
             dSpec.type = "f"
-            numspec = str(dSpec)
-            formatted = format(fixZeroes(value), numspec)
-
-            if fraction:
-                if formatted == "0":
-                    formatted = ""
-                formatted += fraction
         else:
             dSpec.type = "e"
-            numspec = str(dSpec)
-            formatted = format(fixZeroes(value), numspec)
 
+        if dSpec.type == "f" and dSpec.fractional:
+            try:
+                denom = int(dSpec.fractional[1])
+            except IndexError:
+                denom = 8
+            dSpec.precision = "0"
+            value, fraction = splitFraction(value, denom)
+
+        if dSpec.precision:
+            value = roundDecimal(value, int(dSpec.precision))
+
+        dSpec.fractional = None
+        numspec = str(dSpec)
+        formatted = format(value, numspec)
+
+        if fraction:
+            if formatted == "0":
+                formatted = ""
+            formatted += fraction
         return formatted
 
 
@@ -107,7 +107,7 @@ class DecimalSpec:
 
 def roundDecimal(d, accuracy = 0):
     places = decimal.Decimal("10") ** -accuracy
-    return d.quantize(places)
+    return fixZeroes(d.quantize(places))
 
 
 def roundDecimalFraction(number, denominator):
@@ -127,7 +127,7 @@ def splitFraction(value, denom=8):
     if negative:
         whole = -whole
     fraction = fractionStrings[int(part * len(fractionStrings))]
-    return whole, fraction
+    return fixZeroes(whole), fraction
 
 
 def fixZeroes(d):
