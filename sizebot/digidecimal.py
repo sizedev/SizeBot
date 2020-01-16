@@ -107,7 +107,7 @@ class DecimalSpec:
 
 def roundDecimal(d, accuracy = 0):
     places = decimal.Decimal("10") ** -accuracy
-    return d.quantize(places)
+    return fixZeroes(d.quantize(places))
 
 
 def roundDecimalFraction(number, denominator):
@@ -127,7 +127,7 @@ def splitFraction(value, denom=8):
     if negative:
         whole = -whole
     fraction = fractionStrings[int(part * len(fractionStrings))]
-    return whole, fraction
+    return fixZeroes(whole), fraction
 
 
 def fixZeroes(d):
