@@ -1,10 +1,9 @@
 import json
 
+from sizebot import conf, utils
 from sizebot.digidecimal import Decimal
-from sizebot import conf
-from sizebot.lib import errors
 from sizebot.digiSV import SV, WV
-from sizebot import utils
+from sizebot.lib import errors
 
 # Defaults
 defaultheight = SV("1.754")  # meters

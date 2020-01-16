@@ -4,8 +4,7 @@ import importlib.resources as pkg_resources
 
 from discord.ext import commands
 
-from sizebot import logger
-from sizebot import text
+from sizebot import logger, text
 
 monikalines = pkg_resources.read_text(text, "monikalines.txt").splitlines()
 

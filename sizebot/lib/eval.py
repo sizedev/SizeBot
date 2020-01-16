@@ -2,12 +2,10 @@ import builtins
 
 import discord
 
+from sizebot import logger, userdb, utils
 from sizebot.digidecimal import Decimal
-from sizebot import logger
 from sizebot.digiSV import Rate, Mult, SV, WV, TV
 from sizebot.digiobj import objects
-import sizebot.utils
-from sizebot import userdb
 
 
 def cachedCopy(fn):
@@ -49,14 +47,14 @@ def getEvalGlobals():
 
     evalGlobals = {
         "__builtins__": evalBuiltins,
-        "help": sizebot.utils.strHelp,
+        "help": utils.strHelp,
         "Decimal": Decimal,
         "discord": discord,
         "logger": logger,
         "Rate": Rate, "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
         "objects": objects,
-        "utils": sizebot.utils,
-        "pdir": sizebot.utils.pdir,
+        "utils": utils,
+        "pdir": utils.pdir,
         "userdb": userdb
     }
 

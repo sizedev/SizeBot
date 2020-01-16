@@ -3,10 +3,10 @@ from time import time
 from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus
 
+from sizebot import logger
 from sizebot.utils import clamp
 from sizebot.digiSV import TV
 from sizebot.digidecimal import Decimal
-from sizebot import logger
 
 runners = []
 

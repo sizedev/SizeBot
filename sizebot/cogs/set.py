@@ -1,13 +1,10 @@
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger
-from sizebot import userdb
+from sizebot import logger, userdb, digidecimal
 from sizebot.digiSV import SV, WV
-from sizebot.lib import proportions
 from sizebot.utils import clamp
-import sizebot.digidecimal as digidecimal
-from sizebot.lib import errors
+from sizebot.lib import proportions, errors
 
 
 class SetCog(commands.Cog):

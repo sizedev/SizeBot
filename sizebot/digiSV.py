@@ -3,11 +3,11 @@ import re
 import collections
 import importlib.resources as pkg_resources
 
-from sizebot.digidecimal import Decimal, DecimalSpec
-from sizebot.lib import errors
-from sizebot.utils import removeBrackets, re_num, tryOrNone, iset
-from sizebot.lib.picker import getRandomCloseUnit
 from sizebot import logger
+from sizebot.digidecimal import Decimal, DecimalSpec
+from sizebot.utils import removeBrackets, re_num, tryOrNone, iset
+from sizebot.lib import errors
+from sizebot.lib.picker import getRandomCloseUnit
 
 from sizebot import units as units_dir
 

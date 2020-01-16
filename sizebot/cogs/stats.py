@@ -5,9 +5,7 @@ import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger
-# TODO: Fix this...
-from sizebot import userdb
+from sizebot import logger, userdb
 from sizebot.digiSV import SV
 from sizebot.lib import proportions
 from sizebot.digidecimal import Decimal

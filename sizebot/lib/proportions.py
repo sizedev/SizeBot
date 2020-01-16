@@ -4,12 +4,11 @@ import math
 import discord
 
 from sizebot import __version__
-from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes
-from sizebot.lib import errors
-from sizebot.digiSV import SV, WV
-from sizebot import userdb
+from sizebot import userdb, utils
 from sizebot.userdb import defaultheight, defaultweight
-from sizebot import utils
+from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes
+from sizebot.digiSV import SV, WV
+from sizebot.lib import errors
 
 emojis = {
     "compare": "<:Compare:665019546289176597>",

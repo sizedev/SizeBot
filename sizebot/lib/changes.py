@@ -2,11 +2,9 @@ import time
 import json
 
 from sizebot.digidecimal import Decimal
-from sizebot import logger
-from sizebot import userdb
+from sizebot import logger, userdb, conf
 from sizebot.digiSV import SV, TV
 from sizebot.lib import proportions
-from sizebot import conf
 
 
 _activeChanges = {}
