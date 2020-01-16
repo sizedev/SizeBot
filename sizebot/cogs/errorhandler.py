@@ -5,7 +5,7 @@ from discord.ext import commands
 from sizebot import digierror as errors
 from sizebot import logger
 from sizebot.utils import formatTraceback
-from sizebot.telemetry import Telemetry
+from sizebot.lib.telemetry import Telemetry
 
 
 def setup(bot):
