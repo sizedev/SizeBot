@@ -36,6 +36,7 @@ class Runner:
         self.now = Decimal(startTime)
 
     async def step(self, bot):
+        self.now = Decimal(time.time())
         channel = bot.get_channel(self.channelId)
         message = await channel.fetch_message(self.messageId)
         await message.edit(content=self.formatRunner())
