@@ -6,6 +6,7 @@ from sizebot.discordplus import commandsplus
 from sizebot.utils import clamp
 from sizebot.digiSV import TV
 from sizebot.digidecimal import Decimal
+from sizebot import digilogger as logger
 
 runners = []
 
@@ -36,30 +37,35 @@ class Runner:
         self.now = Decimal(startTime)
 
     async def step(self, bot):
-        self.now = Decimal(time.time())
+        self.now = Decimal(time())
         channel = bot.get_channel(self.channelId)
         message = await channel.fetch_message(self.messageId)
         await message.edit(content=self.formatRunner())
-        return self.running
+        running = self.running
+        return running
 
     @property
     def progress(self):
         """Progress 0.0-1.0"""
-        return clamp(Decimal(0), (self.now - self.startTime) / self.duration, Decimal(1))
+        progress = clamp(Decimal(0), (self.now - self.startTime) / self.duration, Decimal(1))
+        return progress
 
     @property
     def running(self):
-        return self.progress <= Decimal(1)
+        running = self.progress <= Decimal(1)
+        return running
 
     @property
     def endtime(self):
-        return self.startTime + self.duration
+        endtime = self.startTime + self.duration
+        return endtime
 
     def formatRunner(self):
         if self.nyan:
-            return buildNyan(self.progress)
+            formatted = buildNyan(self.progress)
         else:
-            return buildRun(self.progress)
+            formatted = buildRun(self.progress)
+        return formatted
 
     @classmethod
     def start(cls, channelId, messageId, *, duration, nyan):
@@ -84,10 +90,13 @@ class RunCog(commands.Cog):
         msg = await ctx.send("Ready... Set... GO")
         Runner.start(ctx.channel.id, msg.id, duration=duration, nyan=nyan)
 
-    @tasks.loop(seconds=0.5)
+    @tasks.loop(seconds=1)
     async def runTask(self):
         global runners
-        runners = [r for r in runners if await r.step(self.bot)]
+        try:
+            runners = [r for r in runners if await r.step(self.bot)]
+        except Exception as e:
+            await logger.error(e)
 
 
 def setup(bot):
