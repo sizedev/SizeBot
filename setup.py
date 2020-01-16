@@ -28,7 +28,7 @@ def getVersion():
 
 
 setuptools.setup(
-    name="SizeBot",
+    name="sizebot",
     version=getVersion(),
     author="DigiDuncan",
     author_email="digiduncan@gmail.com",

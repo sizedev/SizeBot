@@ -2,11 +2,11 @@ from datetime import datetime
 
 import discord
 from discord.ext import commands
+from digiformatter import styles
 
 from sizebot import __version__
 from sizebot import digiSV, digiobj
 from sizebot import digilogger as logger
-from sizebot import digiformatter as df
 from sizebot import conf
 from sizebot import status
 
@@ -45,8 +45,8 @@ def main():
         await digiSV.init()
         await digiobj.init()
 
-        df.createLogLevel("banner", fgval="orange_red_1", bgval="deep_sky_blue_4b", attrval="bold")
-        df.createLogLevel("login", fgval="cyan")
+        styles.create("banner", fgval="orange_red_1", bgval="deep_sky_blue_4b", attrval="bold")
+        styles.create("login", fgval="cyan")
         # Obviously we need the banner printed in the terminal
         await logger.log("banner", conf.banner + " v" + __version__)
 
@@ -56,7 +56,7 @@ def main():
                          f"{bot.user.id}\n"
                          "------")
         await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
-        df.printLogLevels()
+        print(styles)
         launchfinishtime = datetime.now()
         elapsed = launchfinishtime - launchtime
         await logger.debug(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.\n")
