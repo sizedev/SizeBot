@@ -5,8 +5,6 @@ from sizebot.discordplus import commandsplus
 
 from sizebot.checks import requireAdmin
 
-mathemojis = "1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣0️⃣"
-
 inputdict = {"1️⃣": "1",
              "2️⃣": "2",
              "3️⃣": "3",
@@ -34,9 +32,9 @@ class KeypadCog(commands.Cog):
         def check(reaction, reacter):
             return reaction.message.id == outputmsg.id \
                 and reacter.id == user.id \
-                and str(reaction.emoji) in mathemojis
+                and str(reaction.emoji) in inputdict.keys()
 
-        for emoji in mathemojis:
+        for emoji in inputdict.keys():
             await outputmsg.add_reaction(emoji)
 
         listening = True
@@ -49,7 +47,7 @@ class KeypadCog(commands.Cog):
                 listening = False
                 break
 
-            if str(reaction.emoji) in mathemojis:
+            if str(reaction.emoji) in inputdict.keys():
                 await outputmsg.edit(content = outputmsg.content + inputdict[str(reaction.emoji)])
 
         outputmsg.clear_reactions()
