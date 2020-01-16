@@ -421,7 +421,7 @@ def formatShoeSize(footlength):
         shoesizeNum += 12 + Decimal(1) / Decimal(3)
     if shoesizeNum < 1:
         return "No shoes exist this small!"
-    shoesize = format(shoesizeNum, ",.2%2")
+    shoesize = format(Decimal(shoesizeNum), ",.2%2")
     return f"Size US {prefix}{shoesize}"
 
 
