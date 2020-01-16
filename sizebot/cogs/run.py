@@ -23,7 +23,7 @@ def buildRun(progress):
     maxRun = 167
     steps = clamp(0, int(progress * maxRun), maxRun)
     remaining = maxRun - steps
-    return f"🏁{remaining * ' '}🏃‍♀️"
+    return f"\u200b🏁{remaining * ' '}🏃‍♀️"
 
 
 class Runner:
@@ -33,6 +33,7 @@ class Runner:
         self.startTime = Decimal(startTime)
         self.duration = TV(duration)
         self.nyan = nyan
+        self.now = Decimal(startTime)
 
     async def step(self, bot):
         channel = bot.get_channel(self.channelId)
@@ -43,13 +44,11 @@ class Runner:
     @property
     def progress(self):
         """Progress 0.0-1.0"""
-        now = Decimal(time())
-        return max(Decimal(0), now - self.startTime) / self.duration
+        return clamp(Decimal(0), (self.now - self.startTime) / self.duration, Decimal(1))
 
     @property
     def running(self):
-        now = Decimal(time())
-        return self.endtime >= now
+        return self.progress >= Decimal(1)
 
     @property
     def endtime(self):
