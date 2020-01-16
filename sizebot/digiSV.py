@@ -217,7 +217,7 @@ class FeetAndInchesUnit(Unit):
     def format(self, value, spec="", preferName=False):
         inchval = value / self.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
-        formatted = f"{feetval:{spec}}'{inchval:{spec}}\""
+        formatted = f"{Decimal(feetval):{spec}}'{Decimal(inchval):{spec}}\""
         return formatted
 
     def toBaseUnit(self, v):
@@ -339,7 +339,6 @@ class Dimension(Decimal):
                 if u not in uniqUnits:
                     uniqUnits.append(u)
             formatted = " / ".join(uniqUnits)
-
         else:
             formatted = format(value, spec)
 

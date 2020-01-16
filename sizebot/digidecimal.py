@@ -20,14 +20,14 @@ class Decimal(decimal.Decimal):
 
         fractional = formatDict["fractional"]
         formatDict["fractional"] = None
-        try:
-            denom = fractional and int(fractional[1])
-        except IndexError:
-            denom = 8
 
         if Decimal("1e-10") < value < Decimal("1e10"):
             fraction = ""
             if fractional:
+                try:
+                    denom = fractional and int(fractional[1])
+                except IndexError:
+                    denom = 8
                 formatDict["precision"] = "0"
                 value, fraction = splitFraction(value, denom)
 
