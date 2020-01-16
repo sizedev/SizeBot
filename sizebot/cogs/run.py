@@ -77,12 +77,13 @@ class RunCog(commands.Cog):
     )
     async def run(self, ctx, duration: TV, mode: str = ""):
         nyan = mode == "nyan"
-        Runner.start(ctx.channel.id, ctx.message.id, duration=duration, nyan=nyan)
+        msg = await ctx.send("Ready... Set... GO")
+        Runner.start(ctx.channel.id, msg.id, duration=duration, nyan=nyan)
 
     @tasks.loop(seconds=1)
     async def changeTask(self):
         global runners
-        runners = [r for r in runners if r.run(self.bot)]
+        runners = [r for r in runners if await r.step(self.bot)]
 
 
 def setup(bot):
