@@ -55,6 +55,7 @@ async def sayMilestone(channel, winkcount):
 
 class WinksCog(commands.Cog):
     """Yukio wink count."""
+
     def __init__(self, bot):
         self.bot = bot
 
