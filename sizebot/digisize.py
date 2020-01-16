@@ -323,6 +323,10 @@ class PersonStats:
         self.viewscale = self.baseheight / self.height
         self.baseweight = userdata.baseweight
         self.weight = userdata.weight
+
+        self.averageheightmult = self.height / defaultheight
+        self.averageweightmult = self.weight / defaultweight
+
         if userdata.footlength is None:
             self.footlength = SV(self.height * self.footfactor)
         else:
@@ -349,9 +353,6 @@ class PersonStats:
         heightdiff = abs(userdata.height - defaultheight)
         viewdistance = max(userdata.height, defaultheight) / 2
         self.avglookangle = math.degrees(math.atan(heightdiff / viewdistance))
-
-        self.averageheightmult = self.height / defaultheight
-        self.averageweightmult = self.weight / defaultweight
 
         defaultwalkspeed = SV.parse("2.5mi")
         defaultrunspeed = SV.parse("7.5mi")
