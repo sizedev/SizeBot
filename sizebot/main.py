@@ -45,8 +45,8 @@ def main():
         await digiSV.init()
         await digiobj.init()
 
-        styles.create("banner", fgval="orange_red_1", bgval="deep_sky_blue_4b", attrval="bold")
-        styles.create("login", fgval="cyan")
+        styles.create("banner", fg="orange_red_1", bg="deep_sky_blue_4b", attr="bold")
+        styles.create("login", fg="cyan")
         # Obviously we need the banner printed in the terminal
         await logger.log("banner", conf.banner + " v" + __version__)
 
