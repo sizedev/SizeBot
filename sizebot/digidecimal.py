@@ -2,7 +2,7 @@ import re
 import decimal
 import random
 
-__all__ = ["Decimal", "roundDecimal", "fixZeroes", "randRangeLog", "parseSpec", "buildSpec"]
+__all__ = ["Decimal", "roundDecimal", "fixZeroes", "randRangeLog", "DecimalSpec"]
 
 # Configure decimal module
 decimal.getcontext()
@@ -16,10 +16,10 @@ decimal.setcontext(context)
 class Decimal(decimal.Decimal):
     def __format__(self, spec):
         value = decimal.Decimal(self)
-        formatDict = parseSpec(spec)
+        dSpec = DecimalSpec.parse(spec)
 
-        fractional = formatDict["fractional"]
-        formatDict["fractional"] = None
+        fractional = dSpec.fractional
+        dSpec.fractional = None
 
         if Decimal("1e-10") < value < Decimal("1e10"):
             fraction = ""
@@ -28,11 +28,11 @@ class Decimal(decimal.Decimal):
                     denom = fractional and int(fractional[1])
                 except IndexError:
                     denom = 8
-                formatDict["precision"] = "0"
+                dSpec.precision = "0"
                 value, fraction = splitFraction(value, denom)
 
-            formatDict["type"] = "f"
-            numspec = buildSpec(formatDict)
+            dSpec.type = "f"
+            numspec = str(dSpec)
             formatted = format(fixZeroes(value), numspec)
 
             if fraction:
@@ -40,57 +40,69 @@ class Decimal(decimal.Decimal):
                     formatted = ""
                 formatted += fraction
         else:
-            formatDict["type"] = "e"
-            numspec = buildSpec(formatDict)
+            dSpec.type = "e"
+            numspec = str(dSpec)
             formatted = format(fixZeroes(value), numspec)
 
         return formatted
 
 
-formatSpecRe = re.compile(r"""\A
-(?:
-   (?P<fill>.)?
-   (?P<align>[<>=^])
-)?
-(?P<sign>[-+ ])?
-(?P<zeropad>0)?
-(?P<minimumwidth>(?!0)\d+)?
-(?P<thousands_sep>,)?
-(?:\.(?P<precision>0|(?!0)\d+))?
-(?P<type>[a-zA-Z]{1,2})?
-(?P<fractional>%\d?)?
-\Z
-""", re.VERBOSE)
+class DecimalSpec:
+    formatSpecRe = re.compile(r"""\A
+    (?:
+    (?P<fill>.)?
+    (?P<align>[<>=^])
+    )?
+    (?P<sign>[-+ ])?
+    (?P<zeropad>0)?
+    (?P<minimumwidth>(?!0)\d+)?
+    (?P<thousands_sep>,)?
+    (?:\.(?P<precision>0|(?!0)\d+))?
+    (?P<type>[a-zA-Z]{1,2})?
+    (?P<fractional>%\d?)?
+    \Z
+    """, re.VERBOSE)
 
+    def __init__(self, formatDict):
+        self.align = formatDict["align"]
+        self.fill = formatDict["fill"]
+        self.sign = formatDict["sign"]
+        self.zeropad = formatDict["zeropad"]
+        self.minimumwidth = formatDict["minimumwidth"]
+        self.thousands_sep = formatDict["thousands_sep"]
+        self.precision = formatDict["precision"]
+        self.type = formatDict["type"]
+        self.fractional = formatDict["fractional"]
 
-def parseSpec(spec):
-    m = formatSpecRe.match(spec)
-    if m is None:
-        raise ValueError("Invalid format specifier: " + spec)
-    return m.groupdict()
+    @classmethod
+    def parse(cls, spec):
+        m = cls.formatSpecRe.match(spec)
+        if m is None:
+            raise ValueError("Invalid format specifier: " + spec)
+        formatDict = m.groupdict()
+        return cls(formatDict)
 
-
-def buildSpec(formatDict):
-    spec = ""
-    if formatDict["align"] is not None:
-        if formatDict["fill"] is not None:
-            spec += formatDict["fill"]
-        spec += formatDict["align"]
-    if formatDict["sign"] is not None:
-        spec += formatDict["sign"]
-    if formatDict["zeropad"] is not None:
-        spec += formatDict["zeropad"]
-    if formatDict["minimumwidth"] is not None:
-        spec += formatDict["minimumwidth"]
-    if formatDict["thousands_sep"] is not None:
-        spec += formatDict["thousands_sep"]
-    if formatDict["precision"] is not None:
-        spec += "." + formatDict["precision"]
-    if formatDict["type"] is not None:
-        spec += formatDict["type"]
-    if formatDict["fractional"] is not None:
-        spec += formatDict["fractional"]
-    return spec
+    def __str__(self):
+        spec = ""
+        if self.align is not None:
+            if self.fill is not None:
+                spec += self.fill
+            spec += self.align
+        if self.sign is not None:
+            spec += self.sign
+        if self.zeropad is not None:
+            spec += self.zeropad
+        if self.minimumwidth is not None:
+            spec += self.minimumwidth
+        if self.thousands_sep is not None:
+            spec += self.thousands_sep
+        if self.precision is not None:
+            spec += "." + self.precision
+        if self.type is not None:
+            spec += self.type
+        if self.fractional is not None:
+            spec += self.fractional
+        return spec
 
 
 def roundDecimal(d, accuracy = 0):

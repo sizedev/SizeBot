@@ -3,7 +3,7 @@ import re
 import collections
 import importlib.resources as pkg_resources
 
-from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes, parseSpec, buildSpec
+from sizebot.digidecimal import Decimal, DecimalSpec
 from sizebot import digierror as errors
 from sizebot.utils import removeBrackets, re_num, tryOrNone, iset
 from sizebot.picker import getRandomCloseUnit
@@ -138,9 +138,9 @@ class Unit():
     def format(self, value, spec="", preferName=False):
         scaled = Decimal(value / self.factor)
         if not self.fractional:
-            formatDict = parseSpec(spec)
-            formatDict["fractional"] = None
-            spec = buildSpec(formatDict)
+            dSpec = DecimalSpec.parse(spec)
+            dSpec.fractional = None
+            spec = str(dSpec)
         formattedValue = format(scaled, spec)
 
         if formattedValue == "0":
@@ -218,13 +218,11 @@ class FeetAndInchesUnit(Unit):
         inchval = value / self.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
 
-        feetFormatDict = parseSpec(spec)
-        feetFormatDict["precision"] = "0"
-        feetSpec = buildSpec(feetFormatDict)
+        feetSpec = DecimalSpec.parse(spec)
+        feetSpec.precision = "0"
 
-        inchFormatDict = parseSpec(spec)
-        inchFormatDict["sign"] = None
-        inchSpec = buildSpec(feetFormatDict)
+        inchSpec = DecimalSpec.parse(spec)
+        inchSpec.sign = None
 
         formatted = f"{Decimal(feetval):{feetSpec}}'{Decimal(inchval):{inchSpec}}\""
         return formatted
@@ -327,13 +325,13 @@ class Dimension(Decimal):
 
     def __format__(self, spec):
         value = Decimal(self)
-        formatDict = parseSpec(spec)
+        dSpec = DecimalSpec.parse(spec)
 
-        systems = formatDict["type"] or ""
+        systems = dSpec.type or ""
 
         if systems and all(s.casefold() in self._systems.keys() for s in systems):
-            formatDict["type"] = None
-            numspec = buildSpec(formatDict)
+            dSpec.type = None
+            numspec = str(dSpec)
 
             formattedUnits = []
             for s in systems:
