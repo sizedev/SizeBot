@@ -13,10 +13,10 @@ runners = []
 def buildNyan(progress):
     nyanTrail = "<a:nyanTrail:667175870711988254>"
     nyanCat = "<a:nyanEnd:667175883697684510>"
-    maxRun = 102
+    maxRun = 84
     steps = clamp(0, int(progress * maxRun), maxRun)
     trails, spaces = divmod(steps, 6)
-    return f"{spaces * ' '}{trails * nyanTrail}{nyanCat}"
+    return f"\u200b{spaces * ' '}{trails * nyanTrail}{nyanCat}"
 
 
 def buildRun(progress):
