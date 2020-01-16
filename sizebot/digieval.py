@@ -3,7 +3,7 @@ import builtins
 import discord
 
 from sizebot.digidecimal import Decimal
-from sizebot import digilogger as logger
+from sizebot import logger
 from sizebot.digiSV import Rate, Mult, SV, WV, TV
 from sizebot.digiobj import objects
 import sizebot.utils

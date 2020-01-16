@@ -6,7 +6,7 @@ from digiformatter import styles
 
 from sizebot import __version__
 from sizebot import digiSV, digiobj
-from sizebot import digilogger as logger
+from sizebot import logger
 from sizebot import conf
 from sizebot import status
 

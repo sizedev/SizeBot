@@ -2,7 +2,7 @@ import time
 import json
 
 from sizebot.digidecimal import Decimal
-from sizebot import digilogger as logger
+from sizebot import logger
 from sizebot import userdb
 from sizebot.digiSV import SV, TV
 from sizebot import digisize

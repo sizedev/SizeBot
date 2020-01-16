@@ -6,7 +6,7 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot import __version__
-from sizebot import digilogger as logger
+from sizebot import logger
 from sizebot import conf
 from sizebot import userdb
 from sizebot.digiSV import SV, WV

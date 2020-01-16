@@ -7,7 +7,7 @@ from sizebot.digidecimal import Decimal, DecimalSpec
 from sizebot import digierror as errors
 from sizebot.utils import removeBrackets, re_num, tryOrNone, iset
 from sizebot.picker import getRandomCloseUnit
-import sizebot.digilogger as logger
+from sizebot import logger
 
 from sizebot import units as units_dir
 

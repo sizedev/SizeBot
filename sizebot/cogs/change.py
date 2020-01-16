@@ -3,7 +3,7 @@ import random
 from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus
 
-from sizebot import digilogger as logger
+from sizebot import logger
 from sizebot import userdb
 from sizebot.digiSV import Rate
 from sizebot import digisize
