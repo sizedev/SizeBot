@@ -35,23 +35,23 @@ async def log(message, level="info"):
 
 # Sync log functions (prints to console)
 def synctrace(message, **kwargs):
-    log(message, level="trace", **kwargs)
+    synclog(message, level="trace", **kwargs)
 
 
 def syncdebug(message, **kwargs):
-    log(message, level="debug", **kwargs)
+    synclog(message, level="debug", **kwargs)
 
 
 def syncinfo(message, **kwargs):
-    log(message, level="info", **kwargs)
+    synclog(message, level="info", **kwargs)
 
 
 def syncwarn(message, **kwargs):
-    log(message, level="warn", **kwargs)
+    synclog(message, level="warn", **kwargs)
 
 
 def syncerror(message, **kwargs):
-    log(message, level="error", **kwargs)
+    synclog(message, level="error", **kwargs)
 
 
 def synclog(message, level="info"):
