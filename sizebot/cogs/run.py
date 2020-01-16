@@ -84,7 +84,7 @@ class RunCog(commands.Cog):
         msg = await ctx.send("Ready... Set... GO")
         Runner.start(ctx.channel.id, msg.id, duration=duration, nyan=nyan)
 
-    @tasks.loop(seconds=1)
+    @tasks.loop(seconds=0.5)
     async def runTask(self):
         global runners
         runners = [r for r in runners if await r.step(self.bot)]
