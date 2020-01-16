@@ -1,7 +1,22 @@
+import asyncio
+
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot.checks import requireAdmin
+
+mathemojis = "1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣0️⃣"
+
+inputdict = {"1️⃣": "1",
+             "2️⃣": "2",
+             "3️⃣": "3",
+             "4️⃣": "4",
+             "5️⃣": "5",
+             "6️⃣": "6",
+             "7️⃣": "7",
+             "8️⃣": "8",
+             "9️⃣": "9",
+             "0️⃣": "0"}
 
 
 class KeypadCog(commands.Cog):
@@ -14,7 +29,30 @@ class KeypadCog(commands.Cog):
     @commands.check(requireAdmin)
     async def keypad(self, ctx):
         """Test keypad command."""
-        await ctx.send("This command is not done!")
+        outputmsg = await ctx.send("**Input:** ")
+
+        def check(reaction, reacter):
+            return reaction.message.id == outputmsg.id \
+                and reacter.id == user.id \
+                and str(reaction.emoji) in mathemojis
+
+        for emoji in mathemojis:
+            await outputmsg.add_reaction(emoji)
+
+        listening = True
+
+        while listening:
+            try:
+                reaction, user = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
+            except asyncio.TimeoutError:
+                # User took too long to respond
+                listening = False
+                break
+
+            if str(reaction.emoji) in mathemojis:
+                await outputmsg.edit(content = outputmsg.content + inputdict[str(reaction.emoji)])
+
+        outputmsg.clear_reactions()
 
 
 def setup(bot):
