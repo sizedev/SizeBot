@@ -5,7 +5,7 @@ import discord
 from sizebot import logger, userdb, utils
 from sizebot.digidecimal import Decimal
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
-from sizebot.digiobj import objects
+from sizebot.lib.objs import objects
 
 
 def cachedCopy(fn):
