@@ -5,8 +5,7 @@ import importlib.resources as pkg_resources
 
 from sizebot import logger
 from sizebot.digidecimal import Decimal, DecimalSpec
-from sizebot.utils import removeBrackets, re_num, tryOrNone, iset
-from sizebot.lib import errors
+from sizebot.lib import errors, utils
 from sizebot.lib.picker import getRandomCloseUnit
 import sizebot.data
 
@@ -31,8 +30,8 @@ formatSpecRe = re.compile(r"""\A
 
 class Rate():
     """Rate"""
-    re_num_unit = f"{re_num} *[A-Za-z]+"
-    re_opnum_unit = f"({re_num})? *[A-Za-z]+"
+    re_num_unit = f"{utils.re_num} *[A-Za-z]+"
+    re_opnum_unit = f"({utils.re_num})? *[A-Za-z]+"
 
     rateDividers = "|".join(re.escape(d) for d in ("/", "per", "every"))
     stopDividers = "|".join(re.escape(d) for d in ("until", "for", "->"))
@@ -53,25 +52,25 @@ class Rate():
 
         isSub = prefix in cls.subPrefixes
 
-        valueSV = tryOrNone(SV.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
+        valueSV = utils.tryOrNone(SV.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
         valueMult = None
         if valueSV is None:
-            valueMult = tryOrNone(Mult.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
+            valueMult = utils.tryOrNone(Mult.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
         if valueSV is None and valueMult is None:
             raise errors.InvalidSizeValue(s)
         if valueSV and isSub:
             valueSV = -valueSV
 
-        valueTV = tryOrNone(TV.parse, tvStr, ignore=errors.InvalidSizeValue)
+        valueTV = utils.tryOrNone(TV.parse, tvStr, ignore=errors.InvalidSizeValue)
         if valueTV is None:
             raise errors.InvalidSizeValue(s)
 
         stopSV = None
         stopTV = None
         if stopStr is not None:
-            stopSV = tryOrNone(SV.parse, stopStr, ignore=errors.InvalidSizeValue)
+            stopSV = utils.tryOrNone(SV.parse, stopStr, ignore=errors.InvalidSizeValue)
             if stopSV is None:
-                stopTV = tryOrNone(TV.parse, stopStr, ignore=errors.InvalidSizeValue)
+                stopTV = utils.tryOrNone(TV.parse, stopStr, ignore=errors.InvalidSizeValue)
             if stopSV is None and stopTV is None:
                 raise errors.InvalidSizeValue(s)
 
@@ -94,7 +93,7 @@ class Mult():
     divPrefixes = ["/", "÷", "div", "divide"]
     prefixes = '|'.join(re.escape(p) for p in multPrefixes + divPrefixes)
     suffixes = '|'.join(re.escape(p) for p in ["x", "X"])
-    re_mult = re.compile(f"(?P<prefix>{prefixes})? *(?P<multValue>{re_num}) *(?P<suffix>{suffixes})?")
+    re_mult = re.compile(f"(?P<prefix>{prefixes})? *(?P<multValue>{utils.re_num}) *(?P<suffix>{suffixes})?")
 
     @classmethod
     def parse(cls, s):
@@ -128,7 +127,7 @@ class Unit():
         if symbol is not None:
             self.symbols.add(symbol.strip())
 
-        self.names = iset(n.strip() for n in names)        # case insensitive names
+        self.names = utils.iset(n.strip() for n in names)        # case insensitive names
         if name is not None:
             self.names.add(name.strip())
         if namePlural is not None:
@@ -444,7 +443,7 @@ class SV(Dimension):
 
     @classmethod
     def getQuantityPair(cls, s):
-        s = removeBrackets(s)
+        s = utils.removeBrackets(s)
         s = cls.isFeetAndInchesAndIfSoFixIt(s)
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\" ]+)", s)
         value, unit = None, None
@@ -480,7 +479,7 @@ class WV(Dimension):
 
     @classmethod
     def getQuantityPair(cls, s):
-        s = removeBrackets(s)
+        s = utils.removeBrackets(s)
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"]+)", s)
         value, unit = None, None
         if match is not None:
@@ -498,7 +497,7 @@ class TV(Dimension):
 
     @classmethod
     def getQuantityPair(cls, s):
-        s = removeBrackets(s)
+        s = utils.removeBrackets(s)
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z]+)", s)
         value, unit = None, None
         if match is not None:

@@ -3,8 +3,7 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import logger, userdb, digidecimal
 from sizebot.lib.units import SV, WV
-from sizebot.utils import clamp
-from sizebot.lib import proportions, errors
+from sizebot.lib import proportions, errors, utils
 
 
 class SetCog(commands.Cog):
@@ -184,8 +183,8 @@ class SetCog(commands.Cog):
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
             return
 
-        minheightSV = clamp(0, SV.parse(minheight), SV.infinity)
-        maxheightSV = clamp(0, SV.parse(maxheight), SV.infinity)
+        minheightSV = utils.clamp(0, SV.parse(minheight), SV.infinity)
+        maxheightSV = utils.clamp(0, SV.parse(maxheight), SV.infinity)
 
         newheightSV = digidecimal.randRangeLog(minheightSV, maxheightSV)
 

@@ -3,7 +3,7 @@ from pathlib import Path
 import appdirs
 import toml
 
-from sizebot import utils
+from sizebot.lib import utils
 
 
 def getDataDir():

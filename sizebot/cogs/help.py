@@ -7,8 +7,8 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import __version__
 from sizebot import logger, conf, userdb
+from sizebot.lib import utils
 from sizebot.lib.units import SV, WV
-from sizebot.utils import chunkList
 
 # name
 # description
@@ -40,10 +40,10 @@ class HelpCog(commands.Cog):
 
         embed = discord.Embed(title=f"Units [SizeBot {__version__}]")
 
-        for n, units in enumerate(chunkList(heightunits, math.ceil(len(heightunits) / 3))):
+        for n, units in enumerate(utils.chunkList(heightunits, math.ceil(len(heightunits) / 3))):
             embed.add_field(name="Height" if n == 0 else "\u200b", value="\n".join(units))
 
-        for n, units in enumerate(chunkList(weightunits, math.ceil(len(weightunits) / 3))):
+        for n, units in enumerate(utils.chunkList(weightunits, math.ceil(len(weightunits) / 3))):
             embed.add_field(name="Weight" if n == 0 else "\u200b", value="\n".join(units))
 
         await ctx.send(embed=embed)
@@ -64,7 +64,7 @@ class HelpCog(commands.Cog):
 
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
 
-        for n, fieldCommands in enumerate(chunkList(commands, math.ceil(len(commands) / 2))):
+        for n, fieldCommands in enumerate(utils.chunkList(commands, math.ceil(len(commands) / 2))):
             fieldCommandsStr = "\n".join(f"**{c.name}**\n{c.summary or '-'}" for c in fieldCommands)
             embed.add_field(name="Commands" if n == 0 else "\u200b", value=fieldCommandsStr, inline=True)
 

@@ -4,7 +4,7 @@ from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus
 
 from sizebot import logger
-from sizebot.utils import clamp
+from sizebot.lib import utils
 from sizebot.lib.units import TV
 from sizebot.digidecimal import Decimal
 
@@ -15,13 +15,13 @@ def buildNyan(progress):
     nyanTrail = "<a:nyanTrail:667175870711988254>"
     nyanCat = "<a:nyanEnd:667175883697684510>"
     maxRun = 33
-    steps = clamp(0, int(progress * maxRun), maxRun)
+    steps = utils.clamp(0, int(progress * maxRun), maxRun)
     return f"\u200b{steps * nyanTrail}{nyanCat}"
 
 
 def buildRun(progress):
     maxRun = 167
-    steps = clamp(0, int(progress * maxRun), maxRun)
+    steps = utils.clamp(0, int(progress * maxRun), maxRun)
     remaining = maxRun - steps
     return f"\u200b🏁{remaining * ' '}🏃‍♀️"
 
@@ -46,7 +46,7 @@ class Runner:
     @property
     def progress(self):
         """Progress 0.0-1.0"""
-        progress = clamp(Decimal(0), (self.now - self.startTime) / self.duration, Decimal(1))
+        progress = utils.clamp(Decimal(0), (self.now - self.startTime) / self.duration, Decimal(1))
         return progress
 
     @property

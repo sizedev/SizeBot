@@ -4,7 +4,8 @@ from datetime import datetime, timedelta
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger, utils, conf
+from sizebot import logger, conf
+from sizebot.lib import utils
 
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
 starttime = datetime(2019, 9, 15)

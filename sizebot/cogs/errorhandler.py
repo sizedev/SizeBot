@@ -3,8 +3,7 @@ import sys
 from discord.ext import commands
 
 from sizebot import logger
-from sizebot.utils import formatTraceback
-from sizebot.lib import errors
+from sizebot.lib import errors, utils
 from sizebot.lib.telemetry import Telemetry
 
 
@@ -39,7 +38,7 @@ def setup(bot):
         # Default command handling
         await ctx.send("Something went wrong.")
         await logger.error(f"Ignoring exception in command {ctx.command}:")
-        await logger.error(formatTraceback(error))
+        await logger.error(utils.formatTraceback(error))
 
     @bot.event
     async def on_error(event, *args, **kwargs):
@@ -53,4 +52,4 @@ def setup(bot):
             return
 
         await logger.error(f"Ignoring exception in {event}")
-        await logger.error(formatTraceback(error))
+        await logger.error(utils.formatTraceback(error))

@@ -1,6 +1,6 @@
 from digiformatter import logger
 
-from sizebot import utils
+from sizebot.lib import utils
 
 logChannel = None
 
