@@ -27,7 +27,7 @@ class KeypadCog(commands.Cog):
     @commands.check(requireAdmin)
     async def keypad(self, ctx):
         """Test keypad command."""
-        user = ctx.message.author
+        author = ctx.message.author
         defaultmessage = "**Input:**<:blank:665063842866397185>"
         clearemoji = "❌"
 
@@ -35,12 +35,13 @@ class KeypadCog(commands.Cog):
 
         def check(reaction, reacter):
             return reaction.message.id == outputmsg.id \
-                and reacter.id == user.id \
+                and reacter.id == author.id \
                 and str(reaction.emoji) in inputdict.keys() or \
                 str(reaction.emoji) == clearemoji
 
         for emoji in inputdict.keys():
             await outputmsg.add_reaction(emoji)
+        await outputmsg.add_reaction(clearemoji)
 
         listening = True
 
@@ -54,10 +55,10 @@ class KeypadCog(commands.Cog):
 
             if str(reaction.emoji) in inputdict.keys():
                 await outputmsg.edit(content = outputmsg.content + inputdict[str(reaction.emoji)])
-                await reaction.remove()
+                await reaction.remove(user)
             if str(reaction.emoji) == clearemoji:
                 await outputmsg.edit(content = defaultmessage)
-                await reaction.remove()
+                await reaction.remove(user)
 
         await outputmsg.clear_reactions()
 
