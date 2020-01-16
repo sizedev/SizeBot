@@ -27,6 +27,7 @@ class KeypadCog(commands.Cog):
     @commands.check(requireAdmin)
     async def keypad(self, ctx):
         """Test keypad command."""
+        user = ctx.message.author
         outputmsg = await ctx.send("**Input:** ")
 
         def check(reaction, reacter):
