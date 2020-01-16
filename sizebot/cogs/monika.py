@@ -4,9 +4,10 @@ import importlib.resources as pkg_resources
 
 from discord.ext import commands
 
-from sizebot import logger, text
+from sizebot import logger
+import sizebot.data
 
-monikalines = pkg_resources.read_text(text, "monikalines.txt").splitlines()
+monikalines = pkg_resources.read_text(sizebot.data, "monikalines.txt").splitlines()
 
 
 class MonikaCog(commands.Cog):

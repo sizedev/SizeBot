@@ -8,8 +8,7 @@ from sizebot.digidecimal import Decimal, DecimalSpec
 from sizebot.utils import removeBrackets, re_num, tryOrNone, iset
 from sizebot.lib import errors
 from sizebot.lib.picker import getRandomCloseUnit
-
-from sizebot import units as units_dir
+import sizebot.data
 
 __all__ = ["Rate", "Mult", "SV", "WV", "TV"]
 
@@ -395,7 +394,7 @@ class Dimension(Decimal):
     @classmethod
     async def loadFromFile(cls, filename):
         try:
-            fileJson = json.loads(pkg_resources.read_text(units_dir, filename))
+            fileJson = json.loads(pkg_resources.read_text(sizebot.data, filename))
         except FileNotFoundError:
             await logger.error(f"Error loading {filename}")
             return
@@ -514,7 +513,7 @@ class TV(Dimension):
 
 def loadJsonFile(filename):
     try:
-        unitsJson = json.loads(pkg_resources.read_text(units_dir, filename))
+        unitsJson = json.loads(pkg_resources.read_text(sizebot.data, filename))
     except FileNotFoundError:
         unitsJson = None
     return unitsJson

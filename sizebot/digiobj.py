@@ -2,7 +2,7 @@ import json
 import importlib.resources as pkg_resources
 
 from sizebot.digiSV import SV, WV, Unit, SystemUnit
-from sizebot import units as units_dir
+import sizebot.data
 
 objects = []
 
@@ -45,7 +45,7 @@ class DigiObject:
 
 def loadObjFile(filename):
     try:
-        fileJson = json.loads(pkg_resources.read_text(units_dir, filename))
+        fileJson = json.loads(pkg_resources.read_text(sizebot.data, filename))
     except FileNotFoundError:
         fileJson = None
     loadObjJson(fileJson)
