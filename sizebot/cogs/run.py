@@ -5,7 +5,7 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import logger
 from sizebot.utils import clamp
-from sizebot.digiSV import TV
+from sizebot.lib.units import TV
 from sizebot.digidecimal import Decimal
 
 runners = []

@@ -5,7 +5,7 @@ from discord.utils import get
 from sizebot.discordplus import commandsplus
 
 from sizebot import logger, conf, userdb
-from sizebot.digiSV import SV, WV
+from sizebot.lib.units import SV, WV
 from sizebot.lib import proportions
 
 

@@ -5,7 +5,8 @@ from discord.ext import commands
 from digiformatter import styles
 
 from sizebot import __version__
-from sizebot import digiSV, digiobj, logger, conf, status
+from sizebot import digiobj, logger, conf, status
+from sizebot.lib import units
 
 initial_extensions = [
     "sizebot.cogs.change",
@@ -39,7 +40,7 @@ def main():
     async def on_first_ready():
         logChannel = bot.get_channel(conf.logchannelid)
         logger.init(logChannel)
-        await digiSV.init()
+        await units.init()
         await digiobj.init()
 
         styles.create("banner", fg="orange_red_1", bg="deep_sky_blue_4b", attr="bold")

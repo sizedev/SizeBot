@@ -7,7 +7,7 @@ from sizebot import __version__
 from sizebot import userdb, utils
 from sizebot.userdb import defaultheight, defaultweight
 from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes
-from sizebot.digiSV import SV, WV
+from sizebot.lib.units import SV, WV
 from sizebot.lib import errors
 
 emojis = {

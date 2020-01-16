@@ -2,7 +2,7 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot import logger, userdb, digidecimal
-from sizebot.digiSV import SV, WV
+from sizebot.lib.units import SV, WV
 from sizebot.utils import clamp
 from sizebot.lib import proportions, errors
 

@@ -4,7 +4,7 @@ from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus
 
 from sizebot import logger, userdb
-from sizebot.digiSV import Rate
+from sizebot.lib.units import Rate
 from sizebot.lib.checks import requireAdmin
 from sizebot.lib import changes, proportions
 

@@ -2,7 +2,7 @@ import json
 
 from sizebot import conf, utils
 from sizebot.digidecimal import Decimal
-from sizebot.digiSV import SV, WV
+from sizebot.lib.units import SV, WV
 from sizebot.lib import errors
 
 # Defaults

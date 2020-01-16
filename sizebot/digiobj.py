@@ -1,7 +1,7 @@
 import json
 import importlib.resources as pkg_resources
 
-from sizebot.digiSV import SV, WV, Unit, SystemUnit
+from sizebot.lib.units import SV, WV, Unit, SystemUnit
 import sizebot.data
 
 objects = []

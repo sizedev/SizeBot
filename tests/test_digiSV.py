@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from sizebot.digiSV import SV, WV, TV, Mult, Rate
+from sizebot.lib.units import SV, WV, TV, Mult, Rate
 
 
 def test_Mult_parse():

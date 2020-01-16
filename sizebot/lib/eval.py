@@ -4,7 +4,7 @@ import discord
 
 from sizebot import logger, userdb, utils
 from sizebot.digidecimal import Decimal
-from sizebot.digiSV import Rate, Mult, SV, WV, TV
+from sizebot.lib.units import Rate, Mult, SV, WV, TV
 from sizebot.digiobj import objects
 
 
