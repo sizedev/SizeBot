@@ -187,6 +187,7 @@ class PersonComparison:
             f"\tThumb Width: {self.bigToSmall.thumbwidth:,.3mu}\n"
             f"\tNail Thickness: {self.bigToSmall.nailthickness:,.3mu}\n"
             f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:,.3mu}\n"
+            f"\tClothing Thread Thickness: {self.bigToSmall.threadthickness:,.3mu}\n"
             f"\tHair Width: {self.bigToSmall.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.bigToSmall.eyewidth:,.3mu}\n"
             f"\tWalk Speed: {self.bigToSmall.walkspeed,:.3mu}\n"
@@ -208,6 +209,7 @@ class PersonComparison:
             f"\tThumb Width: {self.smallToBig.thumbwidth:,.3mu}\n"
             f"\tNail Thickness: {self.smallToBig.nailthickness:,.3mu}\n"
             f"\tFingerprint Depth: {self.smallToBig.fingerprintdepth:,.3mu}\n"
+            f"\tClothing Thread Thickness: {self.smallToBig.threadthickness:,.3mu}\n"
             f"\tHair Width: {self.smallToBig.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.smallToBig.eyewidth:,.3mu}\n"
             f"\tWalk Speed: {self.smallToBig.walkspeed:,.1M} per hour ({self.smallToBig.walkspeed:,.1U} per hour)\n"
@@ -235,13 +237,13 @@ class PersonComparison:
             f"{emojis['comparesmallcenter']} looks like {emojis['comparesmall']} to {emojis['comparebigcenter']}"), inline=False)
         embed.add_field(name="Height", value=(
             f"{emojis['comparebig']}{self.bigToSmall.height:,.3mu}\n"
-            f"{emojis['comparesmall']}{self.smallToBig.height:,.3mu}"), inline=True)
+            f"{emojis['comparesmall']}{self.smallToBig.height:,.3mu}"), inline=False)
         embed.add_field(name="Weight", value=(
             f"{emojis['comparebig']}{self.bigToSmall.weight:,.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.weight:,.3mu}"), inline=True)
         embed.add_field(name="Foot Length", value=(
             f"{emojis['comparebig']}{self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
-            f"{emojis['comparesmall']}{self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})"), inline=True)
+            f"{emojis['comparesmall']}{self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})"), inline=False)
         embed.add_field(name="Foot Width", value=(
             f"{emojis['comparebig']}{self.bigToSmall.footwidth:,.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.footwidth:,.3mu}"), inline=True)
@@ -271,7 +273,7 @@ class PersonComparison:
             f"{emojis['comparesmall']}{self.smallToBig.eyewidth:,.3mu}"), inline=True)
         embed.add_field(name="Walk Speed", value=(
             f"{emojis['comparebig']}{self.bigToSmall.walkspeed:,.1M} per hour ({self.bigToSmall.walkspeed:,.1U} per hour)\n"
-            f"{emojis['comparesmall']}{self.smallToBig.walkspeed:,.1M} per hour ({self.smallToBig.walkspeed:,.1U} per hour)"), inline=True)
+            f"{emojis['comparesmall']}{self.smallToBig.walkspeed:,.1M} per hour ({self.smallToBig.walkspeed:,.1U} per hour)"), inline=False)
         embed.add_field(name="Run Speed", value=(
             f"{emojis['comparebig']}{self.bigToSmall.runspeed:,.1M} per hour ({self.bigToSmall.runspeed:,.1U} per hour)\n"
             f"{emojis['comparesmall']}{self.smallToBig.runspeed:,.1M} per hour ({self.smallToBig.runspeed:,.1U} per hour)"), inline=True)
@@ -332,6 +334,10 @@ class PersonStats:
         self.pointerlength = SV(self.height * self.pointerfactor)
         self.thumbwidth = SV(self.height * self.thumbfactor)
         self.fingerprintdepth = SV(self.height * self.fingerprintfactor)
+
+        defaultthreadthickness = SV.parse("1.016mm")
+        self.threadthickness = SV(defaultthreadthickness * self.averageheightmult)
+
         self.hairwidth = SV(self.height * self.hairfactor)
         self.nailthickness = SV(self.height * self.nailthickfactor)
         self.eyewidth = SV(self.height * self.eyewidthfactor)
@@ -367,6 +373,7 @@ class PersonStats:
             f"Thumb Width: {self.thumbwidth:,.3mu}\n"
             f"Nail Thickness: {self.nailthickness:,.3mu}\n"
             f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
+            f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n"
             f"Hair Width: {self.hairwidth:,.3mu}\n"
             f"Eye Width: {self.eyewidth:,.3mu}\n"
             f"Walk Speed: {self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)\n"
@@ -384,7 +391,7 @@ class PersonStats:
         embed.set_author(name=f"SizeBot {__version__}")
         embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({fixZeroes(self.averageheightmult):,.3}x average height)", inline=True)
         embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({fixZeroes(self.averageweightmult):,.3}x average weight)", inline=True)
-        embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
+        embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=False)
         embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
         embed.add_field(name="Shoeprint Depth", value=format(self.shoeprintdepth, ",.3mu"), inline=True)
@@ -392,9 +399,10 @@ class PersonStats:
         embed.add_field(name="Thumb Width", value=format(self.thumbwidth, ",.3mu"), inline=True)
         embed.add_field(name="Nail Thickness", value=format(self.nailthickness, ",.3mu"), inline=True)
         embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
+        embed.add_field(name="Clothing Thread Thickness", value=format(self.threadthickness, ",.3mu"), inline=True)
         embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
-        embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)", inline=True)
+        embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)", inline=False)
         embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour ({self.runperhour:,.1U} per hour)", inline=True)
         embed.add_field(name="\u200b", value="\u200b", inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
