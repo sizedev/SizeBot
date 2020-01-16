@@ -28,12 +28,16 @@ class KeypadCog(commands.Cog):
     async def keypad(self, ctx):
         """Test keypad command."""
         user = ctx.message.author
-        outputmsg = await ctx.send("**Input:** ")
+        defaultmessage = "**Input:**<:blank:665063842866397185>"
+        clearemoji = "❌"
+
+        outputmsg = await ctx.send(defaultmessage)
 
         def check(reaction, reacter):
             return reaction.message.id == outputmsg.id \
                 and reacter.id == user.id \
-                and str(reaction.emoji) in inputdict.keys()
+                and str(reaction.emoji) in inputdict.keys() or \
+                str(reaction.emoji) == clearemoji
 
         for emoji in inputdict.keys():
             await outputmsg.add_reaction(emoji)
@@ -50,8 +54,12 @@ class KeypadCog(commands.Cog):
 
             if str(reaction.emoji) in inputdict.keys():
                 await outputmsg.edit(content = outputmsg.content + inputdict[str(reaction.emoji)])
+                await reaction.remove()
+            if str(reaction.emoji) == clearemoji:
+                await outputmsg.edit(content = defaultmessage)
+                await reaction.remove()
 
-        outputmsg.clear_reactions()
+        await outputmsg.clear_reactions()
 
 
 def setup(bot):
