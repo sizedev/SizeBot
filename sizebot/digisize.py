@@ -190,8 +190,8 @@ class PersonComparison:
             f"\tClothing Thread Thickness: {self.bigToSmall.threadthickness:,.3mu}\n"
             f"\tHair Width: {self.bigToSmall.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.bigToSmall.eyewidth:,.3mu}\n"
-            f"\tWalk Speed: {self.bigToSmall.walkspeed,:.3mu}\n"
-            f"\tRun Speed: {self.bigToSmall.runspeed:,.3mu}\n"
+            f"\tWalk Speed: {self.bigToSmall.walkperhour,:.3mu}\n"
+            f"\tRun Speed: {self.bigToSmall.runperhour:,.3mu}\n"
             "\n"
             f"{self.big.tag} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.tag}.\n"
             "\n"
@@ -212,8 +212,8 @@ class PersonComparison:
             f"\tClothing Thread Thickness: {self.smallToBig.threadthickness:,.3mu}\n"
             f"\tHair Width: {self.smallToBig.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.smallToBig.eyewidth:,.3mu}\n"
-            f"\tWalk Speed: {self.smallToBig.walkspeed:,.1M} per hour ({self.smallToBig.walkspeed:,.1U} per hour)\n"
-            f"\tRun Speed: {self.smallToBig.runspeed:,.1M} per hour ({self.smallToBig.runspeed:,.1U} per hour)\n"
+            f"\tWalk Speed: {self.smallToBig.walkperhour:,.1M} per hour ({self.smallToBig.walkperhour:,.1U} per hour)\n"
+            f"\tRun Speed: {self.smallToBig.runperhour:,.1M} per hour ({self.smallToBig.runperhour:,.1U} per hour)\n"
             "\n"
             f"**Base Sizes:**\n"
             f"\t{self.big.tag}: {self.big.baseheight:,.3mu} | {self.big.baseweight:,.3mu}\n"
@@ -243,7 +243,7 @@ class PersonComparison:
             f"{emojis['comparesmall']}{self.smallToBig.weight:,.3mu}"), inline=True)
         embed.add_field(name="Foot Length", value=(
             f"{emojis['comparebig']}{self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
-            f"{emojis['comparesmall']}{self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})"), inline=False)
+            f"{emojis['comparesmall']}{self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})"), inline=True)
         embed.add_field(name="Foot Width", value=(
             f"{emojis['comparebig']}{self.bigToSmall.footwidth:,.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.footwidth:,.3mu}"), inline=True)
@@ -272,11 +272,11 @@ class PersonComparison:
             f"{emojis['comparebig']}{self.bigToSmall.eyewidth:,.3mu}\n"
             f"{emojis['comparesmall']}{self.smallToBig.eyewidth:,.3mu}"), inline=True)
         embed.add_field(name="Walk Speed", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.walkspeed:,.1M} per hour ({self.bigToSmall.walkspeed:,.1U} per hour)\n"
-            f"{emojis['comparesmall']}{self.smallToBig.walkspeed:,.1M} per hour ({self.smallToBig.walkspeed:,.1U} per hour)"), inline=False)
+            f"{emojis['comparebig']}{self.bigToSmall.walkperhour:,.1M} per hour ({self.bigToSmall.walkperhour:,.1U} per hour)\n"
+            f"{emojis['comparesmall']}{self.smallToBig.walkperhour:,.1M} per hour ({self.smallToBig.walkperhour:,.1U} per hour)"), inline=True)
         embed.add_field(name="Run Speed", value=(
-            f"{emojis['comparebig']}{self.bigToSmall.runspeed:,.1M} per hour ({self.bigToSmall.runspeed:,.1U} per hour)\n"
-            f"{emojis['comparesmall']}{self.smallToBig.runspeed:,.1M} per hour ({self.smallToBig.runspeed:,.1U} per hour)"), inline=True)
+            f"{emojis['comparebig']}{self.bigToSmall.runperhour:,.1M} per hour ({self.bigToSmall.runperhour:,.1U} per hour)\n"
+            f"{emojis['comparesmall']}{self.smallToBig.runperhour:,.1M} per hour ({self.smallToBig.runperhour:,.1U} per hour)"), inline=True)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.nickname}."))
