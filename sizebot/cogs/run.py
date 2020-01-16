@@ -44,7 +44,7 @@ class Runner:
     def progress(self):
         """Progress 0.0-1.0"""
         now = Decimal(time())
-        return max(Decimal(0), self.endtime - now) / self.duration
+        return max(Decimal(0), now - self.startTime) / self.duration
 
     @property
     def running(self):
