@@ -37,7 +37,7 @@ class Runner:
     async def step(self, bot):
         channel = bot.get_channel(self.channelId)
         message = await channel.fetch_message(self.messageId)
-        await message.edit(self.formatRunner())
+        await message.edit(content=self.formatRunner())
         return self.running
 
     @property
