@@ -91,8 +91,9 @@ class InvalidRollException(DigiException):
 
 class AdminPermissionException(DigiException):
     def __init__(self):
+        user_message = "{usernick} tried to run an admin command. This incident will be reported."  # TODO: Add this to telemetry.
         message = "{usernick} tried to run an admin command."
-        super().__init__(message)
+        super().__init__(message, user_message)
 
 
 class ArgumentException(DigiException):
