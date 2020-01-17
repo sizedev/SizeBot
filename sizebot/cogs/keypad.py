@@ -24,7 +24,7 @@ class KeypadCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    @commands.check(requireAdmin)
+    #@commands.check(requireAdmin)
     async def keypad(self, ctx):
         """Test keypad command."""
         author = ctx.message.author
