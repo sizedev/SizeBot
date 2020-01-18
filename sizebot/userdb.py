@@ -165,8 +165,17 @@ class User:
     def __lt__(self, other):
         return self.height < other.height
 
+    # TODO: Add __add__, which has to be able to take Users or SVs or Decimals as "other".
+
+    def __mul__(self, other):
+        newuserdata = self
+        newuserdata.height = self.height * other
+        return newuserdata
+
     def __pow__(self, other):
-        self.height = self.height / (self.viewscale ** other)
+        newuserdata = self
+        newuserdata.height = self.height / (self.viewscale ** other)
+        return newuserdata
 
 
 def getuserpath(userid):
