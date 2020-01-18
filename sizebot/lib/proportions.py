@@ -116,17 +116,19 @@ def changeUser(userid, changestyle, amount):
         changestyle = "add"
     if changestyle in ["subtract", "sub", "-", "minus"]:
         changestyle = "subtract"
-    if changestyle in ["multiply", "mult", "m", "x", "times"]:
+    if changestyle in ["power", "exp", "pow", "exponent", "^", "**"]:
+        changestyle = "power"
+    if changestyle in ["multiply", "mult", "m", "x", "times", "*"]:
         changestyle = "multiply"
     if changestyle in ["divide", "d", "/", "div"]:
         changestyle = "divide"
 
-    if changestyle not in ["add", "subtract", "multiply", "divide"]:
+    if changestyle not in ["add", "subtract", "multiply", "divide", "power"]:
         raise errors.ChangeMethodInvalidException(changestyle)
 
     if changestyle in ["add", "subtract"]:
         amountSV = SV.parse(amount)
-    elif changestyle in ["multiply", "divide"]:
+    elif changestyle in ["multiply", "divide", "power"]:
         amountVal = Decimal(amount)
         if amountVal == 1:
             raise errors.ValueIsOneException
@@ -143,8 +145,11 @@ def changeUser(userid, changestyle, amount):
         newamount = userdata.height * amountVal
     elif changestyle == "divide":
         newamount = userdata.height / amountVal
+    elif changestyle == "power":
+        userdata = userdata ** amountVal
 
-    userdata.height = utils.clamp(0, newamount, SV.infinity)
+    if changestyle != "power":
+        userdata.height = utils.clamp(0, newamount, SV.infinity)
 
     userdb.save(userdata)
 

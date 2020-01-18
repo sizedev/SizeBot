@@ -205,6 +205,8 @@ def delete(userid):
     getuserpath(userid).unlink(missing_ok = True)
 
 
+# TODO: Set this up as a User's __nonzero__ function
+# e.g.: bool(user) = user.id.exists()
 def exists(userid):
     exists = True
     try:
