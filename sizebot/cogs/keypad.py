@@ -3,8 +3,6 @@ import asyncio
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot.lib.checks import requireAdmin
-
 inputdict = {"1️⃣": "1",
              "2️⃣": "2",
              "3️⃣": "3",
@@ -24,7 +22,6 @@ class KeypadCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    #@commands.check(requireAdmin)
     async def keypad(self, ctx):
         """Test keypad command."""
         author = ctx.message.author
