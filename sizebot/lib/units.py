@@ -195,7 +195,7 @@ class Unit():
 class FixedUnit(Unit):
     """Unit that only formats to a single symbol"""
 
-    def format(self, value, accuracy=2, spec="", preferName=False, useFractional=False):
+    def format(self, value, spec="", preferName=False):
         return self.symbol
 
     def toBaseUnit(self, v):
