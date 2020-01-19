@@ -16,9 +16,7 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["id", "nickname", "_gender", "display", "_height",
-                 "_baseheight", "_baseweight", "_footlength",
-                 "_unitsystem", "species"]
+    __slots__ = ["id", "nickname", "_gender", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_unitsystem", "species"]
 
     def __init__(self):
         self.id = None
@@ -168,13 +166,21 @@ class User:
     # TODO: Add __add__, which has to be able to take Users or SVs or Decimals as "other".
 
     def __mul__(self, other):
-        newuserdata = self
+        newuserdata = User()
+        newuserdata.gender = self.gender
+        newuserdata.baseheight = self.baseheight
+        newuserdata.baseweight = self.baseweight
+        newuserdata.footlength = self.footlength
         newuserdata.height = self.height * other
         return newuserdata
 
     def __pow__(self, other):
-        newuserdata = self
-        newuserdata.height = self.height / (self.viewscale ** other)
+        newuserdata = User()
+        newuserdata.gender = self.gender
+        newuserdata.baseheight = self.baseheight
+        newuserdata.baseweight = self.baseweight
+        newuserdata.footlength = self.footlength
+        newuserdata.height = self.height / (self.viewscale ** other) # TODO: This doesn't look like it's doing what it should be doing
         return newuserdata
 
 
