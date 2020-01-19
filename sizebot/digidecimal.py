@@ -34,8 +34,11 @@ class Decimal(decimal.Decimal):
             value, fraction = splitFraction(value, denom)
 
         if dSpec.precision is not None:
-            value = roundDecimal(value, int(dSpec.precision))
+            precision = int(dSpec.precision)
             dSpec.precision = None
+        else:
+            precision = 2
+        value = roundDecimal(value, precision)
 
         dSpec.fractional = None
         numspec = str(dSpec)
