@@ -1,5 +1,6 @@
 import json
 
+from copy import copy
 from sizebot import conf
 from sizebot.digidecimal import Decimal
 from sizebot.lib import errors, utils
@@ -111,6 +112,21 @@ class User:
         """How scaled up the world looks to this user"""
         return self.baseheight / self.height
 
+    @viewscale.setter
+    def viewscale(self, viewscale):
+        """Scale the user height to match the view scale"""
+        self.height = self.baseheight / viewscale
+
+    @property
+    def scale(self):
+        """How scaled up the user looks to the world"""
+        return self.height / self.baseheight
+
+    @scale.setter
+    def scale(self, scale):
+        """Scale the user height to match the scale"""
+        self.height = self.baseheight * scale
+
     @property
     def tag(self):
         if self.id is not None:
@@ -166,21 +182,13 @@ class User:
     # TODO: Add __add__, which has to be able to take Users or SVs or Decimals as "other".
 
     def __mul__(self, other):
-        newuserdata = User()
-        newuserdata.gender = self.gender
-        newuserdata.baseheight = self.baseheight
-        newuserdata.baseweight = self.baseweight
-        newuserdata.footlength = self.footlength
-        newuserdata.height = self.height * other
+        newuserdata = copy(self)
+        newuserdata.scale = self.scale * other
         return newuserdata
 
     def __pow__(self, other):
-        newuserdata = User()
-        newuserdata.gender = self.gender
-        newuserdata.baseheight = self.baseheight
-        newuserdata.baseweight = self.baseweight
-        newuserdata.footlength = self.footlength
-        newuserdata.height = self.height / (self.viewscale ** other) # TODO: This doesn't look like it's doing what it should be doing
+        newuserdata = copy(self)
+        newuserdata.scale = self.scale ** other
         return newuserdata
 
 
