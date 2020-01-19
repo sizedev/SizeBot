@@ -140,12 +140,12 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(memberOrHeight)
 
-        goodheight = userdata.height.toGoodUnit('o', accuracy=2, preferName=True)
+        goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2")
         tmp = goodheight.split()
         tmp[0] = format(Decimal(tmp[0]), "%4")
         goodheightout = " ".join(tmp)
 
-        goodweight = userdata.weight.toGoodUnit('o', accuracy=2, preferName=True)
+        goodweight = userdata.weight.toGoodUnit('o', preferName=True, spec=".2")
         tmp2 = goodweight.split()
         tmp2[0] = format(Decimal(tmp2[0]), "%4")
         goodweightout = " ".join(tmp2)
