@@ -9,22 +9,22 @@ from sizebot import logger, conf
 from sizebot.lib import units, objs, status
 
 initial_extensions = [
+    "admin",
+    "banned",
     "change",
+    "errorhandler",
+    "eval",
     "fun",
     "help",
+    "keypad",
+    "meicros",
     "monika",
     "register",
     "roll",
+    "run",
     "set",
     "stats",
-    "winks",
-    "banned",
-    "eval",
-    "errorhandler",
-    "admin",
-    "run",
-    "keypad",
-    "meicros"
+    "winks"
 ]
 
 
