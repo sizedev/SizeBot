@@ -1,3 +1,5 @@
+# TODO: Shouldn't this be in the lib folder?
+
 import re
 import decimal
 import random
@@ -150,12 +152,12 @@ def fixZeroes(d):
 
 
 def randRangeLog(minval, maxval, precision=26):
-    """Generate a logarithmically scaled random number"""
+    """Generate a logarithmically scaled random number."""
     minval = decimal.Decimal(minval)
     maxval = decimal.Decimal(maxval)
     prec = decimal.Decimal("10") ** precision
 
-    # Swap values if provided in the wrong order
+    # Swap values if provided in the wrong order.
     if minval > maxval:
         minval, maxval = maxval, minval
 

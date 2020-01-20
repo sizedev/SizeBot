@@ -82,7 +82,7 @@ class StatsCog(commands.Cog):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
 
-        # TODO: Handle this in an error handler
+        # TODO: Handle this in an error handler.
         if memberOrHeight1 is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
@@ -106,7 +106,7 @@ class StatsCog(commands.Cog):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
 
-        # TODO: Handle this in an error handler
+        # TODO: Handle this in an error handler.
         if memberOrHeight1 is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
@@ -121,7 +121,7 @@ class StatsCog(commands.Cog):
 
     @stats.error
     async def stats_handler(self, ctx, error):
-        # TODO: Track down what line is causing this
+        # TODO: Track down what line is causing this.
         if isinstance(error, InvalidOperation):
             await ctx.send(
                 "SizeBot cannot perform this action due to a math error.\n"
@@ -134,6 +134,7 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def objcompare(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
+        # TODO: Add accuracy percentages to outputs.
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.message.author
