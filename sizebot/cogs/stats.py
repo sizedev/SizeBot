@@ -119,16 +119,6 @@ class StatsCog(commands.Cog):
 
         await logger.info(f"Compared {userdata1} and {userdata2}")
 
-    @stats.error
-    async def stats_handler(self, ctx, error):
-        # TODO: Track down what line is causing this.
-        if isinstance(error, InvalidOperation):
-            await ctx.send(
-                "SizeBot cannot perform this action due to a math error.\n"
-                f"Are you too big, {ctx.message.author.id}?")
-        else:
-            raise error
-
     @commandsplus.command(
         aliases = ["objectcompare", "objcomp"]
     )
