@@ -9,22 +9,22 @@ from sizebot import logger, conf
 from sizebot.lib import units, objs, status
 
 initial_extensions = [
-    "sizebot.cogs.change",
-    "sizebot.cogs.fun",
-    "sizebot.cogs.help",
-    "sizebot.cogs.monika",
-    "sizebot.cogs.register",
-    "sizebot.cogs.roll",
-    "sizebot.cogs.set",
-    "sizebot.cogs.stats",
-    "sizebot.cogs.winks",
-    "sizebot.cogs.banned",
-    "sizebot.cogs.eval",
-    "sizebot.cogs.errorhandler",
-    "sizebot.cogs.admin",
-    "sizebot.cogs.run",
-    "sizebot.cogs.keypad",
-    "sizebot.cogs.meicros"
+    "change",
+    "fun",
+    "help",
+    "monika",
+    "register",
+    "roll",
+    "set",
+    "stats",
+    "winks",
+    "banned",
+    "eval",
+    "errorhandler",
+    "admin",
+    "run",
+    "keypad",
+    "meicros"
 ]
 
 
@@ -36,7 +36,7 @@ def main():
 
     bot.remove_command("help")
     for extension in initial_extensions:
-        bot.load_extension(extension)
+        bot.load_extension("sizebot.cogs." + extension)
 
     async def on_first_ready():
         logChannel = bot.get_channel(conf.logchannelid)
