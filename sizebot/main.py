@@ -23,7 +23,8 @@ initial_extensions = [
     "sizebot.cogs.errorhandler",
     "sizebot.cogs.admin",
     "sizebot.cogs.run",
-    "sizebot.cogs.keypad"
+    "sizebot.cogs.keypad",
+    "sizebot.cogs.meicros"
 ]
 
 
