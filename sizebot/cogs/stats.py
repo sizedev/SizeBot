@@ -134,7 +134,6 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def objcompare(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
-        # TODO: Add accuracy percentages to outputs.
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.message.author
