@@ -179,6 +179,9 @@ class User:
     def __lt__(self, other):
         return self.height < other.height
 
+    def __rt__(self, other):
+        return self.height > other.height
+
     # TODO: Add __add__, which has to be able to take Users or SVs or Decimals as "other".
 
     def __mul__(self, other):
