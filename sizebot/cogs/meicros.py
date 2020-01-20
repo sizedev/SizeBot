@@ -13,6 +13,7 @@ class MeicrosCog(commands.Cog):
         if m.author.bot:
             return
         if m.content.startswith("!stop"):
+            # TODO: Need to join voice channel first
             await m.channel.send("!play stop", delete_after = 0)
 
 
