@@ -24,6 +24,7 @@ initial_extensions = [
     "run",
     "set",
     "stats",
+    "tupperbox",
     "winks"
 ]
 
@@ -70,10 +71,6 @@ def main():
 
     @bot.event
     async def on_message(message):
-        # TODO: Move tupperbox to a check()
-        # Ignore Tupperboxes being mistaken for commands.
-        if message.content.startswith("&") and message.content.endswith("&"):
-            return
         await bot.process_commands(message)
 
     @bot.event
