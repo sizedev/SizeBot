@@ -878,5 +878,44 @@
             "whale",
             "whales"
         ]
+    },
+    {
+        "name": "Sonic the Hedgehog",
+        "length": "1",
+        "weight": "35000",
+        "namePlural": "Sonic the Hedgehogs",
+        "names": [
+            "sonic",
+            "sonics"
+        ]
+    },
+    {
+        "name": "Tyrannosaurus Rex",
+        "length": "4.572",
+        "weight": "7257477.9",
+        "namePlural": "Tyrannosaurus Rexes",
+        "names": [
+            "T-rex",
+            "T-rexes",
+            "T-rexs",
+            "T rex",
+            "T rexes",
+            "T rexs",
+            "Trex",
+            "Trexes",
+            "Trexs"
+        ]
+    },
+    {
+        "name": "bowling ball",
+        "length": "0.2159",
+        "weight": "5896.7",
+        "namePlural": "bowling balls"
+    },
+    {
+        "name": "semi truck",
+        "length": "21.336",
+        "weight": "15422140",
+        "namePlural": "semi trucks"
     }
 ]
