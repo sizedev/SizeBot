@@ -2,6 +2,7 @@ import json
 import re
 import collections
 import importlib.resources as pkg_resources
+from functools import total_ordering
 
 from sizebot import logger
 from sizebot.digidecimal import Decimal, DecimalSpec
@@ -110,6 +111,7 @@ class Mult():
         return multValue
 
 
+@total_ordering
 class Unit():
     """Formats a value by scaling it and applying the appropriate symbol suffix"""
 
@@ -190,6 +192,9 @@ class Unit():
 
     def __lt__(self, other):
         return self.factor < other.factor
+
+    def __eq__(self, other):
+        return self.factor == other.factor
 
 
 class FixedUnit(Unit):
@@ -316,6 +321,9 @@ class SystemUnit():
 
     def __lt__(self, other):
         return self.trigger < other.trigger
+
+    def __eq__(self, other):
+        return self.factor == other.factor
 
 
 class Dimension(Decimal):

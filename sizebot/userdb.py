@@ -1,4 +1,5 @@
 import json
+from functools import total_ordering
 
 from copy import copy
 from sizebot import conf
@@ -15,6 +16,7 @@ defaultweight = WV("66760")  # grams
 DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweight", "unitsystem", "species"]
 
 
+@total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.
     __slots__ = ["id", "nickname", "_gender", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_unitsystem", "species"]
@@ -179,8 +181,8 @@ class User:
     def __lt__(self, other):
         return self.height < other.height
 
-    def __rt__(self, other):
-        return self.height > other.height
+    def __eq__(self, other):
+        return self.height == other.height
 
     # TODO: Add __add__, which has to be able to take Users or SVs or Decimals as "other".
 
