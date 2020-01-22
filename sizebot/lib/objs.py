@@ -15,10 +15,10 @@ class DigiObject:
         self.namePlural = namePlural
         self.names = names
         self.length = length and SV(length)
-        self.height = height and SV(length)
-        self.width = width and SV(length)
-        self.depth = depth and SV(length)
-        self.weight = weight and WV(length)
+        self.height = height and SV(height)
+        self.width = width and SV(width)
+        self.depth = depth and SV(depth)
+        self.weight = weight and WV(weight)
 
     @classmethod
     def fromJson(cls, objJson):
