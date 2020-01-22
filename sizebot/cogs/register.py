@@ -32,7 +32,9 @@ class RegisterCog(commands.Cog):
         self.bot = bot
 
     # TODO: Change the way this works.
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["signup"]
+    )
     @commands.guild_only()
     async def register(self, ctx, nick: str, display: str = "y", currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot"""
