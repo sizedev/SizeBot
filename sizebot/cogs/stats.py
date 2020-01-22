@@ -19,7 +19,7 @@ class StatsCog(commands.Cog):
         usage = "[user/height]"
     )
     @commands.guild_only()
-    async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
+    async def stats(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
@@ -49,7 +49,7 @@ class StatsCog(commands.Cog):
         usage = "[user/height]"
     )
     @commands.guild_only()
-    async def statstxt(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None):
+    async def statstxt(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
         """User stats command, raw text version.
 
         Get tons of user stats about yourself, a user, or a raw height.
@@ -76,7 +76,7 @@ class StatsCog(commands.Cog):
         usage = "[user/height] <user/height>"
     )
     @commands.guild_only()
-    async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Compare two users' size."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
@@ -100,7 +100,7 @@ class StatsCog(commands.Cog):
         usage = "[user/height] <user/height>"
     )
     @commands.guild_only()
-    async def comparetxt(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def comparetxt(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Compare two users' size, raw text version."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.message.author
@@ -147,7 +147,7 @@ class StatsCog(commands.Cog):
         usage = "[object]"
     )
     @commands.guild_only()
-    async def lookat(self, ctx, what):
+    async def lookat(self, ctx, *, what):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
