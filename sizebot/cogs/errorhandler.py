@@ -12,6 +12,11 @@ def setup(bot):
     async def on_command_error(ctx, error):
         # Get actual error
         err = getattr(error, "original", error)
+
+        # If we got some bad arguments, use a generic argument exception error
+        if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument):
+            err = errors.ArgumentException(ctx)
+
         # DigiException handling
         if isinstance(err, errors.DigiException):
             if err.message is not None:
@@ -25,17 +30,14 @@ def setup(bot):
 
             return
 
-        if isinstance(err, commands.errors.MissingRequiredArgument):
-            await ctx.send(str(err))
-            return
-
+        # log unknown commmands to telemetry
         if isinstance(err, commands.errors.CommandNotFound):
             telem = Telemetry.load()
             telem.incrementUnknown(str(ctx.invoked_with))
             telem = telem.save()
             return
 
-        # Default command handling
+        # Default command error handling
         await ctx.send("Something went wrong.")
         await logger.error(f"Ignoring exception in command {ctx.command}:")
         await logger.error(utils.formatTraceback(error))

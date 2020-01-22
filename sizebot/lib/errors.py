@@ -98,5 +98,5 @@ class AdminPermissionException(DigiException):
 
 class ArgumentException(DigiException):
     def __init__(self, ctx):
-        message = f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.usage}`."
-        super().__init__(message)
+        user_message = f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.usage}`."
+        super().__init__(user_message=user_message)

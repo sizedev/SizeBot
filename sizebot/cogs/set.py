@@ -15,13 +15,8 @@ class SetCog(commands.Cog):
         usage = "<nick>"
     )
     @commands.guild_only()
-    async def setnick(self, ctx, *, newnick = None):
+    async def setnick(self, ctx, *, newnick):
         """Change nickname."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newnick is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <newnick>`.")
-            return
-
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.nickname = newnick
@@ -37,13 +32,8 @@ class SetCog(commands.Cog):
         usage = "<species>"
     )
     @commands.guild_only()
-    async def setspecies(self, ctx, *, newtag = None):
+    async def setspecies(self, ctx, *, newtag):
         """Change species."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newtag is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <newtag>`.")
-            return
-
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.species = newtag
@@ -74,13 +64,8 @@ class SetCog(commands.Cog):
         usage = "<height>"
     )
     @commands.guild_only()
-    async def setheight(self, ctx, *, newheight = None):
+    async def setheight(self, ctx, *, newheight):
         """Change height."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newheight is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
-            return
-
         newheightsv = SV.parse(newheight)
         if newheightsv > SV.infinity:
             await logger.warn("Invalid size value.")
@@ -119,13 +104,8 @@ class SetCog(commands.Cog):
         usage = "<Y/N>"
     )
     @commands.guild_only()
-    async def setdisplay(self, ctx, newdisp = None):
+    async def setdisplay(self, ctx, newdisp):
         """Set display mode."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newdisp is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N]`.")
-            return
-
         newdisp = newdisp.upper()
         if newdisp not in ["Y", "N"]:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N]`.")
@@ -146,13 +126,8 @@ class SetCog(commands.Cog):
         usage = "<M/U>"
     )
     @commands.guild_only()
-    async def setsystem(self, ctx, newsys = None):
+    async def setsystem(self, ctx, newsys):
         """Set measurement system."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newsys is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/m]`.")
-            return
-
         newsys = newsys.lower()
         if newsys not in ["m", "u"]:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/m]`.")
@@ -173,16 +148,11 @@ class SetCog(commands.Cog):
         usage = "<minheight> <maxheight>"
     )
     @commands.guild_only()
-    async def setrandomheight(self, ctx, minheight = None, maxheight = None):
+    async def setrandomheight(self, ctx, minheight, maxheight):
         """Change height to a random value.
 
         Sets your height to a height between `minheight` and `maxheight`.
         Weighted on a logarithmic curve."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if minheight is None or maxheight is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
-            return
-
         minheightSV = utils.clamp(0, SV.parse(minheight), SV.infinity)
         maxheightSV = utils.clamp(0, SV.parse(maxheight), SV.infinity)
 
@@ -233,13 +203,8 @@ class SetCog(commands.Cog):
         usage = "<height>"
     )
     @commands.guild_only()
-    async def setbaseheight(self, ctx, *, newbaseheight = None):
+    async def setbaseheight(self, ctx, *, newbaseheight):
         """Change base height."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newbaseheight is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <height>`.")
-            return
-
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.baseheight = SV.parse(newbaseheight)
@@ -255,13 +220,8 @@ class SetCog(commands.Cog):
         usage = "<weight>"
     )
     @commands.guild_only()
-    async def setbaseweight(self, ctx, *, newbaseweight = None):
+    async def setbaseweight(self, ctx, *, newbaseweight):
         """Change base weight."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newbaseweight is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} <weight>`.")
-            return
-
         userdata = userdb.load(ctx.message.author.id)
 
         userdata.baseweight = WV.parse(newbaseweight)
@@ -278,13 +238,7 @@ class SetCog(commands.Cog):
         usage = "<length>"
     )
     @commands.guild_only()
-    async def setfoot(self, ctx, *, newfoot = None):
-        """Change custom foot length."""
-        # TODO: Move this to an error handler for MissingRequiredArgument
-        if newfoot is None:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [length]`.")
-            return
-
+    async def setfoot(self, ctx, *, newfoot):
         newfootsv = SV.parse(newfoot)
         if newfootsv > SV.infinity:
             await logger.warn("Invalid size value.")
@@ -354,13 +308,6 @@ class SetCog(commands.Cog):
 
         await logger.info(f"User {user.id} ({user.display_name}) set their gender to {userdata.gender}.")
         await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.")
-
-    @setgender.error
-    async def setgender_handler(self, ctx, error):
-        # Check if required argument is missing
-        if isinstance(error, commands.MissingRequiredArgument):
-            raise errors.ArgumentException(ctx)
-        raise error
 
     @commandsplus.command(
         aliases = ["cleargender", "unsetgender"]
