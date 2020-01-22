@@ -1,5 +1,4 @@
 import typing
-from decimal import InvalidOperation
 
 import discord
 from discord.ext import commands

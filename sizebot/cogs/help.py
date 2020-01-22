@@ -154,7 +154,9 @@ class HelpCog(commands.Cog):
             "\n"
             f"Version {__version__} | {now.strftime('%d %b %Y')}")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["fund"]
+    )
     async def donate(self, ctx):
         """Give some monetary love to your favorite bot developer!"""
         await ctx.send(

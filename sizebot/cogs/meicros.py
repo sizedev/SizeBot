@@ -7,7 +7,7 @@ class MeicrosCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # TODO: Tell out good friend how they can fund SizeBot.
+    # TODO: Tell our good friend how they can fund SizeBot.
     @commands.Cog.listener()
     async def on_message(self, m):
         if m.author.bot:
