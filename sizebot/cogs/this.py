@@ -1,4 +1,43 @@
+import json
+
 from discord.ext import commands
+
+from sizebot import conf
+
+
+class ThisTracker():
+    def __init__(self, points=None):
+        self.points = points or {}
+
+    def incrementPoints(self, id):
+        count = self.points.get(id, 0)
+        self.points[id] = count + 1
+
+    def save(self):
+        conf.thispath.parent.mkdir(exist_ok = True)
+        jsondata = self.toJSON()
+        with open(conf.thispath, "w") as f:
+            json.dump(jsondata, f, indent = 4)
+
+    def toJSON(self):
+        """Return a python dictionary for json exporting"""
+        return {
+            "points": self.points,
+        }
+
+    @classmethod
+    def load(cls):
+        try:
+            with open(conf.thispath, "r") as f:
+                jsondata = json.load(f)
+        except FileNotFoundError:
+            return ThisTracker()
+        return ThisTracker.fromJSON(jsondata)
+
+    @classmethod
+    def fromJSON(cls, jsondata):
+        points = jsondata["points"]
+        return ThisTracker(points)
 
 
 def findLatestNonThis(messages):
@@ -20,8 +59,9 @@ class ThisCog(commands.Cog):
         if m.content.startswith("^") or m.content.lower() == "this":
             channel = m.channel
             messages = await channel.history(limit=100).flatten()
-            # Add a "this point" to findLatestNonThis(messages).author in a file
-            # that keeps track of this points.
+            tracker = ThisTracker.load()
+            tracker.incrementPoints(findLatestNonThis(messages).author.id)
+            tracker.save()
 
 
 def setup(bot):
