@@ -52,6 +52,7 @@ def main():
         await logger.log(f"Logged in as: {bot.user.name} ({bot.user.id})\n------", level="login")
         await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
         print(styles)
+        await logger.log(f"Prefix: {conf.prefix}")
         launchfinishtime = datetime.now()
         elapsed = launchfinishtime - launchtime
         await logger.debug(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.\n")
