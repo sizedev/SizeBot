@@ -29,8 +29,9 @@ async def error(message, **kwargs):
 async def log(message, level="info"):
     message = str(message)
     logger.log(message, level=level)
-    for m in utils.chunkMsg(message.replace("```", r"\`\`\`")):
-        await logChannel.send(m)
+    if logChannel:
+        for m in utils.chunkMsg(message.replace("```", r"\`\`\`")):
+            await logChannel.send(m)
 
 
 # Sync log functions (prints to console)
