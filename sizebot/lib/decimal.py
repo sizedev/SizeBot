@@ -343,6 +343,7 @@ class DecimalSpec:
     (?:\.(?P<precision>0|(?!0)\d+))?
     (?P<type>[a-zA-Z]{1,2})?
     (?P<fractional>%\d?)?
+    (?P<accuracy>&\d?)?
     \Z
     """, re.VERBOSE)
 
@@ -356,6 +357,7 @@ class DecimalSpec:
         self.precision = formatDict["precision"]
         self.type = formatDict["type"]
         self.fractional = formatDict["fractional"]
+        self.accuracy = formatDict["accuracy"]
 
     @classmethod
     def parse(cls, spec):
@@ -385,6 +387,8 @@ class DecimalSpec:
             spec += self.type
         if self.fractional is not None:
             spec += self.fractional
+        if self.accuracy is not None:
+            spec += self.accuracy
         return spec
 
 
