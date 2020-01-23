@@ -67,7 +67,7 @@ class Decimal():
 
         fraction = ""
 
-        if Decimal("1e-10") < value < Decimal("1e10") or value == 0:
+        if Decimal("1e-10") < abs(value) < Decimal("1e10") or value == 0:
             dSpec.type = "f"
             if dSpec.fractional:
                 dSpec.precision = None
