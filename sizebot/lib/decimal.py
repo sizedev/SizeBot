@@ -4,6 +4,7 @@ import math
 import re
 import decimal
 from decimal import Decimal as RawDecimal
+from decimal import ROUND_DOWN
 import random
 from functools import total_ordering
 
@@ -34,7 +35,7 @@ def clampInf(value, limit):
 
 def unwrapDecimal(value):
     if isinstance(value, Decimal):
-        value = value.value
+        value = value._rawvalue
     return value
 
 
@@ -56,47 +57,53 @@ class Decimal():
             if len(values) == 2:
                 numberator, denominator = values
                 rawvalue = unwrapDecimal(Decimal(numberator) / Decimal(denominator))
-        self.value = clampInf(RawDecimal(rawvalue), unwrapDecimal(self._infinity))
+        self._rawvalue = clampInf(RawDecimal(rawvalue), unwrapDecimal(self._infinity))
 
     def __format__(self, spec):
         if self.is_infinite():
             return self.sign + "∞"
 
         value = self
+        rounded = value
+
         dSpec = DecimalSpec.parse(spec)
 
-        part = None
+        fractional = dSpec.fractional
+        dSpec.fractional = None
+
+        if dSpec.precision is None:
+            dSpec.precision = 2
 
         if Decimal("1e-10") < abs(value) < Decimal("1e10") or value == 0:
             dSpec.type = "f"
-            if dSpec.fractional:
-                dSpec.precision = None
+            if fractional:
                 try:
-                    denom = int(dSpec.fractional[1])
+                    denom = int(fractional[1])
                 except IndexError:
                     denom = 8
-                value, part = splitFraction(value, denom)
-            if dSpec.precision is not None:
-                precision = int(dSpec.precision)
-                dSpec.precision = None
+                rounded = roundFraction(value, denom)
             else:
-                precision = 2
-            value = round(value, precision)
+                precision = int(dSpec.precision)
+                rounded = round(value, precision)
+            dSpec.precision = None
         else:
             dSpec.type = "e"
-            if dSpec.precision is None:
-                dSpec.precision = 2
 
-        dSpec.fractional = None
         numspec = str(dSpec)
-        rawvalue = fixZeroes(RawDecimal(value.value))
-        formatted = format(rawvalue, numspec)
+        if fractional:
+            whole = rounded.to_integral_value(ROUND_DOWN)
+            rawwhole = fixZeroes(whole._rawvalue)
+            formatted = format(rawwhole, numspec)
+            part = abs(whole - round)
+            fraction = formatFraction(part)
+            if fraction:
+                if formatted == "0":
+                    formatted = ""
+                formatted += fraction
+        else:
+            rawvalue = fixZeroes(rounded._rawvalue)
+            formatted = format(rawvalue, numspec)
 
-        fraction = formatFraction(part)
-        if fraction:
-            if formatted == "0":
-                formatted = ""
-            formatted += fraction
         return formatted
 
     def __str__(self):
@@ -105,8 +112,9 @@ class Decimal():
     def __repr__(self):
         return f"Decimal('{self}')"
 
-    def __bool__(self):
-        return bool(self.value)
+    @values
+    def __bool__(value):
+        return bool(value)
 
     @values
     def __hash__(value):
@@ -318,6 +326,9 @@ class Decimal():
     def sign(value):
         return "-" if value.is_signed() else ""
 
+    def to_integral_value(self, *args, **kwargs):
+        return Decimal(self._rawvalue.to_integral_value(*args, **kwargs))
+
 
 class DecimalSpec:
     formatSpecRe = re.compile(r"""\A
@@ -387,19 +398,6 @@ def roundDecimal(d, accuracy = 0):
 def roundFraction(number, denominator):
     rounded = round(number * denominator) / denominator
     return rounded
-
-
-def splitFraction(value, denom=8):
-    if denom not in [2, 4, 8]:
-        raise ValueError("Bad denominator")
-
-    negative = value < 0
-    value = abs(value)
-    roundednumber = roundFraction(value, denom)
-    whole, part = divmod(roundednumber, 1)
-    if negative:
-        whole = -whole
-    return whole, part
 
 
 def formatFraction(value):
