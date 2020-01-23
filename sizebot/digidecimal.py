@@ -92,11 +92,11 @@ class Decimal():
         rawvalue = fixZeroes(RawDecimal(value.value))
         formatted = format(rawvalue, numspec)
 
-        fractionString = formatFraction(part)
-        if fractionString:
+        fraction = formatFraction(part)
+        if fraction:
             if formatted == "0":
                 formatted = ""
-            formatted += fractionString
+            formatted += fraction
         return formatted
 
     def __str__(self):
