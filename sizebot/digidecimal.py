@@ -65,7 +65,7 @@ class Decimal():
         value = self
         dSpec = DecimalSpec.parse(spec)
 
-        fraction = ""
+        part = None
 
         if Decimal("1e-10") < abs(value) < Decimal("1e10") or value == 0:
             dSpec.type = "f"
@@ -75,7 +75,7 @@ class Decimal():
                     denom = int(dSpec.fractional[1])
                 except IndexError:
                     denom = 8
-                value, fraction = splitFraction(value, denom)
+                value, part = splitFraction(value, denom)
             if dSpec.precision is not None:
                 precision = int(dSpec.precision)
                 dSpec.precision = None
@@ -92,10 +92,11 @@ class Decimal():
         rawvalue = fixZeroes(RawDecimal(value.value))
         formatted = format(rawvalue, numspec)
 
-        if fraction:
+        fractionString = formatFraction(part)
+        if fractionString:
             if formatted == "0":
                 formatted = ""
-            formatted += fraction
+            formatted += fractionString
         return formatted
 
     def __str__(self):
@@ -392,16 +393,22 @@ def splitFraction(value, denom=8):
     if denom not in [2, 4, 8]:
         raise ValueError("Bad denominator")
 
-    fractionStrings = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
-
     negative = value < 0
     value = abs(value)
     roundednumber = roundFraction(value, denom)
     whole, part = divmod(roundednumber, 1)
     if negative:
         whole = -whole
+    return whole, part
+
+
+def formatFraction(value):
+    if value is None:
+        return None
+    part = roundFraction(value % 1, 8)
+    fractionStrings = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
     fraction = fractionStrings[int(part * len(fractionStrings))]
-    return whole, fraction
+    return fraction
 
 
 def fixZeroes(d):
