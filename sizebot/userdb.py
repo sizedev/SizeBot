@@ -3,8 +3,7 @@ from functools import total_ordering
 
 from copy import copy
 from sizebot import conf
-from sizebot.digidecimal import Decimal
-from sizebot.lib import errors, utils
+from sizebot.lib import errors
 from sizebot.lib.units import SV, WV
 
 # Defaults
@@ -43,7 +42,7 @@ class User:
 
     @height.setter
     def height(self, value):
-        self._height = SV(utils.clamp(0, SV(value), SV.infinity))
+        self._height = SV(max(0, SV(value)))
 
     @property
     def baseheight(self):
@@ -51,7 +50,7 @@ class User:
 
     @baseheight.setter
     def baseheight(self, value):
-        self._baseheight = SV(utils.clamp(0, SV(value), SV.infinity))
+        self._baseheight = SV(max(0, SV(value)))
 
     @property
     def footlength(self):
@@ -62,7 +61,7 @@ class User:
         if value is None:
             self._footlength = None
             return
-        self._footlength = utils.clamp(0, SV(value), SV.infinity)
+        self._footlength = SV(max(0, SV(value)))
 
     @property
     def gender(self):
@@ -91,11 +90,11 @@ class User:
 
     @baseweight.setter
     def baseweight(self, value):
-        self._baseweight = WV(utils.clamp(0, WV(value), WV.infinity))
+        self._baseweight = WV(max(0, WV(value)))
 
     @property
     def weight(self):
-        return WV(self.baseweight / (self.viewscale ** Decimal("3")))
+        return WV(self.baseweight * (self.scale ** 3))
 
     # Check that unitsystem is valid and lowercase
     @property
@@ -117,7 +116,7 @@ class User:
     @viewscale.setter
     def viewscale(self, viewscale):
         """Scale the user height to match the view scale"""
-        self.height = self.baseheight / viewscale
+        self.height = SV(self.baseheight / viewscale)
 
     @property
     def scale(self):
@@ -127,7 +126,7 @@ class User:
     @scale.setter
     def scale(self, scale):
         """Scale the user height to match the scale"""
-        self.height = self.baseheight * scale
+        self.height = SV(self.baseheight * scale)
 
     @property
     def tag(self):

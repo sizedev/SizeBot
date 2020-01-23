@@ -67,7 +67,7 @@ class Change:
 
 def start(userid, guildid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None):
     """Start a new change task"""
-    startTime = lastRan = Decimal(time.time())
+    startTime = lastRan = time.time()
     change = Change(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV, startTime=startTime, lastRan=lastRan)
     _activate(change)
 

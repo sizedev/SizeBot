@@ -6,7 +6,7 @@ import discord
 from sizebot import __version__
 from sizebot import userdb
 from sizebot.userdb import defaultheight, defaultweight
-from sizebot.digidecimal import Decimal, roundDecimal, fixZeroes
+from sizebot.digidecimal import Decimal
 from sizebot.lib.units import SV, WV
 from sizebot.lib import errors, utils
 
@@ -149,7 +149,7 @@ def changeUser(userid, changestyle, amount):
         userdata = userdata ** amountVal
 
     if changestyle != "power":
-        userdata.height = utils.clamp(0, newamount, SV.infinity)
+        userdata.height = newamount
 
     userdb.save(userdata)
 
@@ -178,8 +178,8 @@ class PersonComparison:
         return (
             "**Comparison:**\n"
             f"{self.big.tag} is really:\n"
-            f"\tReal Height: {self.big.height:,.3mu} ({fixZeroes(1/self.big.viewscale):,.3}x scale)\n"
-            f"\tReal Weight: {self.big.weight:,.3mu}. ({fixZeroes(1/(self.big.viewscale ** 3)):,.3}x scale)\n"
+            f"\tReal Height: {self.big.height:,.3mu} ({self.big.scale:,.3}x scale)\n"
+            f"\tReal Weight: {self.big.weight:,.3mu}. ({self.big.scale ** 3:,.3}x scale)\n"
             f"To {self.small.tag}, {self.big.tag} looks:\n"
             f"\tHeight: {self.bigToSmall.height:,.3mu}\n"
             f"\tWeight: {self.bigToSmall.weight:,.3mu}\n"
@@ -197,11 +197,11 @@ class PersonComparison:
             f"\tWalk Speed: {self.bigToSmall.walkperhour,:.3mu}\n"
             f"\tRun Speed: {self.bigToSmall.runperhour:,.3mu}\n"
             "\n"
-            f"{self.big.tag} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.tag}.\n"
+            f"{self.big.tag} is {self.multiplier:,.3}x taller than {self.small.tag}.\n"
             "\n"
             f"{self.small.tag} is really:\n"
-            f"\tReal Height: {self.small.height:,.3mu} ({fixZeroes(1/self.small.viewscale):,.3}x scale)\n"
-            f"\tReal Weight: {self.small.weight:,.3mu}. ({fixZeroes(1/(self.small.viewscale ** 3)):,.3}x scale)\n"
+            f"\tReal Height: {self.small.height:,.3mu} ({self.small.scale:,.3}x scale)\n"
+            f"\tReal Weight: {self.small.weight:,.3mu}. ({self.small.scale ** 3:,.3}x scale)\n"
             f"To {self.big.tag}, {self.small.tag} looks:\n"
             f"\tHeight: {self.smallToBig.height:,.3mu}\n"
             f"\tWeight: {self.smallToBig.weight:,.3mu}\n"
@@ -283,7 +283,7 @@ class PersonComparison:
             f"{emojis['comparesmall']}{self.smallToBig.runperhour:,.1M} per hour ({self.smallToBig.runperhour:,.1U} per hour)"), inline=True)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
-            f"{self.big.nickname} is {fixZeroes(self.multiplier):,.3}x taller than {self.small.nickname}."))
+            f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}."))
         return embed
 
     @property
@@ -296,10 +296,10 @@ class PersonComparison:
 
         safeSmallNick = quote(self.small.nickname, safe=" ").replace(" ", "-")
         smallGender = gendermap[self.small.gender]
-        smallCm = roundDecimal(self.small.height * 100, 1)
+        smallCm = round(self.small.height * 100, 1)
         safeBigNick = quote(self.big.nickname, safe=" ").replace(" ", "-")
         bigGender = gendermap[self.big.gender]
-        bigCm = roundDecimal(self.big.height * 100, 1)
+        bigCm = round(self.big.height * 100, 1)
 
         compUrl = f"http://www.mrinitialman.com/OddsEnds/Sizes/compsizes.xhtml?{safeSmallNick}~{smallGender}~{smallCm}_{safeBigNick}~{bigGender}~{bigCm}"
         return compUrl
@@ -307,16 +307,16 @@ class PersonComparison:
 
 class PersonStats:
     # Conversion constants
-    footfactor = Decimal("1") / Decimal("7")
+    footfactor = 1 / Decimal("7")
     footwidthfactor = footfactor / Decimal("2.5")
-    toeheightfactor = Decimal("1") / Decimal("65")
-    thumbfactor = Decimal("1") / Decimal("69.06")
-    fingerprintfactor = Decimal("1") / Decimal("35080")
-    hairfactor = Decimal("1") / Decimal("23387")
-    pointerfactor = Decimal("1") / Decimal("17.26")
-    nailthickfactor = Decimal("1") / Decimal("2920")
-    shoeprintfactor = Decimal("1") / Decimal("135")
-    eyewidthfactor = Decimal("1") / Decimal("73.083")
+    toeheightfactor = 1 / Decimal("65")
+    thumbfactor = 1 / Decimal("69.06")
+    fingerprintfactor = 1 / Decimal("35080")
+    hairfactor = 1 / Decimal("23387")
+    pointerfactor = 1 / Decimal("17.26")
+    nailthickfactor = 1 / Decimal("2920")
+    shoeprintfactor = 1 / Decimal("135")
+    eyewidthfactor = 1 / Decimal("73.083")
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -324,7 +324,8 @@ class PersonStats:
         self.gender = userdata.gender
         self.height = userdata.height
         self.baseheight = userdata.baseheight
-        self.viewscale = self.baseheight / self.height
+        self.viewscale = userdata.viewscale
+        self.scale = userdata.scale
         self.baseweight = userdata.baseweight
         self.weight = userdata.weight
 
@@ -356,7 +357,7 @@ class PersonStats:
         # angle the smaller person must look up if they are standing half of the taller person's height away
         heightdiff = abs(userdata.height - defaultheight)
         viewdistance = max(userdata.height, defaultheight) / 2
-        self.avglookangle = math.degrees(math.atan(heightdiff / viewdistance))
+        self.avglookangle = Decimal(math.degrees(math.atan(heightdiff / viewdistance)))
 
         defaultwalkspeed = SV.parse("2.5mi")
         defaultrunspeed = SV.parse("7.5mi")
@@ -367,8 +368,8 @@ class PersonStats:
     def __str__(self):
         return (
             f"**{self.tag} Stats:**\n"
-            f"*Current Height:*  {self.height:,.3mu} ({fixZeroes(self.averageheightmult):,.3}x average height)\n"
-            f"*Current Weight:*  {self.weight:,.3mu} ({fixZeroes(self.averageweightmult):,.3}x average weight\n"
+            f"*Current Height:*  {self.height:,.3mu} ({self.averageheightmult:,.3}x average height)\n"
+            f"*Current Weight:*  {self.weight:,.3mu} ({self.averageweightmult:,.3}x average weight\n"
             f"\n"
             f"Foot Length: {self.footlength:,.3mu} ({self.shoesize})\n"
             f"Foot Width: {self.footwidth:,.3mu}\n"
@@ -394,8 +395,8 @@ class PersonStats:
     def toEmbed(self):
         embed = discord.Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
         embed.set_author(name=f"SizeBot {__version__}")
-        embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({fixZeroes(self.averageheightmult):,.3}x average height)", inline=True)
-        embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({fixZeroes(self.averageweightmult):,.3}x average weight)", inline=True)
+        embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({self.averageheightmult:,.3}x average height)", inline=True)
+        embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({self.averageweightmult:,.3}x average weight)", inline=True)
         embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
@@ -418,12 +419,12 @@ class PersonStats:
 def formatShoeSize(footlength):
     # Inch in meters
     inch = Decimal("0.0254")
-    footlengthinches = Decimal(footlength / inch)
-    shoesizeNum = (3 * (footlengthinches + (Decimal(2) / Decimal(3)))) - 24
+    footlengthinches = footlength / inch
+    shoesizeNum = (3 * (footlengthinches + Decimal("2/3"))) - 24
     prefix = ""
     if shoesizeNum < 1:
         prefix = "Children's "
-        shoesizeNum += 12 + Decimal(1) / Decimal(3)
+        shoesizeNum += 12 + Decimal("1/3")
     if shoesizeNum < 1:
         return "No shoes exist this small!"
     shoesize = format(Decimal(shoesizeNum), ",.2%2")

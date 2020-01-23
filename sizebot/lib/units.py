@@ -78,14 +78,14 @@ class Rate():
         if valueSV is not None:
             addPerSec = valueSV / valueTV
         else:
-            addPerSec = Decimal("0")
+            addPerSec = 0
 
         if valueMult is not None:
             mulPerSec = valueMult ** (1 / valueTV)
         else:
-            mulPerSec = Decimal("1")
+            mulPerSec = 1
 
-        return addPerSec, mulPerSec, stopSV, stopTV
+        return Decimal(addPerSec), Decimal(mulPerSec), stopSV, stopTV
 
 
 class Mult():
@@ -117,7 +117,7 @@ class Unit():
 
     hidden = False
 
-    def __init__(self, factor="1", symbol=None, name=None, namePlural=None, symbols=[], names=[], fractional=False):
+    def __init__(self, factor=1, symbol=None, name=None, namePlural=None, symbols=[], names=[], fractional=False):
         self.fractional = fractional
         self.factor = Decimal(factor)
 
@@ -136,7 +136,12 @@ class Unit():
             self.names.add(namePlural.strip())
 
     def format(self, value, spec="", preferName=False):
-        scaled = Decimal(value / self.factor)
+        if value.is_infinite():
+            if preferName:
+                return value.sign + "infinity"
+            else:
+                return value.sign + "∞"
+        scaled = value / self.factor
         if not self.fractional:
             dSpec = DecimalSpec.parse(spec)
             dSpec.fractional = None
@@ -213,7 +218,7 @@ class FeetAndInchesUnit(Unit):
 
     def __init__(self):
         self.inch = Decimal("0.0254")
-        foot = self.inch * Decimal("12")
+        foot = self.inch * 12
         self.factor = foot
         self.symbol = ("'", "\"")
 
@@ -227,7 +232,7 @@ class FeetAndInchesUnit(Unit):
         inchSpec = DecimalSpec.parse(spec)
         inchSpec.sign = None
 
-        formatted = f"{Decimal(feetval):{feetSpec}}'{Decimal(inchval):{inchSpec}}\""
+        formatted = f"{feetval:{feetSpec}}'{inchval:{inchSpec}}\""
         return formatted
 
     def toBaseUnit(self, v):
@@ -328,7 +333,6 @@ class SystemUnit():
 
 class Dimension(Decimal):
     """Dimension"""
-
     def __format__(self, spec):
         value = Decimal(self)
         dSpec = DecimalSpec.parse(spec)
@@ -363,7 +367,7 @@ class Dimension(Decimal):
         if value is None and unitStr is None:
             raise errors.InvalidSizeValue(s)
         if value is None:
-            value = Decimal("1")
+            value = Decimal(1)
         else:
             value = Decimal(value)
         unit = cls._units.get(unitStr, None)
@@ -447,7 +451,7 @@ class SV(Dimension):
     """Size Value (length in meters)"""
     _units = UnitRegistry()
     _systems = {}
-    infinity = Decimal("8.79848e53")
+    _infinity = Decimal("8.79848e53")
 
     @classmethod
     def getQuantityPair(cls, s):
@@ -472,7 +476,7 @@ class SV(Dimension):
             feetval = "0"
         if inchval is None:
             inchval = "0"
-        totalinches = (Decimal(feetval) * Decimal("12")) + Decimal(inchval)
+        totalinches = (feetval * 12) + inchval
         return f"{totalinches}in"
 
     def __repr__(self):
@@ -483,7 +487,7 @@ class WV(Dimension):
     """Weight Value (mass in grams)"""
     _units = UnitRegistry()
     _systems = {}
-    infinity = Decimal("3.4e84")
+    _infinity = Decimal("3.4e84")
 
     @classmethod
     def getQuantityPair(cls, s):

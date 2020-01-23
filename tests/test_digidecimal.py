@@ -8,12 +8,12 @@ def test_makeSureDecimalStillWorks():
 
 
 def test_roundDecimal_impliedAccuracy():
-    result = digidecimal.roundDecimal(Decimal("2.41"))
+    result = digidecimal.round(Decimal("2.41"))
     assert result == Decimal("2")
 
 
 def test_roundDecimal_specifiedAccuracy():
-    result = digidecimal.roundDecimal(Decimal("2.41"), 1)
+    result = digidecimal.round(Decimal("2.41"), 1)
     assert result == Decimal("2.4")
 
 

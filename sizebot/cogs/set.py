@@ -67,10 +67,6 @@ class SetCog(commands.Cog):
     async def setheight(self, ctx, *, newheight):
         """Change height."""
         newheightsv = SV.parse(newheight)
-        if newheightsv > SV.infinity:
-            await logger.warn("Invalid size value.")
-            await ctx.send("Too big. x_x")
-            newheightsv = SV.infinity
 
         userdata = userdb.load(ctx.message.author.id)
 
@@ -153,8 +149,8 @@ class SetCog(commands.Cog):
 
         Sets your height to a height between `minheight` and `maxheight`.
         Weighted on a logarithmic curve."""
-        minheightSV = utils.clamp(0, SV.parse(minheight), SV.infinity)
-        maxheightSV = utils.clamp(0, SV.parse(maxheight), SV.infinity)
+        minheightSV = utils.clamp(0, SV.parse(minheight), SV._infinity)
+        maxheightSV = utils.clamp(0, SV.parse(maxheight), SV._infinity)
 
         newheightSV = digidecimal.randRangeLog(minheightSV, maxheightSV)
 
@@ -175,7 +171,7 @@ class SetCog(commands.Cog):
         """Change height to infinity."""
         userdata = userdb.load(ctx.message.author.id)
 
-        userdata.height = SV.infinity
+        userdata.height = "infinity"
         userdb.save(userdata)
 
         await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now infinitely tall.")
@@ -240,10 +236,6 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setfoot(self, ctx, *, newfoot):
         newfootsv = SV.parse(newfoot)
-        if newfootsv > SV.infinity:
-            await logger.warn("Invalid size value.")
-            await ctx.send("Too big. x_x")
-            newfootsv = SV.infinity
 
         userdata = userdb.load(ctx.message.author.id)
 
