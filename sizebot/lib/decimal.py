@@ -94,7 +94,7 @@ class Decimal():
             whole = rounded.to_integral_value(ROUND_DOWN)
             rawwhole = fixZeroes(whole._rawvalue)
             formatted = format(rawwhole, numspec)
-            part = abs(whole - round)
+            part = abs(whole - rounded)
             fraction = formatFraction(part)
             if fraction:
                 if formatted == "0":
