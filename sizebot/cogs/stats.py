@@ -131,12 +131,12 @@ class StatsCog(commands.Cog):
 
         goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2")
         tmp = goodheight.split()
-        tmp[0] = format(Decimal(tmp[0]), "%4")
+        tmp[0] = format(Decimal(tmp[0]), "%4&2")
         goodheightout = " ".join(tmp)
 
         goodweight = userdata.weight.toGoodUnit('o', preferName=True, spec=".2")
         tmp2 = goodweight.split()
-        tmp2[0] = format(Decimal(tmp2[0]), "%4")
+        tmp2[0] = format(Decimal(tmp2[0]), "%4&2")
         goodweightout = " ".join(tmp2)
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")

@@ -1,5 +1,3 @@
-# TODO: Shouldn't this be in the lib folder?
-
 import math
 import re
 import decimal
@@ -7,6 +5,7 @@ from decimal import Decimal as RawDecimal
 from decimal import ROUND_DOWN
 import random
 from functools import total_ordering
+from sizebot.lib.utils import minmax
 
 __all__ = ["Decimal", "randRangeLog", "DecimalSpec"]
 
@@ -71,6 +70,9 @@ class Decimal():
         fractional = dSpec.fractional
         dSpec.fractional = None
 
+        accuracy = dSpec.accuracy
+        dSpec.accuracy = None
+
         if dSpec.precision is None:
             dSpec.precision = 2
 
@@ -103,6 +105,16 @@ class Decimal():
         else:
             rawvalue = fixZeroes(rounded._rawvalue)
             formatted = format(rawvalue, numspec)
+
+        if dSpec.type == "f":
+            if accuracy:
+                try:
+                    roundamount = int(accuracy[1])
+                except IndexError:
+                    roundamount = 0
+                small, big = minmax(rounded, value)
+                printacc = round((big / small), roundamount)
+                formatted += f" (~{printacc}% accurate)"
 
         return formatted
 
