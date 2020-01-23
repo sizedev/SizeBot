@@ -43,6 +43,7 @@ datadir = getDataDir()
 winkpath = datadir / "winkcount.txt"
 userdbpath = datadir / "users"
 telemetrypath = datadir / "telemetry.json"
+thispath = datadir / "thistracker.json"
 changespath = datadir / "changes.json"
 confpath = datadir / "sizebot.conf"
 

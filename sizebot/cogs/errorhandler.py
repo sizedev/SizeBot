@@ -34,7 +34,7 @@ def setup(bot):
         if isinstance(err, commands.errors.CommandNotFound):
             telem = Telemetry.load()
             telem.incrementUnknown(str(ctx.invoked_with))
-            telem = telem.save()
+            telem.save()
             return
 
         # Default command error handling
