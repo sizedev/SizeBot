@@ -3,8 +3,8 @@ import builtins
 import discord
 
 from sizebot import logger, userdb
-from sizebot.digidecimal import Decimal
 from sizebot.lib import utils
+from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
 from sizebot.lib.objs import objects
 from sizebot.cogs import thistracker

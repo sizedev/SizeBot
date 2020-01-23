@@ -1,5 +1,5 @@
 import math
-from sizebot.digidecimal import Decimal
+from sizebot.lib.decimal import Decimal
 
 posinf = Decimal("infinity")
 neginf = Decimal("-infinity")

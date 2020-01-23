@@ -1,10 +1,10 @@
 import time
 import json
 
-from sizebot.digidecimal import Decimal
 from sizebot import logger, userdb, conf
-from sizebot.lib.units import SV, TV
 from sizebot.lib import proportions
+from sizebot.lib.decimal import Decimal
+from sizebot.lib.units import SV, TV
 
 
 _activeChanges = {}

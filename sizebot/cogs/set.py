@@ -1,9 +1,9 @@
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger, userdb, digidecimal
+from sizebot import logger, userdb
 from sizebot.lib.units import SV, WV
-from sizebot.lib import proportions, errors, utils
+from sizebot.lib import proportions, errors, utils, decimal
 
 
 class SetCog(commands.Cog):
@@ -152,7 +152,7 @@ class SetCog(commands.Cog):
         minheightSV = utils.clamp(0, SV.parse(minheight), SV._infinity)
         maxheightSV = utils.clamp(0, SV.parse(maxheight), SV._infinity)
 
-        newheightSV = digidecimal.randRangeLog(minheightSV, maxheightSV)
+        newheightSV = decimal.randRangeLog(minheightSV, maxheightSV)
 
         userdata = userdb.load(ctx.message.author.id)
 

@@ -1,5 +1,5 @@
-import sizebot.digidecimal as digidecimal
-from sizebot.digidecimal import Decimal
+from sizebot.lib import decimal
+from sizebot.lib.decimal import Decimal
 
 
 def test_makeSureDecimalStillWorks():
@@ -8,17 +8,17 @@ def test_makeSureDecimalStillWorks():
 
 
 def test_roundDecimal_impliedAccuracy():
-    result = digidecimal.round(Decimal("2.41"))
+    result = decimal.round(Decimal("2.41"))
     assert result == Decimal("2")
 
 
 def test_roundDecimal_specifiedAccuracy():
-    result = digidecimal.round(Decimal("2.41"), 1)
+    result = decimal.round(Decimal("2.41"), 1)
     assert result == Decimal("2.4")
 
 
 def test_roundDecimalFraction():
-    result = digidecimal.roundDecimalFraction(Decimal("2.127"), 8)
+    result = decimal.roundDecimalFraction(Decimal("2.127"), 8)
     assert result == Decimal("2.125")
 
 
@@ -38,12 +38,12 @@ def test_toQuarters_noFraction():
 
 
 def test_trimZeros():
-    result = digidecimal.fixZeroes(Decimal("100.00"))
+    result = decimal.fixZeroes(Decimal("100.00"))
     result = str(result)
     assert result == "100"
 
 
 def test_trimZeros_E():
-    result = digidecimal.fixZeroes(Decimal("1E2"))
+    result = decimal.fixZeroes(Decimal("1E2"))
     result = str(result)
     assert result == "100"
