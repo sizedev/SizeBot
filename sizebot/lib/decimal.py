@@ -5,7 +5,7 @@ from decimal import Decimal as RawDecimal
 from decimal import ROUND_DOWN
 import random
 from functools import total_ordering
-from sizebot.utils import minmax
+from sizebot.lib.utils import minmax
 
 __all__ = ["Decimal", "randRangeLog", "DecimalSpec"]
 
