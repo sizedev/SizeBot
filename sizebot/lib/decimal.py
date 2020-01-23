@@ -1,5 +1,3 @@
-# TODO: Shouldn't this be in the lib folder?
-
 import math
 import re
 import decimal
@@ -7,7 +5,7 @@ from decimal import Decimal as RawDecimal
 from decimal import ROUND_DOWN
 import random
 from functools import total_ordering
-from utils import minmax
+from sizebot.utils import minmax
 
 __all__ = ["Decimal", "randRangeLog", "DecimalSpec"]
 
