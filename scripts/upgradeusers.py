@@ -1,4 +1,4 @@
-from sizebot.digidecimal import Decimal
+from sizebot.lib.decimal import Decimal
 from sizebot import userdb
 
 # Deprecated user array constants
