@@ -476,6 +476,8 @@ class SV(Dimension):
             feetval = "0"
         if inchval is None:
             inchval = "0"
+        feetval = Decimal(feetval)
+        inchval = Decimal(inchval)
         totalinches = (feetval * 12) + inchval
         return f"{totalinches}in"
 

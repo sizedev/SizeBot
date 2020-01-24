@@ -119,7 +119,7 @@ class Decimal():
         return formatted
 
     def __str__(self):
-        return format(self)
+        return str(self._rawvalue)
 
     def __repr__(self):
         return f"Decimal('{self}')"
