@@ -12,14 +12,43 @@ from sizebot.lib.objs import objects
 from sizebot.cogs import thistracker
 
 
-async def edir(ctx, o):
+def eformat(name, value):
+    if value is None:
+        emojiType = "❓"
+    elif callable(value):
+        emojiType = "🚙"
+    elif isinstance(value, (list, tuple)):
+        emojiType = "🗒️"
+    elif isinstance(value, set):
+        emojiType = "📘"
+    elif isinstance(value, dict):
+        emojiType = "📗"
+    elif isinstance(value, bool):
+        if value:
+            emojiType = "✅"
+        else:
+            emojiType = "❎"
+    elif isinstance(value, (int, float)):
+        emojiType = "💯"
+    elif isinstance(value, str):
+        emojiType = "✏️"
+    elif isinstance(value, discord.member.Member):
+        emojiType = "👥"
+    elif isinstance(value, discord.user.User):
+        emojiType = "👤"
+    else:
+        emojiType = "▫️"
+    return f"{emojiType} {name}"
+
+
+def edir(o):
     """send embed of an object's attributes, with type notation"""
-    e = discord.Embed()
-    attrs = [utils.eformat(n, v) for n, v in utils.ddir(o).items()]
+    e = discord.Embed(title=utils.getFullname(o))
+    attrs = [eformat(n, v) for n, v in utils.ddir(o).items()]
     pageLen = math.ceil(len(attrs) / 3)
     for page in utils.chunkList(attrs, pageLen):
         e.add_field(name="\u200b", value="\n".join(page))
-    await ctx.send(embed=e)
+    return e
 
 
 def cachedCopy(fn):

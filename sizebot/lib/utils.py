@@ -133,24 +133,6 @@ def formatTraceback(err):
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
 
 
-def eformat(name, value):
-    if value is None:
-        return f"❓{name}"
-    if callable(value):
-        return f"⏯️{name}"
-    if isinstance(value, (list, tuple)):
-        return f"🗒️{name}"
-    if isinstance(value, set):
-        return f"📘{name}"
-    if isinstance(value, dict):
-        return f"📗{name}"
-    if isinstance(value, (int, float)):
-        return f"#️⃣{name}"
-    if isinstance(value, str):
-        return f"🔤{name}"
-    return name
-
-
 def pformat(name, value):
     if value is None:
         return f"{name}?"
@@ -176,21 +158,26 @@ def ddir(o):
     # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
 
 
-def formatError(err):
-
-    moduleName = err.__class__.__module__
+def getFullname(o):
+    moduleName = o.__class__.__module__
     if moduleName == "builtins":
         moduleName = ""
     if moduleName:
         moduleName = f"{moduleName}."
 
-    className = err.__class__.__name__
+    className = o.__class__.__name__
+    fullname = f"{moduleName}{className}"
+    return fullname
+
+
+def formatError(err):
+    fullname = getFullname(err)
 
     errMessage = str(err)
     if errMessage:
         errMessage = f": {errMessage}"
 
-    return f"{moduleName}{className}{errMessage}"
+    return f"{fullname}{errMessage}"
 
 
 def tryOrNone(fn, *args, ignore=(), **kwargs):

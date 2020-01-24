@@ -39,8 +39,12 @@ class EvalCog(commands.Cog):
                 if waitMsg:
                     await waitMsg.delete(delay=0)
 
-        for m in utils.chunkMsg(str(result).replace("```", r"\`\`\`")):
-            await ctx.send(m)
+        if isinstance(result, discord.Embed):
+            await ctx.send(embed=result)
+        else:
+            strResult = str(result).replace("```", r"\`\`\`")
+            for m in utils.chunkMsg(strResult):
+                await ctx.send(m)
 
     @commandsplus.command(
         hidden = True
