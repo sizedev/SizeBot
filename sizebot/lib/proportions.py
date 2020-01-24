@@ -171,7 +171,9 @@ class PersonComparison:
         smallToBigUserdata.baseweight = smallUserdata.baseweight * self.big.viewscale
         self.smallToBig = PersonStats(smallToBigUserdata)
 
-        self.lookangle, self.lookdirection = look(self.small.height, self.big.height)
+        viewangle = calcViewAngle(self.small.height, self.big.height)
+        self.lookangle = abs(viewangle)
+        self.lookdirection = "up" if viewangle > 0 else "down"
 
     def __str__(self):
         # Print compare
@@ -353,11 +355,10 @@ class PersonStats:
 
         self.avgheightcomp = SV(defaultheight * self.viewscale)
         self.avgweightcomp = WV(defaultweight * self.viewscale ** 3)
-        self.avglookdirection = "down" if self.height >= defaultheight else "up"
-        # angle the smaller person must look up if they are standing half of the taller person's height away
-        heightdiff = abs(userdata.height - defaultheight)
-        viewdistance = max(userdata.height, defaultheight) / 2
-        self.avglookangle = Decimal(math.degrees(math.atan(heightdiff / viewdistance)))
+
+        viewangle = calcViewAngle(self.height, defaultheight)
+        self.avglookangle = abs(viewangle)
+        self.avglookdirection = "down" if self.viewangle >= 0 else "up"
 
         defaultwalkspeed = SV.parse("2.5mi")
         defaultrunspeed = SV.parse("7.5mi")
@@ -431,10 +432,22 @@ def formatShoeSize(footlength):
     return f"Size US {prefix}{shoesize}"
 
 
-def look(height1, height2):
-    lookdirection = "down" if height1 >= height2 else "up"
-    # angle the smaller person must look up if they are standing half of the taller person's height away
-    heightdiff = abs(height1 - height2)
-    viewdistance = max(height1, height2) / 2
-    lookangle = math.degrees(math.atan(heightdiff / viewdistance))
-    return lookangle, lookdirection
+def calcViewAngle(viewer, viewee):
+    viewer = abs(Decimal(viewer))
+    viewee = abs(Decimal(viewee))
+    if viewer.is_infinite() and viewee.is_infinite():
+        viewer = Decimal(1)
+        viewee = Decimal(1)
+    elif viewer.is_infinite():
+        viewer = Decimal(1)
+        viewee = Decimal(0)
+    elif viewee.is_infinite():
+        viewer = Decimal(0)
+        viewee = Decimal(1)
+    elif viewee == 0 and viewer == 0:
+        viewer = Decimal(1)
+        viewee = Decimal(1)
+    viewdistance = viewer / 2
+    heightdiff = viewee - viewer
+    viewangle = Decimal(math.degrees(math.atan(heightdiff / viewdistance)))
+    return viewangle
