@@ -52,7 +52,7 @@ class UserNotFoundException(DigiContextException):
         user = await ctx.guild.fetch_member(self.userid)
         usernick = user.display_name
         return (
-            f"Sorry, {usernick} isn't! You aren't registered with SizeBot.\n"
+            f"Sorry, {usernick} isn't registered with SizeBot.\n"
             "To register, use the `&register` command.")
 
 
