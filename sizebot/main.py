@@ -27,6 +27,7 @@ initial_cogs = [
 initial_extensions = [
     "banned",
     "errorhandler",
+    "telemetry",
     "tupperbox"
 ]
 
