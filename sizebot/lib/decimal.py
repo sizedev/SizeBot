@@ -113,7 +113,7 @@ class Decimal():
                 except IndexError:
                     roundamount = 0
                 small, big = minmax(rounded, value)
-                printacc = round((big / small), roundamount)
+                printacc = round((abs(small / big) * 100), roundamount)
                 formatted += f" (~{printacc}% accurate)"
 
         return formatted

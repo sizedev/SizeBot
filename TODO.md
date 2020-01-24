@@ -5,9 +5,9 @@
 * ~~Follow and document style conventions~~
 * ~~Prevent that error we keep getting on readuser~~
 * Come up with a consistent versioning scheme. (Digi will be anal about this.)
-* Setup develop branch
-* Host Sizebot Unstable on VPS
-    * Setup automatic deployment of develop branch commits
+* ~~Setup develop branch~~
+* ~~Host Sizebot Unstable on VPS~~
+    * ~~Setup automatic deployment of develop branch commits~~
 * ~~Migrate legacy User constants to new User object~~
 * ~~Formatting~~
     * ~~Replace .format() with f-strings~~
@@ -20,12 +20,12 @@
     * ~~Change the way &slowchange works (&slowchange \<rate\>)~~
     * Create convert command (&convert \<size\> \<new unit\>)
     * Custom base height/weight for raw compares
-    * Create eval command (for devs only)
-    * Help command
+    * ~~Create eval command (for devs only)~~
+    * ~~Help command~~
     * ~~Implement SB3's &roll command.~~
-* Save/load of tasks on restart.
-* Make SizeBot respond to DMs in a helpful way.
-    * Allow users to use DM-safe commands in DMs (about, help, bug, donate, convert, roll) \[are there more?\]
+* ~~Save/load of tasks on restart.~~
+* ~~Make SizeBot respond to DMs in a helpful way.~~
+    * ~~Allow users to use DM-safe commands in DMs (about, help, bug, donate, convert, roll) \[are there more?\]~~
     * Otherwise, tell them they have to other commands in a server.
 * Separate command logic into modules.
     * Register commands
@@ -38,20 +38,19 @@
     * Dice rolling
     * Size conversion
 * DigiSV:
-    * Custom trigger points for units (millimeters triggers 1 degree of magnitude early, megameters triggers 1 degree late.)
-    * Flag some units as only input units and not display units.
-    * Fix the giant if statements<sup>?</sup>
+    * ~~Custom trigger points for units (millimeters triggers 1 degree of magnitude early, megameters triggers 1 degree late.)~~
+    * ~~Flag some units as only input units and not display units.~~
+    * ~Fix the giant if statements<sup>?</sup>~~
     * Make no units ambiguous. (universes, Earths, Suns...)
-    * Any value under 0.001ym gets displayed as 0 (currently not true for stats)
-    * Make sure users can't have heights below "zero" (sub-0.001ym) or above infinity.
+    * ~~Any value under 0.001ym gets displayed as 0 (currently not true for stats)~~
+    * ~~Make sure users can't have heights below "zero" (sub-0.001ym) or above infinity.~~
 * Basic English syntax for some commands.
-* Make foot length optionally customizable.
-* Command metadata
-    * Can it be used in DMs?
-    * Help strings
-    * Remove brackets?
-    * etc...
-* Make DigiLogger and DigiFormatter be imported from their seperate things instead of copy+pasting them in to the folder.
+* ~~Make foot length optionally customizable.~~
+* ~~Command metadata~~
+    * ~~Can it be used in DMs?~~
+    * ~~Help strings~~
+    * ~~Remove brackets?~~
+* ~~Make DigiLogger and DigiFormatter be imported from their seperate things instead of copy+pasting them in to the folder.~~
 * Sudo command<sup>?</sup>
 * Question of the Day
     * Users can submit questions
@@ -60,7 +59,7 @@
     * If it gets accepted, it gets added to the pool.
     * A random question (with credit) is posted to a question of the day channel every morning.
 * Change SizeBot's name on certain special dates
-* This Points: if someone posts ^, or :this:, or similar, give a This Point to the person above (unless that person also posted a "this", in which case, give it to the person above that, etc.)
+* ~~This Points: if someone posts ^, or :this:, or similar, give a This Point to the person above (unless that person also posted a "this", in which case, give it to the person above that, etc.)~~
 * Future proofing.
     * Make module functions that make command code easy to read, work with, and make new commands. \[Digi calls this "the SizeAPI"\]
 * Telemetry
@@ -82,21 +81,21 @@
     * "Sizepuppets"
 * Switchable user profiles (create characters, switch between them)
 * Per-user customizable "sizepuppets" (steal Tupperboxes, but with size options.) (Just puppeteer existing profiles?)
-* Switch some things to embeds
+* ~~Switch some things to embeds~~
 * Replace digiSV with dunit
 * Add support for multiple guilds
 * Allow users to store character pictures
-* Autostop option for slowchange
+* ~~Autostop option for slowchange~~
 * Custom emojis trigger events
 * Generate user "cards"
-* Compare yourself to objects of similar size
+* ~~Compare yourself to objects of similar size~~
 * Auto-role based on current size option (optional for user)
 * Allow users to change other users (on, blacklist, whitelist, off)
 * NSFW stats<sup>?</sup>
 * More customizables
 * Natural language chat/help (like a virtual assistant) \[needs a name\]
 * Per-guild customizables for server owners/mods
-    * Custom prefix
+    * ~~Custom prefix~~
     * Custom SizeBot role and SizeBot User role
     * Custom SizeBot channel and QotD channel
     * Turn on/off features
@@ -125,6 +124,6 @@
 
 * Split into separate files for different groups of functions.
 * Define its purpose.
-* Can you generate . functions dynamically?
-    * The user creates a custom style
-    * They can then call it with `digiformatter.`\[stylename\]`(string)`
+* ~~Can you generate . functions dynamically?~~
+    * ~~The user creates a custom style~~
+    * ~~They can then call it with `digiformatter.`\[stylename\]`(string)`~~

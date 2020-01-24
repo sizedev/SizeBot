@@ -8,11 +8,9 @@ from sizebot import __version__
 from sizebot import logger, conf
 from sizebot.lib import units, objs, status
 
-initial_extensions = [
+initial_cogs = [
     "admin",
-    "banned",
     "change",
-    "errorhandler",
     "eval",
     "fun",
     "help",
@@ -24,8 +22,12 @@ initial_extensions = [
     "run",
     "set",
     "stats",
-    "tupperbox",
     "winks"
+]
+initial_extensions = [
+    "banned",
+    "errorhandler",
+    "tupperbox"
 ]
 
 
@@ -36,8 +38,11 @@ def main():
     bot = commands.Bot(command_prefix = conf.prefix, description = conf.description)
 
     bot.remove_command("help")
+
     for extension in initial_extensions:
-        bot.load_extension("sizebot.cogs." + extension)
+        bot.load_extension("sizebot.extensions." + extension)
+    for cog in initial_cogs:
+        bot.load_extension("sizebot.cogs." + cog)
 
     async def on_first_ready():
         logChannel = bot.get_channel(conf.logchannelid)
