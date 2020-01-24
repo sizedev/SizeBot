@@ -1,3 +1,5 @@
+import inspect
+import math
 import builtins
 
 import discord
@@ -8,6 +10,16 @@ from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
 from sizebot.lib.objs import objects
 from sizebot.cogs import thistracker
+
+
+def edir(ctx, o):
+    """send embed of an object's attributes, with type notation"""
+    e = discord.Embed()
+    attrs = [utils.eformat(n, v) for n, v in utils.ddir(o).items()]
+    pageLen = math.ceil(len(attrs) / 3)
+    for page in utils.chunkList(attrs, pageLen):
+        e.add_field(name="\u200b", value="\n".join(page))
+    await ctx.send(embed=e)
 
 
 def cachedCopy(fn):
@@ -49,6 +61,7 @@ def getEvalGlobals():
 
     evalGlobals = {
         "__builtins__": evalBuiltins,
+        "inspect": inspect,
         "help": utils.strHelp,
         "Decimal": Decimal,
         "discord": discord,
@@ -58,7 +71,8 @@ def getEvalGlobals():
         "utils": utils,
         "pdir": utils.pdir,
         "userdb": userdb,
-        "thistracker": thistracker
+        "thistracker": thistracker,
+        "edir": edir
     }
 
     return evalGlobals

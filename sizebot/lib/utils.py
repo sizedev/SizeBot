@@ -130,6 +130,24 @@ def formatTraceback(err):
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
 
 
+def eformat(name, value):
+    if value is None:
+        return f"❓{name}"
+    if callable(value):
+        return f"⏯️{name}"
+    if isinstance(value, (list, tuple)):
+        return f"🗒️{name}"
+    if isinstance(value, set):
+        return f"📘{name}"
+    if isinstance(value, dict):
+        return f"📗{name}"
+    if isinstance(value, (int, float)):
+        return f"#️⃣{name}"
+    if isinstance(value, str):
+        return f"🔤{name}"
+    return name
+
+
 def pformat(name, value):
     if value is None:
         return f"{name}?"
