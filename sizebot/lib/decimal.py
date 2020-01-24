@@ -73,11 +73,13 @@ class Decimal():
         accuracy = dSpec.accuracy
         dSpec.accuracy = None
 
-        if dSpec.precision is None:
-            dSpec.precision = 2
+        precision = 2
+        if dSpec.precision is not None:
+            precision = int(dSpec.precision)
 
-        if Decimal("1e-10") < abs(value) < Decimal("1e10") or value == 0:
+        if (Decimal("10") ** -(precision + 1)) < abs(value) < Decimal("1e10") or value == 0:
             dSpec.type = "f"
+            dSpec.precision = None
             if fractional:
                 try:
                     denom = int(fractional[1])
@@ -85,11 +87,10 @@ class Decimal():
                     denom = 8
                 rounded = roundFraction(value, denom)
             else:
-                precision = int(dSpec.precision)
                 rounded = round(value, precision)
-            dSpec.precision = None
         else:
             dSpec.type = "e"
+            dSpec.precision = str(precision)
 
         numspec = str(dSpec)
         if fractional:
