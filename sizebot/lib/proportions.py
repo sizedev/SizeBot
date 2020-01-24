@@ -358,7 +358,7 @@ class PersonStats:
 
         viewangle = calcViewAngle(self.height, defaultheight)
         self.avglookangle = abs(viewangle)
-        self.avglookdirection = "down" if self.viewangle >= 0 else "up"
+        self.avglookdirection = "down" if viewangle >= 0 else "up"
 
         defaultwalkspeed = SV.parse("2.5mi")
         defaultrunspeed = SV.parse("7.5mi")
