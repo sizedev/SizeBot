@@ -138,7 +138,7 @@ class RegisterCog(commands.Cog):
             await sentMsg.delete()
 
         # if the reaction isn't the right one, stop.
-        if reaction != unregisterEmoji:
+        if reaction.emoji != unregisterEmoji:
             return
 
         # remove the sizetag, delete the user file, and remove the user role
