@@ -1,2 +1,2 @@
-py sizebot/main.py
+py -m sizebot
 pause
