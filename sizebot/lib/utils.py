@@ -98,7 +98,10 @@ def chunkStr(s, chunklen, prefix="", suffix=""):
 
 
 def chunkMsg(m):
-    return chunkStr(m, chunklen=2000, prefix="```\n", suffix="\n```")
+    p = "```\n"
+    if m.startswith("Traceback"):
+        p = "```python\n"
+    return chunkStr(m, chunklen=2000, prefix=p, suffix="\n```")
 
 
 def chunkLines(s, chunklen):
