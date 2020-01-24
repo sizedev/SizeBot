@@ -173,7 +173,7 @@ class PersonComparison:
 
         viewangle = calcViewAngle(self.small.height, self.big.height)
         self.lookangle = abs(viewangle)
-        self.lookdirection = "up" if viewangle > 0 else "down"
+        self.lookdirection = "up" if viewangle >= 0 else "down"
 
     def __str__(self):
         # Print compare
@@ -358,7 +358,7 @@ class PersonStats:
 
         viewangle = calcViewAngle(self.height, defaultheight)
         self.avglookangle = abs(viewangle)
-        self.avglookdirection = "down" if viewangle >= 0 else "up"
+        self.avglookdirection = "up" if viewangle >= 0 else "down"
 
         defaultwalkspeed = SV.parse("2.5mi")
         defaultrunspeed = SV.parse("7.5mi")
