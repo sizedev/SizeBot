@@ -17,30 +17,34 @@ def setup(bot):
         if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument):
             err = errors.ArgumentException(ctx)
 
-        # DigiException handling
-        if isinstance(err, errors.DigiException):
-            if err.message is not None:
-                log_message = err.message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
+        if isinstance(err, errors.DigiContextException):
+            # DigiContextException handling
+            message = await err.formatMessage(ctx)
+            if message is not None:
                 logCmd = getattr(logger, err.level, logger.warn)
-                await logCmd(log_message)
-
-            if err.user_message is not None:
-                user_message = err.user_message.format(usernick = ctx.message.author.display_name, userid = ctx.message.author.id)
-                await ctx.send(user_message, delete_after = err.delete_after)
-
-            return
-
-        # log unknown commmands to telemetry
-        if isinstance(err, commands.errors.CommandNotFound):
+                await logCmd(message)
+            userMessage = await err.formatUserMessage(ctx)
+            if userMessage is not None:
+                await ctx.send(userMessage)
+        elif isinstance(err, errors.DigiException):
+            # DigiException handling
+            message = err.formatMessage()
+            if message is not None:
+                logCmd = getattr(logger, err.level, logger.warn)
+                await logCmd(message)
+            userMessage = err.formatUserMessage()
+            if userMessage is not None:
+                await ctx.send(userMessage)
+        elif isinstance(err, commands.errors.CommandNotFound):
+            # log unknown commmands to telemetry
             telem = Telemetry.load()
             telem.incrementUnknown(str(ctx.invoked_with))
             telem.save()
-            return
-
-        # Default command error handling
-        await ctx.send("Something went wrong.")
-        await logger.error(f"Ignoring exception in command {ctx.command}:")
-        await logger.error(utils.formatTraceback(error))
+        else:
+            # Default command error handling
+            await ctx.send("Something went wrong.")
+            await logger.error(f"Ignoring exception in command {ctx.command}:")
+            await logger.error(utils.formatTraceback(error))
 
     @bot.event
     async def on_error(event, *args, **kwargs):
@@ -49,9 +53,15 @@ def setup(bot):
         err = getattr(error, "original", error)
         # DigiException handling
         if isinstance(err, errors.DigiException):
-            logCmd = getattr(logger, err.level, logger.warn)
-            await logCmd(str(err))
-            return
-
-        await logger.error(f"Ignoring exception in {event}")
-        await logger.error(utils.formatTraceback(error))
+            message = err.formatMessage()
+            if message is not None:
+                logCmd = getattr(logger, err.level, logger.warn)
+                await logCmd(message)
+        if isinstance(err, errors.DigiContextException):
+            message = str(err)
+            if message is not None:
+                logCmd = getattr(logger, err.level, logger.warn)
+                await logCmd(message)
+        else:
+            await logger.error(f"Ignoring exception in {event}")
+            await logger.error(utils.formatTraceback(error))

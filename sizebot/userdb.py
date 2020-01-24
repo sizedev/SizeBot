@@ -220,7 +220,7 @@ def load(userid):
         with open(getuserpath(userid), "r") as f:
             jsondata = json.load(f)
     except FileNotFoundError:
-        raise errors.UserNotFoundException
+        raise errors.UserNotFoundException(userid)
     return User.fromJSON(jsondata)
 
 
