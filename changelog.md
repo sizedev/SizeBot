@@ -3,7 +3,7 @@
 ## Additions
 
 - Added customizable foot length with `&setfoot`.
-- Added shoeprint depth, nail thickness, clothing thread thickness, eye width, walk speed, and run speed to stats and comparisons.
+- Added shoeprint depth, nail thickness, clothing thread thickness, eye width, walk speed, run speed, and viewing angle to stats and comparisons.
 - Added a link to a visual comparison when using `&compare`.
 - Slow changes now support stop conditions, either a time or a size.
 - The `&help` command now supports arguments for detailed info on a specific command, as in `&help [command]`.
@@ -12,6 +12,8 @@
     - For instance, running `&change ^ 2` while 10ft tall would set you to a height that makes you appear 10 ft tall to a 10 ft tall person.
 - Inches are now displayed in fraction increments in sizetags.
 - Added a new command, `&objcompare`, which lets you see what object you are closest to in height and weight.
+    - Displays different, random comparisons from a list of close comparisons on every run.
+    - Includes fractional output to the nearest eighth, and accuracy percentages!
 - Added a `&ping` command, to see if it's us who's lagging, or it's just Discord again.
 - Users now have the ability to use some simple SizeBot functions in DMs, including `&roll`, `&help`, and `&about`.
 - Some fun easter eggs were added to SizeBot as well! Good luck finding them! :wink:
