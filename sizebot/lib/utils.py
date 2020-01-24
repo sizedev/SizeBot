@@ -99,7 +99,7 @@ def chunkStr(s, chunklen, prefix="", suffix=""):
 
 def chunkMsg(m):
     p = "```\n"
-    if m.startswith("Traceback"):
+    if m.startswith("Traceback") or m.startswith("eval error"):
         p = "```python\n"
     return chunkStr(m, chunklen=2000, prefix=p, suffix="\n```")
 
