@@ -30,10 +30,7 @@ async def log(message, level="info"):
     message = str(message)
     logger.log(message, level=level)
     if logChannel:
-        prefixdict = {}
-        if message.startswith("Traceback"):
-            prefixdict["prefix"] = "```python\n"
-        for m in utils.chunkMsg(message.replace("```", r"\`\`\`"), **prefixdict):
+        for m in utils.chunkMsg(message.replace("```", r"\`\`\`")):
             await logChannel.send(m)
 
 
