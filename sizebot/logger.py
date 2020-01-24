@@ -30,8 +30,12 @@ async def log(message, level="info"):
     message = str(message)
     logger.log(message, level=level)
     if logChannel:
-        for m in utils.chunkMsg(message.replace("```", r"\`\`\`")):
-            await logChannel.send(m)
+        if message.startswith("Tracceback"):
+            for m in utils.chunkMsg(message.replace("```", r"\`\`\`"), prefix="```python\n"):
+                await logChannel.send(m)
+        else:
+            for m in utils.chunkMsg(message.replace("```", r"\`\`\`")):
+                await logChannel.send(m)
 
 
 # Sync log functions (prints to console)
