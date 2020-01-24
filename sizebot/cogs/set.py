@@ -1,9 +1,13 @@
+import logging
+
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger, userdb
+from sizebot import userdb
 from sizebot.lib.units import SV, WV
 from sizebot.lib import proportions, errors, utils, decimal
+
+logger = logging.getLogger("sizebot")
 
 
 class SetCog(commands.Cog):
@@ -22,7 +26,7 @@ class SetCog(commands.Cog):
         userdata.nickname = newnick
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their nick to {userdata.nickname}.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their nick to {userdata.nickname}.")
         await ctx.send(f"<@{ctx.message.author.id}>'s nick is now {userdata.nickname}")
 
         if userdata.display:
@@ -39,7 +43,7 @@ class SetCog(commands.Cog):
         userdata.species = newtag
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their species to {userdata.species}.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their species to {userdata.species}.")
         await ctx.send(f"<@{ctx.message.author.id}>'s species is now {userdata.species}")
 
         if userdata.display:
@@ -54,7 +58,7 @@ class SetCog(commands.Cog):
         userdata.species = None
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their species.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their species.")
         await ctx.send("<@{ctx.message.author.id}>'s species is now cleared")
 
         if userdata.display:
@@ -73,7 +77,7 @@ class SetCog(commands.Cog):
         userdata.height = newheightsv
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now {userdata.height:m} tall.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now {userdata.height:m} tall.")
         await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:m} tall. ({userdata.height:u})")
 
         if userdata.display:
@@ -90,7 +94,7 @@ class SetCog(commands.Cog):
         userdata.height = userdata.baseheight
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) reset their size.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) reset their size.")
         # TODO: Add user message
 
         if userdata.display:
@@ -112,7 +116,7 @@ class SetCog(commands.Cog):
         userdata.display = newdisp
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their display to {newdisp}.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their display to {newdisp}.")
         await ctx.send(f"<@{ctx.message.author.id}>'s display is now set to {userdata.display}.")
 
         if userdata.display:
@@ -134,7 +138,7 @@ class SetCog(commands.Cog):
         userdata.unitsystem = newsys
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their system to {userdata.unitsystem}.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their system to {userdata.unitsystem}.")
         await ctx.send(f"<@{ctx.message.author.id}>'s system is now set to {userdata.unitsystem}.'")
 
         if userdata.display:
@@ -159,7 +163,7 @@ class SetCog(commands.Cog):
         userdata.height = newheightSV
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set a random height, and are now {userdata.height:m} tall.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set a random height, and are now {userdata.height:m} tall.")
         await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:m} tall. ({userdata.height:u})")
 
         if userdata.display:
@@ -174,7 +178,7 @@ class SetCog(commands.Cog):
         userdata.height = "infinity"
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now infinitely tall.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now infinitely tall.")
         await ctx.send(f"<@{ctx.message.author.id}> is now infinitely tall.")
 
         if userdata.display:
@@ -189,7 +193,7 @@ class SetCog(commands.Cog):
         userdata.height = 0
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now nothing.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now nothing.")
         await ctx.send(f"<@{ctx.message.author.id}> is now nothing.")
 
         if userdata.display:
@@ -206,7 +210,7 @@ class SetCog(commands.Cog):
         userdata.baseheight = SV.parse(newbaseheight)
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base height to {newbaseheight}.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base height to {newbaseheight}.")
         await ctx.send(f"<@{ctx.message.author.id}>'s base height is now {userdata.baseheight:m}. ({userdata.baseheight:u})")
 
         if userdata.display:
@@ -223,7 +227,7 @@ class SetCog(commands.Cog):
         userdata.baseweight = WV.parse(newbaseweight)
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base weight to {newbaseweight}.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base weight to {newbaseweight}.")
         await ctx.send(f"<@{ctx.message.author.id}>'s base weight is now {userdata.baseweight:m}. ({userdata.baseweight:u})")
 
         if userdata.display:
@@ -242,7 +246,7 @@ class SetCog(commands.Cog):
         userdata.footlength = newfootsv
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name})'s foot is now {userdata.footlength:m} long.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.message.author.id}>'s foot is now {userdata.footlength:mu} long.")
 
         if userdata.display:
@@ -259,7 +263,7 @@ class SetCog(commands.Cog):
         userdata.footlength = None
         userdb.save(userdata)
 
-        await logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their custom foot length.")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their custom foot length.")
         await ctx.send("<@{ctx.message.author.id}>'s foot length is now default.")
 
         if userdata.display:
@@ -289,7 +293,7 @@ class SetCog(commands.Cog):
         try:
             gender = gendermap[gender]
         except KeyError:
-            raise errors.ArgumentException(ctx)
+            raise errors.ArgumentException
 
         userdata = userdb.load(user.id)
         userdata.gender = gender
@@ -298,7 +302,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await proportions.nickUpdate(user)
 
-        await logger.info(f"User {user.id} ({user.display_name}) set their gender to {userdata.gender}.")
+        logger.info(f"User {user.id} ({user.display_name}) set their gender to {userdata.gender}.")
         await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.")
 
     @commandsplus.command(
@@ -317,7 +321,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await proportions.nickUpdate(user)
 
-        await logger.info(f"User {user.id} ({user.display_name}) reset their gender.")
+        logger.info(f"User {user.id} ({user.display_name}) reset their gender.")
         await ctx.send(f"<@{user.id}>'s gender is now reset.")
 
 

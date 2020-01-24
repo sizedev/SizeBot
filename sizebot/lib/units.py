@@ -3,14 +3,16 @@ import re
 import collections
 import importlib.resources as pkg_resources
 from functools import total_ordering
+import logging
 
-from sizebot import logger
 from sizebot.lib.decimal import Decimal, DecimalSpec
 from sizebot.lib import errors, utils
 from sizebot.lib.picker import getRandomCloseUnit
 import sizebot.data
 
 __all__ = ["Rate", "Mult", "SV", "WV", "TV"]
+
+logger = logging.getLogger("sizebot")
 
 
 formatSpecRe = re.compile(r"""\A
@@ -407,7 +409,7 @@ class Dimension(Decimal):
         try:
             fileJson = json.loads(pkg_resources.read_text(sizebot.data, filename))
         except FileNotFoundError:
-            await logger.error(f"Error loading {filename}")
+            logger.error(f"Error loading {filename}")
             return
         cls.loadFromJson(fileJson)
 

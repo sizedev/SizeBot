@@ -1,11 +1,14 @@
 import re
 from datetime import datetime, timedelta
+import logging
 
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger, conf
+from sizebot import conf
 from sizebot.lib import utils
+
+logger = logging.getLogger("sizebot")
 
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
 starttime = datetime(2019, 9, 15)
@@ -48,7 +51,7 @@ async def sayMilestone(channel, winkcount):
                        f"(That's **{winksperday}** winks/day!)\n"
                        f"Great winking, <@{yukioid}>!")
 
-    await logger.error(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
+    logger.error(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
                        f"It took {prettytimesince} to hit this milestone!\n"
                        f"That's an average of {prettytimeperwink} per wink!\n"
                        f"(That's {winksperday} winks/day!)")
@@ -70,7 +73,7 @@ class WinksCog(commands.Cog):
             return
 
         winkcount = addWinks(winksSeen)
-        await logger.info(f"Yukio has winked {winkcount} times!")
+        logger.info(f"Yukio has winked {winkcount} times!")
         if winkcount in milestones:
             await sayMilestone(message.channel, winkcount)
 
@@ -80,7 +83,7 @@ class WinksCog(commands.Cog):
     async def winkcount(self, ctx):
         winkcount = getWinks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
-        await logger.info(f"Wink count requested! Current count: {winkcount} times!")
+        logger.info(f"Wink count requested! Current count: {winkcount} times!")
 
 
 def setup(bot):

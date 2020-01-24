@@ -1,14 +1,17 @@
 import math
 from datetime import datetime
+import logging
 
 import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot import __version__
-from sizebot import logger, conf, userdb
+from sizebot import conf, userdb
 from sizebot.lib import utils
 from sizebot.lib.units import SV, WV
+
+logger = logging.getLogger("sizebot")
 
 # name
 # description
@@ -172,7 +175,7 @@ class HelpCog(commands.Cog):
     )
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
-        await logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
+        logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
         await self.bot.get_user(conf.getId("DigiDuncan")).send(f"Bug report from <@{ctx.message.author.id}>: {message}")
 
         @commandsplus.command(
@@ -180,7 +183,7 @@ class HelpCog(commands.Cog):
         )
         async def suggest(self, ctx, *, message: str):
             """Suggest a feature for SizeBot!"""
-            await logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
+            logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
             await self.bot.get_user(conf.getId("DigiDuncan")).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
 
     @commandsplus.command()

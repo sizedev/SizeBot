@@ -1,11 +1,12 @@
 import random
-
 import importlib.resources as pkg_resources
+import logging
 
 from discord.ext import commands
 
-from sizebot import logger
 import sizebot.data
+
+logger = logging.getLogger("sizebot")
 
 monikalines = pkg_resources.read_text(sizebot.data, "monikalines.txt").splitlines()
 
@@ -22,9 +23,9 @@ class MonikaCog(commands.Cog):
             return
         if "monika" not in m.content.lower():
             return
-        await logger.warn("Monika detected.")
+        logger.warn("Monika detected.")
         if random.randrange(6) == 1:
-            await logger.warn("Monika triggered.")
+            logger.warn("Monika triggered.")
             line = random.choice(monikalines)
             await m.channel.send(line, delete_after = 7)
 

@@ -1,13 +1,16 @@
 import typing
+import logging
 
 import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger, userdb
+from sizebot import userdb
 from sizebot.lib import proportions
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV
+
+logger = logging.getLogger("sizebot")
 
 
 class StatsCog(commands.Cog):
@@ -43,7 +46,7 @@ class StatsCog(commands.Cog):
             embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
         await ctx.send(embed = embedtosend)
 
-        await logger.info(f"Stats for {memberOrHeight} sent.")
+        logger.info(f"Stats for {memberOrHeight} sent.")
 
     @commandsplus.command(
         usage = "[user/height]"
@@ -70,7 +73,7 @@ class StatsCog(commands.Cog):
         stats = proportions.PersonStats(userdata)
         await ctx.send(str(stats))
 
-        await logger.info(f"Stats for {memberOrHeight} sent.")
+        logger.info(f"Stats for {memberOrHeight} sent.")
 
     @commandsplus.command(
         usage = "[user/height] <user/height>"
@@ -94,7 +97,7 @@ class StatsCog(commands.Cog):
         embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
         await ctx.send(embed = embedtosend)
 
-        await logger.info(f"Compared {userdata1} and {userdata2}")
+        logger.info(f"Compared {userdata1} and {userdata2}")
 
     @commandsplus.command(
         usage = "[user/height] <user/height>"
@@ -116,7 +119,7 @@ class StatsCog(commands.Cog):
         comparison = proportions.PersonComparison(userdata1, userdata2)
         await ctx.send(str(comparison))
 
-        await logger.info(f"Compared {userdata1} and {userdata2}")
+        logger.info(f"Compared {userdata1} and {userdata2}")
 
     @commandsplus.command(
         aliases = ["objectcompare", "objcomp"]
@@ -140,7 +143,7 @@ class StatsCog(commands.Cog):
         goodweightout = " ".join(tmp2)
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
-        await logger.info(f"Sent object comparison for {userdata.nickname}.")
+        logger.info(f"Sent object comparison for {userdata.nickname}.")
 
     @commandsplus.command(
         aliases = ["look", "examine"],
@@ -155,7 +158,7 @@ class StatsCog(commands.Cog):
         `&lookat man`
         `&look book`
         `&examine building`"""
-        await logger.info(f"{ctx.message.author.display_name} looked at {what}.")
+        logger.info(f"{ctx.message.author.display_name} looked at {what}.")
 
         if what not in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             await ctx.send(f"Sorry, *{what}* is not a valid object.")

@@ -1,7 +1,5 @@
 from sizebot.lib import utils
 
-# TODO: split this into DigiException and DigiContextException
-
 
 # error.message will be printed when you do print(error)
 # error.user_message will be displayed to the user
@@ -133,7 +131,6 @@ class InvalidRollException(DigiException):
         return f"Invalid roll string `{self.dString}`."
 
 
-# TODO: Add this to telemetry.
 class AdminPermissionException(DigiContextException):
     async def formatMessage(self, ctx):
         usernick = ctx.message.author.display_name

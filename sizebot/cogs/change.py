@@ -1,12 +1,15 @@
 import random
+import logging
 
 from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger, userdb
+from sizebot import userdb
 from sizebot.lib.units import Rate
 from sizebot.lib.checks import requireAdmin
 from sizebot.lib import changes, proportions
+
+logger = logging.getLogger("sizebot")
 
 
 class ChangeCog(commands.Cog):
@@ -29,7 +32,7 @@ class ChangeCog(commands.Cog):
         proportions.changeUser(userid, style, amount)
         userdata = userdb.load(userid)
 
-        await logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
+        logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
         await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
 
     @commandsplus.command(
@@ -45,7 +48,7 @@ class ChangeCog(commands.Cog):
             changeDump = "No active changes"
 
         await ctx.author.send("**ACTIVE CHANGES**\n" + changeDump)
-        await logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the running changes.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the running changes.")
 
     @commandsplus.command(
         usage = "<rate>"
@@ -67,7 +70,7 @@ class ChangeCog(commands.Cog):
         changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
 
         # TODO: Add user message
-        await logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commandsplus.command()
     @commands.guild_only()
@@ -80,10 +83,10 @@ class ChangeCog(commands.Cog):
 
         if deleted is None:
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
-            await logger.warn(f"User {ctx.author.id} ({ctx.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
+            logger.warn(f"User {ctx.author.id} ({ctx.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
         else:
             # TODO: Add user message
-            await logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) stopped slow-changing.")
+            logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) stopped slow-changing.")
 
     @commandsplus.command()
     @commands.guild_only()
@@ -101,7 +104,7 @@ class ChangeCog(commands.Cog):
         await ctx.send(
             f"<@{userid}> ate a :cake:! *I mean it said \"Eat me...\"*\n"
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
-        await logger.info(f"User {userid} ({ctx.author.display_name}) ate a cake and multiplied {randmult}.")
+        logger.info(f"User {userid} ({ctx.author.display_name}) ate a cake and multiplied {randmult}.")
 
     @commandsplus.command()
     @commands.guild_only()
@@ -119,7 +122,7 @@ class ChangeCog(commands.Cog):
         await ctx.send(
             f"<@{ctx.author.id}> ate a :milk:! *I mean it said \"Drink me...\"*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
-        await logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) drank a potion and shrunk {randmult}.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) drank a potion and shrunk {randmult}.")
 
     @tasks.loop(seconds=6)
     async def changeTask(self):

@@ -1,12 +1,14 @@
 from time import time
+import logging
 
 from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger
 from sizebot.lib import utils
 from sizebot.lib.units import TV
 from sizebot.lib.decimal import Decimal
+
+logger = logging.getLogger("sizebot")
 
 runners = []
 
@@ -95,7 +97,7 @@ class RunCog(commands.Cog):
         try:
             runners = [r for r in runners if await r.step(self.bot)]
         except Exception as e:
-            await logger.error(e)
+            logger.error(e)
 
 
 def setup(bot):

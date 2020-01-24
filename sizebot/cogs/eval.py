@@ -1,11 +1,14 @@
+import logging
+
 import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot import logger
 from sizebot.lib.checks import requireAdmin
 from sizebot.lib.eval import runEval
 from sizebot.lib import utils
+
+logger = logging.getLogger("sizebot")
 
 
 class EvalCog(commands.Cog):
@@ -20,7 +23,7 @@ class EvalCog(commands.Cog):
         """Evaluate a Python expression."""
         evalStr = utils.removeCodeBlock(evalStr)
 
-        await logger.info(f"{ctx.message.author.display_name} tried to eval {evalStr!r}.")
+        logger.info(f"{ctx.message.author.display_name} tried to eval {evalStr!r}.")
 
         # Show user that bot is busy doing something
         waitMsg = None
@@ -31,7 +34,7 @@ class EvalCog(commands.Cog):
             try:
                 result = await runEval(ctx, evalStr)
             except Exception as err:
-                await logger.error("eval error:\n" + utils.formatTraceback(err))
+                logger.error("eval error:\n" + utils.formatTraceback(err))
                 await ctx.send(f"⚠️ ` {utils.formatError(err)} `")
                 return
             finally:
@@ -56,13 +59,13 @@ class EvalCog(commands.Cog):
 
         evalStr = utils.removeCodeBlock(evalStr)
 
-        await logger.info(f"{ctx.message.author.display_name} tried to quietly eval {evalStr!r}.")
+        logger.info(f"{ctx.message.author.display_name} tried to quietly eval {evalStr!r}.")
 
         async with ctx.typing():
             try:
                 await runEval(ctx, evalStr, returnValue = False)
             except Exception as err:
-                await logger.error("eval error:\n" + utils.formatTraceback(err))
+                logger.error("eval error:\n" + utils.formatTraceback(err))
                 await ctx.message.author.send(f"⚠️ ` {utils.formatError(err)} `")
 
 

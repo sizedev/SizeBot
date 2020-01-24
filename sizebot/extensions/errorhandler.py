@@ -2,9 +2,12 @@ import sys
 
 from discord.ext import commands
 
-from sizebot import logger
+import logging
+
 from sizebot.lib import errors, utils
 from sizebot.lib.telemetry import Telemetry
+
+logger = logging.getLogger("sizebot")
 
 
 def setup(bot):
@@ -15,7 +18,7 @@ def setup(bot):
 
         # If we got some bad arguments, use a generic argument exception error
         if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument):
-            err = errors.ArgumentException(ctx)
+            err = errors.ArgumentException()
 
         if isinstance(err, errors.AdminPermissionException):
             # Log Admin Permission Exceptions to telemetry
@@ -49,8 +52,8 @@ def setup(bot):
         else:
             # Default command error handling
             await ctx.send("Something went wrong.")
-            await logger.error(f"Ignoring exception in command {ctx.command}:")
-            await logger.error(utils.formatTraceback(error))
+            logger.error(f"Ignoring exception in command {ctx.command}:")
+            logger.error(utils.formatTraceback(error))
 
     @bot.event
     async def on_error(event, *args, **kwargs):
@@ -69,5 +72,5 @@ def setup(bot):
                 logCmd = getattr(logger, err.level, logger.warn)
                 await logCmd(message)
         else:
-            await logger.error(f"Ignoring exception in {event}")
-            await logger.error(utils.formatTraceback(error))
+            logger.error(f"Ignoring exception in {event}")
+            logger.error(utils.formatTraceback(error))

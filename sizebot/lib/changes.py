@@ -1,10 +1,13 @@
 import time
 import json
+import logging
 
-from sizebot import logger, userdb, conf
+from sizebot import userdb, conf
 from sizebot.lib import proportions
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, TV
+
+logger = logging.getLogger("sizebot")
 
 
 _activeChanges = {}
@@ -88,7 +91,7 @@ async def apply(bot):
             if running:
                 runningChanges[key] = change
         except Exception as e:
-            await logger.error(e)
+            logger.error(e)
     _activeChanges = runningChanges
     saveToFile()
 

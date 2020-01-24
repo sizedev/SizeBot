@@ -1,15 +1,18 @@
 import inspect
 import math
 import builtins
+import logging
 
 import discord
 
-from sizebot import logger, userdb
+from sizebot import userdb
 from sizebot.lib import utils
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
 from sizebot.lib.objs import objects
 from sizebot.cogs import thistracker
+
+logger = logging.getLogger("sizebot")
 
 
 def eformat(name, value):
@@ -135,7 +138,7 @@ async def runEval(ctx, evalStr):
 
     evalWrapper, evalWrapperStr = buildEvalWrapper(evalStr)
 
-    await logger.debug(f"Executing eval:\n{evalWrapperStr}")
+    logger.debug(f"Executing eval:\n{evalWrapperStr}")
 
     exec(
         evalWrapper,
