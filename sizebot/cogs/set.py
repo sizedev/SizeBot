@@ -289,7 +289,7 @@ class SetCog(commands.Cog):
         try:
             gender = gendermap[gender]
         except KeyError:
-            raise errors.ArgumentException(ctx)
+            raise errors.ArgumentException
 
         userdata = userdb.load(user.id)
         userdata.gender = gender

@@ -5,7 +5,6 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import logger, userdb
 from sizebot.lib.units import Rate
-from sizebot.lib.checks import requireAdmin
 from sizebot.lib import changes, proportions
 
 
@@ -35,7 +34,7 @@ class ChangeCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    @commands.check(requireAdmin)
+    @commands.is_owner()
     async def changes(self, ctx):
         await ctx.message.delete(delay=0)
 

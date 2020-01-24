@@ -15,7 +15,10 @@ def setup(bot):
 
         # If we got some bad arguments, use a generic argument exception error
         if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument):
-            err = errors.ArgumentException(ctx)
+            err = errors.ArgumentException()
+
+        if isinstance(err, commands.NotOwner):
+            err = errors.AdminPermissionException()
 
         if isinstance(err, errors.AdminPermissionException):
             # Log Admin Permission Exceptions to telemetry
