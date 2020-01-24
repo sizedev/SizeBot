@@ -4,10 +4,11 @@ from sizebot import conf
 
 
 class Telemetry():
-    def __init__(self, unknowns=None, commands=None, ratelimits=None):
+    def __init__(self, unknowns=None, commands=None, ratelimits=None, permissionerrors=None):
         self.unknowns = unknowns or {}
         self.commands = commands or {}
         self.ratelimits = ratelimits or {}
+        self.permissionerrors = permissionerrors or {}
 
     def incrementUnknown(self, name):
         count = self.unknowns.get(name, 0)
@@ -21,6 +22,10 @@ class Telemetry():
         count = self.ratelimits.get(name, 0)
         self.ratelimits[name] = count + 1
 
+    def incrementPermissionError(self, name):
+        count = self.permissionerrors.get(name, 0)
+        self.permissionerrors[name] = count + 1
+
     def save(self):
         conf.telemetrypath.parent.mkdir(exist_ok = True)
         jsondata = self.toJSON()
@@ -32,7 +37,8 @@ class Telemetry():
         return {
             "unknowns": self.unknowns,
             "commands": self.commands,
-            "ratelimits": self.ratelimits
+            "ratelimits": self.ratelimits,
+            "permissionerrors": self.permissionerrors
         }
 
     @classmethod
@@ -46,7 +52,4 @@ class Telemetry():
 
     @classmethod
     def fromJSON(cls, jsondata):
-        unknowns = jsondata["unknowns"]
-        commands = jsondata["commands"]
-        ratelimits = jsondata["ratelimits"]
-        return Telemetry(unknowns, commands, ratelimits)
+        return Telemetry(**jsondata)

@@ -17,6 +17,12 @@ def setup(bot):
         if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument):
             err = errors.ArgumentException(ctx)
 
+        if isinstance(err, errors.AdminPermissionException):
+            # Log Admin Permission Exceptions to telemetry
+            telem = Telemetry.load()
+            telem.incrementPermissionError(str(ctx.invoked_with))
+            telem.save()
+
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
             message = await err.formatMessage(ctx)
