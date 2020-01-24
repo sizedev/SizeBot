@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 
 import discord
 from discord.ext import commands
@@ -7,6 +8,8 @@ from digiformatter import styles
 from sizebot import __version__
 from sizebot import logger, conf
 from sizebot.lib import units, objs, status
+
+logging.basicConfig(level=logging.INFO)
 
 initial_cogs = [
     "admin",
