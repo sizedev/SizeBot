@@ -12,7 +12,7 @@ from sizebot.lib.objs import objects
 from sizebot.cogs import thistracker
 
 
-def edir(ctx, o):
+async def edir(ctx, o):
     """send embed of an object's attributes, with type notation"""
     e = discord.Embed()
     attrs = [utils.eformat(n, v) for n, v in utils.ddir(o).items()]
