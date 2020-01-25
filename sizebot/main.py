@@ -31,6 +31,7 @@ initial_cogs = [
     "run",
     "set",
     "stats",
+    "thistracker",
     "winks"
 ]
 initial_extensions = [
