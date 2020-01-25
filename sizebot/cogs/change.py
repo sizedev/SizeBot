@@ -68,7 +68,7 @@ class ChangeCog(commands.Cog):
 
         changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
 
-        # TODO: Add user message
+        await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{rateStr}`.")
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commandsplus.command()
@@ -84,7 +84,7 @@ class ChangeCog(commands.Cog):
             await ctx.send("You can't stop slow-changing, as you don't have a task active!")
             logger.warn(f"User {ctx.author.id} ({ctx.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
         else:
-            # TODO: Add user message
+            await ctx.send(f"{ctx.author.display_name} has stopped slow-changing.")
             logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) stopped slow-changing.")
 
     @commandsplus.command()

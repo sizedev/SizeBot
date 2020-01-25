@@ -44,7 +44,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their species to {userdata.species}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s species is now {userdata.species}")
+        await ctx.send(f"<@{ctx.message.author.id}>'s species is now a {userdata.species}.")
 
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)
@@ -59,7 +59,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their species.")
-        await ctx.send("<@{ctx.message.author.id}>'s species is now cleared")
+        await ctx.send(f"<@{ctx.message.author.id}>'s species is now cleared.")
 
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)
@@ -78,7 +78,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now {userdata.height:m} tall.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:m} tall. ({userdata.height:u})")
+        await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:mu} tall.")
 
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)
@@ -94,8 +94,8 @@ class SetCog(commands.Cog):
         userdata.height = userdata.baseheight
         userdb.save(userdata)
 
+        await ctx.send(f"{ctx.message.author.display_name} reset their size.")
         logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) reset their size.")
-        # TODO: Add user message
 
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)
@@ -139,7 +139,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their system to {userdata.unitsystem}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s system is now set to {userdata.unitsystem}.'")
+        await ctx.send(f"<@{ctx.message.author.id}>'s system is now set to {userdata.unitsystem}.")
 
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)
@@ -164,7 +164,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set a random height, and are now {userdata.height:m} tall.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:m} tall. ({userdata.height:u})")
+        await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:mu} tall.")
 
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)
@@ -211,7 +211,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base height to {newbaseheight}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s base height is now {userdata.baseheight:m}. ({userdata.baseheight:u})")
+        await ctx.send(f"<@{ctx.message.author.id}>'s base height is now {userdata.baseheight:mu} tall.")
 
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)
@@ -228,7 +228,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base weight to {newbaseweight}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s base weight is now {userdata.baseweight:m}. ({userdata.baseweight:u})")
+        await ctx.send(f"<@{ctx.message.author.id}>'s base weight is now {userdata.baseweight:mu}")
 
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)

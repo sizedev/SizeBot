@@ -12,7 +12,7 @@ class AdminCog(commands.Cog):
     @commands.is_owner()
     async def stop(self, ctx):
         """RIP SizeBot."""
-        await ctx.send("Stopping SizeBot")
+        await ctx.send("Stopping SizeBot. ☠️")
         await ctx.bot.close()
 
 

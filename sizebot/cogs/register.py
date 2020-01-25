@@ -11,6 +11,7 @@ from sizebot.lib import proportions
 
 logger = logging.getLogger("sizebot")
 
+
 async def addUserRole(member):
     sizebotuserroleid = conf.getId("sizebotuserrole")
     role = get(member.guild.roles, id = sizebotuserroleid)
@@ -151,6 +152,7 @@ class RegisterCog(commands.Cog):
         logger.warn(f"User {user.id} successfully unregistered.")
         await ctx.send(f"Unregistered {user.name}.")
 
+    # TODO: Move this to its own extension.
     @commands.Cog.listener()
     async def on_message(self, m):
         await proportions.nickUpdate(m.author)
