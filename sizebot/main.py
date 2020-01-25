@@ -14,7 +14,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("sizebot")
 logger.handlers = []
 logger.propagate = False
-logger.addHandler(digilogger.DigiFormatterHandler())
+dfhandler = digilogger.DigiFormatterHandler()
+logger.addHandler(dfhandler)
 
 initial_cogs = [
     "admin",
@@ -55,9 +56,10 @@ def main():
 
     async def on_first_ready():
         logChannel = bot.get_channel(conf.logchannelid)
-        logger.addHandler(DiscordHandler(logChannel))
+        discordhandler = DiscordHandler(logChannel)
+        logger.addHandler(discordhandler)
         discordlogger = logging.getLogger("discord")
-        discordlogger.addHandler(DiscordHandler(logChannel))
+        discordlogger.addHandler(discordhandler)
 
         await units.init()
         await objs.init()
