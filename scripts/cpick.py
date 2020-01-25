@@ -1,5 +1,5 @@
 from colored import colors, style, fg, bg, attr
-
+import os
 from getch import getch
 
 ESC = "\033"
@@ -62,6 +62,9 @@ class Index:
 
 
 def main():
+
+    os.system("")
+
     indexes = [
         Index("FG", colorlist, fg),
         Index("BG", colorlist, bg),
