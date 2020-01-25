@@ -153,6 +153,7 @@ class HelpCog(commands.Cog):
             "\":100::thumbsup:\" -- *Anonymous*\n"
             "\"I want to put SizeBot in charge of the world government.\" -- *AWK*\n"
             "\"Um... I like it?\" -- *Goddess Syn*\n"
+            "\"I'm kinda upset I'm not in the quotes.\" -- *Chocola*\n"
             "\"I am the only person who has accidentally turned my fetish into a tech support job.\" -- *DigiDuncan*\n"
             "\n"
             f"Version {__version__} | {now.strftime('%d %b %Y')}")
