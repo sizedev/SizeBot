@@ -28,8 +28,8 @@ class MeicrosCog(commands.Cog):
             # TODO: Need to join voice channel first
             await m.channel.send("!play stop", delete_after = 0)
         # Tell our good friend how they can fund SizeBot.
-        if m.author.id == chocola and isACommand(m.content) and not m.content.endswith("--fund"):
-            await m.channel.send(f"<@{chocola}>\n1 packages are looking funding.\nRun `{conf.prefix}fund` for details.")
+        if m.author.id == chocola and isACommand(m.content) and not m.content.endswith("--no-fund"):
+            await m.channel.send(f"<@{chocola}>\n1 packages are looking funding.\nRun `{conf.prefix}fund` for details.\n(To stop seeing this message, run commands with `--no-fund`.)")
 
 
 def setup(bot):

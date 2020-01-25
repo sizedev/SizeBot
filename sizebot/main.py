@@ -92,8 +92,8 @@ def main():
 
     @bot.event
     async def on_message(message):
-        if message.endswith(" --fund"):
-            message = message[:-7]
+        if message.endswith(" --no-fund"):
+            message = message[:-10]
         await bot.process_commands(message)
 
     @bot.event
