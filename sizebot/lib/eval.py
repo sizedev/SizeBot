@@ -39,7 +39,7 @@ def eformat(name, value):
         emojiType = "👥"
     elif isinstance(value, discord.user.User):
         emojiType = "👤"
-    elif isinstace(value, discord.ext.commands.Bot)L
+    elif isinstance(value, discord.ext.commands.Bot):
         emojiType = "🤖"
     else:
         emojiType = "▫️"
