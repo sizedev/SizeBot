@@ -7,7 +7,8 @@ from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
 from sizebot import conf
-from sizebot.lib import units, objs, status, discordlogger
+from sizebot.lib import units, objs, status
+from sizebot.lib.discordlogger import DiscordHandler
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("sizebot")
@@ -54,7 +55,9 @@ def main():
 
     async def on_first_ready():
         logChannel = bot.get_channel(conf.logchannelid)
-        logger.addHandler(discordlogger.DiscordHandler(logChannel))
+        logger.addHandler(DiscordHandler(logChannel))
+        discordlogger = logging.getLogger("discord")
+        discordlogger.addHandler(DiscordHandler(logChannel))
 
         await units.init()
         await objs.init()
