@@ -7,7 +7,11 @@ from sizebot import conf
 
 class ThisTracker():
     def __init__(self, points=None):
-        self.points = points or {}
+        if points is None:
+            points = {}
+        # Convert keys to integers
+        points = {int(k): v for k, v in points.items()}
+        self.point = points
 
     def incrementPoints(self, id):
         count = self.points.get(id, 0)
