@@ -55,10 +55,10 @@ class _GetchWindows:
         import msvcrt
         # https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
         sequences = {
-            "\xe0\x4b": "LEFT_ARROW",
-            "\xe0\x48": "UP_ARROW",
-            "\xe0\x4d": "RIGHT_ARROW",
-            "\xe0\x50": "DOWN_ARROW"
+            "\xe0\x4b": "KEY_LEFT",
+            "\xe0\x48": "KEY_UP",
+            "\xe0\x4d": "KEY_RIGHT",
+            "\xe0\x50": "KEY_DOWN"
         }
         ch = chr(msvcrt.getch()[0])
         if ch == "\x00":
