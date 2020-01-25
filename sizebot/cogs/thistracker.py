@@ -1,5 +1,5 @@
 import json
-
+import discord
 from discord.ext import commands
 
 from sizebot import conf
@@ -47,7 +47,7 @@ class ThisTracker():
 
 def findLatestNonThis(messages):
     for message in messages:
-        if not message.content.startswith("^") or message.content.lower() == "this":
+        if not message.content.startswith("^") or message.content.lower() in ["this", "🔼", "⬆️", "⤴️"]:
             return message
 
 
@@ -67,6 +67,20 @@ class ThisCog(commands.Cog):
             tracker = ThisTracker.load()
             tracker.incrementPoints(findLatestNonThis(messages).author.id)
             tracker.save()
+
+    @commands.Cog.listener()
+    async def on_reaction_add(self, r, u):
+        tracker = ThisTracker.load()
+        if r.message.author.bot:
+            return
+        if isinstance(r, discord.Reaction):
+            if r.emoji.name.lower() in ["this", "brilliancethis", "braverythis", "balancethis", "123this"]:
+                tracker.incrementPoints(r.message.author.id)
+                tracker = ThisTracker.load()
+        else:
+            if r.emoji in ["🔼", "⬆️", "⤴️"]:
+                tracker.incrementPoints(r.message.author.id)
+                tracker.save()
 
 
 def setup(bot):
