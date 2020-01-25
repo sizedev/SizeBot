@@ -4,7 +4,6 @@ import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot.lib.checks import requireAdmin
 from sizebot.lib.eval import runEval
 from sizebot.lib import utils
 
@@ -18,7 +17,7 @@ class EvalCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    @commands.check(requireAdmin)
+    @commands.is_owner()
     async def eval(self, ctx, *, evalStr):
         """Evaluate a Python expression."""
         evalStr = utils.removeCodeBlock(evalStr)
@@ -52,7 +51,7 @@ class EvalCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    @commands.check(requireAdmin)
+    @commands.is_owner()
     async def evil(self, ctx, *, evalStr):
         """Evaluate a Python expression, but evilly."""
         await ctx.message.delete(delay = 0)

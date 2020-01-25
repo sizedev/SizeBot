@@ -1,8 +1,6 @@
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot.lib.checks import requireAdmin
-
 
 class AdminCog(commands.Cog):
     def __init__(self, bot):
@@ -11,7 +9,7 @@ class AdminCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    @commands.check(requireAdmin)
+    @commands.is_owner()
     async def stop(self, ctx):
         """RIP SizeBot."""
         await ctx.send("Stopping SizeBot")

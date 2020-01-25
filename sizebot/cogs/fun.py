@@ -4,7 +4,6 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot import conf
-from sizebot.lib.checks import requireAdmin
 
 tasks = {}
 
@@ -18,7 +17,7 @@ class FunCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    @commands.check(requireAdmin)
+    @commands.is_owner()
     async def repeat(self, ctx, delay: float, *, message: str):
         if ctx.message.author.id != conf.getId("DigiDuncan"):
             return
@@ -34,7 +33,7 @@ class FunCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    @commands.check(requireAdmin)
+    @commands.is_owner()
     async def stoprepeat(self, ctx):
         await ctx.message.delete(delay=0)
         tasks[ctx.message.author.id].cancel()
@@ -43,7 +42,7 @@ class FunCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    @commands.check(requireAdmin)
+    @commands.is_owner()
     async def say(self, ctx, *, message: str):
         await ctx.message.delete(delay=0)
         await ctx.send(message)
