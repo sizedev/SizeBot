@@ -123,7 +123,7 @@ class HelpCog(commands.Cog):
             await self.send_command_help(ctx, cmd)
             return
 
-        await ctx.send(f"Unrecognized command: {cmdName}")
+        await ctx.send(f"Unrecognized command: `{cmdName}`.")
 
     @commandsplus.command(
     )
