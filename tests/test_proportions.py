@@ -1,6 +1,14 @@
+import asyncio
+
 from decimal import Decimal
 
+from sizebot.lib import units
 from sizebot.lib.units import SV, WV, TV, Mult, Rate
+
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(units.init())
+loop.close()
 
 
 def test_Mult_parse():
