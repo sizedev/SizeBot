@@ -6,7 +6,7 @@ chocola = 161027274764713984
 
 def isACommand(commands, message):
     for command in commands:
-        if message.startswith(conf.prefix) + command:
+        if message.startswith(conf.prefix + command):
             return True
     if message.startswith("!stop"):
         return True
