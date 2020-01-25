@@ -9,9 +9,10 @@ class ThisTracker():
     def __init__(self, points=None):
         if points is None:
             points = {}
-        # Convert keys to integers
-        points = {int(k): v for k, v in points.items()}
-        self.point = points
+        else:
+            # Convert keys to integers
+            points = {int(k): v for k, v in points.items()}
+        self.points = points
 
     def incrementPoints(self, id):
         count = self.points.get(id, 0)
