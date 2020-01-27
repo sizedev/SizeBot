@@ -97,7 +97,7 @@ class NoPermissionsException(DigiException):
     level = "error"
 
     def formatMessage(self):
-        "SizeBot does not have the permssions to perform this action."
+        return "SizeBot does not have the permssions to perform this action."
 
 
 # TODO: Unused
@@ -143,4 +143,4 @@ class AdminPermissionException(DigiContextException):
 
 class ArgumentException(DigiContextException):
     async def formatUserMessage(self, ctx):
-        f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.usage}`."
+        return f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.usage}`."
