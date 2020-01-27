@@ -240,22 +240,20 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setbase(self, ctx, arg1: typing.Union[SV, WV], arg2: typing.Union[SV, WV] = None):
         userdata = userdb.load(ctx.message.author.id)
-        if arg2:
-            if (isinstance(arg1, SV) and isinstance(arg2, SV)) or (isinstance(arg1, WV) and isinstance(arg2, WV)):
-                logger.warn(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) tried to set two base heights or weights.")
-                await ctx.send(f"Sorry, you can't set two bases of the same dimension.")
-                return
+
+        # Don't allow a user to enter setbase(SV, SV) or setbase(WV, WV)
+        if (isinstance(arg1, SV) and isinstance(arg2, SV)) or (isinstance(arg1, WV) and isinstance(arg2, WV)):
+            raise errors.ArgumentException
+
         for arg in [arg1, arg2]:
             if isinstance(arg, SV):
-                userdata.baseheight = SV.parse(arg)
+                userdata.baseheight = arg
             if isinstance(arg, WV):
-                userdata.baseweight = WV.parse(arg)
+                userdata.baseweight = arg
         userdb.save(userdata)
 
-        printbaseheight = format(userdata.baseheight, ",.3mu")
-        printbaseweight = format(userdata.baseweight, ",.3mu")
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base height and weight to {printbaseheight} and {printbaseweight}.")
-        await ctx.send(f"{ctx.message.author.display_name} changed their base height and weight to {printbaseheight} and {printbaseweight}")
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
+        await ctx.send(f"{ctx.message.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
 
     # TODO: Make this accept shoe size as an input.
     @commandsplus.command(
