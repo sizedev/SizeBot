@@ -27,6 +27,7 @@ initial_cogs = [
     "keypad",
     "meicros",
     "monika",
+    "naptime",
     "register",
     "roll",
     "run",
