@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime
 import logging
 
@@ -70,7 +71,13 @@ def main():
         # Obviously we need the banner printed in the terminal
         logger.log(BANNER, conf.banner + " v" + __version__)
         logger.log(LOGIN, f"Logged in as: {bot.user.name} ({bot.user.id})\n------")
-        await bot.change_presence(activity = discord.Game(name = "Ratchet and Clank: Size Matters"))
+
+        # Add a special message to bot status if we are running in debug mode
+        activity = discord.Game(name = "Ratchet and Clank: Size Matters")
+        if sys.gettrace() is not None:
+            activity = discord.Activity(type=discord.ActivityType.listening, name = "DEBUGGER 🔧")
+
+        await bot.change_presence(activity = activity)
         print(styles)
         logger.info(f"Prefix: {conf.prefix}")
         launchfinishtime = datetime.now()
