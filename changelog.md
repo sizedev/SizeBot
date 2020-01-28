@@ -15,6 +15,7 @@
     - Displays different, random comparisons from a list of close comparisons on every run.
     - Includes fractional output to the nearest eighth, and accuracy percentages!
 - Added a `&ping` command, to see if it's us who's lagging, or it's just Discord again.
+- Added a new command, `&naptime`, which kicks you from any voice channel you're in after a set duration.
 - Users now have the ability to use some simple SizeBot functions in DMs, including `&roll`, `&help`, and `&about`.
 - Some fun easter eggs were added to SizeBot as well! Good luck finding them! :wink:
 
@@ -49,6 +50,7 @@
 - `&objcompare`
 - `&ping`
 - `&setbase <height/weight> [height/weight]`
+- `&naptime <duration>`
 - `&units`
 
 ### New Command Syntax
