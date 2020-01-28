@@ -40,7 +40,7 @@ class RegisterCog(commands.Cog):
     )
     @commands.guild_only()
     async def register(self, ctx, nick: str, display: str = "y", currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
-        """Registers a user for SizeBot"""
+        """Registers a user for SizeBot."""
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
         logger.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
         logger.info(readable)
