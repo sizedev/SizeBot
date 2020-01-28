@@ -1,6 +1,7 @@
 import json
 import discord
 from discord.ext import commands
+from sizebot.discordplus import commandsplus
 
 from sizebot import conf
 
@@ -56,6 +57,19 @@ class ThisCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @commandsplus.command(
+        aliases = ["points", "board"]
+    )
+    @commands.guild_only()
+    async def leaderboard(self, ctx):
+        tracker = ThisTracker.load()
+        trackerdict = tracker.points
+        lboard = sorted(trackerdict, key=trackerdict.get)
+        messagetosend = "**__The Most Agreeable Users:__**\n"
+        for i in range(10):
+            messagetosend += f"{**self.bot.get_user(lboard[i]).display_name}**: {lboard[i][0]}"
+        await ctx.send(messagetosend)
 
     @commands.Cog.listener()
     async def on_message(self, m):
