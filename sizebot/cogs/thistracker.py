@@ -68,7 +68,7 @@ class ThisCog(commands.Cog):
         lboard = sorted(trackerdict, key=trackerdict.get)
         messagetosend = "**__The Most Agreeable Users:__**\n"
         for i in range(10):
-            messagetosend += f"{**self.bot.get_user(lboard[i]).display_name}**: {lboard[i][0]}"
+            messagetosend += f"**{self.bot.get_user(lboard[i]).display_name}**: {lboard[i][0]}"
         await ctx.send(messagetosend)
 
     @commands.Cog.listener()
