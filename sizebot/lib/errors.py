@@ -144,3 +144,11 @@ class AdminPermissionException(DigiContextException):
 class ArgumentException(DigiContextException):
     async def formatUserMessage(self, ctx):
         return f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.signature}`."
+
+
+class UserMessedUpException(DigiContextException):
+    def __init__(self, custommessage):
+        self.custommessage = custommessage
+
+    async def formatUserMessage(self, ctx):
+        return self.custommessage

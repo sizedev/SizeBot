@@ -243,7 +243,7 @@ class SetCog(commands.Cog):
 
         # Don't allow a user to enter setbase(SV, SV) or setbase(WV, WV)
         if (isinstance(arg1, SV) and isinstance(arg2, SV)) or (isinstance(arg1, WV) and isinstance(arg2, WV)):
-            raise errors.ArgumentException
+            raise errors.UserMessedUpException("Please do not enter two heights or two weights.")
 
         for arg in [arg1, arg2]:
             if isinstance(arg, SV):
