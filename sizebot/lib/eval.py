@@ -99,6 +99,7 @@ def getEvalGlobals():
         "help": utils.strHelp,
         "Decimal": Decimal,
         "discord": discord,
+        "logging": logging,
         "logger": logger,
         "Rate": Rate, "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
         "objects": objects,
