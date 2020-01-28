@@ -175,8 +175,8 @@
         },
         {
             "factor": "5.9721986e27",
-            "name": "Earth",
-            "namePlural": "Earths"
+            "name": "Earth weight",
+            "namePlural": "Earth weights"
         },
         {
             "factor": "1e30",
@@ -190,8 +190,8 @@
         },
         {
             "factor": "1.988435e33",
-            "name": "Sun",
-            "namePlural": "Suns"
+            "name": "Sun weight",
+            "namePlural": "Sun weights"
         },
         {
             "factor": "9.5e43",
@@ -377,10 +377,10 @@
                 "unit": " US tons"
             },
             {
-                "unit": "earths"
+                "unit": "Earth weights"
             },
             {
-                "unit": "sun"
+                "unit": "Sun weights"
             },
             {
                 "unit": " Milky Ways"

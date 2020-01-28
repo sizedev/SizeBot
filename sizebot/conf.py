@@ -45,6 +45,7 @@ userdbpath = datadir / "users"
 telemetrypath = datadir / "telemetry.json"
 thispath = datadir / "thistracker.json"
 changespath = datadir / "changes.json"
+naptimepath = datadir / "naptime.json"
 confpath = datadir / "sizebot.conf"
 
 

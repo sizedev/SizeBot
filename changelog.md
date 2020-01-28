@@ -28,6 +28,11 @@
 - Changed the way 0 and Infinity are handled as heights, making their stats and comparisons make much more sense.
 - The about section now is more accurate, and has new information.
 - `&weightunits` and `&heightunits` have been merged into the more easily remembered and cleanly displayed `&units`.
+- `&setbaseheight` and `&setbaseweight` have been merged into `&setbase`, which automatically determines which value to change based on the units you give it.
+    - `&setbase 5ft` sets your base height to 5ft.
+    - `&setbase 100lb` sets your base weight to 100lb.
+    - `&setbase 5ft 100lb` sets both base height and base weight simultaneously.
+    - `&setbaseheight` and `&setbaseweight` still exist for convenience.
 
 ## Fixes
 
@@ -43,6 +48,8 @@
 
 - `&objcompare`
 - `&ping`
+- `&setbase <height/weight> [height/weight]`
+- `&units`
 
 ### New Command Syntax
 

@@ -64,6 +64,8 @@ class ThisCog(commands.Cog):
         if m.content.startswith("^") or m.content.lower() == "this":
             channel = m.channel
             messages = await channel.history(limit=100).flatten()
+            if findLatestNonThis(messages).author.id == m.author.id:
+                return
             tracker = ThisTracker.load()
             tracker.incrementPoints(findLatestNonThis(messages).author.id)
             tracker.save()
@@ -72,6 +74,8 @@ class ThisCog(commands.Cog):
     async def on_reaction_add(self, r, u):
         tracker = ThisTracker.load()
         if r.message.author.bot:
+            return
+        if r.message.author.id == u.id:
             return
         if isinstance(r, discord.Reaction):
             if r.emoji.name.lower() in ["this", "brilliancethis", "braverythis", "balancethis", "123this"]:
