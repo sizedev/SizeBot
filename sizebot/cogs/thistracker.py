@@ -64,12 +64,10 @@ class ThisCog(commands.Cog):
     @commands.guild_only()
     async def leaderboard(self, ctx):
         tracker = ThisTracker.load()
-        trackerdict = tracker.points
-        lboard = sorted(trackerdict, key=trackerdict.get)
+        trackerlist = sorted(tracker.points.items(), key=lambda i: i[1])
         messagetosend = "**__The Most Agreeable Users:__**\n"
-        userstooutput = 10 if len(lboard) > 10 else len(lboard)
-        for i in list(lboard)[0:userstooutput]:
-            messagetosend += f"**{self.bot.get_user(i).display_name}**: {lboard[i]}"
+        for userid, points in trackerlist[:10]:
+            messagetosend += f"**{self.bot.get_user(userid).display_name}**: {points}"
         await ctx.send(messagetosend)
 
     @commands.Cog.listener()
