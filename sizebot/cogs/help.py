@@ -97,9 +97,9 @@ class HelpCog(commands.Cog):
         description = "\n\n".join(descriptionParts)
 
         embed = discord.Embed(
-            title=signature + f" [SizeBot {__version__}]",
+            title=signature,
             description=description
-        ).set_author(name=f"Help")
+        ).set_author(name=f"Help [SizeBot {__version__}]")
 
         if cmd.aliases:
             embed.add_field(name="**Aliases:**", value=", ".join(cmd.aliases), inline=False)
