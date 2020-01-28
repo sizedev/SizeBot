@@ -239,6 +239,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def setbase(self, ctx, arg1: typing.Union[SV, WV], arg2: typing.Union[SV, WV] = None):
+        """Set your base height and weight."""
         userdata = userdb.load(ctx.message.author.id)
 
         # Don't allow a user to enter setbase(SV, SV) or setbase(WV, WV)
@@ -261,6 +262,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def setfoot(self, ctx, *, newfoot):
+        """Set a custom foot length."""
         newfootsv = SV.parse(newfoot)
 
         userdata = userdb.load(ctx.message.author.id)
