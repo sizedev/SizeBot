@@ -1,11 +1,12 @@
+import logging
+
 from sizebot.lib import utils
 
 
 # error.message will be printed when you do print(error)
 # error.user_message will be displayed to the user
 class DigiException(Exception):
-    __slots__ = ()
-    level = "warn"
+    level = logging.WARNING
 
     def formatMessage(self):
         return None
@@ -21,8 +22,7 @@ class DigiException(Exception):
 
 
 class DigiContextException(Exception):
-    __slots__ = ()
-    level = "warn"
+    level = logging.WARNING
 
     async def formatMessage(self, ctx):
         return None
@@ -87,14 +87,14 @@ class ChangeMethodInvalidException(DigiContextException):
 
 
 class CannotSaveWithoutIDException(DigiException):
-    level = "crit"
+    level = logging.CRITICAL
 
     def formatMessage(self):
         return "Tried to save a user without an ID."
 
 
 class NoPermissionsException(DigiException):
-    level = "error"
+    level = logging.ERROR
 
     def formatMessage(self):
         return "SizeBot does not have the permssions to perform this action."
