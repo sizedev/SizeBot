@@ -67,7 +67,8 @@ class ThisCog(commands.Cog):
         trackerdict = tracker.points
         lboard = sorted(trackerdict, key=trackerdict.get)
         messagetosend = "**__The Most Agreeable Users:__**\n"
-        for i in range(10):
+        userstooutput = 10 if len(lboard) > 10 else len(lboard)
+        for i in range(userstooutput):
             messagetosend += f"**{self.bot.get_user(lboard[i]).display_name}**: {lboard[i][0]}"
         await ctx.send(messagetosend)
 
