@@ -30,7 +30,7 @@ class NaptimeCog(commands.Cog):
 
         naps.start(ctx.author.id, ctx.guild.id, duration)
 
-        await ctx.send(f"See you in {duration:m}")
+        await ctx.send(f"See you in {duration:m}!")
 
     @commandsplus.command(
         hidden = True
