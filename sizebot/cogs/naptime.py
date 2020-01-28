@@ -24,7 +24,9 @@ class NaptimeCog(commands.Cog):
         hidden = True
     )
     async def naptime(self, ctx, *, duration: TV):
-        """Go to bed in a set amount of time
+        """Go to bed in a set amount of time.
+
+        Kicks you from any voice channel you're in after a set amount of time.
         """
         logger.info(f"{ctx.author.display_name} wants to go to sleep in {duration:m}.")
 
@@ -36,13 +38,13 @@ class NaptimeCog(commands.Cog):
         hidden = True
     )
     async def grump(self, ctx):
-        """Too grumpy for bed time
+        """Too grumpy for bed time.
         """
         logger.info(f"{ctx.author.display_name} wants to cancel bedtime.")
 
         nanny = naps.stop(ctx.author.id)
         if nanny is not None:
-            await ctx.send("Naptime has been cancelled")
+            await ctx.send("Naptime has been cancelled.")
 
     @commandsplus.command(
         aliases = ["nanny"],
@@ -50,14 +52,14 @@ class NaptimeCog(commands.Cog):
     )
     @commands.is_owner()
     async def nannies(self, ctx):
-        """Too grumpy for bed time
+        """Show me those nannies!
         """
         await ctx.message.delete(delay=0)
 
         nannyDump = naps.formatSummary()
 
         if not nannyDump:
-            nannyDump = "No active nannies"
+            nannyDump = "No active nannies."
 
         await ctx.author.send("**WAITING NANNIES**\n" + nannyDump)
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the waiting nannies.")
