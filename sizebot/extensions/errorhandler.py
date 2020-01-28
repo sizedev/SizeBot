@@ -17,7 +17,7 @@ def setup(bot):
         err = getattr(error, "original", error)
 
         # If we got some bad arguments, use a generic argument exception error
-        if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument):
+        if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument) or isinstance(err, commands.BadArgument):
             err = errors.ArgumentException()
 
         if isinstance(err, commands.NotOwner):
@@ -33,8 +33,7 @@ def setup(bot):
             # DigiContextException handling
             message = await err.formatMessage(ctx)
             if message is not None:
-                logCmd = getattr(logger, err.level, logger.warn)
-                await logCmd(message)
+                logger.log(err.level, message)
             userMessage = await err.formatUserMessage(ctx)
             if userMessage is not None:
                 await ctx.send(userMessage)
@@ -42,8 +41,7 @@ def setup(bot):
             # DigiException handling
             message = err.formatMessage()
             if message is not None:
-                logCmd = getattr(logger, err.level, logger.warn)
-                await logCmd(message)
+                logger.log(err.level, message)
             userMessage = err.formatUserMessage()
             if userMessage is not None:
                 await ctx.send(userMessage)
@@ -67,13 +65,11 @@ def setup(bot):
         if isinstance(err, errors.DigiException):
             message = err.formatMessage()
             if message is not None:
-                logCmd = getattr(logger, err.level, logger.warn)
-                await logCmd(message)
+                logger.log(err.level, message)
         if isinstance(err, errors.DigiContextException):
             message = str(err)
             if message is not None:
-                logCmd = getattr(logger, err.level, logger.warn)
-                await logCmd(message)
+                logger.log(err.level, message)
         else:
             logger.error(f"Ignoring exception in {event}")
             logger.error(utils.formatTraceback(error))
