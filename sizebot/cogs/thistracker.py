@@ -63,12 +63,13 @@ class ThisCog(commands.Cog):
     )
     @commands.guild_only()
     async def leaderboard(self, ctx):
+        """See who's the most agreeable!"""
         tracker = ThisTracker.load()
         trackerlist = sorted(tracker.points.items(), key=lambda i: i[1], reverse= True)
         messagetosend = "**__The Most Agreeable Users:__**"
         for userid, points in trackerlist[:10]:
             messagetosend += f"\n**{self.bot.get_user(userid).display_name}**: {points}"
-        await ctx.send(messagetosend)
+        await ctx.send(messagetosend)  # TODO: Make this an embed.
 
     @commands.Cog.listener()
     async def on_message(self, m):
