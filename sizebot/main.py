@@ -101,14 +101,16 @@ def main():
     @bot.event
     async def on_message(message):
         if message.content.endswith(" --no-fund"):  # TODO: Make this capture all flags. Parse them?
-            message = message[:-10]
+            message.content = message.content[:-10]
         await bot.process_commands(message)
 
     @bot.event
-    async def on_message_edit(message):
-        if message.content.endswith(" --no-fund"):  # See above.
-            message = message[:-10]
-        await bot.process_commands(message)
+    async def on_message_edit(before, after):
+        if before.content == after.content:
+            return
+        if after.content.endswith(" --no-fund"):  # See above.
+            after.content = after.content[:-10]
+        await bot.process_commands(after)
 
     @bot.event
     async def on_disconnect():
