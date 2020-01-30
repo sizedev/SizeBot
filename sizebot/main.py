@@ -115,7 +115,6 @@ def main():
     @bot.event
     async def on_disconnect():
         logger.error("SizeBot has been disconnected from Discord!")
-        status.stopping()
 
     if not conf.authtoken:
         logger.error(f"Authentication token not found!")
