@@ -1,9 +1,11 @@
 import json
 import discord
+from datetime import datetime
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot import conf
+from sizebot import __version__
 
 
 class ThisTracker():
@@ -64,12 +66,17 @@ class ThisCog(commands.Cog):
     @commands.guild_only()
     async def leaderboard(self, ctx):
         """See who's the most agreeable!"""
+        now = datetime.now()
         tracker = ThisTracker.load()
         trackerlist = sorted(tracker.points.items(), key=lambda i: i[1], reverse= True)
-        messagetosend = "**__The Most Agreeable Users:__**"
+        embed = discord.Embed(title=f"The Most Agreeable Users", color=0x31eff9)
+        embed.set_author(name=f"SizeBot {__version__}")
+        messagetosend = ""
         for userid, points in trackerlist[:10]:
-            messagetosend += f"\n**{self.bot.get_user(userid).display_name}**: {points}"
-        await ctx.send(messagetosend)  # TODO: Make this an embed.
+            messagetosend += f"**{self.bot.get_user(userid).display_name}**: {points}\n"
+        embed.add_field(name="\u200b", value=messagetosend.strip(), inline=False)
+        embed.set_footer(text=f"{now.strftime('%d %b %Y %H:%M:%S %Z')}")
+        await ctx.send(embed = embed)
 
     @commands.Cog.listener()
     async def on_message(self, m):
