@@ -73,8 +73,8 @@ class ThisCog(commands.Cog):
         embed = discord.Embed(title=f"The Most Agreeable Users", color=0x31eff9)
         embed.set_author(name=f"SizeBot {__version__}")
         messagetosend = ""
-        for userid, points in trackerlist[0]:
-            fieldtitle = f"**{self.bot.get_user(userid).display_name}**: {points}"
+        userid, points = trackerlist[0]
+        fieldtitle = f"**{self.bot.get_user(userid).display_name}**: {points}"
         for userid, points in trackerlist[1:10]:
             messagetosend += f"**{self.bot.get_user(userid).display_name}**: {points}\n"
         embed.add_field(name=fieldtitle, value=messagetosend.strip(), inline=False)
