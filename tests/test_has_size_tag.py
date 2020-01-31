@@ -1,4 +1,4 @@
-from sizebot.util import hasSizeTag
+from sizebot.lib.utils import hasSizeTag
 
 
 def test_integer_one_unit():
