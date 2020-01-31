@@ -49,9 +49,22 @@ class ThisTracker():
         return ThisTracker(points)
 
 
+def isAgreementEmoji(emoji):
+    if isinstance(emoji, discord.Emoji):
+        if emoji.name.lower() in ["this", "brilliancethis", "braverythis", "balancethis", "123this"]:
+            return True
+    else:
+        if emoji in ["🔼", "⬆️", "⤴️", "☝️"]:
+            return True
+
+
+def isAgreementMessage(message):
+    return isAgreementEmoji(message) or message.lower() in ["this", "^", "agree"] or message.startswith("^")
+
+
 def findLatestNonThis(messages):
     for message in messages:
-        if not message.content.startswith("^") or message.content.lower() in ["this", "🔼", "⬆️", "⤴️"]:
+        if not isAgreementMessage(message.content):
             return message
 
 
@@ -85,7 +98,7 @@ class ThisCog(commands.Cog):
     async def on_message(self, m):
         if m.author.bot:
             return
-        if m.content.startswith("^") or m.content.lower() == "this":
+        if isAgreementMessage(m.content):
             channel = m.channel
             messages = await channel.history(limit=100).flatten()
             if findLatestNonThis(messages).author.id == m.author.id:
@@ -101,14 +114,9 @@ class ThisCog(commands.Cog):
             return
         if r.message.author.id == u.id:
             return
-        if isinstance(r, discord.Reaction):
-            if r.emoji.name.lower() in ["this", "brilliancethis", "braverythis", "balancethis", "123this"]:
-                tracker.incrementPoints(r.message.author.id)
-                tracker = ThisTracker.load()
-        else:
-            if r.emoji in ["🔼", "⬆️", "⤴️"]:
-                tracker.incrementPoints(r.message.author.id)
-                tracker.save()
+        if isAgreementEmoji(r.emoji):
+            tracker.incrementPoints(r.message.author.id)
+            tracker.save()
 
 
 def setup(bot):
