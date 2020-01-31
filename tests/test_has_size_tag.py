@@ -91,6 +91,66 @@ def test_decimal_one_long_unit_plus_commas():
     assert val is True
 
 
+def test_integer_E_pos_no_plus():
+    val = hasSizeTag("DigiDuncan [1E10ly]")
+    assert val is True
+
+
+def test_integer_E_pos_plus():
+    val = hasSizeTag("DigiDuncan [1E+10ly]")
+    assert val is True
+
+
+def test_integer_E_neg():
+    val = hasSizeTag("DigiDuncan [1E-10ly]")
+    assert val is True
+
+
+def test_integer_e_pos_no_plus():
+    val = hasSizeTag("DigiDuncan [1e10ly]")
+    assert val is True
+
+
+def test_integer_e_pos_plus():
+    val = hasSizeTag("DigiDuncan [1e+10ly]")
+    assert val is True
+
+
+def test_integer_e_neg():
+    val = hasSizeTag("DigiDuncan [1e-10ly]")
+    assert val is True
+
+
+def test_decimal_E_pos_no_plus():
+    val = hasSizeTag("DigiDuncan [1.1E10ly]")
+    assert val is True
+
+
+def test_decimal_E_pos_plus():
+    val = hasSizeTag("DigiDuncan [1.1E+10ly]")
+    assert val is True
+
+
+def test_decimal_E_neg():
+    val = hasSizeTag("DigiDuncan [1.1E-10ly]")
+    assert val is True
+
+
+def test_decimal_e_pos_no_plus():
+    val = hasSizeTag("DigiDuncan [1.1e10ly]")
+    assert val is True
+
+
+def test_decimal_e_pos_plus():
+    val = hasSizeTag("DigiDuncan [1.1e+10ly]")
+    assert val is True
+
+
+def test_decimal_e_neg():
+    val = hasSizeTag("DigiDuncan [1.1e-10ly]")
+    assert val is True
+
+
 def test_zero():
     val = hasSizeTag("DigiDuncan [0]")
     assert val is True
