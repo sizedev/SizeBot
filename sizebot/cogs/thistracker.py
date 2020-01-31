@@ -86,11 +86,10 @@ class ThisCog(commands.Cog):
         embed = discord.Embed(title=f"The Most Agreeable Users", color=0x31eff9)
         embed.set_author(name=f"SizeBot {__version__}")
         messagetosend = ""
-        userid, points = trackerlist[0]
-        fieldtitle = f"**{self.bot.get_user(userid).display_name}**: {points}"
-        for userid, points in trackerlist[1:10]:
+        totalpoints = sum(tracker.points.values())
+        for userid, points in trackerlist[0:10]:
             messagetosend += f"**{self.bot.get_user(userid).display_name}**: {points}\n"
-        embed.add_field(name=fieldtitle, value=messagetosend.strip(), inline=False)
+        embed.add_field(name=f"{totalpoints} total agreements", value=messagetosend.strip(), inline=False)
         embed.set_footer(text=f"{now.strftime('%d %b %Y %H:%M:%S %Z')}")
         await ctx.send(embed = embed)
 
