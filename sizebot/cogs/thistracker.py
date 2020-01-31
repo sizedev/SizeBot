@@ -111,12 +111,12 @@ class ThisCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_reaction_add(self, r, u):
-        tracker = ThisTracker.load()
         if r.message.author.bot:
             return
         if r.message.author.id == u.id:
             return
         if isAgreementEmoji(r.emoji):
+            tracker = ThisTracker.load()
             tracker.incrementPoints(r.message.author.id)
             tracker.save()
 

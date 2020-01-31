@@ -276,7 +276,7 @@ def hasSizeTag(s):
 
 def stripSizeTag(s):
     if hasSizeTag(s):
-        re_sizetagloose = re.compile(r"^(.*) \[.*\]$", re.DOTALL)
+        re_sizetagloose = re.compile(r"^(.*) \[.*\]$", re.DOTALL)  # TODO: Make this less clumsy. Use the actual regex we made?
         s_sizetagloose = re.sub(re_sizetagloose, r"\1", s)
         return s_sizetagloose
     return s
