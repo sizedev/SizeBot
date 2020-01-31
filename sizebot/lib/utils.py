@@ -265,4 +265,4 @@ def removeCodeBlock(s):
 
 
 def hasSizeTag(s):
-    return re.search(s, re_sizetag) is not None
+    return re_sizetag.search(s) is not None
