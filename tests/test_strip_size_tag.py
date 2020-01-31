@@ -163,12 +163,7 @@ def test_strip_infinity():
 
 def test_strip_zalgo():
     val = stripSizeTag("D̶̨i͏̢͟g͞i̴͡D͝ư͢nc͞an̸ [5'8\"]")
-    assert val == "DigiDuncan"
-
-
-def test_strip_brackets_in_name():
-    val = stripSizeTag("[DigiDuncan] [5'8\"]")
-    assert val == "DigiDuncan"
+    assert val == "D̶̨i͏̢͟g͞i̴͡D͝ư͢nc͞an̸"
 
 
 def test_strip_empty_tag():
