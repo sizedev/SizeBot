@@ -22,6 +22,7 @@ emojis = {
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
 
+# TODO: Move to somewhere other than here.
 # Update users nicknames to include sizetags
 async def nickUpdate(user):
     # webhooks
@@ -83,6 +84,7 @@ async def nickUpdate(user):
         raise errors.NoPermissionsException
 
 
+# TODO: Move to somewhere other than here.
 async def nickReset(user):
     """Remove sizetag from user's nickname"""
     # webhooks
