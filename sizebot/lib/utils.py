@@ -4,7 +4,36 @@ import traceback
 import re
 from functools import reduce
 
-re_num = "\\d+\\.?\\d*"
+re_num = r"\d+\.?\d*"
+re_sizetag = re.compile(r"""
+\[              # start with a left bracket
+# the size bit
+(
+    # a standard quantity + unit
+    (
+        # the quantity bit
+        (
+            (\d{1,3},)*     # which might have some groups of numbers with commas
+            \d+             # but it will definitely have a group of numbers in it
+            # maybe even a fraction or decimal part
+            (
+                .\d+        # decimal
+                |[⅛¼⅜½⅝¾⅞]  # or fractional
+            )?
+        )
+        # the unit bit
+        (
+            \w{1,4}     # between 1-4 letters
+            |[\'\"]     # or ' or "
+        )
+    ){1,2}  # either 1 or 2 units per tag
+    |0      # or zero
+    |∞      # or infinity
+)
+# the species bit (optional)
+(,\s*.+)?   # a comma, a space, and some characters
+\]\Z        # and a right bracket at the end of the name
+""", re.VERBOSE)
 
 
 def clamp(minVal, val, maxVal):
@@ -233,3 +262,7 @@ def removeCodeBlock(s):
         return s_nominiblock
 
     return s
+
+
+def hasSizeTag(s):
+    return re.search(s, re_sizetag) is not None
