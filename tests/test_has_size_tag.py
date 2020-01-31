@@ -102,7 +102,7 @@ def test_infinity():
 
 
 def test_zalgo():
-    val = hasSizeTag("D̶̨i͏̢͟g͞i̴͡D͝ư͢nc͞an̸ [5'8]")
+    val = hasSizeTag("D̶̨i͏̢͟g͞i̴͡D͝ư͢nc͞an̸ [5'8\"]")
     assert val is True
 
 
