@@ -14,9 +14,13 @@
 - Added a new command, `&objcompare`, which lets you see what object you are closest to in height and weight.
     - Displays different, random comparisons from a list of close comparisons on every run.
     - Includes fractional output to the nearest eighth, and accuracy percentages!
+- Added an Agreements Leaderboard.
+    - Sending either `^`, `this`, `agree`, or one of many various "this" emotes after a message, or reacting to a message with one of those emotes, will give that user an "agreement point."
+    - The leaderboard for this can be displayed with `&leaderboard`.
 - Added a `&ping` command, to see if it's us who's lagging, or it's just Discord again.
 - Added a new command, `&naptime`, which kicks you from any voice channel you're in after a set duration.
 - Users now have the ability to use some simple SizeBot functions in DMs, including `&roll`, `&help`, and `&about`.
+- You can now edit a failed command message, and it will rerun the command.
 - Some fun easter eggs were added to SizeBot as well! Good luck finding them! :wink:
 
 ## Changes
