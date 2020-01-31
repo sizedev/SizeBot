@@ -272,3 +272,11 @@ def removeCodeBlock(s):
 
 def hasSizeTag(s):
     return re_sizetag.search(s) is not None
+
+
+def stripSizeTag(s):
+    if hasSizeTag(s):
+        re_sizetagloose = re.compile(r"^(.*) \[.*\]$", re.DOTALL)
+        s_sizetagloose = re.sub(re_sizetagloose, r"\1", s)
+        return s_sizetagloose
+    return s
