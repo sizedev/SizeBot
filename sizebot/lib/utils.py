@@ -17,7 +17,7 @@ re_sizetag = re.compile(r"""
             \d+             # but it will definitely have a group of numbers in it
             # maybe even a fraction or decimal part
             (
-                .\d+        # decimal
+                \.\d+        # decimal
                 |[⅛¼⅜½⅝¾⅞]  # or fractional
             )?
             # it might even have Es
