@@ -14,7 +14,7 @@ re_sizetag = re.compile(r"""
         # the quantity bit
         (
             (\d{1,3},)*     # which might have some groups of numbers with commas
-            \d+             # but it will definitely have a group of numbers in it
+            \d+|[⅛¼⅜½⅝¾⅞]   # but it will definitely have a group of numbers in it
             # maybe even a fraction or decimal part
             (
                 \.\d+        # decimal
