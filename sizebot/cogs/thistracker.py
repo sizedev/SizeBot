@@ -50,16 +50,19 @@ class ThisTracker():
 
 
 def isAgreementEmoji(emoji):
+    discordagreements = ["this", "brilliancethis", "braverythis", "balancethis", "123this"]
+    unicodeagreements = ["🔼", "⬆️", "⤴️", "☝️"]
     if isinstance(emoji, discord.Emoji):
-        if emoji.name.lower() in ["this", "brilliancethis", "braverythis", "balancethis", "123this"]:
+        if emoji.name.lower() in discordagreements:
             return True
     else:
-        if emoji in ["🔼", "⬆️", "⤴️", "☝️"]:
+        if emoji in unicodeagreements:
             return True
 
 
 def isAgreementMessage(message):
-    return isAgreementEmoji(message) or message.lower() in ["this", "^", "agree"] or message.startswith("^")
+    textagreements = ["this", "^", "agree"]
+    return isAgreementEmoji(message) or message.lower() in textagreements or message.startswith("^")
 
 
 def findLatestNonThis(messages):
