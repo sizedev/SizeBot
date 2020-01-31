@@ -151,6 +151,11 @@ def test_decimal_e_neg():
     assert val is True
 
 
+def test_fractional_inch():
+    val = hasSizeTag("DigiDuncan [⅝in]")
+    assert val is True
+
+
 def test_zero():
     val = hasSizeTag("DigiDuncan [0]")
     assert val is True
