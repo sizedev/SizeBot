@@ -27,7 +27,7 @@ class HolidayCog(commands.Cog):
             nowtime = now.time()
             TWENTY_FOUR_HOURS = timedelta(hours = 24)
             tomorrow = now + TWENTY_FOUR_HOURS
-            midnight = time(hours = 0, minutes = 0, seconds = 0)
+            midnight = time(hour = 0, minute = 0, second = 0)
             midnighttime = datetime.combine(tomorrow, midnight)
             nowday = now.day
 
