@@ -32,6 +32,7 @@ userdbpath = None
 telemetrypath = None
 changespath = None
 prefix = "&"
+name = "SizeBot"
 authtoken = None
 admins = []             # List of admins
 ids = dict()            # List of ids by name
@@ -56,6 +57,8 @@ def load():
     # Sizebot
     if utils.hasPath(configDict, "sizebot.prefix"):
         prefix = utils.getPath(configDict, "sizebot.prefix")
+    if utils.hasPath(configDict, "sizebot.name"):
+        prefix = utils.getPath(configDict, "sizebot.name")
 
     # Discord
     if utils.hasPath(configDict, "discord.authtoken"):
