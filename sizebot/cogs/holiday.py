@@ -4,7 +4,7 @@ from discord.ext import commands, tasks
 from datetime import datetime, time, date
 from sizebot import conf
 
-from utils import intToRoman
+from sizebot.utils import intToRoman
 
 logger = logging.getLogger("sizebot")
 
