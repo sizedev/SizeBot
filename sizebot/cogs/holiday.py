@@ -41,7 +41,7 @@ class HolidayCog(commands.Cog):
                 newnick += f" {intToRoman(int(now.year))}"
             if now.month == 3 and now.day == 10:  # Digi's birthday
                 newnick += " 🎉"
-            if newnick != self.bot.user.nickname:
+            if newnick != self.bot.user.name:
                 self.bot.user.edit(username = newnick)
         except Exception as err:
             logger.error(formatTraceback(err))
