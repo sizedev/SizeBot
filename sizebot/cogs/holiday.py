@@ -42,9 +42,13 @@ class HolidayCog(commands.Cog):
             if now.month == 3 and now.day == 10:  # Digi's birthday
                 newnick += " 🎉"
             if newnick != self.bot.user.name:
-                self.bot.user.edit(username = newnick)
+                await self.bot.user.edit(username = newnick)
         except Exception as err:
             logger.error(formatTraceback(err))
+
+    @holidayTask.before_loop
+    async def before_holidayTask(self):
+        await self.bot.wait_until_ready()
 
 
 def setup(bot):
