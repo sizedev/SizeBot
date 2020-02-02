@@ -1,7 +1,7 @@
 import logging
 
 from discord.ext import commands, tasks
-from datetime import datetime, time, date
+from datetime import datetime, time, date, timedelta
 from sizebot import conf
 
 from sizebot.lib.utils import intToRoman
@@ -21,16 +21,21 @@ class HolidayCog(commands.Cog):
 
     @tasks.loop(seconds=60)
     async def holidayTask(self):
+        """Holiday checker"""
         try:
-            """Holiday checker"""
             now = datetime.now()
             nowtime = now.time()
+            TWENTY_FOUR_HOURS = timedelta(hours = 24)
+            tomorrow = now + TWENTY_FOUR_HOURS
+            midnight = time(hours = 0, minutes = 0, seconds = 0)
+            midnighttime = datetime.combine(tomorrow, midnight)
             nowday = now.day
-            midnight = time(hour = 0, minute = 0)
+
             # Make sure our loop point is midnight.
             if nowtime != midnight:
-                timeuntilmidnight = midnight - nowtime
+                timeuntilmidnight = midnighttime - now
                 self.holidayTask.change_interval(seconds = timeuntilmidnight.total_seconds())
+
             # Holiday checks.
             newnick = conf.name
             if nowday == date(month = 1, day = 1).day:  # New Year's Day
