@@ -6,39 +6,40 @@ from functools import reduce
 
 re_num = r"\d+\.?\d*"
 re_sizetag = re.compile(r"""
-\[              # start with a left bracket
+\[  # start with a left bracket
 # the size bit
 (
     # a standard quantity + unit
     (
         # the quantity bit
         (
-            (\d{1,3},)*     # which might have some groups of numbers with commas
-            (\d+|[⅛¼⅜½⅝¾⅞])   # but it will definitely have a group of numbers in it
+            (\d{1,3},)*      # which might have some groups of numbers with commas
+            (\d+|[⅛¼⅜½⅝¾⅞])  # but it will definitely have a group of numbers in it, or a single fraction
             # maybe even a fraction or decimal part
             (
-                \.\d+        # decimal
+                \.\d+       # decimal
                 |[⅛¼⅜½⅝¾⅞]  # or fractional
             )?
             # it might even have Es
             (
-                [Ee]
-                [-+]?
-                \d+
+                [Ee]   # uppercase or lowercase E
+                [-+]?  # it might have a sign
+                \d+    # E values are always integers
             )?
         )
         # the unit bit
         (
-            [^\s\d\'\"\W]{1,4}     # between 1-4 letters
-            |[\'\"]     # or ' or "
+            [^\s\d\'\"\W]{1,4}  # between 1-4 symbols which resemble letters
+            |[\'\"]             # or ' or "
         )
     ){1,2}  # either 1 or 2 units per tag
-    |0      # or zero
-    |∞      # or infinity
+    |0      # or the whole unit can just be zero
+    |∞   # or infinity
 )
 # the species bit (optional)
 (,\s*.+)?   # a comma, a space, and some characters
-\]\Z        # and a right bracket at the end of the name
+# and a right bracket at the end of the name
+\]\Z
 """, re.VERBOSE)
 
 
