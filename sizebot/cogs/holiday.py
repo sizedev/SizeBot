@@ -4,7 +4,7 @@ from discord.ext import commands, tasks
 from datetime import datetime, time, date, timedelta
 from sizebot import conf
 
-from sizebot.lib.utils import intToRoman
+from sizebot.lib.utils import intToRoman, formatTraceback
 
 logger = logging.getLogger("sizebot")
 
@@ -45,7 +45,7 @@ class HolidayCog(commands.Cog):
             if newnick != self.bot.user.nickname:
                 self.bot.user.edit(username = newnick)
         except Exception as err:
-            logger.error(err)
+            logger.error(formatTraceback(err))
 
 
 def setup(bot):
