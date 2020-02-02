@@ -24,6 +24,7 @@ initial_cogs = [
     "eval",
     "fun",
     "help",
+    "holiday",
     "keypad",
     "meicros",
     "monika",
