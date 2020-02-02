@@ -29,7 +29,7 @@ re_sizetag = re.compile(r"""
         )
         # the unit bit
         (
-            [a-zA-Z]{1,4}     # between 1-4 letters
+            [^\s\d]{1,4}     # between 1-4 letters
             |[\'\"]     # or ' or "
         )
     ){1,2}  # either 1 or 2 units per tag
