@@ -1,7 +1,7 @@
 import logging
 
 from discord.ext import commands, tasks
-from datetime import datetime, time, date, timedelta
+from datetime import datetime, time, timedelta
 from sizebot import conf
 
 from sizebot.lib.utils import intToRoman, formatTraceback
@@ -29,7 +29,6 @@ class HolidayCog(commands.Cog):
             tomorrow = now + TWENTY_FOUR_HOURS
             midnight = time(hour = 0, minute = 0, second = 0)
             midnighttime = datetime.combine(tomorrow, midnight)
-            nowday = now.day
 
             # Make sure our loop point is midnight.
             if nowtime != midnight:
@@ -38,9 +37,9 @@ class HolidayCog(commands.Cog):
 
             # Holiday checks.
             newnick = conf.name
-            if nowday == date(month = 1, day = 1).day:  # New Year's Day
+            if now.month == 1 and now.day == 1:  # New Year's Day
                 newnick += f" {intToRoman(int(now.year))}"
-            if nowday == date(month = 3, day = 10).day:  # Digi's birthday
+            if now.month == 3 and now.day == 10:  # Digi's birthday
                 newnick += " 🎉"
             if newnick != self.bot.user.nickname:
                 self.bot.user.edit(username = newnick)
