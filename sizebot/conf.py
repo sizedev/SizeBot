@@ -51,14 +51,14 @@ confpath = datadir / "sizebot.conf"
 
 
 def load():
-    global prefix, authtoken, admins, ids, emoji, logchannelid
+    global prefix, name, authtoken, admins, ids, emoji, logchannelid
     configDict = toml.load(confpath)
 
     # Sizebot
     if utils.hasPath(configDict, "sizebot.prefix"):
         prefix = utils.getPath(configDict, "sizebot.prefix")
     if utils.hasPath(configDict, "sizebot.name"):
-        prefix = utils.getPath(configDict, "sizebot.name")
+        name = utils.getPath(configDict, "sizebot.name")
 
     # Discord
     if utils.hasPath(configDict, "discord.authtoken"):
