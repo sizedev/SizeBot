@@ -23,6 +23,7 @@ class HolidayCog(commands.Cog):
     async def holidayTask(self):
         """Holiday checker"""
         try:
+            logger.debug("Checking for holidays")
             now = datetime.now()
             nowtime = now.time()
             TWENTY_FOUR_HOURS = timedelta(hours = 24)
@@ -38,11 +39,18 @@ class HolidayCog(commands.Cog):
             # Holiday checks.
             newnick = conf.name
             if now.month == 1 and now.day == 1:  # New Year's Day
+                logger.debug("Happy new year!")
                 newnick += f" {intToRoman(int(now.year))}"
-            if now.month == 3 and now.day == 10:  # Digi's birthday
+            elif now.month == 3 and now.day == 10:  # Digi's birthday
+                logger.debug("Happy birthday Digi!")
                 newnick += " 🎉"
+            else:
+                logger.debug("Just another boring non-holiday")
+
             if newnick != self.bot.user.name:
+                logger.debug(f"Updating bot nick to {newnick}")
                 await self.bot.user.edit(username = newnick)
+
         except Exception as err:
             logger.error(formatTraceback(err))
 
