@@ -57,7 +57,7 @@ class HolidayCog(commands.Cog):
                 logger.debug("Happy Halloween!")
                 newnick = "SpookBot 🎃"
                 newactivityname = "OoOoOoOo"
-            elif now.month == 12 and now.day == 25:  # Halloween
+            elif now.month == 12 and now.day == 25:  # Christmas
                 logger.debug("Merry Christmas!")
                 newnick = "SizeSanta 🎄"
                 newactivityname = "Merry Christmas!"
