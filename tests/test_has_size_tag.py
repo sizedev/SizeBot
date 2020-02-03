@@ -226,6 +226,11 @@ def space_between_unit():
     assert val is False
 
 
+def unit_is_the_word_inch():
+    val = hasSizeTag("DigiDuncan [1inch]")
+    assert val is False
+
+
 # Tests with species
 # True
 
@@ -449,6 +454,11 @@ def dot_after_unit_plus_species():
 
 def space_between_unit_plus_species():
     val = hasSizeTag("DigiDuncan [1 in, Species]")
+    assert val is False
+
+
+def unit_is_the_word_inch_plus_species():
+    val = hasSizeTag("DigiDuncan [1inch, Species]")
     assert val is False
 
 

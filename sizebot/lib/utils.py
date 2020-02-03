@@ -29,8 +29,10 @@ re_sizetag = re.compile(r"""
         )
         # the unit bit
         (
-            [^\s\d\'\"\W]{1,4}  # between 1-4 symbols which resemble letters
-            |[\'\"]             # or ' or "
+            [YZEPTGMkcmμnpfazy]?    # might have a SI prefix
+            [a-ZA-Z]{1-3]           # between 1-3 letters
+            [^\s\d\'\"\W]{1,3}      # between 1-3 symbols which resemble letters
+            |[\'\"]                 # or ' or "
         )
     ){1,2}  # either 1 or 2 units per tag
     |0      # or the whole unit can just be zero
