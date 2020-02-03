@@ -33,6 +33,7 @@ telemetrypath = None
 changespath = None
 prefix = "&"
 name = "SizeBot"
+activity = "Ratchet and Clank: Size Matters"
 authtoken = None
 admins = []             # List of admins
 ids = dict()            # List of ids by name
@@ -51,7 +52,7 @@ confpath = datadir / "sizebot.conf"
 
 
 def load():
-    global prefix, name, authtoken, admins, ids, emoji, logchannelid
+    global prefix, name, activity, authtoken, admins, ids, emoji, logchannelid
     configDict = toml.load(confpath)
 
     # Sizebot
@@ -59,6 +60,8 @@ def load():
         prefix = utils.getPath(configDict, "sizebot.prefix")
     if utils.hasPath(configDict, "sizebot.name"):
         name = utils.getPath(configDict, "sizebot.name")
+    if utils.hasPath(configDict, "sizebot.activity"):
+        activity = utils.getPath(configDict, "sizebot.activity")
 
     # Discord
     if utils.hasPath(configDict, "discord.authtoken"):
