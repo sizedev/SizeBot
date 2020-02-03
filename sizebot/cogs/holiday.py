@@ -35,7 +35,8 @@ class HolidayCog(commands.Cog):
             # Make sure our loop point is midnight.
             if nowtime != midnight:
                 timeuntilmidnight = midnighttime - now
-                self.holidayTask.change_interval(seconds = timeuntilmidnight.total_seconds())
+                secondsuntilmidnight = timeuntilmidnight.total_seconds()
+                self.holidayTask.change_interval(seconds = secondsuntilmidnight)
 
             # Holiday checks.
             newnick = conf.name
