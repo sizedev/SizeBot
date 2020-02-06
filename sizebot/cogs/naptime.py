@@ -20,6 +20,7 @@ class NaptimeCog(commands.Cog):
         self.nannyTask.cancel()
 
     @commandsplus.command(
+        aliases = ["chloroform"],
         usage="<duration>",
         hidden = True
     )
