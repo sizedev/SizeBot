@@ -7,8 +7,8 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot import __version__
-from sizebot import conf, userdb
-from sizebot.lib import utils
+from sizebot import conf
+from sizebot.lib import utils, userdb
 from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
