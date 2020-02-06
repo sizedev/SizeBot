@@ -12,7 +12,7 @@ logger = logging.getLogger("sizebot")
 
 
 async def addUserRole(member):
-    sizebotuserroleid = utils.getID("sizebotuserrole")
+    sizebotuserroleid = utils.getId("sizebotuserrole")
     role = get(member.guild.roles, id = sizebotuserroleid)
     if role is None:
         logger.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")
@@ -21,7 +21,7 @@ async def addUserRole(member):
 
 
 async def removeUserRole(member):
-    sizebotuserroleid = utils.getID("sizebotuserrole")
+    sizebotuserroleid = utils.getId("sizebotuserrole")
     role = get(member.guild.roles, id = sizebotuserroleid)
     if role is None:
         logger.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")

@@ -176,7 +176,7 @@ class HelpCog(commands.Cog):
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-        await self.bot.get_user(utils.getID("DigiDuncan")).send(f"Bug report from <@{ctx.message.author.id}>: {message}")
+        await self.bot.get_user(utils.getId("DigiDuncan")).send(f"Bug report from <@{ctx.message.author.id}>: {message}")
 
         @commandsplus.command(
             usage = "<message>"
@@ -184,7 +184,7 @@ class HelpCog(commands.Cog):
         async def suggest(self, ctx, *, message: str):
             """Suggest a feature for SizeBot!"""
             logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-            await self.bot.get_user(utils.getID("DigiDuncan")).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
+            await self.bot.get_user(utils.getId("DigiDuncan")).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
 
     @commandsplus.command()
     async def ping(self, ctx):

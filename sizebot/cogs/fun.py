@@ -19,7 +19,7 @@ class FunCog(commands.Cog):
     )
     @commands.is_owner()
     async def repeat(self, ctx, delay: float, *, message: str):
-        if ctx.message.author.id != utils.getID("DigiDuncan"):
+        if ctx.message.author.id != utils.getId("DigiDuncan"):
             return
         await ctx.message.delete(delay=0)
 
