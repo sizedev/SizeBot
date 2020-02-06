@@ -1,5 +1,5 @@
 from sizebot.lib.decimal import Decimal
-from sizebot import userdb
+from sizebot.lib import userdb
 
 # Deprecated user array constants
 NICK = 0
