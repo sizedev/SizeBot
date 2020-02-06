@@ -5,7 +5,7 @@ import discord
 
 from sizebot import __version__
 from sizebot.lib import userdb
-from sizebot.userdb import defaultheight, defaultweight
+from sizebot.lib.userdb import defaultheight, defaultweight
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
 from sizebot.lib import errors, utils
