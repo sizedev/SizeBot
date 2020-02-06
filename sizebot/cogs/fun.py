@@ -3,7 +3,7 @@ import asyncio
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot import conf
+from sizebot import utils
 
 tasks = {}
 
@@ -19,7 +19,7 @@ class FunCog(commands.Cog):
     )
     @commands.is_owner()
     async def repeat(self, ctx, delay: float, *, message: str):
-        if ctx.message.author.id != conf.getId("DigiDuncan"):
+        if ctx.message.author.id != utils.getID("DigiDuncan"):
             return
         await ctx.message.delete(delay=0)
 

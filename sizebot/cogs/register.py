@@ -5,7 +5,7 @@ from discord.ext import commands
 from discord.utils import get
 from sizebot.discordplus import commandsplus
 
-from sizebot import conf, userdb
+from sizebot import utils, userdb
 from sizebot.lib.units import SV, WV
 from sizebot.lib import proportions
 
@@ -13,7 +13,7 @@ logger = logging.getLogger("sizebot")
 
 
 async def addUserRole(member):
-    sizebotuserroleid = conf.getId("sizebotuserrole")
+    sizebotuserroleid = utils.getID("sizebotuserrole")
     role = get(member.guild.roles, id = sizebotuserroleid)
     if role is None:
         logger.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")
@@ -22,7 +22,7 @@ async def addUserRole(member):
 
 
 async def removeUserRole(member):
-    sizebotuserroleid = conf.getId("sizebotuserrole")
+    sizebotuserroleid = utils.getID("sizebotuserrole")
     role = get(member.guild.roles, id = sizebotuserroleid)
     if role is None:
         logger.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")

@@ -43,7 +43,7 @@ async def sayMilestone(channel, winkcount):
     timeperwink = timesince / winkcount
     prettytimeperwink = utils.prettyTimeDelta(timeperwink.total_seconds())
     winksperday = winkcount / (timesince / timedelta(days = 1))
-    yukioid = conf.getId("Yukio")
+    yukioid = utils.getID("Yukio")
 
     await channel.send(f":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball\n:"
                        f"It took **{prettytimesince}** to hit this milestone!\n"
@@ -65,7 +65,7 @@ class WinksCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.id != conf.getId("Yukio"):
+        if message.author.id != utils.getID("Yukio"):
             return
 
         winksSeen = countWinks(message.content)
