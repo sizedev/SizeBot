@@ -70,6 +70,3 @@ def load():
     logchannelid = utils.getPath(configDict, "discord.logchannelid")
     if logchannelid is not None:
         logchannelid = int(logchannelid)
-
-
-load()

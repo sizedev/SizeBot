@@ -46,6 +46,11 @@ initial_extensions = [
 
 
 def main():
+    try:
+        conf.load()
+    except FileNotFoundError as e:
+        logger.error(f"Configuration file not found: {e.filename}")
+        return
     constants.load()
 
     booting = True
