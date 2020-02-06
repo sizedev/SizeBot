@@ -4,8 +4,8 @@ import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot.lib.eval import runEval
 from sizebot.lib import utils
+from sizebot.lib.eval import runEval
 
 logger = logging.getLogger("sizebot")
 

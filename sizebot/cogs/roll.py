@@ -7,6 +7,7 @@ from sizebot.lib import roller
 
 logger = logging.getLogger("sizebot")
 
+
 class RollCog(commands.Cog):
     """Commands for dice rolling."""
 

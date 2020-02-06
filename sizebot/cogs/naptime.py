@@ -1,10 +1,10 @@
 import logging
 
 from discord.ext import commands, tasks
-
 from sizebot.discordplus import commandsplus
-from sizebot.lib.units import TV
+
 from sizebot.lib import naps
+from sizebot.lib.units import TV
 
 logger = logging.getLogger("sizebot")
 

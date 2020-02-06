@@ -4,9 +4,8 @@ import logging
 from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus
 
-from sizebot.lib import userdb
+from sizebot.lib import changes, proportions, userdb
 from sizebot.lib.units import Rate
-from sizebot.lib import changes, proportions
 
 logger = logging.getLogger("sizebot")
 

@@ -8,7 +8,7 @@ from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
 from sizebot import conf
-from sizebot.lib import units, objs, status
+from sizebot.lib import objs, status, units
 from sizebot.lib.discordlogger import DiscordHandler
 
 logging.basicConfig(level=logging.INFO)

@@ -5,8 +5,7 @@ import logging
 
 import discord
 
-from sizebot.lib import userdb
-from sizebot.lib import utils
+from sizebot.lib import userdb, utils
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
 from sizebot.lib.objs import objects
