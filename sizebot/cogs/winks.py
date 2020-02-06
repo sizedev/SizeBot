@@ -52,9 +52,9 @@ async def sayMilestone(channel, winkcount):
                        f"Great winking, <@{yukioid}>!")
 
     logger.error(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
-                       f"It took {prettytimesince} to hit this milestone!\n"
-                       f"That's an average of {prettytimeperwink} per wink!\n"
-                       f"(That's {winksperday} winks/day!)")
+                 f"It took {prettytimesince} to hit this milestone!\n"
+                 f"That's an average of {prettytimeperwink} per wink!\n"
+                 f"(That's {winksperday} winks/day!)")
 
 
 class WinksCog(commands.Cog):
