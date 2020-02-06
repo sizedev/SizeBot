@@ -2,10 +2,12 @@
 
 ## Additions
 
-- Added customizable foot length with `&setfoot`.
+- Added customizable foot length with `&setfoot`. You can turn off custom foot length with `&resetfoot`.
 - Added shoeprint depth, nail thickness, clothing thread thickness, eye width, walk speed, run speed, and viewing angle to stats and comparisons.
 - Added a link to a visual comparison when using `&compare`.
 - Slow changes now support stop conditions, either a time or a size.
+- Gender is now customizable, though it doesn't do much right now, with `&setgender`. Turn off "hard gender" with `&resetgender`.
+    - Gender will try to be infered if you have an gender roels assigned to you. This is known as "soft gender."
 - The `&help` command now supports arguments for detailed info on a specific command, as in `&help [command]`.
     - Many commands now have helpful aliases, which you can find by running `&help [command]`.
 - Added the ability to use exponents in changes, for instance `&change ^ 2`.
@@ -21,6 +23,7 @@
 - Added a new command, `&naptime`, which kicks you from any voice channel you're in after a set duration.
 - Users now have the ability to use some simple SizeBot functions in DMs, including `&roll`, `&help`, and `&about`.
 - You can now edit a failed command message, and it will rerun the command.
+- Mei and SizeBot are now friends.
 - Some fun easter eggs were added to SizeBot as well! Good luck finding them! :wink:
 
 ## Changes
@@ -41,6 +44,7 @@
 
 ## Fixes
 
+- **The entire codebase was rewritten from the ground up.**
 - Slow changes now save and catch up if SizeBot crashes.
     - Many other weird undocumented behaviors with slow changes should also be resolved.
 - Most math was either inaccurate or slightly wrong, which is now fixed.
@@ -54,8 +58,13 @@
 - `&objcompare`
 - `&ping`
 - `&setbase <height/weight> [height/weight]`
+- `&setfoot <length>`
+- `&setgender <m/f>`
+- `&resetfoot`
+- `&resetgender`
 - `&naptime <duration>`
 - `&units`
+- `&leaderboard`
 
 ### New Command Syntax
 
