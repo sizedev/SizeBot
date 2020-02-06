@@ -3,8 +3,7 @@ import json
 import logging
 
 from sizebot import conf
-from sizebot.lib import userdb
-from sizebot.lib import proportions
+from sizebot.lib import proportions, userdb
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, TV
 
