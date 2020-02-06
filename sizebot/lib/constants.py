@@ -1,7 +1,7 @@
 from enum import Enum
 import logging
 
-import pkg_resources
+import importlib.resources as pkg_resources
 import toml
 
 import sizebot.data
