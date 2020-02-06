@@ -7,6 +7,7 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import conf
 from sizebot.lib import utils
+from sizebot.lib.constants import ids
 
 logger = logging.getLogger("sizebot")
 
@@ -43,13 +44,12 @@ async def sayMilestone(channel, winkcount):
     timeperwink = timesince / winkcount
     prettytimeperwink = utils.prettyTimeDelta(timeperwink.total_seconds())
     winksperday = winkcount / (timesince / timedelta(days = 1))
-    yukioid = utils.getId("Yukio")
 
     await channel.send(f":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball\n:"
                        f"It took **{prettytimesince}** to hit this milestone!\n"
                        f"That's an average of **{prettytimeperwink}** per wink!\n"
                        f"(That's **{winksperday}** winks/day!)\n"
-                       f"Great winking, <@{yukioid}>!")
+                       f"Great winking, <@{ids.yukio}>!")
 
     logger.error(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
                  f"It took {prettytimesince} to hit this milestone!\n"
@@ -65,7 +65,7 @@ class WinksCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.id != utils.getId("Yukio"):
+        if message.author.id != ids.yukio:
             return
 
         winksSeen = countWinks(message.content)

@@ -4,8 +4,6 @@ import traceback
 import re
 from functools import reduce
 
-from sizebot import conf
-
 re_num = r"\d+\.?\d*"
 re_sizetag = re.compile(r"""
 \[  # start with a left bracket
@@ -301,21 +299,3 @@ def intToRoman(input):
         result.append(nums[i] * count)
         input -= ints[i] * count
     return ''.join(result)
-
-
-def getId(name):
-    datadir = conf.getDataDir()
-    idpath = datadir / "ids.txt"
-
-    ids = {}
-    lines = []
-
-    with open(idpath, "r") as f:
-        lines = f.readlines()
-
-    for line in lines:
-        discordname, discordID = line.split(":")
-        ids[discordname.lower()] = int(discordID)
-
-    name = name.lower()
-    return ids.get(name, 000000000000000000)

@@ -36,7 +36,6 @@ name = "SizeBot"
 activity = "Ratchet and Clank: Size Matters"
 authtoken = None
 admins = []             # List of admins
-emoji = dict()          # List of emojis by name
 logchannelid = None
 
 # File paths
@@ -51,7 +50,7 @@ confpath = datadir / "sizebot.conf"
 
 
 def load():
-    global prefix, name, activity, authtoken, admins, ids, emoji, logchannelid
+    global prefix, name, activity, authtoken, admins, logchannelid
     configDict = toml.load(confpath)
 
     # Sizebot
@@ -67,8 +66,6 @@ def load():
         authtoken = utils.getPath(configDict, "discord.authtoken")
     if utils.hasPath(configDict, "discord.admins"):
         admins = utils.getPath(configDict, "discord.admins")
-    if "emoji" in configDict:
-        emoji = configDict["emoji"]
 
     logchannelid = utils.getPath(configDict, "discord.logchannelid")
     if logchannelid is not None:

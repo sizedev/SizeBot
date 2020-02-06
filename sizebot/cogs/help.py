@@ -10,6 +10,7 @@ from sizebot import __version__
 from sizebot import conf
 from sizebot.lib import utils, userdb
 from sizebot.lib.units import SV, WV
+from sizebot.lib.constants import ids
 
 logger = logging.getLogger("sizebot")
 
@@ -176,7 +177,7 @@ class HelpCog(commands.Cog):
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-        await self.bot.get_user(utils.getId("DigiDuncan")).send(f"Bug report from <@{ctx.message.author.id}>: {message}")
+        await self.bot.get_user(ids.digiduncan).send(f"Bug report from <@{ctx.message.author.id}>: {message}")
 
         @commandsplus.command(
             usage = "<message>"
@@ -184,7 +185,7 @@ class HelpCog(commands.Cog):
         async def suggest(self, ctx, *, message: str):
             """Suggest a feature for SizeBot!"""
             logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-            await self.bot.get_user(utils.getId("DigiDuncan")).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
+            await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
 
     @commandsplus.command()
     async def ping(self, ctx):

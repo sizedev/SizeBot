@@ -2,6 +2,7 @@ import asyncio
 
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
+from sizebot.lib.constants import emojis
 
 inputdict = {"1️⃣": "1",
              "2️⃣": "2",
@@ -25,8 +26,7 @@ class KeypadCog(commands.Cog):
     async def keypad(self, ctx):
         """Test keypad command."""
         author = ctx.message.author
-        defaultmessage = "**Input:**<:blank:665063842866397185>"
-        clearemoji = "❌"
+        defaultmessage = f"**Input:**{emojis.blank}"
 
         outputmsg = await ctx.send(defaultmessage)
 
@@ -34,11 +34,11 @@ class KeypadCog(commands.Cog):
             return reaction.message.id == outputmsg.id \
                 and reacter.id == author.id \
                 and (str(reaction.emoji) in inputdict.keys()
-                     or str(reaction.emoji) == clearemoji)
+                     or str(reaction.emoji) == emojis.cancel)
 
         for emoji in inputdict.keys():
             await outputmsg.add_reaction(emoji)
-        await outputmsg.add_reaction(clearemoji)
+        await outputmsg.add_reaction(emojis.cancel)
 
         listening = True
 
@@ -53,7 +53,7 @@ class KeypadCog(commands.Cog):
             if str(reaction.emoji) in inputdict.keys():
                 await outputmsg.edit(content = outputmsg.content + inputdict[str(reaction.emoji)])
                 await reaction.remove(user)
-            if str(reaction.emoji) == clearemoji:
+            if str(reaction.emoji) == emojis.cancel:
                 await outputmsg.edit(content = defaultmessage)
                 await reaction.remove(user)
 

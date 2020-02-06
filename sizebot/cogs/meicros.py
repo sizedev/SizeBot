@@ -1,7 +1,7 @@
 from discord.ext import commands
-from sizebot import conf
 
-chocola = 161027274764713984
+from sizebot import conf
+from sizebot.lib.constants import ids
 
 
 def isACommand(commands, message):
@@ -57,7 +57,7 @@ class MeicrosCog(commands.Cog):
             await leave.disconnect()
 
         # Tell our good friend how they can fund SizeBot.
-        if m.author.id == chocola and isACommand(self.bot.all_commands.keys(), m.content) and not m.content.endswith("--no-fund"):
+        if m.author.id == ids.chocola and isACommand(self.bot.all_commands.keys(), m.content) and not m.content.endswith("--no-fund"):
             await m.channel.send(f"1 packages are looking funding.\nRun `{conf.prefix}fund` for details.\n(To stop seeing this message, run commands with `--no-fund`.)")
 
 

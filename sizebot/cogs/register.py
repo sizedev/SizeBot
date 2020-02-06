@@ -5,28 +5,27 @@ from discord.ext import commands
 from discord.utils import get
 from sizebot.discordplus import commandsplus
 
+from sizebot.lib import proportions, userdb
 from sizebot.lib.units import SV, WV
-from sizebot.lib import proportions, utils, userdb
+from sizebot.lib.constants import ids, emojis
 
 logger = logging.getLogger("sizebot")
 
 
 async def addUserRole(member):
-    sizebotuserroleid = utils.getId("sizebotuserrole")
-    role = get(member.guild.roles, id = sizebotuserroleid)
+    role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
-        logger.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")
+        logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
-    await member.add_roles(role, reason = "Registered as sizebot user")
+    await member.add_roles(role, reason="Registered as sizebot user")
 
 
 async def removeUserRole(member):
-    sizebotuserroleid = utils.getId("sizebotuserrole")
-    role = get(member.guild.roles, id = sizebotuserroleid)
+    role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
-        logger.warn(f"Sizebot user role {sizebotuserroleid} not found in guild {member.guild.id}")
+        logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
-    await member.remove_roles(role, reason = "Unregistered as sizebot user")
+    await member.remove_roles(role, reason="Unregistered as sizebot user")
 
 
 class RegisterCog(commands.Cog):
@@ -115,19 +114,17 @@ class RegisterCog(commands.Cog):
             return
 
         # Send a confirmation request
-        unregisterEmoji = "✔️"
-        cancelEmoji = "❌"
-        sentMsg = await ctx.send(f"To unregister, react with {unregisterEmoji}.")
-        await sentMsg.add_reaction(unregisterEmoji)
-        await sentMsg.add_reaction(cancelEmoji)
+        sentMsg = await ctx.send(f"To unregister, react with {emojis.check}.")
+        await sentMsg.add_reaction(emojis.check)
+        await sentMsg.add_reaction(emojis.cancel)
 
-        # Wait for requesting user to react to sent message with unregisterEmoji or cancelEmoji
+        # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
         def check(reaction, reacter):
             return reaction.message.id == sentMsg.id \
                 and reacter.id == user.id \
                 and (
-                    str(reaction.emoji) == unregisterEmoji
-                    or str(reaction.emoji) == cancelEmoji
+                    str(reaction.emoji) == emojis.check
+                    or str(reaction.emoji) == emojis.cancel
                 )
 
         try:
@@ -140,7 +137,7 @@ class RegisterCog(commands.Cog):
             await sentMsg.delete()
 
         # if the reaction isn't the right one, stop.
-        if reaction.emoji != unregisterEmoji:
+        if reaction.emoji != emojis.check:
             return
 
         # remove the sizetag, delete the user file, and remove the user role
