@@ -8,7 +8,7 @@ from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
 from sizebot import conf
-from sizebot.lib import objs, status, units
+from sizebot.lib import constants, objs, status, units
 from sizebot.lib.discordlogger import DiscordHandler
 
 logging.basicConfig(level=logging.INFO)
@@ -46,6 +46,8 @@ initial_extensions = [
 
 
 def main():
+    constants.load()
+
     booting = True
     launchtime = datetime.now()
 
