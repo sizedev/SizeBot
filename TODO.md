@@ -40,8 +40,8 @@
 * DigiSV:
     * ~~Custom trigger points for units (millimeters triggers 1 degree of magnitude early, megameters triggers 1 degree late.)~~
     * ~~Flag some units as only input units and not display units.~~
-    * ~Fix the giant if statements<sup>?</sup>~~
-    * Make no units ambiguous. (universes, Earths, Suns...)
+    * ~~Fix the giant if statements<sup>?</sup>~~
+    * ~~Make no units ambiguous. (universes, Earths, Suns...)~~
     * ~~Any value under 0.001ym gets displayed as 0 (currently not true for stats)~~
     * ~~Make sure users can't have heights below "zero" (sub-0.001ym) or above infinity.~~
 * Basic English syntax for some commands.
@@ -51,22 +51,22 @@
     * ~~Help strings~~
     * ~~Remove brackets?~~
 * ~~Make DigiLogger and DigiFormatter be imported from their seperate things instead of copy+pasting them in to the folder.~~
-* Sudo command<sup>?</sup>
+* ~~Sudo command<sup>?</sup>~~
 * Question of the Day
     * Users can submit questions
     * These get posted to a voting channel for mods only.
     * Mods react to the submissions with emotes (:voteyes:/:voteno:)
     * If it gets accepted, it gets added to the pool.
     * A random question (with credit) is posted to a question of the day channel every morning.
-* Change SizeBot's name on certain special dates
+* ~~Change SizeBot's name on certain special dates~~
 * ~~This Points: if someone posts ^, or :this:, or similar, give a This Point to the person above (unless that person also posted a "this", in which case, give it to the person above that, etc.)~~
 * Future proofing.
     * Make module functions that make command code easy to read, work with, and make new commands. \[Digi calls this "the SizeAPI"\]
 * Telemetry
-    * Command usage amount
-    * Mistyped commands
+    * ~~Command usage amount~~
+    * ~~Mistyped commands~~
     * How often we're hitting rate limits
-* Change status on Discord to "In debugger mode!" (or similar) when running in a debugger.
+* ~~Change status on Discord to "In debugger mode!" (or similar) when running in a debugger.~~
 
 #### Figure out database schema.
 
