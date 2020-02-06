@@ -303,7 +303,7 @@ def intToRoman(input):
     return ''.join(result)
 
 
-def getId(name):
+def getID(name):
     datadir = conf.getDataDir()
     idpath = datadir / "ids.txt"
 
