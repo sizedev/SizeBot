@@ -36,7 +36,6 @@ name = "SizeBot"
 activity = "Ratchet and Clank: Size Matters"
 authtoken = None
 admins = []             # List of admins
-ids = dict()            # List of ids by name
 emoji = dict()          # List of emojis by name
 logchannelid = None
 
@@ -68,18 +67,12 @@ def load():
         authtoken = utils.getPath(configDict, "discord.authtoken")
     if utils.hasPath(configDict, "discord.admins"):
         admins = utils.getPath(configDict, "discord.admins")
-    if "ids" in configDict:
-        ids = configDict["ids"]
     if "emoji" in configDict:
         emoji = configDict["emoji"]
 
     logchannelid = utils.getPath(configDict, "discord.logchannelid")
     if logchannelid is not None:
         logchannelid = int(logchannelid)
-
-
-def getId(name):
-    return ids.get(name, 000000000000000000)
 
 
 load()
