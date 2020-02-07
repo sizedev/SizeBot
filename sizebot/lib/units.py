@@ -308,9 +308,13 @@ class SystemRegistry():
 class SystemUnit():
     """System Units"""
 
-    def __init__(self, unit, trigger=None):
+    def __init__(self, unit, trigger=None, rel_trigger=None):
+        if trigger is not None and rel_trigger is not None:
+            raise ValueError
+
         self.unitname = unit
         self._trigger = trigger and Decimal(trigger)
+        self._rel_trigger = rel_trigger and Decimal(rel_trigger)
         self.unit = None
 
     def load(self, units):
@@ -322,6 +326,8 @@ class SystemUnit():
 
     @property
     def trigger(self):
+        if self._rel_trigger is not None:
+            return self.unit.factor * self._rel_trigger
         if self._trigger is not None:
             return self._trigger
         return self.factor
