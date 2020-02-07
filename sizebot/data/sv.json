@@ -228,7 +228,7 @@
             },
             {
                 "unit": "mm",
-                "trigger": "1e-4"
+                "rel_trigger": "1e-1"
             },
             {
                 "unit": "cm"
@@ -241,7 +241,7 @@
             },
             {
                 "unit": "Mm",
-                "trigger": "1e+7"
+                "rel_trigger": "1e+1"
             },
             {
                 "unit": "Gm"
@@ -313,11 +313,11 @@
             },
             {
                 "unit": "mm",
-                "trigger": "1e-4"
+                "rel_trigger": "1e-1"
             },
             {
                 "unit": "in",
-                "trigger": "2.54e-3"
+                "rel_trigger": "1e-1"
             },
             {
                 "unit": "mi"
