@@ -194,7 +194,7 @@ class HelpCog(commands.Cog):
 
         Check SizeBot's current latency."""
         response = await ctx.send(emojis.loading)
-        subcommand = subcommand.lower()
+        subcommand = subcommand and subcommand.lower()
         if subcommand in ["heartbeat", "discord"]:
             await response.edit('Pong! :ping_pong:\nDiscord HEARTBEAT latency: {0}s'.format(round(self.bot.latency, 3)))
         if subcommand in ["bot", None]:
