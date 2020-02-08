@@ -1,4 +1,3 @@
-from enum import Enum
 import logging
 
 import importlib.resources as pkg_resources
@@ -11,6 +10,11 @@ ids = None
 emojis = None
 
 
+class AttrDict:
+    def __init__(self, data):
+        self.__dict__ = data
+
+
 def loadids(data):
     global ids
     # Get the ids dictionary (or an empty dict if none exists)
@@ -18,7 +22,7 @@ def loadids(data):
     # make all names lowercase
     idsdict = {name.lower(): userid for name, userid in idsdict.items()}
     # create the enum
-    ids = Enum("ids", idsdict)
+    ids = AttrDict(idsdict)
 
 
 def loademojis(data):
@@ -28,7 +32,7 @@ def loademojis(data):
     # make all names lowercase
     emojisdict = {name.lower(): emoji for name, emoji in emojisdict.items()}
     # create the enum
-    emojis = Enum("emojis", emojisdict)
+    emojis = AttrDict(emojisdict)
 
 
 def load():
