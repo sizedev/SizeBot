@@ -48,7 +48,7 @@ def clamp(minVal, val, maxVal):
     return max(minVal, min(maxVal, val))
 
 
-def prettyTimeDelta(totalSeconds):
+def prettyTimeDelta(totalSeconds, millisecondAccuracy = False):
     SECONDS_PER_YEAR = 86400 * 365
     SECONDS_PER_DAY = 86400
     SECONDS_PER_HOUR = 3600
@@ -69,7 +69,10 @@ def prettyTimeDelta(totalSeconds):
         s += f"{hours:d} hours, "
     if totalSeconds >= SECONDS_PER_MINUTE:
         s += f"{minutes:d} minutes, "
-    s += f"{seconds:d} seconds"
+    if millisecondAccuracy:
+        s += f"{seconds:.3} seconds"
+    else:
+        s += f"{seconds:d} seconds"
 
 
 def tryInt(val):
