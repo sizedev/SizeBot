@@ -10,7 +10,8 @@ from sizebot import __version__
 from sizebot import conf
 from sizebot.lib import userdb, utils
 from sizebot.lib.units import SV, WV
-from sizebot.lib.constants import ids
+from sizebot.lib.constants import ids, emojis
+
 
 logger = logging.getLogger("sizebot")
 
@@ -188,11 +189,19 @@ class HelpCog(commands.Cog):
             await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
 
     @commandsplus.command()
-    async def ping(self, ctx):
+    async def ping(self, ctx, subcommand: str = None):
         """Pong!
 
         Check SizeBot's current latency."""
-        await ctx.send('Pong! :ping_pong: {0}s'.format(round(self.bot.latency, 3)))
+        response = await ctx.send(emojis.loading)
+        subcommand = subcommand.lower()
+        if subcommand in ["heartbeat", "discord"]:
+            await response.edit('Pong! :ping_pong:\nDiscord HEARTBEAT latency: {0}s'.format(round(self.bot.latency, 3)))
+        if subcommand in ["bot", None]:
+            time1 = ctx.message.created_at
+            time2 = response.created_at
+            timediff = time2 - time1
+            await response.edit('Pong! :ping_pong:\nCommand latency: {0}'.format(utils.prettyTimeDelta(timediff, True)))
 
 
 def setup(bot):
