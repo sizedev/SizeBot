@@ -9,6 +9,7 @@ from sizebot.lib import userdb, utils
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
 from sizebot.lib.objs import objects
+from sizebot.lib.constants import ids, emojis
 from sizebot.cogs import thistracker
 
 logger = logging.getLogger("sizebot")
@@ -106,7 +107,9 @@ def getEvalGlobals():
         "pdir": utils.pdir,
         "userdb": userdb,
         "thistracker": thistracker,
-        "edir": edir
+        "edir": edir,
+        "ids": ids,
+        "emojis": emojis
     }
 
     return evalGlobals
