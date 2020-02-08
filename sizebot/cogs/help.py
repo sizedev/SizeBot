@@ -196,16 +196,14 @@ class HelpCog(commands.Cog):
         response = await ctx.send(emojis.loading)
         subcommand = subcommand and subcommand.lower()
         if subcommand in ["heartbeat", "discord"]:
-            await response.edit('Pong! :ping_pong:\nDiscord HEARTBEAT latency: {0} seconds'.format(round(self.bot.latency, 3)))
+            messagetosend = 'Pong! :ping_pong:\nDiscord HEARTBEAT latency: {0} seconds'.format(round(self.bot.latency, 3))
+            await response.edit(messagetosend)
         if subcommand in ["bot", None]:
             time1 = ctx.message.created_at
             time2 = response.created_at
             timediff = time2 - time1
-            await response.edit(
-                'Pong! :ping_pong:\nCommand latency: {0}'.format(
-                    utils.prettyTimeDelta(timediff.total_seconds(), True)
-                    )
-                )
+            messagetosend = 'Pong! :ping_pong:\nCommand latency: {0}'.format(utils.prettyTimeDelta(timediff.total_seconds(), True))
+            await response.edit(messagetosend)
 
 
 def setup(bot):
