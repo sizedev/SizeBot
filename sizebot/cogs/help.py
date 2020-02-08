@@ -196,7 +196,7 @@ class HelpCog(commands.Cog):
         response = await ctx.send(emojis.loading)
         subcommand = subcommand and subcommand.lower()
         if subcommand in ["heartbeat", "discord"]:
-            await response.edit('Pong! :ping_pong:\nDiscord HEARTBEAT latency: {0}s'.format(round(self.bot.latency, 3)))
+            await response.edit('Pong! :ping_pong:\nDiscord HEARTBEAT latency: {0} seconds'.format(round(self.bot.latency, 3)))
         if subcommand in ["bot", None]:
             time1 = ctx.message.created_at
             time2 = response.created_at
