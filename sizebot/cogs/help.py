@@ -201,7 +201,11 @@ class HelpCog(commands.Cog):
             time1 = ctx.message.created_at
             time2 = response.created_at
             timediff = time2 - time1
-            await response.edit('Pong! :ping_pong:\nCommand latency: {0}'.format(utils.prettyTimeDelta(timediff.total_seconds(), True)))
+            await response.edit(
+                'Pong! :ping_pong:\nCommand latency: {0}'.format(
+                    utils.prettyTimeDelta(timediff.total_seconds(), True)
+                    )
+                )
 
 
 def setup(bot):

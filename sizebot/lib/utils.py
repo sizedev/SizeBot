@@ -76,6 +76,8 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False):
     else:
         s += f"{seconds:d} seconds"
 
+    return s
+
 
 def tryInt(val):
     try:
