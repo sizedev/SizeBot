@@ -6,6 +6,7 @@ from sizebot.discordplus import commandsplus
 
 from sizebot.lib import utils
 from sizebot.lib.eval import runEval
+from sizebot.lib.constants import emojis
 
 logger = logging.getLogger("sizebot")
 
@@ -27,14 +28,14 @@ class EvalCog(commands.Cog):
         # Show user that bot is busy doing something
         waitMsg = None
         if isinstance(ctx.channel, discord.TextChannel):
-            waitMsg = await ctx.send(f"<a:loading:663876493771800603>")
+            waitMsg = await ctx.send(emojis.loading)
 
         async with ctx.typing():
             try:
                 result = await runEval(ctx, evalStr)
             except Exception as err:
                 logger.error("eval error:\n" + utils.formatTraceback(err))
-                await ctx.send(f"⚠️ ` {utils.formatError(err)} `")
+                await ctx.send(emojis.warn + f" ` {utils.formatError(err)} `")
                 return
             finally:
                 # Remove wait message when done
@@ -65,7 +66,7 @@ class EvalCog(commands.Cog):
                 await runEval(ctx, evalStr, returnValue = False)
             except Exception as err:
                 logger.error("eval error:\n" + utils.formatTraceback(err))
-                await ctx.message.author.send(f"⚠️ ` {utils.formatError(err)} `")
+                await ctx.message.author.send(emojis.warning + f" ` {utils.formatError(err)} `")
 
 
 def setup(bot):
