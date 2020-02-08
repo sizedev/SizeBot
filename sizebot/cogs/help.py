@@ -189,21 +189,18 @@ class HelpCog(commands.Cog):
             await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
 
     @commandsplus.command()
-    async def ping(self, ctx, subcommand: str = None):
+    async def ping(self, ctx, subcommand: str = ""):
         """Pong!
 
         Check SizeBot's current latency."""
-        response = await ctx.send(emojis.loading)
-        subcommand = subcommand and subcommand.lower()
-        if subcommand in ["heartbeat", "discord"]:
-            messagetosend = 'Pong! :ping_pong:\nDiscord HEARTBEAT latency: {0} seconds'.format(round(self.bot.latency, 3))
-            await response.edit(content = messagetosend)
-        if subcommand in ["bot", None]:
-            time1 = ctx.message.created_at
-            time2 = response.created_at
-            timediff = time2 - time1
-            messagetosend = 'Pong! :ping_pong:\nCommand latency: {0}'.format(utils.prettyTimeDelta(timediff.total_seconds(), True))
-            await response.edit(content = messagetosend)
+        waitMsg = await ctx.send(emojis.loading)
+
+        if subcommand.lower() in ["heartbeat", "discord"]:
+            response = f"Pong! :ping_pong:\nDiscord HEARTBEAT latency: {round(self.bot.latency, 3)} seconds"
+        else:
+            messageLatency = waitMsg.created_at - ctx.message.created_at
+            response = f"Pong! :ping_pong:\nCommand latency: {utils.prettyTimeDelta(messageLatency.total_seconds(), True)}"
+        await waitMsg.edit(content = response)
 
 
 def setup(bot):
