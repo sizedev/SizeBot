@@ -91,7 +91,7 @@ class ColorCog(commands.Cog):
         r = requests.get(url + "/id?" + colortype + "=" + colorvalueout)
         colorjson = r.json()
 
-        if r.response != 200:
+        if r.response.status_code != 200:
             await outmessage.edit(emojis.warning + "The Color API is not working as expected. Please try again later.")
 
         hexstring = colorjson["hex"]["clean"]
