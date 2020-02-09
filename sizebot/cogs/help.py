@@ -188,11 +188,15 @@ class HelpCog(commands.Cog):
             logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
             await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        usage = ["[type]"]
+    )
     async def ping(self, ctx, subcommand: str = ""):
         """Pong!
 
-        Check SizeBot's current latency."""
+        Check SizeBot's current latency.
+
+        Check the bot's latency with `&ping`, or check the Discord API's latency with `&ping discord`."""
         waitMsg = await ctx.send(emojis.loading)
 
         if subcommand.lower() in ["heartbeat", "discord"]:
