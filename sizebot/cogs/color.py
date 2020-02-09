@@ -23,9 +23,9 @@ class ColorCog(commands.Cog):
 
         # url = "http://thecolorapi.com"
         splitregex = r",|\s|,\s"
-        hexregex = r"#?([0-9A-Fa-f]{3}){1,2}$"
-        isdigits = r"\d+$"
-        isdigitsandpercent = r"\d+%?$"
+        hexregex = r"#?([0-9A-Fa-f]{3}){1,2}"
+        isdigits = r"\d+"
+        isdigitsandpercent = r"\d+%?"
         acceptedtypes = ["hex", "rgb", "hsv", "hsl", "cymk"]
 
         colortype = ""
@@ -42,12 +42,14 @@ class ColorCog(commands.Cog):
             colorvalue = arg2
 
         if colortype not in acceptedtypes:
+            outmessage.delete()
             raise ArgumentException
 
         # Make the color value we're putting into the URL be formatted in a way it likes,
         # and also catch any malformed arguments.
         if colortype == "hex":
             if not re.match(colorvalue, hexregex):
+                outmessage.delete()
                 raise ArgumentException
             if colorvalue.startswith("#"):
                 colorvalueout = colorvalue[1:]
@@ -57,22 +59,28 @@ class ColorCog(commands.Cog):
             colorvalues = colorvalue.split(splitregex)
             colorvalueout = colorvalues.join(",")
         if len(colorvalues) not in [3, 4]:
+            outmessage.delete()
             raise ArgumentException
         if colortype != "hex" and len(colorvalues) != 3:
+            outmessage.delete()
             raise ArgumentException
         if colortype == "rgb":
             for value in colorvalues:
                 if not re.match(value, isdigits):
+                    outmessage.delete()
                     raise ArgumentException
         elif colortype in ["hsl", "hsv"]:
             if not re.match(colorvalues[0], isdigits):
+                outmessage.delete()
                 raise ArgumentException
             for value in colorvalues[1:]:
                 if not re.match(value, isdigitsandpercent):
+                    outmessage.delete()
                     raise ArgumentException
         elif colortype == "cymk":
             for value in colorvalues:
                 if not re.match(value, isdigitsandpercent):
+                    outmessage.delete()
                     raise ArgumentException
 
         await outmessage.edit(content = f"You gave me a {colortype} color with the value {colorvalueout}!")
