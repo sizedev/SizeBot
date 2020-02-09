@@ -18,7 +18,7 @@ class AdminCog(commands.Cog):
     @commands.is_owner()
     async def stop(self, ctx):
         """RIP SizeBot."""
-        logger.critical("Help, {ctx.message.author.display_name} is closing me!")
+        logger.critical(f"Help, {ctx.message.author.display_name} is closing me!")
         await ctx.send("Stopping SizeBot. ☠️")
         await ctx.bot.close()
 
