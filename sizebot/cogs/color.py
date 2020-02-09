@@ -41,16 +41,17 @@ class ColorCog(commands.Cog):
             colortype = arg1
             colorvalue = arg2
 
+        colortype = colortype.lower()
         if colortype not in acceptedtypes:
-            outmessage.delete()
-            raise ArgumentException
+            await outmessage.edit(content = f"`{colortype}` is not an accepted color type.\nAccepted types are hex, rgb, hsv, hsl, or cymk.")
+            return
 
         # Make the color value we're putting into the URL be formatted in a way it likes,
         # and also catch any malformed arguments.
         if colortype == "hex":
             if not re.match(colorvalue, hexregex):
-                outmessage.delete()
-                raise ArgumentException
+                await outmessage.edit(content = f"`{colorvalue}` is not an accepted hex color.")
+                return
             if colorvalue.startswith("#"):
                 colorvalueout = colorvalue[1:]
             else:
@@ -59,29 +60,29 @@ class ColorCog(commands.Cog):
             colorvalues = colorvalue.split(splitregex)
             colorvalueout = colorvalues.join(",")
         if len(colorvalues) not in [3, 4]:
-            outmessage.delete()
-            raise ArgumentException
-        if colortype != "hex" and len(colorvalues) != 3:
-            outmessage.delete()
-            raise ArgumentException
+            await outmessage.edit(content = "A non-hex color can only have between 3 and 4 parts.")
+            return
+        if colortype != "cymk" and len(colorvalues) != 3:
+            await outmessage.edit(content = "A hsl, hsv, or rgb color can only have 3 parts.")
+            return
         if colortype == "rgb":
             for value in colorvalues:
                 if not re.match(value, isdigits):
-                    outmessage.delete()
-                    raise ArgumentException
+                    await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
+                    return
         elif colortype in ["hsl", "hsv"]:
             if not re.match(colorvalues[0], isdigits):
-                outmessage.delete()
-                raise ArgumentException
+                await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
+                return
             for value in colorvalues[1:]:
                 if not re.match(value, isdigitsandpercent):
-                    outmessage.delete()
-                    raise ArgumentException
+                    await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
+                    return
         elif colortype == "cymk":
             for value in colorvalues:
                 if not re.match(value, isdigitsandpercent):
-                    outmessage.delete()
-                    raise ArgumentException
+                    await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
+                    return
 
         await outmessage.edit(content = f"You gave me a {colortype} color with the value {colorvalueout}!")
 
