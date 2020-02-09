@@ -35,7 +35,7 @@ class EvalCog(commands.Cog):
                 result = await runEval(ctx, evalStr)
             except Exception as err:
                 logger.error("eval error:\n" + utils.formatTraceback(err))
-                await ctx.send(emojis.warn + f" ` {utils.formatError(err)} `")
+                await ctx.send(emojis.warning + f" ` {utils.formatError(err)} `")
                 return
             finally:
                 # Remove wait message when done
