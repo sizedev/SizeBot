@@ -115,7 +115,7 @@ class ColorCog(commands.Cog):
         embed.add_field(name="HSL Value", value = colorhsl, inline = True)
         embed.add_field(name="HSV Value", value = colorhsv, inline = True)
         embed.add_field(name="CMYK Value", value = colorcmyk, inline = True)
-        embed.set_footer(ftext = "Requested by {ctx.message.author.display_name}")
+        embed.set_footer(text = f"Requested by {ctx.message.author.display_name}")
 
         await outmessage.edit(content = "", embed = embed)
 
