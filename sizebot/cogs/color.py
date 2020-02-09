@@ -5,7 +5,12 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot.lib.constants import emojis
-from sizebot.lib.errors import ArgumentException
+
+
+re_hex = re.compile(r"#?((?:[0-9A-Fa-f]{3}){1,2})")
+re_digits = re.compile(r"\d+")
+re_percent = re.compile(r"\d+%?")
+re_dividers = re.compile(r"[\s,]+")
 
 
 class ColorCog(commands.Cog):
@@ -22,67 +27,62 @@ class ColorCog(commands.Cog):
         outmessage = await ctx.send(emojis.loading)
 
         # url = "http://thecolorapi.com"
-        splitregex = r",|\s|,\s"
-        hexregex = r"#?([0-9A-Fa-f]{3}){1,2}"
-        isdigits = r"\d+"
-        isdigitsandpercent = r"\d+%?"
-        acceptedtypes = ["hex", "rgb", "hsv", "hsl", "cymk"]
 
-        colortype = ""
-        colorvalue = ""
-        colorvalues = []
-        colorvalueout = ""
-
-        # Deafult to hex.
+        # Default to hex.
         if not arg2:
             colortype = "hex"
             colorvalue = arg1
         else:
-            colortype = arg1
+            colortype = arg1.lower()
             colorvalue = arg2
 
-        colortype = colortype.lower()
-        if colortype not in acceptedtypes:
-            await outmessage.edit(content = f"`{colortype}` is not an accepted color type.\nAccepted types are hex, rgb, hsv, hsl, or cymk.")
-            return
+        colorvalues = re_dividers.split(colorvalue)
 
         # Make the color value we're putting into the URL be formatted in a way it likes,
         # and also catch any malformed arguments.
         if colortype == "hex":
-            if not re.match(colorvalue, hexregex):
+            # HEX
+            match_hex = re_hex.match(colorvalue)
+            if not match_hex:
                 await outmessage.edit(content = f"`{colorvalue}` is not an accepted hex color.")
                 return
-            if colorvalue.startswith("#"):
-                colorvalueout = colorvalue[1:]
-            else:
-                colorvalueout = colorvalue
-        else:
-            colorvalues = colorvalue.split(splitregex)
-            colorvalueout = colorvalues.join(",")
-        if len(colorvalues) not in [3, 4]:
-            await outmessage.edit(content = "A non-hex color can only have between 3 and 4 parts.")
-            return
-        if colortype != "cymk" and len(colorvalues) != 3:
-            await outmessage.edit(content = "A hsl, hsv, or rgb color can only have 3 parts.")
-            return
-        if colortype == "rgb":
+            colorvalueout = match_hex.group(1)
+        elif colortype == "rgb":
+            # RGB
+            if len(colorvalues) != 3:
+                await outmessage.edit(content = f"A {colortype} color can only have 3 parts.")
+                return
             for value in colorvalues:
-                if not re.match(value, isdigits):
+                if not re_digits.match(value):
                     await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
                     return
+            colorvalueout = ",".join(colorvalues)
         elif colortype in ["hsl", "hsv"]:
-            if not re.match(colorvalues[0], isdigits):
+            # HSL/HSV
+            if len(colorvalues) != 3:
+                await outmessage.edit(content = f"A {colortype} color can only have 3 parts.")
+                return
+            if not re_digits.match(colorvalues[0]):
                 await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
                 return
             for value in colorvalues[1:]:
-                if not re.match(value, isdigitsandpercent):
+                if not re_percent.match(value):
                     await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
                     return
+            colorvalueout = ",".join(colorvalues)
         elif colortype == "cymk":
+            # CYMK
+            if len(colorvalues) not in [3, 4]:
+                await outmessage.edit(content = f"A {colortype} color can only have between 3 and 4 parts.")
+                return
             for value in colorvalues:
-                if not re.match(value, isdigitsandpercent):
+                if not re_percent.match(value):
                     await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
                     return
+            colorvalueout = ",".join(colorvalues)
+        else:
+            # Invalid color type
+            await outmessage.edit(content = f"`{colortype}` is not an accepted color type.\nAccepted types are hex, rgb, hsv, hsl, or cymk.")
 
         await outmessage.edit(content = f"You gave me a {colortype} color with the value {colorvalueout}!")
 
