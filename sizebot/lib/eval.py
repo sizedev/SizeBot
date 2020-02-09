@@ -1,6 +1,7 @@
 import inspect
 import math
 import builtins
+import itertools
 import logging
 
 import discord
@@ -109,7 +110,8 @@ def getEvalGlobals():
         "thistracker": thistracker,
         "edir": edir,
         "ids": ids,
-        "emojis": emojis
+        "emojis": emojis,
+        "itertools": itertools
     }
 
     return evalGlobals
