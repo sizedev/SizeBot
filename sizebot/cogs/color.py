@@ -77,7 +77,7 @@ class ColorCog(commands.Cog):
             colorvalueout = ",".join(colorvalues)
         elif colortype == "cymk":
             # CYMK
-            if len(colorvalues) not in [3, 4]:
+            if len(colorvalues) != 4:
                 await outmessage.edit(content = f"A {colortype} color can only have between 3 and 4 parts.")
                 return
             for value in colorvalues:
