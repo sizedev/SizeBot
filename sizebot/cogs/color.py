@@ -15,10 +15,10 @@ class ColorCog(commands.Cog):
         self.bot = bot
 
     @commandsplus.command(
-        aliases = ["color", "hex"],
+        aliases = ["colour"],
         usage = "[hex/rgb/hsv/hsl/cymk] <colorcode>"
     )
-    async def hexcolor(self, ctx, arg1: str, *, arg2: str = None):
+    async def color(self, ctx, arg1: str, *, arg2: str = None):
         outmessage = await ctx.send(emojis.loading)
 
         # url = "http://thecolorapi.com"

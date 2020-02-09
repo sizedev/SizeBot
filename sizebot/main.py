@@ -21,6 +21,7 @@ logger.addHandler(dfhandler)
 initial_cogs = [
     "admin",
     "change",
+    "color",
     "eval",
     "fun",
     "help",
