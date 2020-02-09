@@ -1,9 +1,11 @@
-# import requests
+import requests
 import re
 
+import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
+from sizebot import __version__
 from sizebot.lib.constants import emojis
 
 
@@ -11,6 +13,7 @@ re_hex = re.compile(r"#?((?:[0-9A-Fa-f]{3}){1,2})")
 re_digits = re.compile(r"\d+")
 re_percent = re.compile(r"\d+%?")
 re_dividers = re.compile(r"[\s,]+")
+coloricon = "https://cdn.discordapp.com/attachments/650460192009617433/676205298674958366/spinning-beachball-of-death-mac.png"
 
 
 class ColorCog(commands.Cog):
@@ -26,7 +29,8 @@ class ColorCog(commands.Cog):
     async def color(self, ctx, arg1: str, *, arg2: str = None):
         outmessage = await ctx.send(emojis.loading)
 
-        # url = "http://thecolorapi.com"
+        url = "http://thecolorapi.com"
+        schemeurl = "https://www.thecolorapi.com/scheme?hex={0}&format=html"
 
         # Default to hex.
         if not arg2:
@@ -84,10 +88,34 @@ class ColorCog(commands.Cog):
             # Invalid color type
             await outmessage.edit(content = f"`{colortype}` is not an accepted color type.\nAccepted types are hex, rgb, hsv, hsl, or cymk.")
 
-        await outmessage.edit(content = f"You gave me a {colortype} color with the value {colorvalueout}!")
+        r = requests.get(url + "/id?" + colortype + "=" + colorvalueout)
+        colorjson = r.json()
 
-        # r = requests.get(url + "/id?" + colortype + "=" + colorvalueout)
-        # colorjson = r.json()
+        if r.response != 200:
+            await outmessage.edit(emojis.warning + "The Color API is not working as expected. Please try again later.")
+
+        hexstring = colorjson["hex"]["clean"]
+        hexvalue = int(hexstring, 16)
+        colorscheme = schemeurl.format(hexstring)
+        colorname = colorjson["name"]["value"]
+        printhex = colorjson["hex"]["value"]
+        colorrgb = colorjson["rgb"]["value"]
+        colorhsl = colorjson["hsl"]["value"]
+        colorhsv = colorjson["hsv"]["value"]
+        colorcmyk = colorjson["cmyk"]["value"]
+
+        embed = discord.Embed(title=f"{colorname} [{printhex}]",
+                              description=f"Requested by {ctx.message.author.display_name}",
+                              color=hexvalue,
+                              url=colorscheme)
+        embed.set_author(name=f"SizeBot {__version__}", icon_url=coloricon)
+        embed.add_field(name="Hex Value", value = printhex, inline = True)
+        embed.add_field(name="RGB Value", value = colorrgb, inline = True)
+        embed.add_field(name="HSL Value", value = colorhsl, inline = True)
+        embed.add_field(name="HSV Value", value = colorhsv, inline = True)
+        embed.add_field(name="CMYK Value", value = colorcmyk, inline = True)
+
+        await ctx.send(emobed = embed)
 
 
 def setup(bot):
