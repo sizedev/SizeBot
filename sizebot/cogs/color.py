@@ -115,7 +115,7 @@ class ColorCog(commands.Cog):
         embed.add_field(name="HSV Value", value = colorhsv, inline = True)
         embed.add_field(name="CMYK Value", value = colorcmyk, inline = True)
 
-        await ctx.send(emobed = embed)
+        await ctx.send(embed = embed)
 
 
 def setup(bot):
