@@ -6,6 +6,7 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot import __version__
+from sizebot import conf
 from sizebot.lib.constants import emojis
 
 
@@ -105,17 +106,18 @@ class ColorCog(commands.Cog):
         colorcmyk = colorjson["cmyk"]["value"]
 
         embed = discord.Embed(title=f"{colorname} [{printhex}]",
-                              description=f"Requested by {ctx.message.author.display_name}",
+                              description="",
                               color=hexvalue,
                               url=colorscheme)
-        embed.set_author(name=f"SizeBot {__version__}", icon_url=coloricon)
+        embed.set_author(name=f"SizeBot {__version__} [{conf.prefix}color]", icon_url=coloricon)
         embed.add_field(name="Hex Value", value = printhex, inline = True)
         embed.add_field(name="RGB Value", value = colorrgb, inline = True)
         embed.add_field(name="HSL Value", value = colorhsl, inline = True)
         embed.add_field(name="HSV Value", value = colorhsv, inline = True)
         embed.add_field(name="CMYK Value", value = colorcmyk, inline = True)
+        embed.set_footer(ftext = "Requested by {ctx.message.author.display_name}")
 
-        await ctx.send(embed = embed)
+        await outmessage.edit(content = "", embed = embed)
 
 
 def setup(bot):
