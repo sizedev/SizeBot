@@ -55,6 +55,12 @@ class MeicrosCog(commands.Cog):
             await m.channel.send("!play current", delete_after = 0)
             leave = m.guild.voice_client
             await leave.disconnect()
+        elif m.content.startswith("!volume"):
+            channel = m.author.voice.channel
+            await channel.connect()
+            await m.channel.send("!volume" + m.content[8:], delete_after = 0)
+            leave = m.guild.voice_client
+            await leave.disconnect()
 
         # Tell our good friend how they can fund SizeBot.
         if m.author.id == ids.chocola and isACommand(self.bot.all_commands.keys(), m.content) and not m.content.endswith("--no-fund"):
