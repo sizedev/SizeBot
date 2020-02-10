@@ -76,8 +76,9 @@ class ColorCog(commands.Cog):
                     await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
                     return
             colorvalueout = ",".join(colorvalues)
-        elif colortype == "cymk":
-            # CYMK
+        elif colortype in ["cmyk", "cymk"]:
+            # CMYK
+            colortype = "cmyk"
             if len(colorvalues) != 4:
                 await outmessage.edit(content = f"A {colortype} color can only have between 3 and 4 parts.")
                 return
@@ -89,6 +90,7 @@ class ColorCog(commands.Cog):
         else:
             # Invalid color type
             await outmessage.edit(content = f"`{colortype}` is not an accepted color type.\nAccepted types are hex, rgb, hsv, hsl, or cymk.")
+            return
 
         r = requests.get(url + "/id?" + colortype + "=" + colorvalueout)
         colorjson = r.json()
