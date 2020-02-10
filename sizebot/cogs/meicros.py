@@ -1,17 +1,5 @@
 from discord.ext import commands
 
-from sizebot import conf
-from sizebot.lib.constants import ids
-
-
-def isACommand(commands, message):
-    for command in commands:
-        if message.startswith(conf.prefix + command):
-            return True
-    if message.startswith("!stop"):
-        return True
-    return False
-
 
 class MeicrosCog(commands.Cog):
     """Meicros, or how to annoy your developer friend."""
@@ -61,10 +49,6 @@ class MeicrosCog(commands.Cog):
             await m.channel.send("!play volume" + m.content[7:], delete_after = 0)
             leave = m.guild.voice_client
             await leave.disconnect()
-
-        # Tell our good friend how they can fund SizeBot.
-        if m.author.id == ids.chocola and isACommand(self.bot.all_commands.keys(), m.content) and not m.content.endswith("--no-fund"):
-            await m.channel.send(f"1 packages are looking funding.\nRun `{conf.prefix}fund` for details.\n(To stop seeing this message, run commands with `--no-fund`.)")
 
 
 def setup(bot):
