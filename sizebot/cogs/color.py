@@ -28,6 +28,7 @@ class ColorCog(commands.Cog):
         usage = "[hex/rgb/hsv/hsl/cymk] <colorcode>"
     )
     async def color(self, ctx, arg1: str, *, arg2: str = None):
+        """Get info about a color."""
         outmessage = await ctx.send(emojis.loading)
 
         url = "http://thecolorapi.com"
