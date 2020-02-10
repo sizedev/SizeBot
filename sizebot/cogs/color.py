@@ -117,7 +117,7 @@ class ColorCog(commands.Cog):
         embed.add_field(name="CMYK Value", value = colorcmyk, inline = True)
         embed.set_footer(text = f"Requested by {ctx.message.author.display_name}")
 
-        embed.set_image(url = f"http://www.singlecolorimage.com/get/{hexstring}/400x400")
+        embed.set_image(url = f"http://www.singlecolorimage.com/get/{hexstring}/400x200.png")
 
         await outmessage.edit(content = "", embed = embed)
 
