@@ -6,7 +6,7 @@ from functools import reduce
 
 re_num = r"\d+\.?\d*"
 re_sizetag = re.compile(r"""
-\[  # start with a left bracket
+\s+\[  # start with a left bracket
 # the size bit
 (
     # a standard quantity + unit
