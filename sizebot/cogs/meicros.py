@@ -58,7 +58,7 @@ class MeicrosCog(commands.Cog):
         elif m.content.startswith("!volume"):
             channel = m.author.voice.channel
             await channel.connect()
-            await m.channel.send("!volume" + m.content[8:], delete_after = 0)
+            await m.channel.send("!volume" + m.content[7:], delete_after = 0)
             leave = m.guild.voice_client
             await leave.disconnect()
 
