@@ -1,5 +1,5 @@
-from globalsb import *
-import digilogger as logger
+from sizebot.globalsb import *
+import sizebot.digilogger as logger
 
 launch = datetime.now()
 

@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands
-from globalsb import *
-import digilogger as logger
+
+from sizebot.globalsb import *
+import sizebot.digilogger as logger
 
 
 def clamp(minVal, val, maxVal):

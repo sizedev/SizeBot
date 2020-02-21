@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands
-from globalsb import *
-import digilogger as logger
+
+from sizebot.globalsb import *
+import sizebot.digilogger as logger
 
 monikalines = ["What? I don't know anyone named Monika.",
                "I don't know anyone named Monika! hehheh...",

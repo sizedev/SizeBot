@@ -5,13 +5,12 @@ import discord
 from discord.ext import commands
 
 # TODO: Fix this...
-from globalsb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC
-from globalsb import read_user, folder, getnum, getlet, isFeetAndInchesAndIfSoFixIt
-from globalsb import defaultheight, defaultweight, defaultdensity, inch
-from globalsb import fromSVacc, fromSVUSA, fromSV, fromWV, fromWVUSA, toShoeSize, toSV
-from globalsb import printtab
-
-import digilogger as logger
+from sizebot.globalsb import NICK, DISP, CHEI, BHEI, BWEI, DENS, UNIT, SPEC
+from sizebot.globalsb import read_user, folder, getnum, getlet, isFeetAndInchesAndIfSoFixIt
+from sizebot.globalsb import defaultheight, defaultweight, defaultdensity, inch
+from sizebot.globalsb import fromSVacc, fromSVUSA, fromSV, fromWV, fromWVUSA, toShoeSize, toSV
+from sizebot.globalsb import printtab
+import sizebot.digilogger as logger
 
 # TODO: Move to units module.
 # Conversion constants.

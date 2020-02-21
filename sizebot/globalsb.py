@@ -1,5 +1,3 @@
-import discord
-from discord.ext import commands
 import re
 import datetime
 from datetime import *
@@ -11,13 +9,17 @@ import math
 from math import *
 import random
 from decimal import *
-from colored import fore, back, style, fg, bg, attr
-from pathlib import Path
 import string
 import traceback
 import asyncio
 import codecs
-import digilogger as logger
+from pathlib import Path
+
+import discord
+from discord.ext import commands
+from colored import fore, back, style, fg, bg, attr
+
+import sizebot.digilogger as logger
 
 
 # TODO: Make this do something useful.

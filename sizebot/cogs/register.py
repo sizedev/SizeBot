@@ -5,11 +5,11 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 
-import digilogger as logger
-from globalsb import folder, readhexcode, regenhexcode
-from globalsb import isFeetAndInchesAndIfSoFixIt, getlet, getnum, toSV, toWV
-from globalsb import sizebotuser_roleid
-from globalsb import nickupdate
+import sizebot.digilogger as logger
+from sizebot.globalsb import folder, readhexcode, regenhexcode
+from sizebot.globalsb import isFeetAndInchesAndIfSoFixIt, getlet, getnum, toSV, toWV
+from sizebot.globalsb import sizebotuser_roleid
+from sizebot.globalsb import nickupdate
 
 
 # Add newlines and join into one string

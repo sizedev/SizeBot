@@ -1,8 +1,11 @@
-from discord.ext import commands
-import digilogger as logger
+import importlib.resources as pkg_resources
 
-with open("gifts.txt") as f:
-    gifts = f.readlines()
+from discord.ext import commands
+
+import sizebot.data
+import sizebot.digilogger as logger
+
+gifts = pkg_resources.read_text(sizebot.data, "gifts.txt").splitlines()
 gifts = [x.strip() for x in gifts]
 
 alreadyclaimed = set()

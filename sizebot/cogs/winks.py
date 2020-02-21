@@ -1,8 +1,10 @@
-from discord.ext import commands
-from globalsb import yukioid, pretty_time_delta, digiid
-import digilogger as logger
 import re
 from datetime import timedelta, datetime
+
+from discord.ext import commands
+
+from sizebot.globalsb import yukioid, pretty_time_delta, digiid
+import sizebot.digilogger as logger
 
 winkpath = "../winkcount.txt"
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance

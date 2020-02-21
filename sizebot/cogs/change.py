@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands
-from globalsb import *
-import digilogger as logger
+
+from sizebot.globalsb import *
+import sizebot.digilogger as logger
 
 class ChangeCog(commands.Cog):
     def __init__(self, bot):

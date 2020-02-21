@@ -1,7 +1,8 @@
 from discord.ext import commands
-from globalsb import *
-import digilogger as logger
-import roller
+
+from sizebot.globalsb import *
+import sizebot.digilogger as logger
+import sizebot.roller
 
 
 # Commands for roleplaying.
