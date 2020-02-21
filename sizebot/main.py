@@ -63,10 +63,9 @@ def main():
         await bot.process_commands(message)
 
     # Here we load our extensions(cogs) listed above in [initial_extensions].
-    if __name__ == '__main__':
-        for extension in initial_extensions:
-            # try:
-            bot.load_extension(extension)
+    for extension in initial_extensions:
+        # try:
+        bot.load_extension(extension)
 
 
     bot.run(authtoken)
