@@ -18,17 +18,17 @@ def main():
     Written by DigiDuncan.
     The SizeBot Team: DigiDuncan, Natalie, AWK_, Benyovski, Arceus3521, Surge The Raichu.'''
     initial_extensions = [
-        'cogs.change',
-        'cogs.dm',
-        'cogs.fun',
-        'cogs.mod',
-        'cogs.monika',
-        'cogs.register',
-        'cogs.roleplay',
-        'cogs.set',
-        'cogs.stats',
-        'cogs.winks',
-        'cogs.christmas'
+        'sizebot.cogs.change',
+        'sizebot.cogs.dm',
+        'sizebot.cogs.fun',
+        'sizebot.cogs.mod',
+        'sizebot.cogs.monika',
+        'sizebot.cogs.register',
+        'sizebot.cogs.roleplay',
+        'sizebot.cogs.set',
+        'sizebot.cogs.stats',
+        'sizebot.cogs.winks',
+        'sizebot.cogs.christmas'
     ]
 
     # Obviously we need this printed in the terminal.
