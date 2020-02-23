@@ -2,7 +2,7 @@ from discord.ext import commands
 
 from sizebot.globalsb import *
 import sizebot.digilogger as logger
-import sizebot.roller
+from sizebot import roller
 
 
 # Commands for roleplaying.
