@@ -8,7 +8,8 @@ from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
 from sizebot import conf
-from sizebot.lib import constants, objs, status, units
+from sizebot.lib import constants, objs, status, units, proportions
+from sizebot.plugins import monika, meicros
 from sizebot.lib.discordlogger import DiscordHandler
 
 logging.basicConfig(level=logging.INFO)
@@ -27,8 +28,6 @@ initial_cogs = [
     "help",
     "holiday",
     "keypad",
-    "meicros",
-    "monika",
     "naptime",
     "register",
     "roll",
@@ -110,12 +109,16 @@ def main():
     @bot.event
     async def on_message(message):
         await bot.process_commands(message)
+        await proportions.nickUpdate(m.author)
+        await meicros.on_message(message)
+        await monika.on_message(message)
 
     @bot.event
     async def on_message_edit(before, after):
         if before.content == after.content:
             return
         await bot.process_commands(after)
+        await proportions.nickUpdate(m.author)
 
     @bot.event
     async def on_disconnect():
