@@ -346,7 +346,7 @@ class PersonStats:
         if userdata.hairlength is None:
             self.hairlength = None
         else:
-            self.hairlength = userdata.hairlength
+            self.hairlength = SV(userdata.hairlength / self.viewscale)
 
         if userdata.footlength is None:
             self.footlength = SV(self.height * self.footfactor)
