@@ -293,6 +293,42 @@ class SetCog(commands.Cog):
             await proportions.nickUpdate(ctx.message.author)
 
     @commandsplus.command(
+        usage = "<length>"
+    )
+    @commands.guild_only()
+    async def sethair(self, ctx, *, newhair):
+        """Set a custom hair length."""
+        newhairsv = SV.parse(newhair)
+
+        userdata = userdb.load(ctx.message.author.id)
+
+        userdata.hairlength = newhairsv
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name})'s hair is now {userdata.hairlength:m} long.")
+        await ctx.send(f"<@{ctx.message.author.id}>'s hair is now {userdata.hairlength:mu} long.")
+
+        if userdata.display:
+            await proportions.nickUpdate(ctx.message.author)
+
+    @commandsplus.command(
+        aliases = ["clearhair", "unsethair"]
+    )
+    @commands.guild_only()
+    async def resethair(self, ctx):
+        """Remove custom hair length."""
+        userdata = userdb.load(ctx.message.author.id)
+
+        userdata.hairlength = None
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their custom hair length.")
+        await ctx.send("<@{ctx.message.author.id}>'s hair length is now default.")
+
+        if userdata.display:
+            await proportions.nickUpdate(ctx.message.author)
+
+    @commandsplus.command(
         usage = "<male/female/none>"
     )
     @commands.guild_only()

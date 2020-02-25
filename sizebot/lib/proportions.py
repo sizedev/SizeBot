@@ -170,7 +170,7 @@ class PersonComparison:
 
     def __str__(self):
         # Print compare
-        return (
+        returnstr = (
             "**Comparison:**\n"
             f"{self.big.tag} is really:\n"
             f"\tReal Height: {self.big.height:,.3mu} ({self.big.scale:,.3}x scale)\n"
@@ -186,7 +186,10 @@ class PersonComparison:
             f"\tThumb Width: {self.bigToSmall.thumbwidth:,.3mu}\n"
             f"\tNail Thickness: {self.bigToSmall.nailthickness:,.3mu}\n"
             f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:,.3mu}\n"
-            f"\tClothing Thread Thickness: {self.bigToSmall.threadthickness:,.3mu}\n"
+            f"\tClothing Thread Thickness: {self.bigToSmall.threadthickness:,.3mu}\n")
+        if self.bigToSmall.hairlength:
+            returnstr += f"\tHair Length: {self.bigToSmall.hairlength:,.3mu}\n"
+        returnstr += (
             f"\tHair Width: {self.bigToSmall.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.bigToSmall.eyewidth:,.3mu}\n"
             f"\tWalk Speed: {self.bigToSmall.walkperhour,:.3mu}\n"
@@ -208,7 +211,10 @@ class PersonComparison:
             f"\tThumb Width: {self.smallToBig.thumbwidth:,.3mu}\n"
             f"\tNail Thickness: {self.smallToBig.nailthickness:,.3mu}\n"
             f"\tFingerprint Depth: {self.smallToBig.fingerprintdepth:,.3mu}\n"
-            f"\tClothing Thread Thickness: {self.smallToBig.threadthickness:,.3mu}\n"
+            f"\tClothing Thread Thickness: {self.smallToBig.threadthickness:,.3mu}\n")
+        if self.smallToBig.hairlength:
+            returnstr += f"\tHair Length: {self.smallToBig.hairlength:,.3mu}\n"
+        returnstr += (
             f"\tHair Width: {self.smallToBig.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.smallToBig.eyewidth:,.3mu}\n"
             f"\tWalk Speed: {self.smallToBig.walkperhour:,.1M} per hour ({self.smallToBig.walkperhour:,.1U} per hour)\n"
@@ -217,7 +223,9 @@ class PersonComparison:
             f"**Base Sizes:**\n"
             f"\t{self.big.tag}: {self.big.baseheight:,.3mu} | {self.big.baseweight:,.3mu}\n"
             f"\t{self.small.tag}: {self.small.baseheight:,.3mu} | {self.small.baseweight:,.3mu}"
-        ).replace("\t", "\u2002" * 4)
+        )
+        returnstr = returnstr.replace("\t", "\u2002" * 4)
+        return returnstr
 
     def toEmbed(self):
         embed = discord.Embed(title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
@@ -264,6 +272,14 @@ class PersonComparison:
         embed.add_field(name="Fingerprint Depth", value=(
             f"{emojis.comparebig}{self.bigToSmall.fingerprintdepth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.fingerprintdepth:,.3mu}"), inline=True)
+        if self.bigToSmall.hairlength or self.smallToBig.hairlength:
+            hairfield = ""
+            if self.bigToSmall.hairlength:
+                hairfield += f"{emojis.comparebig}{self.bigToSmall.hairlength:,.3mu}\n"
+            if self.smallToBig.hairlength:
+                hairfield += f"{emojis.comparebig}{self.smallToBig.hairlength:,.3mu}\n"
+            hairfield = hairfield.strip()
+            embed.add_field(name="Hair Length", value=hairfield, inline=True)
         embed.add_field(name="Hair Width", value=(
             f"{emojis.comparebig}{self.bigToSmall.hairwidth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.hairwidth:,.3mu}"), inline=True)
@@ -327,6 +343,11 @@ class PersonStats:
         self.averageheightmult = self.height / defaultheight
         self.averageweightmult = self.weight / defaultweight
 
+        if userdata.hairlength is None:
+            self.hairlength = None
+        else:
+            self.hairlength = userdata.hairlength
+
         if userdata.footlength is None:
             self.footlength = SV(self.height * self.footfactor)
         else:
@@ -360,7 +381,7 @@ class PersonStats:
         self.runperhour = SV(defaultrunspeed * self.averageheightmult)
 
     def __str__(self):
-        return (
+        returnstr = (
             f"**{self.tag} Stats:**\n"
             f"*Current Height:*  {self.height:,.3mu} ({self.averageheightmult:,.3}x average height)\n"
             f"*Current Weight:*  {self.weight:,.3mu} ({self.averageweightmult:,.3}x average weight\n"
@@ -373,7 +394,10 @@ class PersonStats:
             f"Thumb Width: {self.thumbwidth:,.3mu}\n"
             f"Nail Thickness: {self.nailthickness:,.3mu}\n"
             f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
-            f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n"
+            f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n")
+        if self.hairlength:
+            returnstr += f"Hair Length: {self.hairlength:,.3mu}\n"
+        returnstr += (
             f"Hair Width: {self.hairwidth:,.3mu}\n"
             f"Eye Width: {self.eyewidth:,.3mu}\n"
             f"Walk Speed: {self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)\n"
@@ -383,8 +407,8 @@ class PersonStats:
             f"Weight of a Normal Person (Comparative): {self.avgweightcomp:,.3mu}\n"
             f"To look {self.avglookdirection} at a average human, you'd have to look {self.avglookdirection} {self.avglookangle:.0f}°.\n"
             f"\n"
-            f"Character Bases: {self.baseheight:,.3mu} | {self.baseweight:,.3mu}"
-        )
+            f"Character Bases: {self.baseheight:,.3mu} | {self.baseweight:,.3mu}")
+        return returnstr
 
     def toEmbed(self):
         embed = discord.Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
@@ -400,6 +424,8 @@ class PersonStats:
         embed.add_field(name="Nail Thickness", value=format(self.nailthickness, ",.3mu"), inline=True)
         embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
         embed.add_field(name="Clothing Thread Thickness", value=format(self.threadthickness, ",.3mu"), inline=True)
+        if self.hairlength:
+            embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)", inline=True)

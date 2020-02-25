@@ -29,6 +29,7 @@ class User:
         self._baseheight = defaultheight
         self._baseweight = defaultweight
         self._footlength = None
+        self._hairlength = None
         self._unitsystem = "m"
         self.species = None
 
@@ -62,6 +63,17 @@ class User:
             self._footlength = None
             return
         self._footlength = SV(max(0, SV(value)))
+
+    @property
+    def hairlength(self):
+        return self._hairlength
+
+    @hairlength.setter
+    def hairlength(self, value):
+        if value is None:
+            self._hairlength = None
+            return
+        self._hairlength = SV(max(0, SV(value)))
 
     @property
     def gender(self):
@@ -157,6 +169,7 @@ class User:
             "baseheight": str(self.baseheight),
             "baseweight": str(self.baseweight),
             "footlength": None if self.footlength is None else str(self.footlength),
+            "hairlength": None if self.hairlength is None else str(self.hairlength),
             "unitsystem": self.unitsystem,
             "species": self.species
         }
@@ -173,6 +186,7 @@ class User:
         userdata.baseheight = jsondata["baseheight"]
         userdata.baseweight = jsondata["baseweight"]
         userdata.footlength = jsondata.get("footlength")
+        userdata.hairlength = jsondata.get("hairlength")
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         return userdata
