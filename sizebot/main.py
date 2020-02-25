@@ -109,7 +109,7 @@ def main():
     @bot.event
     async def on_message(message):
         await bot.process_commands(message)
-        await proportions.nickUpdate(m.author)
+        await proportions.nickUpdate(message.author)
         await meicros.on_message(message)
         await monika.on_message(message)
 
@@ -118,7 +118,7 @@ def main():
         if before.content == after.content:
             return
         await bot.process_commands(after)
-        await proportions.nickUpdate(m.author)
+        await proportions.nickUpdate(after.author)
 
     @bot.event
     async def on_disconnect():
