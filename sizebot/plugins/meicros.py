@@ -1,4 +1,4 @@
-async def on_message(self, m):
+async def on_message(m):
     """Meicros, or how to annoy your developer friend."""
     if m.author.bot:
         return

@@ -8,7 +8,7 @@ logger = logging.getLogger("sizebot")
 monikalines = pkg_resources.read_text(sizebot.data, "monikalines.txt").splitlines()
 
 
-async def on_message(self, m):
+async def on_message(m):
     """Monika easter eggs."""
     if m.author.bot:
         return
