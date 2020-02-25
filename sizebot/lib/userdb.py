@@ -18,7 +18,7 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 @total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["id", "nickname", "_gender", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_unitsystem", "species"]
+    __slots__ = ["id", "nickname", "_gender", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_hairlength", "_unitsystem", "species"]
 
     def __init__(self):
         self.id = None
@@ -34,7 +34,7 @@ class User:
         self.species = None
 
     def __str__(self):
-        return f"ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, UNIT {self.unitsystem}, SPEC {self.species}"
+        return f"ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, HAIR {self.hairlength}, UNIT {self.unitsystem}, SPEC {self.species}"
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
