@@ -8,7 +8,7 @@ from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
 from sizebot import conf
-from sizebot.lib import constants, objs, status, units, proportions
+from sizebot.lib import objs, status, units, proportions
 from sizebot.plugins import monika, meicros
 from sizebot.lib.discordlogger import DiscordHandler
 
@@ -51,7 +51,6 @@ def main():
     except FileNotFoundError as e:
         logger.error(f"Configuration file not found: {e.filename}")
         return
-    constants.load()
 
     booting = True
     launchtime = datetime.now()

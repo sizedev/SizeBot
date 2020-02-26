@@ -1,11 +1,8 @@
-import logging
-
 import importlib.resources as pkg_resources
 import toml
 
 import sizebot.data
 
-logger = logging.getLogger("sizebot")
 ids = None
 emojis = None
 
@@ -40,3 +37,6 @@ def load():
     data = toml.loads(pkg_resources.read_text(sizebot.data, "constants.ini"))
     loadids(data)
     loademojis(data)
+
+
+load()
