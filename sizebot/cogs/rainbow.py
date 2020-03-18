@@ -7,13 +7,13 @@ from discord.ext import tasks, commands
 from sizebot.lib.utils import formatTraceback
 
 colorgen = itertools.cycle([
-    discord.Color(0xff0000),  # red
-    discord.Color(0xff7700),  # orange
-    discord.Color(0xffff00),  # yellow
-    discord.Color(0x00ff00),  # green
-    discord.Color(0x00ffff),  # cyan
-    discord.Color(0x0000ff),  # blue
-    discord.Color(0xff00ff)   # purple
+    discord.Color.red(),  # red
+    discord.Color.orange(),  # orange
+    discord.Color.gold(),  # yellow
+    discord.Color.green(),  # green
+    discord.Color.teal(),  # cyan
+    discord.Color.blue(),  # blue
+    discord.Color.purple()   # purple
 ])
 
 logger = logging.getLogger("sizebot")
