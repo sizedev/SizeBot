@@ -19,7 +19,7 @@ class RainbowCog(commands.Cog):
             self.index == 0
         for guild in self.bot.guilds:
             for role in guild.roles:
-                if role.name.lower() == "Rainbow":
+                if role.name.lower() == "rainbow":
                     await role.edit(color = colorlist[self.index])
 
 
