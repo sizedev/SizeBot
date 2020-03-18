@@ -5,6 +5,7 @@ colorlist = [0xff0000, 0xff7700, 0xffff00, 0x00ff00, 0x00ffff, 0x0000ff, 0xff00f
 
 class RainbowCog(commands.Cog):
     def __init__(self, bot):
+        self.bot = bot
         self.index = 0
         self.rainbower.start()
 
