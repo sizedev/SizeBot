@@ -3,7 +3,7 @@ from discord.ext import tasks, commands
 colorlist = [0xff0000, 0xff7700, 0xffff00, 0x00ff00, 0x00ffff, 0x0000ff, 0xff00ff]
 
 
-class MyCog(commands.Cog):
+class RainbowCog(commands.Cog):
     def __init__(self, bot):
         self.index = 0
         self.rainbower.start()
@@ -20,3 +20,7 @@ class MyCog(commands.Cog):
             for role in guild.roles:
                 if role.name.lower() == "Rainbow":
                     await role.edit(color = colorlist[self.index])
+
+
+def setup(bot):
+    bot.add_cog(RainbowCog(bot))
