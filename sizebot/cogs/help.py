@@ -97,7 +97,7 @@ class HelpCog(commands.Cog):
         if cmd.help:
             descriptionParts.append(cmd.help)
         description = ""
-        if commands.is_owner() in cmd.checks:
+        if ctx.bot.is_owner() in cmd.checks:
             description += ":rotating_light: **THIS COMMAND IS FOR BOT OWNERS ONLY** :rotating_light:\n"
         description += "\n\n".join(descriptionParts)
 
