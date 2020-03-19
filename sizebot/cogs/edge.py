@@ -121,3 +121,7 @@ class EdgeCog(commands.Cog):
         edgedict["largest"] = None
         with open(conf.edgepath, "w") as f:
             f.write(toml.dump(edgedict))
+
+
+def setup(bot):
+    bot.add_cog(EdgeCog(bot))
