@@ -31,11 +31,13 @@ winkpath = None
 userdbpath = None
 telemetrypath = None
 changespath = None
+naptimepath = None
+edgepath = None
 prefix = "&"
 name = "SizeBot"
 activity = "Ratchet and Clank: Size Matters"
 authtoken = None
-admins = []             # List of admins
+admins = []             # List of admins # TODO: (deprecated?)
 logchannelid = None
 
 # File paths
@@ -46,6 +48,7 @@ telemetrypath = datadir / "telemetry.json"
 thispath = datadir / "thistracker.json"
 changespath = datadir / "changes.json"
 naptimepath = datadir / "naptime.json"
+edgepath = datadir / "edgeusers.ini"
 confpath = datadir / "sizebot.conf"
 
 
