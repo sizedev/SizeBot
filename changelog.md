@@ -7,7 +7,7 @@
 - Added a link to a visual comparison when using `&compare`.
 - Slow changes now support stop conditions, either a time or a size.
 - Gender is now customizable, though it doesn't do much right now, with `&setgender`. Turn off "hard gender" with `&resetgender`.
-    - Gender will try to be infered if you have an gender roels assigned to you. This is known as "soft gender."
+    - Gender will try to be infered if you have an gender roles assigned to you. This is known as "soft gender."
 - The `&help` command now supports arguments for detailed info on a specific command, as in `&help [command]`.
     - Many commands now have helpful aliases, which you can find by running `&help [command]`.
 - Added the ability to use exponents in changes, for instance `&change ^ 2`.
@@ -16,11 +16,16 @@
 - Added a new command, `&objcompare`, which lets you see what object you are closest to in height and weight.
     - Displays different, random comparisons from a list of close comparisons on every run.
     - Includes fractional output to the nearest eighth, and accuracy percentages!
+- Added the ability for administrators to set "edge" users, one "smallest" and one "largest", whose size will be auto-set to be the lowest or highest on the server.
+    - Use `&edges` to see who is currently set to be the edge users.
+    - Administrators can use `&setsmallest <@user>` and `&setlargest <@user>` to set the edge users, and `&clearsmallest` and `&clearlargest` to remove them.
 - Added an Agreements Leaderboard.
     - Sending either `^`, `this`, `agree`, or one of many various "this" emotes after a message, or reacting to a message with one of those emotes, will give that user an "agreement point."
     - The leaderboard for this can be displayed with `&leaderboard`.
+- Added some non-size commands for fun:
+    - Added a new command, `&naptime`, which kicks you from any voice channel you're in after a set duration.
+    - Added `&color <hex/rgb/hsv/cmyk> <value>`, which let's you see information about different colors.
 - Added a `&ping` command, to see if it's us who's lagging, or it's just Discord again.
-- Added a new command, `&naptime`, which kicks you from any voice channel you're in after a set duration.
 - Users now have the ability to use some simple SizeBot functions in DMs, including `&roll`, `&help`, and `&about`.
 - You can now edit a failed command message, and it will rerun the command.
 - Mei and SizeBot are now friends.
@@ -51,21 +56,12 @@
 - Unicode in nicknames is now handled correctly.
 - Some smallish numbers were being displayed in scientific notation, which is no longer the case.
 
-## New Commands and New Command Syntax
+## New Commands and Changeed Command Syntax
 
 ### New Commands
 
-- `&objcompare`
-- `&ping`
-- `&setbase <height/weight> [height/weight]`
-- `&setfoot <length>`
-- `&setgender <m/f>`
-- `&resetfoot`
-- `&resetgender`
-- `&naptime <duration>`
-- `&units`
-- `&leaderboard`
+`# TODO: Work on this section.`
 
-### New Command Syntax
+### Changed Command Syntax
 
-- `&slowchange <rate> [stop condition]`
+`# TODO: Work on this section.`
