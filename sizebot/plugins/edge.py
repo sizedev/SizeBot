@@ -3,8 +3,17 @@
 # to either 1.1x or 0.9x of the largest or smallest user (in the guild [SB4]), respectively.
 
 import toml
-from sizebot import conf
+import logging
+from os import listdir
 
+import sizebot.lib.decimal as Decimal
+from sizebot import conf
+from sizebot.lib.units import SV
+from sizebot.lib import userdb
+
+logger = logging.getLogger("sizebot")
+
+# Read the edges file.
 try:
     with open(conf.edgepath, "r") as f:
         edgedict = toml.loads(f.read())
@@ -15,4 +24,45 @@ except (FileNotFoundError, TypeError, toml.TomlDecodeError):
 
 
 async def on_message(m):
-    pass
+    if m.author.id != edgedict.get("smallest", None) or m.author.id != edgedict.get("largest", None):
+        return  # The user is not set to be the smallest or the largest user.
+
+    userdata = userdb.load(m.author.id)
+
+    # Find the largest and smallest current users.
+    smallestuser = 000000000000000000
+    smallestsize = SV(SV.infinity)
+    largestuser = 000000000000000000
+    largestsize = SV(0)
+    userfilelist = listdir(conf.userdbpath)
+    for userfile in userfilelist:
+        testid = userfile[:-5]  # Remove the ".json" from the file name, leaving us with the ID.
+        testdata = userdb.load(testid)
+        if testdata.height <= 0 or testdata.height >= SV.infinity:
+            break
+        if testdata.height > largestsize:
+            largestuser = testid
+            largestsize = testdata.height
+        if testdata.height < smallestsize:
+            smallestuser = testid
+            smallestsize = testdata.height
+
+    if edgedict.get("smallest", None) == m.author.id:
+        if m.author.id == smallestuser:
+            return
+        elif userdata.height == SV(0):
+            return
+        else:
+            userdata.height = smallestsize * Decimal(0.9)
+            userdb.save(userdata)
+            logger.info(f"User {m.author.id} ({m.author.display_name}) is now {userdata.height:m} tall, so that they stay the smallest.")
+
+    if edgedict.get("largest", None) == m.author.id:
+        if m.author.id == largestuser:
+            return
+        elif userdata.height == SV(SV.infinity):
+            return
+        else:
+            userdata.height = largestsize * Decimal(1.1)
+            userdb.save(userdata)
+            logger.info(f"User {m.author.id} ({m.author.display_name}) is now {userdata.height:m} tall, so that they stay the largest.")
