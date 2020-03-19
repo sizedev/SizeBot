@@ -12,9 +12,9 @@ from sizebot.discordplus import commandsplus
 
 import sizebot.lib.decimal as Decimal
 from sizebot import conf
-from sizebot.lib.units import SV
 from sizebot.lib import userdb
 from sizebot.lib import proportions
+from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
 
