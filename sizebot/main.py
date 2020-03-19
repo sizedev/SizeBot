@@ -9,7 +9,7 @@ from digiformatter import styles, logger as digilogger
 from sizebot import __version__
 from sizebot import conf
 from sizebot.lib import objs, status, units, proportions
-from sizebot.plugins import monika, meicros
+from sizebot.plugins import monika, meicros, edge
 from sizebot.lib.discordlogger import DiscordHandler
 
 logging.basicConfig(level=logging.INFO)
@@ -109,6 +109,7 @@ def main():
     @bot.event
     async def on_message(message):
         await bot.process_commands(message)
+        await edge.on_message(message)
         await proportions.nickUpdate(message.author)
         await meicros.on_message(message)
         await monika.on_message(message)
