@@ -14,6 +14,7 @@ import sizebot.lib.decimal as Decimal
 from sizebot import conf
 from sizebot.lib.units import SV
 from sizebot.lib import userdb
+from sizebot.lib import proportions
 
 logger = logging.getLogger("sizebot")
 
@@ -70,6 +71,9 @@ async def on_message(m):
             userdata.height = largestsize * Decimal(1.1)
             userdb.save(userdata)
             logger.info(f"User {m.author.id} ({m.author.display_name}) is now {userdata.height:m} tall, so that they stay the largest.")
+
+    if userdata.display:
+        await proportions.nickUpdate(m.author)
 
 
 class EdgeCog(commands.Cog):
