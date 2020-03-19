@@ -88,6 +88,7 @@ class EdgeCog(commands.Cog):
     )
     @commands.is_owner()
     async def setsmallest(self, ctx, *, member: discord.Member):
+        """Set the smallest user."""
         edgedict["smallest"] = member.id
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
@@ -98,6 +99,7 @@ class EdgeCog(commands.Cog):
     )
     @commands.is_owner()
     async def setlargest(self, ctx, *, member: discord.Member):
+        """Set the largest user."""
         edgedict["largest"] = member.id
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
@@ -108,6 +110,7 @@ class EdgeCog(commands.Cog):
     )
     @commands.is_owner()
     async def clearsmallest(self, ctx, *, member: discord.Member):
+        """Clear the role of 'smallest user.'"""
         edgedict["smallest"] = None
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
@@ -118,6 +121,7 @@ class EdgeCog(commands.Cog):
     )
     @commands.is_owner()
     async def clearlargest(self, ctx, *, member: discord.Member):
+        """Clear the role of 'largest user.'"""
         edgedict["largest"] = None
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
