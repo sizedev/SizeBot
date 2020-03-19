@@ -25,7 +25,7 @@ try:
 except (FileNotFoundError, TypeError, toml.TomlDecodeError):
     edgedict = {"edges": {"smallest": None, "largest": None}}
     with open(conf.edgepath, "w") as f:
-        f.write(toml.dump(edgedict))
+        f.write(toml.dumps(edgedict))
 
 
 async def on_message(m):
@@ -90,7 +90,7 @@ class EdgeCog(commands.Cog):
     async def setsmallest(self, ctx, *, member: discord.Member):
         edgedict["smallest"] = member.id
         with open(conf.edgepath, "w") as f:
-            f.write(toml.dump(edgedict))
+            f.write(toml.dumps(edgedict))
 
     @commandsplus.command(
         aliases = ["largest"],
@@ -100,7 +100,7 @@ class EdgeCog(commands.Cog):
     async def setlargest(self, ctx, *, member: discord.Member):
         edgedict["largest"] = member.id
         with open(conf.edgepath, "w") as f:
-            f.write(toml.dump(edgedict))
+            f.write(toml.dumps(edgedict))
 
     @commandsplus.command(
         aliases = ["resetsmallest", "removesmallest"],
@@ -110,7 +110,7 @@ class EdgeCog(commands.Cog):
     async def clearsmallest(self, ctx, *, member: discord.Member):
         edgedict["smallest"] = None
         with open(conf.edgepath, "w") as f:
-            f.write(toml.dump(edgedict))
+            f.write(toml.dumps(edgedict))
 
     @commandsplus.command(
         aliases = ["resetlargest", "removelargest"],
@@ -120,7 +120,7 @@ class EdgeCog(commands.Cog):
     async def clearlargest(self, ctx, *, member: discord.Member):
         edgedict["largest"] = None
         with open(conf.edgepath, "w") as f:
-            f.write(toml.dump(edgedict))
+            f.write(toml.dumps(edgedict))
 
 
 def setup(bot):
