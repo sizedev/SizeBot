@@ -29,7 +29,7 @@ initial_cogs = [
     "holiday",
     "keypad",
     "naptime",
-    "rainbow",
+    # "rainbow",
     "register",
     "roll",
     "run",

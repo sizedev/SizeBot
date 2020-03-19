@@ -7,12 +7,12 @@ from discord.ext import tasks, commands
 from sizebot.lib.utils import formatTraceback
 
 colorgen = itertools.cycle([
-    discord.Color.red(),  # red
+    discord.Color.red(),     # red
     discord.Color.orange(),  # orange
-    discord.Color.gold(),  # yellow
-    discord.Color.green(),  # green
-    discord.Color.teal(),  # cyan
-    discord.Color.blue(),  # blue
+    discord.Color.gold(),    # yellow
+    discord.Color.green(),   # green
+    discord.Color.teal(),    # cyan
+    discord.Color.blue(),    # blue
     discord.Color.purple()   # purple
 ])
 
