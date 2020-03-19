@@ -6,6 +6,10 @@ import toml
 import logging
 from os import listdir
 
+import discord
+from discord.ext import commands
+from sizebot.discordplus import commandsplus
+
 import sizebot.lib.decimal as Decimal
 from sizebot import conf
 from sizebot.lib.units import SV
@@ -66,3 +70,50 @@ async def on_message(m):
             userdata.height = largestsize * Decimal(1.1)
             userdb.save(userdata)
             logger.info(f"User {m.author.id} ({m.author.display_name}) is now {userdata.height:m} tall, so that they stay the largest.")
+
+
+class EdgeCog(commands.Cog):
+    """Commands to create or clear edge users."""
+
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commandsplus.command(
+        aliases = ["smallest"],
+        usage = "[user]"
+    )
+    @commands.is_owner()
+    async def setsmallest(self, ctx, *, member: discord.Member):
+        edgedict["smallest"] = member.id
+        with open(conf.edgepath, "w") as f:
+            f.write(toml.dump(edgedict))
+
+    @commandsplus.command(
+        aliases = ["largest"],
+        usage = "[user]"
+    )
+    @commands.is_owner()
+    async def setlargest(self, ctx, *, member: discord.Member):
+        edgedict["largest"] = member.id
+        with open(conf.edgepath, "w") as f:
+            f.write(toml.dump(edgedict))
+
+    @commandsplus.command(
+        aliases = ["resetsmallest", "removesmallest"],
+        usage = "[user]"
+    )
+    @commands.is_owner()
+    async def clearsmallest(self, ctx, *, member: discord.Member):
+        edgedict["smallest"] = None
+        with open(conf.edgepath, "w") as f:
+            f.write(toml.dump(edgedict))
+
+    @commandsplus.command(
+        aliases = ["resetlargest", "removelargest"],
+        usage = "[user]"
+    )
+    @commands.is_owner()
+    async def clearlargest(self, ctx, *, member: discord.Member):
+        edgedict["largest"] = None
+        with open(conf.edgepath, "w") as f:
+            f.write(toml.dump(edgedict))
