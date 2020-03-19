@@ -82,6 +82,11 @@ class EdgeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commandsplus.command()
+    async def edges(self, ctx):
+        """See who is set to be the smallest and largest users."""
+        await ctx.send(f"***SERVER-SET SMALLEST AND LARGEST USERS:**\nSmallest: {edgedict.get('smallest', '*Unset*')}\nLargest: {edgedict.get('largest', '*Unset*')}")
+
     @commandsplus.command(
         aliases = ["smallest"],
         usage = "[user]"
