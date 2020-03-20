@@ -10,11 +10,11 @@ import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-import sizebot.lib.decimal as Decimal
 from sizebot import conf
 from sizebot.lib import userdb
 from sizebot.lib import proportions
 from sizebot.lib.units import SV
+from sizebot.lib.decimal import Decimal
 
 logger = logging.getLogger("sizebot")
 
