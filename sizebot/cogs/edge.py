@@ -29,7 +29,9 @@ except (FileNotFoundError, TypeError, toml.TomlDecodeError):
 
 
 async def on_message(m):
-    if m.author.id != edgedict.get("smallest", None) or m.author.id != edgedict.get("largest", None):
+    sm = edgedict.get("smallest", None)
+    lg = edgedict.get("largest", None)
+    if m.author.id != sm and m.author.id != lg:
         return  # The user is not set to be the smallest or the largest user.
 
     userdata = userdb.load(m.author.id)
