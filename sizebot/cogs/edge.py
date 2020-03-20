@@ -166,8 +166,8 @@ class EdgeCog(commands.Cog):
         usersizes = getUserSizes()
 
         outstring = f"**CURRENT USER:**\nID: `{ctx.message.author.id}`\nHeight: `{userdata.height}`\n\n"
-        outstring += f"**SMALLEST USER:**\nID: `{usersizes['smallest']['id']}\nHeight: `{usersizes['smallest']['size']}`\n\n"
-        outstring += f"**LARGEST USER:**\nID: `{usersizes['largest']['id']}\nHeight: `{usersizes['largest']['size']}`\n\n"
+        outstring += f"**SMALLEST USER:**\nID: `{usersizes['smallest']['id']``}\nHeight: `{usersizes['smallest']['size']}`\n\n"
+        outstring += f"**LARGEST USER:**\nID: `{usersizes['largest']['id']}`\nHeight: `{usersizes['largest']['size']}`\n\n"
         outstring += "**ALL USERS:**\n"
 
         for pair in usersizes['users'].items():
