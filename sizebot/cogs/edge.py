@@ -54,6 +54,9 @@ async def on_message(m):
             smallestuser = testid
             smallestsize = testdata.height
 
+    smallestuser = int(smallestuser)
+    largestuser = int(largestuser)
+
     if edgedict.get("smallest", None) == m.author.id:
         if m.author.id == smallestuser:
             return
