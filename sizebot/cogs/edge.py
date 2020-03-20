@@ -97,6 +97,7 @@ class EdgeCog(commands.Cog):
         edgedict["smallest"] = member.id
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
+        logger.info(f"{member.name} ({member.id}) is now the smallest user.")
 
     @commandsplus.command(
         aliases = ["largest"],
@@ -108,6 +109,7 @@ class EdgeCog(commands.Cog):
         edgedict["largest"] = member.id
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
+        logger.info(f"{member.name} ({member.id}) is now the largest user.")
 
     @commandsplus.command(
         aliases = ["resetsmallest", "removesmallest"],
@@ -119,6 +121,7 @@ class EdgeCog(commands.Cog):
         edgedict["smallest"] = None
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
+        logger.info("Smallest user unset.")
 
     @commandsplus.command(
         aliases = ["resetlargest", "removelargest"],
@@ -130,6 +133,7 @@ class EdgeCog(commands.Cog):
         edgedict["largest"] = None
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
+        logger.info("Largest user unset.")
 
 
 def setup(bot):
