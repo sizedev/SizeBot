@@ -168,7 +168,7 @@ class EdgeCog(commands.Cog):
         outstring += f"**LARGEST USER:**\nID: `{usersizes['largest']['id']}\nHeight: `{usersizes['largest']['size']}\n\n"
         outstring += "**ALL USERS:\n"
 
-        for user, size in usersizes['allusers']:
+        for user, size in usersizes['users']:
             outstring += f"`{user}`: {size}\n"
 
         await ctx.send(outstring)
