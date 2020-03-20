@@ -99,6 +99,7 @@ class EdgeCog(commands.Cog):
         edgedict["smallest"] = member.id
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
+        await ctx.send(f"<@{member.id}> is now the smallest user. They will be automatically adjusted to be the smallest user until they are removed from this role.")
         logger.info(f"{member.name} ({member.id}) is now the smallest user.")
 
     @commandsplus.command(
@@ -111,6 +112,7 @@ class EdgeCog(commands.Cog):
         edgedict["largest"] = member.id
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
+        await ctx.send(f"<@{member.id}> is now the largest user. They will be automatically adjusted to be the largest user until they are removed from this role.")
         logger.info(f"{member.name} ({member.id}) is now the largest user.")
 
     @commandsplus.command(
@@ -123,6 +125,7 @@ class EdgeCog(commands.Cog):
         edgedict["smallest"] = None
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
+        await ctx.send("Smallest user unset.")
         logger.info("Smallest user unset.")
 
     @commandsplus.command(
@@ -135,6 +138,7 @@ class EdgeCog(commands.Cog):
         edgedict["largest"] = None
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
+        await ctx.send("Largest user unset.")
         logger.info("Largest user unset.")
 
 
