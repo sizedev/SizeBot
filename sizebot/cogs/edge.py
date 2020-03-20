@@ -119,11 +119,10 @@ class EdgeCog(commands.Cog):
         logger.info(f"{member.name} ({member.id}) is now the largest user.")
 
     @commandsplus.command(
-        aliases = ["resetsmallest", "removesmallest"],
-        usage = "[user]"
+        aliases = ["resetsmallest", "removesmallest"]
     )
     @commands.is_owner()
-    async def clearsmallest(self, ctx, *, member: discord.Member):
+    async def clearsmallest(self, ctx):
         """Clear the role of 'smallest user.'"""
         edgedict["smallest"] = None
         with open(conf.edgepath, "w") as f:
@@ -132,11 +131,10 @@ class EdgeCog(commands.Cog):
         logger.info("Smallest user unset.")
 
     @commandsplus.command(
-        aliases = ["resetlargest", "removelargest"],
-        usage = "[user]"
+        aliases = ["resetlargest", "removelargest"]
     )
     @commands.is_owner()
-    async def clearlargest(self, ctx, *, member: discord.Member):
+    async def clearlargest(self, ctx):
         """Clear the role of 'largest user.'"""
         edgedict["largest"] = None
         with open(conf.edgepath, "w") as f:
