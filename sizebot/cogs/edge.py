@@ -28,14 +28,7 @@ except (FileNotFoundError, TypeError, toml.TomlDecodeError):
         f.write(toml.dumps(edgedict))
 
 
-async def on_message(m):
-    sm = edgedict.get("smallest", None)
-    lg = edgedict.get("largest", None)
-    if m.author.id != sm and m.author.id != lg:
-        return  # The user is not set to be the smallest or the largest user.
-
-    userdata = userdb.load(m.author.id)
-
+def getUserSizes():
     # Find the largest and smallest current users.
     # TODO: Check to see if these users are recently active, which would determine if they count towards the check.
     smallestuser = 000000000000000000
@@ -43,9 +36,11 @@ async def on_message(m):
     largestuser = 000000000000000000
     largestsize = SV(0)
     userfilelist = listdir(conf.userdbpath)
+    allusers = {}
     for userfile in userfilelist:
         testid = userfile[:-5]  # Remove the ".json" from the file name, leaving us with the ID.
         testdata = userdb.load(testid)
+        allusers[testid] = testdata.height
         if testdata.height <= 0 or testdata.height >= SV.infinity:
             break
         if testdata.height > largestsize:
@@ -57,6 +52,25 @@ async def on_message(m):
 
     smallestuser = int(smallestuser)
     largestuser = int(largestuser)
+
+    return {"smallest": {"id": smallestuser, "size": smallestsize},
+            "largest": {"id": largestuser, "size": largestsize},
+            "users": allusers}
+
+
+async def on_message(m):
+    sm = edgedict.get("smallest", None)
+    lg = edgedict.get("largest", None)
+    if m.author.id != sm and m.author.id != lg:
+        return  # The user is not set to be the smallest or the largest user.
+
+    userdata = userdb.load(m.author.id)
+
+    usersizes = getUserSizes()
+    smallestuser = usersizes["smallest"]["id"]
+    smallestsize = usersizes["smallest"]["size"]
+    largestuser = usersizes["largest"]["id"]
+    largestsize = usersizes["largest"]["size"]
 
     if edgedict.get("smallest", None) == m.author.id:
         if m.author.id == smallestuser:
