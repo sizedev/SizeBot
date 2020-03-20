@@ -37,6 +37,7 @@ async def on_message(m):
     userdata = userdb.load(m.author.id)
 
     # Find the largest and smallest current users.
+    # TODO: Check to see if these users are recently active, which would determine if they count towards the check.
     smallestuser = 000000000000000000
     smallestsize = SV(SV.infinity)
     largestuser = 000000000000000000
