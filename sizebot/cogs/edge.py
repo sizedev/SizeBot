@@ -1,5 +1,5 @@
-# The "edge" extensions allows bot admins (and later guild owners [SB4]) to set a largest/smallest user (for their server [SB4]).
-# It does this by sseeing if they are the largest or smallest user (in the guild [SB4]), and if they aren't setting their height
+# The "edge" cog allows bot admins (and later guild owners [SB4]) to set a largest/smallest user (for their server [SB4]).
+# It does this by seeing if they are the largest or smallest user (in the guild [SB4]), and if they aren't setting their height
 # to either 1.1x or 0.9x of the largest or smallest user (in the guild [SB4]), respectively.
 
 import toml
