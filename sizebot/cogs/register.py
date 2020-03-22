@@ -209,7 +209,7 @@ class RegisterCog(commands.Cog):
             return
 
         # TODO: This doesn't seem to work.
-        if guildsregisteredin == [str(ctx.guild.id)]:
+        if guildsregisteredin == [ctx.guild.id]:
             await ctx.send("You are not registered with SizeBot in any other guilds.")
             return
 
@@ -255,7 +255,7 @@ class RegisterCog(commands.Cog):
             chosen = inputdict[reaction.emoji] - 1
             chosenguild = guildsregisteredin[chosen]
 
-            frompath = conf.guilddbpath / chosenguild / "users" / f"{ctx.message.author.id}.json"
+            frompath = conf.guilddbpath / str(chosenguild) / "users" / f"{ctx.message.author.id}.json"
             topath = conf.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.message.author.id}.json"
 
             copyfile(frompath, topath)
