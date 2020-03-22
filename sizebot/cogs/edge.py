@@ -59,12 +59,15 @@ def getUserSizes():
 
 
 async def on_message(m):
+    # non-guild messages
+    if not isinstance(m.author, discord.Member):
+        return
     sm = edgedict.get("smallest", None)
     lg = edgedict.get("largest", None)
     if m.author.id != sm and m.author.id != lg:
         return  # The user is not set to be the smallest or the largest user.
 
-    userdata = userdb.load(m.author.id)
+    userdata = userdb.load(m.guild.id, m.author.id)
 
     usersizes = getUserSizes()
     smallestuser = usersizes["smallest"]["id"]
@@ -162,7 +165,7 @@ class EdgeCog(commands.Cog):
     )
     @commands.is_owner()
     async def edgedebug(self, ctx):
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
         usersizes = getUserSizes()
 
         outstring = f"**CURRENT USER:**\nID: `{ctx.message.author.id}`\nHeight: `{userdata.height}`\n\n"
