@@ -28,6 +28,7 @@ def getEdgesFile(gid):
             edgedict = toml.loads(f.read())
     except (FileNotFoundError, TypeError, toml.TomlDecodeError):
         edgedict = {"edges": {"smallest": None, "largest": None}}
+        edgepath.parent.mkdir(parents = True, exist_ok = True)
         with open(edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
 
