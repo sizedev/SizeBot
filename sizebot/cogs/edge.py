@@ -2,19 +2,20 @@
 # It does this by seeing if they are the largest or smallest user (in the guild [SB4]), and if they aren't setting their height
 # to either 1.1x or 0.9x of the largest or smallest user (in the guild [SB4]), respectively.
 
-import toml
 import logging
+import toml
 from os import listdir
 
 import discord
 from discord.ext import commands
-from sizebot.discordplus import commandsplus
 
 from sizebot import conf
-from sizebot.lib import userdb
+from sizebot.discordplus import commandsplus
 from sizebot.lib import proportions
-from sizebot.lib.units import SV
+from sizebot.lib import userdb
+from sizebot.lib.checks import is_mod
 from sizebot.lib.decimal import Decimal
+from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
 
@@ -114,7 +115,7 @@ class EdgeCog(commands.Cog):
         aliases = ["smallest"],
         usage = "[user]"
     )
-    @commands.is_owner()
+    @is_mod()
     async def setsmallest(self, ctx, *, member: discord.Member):
         """Set the smallest user."""
         edgedict["smallest"] = member.id
@@ -127,7 +128,7 @@ class EdgeCog(commands.Cog):
         aliases = ["largest"],
         usage = "[user]"
     )
-    @commands.is_owner()
+    @is_mod()
     async def setlargest(self, ctx, *, member: discord.Member):
         """Set the largest user."""
         edgedict["largest"] = member.id
@@ -139,7 +140,7 @@ class EdgeCog(commands.Cog):
     @commandsplus.command(
         aliases = ["resetsmallest", "removesmallest"]
     )
-    @commands.is_owner()
+    @is_mod()
     async def clearsmallest(self, ctx):
         """Clear the role of 'smallest user.'"""
         edgedict["smallest"] = None
@@ -151,7 +152,7 @@ class EdgeCog(commands.Cog):
     @commandsplus.command(
         aliases = ["resetlargest", "removelargest"]
     )
-    @commands.is_owner()
+    @is_mod()
     async def clearlargest(self, ctx):
         """Clear the role of 'largest user.'"""
         edgedict["largest"] = None
@@ -163,7 +164,7 @@ class EdgeCog(commands.Cog):
     @commandsplus.command(
         hidden = True
     )
-    @commands.is_owner()
+    @is_mod()
     async def edgedebug(self, ctx):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         usersizes = getUserSizes()
