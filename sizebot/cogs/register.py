@@ -224,6 +224,8 @@ class RegisterCog(commands.Cog):
 
         outstring += f"\nClick {emojis.cancel} to cancel."
 
+        await outmsg.edit(content = outstring)
+
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
         def check(reaction, reacter):
             return reaction.message.id == outmsg.id \
