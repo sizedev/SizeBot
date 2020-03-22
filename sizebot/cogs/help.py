@@ -113,7 +113,11 @@ class HelpCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commandsplus.command(description="[description]", usage="[usage]", aliases=["helpme", "wtf"])
+    @commandsplus.command(
+        description="[description]",
+        usage="[usage]",
+        aliases=["helpme", "wtf"]
+    )
     async def help(self, ctx, cmdName: str = None):
         """[cmd.help[0]]
 
@@ -150,7 +154,7 @@ class HelpCog(commands.Cog):
             "**Additional equations** *by Benyovski and Arceus3251*\n"
             "**Alpha Tested** *by AWK_*\n"
             "**Beta Tested** *by Kelly, worstgender, and Arceus3251.*\n"
-            "**written in** *Python 3.7 with discord.py rewrite*\n"
+            "**written in** *Python 3.7/8 with discord.py rewrite*\n"
             "**written with** *Atom* and *Visual Studio Code*\n"
             "**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
             "**Special thanks** *to the discord.py Community Discord for helping with code*\n"
@@ -173,7 +177,7 @@ class HelpCog(commands.Cog):
             f"<@{ctx.message.author.id}>\n"
             "SizeBot is coded (mainly) and hosted by DigiDuncan, and for absolutely free.\n"
             "However, if you wish to contribute to DigiDuncan directly, you can do so here:\n"
-            "https://ko-fi.com/DigiDuncan\n"
+            "https://donate.digiduncan.com\n"
             "SizeBot has been a passion project coded over a period of three years and learning a lot of Python along the way.\n"
             "Thank you so much for being here throughout this journey!")
 
@@ -185,13 +189,13 @@ class HelpCog(commands.Cog):
         logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
         await self.bot.get_user(ids.digiduncan).send(f"Bug report from <@{ctx.message.author.id}>: {message}")
 
-        @commandsplus.command(
-            usage = "<message>"
-        )
-        async def suggest(self, ctx, *, message: str):
-            """Suggest a feature for SizeBot!"""
-            logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-            await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
+    @commandsplus.command(
+        usage = "<message>"
+    )
+    async def suggest(self, ctx, *, message: str):
+        """Suggest a feature for SizeBot!"""
+        logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
+        await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
 
     @commandsplus.command(
         usage = ["[type]"]
