@@ -2,9 +2,10 @@
 
 ## Additions
 
-- SizeBot now has rudimentary multi-guild support!
+- SizeBot now has rudimentary multi-guild support! (β)
     - You can copy your profile from one guild to the other with `&copy`.
     - Keeping your profiles on multiple servers synced to each other is not yet possible.
+    - **NOTE:** *This is in beta stages, and is being rolled out slowly. Contact DigiDuncan if you are interested in having SizeBot on your server.*
 - Added customizable foot length with `&setfoot`. You can turn off custom foot length with `&resetfoot`.
 - Added shoeprint depth, nail thickness, clothing thread thickness, eye width, walk speed, run speed, and viewing angle to stats and comparisons.
 - Added a link to a visual comparison when using `&compare`.
@@ -26,7 +27,7 @@
     - Sending either `^`, `this`, `agree`, or one of many various "this" emotes after a message, or reacting to a message with one of those emotes, will give that user an "agreement point."
     - The leaderboard for this can be displayed with `&leaderboard`.
 - Added some non-size commands for fun:
-    - Added a new command, `&naptime`, which kicks you from any voice channel you're in after a set duration.
+    - Added a new command, `&naptime <duration>`, which kicks you from any voice channel you're in after a set duration.
     - Added `&color <hex/rgb/hsv/cmyk> <value>`, which let's you see information about different colors.
 - Added a `&ping` command, to see if it's us who's lagging, or it's just Discord again.
 - Users now have the ability to use some simple SizeBot functions in DMs, including `&roll`, `&help`, and `&about`.
@@ -56,8 +57,14 @@
 - Slow changes now save and catch up if SizeBot crashes.
     - Many other weird undocumented behaviors with slow changes should also be resolved.
 - Most math was either inaccurate or slightly wrong, which is now fixed.
+- SizeBot should no longer crash seemingly randomly.
+- Users having their height set to zero and running stats or compare should no longer make less sense than the concept itself does.
 - Unicode in nicknames is now handled correctly.
 - Some smallish numbers were being displayed in scientific notation, which is no longer the case.
+- A bug where sometimes SizeBot would spit way too many decimal places out should be corrected.
+- All commands should now give feedback to the user, so you actually know if something happened.
+- Nicknames should now update as soon as your size changes, and not just when you first type.
+
 
 ## New Commands and Changeed Command Syntax
 
