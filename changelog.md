@@ -2,6 +2,7 @@
 
 ## Additions
 
+- SizeBot now has rudimentary multi-guild support!
 - Added customizable foot length with `&setfoot`. You can turn off custom foot length with `&resetfoot`.
 - Added shoeprint depth, nail thickness, clothing thread thickness, eye width, walk speed, run speed, and viewing angle to stats and comparisons.
 - Added a link to a visual comparison when using `&compare`.
