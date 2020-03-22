@@ -101,7 +101,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR BOT OWNERS ONLY** :rotating_light:\n"
         if "is_mod" in repr(cmd.checks):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
-        description += "\n\n".join(descriptionParts)
+        description += "\n\n".join(descriptionParts).replace("&", conf.prefix)
 
         embed = discord.Embed(
             title=signature,
