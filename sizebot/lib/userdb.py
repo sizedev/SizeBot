@@ -232,7 +232,7 @@ def save(userdata):
     if guildid is None or userid is None:
         raise errors.CannotSaveWithoutIDException
     path = getuserpath(guildid, userid)
-    path.parent.mkdir(exist_ok = True)
+    path.parent.mkdir(exist_ok = True, parents = True)
     jsondata = userdata.toJSON()
     with open(path, "w") as f:
         json.dump(jsondata, f, indent = 4)
