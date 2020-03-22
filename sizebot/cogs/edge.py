@@ -43,7 +43,7 @@ def getUserSizes(gid):
     largestsize = SV(0)
     allusers = {}
     for _, testid in userdb.listusers(gid):
-        testdata = userdb.load(testid)
+        testdata = userdb.load(gid, testid)
         allusers[testid] = testdata.height
         if testdata.height <= 0 or testdata.height >= SV.infinity:
             break
