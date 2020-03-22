@@ -219,8 +219,8 @@ class RegisterCog(commands.Cog):
 
         outstring += "Copy profile from what guild?"
         for i in range(min(len(guildsregisteredin), 10)):  # Loops over either the whole list of guilds, or if that's longer than 10, 10 times.
-            outstring += f"{inputdict.keys()[i]} *{guildsregisteredin[i]}*\n"
-            await outmsg.add_reaction(inputdict.keys()[i])
+            outstring += f"{list(inputdict.keys())[i]} *{guildsregisteredin[i]}*\n"
+            await outmsg.add_reaction(list(inputdict.keys())[i])
 
         outstring += f"\nClick {emojis.cancel} to cancel."
 
