@@ -215,6 +215,10 @@ class HelpCog(commands.Cog):
             response = f"Pong! :ping_pong:\nCommand latency: {utils.prettyTimeDelta(messageLatency.total_seconds(), True)}"
         await waitMsg.edit(content = response)
 
+    @commandsplus.command()
+    async def changelog(self, ctx):
+        await ctx.send("View the changelog here!:\nhttps://github.com/sizedev/SizeBot3AndAHalf/blob/develop/changelog.md")
+
 
 def setup(bot):
     bot.add_cog(HelpCog(bot))
