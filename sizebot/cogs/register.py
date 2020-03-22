@@ -223,6 +223,7 @@ class RegisterCog(commands.Cog):
         for i in range(min(len(guildsregisteredin), 10)):  # Loops over either the whole list of guilds, or if that's longer than 10, 10 times.
             outstring += f"{list(inputdict.keys())[i]} *{guildsregisteredinnames[i]}*\n"
             await outmsg.add_reaction(list(inputdict.keys())[i])
+        await outmsg.add_reaction(emojis.cancel)
 
         outstring += f"\nClick {emojis.cancel} to cancel."
 
@@ -257,6 +258,8 @@ class RegisterCog(commands.Cog):
 
             frompath = conf.guilddbpath / str(chosenguild) / "users" / f"{ctx.message.author.id}.json"
             topath = conf.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.message.author.id}.json"
+
+            topath.parent.mkdir(parents = True, exist_ok = True)
 
             copyfile(frompath, topath)
 
