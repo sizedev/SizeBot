@@ -65,14 +65,14 @@ class RegisterCog(commands.Cog):
             # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
             def check(reaction, reacter):
                 return reaction.message.id == sentMsg.id \
-                    and reacter.id == user.id \
+                    and reacter.id == ctx.message.author.id \
                     and (
                         str(reaction.emoji) == emojis.check
                         or str(reaction.emoji) == emojis.cancel
                     )
 
             try:
-                reaction, user = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
+                reaction, ctx.message.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
             except asyncio.TimeoutError:
                 # User took too long to respond
                 await sentMsg.delete()
@@ -227,14 +227,14 @@ class RegisterCog(commands.Cog):
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
         def check(reaction, reacter):
             return reaction.message.id == outmsg.id \
-                and reacter.id == user.id \
+                and reacter.id == ctx.message.author.id \
                 and (
                     str(reaction.emoji) == emojis.check
                     or str(reaction.emoji) in inputdict.keys()
                 )
 
         try:
-            reaction, user = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
+            reaction, ctx.message.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
         except asyncio.TimeoutError:
             # User took too long to respond
             return
