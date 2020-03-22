@@ -34,7 +34,7 @@ class Change:
         self.lastRan = now
         addPerTick = self.addPerSec * seconds
         mulPerTick = self.mulPerSec ** seconds
-        userdata = userdb.load(self.userid)
+        userdata = userdb.load(self.guildid, self.userid)
         newheight = (userdata.height * mulPerTick) + addPerTick
         if self.stopSV is not None and ((newheight < userdata.height and self.stopSV >= newheight) or (newheight > userdata.height and self.stopSV <= newheight)):
             newheight = self.stopSV

@@ -21,7 +21,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setnick(self, ctx, *, newnick):
         """Change nickname."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.nickname = newnick
         userdb.save(userdata)
@@ -38,7 +38,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setspecies(self, ctx, *, newtag):
         """Change species."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.species = newtag
         userdb.save(userdata)
@@ -53,7 +53,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def clearspecies(self, ctx):
         """Remove species."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.species = None
         userdb.save(userdata)
@@ -72,7 +72,7 @@ class SetCog(commands.Cog):
         """Change height."""
         newheightsv = SV.parse(newheight)
 
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.height = newheightsv
         userdb.save(userdata)
@@ -89,7 +89,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def resetsize(self, ctx):
         """Reset size."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.height = userdata.baseheight
         userdb.save(userdata)
@@ -111,7 +111,7 @@ class SetCog(commands.Cog):
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N]`.")
             return
 
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.display = newdisp
         userdb.save(userdata)
@@ -133,7 +133,7 @@ class SetCog(commands.Cog):
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/m]`.")
             return
 
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.unitsystem = newsys
         userdb.save(userdata)
@@ -158,7 +158,7 @@ class SetCog(commands.Cog):
 
         newheightSV = decimal.randRangeLog(minheightSV, maxheightSV)
 
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.height = newheightSV
         userdb.save(userdata)
@@ -173,7 +173,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setinf(self, ctx):
         """Change height to infinity."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.height = "infinity"
         userdb.save(userdata)
@@ -188,7 +188,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def set0(self, ctx):
         """Change height to a zero."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.height = 0
         userdb.save(userdata)
@@ -205,7 +205,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setbaseheight(self, ctx, *, newbaseheight):
         """Change base height."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.baseheight = SV.parse(newbaseheight)
         userdb.save(userdata)
@@ -222,7 +222,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setbaseweight(self, ctx, *, newbaseweight):
         """Change base weight."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.baseweight = WV.parse(newbaseweight)
         userdb.save(userdata)
@@ -239,7 +239,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setbase(self, ctx, arg1: typing.Union[SV, WV], arg2: typing.Union[SV, WV] = None):
         """Set your base height and weight."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         # Don't allow a user to enter setbase(SV, SV) or setbase(WV, WV)
         if (isinstance(arg1, SV) and isinstance(arg2, SV)) or (isinstance(arg1, WV) and isinstance(arg2, WV)):
@@ -264,7 +264,7 @@ class SetCog(commands.Cog):
         """Set a custom foot length."""
         newfootsv = SV.parse(newfoot)
 
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.footlength = newfootsv
         userdb.save(userdata)
@@ -281,7 +281,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def resetfoot(self, ctx):
         """Remove custom foot length."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.footlength = None
         userdb.save(userdata)
@@ -300,7 +300,7 @@ class SetCog(commands.Cog):
         """Set a custom hair length."""
         newhairsv = SV.parse(newhair)
 
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.hairlength = newhairsv
         userdb.save(userdata)
@@ -317,7 +317,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def resethair(self, ctx):
         """Remove custom hair length."""
-        userdata = userdb.load(ctx.message.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         userdata.hairlength = None
         userdb.save(userdata)
@@ -334,7 +334,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setgender(self, ctx, gender):
         """Set gender."""
-
+        guild = ctx.guild
         user = ctx.author
 
         gendermap = {
@@ -354,7 +354,7 @@ class SetCog(commands.Cog):
         except KeyError:
             raise errors.ArgumentException
 
-        userdata = userdb.load(user.id)
+        userdata = userdb.load(guild.id, user.id)
         userdata.gender = gender
         userdb.save(userdata)
 
@@ -370,10 +370,10 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def resetgender(self, ctx):
         """Reset gender."""
-
+        guild = ctx.guild
         user = ctx.author
 
-        userdata = userdb.load(user.id)
+        userdata = userdb.load(guild.id, user.id)
         userdata.gender = None
         userdb.save(userdata)
 

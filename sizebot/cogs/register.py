@@ -44,10 +44,10 @@ class RegisterCog(commands.Cog):
         logger.info(readable)
 
         # Already registered
-        if userdb.exists(ctx.message.author.id):
+        if userdb.exists(ctx.guild.id, ctx.author.id):
             await ctx.send("Sorry! You already registered with SizeBot.\n"
                            "To unregister, use the `&unregister` command.")
-            logger.warn(f"User already registered on user registration: {ctx.message.author}.")
+            logger.warn(f"User already registered on user registration: {ctx.author}.")
             return
 
         # Invalid size value
@@ -69,7 +69,8 @@ class RegisterCog(commands.Cog):
             return
 
         userdata = userdb.User()
-        userdata.id = ctx.message.author.id
+        userdata.guildid = ctx.guild.id
+        userdata.id = ctx.author.id
         userdata.nickname = nick
         userdata.display = display == "y"
         userdata.height = currentheight
@@ -105,9 +106,10 @@ class RegisterCog(commands.Cog):
     @commands.guild_only()
     async def unregister(self, ctx):
         """Unregister your SizeBot profile."""
-        user = ctx.message.author
+        guild = ctx.guild
+        user = ctx.author
         # User is not registered
-        if not userdb.exists(user.id):
+        if not userdb.exists(guild.id, user.id):
             logger.warn(f"User {user.id} not registered with SizeBot, but tried to unregister anyway.")
             await ctx.send("Sorry! You aren't registered with SizeBot.\n"
                            "To register, use the `&register` command.")
@@ -142,7 +144,7 @@ class RegisterCog(commands.Cog):
 
         # remove the sizetag, delete the user file, and remove the user role
         await proportions.nickReset(user)
-        userdb.delete(user.id)
+        userdb.delete(guild.id, user.id)
         await removeUserRole(user)
 
         logger.warn(f"User {user.id} successfully unregistered.")

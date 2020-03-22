@@ -41,7 +41,7 @@ logchannelid = None
 # File paths
 datadir = getDataDir()
 winkpath = datadir / "winkcount.txt"
-userdbpath = datadir / "users"
+userdbpath = datadir / "guilds"
 telemetrypath = datadir / "telemetry.json"
 thispath = datadir / "thistracker.json"
 changespath = datadir / "changes.json"

@@ -25,10 +25,11 @@ class ChangeCog(commands.Cog):
     @commands.guild_only()
     async def change(self, ctx, style, *, amount):
         """Change height."""
+        guildid = ctx.guild.id
         userid = ctx.author.id
 
-        proportions.changeUser(userid, style, amount)
-        userdata = userdb.load(userid)
+        proportions.changeUser(guildid, userid, style, amount)
+        userdata = userdb.load(guildid, userid)
 
         logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
         await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
@@ -92,11 +93,12 @@ class ChangeCog(commands.Cog):
         """Eat me!
 
         Increases your height by a random amount between 2x and 20x."""
+        guildid = ctx.guild.id
         userid = ctx.author.id
 
         randmult = round(random.random(2, 20), 1)
-        proportions.changeUser(userid, "multiply", randmult)
-        userdata = userdb.load(userid)
+        proportions.changeUser(guildid, userid, "multiply", randmult)
+        userdata = userdb.load(guildid, userid)
 
         # TODO: Randomize the italics message here
         await ctx.send(
@@ -110,11 +112,12 @@ class ChangeCog(commands.Cog):
         """Drink me!
 
         Decreases your height by a random amount between 2x and 20x."""
+        guildid = ctx.guild.id
         userid = ctx.author.id
 
-        userdata = userdb.load(userid)
+        userdata = userdb.load(guildid, userid)
         randmult = round(random.random(2, 20), 1)
-        proportions.changeUser(ctx.author.id, "divide", randmult)
+        proportions.changeUser(guildid, ctx.author.id, "divide", randmult)
 
         # TODO: Randomize the italics message here
         await ctx.send(

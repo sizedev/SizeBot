@@ -18,9 +18,10 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 @total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["id", "nickname", "_gender", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_hairlength", "_unitsystem", "species"]
+    __slots__ = ["guildid", "id", "nickname", "_gender", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_hairlength", "_unitsystem", "species"]
 
     def __init__(self):
+        self.guildid = None
         self.id = None
         self.nickname = None
         self._gender = None
@@ -34,7 +35,7 @@ class User:
         self.species = None
 
     def __str__(self):
-        return f"ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, HAIR {self.hairlength}, UNIT {self.unitsystem}, SPEC {self.species}"
+        return f"GUILDID {self.guildid}, ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, HAIR {self.hairlength}, UNIT {self.unitsystem}, SPEC {self.species}"
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
@@ -161,6 +162,7 @@ class User:
     # Return an python dictionary for json exporting
     def toJSON(self):
         return {
+            "guildid": self.guildid,
             "id": self.id,
             "nickname": self.nickname,
             "gender": self.gender,
@@ -178,6 +180,7 @@ class User:
     @classmethod
     def fromJSON(cls, jsondata):
         userdata = User()
+        userdata.guildid = jsondata.get("guildid", 350429009730994199)
         userdata.id = jsondata["id"]
         userdata.nickname = jsondata["nickname"]
         userdata.gender = jsondata.get("gender")
@@ -215,44 +218,52 @@ class User:
         return newuserdata
 
 
-def getuserpath(userid):
-    return conf.userdbpath / f"{userid}.json"
+def getguilduserspath(guildid):
+    return conf.guilddbpath / f"{guildid}" / "users"
+
+
+def getuserpath(guildid, userid):
+    return getguilduserspath(guildid) / f"{userid}.json"
 
 
 def save(userdata):
+    guildid = userdata.guildid
     userid = userdata.id
-    if userid is None:
+    if guildid is None or userid is None:
         raise errors.CannotSaveWithoutIDException
-    conf.userdbpath.mkdir(exist_ok = True)
+    path = getuserpath(guildid, userid)
+    path.parent.mkdir(exist_ok = True)
     jsondata = userdata.toJSON()
-    with open(getuserpath(userid), "w") as f:
+    with open(path, "w") as f:
         json.dump(jsondata, f, indent = 4)
 
 
-def load(userid):
+def load(guildid, userid):
+    path = getuserpath(guildid, userid)
     try:
-        with open(getuserpath(userid), "r") as f:
+        with open(path, "r") as f:
             jsondata = json.load(f)
     except FileNotFoundError:
-        raise errors.UserNotFoundException(userid)
+        raise errors.UserNotFoundException(guildid, userid)
     return User.fromJSON(jsondata)
 
 
-def delete(userid):
-    getuserpath(userid).unlink(missing_ok = True)
+def delete(guildid, userid):
+    path = getuserpath(guildid, userid)
+    path.unlink(missing_ok = True)
 
 
 # TODO: Set this up as a User's __nonzero__ function
 # e.g.: bool(user) = user.id.exists()
-def exists(userid):
+def exists(guildid, userid):
     exists = True
     try:
-        load(userid)
+        load(guildid, userid)
     except errors.UserNotFoundException:
         exists = False
     return exists
 
 
 def count():
-    usercount = len(list(conf.userdbpath.glob("*.json")))
+    usercount = len(list(conf.userdbpath.glob("**/users/*.json")))
     return usercount

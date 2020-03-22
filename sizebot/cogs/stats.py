@@ -177,7 +177,7 @@ class StatsCog(commands.Cog):
 
 def getUserdata(memberOrSV, nickname = "Raw"):
     if isinstance(memberOrSV, discord.Member):
-        userdata = userdb.load(memberOrSV.id)
+        userdata = userdb.load(memberOrSV.guild.id, memberOrSV.id)
     else:
         userdata = userdb.User()
         userdata.nickname = nickname

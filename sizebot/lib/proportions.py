@@ -30,7 +30,7 @@ async def nickUpdate(user):
         return
 
     try:
-        userdata = userdb.load(user.id)
+        userdata = userdb.load(user.guild.id, user.id)
     except errors.UserNotFoundException:
         return
 
@@ -91,7 +91,7 @@ async def nickReset(user):
     if user.id == user.guild.owner.id:
         return
 
-    userdata = userdb.load(user.id)
+    userdata = userdb.load(user.guild.id, user.id)
 
     # User's display setting is N. No sizetag.
     if not userdata.display:
@@ -103,7 +103,7 @@ async def nickReset(user):
         raise errors.NoPermissionsException
 
 
-def changeUser(userid, changestyle, amount):
+def changeUser(guildid, userid, changestyle, amount):
     changestyle = changestyle.lower()
     if changestyle in ["add", "+", "a", "plus"]:
         changestyle = "add"
@@ -128,7 +128,7 @@ def changeUser(userid, changestyle, amount):
         if amountVal == 0:
             raise errors.ValueIsZeroException
 
-    userdata = userdb.load(userid)
+    userdata = userdb.load(guildid, userid)
 
     if changestyle == "add":
         newamount = userdata.height + amountSV
