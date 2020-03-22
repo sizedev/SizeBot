@@ -1,11 +1,13 @@
 import asyncio
 import logging
+from shutil import copyfile
 
 from discord.ext import commands
 from discord.utils import get
 from sizebot.discordplus import commandsplus
 
-from sizebot.lib import proportions, userdb
+from sizebot import conf
+from sizebot.lib import errors, proportions, userdb
 from sizebot.lib.units import SV, WV
 from sizebot.lib.constants import ids, emojis
 
@@ -49,6 +51,35 @@ class RegisterCog(commands.Cog):
                            "To unregister, use the `&unregister` command.")
             logger.warn(f"User already registered on user registration: {ctx.author}.")
             return
+
+        currentusers = userdb.listUsers()
+        guildsregisteredin = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == ctx.message.author.id]
+        if guildsregisteredin != []:
+            guildsstring = guildsregisteredin.join('\n')
+            sentMsg = await ctx.send(f"You are already registed with SizeBot in these servers:\n{guildsstring}"
+                                     f"You can copy a profile from one of these guilds to this one using `{conf.prefix}copy.`\n"
+                                     "Proceed with registration anyway?")
+            await sentMsg.add_reaction(emojis.check)
+            await sentMsg.add_reaction(emojis.cancel)
+
+            # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
+            def check(reaction, reacter):
+                return reaction.message.id == sentMsg.id \
+                    and reacter.id == ctx.message.author.id \
+                    and (
+                        str(reaction.emoji) == emojis.check
+                        or str(reaction.emoji) == emojis.cancel
+                    )
+
+            try:
+                reaction, ctx.message.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
+            except asyncio.TimeoutError:
+                # User took too long to respond
+                await sentMsg.delete()
+
+            # if the reaction isn't the right one, stop.
+            if reaction.emoji != emojis.check:
+                return
 
         # Invalid size value
         if (currentheight <= 0 or baseheight <= 0 or baseweight <= 0):
@@ -149,6 +180,92 @@ class RegisterCog(commands.Cog):
 
         logger.warn(f"User {user.id} successfully unregistered.")
         await ctx.send(f"Unregistered {user.name}.")
+
+    @commandsplus.command()
+    @commands.guild_only()
+    async def copy(self, ctx):
+        """Copy your SizeBot profile from a different guild to this one."""
+
+        inputdict = {
+            "1️⃣": 1,
+            "2️⃣": 2,
+            "3️⃣": 3,
+            "4️⃣": 4,
+            "5️⃣": 5,
+            "6️⃣": 6,
+            "7️⃣": 7,
+            "8️⃣": 8,
+            "9️⃣": 9,
+            "0️⃣": 10
+        }
+
+        currentusers = userdb.listUsers()
+        guildsregisteredin = [self.bot.get_guild(int(g)).id for g, u in currentusers if u == str(ctx.message.author.id)]
+        guildsregisteredinnames = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == str(ctx.message.author.id)]
+
+        if guildsregisteredin == []:
+            await ctx.send("You are not registered with SizeBot in any guilds."
+                           f"To register, use `{conf.prefix}register`.")
+            return
+
+        # TODO: This doesn't seem to work.
+        if guildsregisteredin == [ctx.guild.id]:
+            await ctx.send("You are not registered with SizeBot in any other guilds.")
+            return
+
+        outmsg = await ctx.send(emojis.loading)
+        outstring = ""
+
+        if userdb.exists(ctx.guild.id, ctx.author.id):
+            outstring += "**:rotating_light:WARNING::rotating_light:**\n**You are already registered with SizeBot on this guild. Copying a profile to this guild will overwrite any size data you have here. Proceed with caution.**\n\n"
+
+        outstring += "Copy profile from what guild?\n"
+        for i in range(min(len(guildsregisteredin), 10)):  # Loops over either the whole list of guilds, or if that's longer than 10, 10 times.
+            outstring += f"{list(inputdict.keys())[i]} *{guildsregisteredinnames[i]}*\n"
+            await outmsg.add_reaction(list(inputdict.keys())[i])
+
+        outstring += f"\nClick {emojis.cancel} to cancel."
+
+        await outmsg.edit(content = outstring)
+
+        # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
+        def check(reaction, reacter):
+            return reaction.message.id == outmsg.id \
+                and reacter.id == ctx.message.author.id \
+                and (
+                    str(reaction.emoji) == emojis.check
+                    or str(reaction.emoji) in inputdict.keys()
+                )
+
+        try:
+            reaction, ctx.message.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
+        except asyncio.TimeoutError:
+            # User took too long to respond
+            return
+        finally:
+            # User took too long OR User clicked the emoji
+            await outmsg.delete()
+
+        # if the reaction isn't the right one, stop.
+        if reaction.emoji == emojis.cancel:
+            await outmsg.delete()
+            return
+
+        if reaction.emoji in inputdict.keys():
+            chosen = inputdict[reaction.emoji] - 1
+            chosenguild = guildsregisteredin[chosen]
+
+            frompath = conf.guilddbpath / str(chosenguild) / "users" / f"{ctx.message.author.id}.json"
+            topath = conf.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.message.author.id}.json"
+
+            copyfile(frompath, topath)
+
+            await outmsg.delete()
+            await ctx.send(f"Successfully copied profile from *{self.bot.get_guild(int(chosenguild)).name}* to here!")
+
+        else:
+            await outmsg.delete()
+            raise errors.ThisShouldNeverHappenException
 
 
 def setup(bot):

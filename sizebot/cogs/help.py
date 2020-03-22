@@ -101,7 +101,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR BOT OWNERS ONLY** :rotating_light:\n"
         if "is_mod" in repr(cmd.checks):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
-        description += "\n\n".join(descriptionParts)
+        description += "\n\n".join(descriptionParts).replace("&", conf.prefix)
 
         embed = discord.Embed(
             title=signature,
@@ -214,6 +214,10 @@ class HelpCog(commands.Cog):
             messageLatency = waitMsg.created_at - ctx.message.created_at
             response = f"Pong! :ping_pong:\nCommand latency: {utils.prettyTimeDelta(messageLatency.total_seconds(), True)}"
         await waitMsg.edit(content = response)
+
+    @commandsplus.command()
+    async def changelog(self, ctx):
+        await ctx.send("View the changelog here!:\nhttps://github.com/sizedev/SizeBot3AndAHalf/blob/develop/changelog.md")
 
 
 def setup(bot):
