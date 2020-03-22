@@ -63,13 +63,13 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False):
     seconds, milliseconds = divmod(milliseconds, MILLISECONDS_PER_SECOND)
 
     s = ""
-    if totalSeconds >= MILLISECONDS_PER_YEAR:
+    if milliseconds >= MILLISECONDS_PER_YEAR:
         s += f"{years:d} years, "
-    if totalSeconds >= MILLISECONDS_PER_DAY:
+    if milliseconds >= MILLISECONDS_PER_DAY:
         s += f"{days:d} days, "
-    if totalSeconds >= MILLISECONDS_PER_HOUR:
+    if milliseconds >= MILLISECONDS_PER_HOUR:
         s += f"{hours:d} hours, "
-    if totalSeconds >= MILLISECONDS_PER_MINUTE:
+    if milliseconds >= MILLISECONDS_PER_MINUTE:
         s += f"{minutes:d} minutes, "
     if millisecondAccuracy:
         s += f"{seconds:d}.{milliseconds:d} seconds"

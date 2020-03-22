@@ -96,7 +96,10 @@ class HelpCog(commands.Cog):
             descriptionParts.append(cmd.description)
         if cmd.help:
             descriptionParts.append(cmd.help)
-        description = "\n\n".join(descriptionParts)
+        description = ""
+        if "is_owner" in repr(cmd.checks):
+            description += ":rotating_light: **THIS COMMAND IS FOR BOT OWNERS ONLY** :rotating_light:\n"
+        description += "\n\n".join(descriptionParts)
 
         embed = discord.Embed(
             title=signature,
