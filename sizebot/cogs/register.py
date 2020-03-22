@@ -200,7 +200,8 @@ class RegisterCog(commands.Cog):
         }
 
         currentusers = userdb.listUsers()
-        guildsregisteredin = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == str(ctx.message.author.id)]
+        guildsregisteredin = [self.bot.get_guild(int(g)).id for g, u in currentusers if u == str(ctx.message.author.id)]
+        guildsregisteredinames = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == str(ctx.message.author.id)]
 
         if guildsregisteredin == []:
             await ctx.send("You are not registered with SizeBot in any guilds."
@@ -218,9 +219,9 @@ class RegisterCog(commands.Cog):
         if userdb.exists(ctx.guild.id, ctx.author.id):
             outstring += "**:rotating_light:WARNING::rotating_light:**\n**You are already registered with SizeBot on this guild. Copying a profile to this guild will overwrite any size data you have here. Proceed with caution.**\n\n"
 
-        outstring += "Copy profile from what guild?"
+        outstring += "Copy profile from what guild?\n"
         for i in range(min(len(guildsregisteredin), 10)):  # Loops over either the whole list of guilds, or if that's longer than 10, 10 times.
-            outstring += f"{list(inputdict.keys())[i]} *{guildsregisteredin[i]}*\n"
+            outstring += f"{list(inputdict.keys())[i]} *{guildsregisteredinnames[i]}*\n"
             await outmsg.add_reaction(list(inputdict.keys())[i])
 
         outstring += f"\nClick {emojis.cancel} to cancel."
