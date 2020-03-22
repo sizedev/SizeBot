@@ -7,6 +7,7 @@ import os
 
 import discord
 
+from sizebot import conf
 from sizebot.lib import userdb, utils
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
@@ -113,7 +114,8 @@ def getEvalGlobals():
         "ids": ids,
         "emojis": emojis,
         "itertools": itertools,
-        "os": os
+        "os": os,
+        "conf": conf
     }
 
     return evalGlobals
