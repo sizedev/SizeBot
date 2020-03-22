@@ -72,7 +72,7 @@ class RegisterCog(commands.Cog):
         userdata.guildid = ctx.guild.id
         userdata.id = ctx.author.id
         userdata.nickname = nick
-        userdata.display = display == "y"
+        userdata.display = display.lower() == "y"
         userdata.height = currentheight
         userdata.baseheight = baseheight
         userdata.baseweight = baseweight
