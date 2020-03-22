@@ -242,10 +242,8 @@ class RegisterCog(commands.Cog):
             reaction, ctx.message.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
         except asyncio.TimeoutError:
             # User took too long to respond
-            return
-        finally:
-            # User took too long OR User clicked the emoji
             await outmsg.delete()
+            return
 
         # if the reaction isn't the right one, stop.
         if reaction.emoji == emojis.cancel:
