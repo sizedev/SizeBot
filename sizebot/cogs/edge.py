@@ -18,14 +18,20 @@ from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
 
+
 # Read the edges file.
-try:
-    with open(conf.edgepath, "r") as f:
-        edgedict = toml.loads(f.read())
-except (FileNotFoundError, TypeError, toml.TomlDecodeError):
-    edgedict = {"edges": {"smallest": None, "largest": None}}
-    with open(conf.edgepath, "w") as f:
-        f.write(toml.dumps(edgedict))
+def getEdgesFile(gid):
+    edgepath = conf.guilddbpath / str(gid) / "edges.ini"
+
+    try:
+        with open(edgepath, "r") as f:
+            edgedict = toml.loads(f.read())
+    except (FileNotFoundError, TypeError, toml.TomlDecodeError):
+        edgedict = {"edges": {"smallest": None, "largest": None}}
+        with open(edgepath, "w") as f:
+            f.write(toml.dumps(edgedict))
+
+    return edgedict
 
 
 def getUserSizes(gid):
@@ -60,6 +66,8 @@ async def on_message(m):
     # non-guild messages
     if not isinstance(m.author, discord.Member):
         return
+
+    edgedict = getEdgesFile(m.guild.id)
     sm = edgedict.get("smallest", None)
     lg = edgedict.get("largest", None)
     if m.author.id != sm and m.author.id != lg:
@@ -67,7 +75,7 @@ async def on_message(m):
 
     userdata = userdb.load(m.guild.id, m.author.id)
 
-    usersizes = getUserSizes()
+    usersizes = getUserSizes(m.guild.id)
     smallestuser = usersizes["smallest"]["id"]
     smallestsize = usersizes["smallest"]["size"]
     largestuser = usersizes["largest"]["id"]
@@ -106,6 +114,7 @@ class EdgeCog(commands.Cog):
     @commandsplus.command()
     async def edges(self, ctx):
         """See who is set to be the smallest and largest users."""
+        edgedict = getEdgesFile(ctx.guild.id)
         await ctx.send(f"**SERVER-SET SMALLEST AND LARGEST USERS:**\nSmallest: {edgedict.get('smallest', '*Unset*')}\nLargest: {edgedict.get('largest', '*Unset*')}")
 
     @commandsplus.command(
@@ -115,6 +124,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def setsmallest(self, ctx, *, member: discord.Member):
         """Set the smallest user."""
+        edgedict = getEdgesFile(ctx.guild.id)
         edgedict["smallest"] = member.id
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
@@ -128,6 +138,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def setlargest(self, ctx, *, member: discord.Member):
         """Set the largest user."""
+        edgedict = getEdgesFile(ctx.guild.id)
         edgedict["largest"] = member.id
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
@@ -140,6 +151,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def clearsmallest(self, ctx):
         """Clear the role of 'smallest user.'"""
+        edgedict = getEdgesFile(ctx.guild.id)
         edgedict["smallest"] = None
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
@@ -152,6 +164,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def clearlargest(self, ctx):
         """Clear the role of 'largest user.'"""
+        edgedict = getEdgesFile(ctx.guild.id)
         edgedict["largest"] = None
         with open(conf.edgepath, "w") as f:
             f.write(toml.dumps(edgedict))
@@ -164,9 +177,11 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def edgedebug(self, ctx):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
-        usersizes = getUserSizes()
+        usersizes = getUserSizes(ctx.guild.id)
+        edgedict = getEdgesFile(ctx.guild.id)
 
         outstring = f"**CURRENT USER:**\nID: `{ctx.message.author.id}`\nHeight: `{userdata.height}`\n\n"
+        outstring += f"**EDGES:**\nSmallest: {edgedict['edges']['smallest']}\nLargest: {edgedict['edges']['largest']}"
         outstring += f"**SMALLEST USER:**\nID: `{usersizes['smallest']['id']}`\nHeight: `{usersizes['smallest']['size']}`\n\n"
         outstring += f"**LARGEST USER:**\nID: `{usersizes['largest']['id']}`\nHeight: `{usersizes['largest']['size']}`\n\n"
         outstring += "**ALL USERS:**\n"
