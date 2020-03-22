@@ -3,9 +3,11 @@ import math
 import builtins
 import itertools
 import logging
+import os
 
 import discord
 
+from sizebot import conf
 from sizebot.lib import userdb, utils
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
@@ -111,7 +113,9 @@ def getEvalGlobals():
         "edir": edir,
         "ids": ids,
         "emojis": emojis,
-        "itertools": itertools
+        "itertools": itertools,
+        "os": os,
+        "conf": conf
     }
 
     return evalGlobals

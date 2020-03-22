@@ -4,7 +4,6 @@
 
 import logging
 import toml
-from os import listdir
 
 import discord
 from discord.ext import commands
@@ -29,17 +28,15 @@ except (FileNotFoundError, TypeError, toml.TomlDecodeError):
         f.write(toml.dumps(edgedict))
 
 
-def getUserSizes():
+def getUserSizes(gid):
     # Find the largest and smallest current users.
     # TODO: Check to see if these users are recently active, which would determine if they count towards the check.
     smallestuser = 000000000000000000
     smallestsize = SV(SV.infinity)
     largestuser = 000000000000000000
     largestsize = SV(0)
-    userfilelist = listdir(conf.guilddbpath)
     allusers = {}
-    for userfile in userfilelist:
-        testid = userfile[:-5]  # Remove the ".json" from the file name, leaving us with the ID.
+    for _, testid in userdb.listusers(gid):
         testdata = userdb.load(testid)
         allusers[testid] = testdata.height
         if testdata.height <= 0 or testdata.height >= SV.infinity:
