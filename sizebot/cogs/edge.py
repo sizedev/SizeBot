@@ -179,9 +179,11 @@ class EdgeCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         usersizes = getUserSizes(ctx.guild.id)
         edgedict = getEdgesFile(ctx.guild.id)
+        sm = edgedict.get("smallest", None)
+        lg = edgedict.get("largest", None)
 
         outstring = f"**CURRENT USER:**\nID: `{ctx.message.author.id}`\nHeight: `{userdata.height}`\n\n"
-        outstring += f"**EDGES:**\nSmallest: {edgedict['edges']['smallest']}\nLargest: {edgedict['edges']['largest']}"
+        outstring += f"**EDGES:**\nSmallest: {sm}\nLargest: {lg}"
         outstring += f"**SMALLEST USER:**\nID: `{usersizes['smallest']['id']}`\nHeight: `{usersizes['smallest']['size']}`\n\n"
         outstring += f"**LARGEST USER:**\nID: `{usersizes['largest']['id']}`\nHeight: `{usersizes['largest']['size']}`\n\n"
         outstring += "**ALL USERS:**\n"
