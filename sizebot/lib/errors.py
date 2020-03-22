@@ -38,13 +38,15 @@ class DigiContextException(Exception):
 
 
 class UserNotFoundException(DigiContextException):
-    def __init__(self, userid):
+    def __init__(self, guildid, userid):
+        self.guildid = guildid
         self.userid = userid
 
     async def formatMessage(self, ctx):
         user = await ctx.guild.fetch_member(self.userid)
         usernick = user.display_name
-        return f"User {self.userid} ({usernick}) not found."
+        guild = await ctx.bot.fetch_guild(self.guildid)
+        return f"User {self.userid} ({usernick}) not found in {self.guildid} ({guild.name})."
 
     async def formatUserMessage(self, ctx):
         user = await ctx.guild.fetch_member(self.userid)
