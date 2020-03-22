@@ -28,7 +28,7 @@ description = (
     "Written by DigiDuncan.\n"
     "The SizeBot Team: DigiDuncan, Natalie, Kelly, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
 winkpath = None
-userdbpath = None
+guilddbpath = None
 telemetrypath = None
 changespath = None
 naptimepath = None
@@ -43,7 +43,7 @@ logchannelid = None
 # File paths
 datadir = getDataDir()
 winkpath = datadir / "winkcount.txt"
-userdbpath = datadir / "guilds"
+guilddbpath = datadir / "guilds"
 telemetrypath = datadir / "telemetry.json"
 thispath = datadir / "thistracker.json"
 changespath = datadir / "changes.json"

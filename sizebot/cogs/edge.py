@@ -35,7 +35,7 @@ def getUserSizes():
     smallestsize = SV(SV.infinity)
     largestuser = 000000000000000000
     largestsize = SV(0)
-    userfilelist = listdir(conf.userdbpath)
+    userfilelist = listdir(conf.guilddbpath)
     allusers = {}
     for userfile in userfilelist:
         testid = userfile[:-5]  # Remove the ".json" from the file name, leaving us with the ID.
