@@ -200,8 +200,8 @@ class RegisterCog(commands.Cog):
         }
 
         currentusers = userdb.listUsers()
-        guildsregisteredin = [self.bot.get_guild(int(g)).id for g, u in currentusers if u == str(ctx.message.author.id)]
-        guildsregisteredinnames = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == str(ctx.message.author.id)]
+        guildsregisteredin = [g for g, u in currentusers if u == ctx.message.author.id]
+        guildsregisteredinnames = [self.bot.get_guild(g).name for g, u in currentusers if u == ctx.message.author.id]
 
         if guildsregisteredin == []:
             await ctx.send("You are not registered with SizeBot in any guilds."
