@@ -265,5 +265,11 @@ def exists(guildid, userid):
 
 
 def count():
-    usercount = len(list(conf.userdbpath.glob("**/users/*.json")))
+    usercount = len(list(conf.userdbpath.glob("*/users/*.json")))
     return usercount
+
+
+def listusers(guildid = None):
+    userfiles = conf.userdbpath.glob("*/users/*.json")
+    users = [(p.parent.parent.name, p.stem) for p in userfiles]
+    return users
