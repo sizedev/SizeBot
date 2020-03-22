@@ -5,6 +5,7 @@ from discord.ext import commands
 from discord.utils import get
 from sizebot.discordplus import commandsplus
 
+from sizebot import conf
 from sizebot.lib import proportions, userdb
 from sizebot.lib.units import SV, WV
 from sizebot.lib.constants import ids, emojis
@@ -49,6 +50,38 @@ class RegisterCog(commands.Cog):
                            "To unregister, use the `&unregister` command.")
             logger.warn(f"User already registered on user registration: {ctx.author}.")
             return
+
+        currentusers = userdb.listUsers()
+        guildsregisteredin = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == ctx.message.author.id]
+        if guildsregisteredin != []:
+            guildsstring = guildsregisteredin.join('\n')
+            sentMsg = await ctx.send(f"You are already registed with SizeBot in these servers:\n{guildsstring}"
+                                     f"You can copy a profile from one of these guilds to this one using {conf.prefix}copy.\n"
+                                     "Proceed with registration anyway?")
+            await sentMsg.add_reaction(emojis.check)
+            await sentMsg.add_reaction(emojis.cancel)
+
+            # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
+            def check(reaction, reacter):
+                return reaction.message.id == sentMsg.id \
+                    and reacter.id == user.id \
+                    and (
+                        str(reaction.emoji) == emojis.check
+                        or str(reaction.emoji) == emojis.cancel
+                    )
+
+            try:
+                reaction, user = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
+            except asyncio.TimeoutError:
+                # User took too long to respond
+                return
+            finally:
+                # User took too long OR User clicked the emoji
+                await sentMsg.delete()
+
+            # if the reaction isn't the right one, stop.
+            if reaction.emoji != emojis.check:
+                return
 
         # Invalid size value
         if (currentheight <= 0 or baseheight <= 0 or baseweight <= 0):
