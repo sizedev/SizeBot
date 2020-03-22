@@ -4,7 +4,6 @@ import logging
 from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus
 
-from sizebot import conf
 from sizebot.lib import changes, proportions, userdb
 from sizebot.lib.units import Rate
 
@@ -55,13 +54,13 @@ class ChangeCog(commands.Cog):
     )
     @commands.guild_only()
     async def slowchange(self, ctx, *, rateStr: str):
-        f"""Change your height steadily over time.
+        """Change your height steadily over time.
 
         Set how fast or slow you'd like to change, and when you'd like to stop.
         Examples:
-        `{conf.prefix}slowchange 1m/s`
-        `{conf.prefix}slowchange 1m/s until 10m`
-        `{conf.prefix}slowchange 1m/s for 1h`"""
+        `&slowchange 1m/s`
+        `&slowchange 1m/s until 10m`
+        `&slowchange 1m/s for 1h`"""
         userid = ctx.author.id
         guildid = ctx.guild.id
 
