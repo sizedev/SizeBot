@@ -207,6 +207,7 @@ class RegisterCog(commands.Cog):
                            f"To register, use `{conf.prefix}register`.")
             return
 
+        # TODO: This doesn't seem to work.
         if guildsregisteredin == [str(ctx.guild.id)]:
             await ctx.send("You are not registered with SizeBot in any other guilds.")
             return
