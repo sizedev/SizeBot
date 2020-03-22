@@ -271,5 +271,5 @@ def count():
 
 def listusers(guildid = None):
     userfiles = conf.guilddbpath.glob("*/users/*.json")
-    users = [(p.parent.parent.name, p.stem) for p in userfiles]
+    users = [(int(p.parent.parent.name), int(p.stem)) for p in userfiles]
     return users
