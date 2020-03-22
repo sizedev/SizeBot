@@ -99,6 +99,8 @@ class HelpCog(commands.Cog):
         description = ""
         if "is_owner" in repr(cmd.checks):
             description += ":rotating_light: **THIS COMMAND IS FOR BOT OWNERS ONLY** :rotating_light:\n"
+        if "is_mod" in repr(cmd.checks):
+            description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
         description += "\n\n".join(descriptionParts)
 
         embed = discord.Embed(
