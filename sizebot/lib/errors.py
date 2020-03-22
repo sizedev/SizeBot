@@ -154,3 +154,10 @@ class UserMessedUpException(DigiContextException):
 
     async def formatUserMessage(self, ctx):
         return self.custommessage
+
+
+class ThisShouldNeverHappenException(DigiException):
+    level = logging.CRITICAL
+
+    def formatMessage(self):
+        return "This should never happen Something very wrong has occured."
