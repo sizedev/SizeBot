@@ -218,12 +218,12 @@ class User:
         return newuserdata
 
 
-def getguilduserspath(guildid):
+def getGuildUsersPath(guildid):
     return conf.guilddbpath / f"{guildid}" / "users"
 
 
-def getuserpath(guildid, userid):
-    return getguilduserspath(guildid) / f"{userid}.json"
+def getUserPath(guildid, userid):
+    return getGuildUsersPath(guildid) / f"{userid}.json"
 
 
 def save(userdata):
@@ -231,7 +231,7 @@ def save(userdata):
     userid = userdata.id
     if guildid is None or userid is None:
         raise errors.CannotSaveWithoutIDException
-    path = getuserpath(guildid, userid)
+    path = getUserPath(guildid, userid)
     path.parent.mkdir(exist_ok = True, parents = True)
     jsondata = userdata.toJSON()
     with open(path, "w") as f:
@@ -239,7 +239,7 @@ def save(userdata):
 
 
 def load(guildid, userid):
-    path = getuserpath(guildid, userid)
+    path = getUserPath(guildid, userid)
     try:
         with open(path, "r") as f:
             jsondata = json.load(f)
@@ -249,7 +249,7 @@ def load(guildid, userid):
 
 
 def delete(guildid, userid):
-    path = getuserpath(guildid, userid)
+    path = getUserPath(guildid, userid)
     path.unlink(missing_ok = True)
 
 
@@ -269,7 +269,7 @@ def count():
     return usercount
 
 
-def listusers(guildid = None):
+def listUsers(guildid = None):
     userfiles = conf.guilddbpath.glob("*/users/*.json")
     users = [(p.parent.parent.name, p.stem) for p in userfiles]
     return users
