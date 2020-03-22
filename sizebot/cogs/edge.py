@@ -2,19 +2,19 @@
 # It does this by seeing if they are the largest or smallest user (in the guild [SB4]), and if they aren't setting their height
 # to either 1.1x or 0.9x of the largest or smallest user (in the guild [SB4]), respectively.
 
-import toml
 import logging
+import toml
 from os import listdir
 
 import discord
 from discord.ext import commands
-from sizebot.discordplus import commandsplus
 
 from sizebot import conf
-from sizebot.lib import userdb
+from sizebot.discordplus import commandsplus
 from sizebot.lib import proportions
-from sizebot.lib.units import SV
+from sizebot.lib import userdb
 from sizebot.lib.decimal import Decimal
+from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
 
