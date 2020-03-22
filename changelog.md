@@ -3,6 +3,8 @@
 ## Additions
 
 - SizeBot now has rudimentary multi-guild support!
+    - You can copy your profile from one guild to the other with `&copy`.
+    - Keeping your profiles on multiple servers synced to each other is not yet possible.
 - Added customizable foot length with `&setfoot`. You can turn off custom foot length with `&resetfoot`.
 - Added shoeprint depth, nail thickness, clothing thread thickness, eye width, walk speed, run speed, and viewing angle to stats and comparisons.
 - Added a link to a visual comparison when using `&compare`.
