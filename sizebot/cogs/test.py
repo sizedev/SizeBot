@@ -29,7 +29,7 @@ class TestCog(commands.Cog):
     )
     @commands.is_owner()
     async def test(self, ctx):
-        reactionmenu = await menu.Menu(ctx, "This is a test menu!", numberemojis, cancel_emoji = emojis.cancel)
+        reactionmenu = await menu.Menu(ctx, numberemojis, cancel_emoji = emojis.cancel, initial_message = "This is a test menu!")
         menu_message = reactionmenu.message
         answer = await reactionmenu.run()
         if answer in numberemojis:
