@@ -114,8 +114,8 @@ def getEvalGlobals():
         "ids": ids,
         "emojis": emojis,
         "itertools": itertools,
-        "os": os,
-        "conf": conf
+        "conf": conf,
+        "findOne": utils.findOne
     }
 
     return evalGlobals

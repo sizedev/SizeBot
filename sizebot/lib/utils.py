@@ -306,3 +306,11 @@ def intToRoman(input):
         result.append(nums[i] * count)
         input -= ints[i] * count
     return ''.join(result)
+
+
+def findOne(iterator):
+    try:
+        val = next(iterator)
+    except StopIteration:
+        val = None
+    return val
