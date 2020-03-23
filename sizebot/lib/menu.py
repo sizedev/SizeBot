@@ -74,7 +74,7 @@ class Menu:
 
         # If the reaction is the right one, return what it is.
         if reaction.emoji in self.options:
-            if self.delete_after():
+            if self.delete_after:
                 self.ctx.message.delete()
             return reaction.emoji
 
