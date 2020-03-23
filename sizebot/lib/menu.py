@@ -47,7 +47,7 @@ class Menu:
             await self.ctx.message.add_reaction(self.cancel_emoji)
 
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
-        def check(self, reaction, reacter):
+        def check(reaction, reacter):
             correctreactor = not self.only_sender or reacter.id == self.ctx.message.author.id
             return reaction.message.id == self.ctx.message.id \
                 and correctreactor \
