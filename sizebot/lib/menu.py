@@ -24,11 +24,11 @@ class Menu:
     """
 
     def __init__(self, ctx: commands.context.Context, options: list, *,
-                 timeout: float = 60, delete: bool = True, only_sender: bool = True, cancel_emoji: None):
+                 timeout: float = 60, delete_after: bool = True, only_sender: bool = True, cancel_emoji: None):
         self.ctx = ctx
         self.options = options
         self.timeout = timeout
-        self.delete = delete
+        self.delete_after = delete_after
         self.only_sender = only_sender
         self.cancel_emoji = cancel_emoji
 
@@ -36,7 +36,7 @@ class Menu:
             raise TooManyMenuOptionsException
 
     def debug(self):
-        return f"{self.ctx=} | {self.options=} | {self.timeout=} | {self.delete=} | {self.only_sender=} {self.cancel_emoji=}"
+        return f"{self.ctx=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.only_sender=} {self.cancel_emoji=}"
 
     async def run(self):
 
@@ -61,20 +61,20 @@ class Menu:
             reaction, self.ctx.message.author = await self.ctx.bot.wait_for("reaction_add", timeout=self.timeout, check=check)
         except asyncio.TimeoutError:
             # User took too long to respond
-            if self.delete:
+            if self.delete_after:
                 await self.ctx.message.delete()
             return
 
         # If the reaction is cancel, stop.
         if self.cancel_emoji:
             if reaction.emoji == self.cancel_emoji:
-                if self.delete:
+                if self.delete_after:
                     await self.ctx.message.delete()
                     return
 
         # If the reaction is the right one, return what it is.
         if reaction.emoji in self.options:
-            if self.delete():
+            if self.delete_after():
                 self.ctx.message.delete()
             return reaction.emoji
 
