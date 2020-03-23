@@ -36,7 +36,7 @@ class Menu:
             raise TooManyMenuOptionsException
 
     def debug(self):
-        return f"{self.ctx:=} | {self.options:=} | {self.timeout:=} | {self.delete:=} | {self.only_sender:=} {self.cancel_emoji:=}"
+        return f"{self.ctx=} | {self.options=} | {self.timeout=} | {self.delete=} | {self.only_sender=} {self.cancel_emoji=}"
 
     async def run(self):
 
