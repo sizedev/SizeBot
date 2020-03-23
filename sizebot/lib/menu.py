@@ -58,7 +58,7 @@ class Menu:
 
         # Wait for a reaction.
         try:
-            reaction, self.ctx.message.author = await self.ctx.bot.wait_for("reaction_add", timeout=self.timeout, check=self.check)
+            reaction, self.ctx.message.author = await self.ctx.bot.wait_for("reaction_add", timeout=self.timeout, check=check)
         except asyncio.TimeoutError:
             # User took too long to respond
             if self.delete:
