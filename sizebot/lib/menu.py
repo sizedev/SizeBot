@@ -18,14 +18,18 @@ class Menu:
     options: a list of either valid Unicode emojis or Discord Emoji objects. (up to 20, or 19 if `cancel_emoji`.)
 
     Keyword Arguments:
+    initial_message: what you want the menu to message to say first. Default = "".
     timeout: when to stop accepting reactions (a seconds value as a float). Default = 60.0
     delete: whether to delete the message when the menu is done accepting options. Default = True
     cancel_emoji: either a valid Unicode emoji or Discord Emoji object to exit the menu. Default = None
     """
 
-    def __init__(self, ctx: commands.context.Context, options: list, *,
-                 timeout: float = 60, delete_after: bool = True, only_sender: bool = True, cancel_emoji: None):
+    async def __init__(self, ctx: commands.context.Context, options: list, *,
+                       initial_message: str = "", timeout: float = 60, delete_after: bool = True,
+                       only_sender: bool = True, cancel_emoji: None):
         self.ctx = ctx
+        self.initial_message = initial_message
+        self.message = await self.ctx.send(self.initial_message)
         self.options = options
         self.timeout = timeout
         self.delete_after = delete_after
@@ -42,14 +46,14 @@ class Menu:
 
         # Add all the reactions we need.
         for option in self.options:
-            await self.ctx.message.add_reaction(option)
+            await self.message.add_reaction(option)
         if self.cancel_emoji:
-            await self.ctx.message.add_reaction(self.cancel_emoji)
+            await self.message.add_reaction(self.cancel_emoji)
 
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
         def check(reaction, reacter):
             correctreactor = not self.only_sender or reacter.id == self.ctx.message.author.id
-            return reaction.message.id == self.ctx.message.id \
+            return reaction.message.id == self.message.id \
                 and correctreactor \
                 and (
                     str(reaction.emoji) == self.cancel_emoji
