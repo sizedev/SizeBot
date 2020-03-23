@@ -200,8 +200,8 @@ class RegisterCog(commands.Cog):
         }
 
         currentusers = userdb.listUsers()
-        guildsregisteredin = [self.bot.get_guild(int(g)).id for g, u in currentusers if u == str(ctx.message.author.id)]
-        guildsregisteredinnames = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == str(ctx.message.author.id)]
+        guildsregisteredin = [g for g, u in currentusers if u == ctx.message.author.id]
+        guildsregisteredinnames = [self.bot.get_guild(g).name for g, u in currentusers if u == ctx.message.author.id]
 
         if guildsregisteredin == []:
             await ctx.send("You are not registered with SizeBot in any guilds."
@@ -223,6 +223,7 @@ class RegisterCog(commands.Cog):
         for i in range(min(len(guildsregisteredin), 10)):  # Loops over either the whole list of guilds, or if that's longer than 10, 10 times.
             outstring += f"{list(inputdict.keys())[i]} *{guildsregisteredinnames[i]}*\n"
             await outmsg.add_reaction(list(inputdict.keys())[i])
+        await outmsg.add_reaction(emojis.cancel)
 
         outstring += f"\nClick {emojis.cancel} to cancel."
 
@@ -241,10 +242,8 @@ class RegisterCog(commands.Cog):
             reaction, ctx.message.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
         except asyncio.TimeoutError:
             # User took too long to respond
-            return
-        finally:
-            # User took too long OR User clicked the emoji
             await outmsg.delete()
+            return
 
         # if the reaction isn't the right one, stop.
         if reaction.emoji == emojis.cancel:
@@ -257,6 +256,8 @@ class RegisterCog(commands.Cog):
 
             frompath = conf.guilddbpath / str(chosenguild) / "users" / f"{ctx.message.author.id}.json"
             topath = conf.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.message.author.id}.json"
+
+            topath.parent.mkdir(parents = True, exist_ok = True)
 
             copyfile(frompath, topath)
 
