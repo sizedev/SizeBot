@@ -35,7 +35,7 @@ class Menu:
         if len(self.options) + int(self.cancel_emoji) > 20:
             raise TooManyMenuOptionsException
 
-    def run(self):
+    async def run(self):
 
         # Add all the reactions we need.
         for option in self.options:
