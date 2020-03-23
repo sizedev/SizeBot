@@ -32,7 +32,7 @@ class Menu:
         self.only_sender = only_sender
         self.cancel_emoji = cancel_emoji
 
-        if len(self.options) + int(self.cancel_emoji) > 20:
+        if len(self.options) + int(bool(self.cancel_emoji)) > 20:
             raise TooManyMenuOptionsException
 
     async def run(self):
