@@ -36,12 +36,12 @@ setuptools.setup(
     long_description=getLongDescription(),
     long_description_content_type="text/markdown",
     url="https://github.com/sizedev/SizeBot3AndAHalf",
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires=getRequirements(),
     packages=setuptools.find_packages(),
     include_package_data=True,
     classifiers=[
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
     ],
