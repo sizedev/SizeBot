@@ -137,9 +137,9 @@ class HelpCog(commands.Cog):
         await ctx.send(f"Unrecognized command: `{cmdName}`.")
 
     @commandsplus.command(
+        hidden = True
     )
-    async def about(self, ctx):
-        """Get the credits and some facts about SizeBot."""
+    async def oldabout(self, ctx):
         now = datetime.now()
         await ctx.send(
             "```\n"
@@ -169,7 +169,8 @@ class HelpCog(commands.Cog):
             f"Version {__version__} | {now.strftime('%d %b %Y')}")
 
     @commandsplus.command()
-    async def aboutembed(self, ctx):
+    async def about(self, ctx):
+        """Get the credits and some facts about SizeBot."""
         now = datetime.now()
         embed = discord.Embed(title = "SizeBot3½", description = "Think of a new slogan!", color = 0x11cccc)
         embed.set_author(name = "DigiDuncan")
