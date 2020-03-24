@@ -28,7 +28,8 @@ def main():
         'sizebot.cogs.set',
         'sizebot.cogs.stats',
         'sizebot.cogs.winks',
-        'sizebot.cogs.christmas'
+        'sizebot.cogs.christmas',
+        'sizebot.cogs.eval'
     ]
 
     # Obviously we need this printed in the terminal.
