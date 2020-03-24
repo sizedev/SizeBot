@@ -162,7 +162,7 @@ class EvalCog(commands.Cog):
         """Evaluate a Python expression."""
         evalStr = utils.removeCodeBlock(evalStr)
 
-        logger.info(f"{ctx.message.author.display_name} tried to eval {evalStr!r}.")
+        logger.msg(f"{ctx.message.author.display_name} tried to eval {evalStr!r}.")
 
         # Show user that bot is busy doing something
         waitMsg = None
@@ -198,7 +198,7 @@ class EvalCog(commands.Cog):
 
         evalStr = utils.removeCodeBlock(evalStr)
 
-        logger.info(f"{ctx.message.author.display_name} tried to quietly eval {evalStr!r}.")
+        logger.msg(f"{ctx.message.author.display_name} tried to quietly eval {evalStr!r}.")
 
         async with ctx.typing():
             try:
