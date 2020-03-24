@@ -24,12 +24,12 @@ class Menu:
     cancel_emoji: either a valid Unicode emoji or Discord Emoji object to exit the menu. Default = None
     """
 
-    async def __init__(self, ctx: commands.context.Context, options: list, *,
-                       initial_message: str = "", timeout: float = 60, delete_after: bool = True,
-                       only_sender: bool = True, cancel_emoji: None):
+    def __init__(self, ctx: commands.context.Context, options: list, *,
+                 initial_message: str = "", timeout: float = 60, delete_after: bool = True,
+                 only_sender: bool = True, cancel_emoji: None):
         self.ctx = ctx
         self.initial_message = initial_message
-        self.message = await self.ctx.send(self.initial_message)
+        self.message = None
         self.options = options
         self.timeout = timeout
         self.delete_after = delete_after
@@ -43,6 +43,8 @@ class Menu:
         return f"{self.ctx=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.only_sender=} {self.cancel_emoji=}"
 
     async def run(self):
+
+        self.message = await self.ctx.send(self.initial_message)
 
         # Add all the reactions we need.
         for option in self.options:
