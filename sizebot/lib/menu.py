@@ -46,8 +46,8 @@ class Menu:
     def menu_owner(self):
         return self.ctx.message.author
 
-    def debug(self):
-        return f"{self.ctx=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.only_sender=} {self.cancel_emoji=}"
+    def __str__(self):
+        return f"{self.ctx=} | {self.initial_message=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.only_sender=} | {self.cancel_emoji=}"
 
     async def run(self):
 
