@@ -29,14 +29,14 @@ class Menu:
 
     def __init__(self, ctx: commands.context.Context, options: list, *,
                  initial_message: str = "", timeout: float = 60, delete_after: bool = True,
-                 only_sender: bool = True, cancel_emoji: None):
+                 allow_any: bool = False, cancel_emoji: None):
         self.ctx = ctx
         self.initial_message = initial_message
         self.message = None
         self.options = options
         self.timeout = timeout
         self.delete_after = delete_after
-        self.only_sender = only_sender
+        self.allow_any = allow_any
         self.cancel_emoji = cancel_emoji
 
         if len(self.options) + int(bool(self.cancel_emoji)) > 20:
@@ -47,10 +47,9 @@ class Menu:
         return self.ctx.message.author
 
     def __str__(self):
-        return f"{self.ctx=} | {self.initial_message=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.only_sender=} | {self.cancel_emoji=}"
+        return f"{self.ctx=} | {self.initial_message=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.allow_any=} | {self.cancel_emoji=}"
 
     async def run(self):
-
         self.message = await self.ctx.send(self.initial_message)
 
         # Add all the reactions we need.
@@ -61,36 +60,39 @@ class Menu:
 
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
         def check(reaction, reacter):
-            correctreactor = (not self.only_sender) or reacter.id == self.menu_owner
             return reaction.message.id == self.message.id \
-                and correctreactor \
+                and (self.allow_any or reacter.id == self.menu_owner.id) \
                 and (
                     str(reaction.emoji) == self.cancel_emoji
                     or str(reaction.emoji) in self.options
                 )
 
         # Wait for a reaction.
+        reaction = None
         try:
             reaction, reacter = await self.ctx.bot.wait_for("reaction_add", timeout=self.timeout, check=check)
         except asyncio.TimeoutError:
             # User took too long to respond
-            if self.delete_after:
-                await self.message.delete()
-            return
+            pass
 
-        # If the reaction is cancel, stop.
-        if self.cancel_emoji:
-            if reaction.emoji == self.cancel_emoji:
-                if self.delete_after:
-                    await self.message.delete()
-                    return
+        if self.delete_after:
+            await self.message.delete()
 
-        # If the reaction is the right one, return what it is.
-        if reaction.emoji in self.options:
-            if self.delete_after:
-                self.message.delete()
-            return reaction.emoji
+        if reaction is None or reaction.emoji == self.cancel_emoji:
+            # User took too long to respond
+            # or the reaction is cancel, stop.
+            answer = None
+        else:
+            # If the reaction is the right one, return what it is.
+            answer = reaction.emoji
 
+        return answer
+
+    @classmethod
+    async def display(cls, *args, **kwargs):
+        reactionmenu = Menu(*args, **kwargs)
+        answer = await reactionmenu.run()
+        return reactionmenu, answer
 
 # class LoopingMenu:
 #     """Creates a reaction-based menu in a Discord message that can accept multiple inputs.
@@ -109,13 +111,13 @@ class Menu:
 #     """
 
 #     def __init__(self, ctx: commands.context.Context, options: list, success_function = None, *,
-#                  timeout: float = 60, delete: bool = True, only_sender: bool = True, remove_reaction = True, cancel_emoji: None):
+#                  timeout: float = 60, delete: bool = True, allow_any: bool = False, remove_reaction = True, cancel_emoji: None):
 #         self.ctx = ctx
 #         self.options = options
 #         self.success_function = success_function
 #         self.timeout = timeout
 #         self.delete = delete
-#         self.only_sender = only_sender
+#         self.allow_any = allow_any
 #         self.cancel_emoji = cancel_emoji
 
 #         if len(self.options) + int(self.cancel_emoji) > 20:
