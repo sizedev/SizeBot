@@ -13,7 +13,7 @@ from sizebot import globalsb
 
 emojis = {
     "loading": "Loading...",
-    "warning": "Warning!"
+    "warning": "⚠️"
 }
 
 
@@ -138,7 +138,7 @@ async def runEval(ctx, evalStr):
 
     evalWrapper, evalWrapperStr = buildEvalWrapper(evalStr)
 
-    logger.debug(f"Executing eval:\n{evalWrapperStr}")
+    logger.load(f"Executing eval:\n{evalWrapperStr}")
 
     exec(
         evalWrapper,
