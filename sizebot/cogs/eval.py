@@ -173,7 +173,7 @@ class EvalCog(commands.Cog):
             try:
                 result = await runEval(ctx, evalStr)
             except Exception as err:
-                logger.error("eval error:\n" + utils.formatTraceback(err))
+                logger.crit("eval error:\n" + utils.formatTraceback(err))
                 await ctx.send(emojis["warning"] + f" ` {utils.formatError(err)} `")
                 return
             finally:
@@ -204,7 +204,7 @@ class EvalCog(commands.Cog):
             try:
                 await runEval(ctx, evalStr, returnValue = False)
             except Exception as err:
-                logger.error("eval error:\n" + utils.formatTraceback(err))
+                logger.crit("eval error:\n" + utils.formatTraceback(err))
                 await ctx.message.author.send("**!**" + f" ` {utils.formatError(err)} `")
 
 
