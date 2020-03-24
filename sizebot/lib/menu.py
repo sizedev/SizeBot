@@ -61,7 +61,7 @@ class Menu:
 
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
         def check(reaction, reacter):
-            correctreactor = not self.only_sender or reacter.id == self.menu_owner
+            correctreactor = (not self.only_sender) or reacter.id == self.menu_owner
             return reaction.message.id == self.message.id \
                 and correctreactor \
                 and (
