@@ -22,6 +22,9 @@ class Menu:
     timeout: when to stop accepting reactions (a seconds value as a float). Default = 60.0
     delete: whether to delete the message when the menu is done accepting options. Default = True
     cancel_emoji: either a valid Unicode emoji or Discord Emoji object to exit the menu. Default = None
+
+    Properties:
+    menu_owner: the Member object that asked for this menu.
     """
 
     def __init__(self, ctx: commands.context.Context, options: list, *,
@@ -39,6 +42,10 @@ class Menu:
         if len(self.options) + int(bool(self.cancel_emoji)) > 20:
             raise TooManyMenuOptionsException
 
+    @property
+    def menu_owner(self):
+        return self.ctx.message.author
+
     def debug(self):
         return f"{self.ctx=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.only_sender=} {self.cancel_emoji=}"
 
@@ -54,7 +61,7 @@ class Menu:
 
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
         def check(reaction, reacter):
-            correctreactor = not self.only_sender or reacter.id == self.ctx.message.author.id
+            correctreactor = not self.only_sender or reacter.id == self.menu_owner
             return reaction.message.id == self.message.id \
                 and correctreactor \
                 and (
@@ -64,24 +71,24 @@ class Menu:
 
         # Wait for a reaction.
         try:
-            reaction, self.ctx.message.author = await self.ctx.bot.wait_for("reaction_add", timeout=self.timeout, check=check)
+            reaction, reacter = await self.ctx.bot.wait_for("reaction_add", timeout=self.timeout, check=check)
         except asyncio.TimeoutError:
             # User took too long to respond
             if self.delete_after:
-                await self.ctx.message.delete()
+                await self.message.delete()
             return
 
         # If the reaction is cancel, stop.
         if self.cancel_emoji:
             if reaction.emoji == self.cancel_emoji:
                 if self.delete_after:
-                    await self.ctx.message.delete()
+                    await self.message.delete()
                     return
 
         # If the reaction is the right one, return what it is.
         if reaction.emoji in self.options:
             if self.delete_after:
-                self.ctx.message.delete()
+                self.message.delete()
             return reaction.emoji
 
 
