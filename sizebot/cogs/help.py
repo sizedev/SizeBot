@@ -183,7 +183,7 @@ class HelpCog(commands.Cog):
                                  "**\"Moral Support\"** *by Chocola*"),
                         inline = False)
         embed.add_field(name = "Technical Details",
-                        value = "Written in Python 3.6, and slowly upgraded to 3.8. Originally written using Atom, and now Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library, and various dependencies you can find on the GitHub page.",
+                        value = "Written in Python 3.6, and slowly upgraded to 3.8. Originally written using Atom, and now Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
                         inline = False)
         embed.add_field(name = "Special Thanks",
                         value = ("**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
@@ -193,7 +193,8 @@ class HelpCog(commands.Cog):
         embed.add_field(name = "Testimonials",
                         value = ("\"She [SizeBot] is beautiful.\" *-- GoddessArete*\n"
                                  "\"I want to put SizeBot in charge of the world government.\"* -- AWK*\n"
-                                 "\"Um... I like it?\" -- Goddess Syn\n"
+                                 "\"Um... I like it?\" *-- Goddess Syn*\n"
+                                 # "\"Fix the bot.\" *-- Natalie*"
                                  "\"I am the only person who has accidentally turned my fetish into a tech support job.\" *-- DigiDuncan*\n"
                                  "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\"\" *-- Chocola*"),
                         inline = False)
