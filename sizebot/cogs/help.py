@@ -79,7 +79,9 @@ class HelpCog(commands.Cog):
         pages = ["\n".join(p) for p in utils.chunkList(commandStrings, commandsPerPage)]
 
         for n, p in enumerate(pages):
-            embeds[math.floor(n / pagesPerEmbed)].add_field(name=("Commands" if n == 0 else "\u200b"), value=p, inline=n != 2)
+            if n == 2:
+                embeds[math.floor(n / pagesPerEmbed)].add_field(name="\u200b", value="\u200b", inline=False)
+            embeds[math.floor(n / pagesPerEmbed)].add_field(name=("Commands" if n == 0 else "\u200b"), value=p, inline=True)
 
         for e in embeds:
             await ctx.send(embed=e)
