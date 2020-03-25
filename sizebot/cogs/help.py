@@ -65,15 +65,23 @@ class HelpCog(commands.Cog):
         ...
         """
 
-        embed = discord.Embed(title=f"Help [SizeBot {__version__}]")
+        embedCount = 2
+
+        embeds = [discord.Embed(title=(f"Help [SizeBot {__version__}]" if n == 0 else None)) for n in range(embedCount)]
 
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
 
-        for n, fieldCommands in enumerate(utils.chunkList(commands, math.ceil(len(commands) / 4))):
-            fieldCommandsStr = "\n".join(f"**{c.name}**\n{c.short_doc or '-'}" for c in fieldCommands)
-            embed.add_field(name="Commands" if n == 0 else "\u200b", value=fieldCommandsStr, inline=True)
+        commandsPerPage = math.ceil(len(commands) / (embedCount * 2))
 
-        await ctx.send(embed=embed)
+        commandStrings = [f"**{c.name}**\n{c.short_doc or '-'}" for c in commands]
+
+        pages = ["\n".join(p) for p in utils.chunkList(commandStrings, commandsPerPage)]
+
+        for n, p in enumerate(pages):
+            embeds[math.floor(n / 2)].add_field(name=("Commands" if n == 0 else "\u200b"), value=p, inline=True)
+
+        for e in embeds:
+            await ctx.send(embed=e)
 
     async def send_command_help(self, ctx, cmd):
         """Sends help for a command.
