@@ -65,20 +65,21 @@ class HelpCog(commands.Cog):
         ...
         """
 
-        embedCount = 2
+        embedCount = 1
+        pagesPerEmbed = 4
 
         embeds = [discord.Embed(title=(f"Help [SizeBot {__version__}]" if n == 0 else None)) for n in range(embedCount)]
 
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
 
-        commandsPerPage = math.ceil(len(commands) / (embedCount * 2))
+        commandsPerPage = math.ceil(len(commands) / (embedCount * pagesPerEmbed))
 
         commandStrings = [f"**{c.name}**\n{c.short_doc or '-'}" for c in commands]
 
         pages = ["\n".join(p) for p in utils.chunkList(commandStrings, commandsPerPage)]
 
         for n, p in enumerate(pages):
-            embeds[math.floor(n / 2)].add_field(name=("Commands" if n == 0 else "\u200b"), value=p, inline=True)
+            embeds[math.floor(n / 2)].add_field(name=("Commands" if n == 0 else "\u200b"), value=p, inline=n != 2)
 
         for e in embeds:
             await ctx.send(embed=e)
