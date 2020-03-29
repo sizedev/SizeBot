@@ -1,8 +1,9 @@
 import random
+from sizebot.lib.decimal import roundFraction
 
 
 def isGood(n):
-    r = round(n)
+    r = roundFraction(n, 4)
     if r == 0:
         return False
     creditRating = abs(n - r) / r
@@ -10,7 +11,7 @@ def isGood(n):
 
 
 def getCloseUnitsWithLimit(val, limit, units):
-    return [u for u in units if 1 <= round(val / u.factor) <= limit and isGood(val / u.factor)]
+    return [u for u in units if 1 <= roundFraction(val / u.factor, 4) <= limit and isGood(val / u.factor)]
 
 
 def getRandomCloseUnit(val, units):
