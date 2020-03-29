@@ -6,7 +6,6 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot.lib import proportions, userdb
-from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
@@ -131,15 +130,15 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(memberOrHeight)
 
-        goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2")
+        goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2%4&2")
         tmp = goodheight.split()
-        tmp[0] = format(Decimal(tmp[0]), "%4&2")
-        goodheightout = " ".join(tmp)
+        tmpout = [tmp[0]] + tmp[3:] + tmp[1:3]  # Move the paranthesis bit of the height string to the end.
+        goodheightout = " ".join(tmpout)
 
-        goodweight = userdata.weight.toGoodUnit('o', preferName=True, spec=".2")
+        goodweight = userdata.weight.toGoodUnit('o', preferName=True, spec=".2%4&2")
         tmp2 = goodweight.split()
-        tmp2[0] = format(Decimal(tmp2[0]), "%4&2")
-        goodweightout = " ".join(tmp2)
+        tmp2out = [tmp2[0]] + tmp2[3:] + tmp2[1:3]  # Move the paranthesis bit of the height string to the end.
+        goodweightout = " ".join(tmp2out)
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
         logger.info(f"Sent object comparison for {userdata.nickname}.")
@@ -183,6 +182,14 @@ def getUserdata(memberOrSV, nickname = "Raw"):
         userdata.nickname = nickname
         userdata.height = memberOrSV
     return userdata
+
+
+def isThisAnObject(s):
+    v, u = SV.getQuantityPair(s)
+    for systemunit in SV._systems['o']._systemunits:
+        if u in systemunit.unit.names:
+            return True
+    return False
 
 
 def setup(bot):
