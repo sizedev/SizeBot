@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot.lib import proportions, userdb
+from sizebot.lib import proportions, userdb, errors
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
@@ -158,20 +158,26 @@ class StatsCog(commands.Cog):
         `&examine building`"""
         logger.info(f"{ctx.message.author.display_name} looked at {what}.")
 
-        if what not in ["person", "man", "average", "average person", "average man", "average human", "human"]:
-            await ctx.send(f"Sorry, *{what}* is not a valid object.")
-            return
-
         userdata = getUserdata(ctx.message.author)
         userstats = proportions.PersonStats(userdata)
-        userheight = userstats.avgheightcomp
-        compdata = getUserdata(userheight)
 
-        stats = proportions.PersonStats(compdata)
-        embedtosend = stats.toEmbed()
-        if ctx.message.author.id != userdata.id:
-            embedtosend.description = f"Reverse stats for {userdata.nickname}*\n*Requested by *{ctx.message.author.display_name}*"
-        await ctx.send(embed = embedtosend)
+        if isAnObject(what):
+            await ctx.send(f"You definitely just said the name of an object! `{what}`")
+        else:  # then it's a person height.
+            if what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
+                compheight = userstats.avgheightcomp
+            else:
+                try:  # TODO: This breaks on Members.
+                    compheight = SV.parse(what)
+                except errors.InvalidSizeValue:
+                    await ctx.send(f"`{what}` is not a valid object, member, or height.")
+                    return
+            compdata = getUserdata(compheight)
+            stats = proportions.PersonStats(compdata)
+            embedtosend = stats.toEmbed()
+            if ctx.message.author.id != userdata.id:  # Future proofing for when you can do lookats for other people.
+                embedtosend.description = f"*Requested by *{ctx.message.author.display_name}*"
+            await ctx.send(embed = embedtosend)
 
 
 def getUserdata(memberOrSV, nickname = "Raw"):
@@ -184,11 +190,12 @@ def getUserdata(memberOrSV, nickname = "Raw"):
     return userdata
 
 
-def isThisAnObject(s):
+def isAnObject(s):
     v, u = SV.getQuantityPair(s)
-    for systemunit in SV._systems['o']._systemunits:
-        if u in systemunit.unit.names:
-            return True
+    if u:
+        for systemunit in SV._systems['o']._systemunits:
+            if u in systemunit.unit.names:
+                return True
     return False
 
 
