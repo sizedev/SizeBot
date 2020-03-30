@@ -29,6 +29,6 @@ class ObjectComparison:
         if self.perceiveddepth:
             returnstr += f"{emojis.blank}{self.perceiveddepth:,.3mu} deep\n"
         if self.perceivedweight:
-            returnstr += "and weighs"
+            returnstr += "and weighs...\n"
             returnstr += f"{emojis.blank}{self.perceivedweight:,.3mu}"
         return returnstr
