@@ -32,3 +32,5 @@ class ObjectComparison:
             returnstr += "and weighs...\n"
             returnstr += f"{emojis.blank}{self.perceivedweight:,.3mu}"
         return returnstr
+
+    # TODO: Add a toEmbed() method.
