@@ -150,7 +150,7 @@ class StatsCog(commands.Cog):
         usage = "[object]"
     )
     @commands.guild_only()
-    async def lookat(self, ctx, *, what: typing.Union[discord.Member, SV, DigiObject]):
+    async def lookat(self, ctx, *, what: typing.Union[discord.Member, DigiObject, SV]):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
