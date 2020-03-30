@@ -8,7 +8,7 @@ from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
 from sizebot import conf
-from sizebot.lib import objs, status, units, proportions
+from sizebot.lib import language, objs, proportions, status, units
 from sizebot.plugins import monika, meicros
 from sizebot.cogs import edge
 from sizebot.lib.discordlogger import DiscordHandler
@@ -74,6 +74,8 @@ def main():
         logger.addHandler(discordhandler)
         discordlogger = logging.getLogger("discord")
         discordlogger.addHandler(discordhandler)
+
+        language.load()
 
         await units.init()
         await objs.init()
