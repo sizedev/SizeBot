@@ -1,17 +1,41 @@
 [
     {
-        "name": "E. coli",
-        "length": "0.000007",
-        "weight": "1e-12",
-        "namePlural": "E. coli"
+        "name": "DNA",
+        "length": "2.5e-9",
+        "weight": "1.67e-24",
+        "namePlural": "DNAs"
     },
     {
-        "name": "human hair",
+        "name": "transistor",
+        "length": "7e-9",
+        "namePlural": "transistors"
+    },
+    {
+        "name": "E. coli",
+        "length": "0.000007",
+        "weight": "1e-12"
+    },
+    {
+        "name": "red blood cell",
+        "length": "0.000007",
+        "weight": "2.7e-11",
+        "namePlural": "red blood cells",
+        "names": [
+            "blood",
+            "blood cell",
+            "blood cells"
+        ]
+    },
+    {
+        "name": "hair width",
         "length": "0.00005",
         "weight": "0.00062",
         "namePlural": "hair widths",
         "names": [
-            "hair"
+            "hair",
+            "hairs",
+            "human hair",
+            "human hairs"
         ]
     },
     {
@@ -122,7 +146,7 @@
         ]
     },
     {
-        "name": "scotch tape width",
+        "name": "Scotch tape width",
         "length": "0.01905",
         "namePlural": "Scotch tape widths",
         "names": [
@@ -137,12 +161,10 @@
         "namePlural": "pennies"
     },
     {
-        "name": "dice",
+        "name": "die",
         "length": "0.02",
         "weight": "3.714285",
-        "names": [
-            "die"
-        ]
+        "namePlural": "dice"
     },
     {
         "name": "push pin",
@@ -226,6 +248,18 @@
         "names": [
             "minifig",
             "minifigs"
+        ]
+    },
+    {
+        "name": "AirPod™",
+        "length": "0.04",
+        "weight": "4",
+        "namePlural": "AirPods™",
+        "names": [
+            "earbud",
+            "earbuds",
+            "airpod",
+            "airpods"
         ]
     },
     {
@@ -497,6 +531,12 @@
         "namePlural": "remotes"
     },
     {
+        "name": "bowling ball",
+        "length": "0.2159",
+        "weight": "5896.7",
+        "namePlural": "bowling balls"
+    },
+    {
         "name": "soccer ball",
         "length": "0.22",
         "weight": "450",
@@ -593,6 +633,16 @@
         ]
     },
     {
+        "name": "Sonic the Hedgehog",
+        "length": "1",
+        "weight": "35000",
+        "namePlural": "Sonic the Hedgehogs",
+        "names": [
+            "sonic",
+            "sonics"
+        ]
+    },
+    {
         "name": "sidewalk width",
         "length": "1.2192",
         "namePlural": "sidewalk widths"
@@ -655,6 +705,35 @@
         "namePlural": "cars"
     },
     {
+        "name": "double decker bus",
+        "length": "4.5",
+        "weight": "25885610",
+        "namePlural": "double decker buses",
+        "names": [
+            "bus",
+            "buses",
+            "double-decker bus",
+            "double-decker buses"
+        ]
+    },
+    {
+        "name": "Tyrannosaurus Rex",
+        "length": "4.572",
+        "weight": "7257477.9",
+        "namePlural": "Tyrannosaurus Rexes",
+        "names": [
+            "T-rex",
+            "T-rexes",
+            "T-rexs",
+            "T rex",
+            "T rexes",
+            "T rexs",
+            "Trex",
+            "Trexes",
+            "Trexs"
+        ]
+    },
+    {
         "name": "2-lane road width",
         "length": "6",
         "namePlural": "2-lane road widths",
@@ -680,10 +759,56 @@
         ]
     },
     {
+        "name": "humpback whale",
+        "length": "16",
+        "weight": "30000000",
+        "namePlural": "humpback whales",
+        "names": [
+            "whale",
+            "whales"
+        ]
+    },
+    {
         "name": "train car",
         "length": "16.1798",
         "weight": "25400000",
         "namePlural": "train cars"
+    },
+    {
+        "name": "oak tree",
+        "length": "18",
+        "weight": "7500000",
+        "namePlural": "oak trees",
+        "names": [
+            "tree",
+            "trees"
+        ]
+    },
+    {
+        "name": "bowling alley",
+        "length": "18.288",
+        "namePlural": "bowling alleys"
+    },
+    {
+        "name": "semi truck",
+        "length": "21.336",
+        "weight": "15422140",
+        "namePlural": "semi trucks",
+        "names": [
+            "truck"
+        ]
+    },
+    {
+        "name": "7-story office building",
+        "length": "22",
+        "weight": "3168488761.2",
+        "namePlural": "7-story office buildings",
+        "names": [
+            "office building",
+            "office buildings",
+            "office",
+            "offices"
+        ]
     },
     {
         "name": "swimming pool",
@@ -702,7 +827,13 @@
         "namePlural": "Leaning Tower of Pisas"
     },
     {
-        "name": "falcon heavy",
+        "name": "redwood tree",
+        "length": "60.96",
+        "weight": "725747792",
+        "namePlural": "redwood trees"
+    },
+    {
+        "name": "Falcon Heavy",
         "length": "70",
         "weight": "1420651303",
         "namePlural": "Falcon Heavys",
@@ -712,13 +843,15 @@
         ]
     },
     {
-        "name": "boeing 747",
+        "name": "Boeing 747",
         "length": "70.7136",
         "weight": "183523473",
         "namePlural": "Boeing 747s",
         "names": [
             "747",
-            "747s"
+            "747s",
+            "jumbo jet",
+            "jumbo jets"
         ]
     },
     {
@@ -731,7 +864,7 @@
         ]
     },
     {
-        "name": "statue of liberty",
+        "name": "Statue of Liberty",
         "length": "93",
         "weight": "204116566",
         "namePlural": "Statue of Libertys",
@@ -748,12 +881,38 @@
         "namePlural": "Big Bens"
     },
     {
+        "name": "ferris wheel",
+        "length": "100",
+        "weight": "7257480",
+        "namePlural": "ferris wheels"
+    },
+    {
         "name": "football field",
         "length": "109.728",
         "namePlural": "football fields",
         "names": [
             "field",
             "fields"
+        ]
+    },
+    {
+        "name": "Washington monument",
+        "length": "169.164",
+        "weight": "82421400000",
+        "namePlural": "Washington monuments",
+        "names": [
+            "washington",
+            "washgintons"
+        ]
+    },
+    {
+        "name": "Battleship Iowa",
+        "length": "270",
+        "weight": "44081921000",
+        "namePlural": "Battleship Iowas",
+        "names": [
+            "battleship",
+            "battleships"
         ]
     },
     {
@@ -779,6 +938,15 @@
         "namePlural": "Empire State Buildings"
     },
     {
+        "name": "Grand Canyon",
+        "length": "1828.8",
+        "namePlural": "Grand Canyons",
+        "names": [
+            "canyon",
+            "canyons"
+        ]
+    },
+    {
         "name": "Mount Everest",
         "length": "8848",
         "weight": "161932476090000000",
@@ -788,6 +956,15 @@
             "everests",
             "mountain",
             "mountains"
+        ]
+    },
+    {
+        "name": "Kármán line",
+        "length": "100000",
+        "namePlural": "Kármán lines",
+        "names": [
+            "karman line",
+            "karman lines"
         ]
     },
     {
@@ -808,122 +985,25 @@
         "namePlural": "Earths"
     },
     {
+        "name": "Jupiter",
+        "length": "139820000",
+        "weight": "1.898e+30",
+        "namePlural": "Jupiters"
+    },
+    {
         "name": "Sun",
         "length": "1391000000",
         "weight": "1.989e+33",
         "namePlural": "Suns"
     },
     {
-        "name": "Kármán line",
-        "length": "100000",
-        "namePlural": "Kármán lines",
+        "name": "Minecraft character",
+        "length": "1.8",
+        "weight": "72151",
+        "namePlural": "Minecraft characters",
         "names": [
-            "karman line",
-            "karman lines"
+            "Steve",
+            "Steves"
         ]
-    },
-    {
-        "name": "Washington monument",
-        "length": "169.164",
-        "weight": "82421400000",
-        "namePlural": "Washington monument",
-        "names": [
-            "washington",
-            "washgintons"
-        ]
-    },
-    {
-        "name": "bowling alley",
-        "length": "18.288",
-        "namePlural": "bowling alleys"
-    },
-    {
-        "name": "double decker bus",
-        "length": "4.5",
-        "weight": "25885610",
-        "namePlural": "double decker buses",
-        "names": [
-            "bus",
-            "buses",
-            "double-decker bus",
-            "double-decker buses"
-        ]
-    },
-    {
-        "name": "ferris wheel",
-        "length": "100",
-        "weight": "7257480"
-    },
-    {
-        "name": "Grand Canyon",
-        "length": "1828.8",
-        "namePlural": "Grand Canyons",
-        "names": [
-            "canyon",
-            "canyons"
-        ]
-    },
-    {
-        "name": "redwood tree",
-        "length": "60.96",
-        "weight": "725747792",
-        "namePlural": "redwood trees"
-    },
-    {
-        "name": "humpback whale",
-        "length": "16",
-        "weight": "30000000",
-        "namePlural": "humpback whales",
-        "names": [
-            "whale",
-            "whales"
-        ]
-    },
-    {
-        "name": "Sonic the Hedgehog",
-        "length": "1",
-        "weight": "35000",
-        "namePlural": "Sonic the Hedgehogs",
-        "names": [
-            "sonic",
-            "sonics"
-        ]
-    },
-    {
-        "name": "Tyrannosaurus Rex",
-        "length": "4.572",
-        "weight": "7257477.9",
-        "namePlural": "Tyrannosaurus Rexes",
-        "names": [
-            "T-rex",
-            "T-rexes",
-            "T-rexs",
-            "T rex",
-            "T rexes",
-            "T rexs",
-            "Trex",
-            "Trexes",
-            "Trexs"
-        ]
-    },
-    {
-        "name": "bowling ball",
-        "length": "0.2159",
-        "weight": "5896.7",
-        "namePlural": "bowling balls"
-    },
-    {
-        "name": "semi truck",
-        "length": "21.336",
-        "weight": "15422140",
-        "namePlural": "semi trucks"
-    },
-    {
-        "name": "shipping container",
-        "height": "2.59",
-        "width": "2.43",
-        "length": "12.2",
-        "weight": "4000000",
-        "namePlural": "shipping containers"
     }
 ]
