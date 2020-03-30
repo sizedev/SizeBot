@@ -5,10 +5,9 @@ import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot.lib import proportions, userdb, errors
+from sizebot.lib import proportions, userdb
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV
-from sizebot.lib.objs import DigiObject
 
 logger = logging.getLogger("sizebot")
 
@@ -150,7 +149,7 @@ class StatsCog(commands.Cog):
         usage = "[object]"
     )
     @commands.guild_only()
-    async def lookat(self, ctx, *, what: typing.Union[discord.Member, DigiObject, SV]):
+    async def lookat(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -163,23 +162,22 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(ctx.message.author)
         userstats = proportions.PersonStats(userdata)
 
-        if isAnObject(what):
+        if isinstance(what, DigiObject):
             await ctx.send(f"You definitely just said the name of an object! `{what}`")
-        else:  # then it's a person height.
-            if what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
-                compheight = userstats.avgheightcomp
-            else:
-                try:  # TODO: This breaks on Members.
-                    compheight = SV.parse(what)
-                except errors.InvalidSizeValue:
-                    await ctx.send(f"`{what}` is not a valid object, member, or height.")
-                    return
+            return
+        elif isinstance(what, discord.Member) or isinstance(what, SV):
+            compdata = getUserdata(what, "Raw")
+        elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
+            compheight = userstats.avgheightcomp
             compdata = getUserdata(compheight)
-            stats = proportions.PersonStats(compdata)
-            embedtosend = stats.toEmbed()
-            if ctx.message.author.id != userdata.id:  # Future proofing for when you can do lookats for other people.
-                embedtosend.description = f"*Requested by *{ctx.message.author.display_name}*"
-            await ctx.send(embed = embedtosend)
+        else:
+            await ctx.send(f"`{what}` is not a valid object, member, or height.")
+            return
+        stats = proportions.PersonComparison(userdata, compdata)
+        embedtosend = stats.toEmbed()
+        if ctx.message.author.id != userdata.id:  # Future proofing for when you can do lookats for other people.
+            embedtosend.description = f"*Requested by *{ctx.message.author.display_name}*"
+        await ctx.send(embed = embedtosend)
 
 
 def getUserdata(memberOrSV, nickname = "Raw"):
