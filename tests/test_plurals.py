@@ -1,14 +1,13 @@
 import asyncio
 
-import inflect
+from sizebot.lib import objs, language
 
-from sizebot.lib import objs
+inflecter = language.engine
 
-inflecter = inflect.engine()
-
+language.load()
 asyncio.run(objs.init())
 
 
 def test_plural_matching():
-    for o in objs.objects:
-        assert (inflecter.plural(o.name) == o.namePlural) is True
+    failures = [(o.name, o.namePlural, inflecter.plural_noun(o.name)) for o in objs.objects if inflecter.plural_noun(o.name) != o.namePlural]
+    assert failures == []
