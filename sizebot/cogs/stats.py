@@ -6,6 +6,7 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot.lib import proportions, userdb, errors
+from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
@@ -193,8 +194,8 @@ def getUserdata(memberOrSV, nickname = "Raw"):
 def isAnObject(s):
     v, u = SV.getQuantityPair(s)
     if u:
-        for systemunit in SV._systems['o']._systemunits:
-            if u in systemunit.unit.names:
+        for o in DigiObject.objects:
+            if u in o.names:
                 return True
     return False
 
