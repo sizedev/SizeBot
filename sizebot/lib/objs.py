@@ -13,9 +13,7 @@ class DigiObject:
     def __init__(self, name, aliases=[], length=None, height=None, width=None, depth=None, weight=None):
         self.name = name
         self.namePlural = getPlural(name)
-        self.aliases = aliases
-        for alias in self.aliases:
-            self.aliases.append(getPlural(alias))
+        self.aliases = aliases + [getPlural(a) for a in aliases]
         self.article = getIndefiniteArticle(self.name)
         self.length = length and SV(length)
         self.height = height and SV(height)
