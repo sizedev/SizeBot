@@ -97,7 +97,7 @@ class RegisterCog(commands.Cog):
         if unitsystem.lower() not in ["m", "u"]:
             logger.warn(f"unitsystem was {unitsystem}, must be M or U.")
             await ctx.send("Unitsystem must be `M` or `U`.")
-            return
+            raise errors.InvalidUnitSystemException
 
         userdata = userdb.User()
         userdata.guildid = ctx.guild.id
@@ -147,6 +147,7 @@ class RegisterCog(commands.Cog):
             return
 
         # Send a confirmation request
+        # TODO: Replace this with a Menu.
         sentMsg = await ctx.send(f"To unregister, react with {emojis.check}.")
         await sentMsg.add_reaction(emojis.check)
         await sentMsg.add_reaction(emojis.cancel)
