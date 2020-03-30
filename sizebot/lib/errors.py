@@ -108,7 +108,6 @@ class InvalidUserOrHeightException(DigiException):
         return "Sorry! I didn't recognize that user or height."
 
 
-# TODO: Unused
 class InvalidUnitSystemException(DigiException):
     def __init__(self, unitsystem):
         self.unitsystem = unitsystem
@@ -168,4 +167,4 @@ class ThisShouldNeverHappenException(DigiException):
     level = logging.CRITICAL
 
     def formatMessage(self):
-        return "This should never happen Something very wrong has occured."
+        return "This should never happen. Something very wrong has occured."

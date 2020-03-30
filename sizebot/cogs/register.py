@@ -221,6 +221,8 @@ class RegisterCog(commands.Cog):
             outstring += "**:rotating_light:WARNING::rotating_light:**\n**You are already registered with SizeBot on this guild. Copying a profile to this guild will overwrite any size data you have here. Proceed with caution.**\n\n"
 
         outstring += "Copy profile from what guild?\n"
+
+        # TODO: Replace this with a Menu.
         for i in range(min(len(guildsregisteredin), 10)):  # Loops over either the whole list of guilds, or if that's longer than 10, 10 times.
             outstring += f"{list(inputdict.keys())[i]} *{guildsregisteredinnames[i]}*\n"
             await outmsg.add_reaction(list(inputdict.keys())[i])
