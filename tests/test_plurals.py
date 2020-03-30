@@ -1,11 +1,16 @@
-from sizebot.lib import objs
+import asyncio
+
 import inflect
+
+from sizebot.lib import objs
 
 inflecter = inflect.engine()
 
+loop2 = asyncio.get_event_loop()
+loop2.run_until_complete(objs.init())
+loop2.close()
 
-async def test_plural_matching():
-    await objs.init()
 
+def test_plural_matching():
     for o in objs.objects:
         assert (inflecter.plural(o.name) == o.namePlural) is True
