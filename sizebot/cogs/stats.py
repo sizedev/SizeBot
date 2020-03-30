@@ -158,7 +158,6 @@ class StatsCog(commands.Cog):
         `&lookat man`
         `&look book`
         `&examine building`"""
-        logger.info(f"{ctx.message.author.display_name} looked at {what}.")
 
         userdata = getUserdata(ctx.message.author)
         userstats = proportions.PersonStats(userdata)
@@ -166,14 +165,17 @@ class StatsCog(commands.Cog):
         if isinstance(what, DigiObject):
             oc = ObjectComparison(userdata, what)
             await ctx.send(f"{oc}")
+            logger.info(f"{ctx.message.author.display_name} looked at {what.article}.")
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):
             compdata = getUserdata(what, "Raw")
+            logger.info(f"{ctx.message.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userstats.avgheightcomp
             compdata = getUserdata(compheight)
         else:
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
+            logger.info(f"{ctx.message.author.display_name} tried to look at {what}, but that's invalid.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
         embedtosend = stats.toEmbed()
