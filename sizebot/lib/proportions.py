@@ -147,7 +147,7 @@ def changeUser(guildid, userid, changestyle, amount):
     userdb.save(userdata)
 
 
-class PersonComparison:
+class PersonComparison:  # TODO: Make a one-sided comparison option.
     def __init__(self, userdata1, userdata2):
         smallUserdata, bigUserdata = utils.minmax(userdata1, userdata2)
         self.big = PersonStats(bigUserdata)

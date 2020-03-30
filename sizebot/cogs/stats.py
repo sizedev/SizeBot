@@ -167,7 +167,7 @@ class StatsCog(commands.Cog):
             await ctx.send(f"{oc}")
             logger.info(f"{ctx.message.author.display_name} looked at {what.article}.")
             return
-        elif isinstance(what, discord.Member) or isinstance(what, SV):
+        elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare.
             compdata = getUserdata(what, "Raw")
             logger.info(f"{ctx.message.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
