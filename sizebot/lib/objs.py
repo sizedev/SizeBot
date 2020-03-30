@@ -9,10 +9,10 @@ objects = []
 
 
 class DigiObject:
-    def __init__(self, name, namePlural=None, names=[], length=None, height=None, width=None, depth=None, weight=None):
+    def __init__(self, name, aliases=[], length=None, height=None, width=None, depth=None, weight=None):
         self.name = name
         self.namePlural = namePlural
-        self.names = names
+        self.aliases = aliases
         self.length = length and SV(length)
         self.height = height and SV(height)
         self.width = width and SV(width)
@@ -21,20 +21,20 @@ class DigiObject:
 
     def addToUnits(self):
         if self.length is not None:
-            SV.addUnit(Unit(factor=self.length, name=self.name, namePlural=self.namePlural, names=self.names))
+            SV.addUnit(Unit(factor=self.length, name=self.name, namePlural=self.namePlural, names=self.aliases))
             SV.addSystemUnit("o", SystemUnit(self.name))
         if self.width is not None:
-            SV.addUnit(Unit(factor=self.width, name=self.name, namePlural=self.namePlural, names=self.names))
+            SV.addUnit(Unit(factor=self.width, name=self.name, namePlural=self.namePlural, names=self.aliases))
             SV.addSystemUnit("o", SystemUnit(self.name))
         elif self.height is not None:
-            SV.addUnit(Unit(factor=self.height, name=self.name, namePlural=self.namePlural, names=self.names))
+            SV.addUnit(Unit(factor=self.height, name=self.name, namePlural=self.namePlural, names=self.aliases))
             SV.addSystemUnit("o", SystemUnit(self.name))
         elif self.depth is not None:
-            SV.addUnit(Unit(factor=self.depth, name=self.name, namePlural=self.namePlural, names=self.names))
+            SV.addUnit(Unit(factor=self.depth, name=self.name, namePlural=self.namePlural, names=self.aliases))
             SV.addSystemUnit("o", SystemUnit(self.name))
 
         if self.weight is not None:
-            WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural, names=self.names))
+            WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural, names=self.aliases))
             WV.addSystemUnit("o", SystemUnit(self.name))
 
     def __eq__(self, other):
@@ -42,7 +42,7 @@ class DigiObject:
             lowerName = other.lower()
             return lowerName == self.name.lower() \
                 or lowerName == self.namePlural \
-                or lowerName in (n.lower() for n in self.names)
+                or lowerName in (n.lower() for n in self.aliases)
         return super().__eq__(other)
 
     @classmethod
