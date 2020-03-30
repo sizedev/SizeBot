@@ -8,6 +8,7 @@ from sizebot.discordplus import commandsplus
 from sizebot.lib import proportions, userdb
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV
+from sizebot.lib.objs import DigiObject
 
 logger = logging.getLogger("sizebot")
 
@@ -149,7 +150,7 @@ class StatsCog(commands.Cog):
         usage = "[object]"
     )
     @commands.guild_only()
-    async def lookat(self, ctx, *, what):
+    async def lookat(self, ctx, *, what: typing.Union[discord.Member, SV, DigiObject]):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.

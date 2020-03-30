@@ -1,6 +1,7 @@
 import json
 import importlib.resources as pkg_resources
 
+from sizebot.lib import errors
 from sizebot.lib.units import SV, WV, Unit, SystemUnit
 import sizebot.data
 
@@ -20,10 +21,6 @@ class DigiObject:
         self.depth = depth and SV(depth)
         self.weight = weight and WV(weight)
 
-    @classmethod
-    def fromJson(cls, objJson):
-        return cls(**objJson)
-
     def addToUnits(self):
         if self.length is not None:
             SV.addUnit(Unit(factor=self.length, name=self.name, namePlural=self.namePlural, names=self.names))
@@ -41,6 +38,33 @@ class DigiObject:
         if self.weight is not None:
             WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural, names=self.names))
             WV.addSystemUnit("o", SystemUnit(self.name))
+
+    def __eq__(self, other):
+        if isinstance(other, str):
+            lowerName = other.lower()
+            return lowerName == self.name.lower() \
+                or lowerName == self.namePlural \
+                or lowerName in (n.lower() for n in self.names)
+        return super().__eq__(other)
+
+    @classmethod
+    def findByName(cls, name):
+        lowerName = name.lower()
+        for o in cls.objects:
+            if o == lowerName:
+                return o
+        return None
+
+    @classmethod
+    def fromJson(cls, objJson):
+        return cls(**objJson)
+
+    @classmethod
+    async def convert(cls, ctx, argument):
+        obj = cls.findByName(argument)
+        if obj is None:
+            raise errors.InvalidObject(argument)
+        return obj
 
 
 def loadObjFile(filename):

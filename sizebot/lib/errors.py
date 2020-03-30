@@ -125,6 +125,14 @@ class InvalidSizeValue(DigiException):
         return f"{self.sizevalue!r} is an unrecognized size value."
 
 
+class InvalidObject(DigiException):
+    def __init__(self, name):
+        self.name = name
+
+    def formatUserMessage(self):
+        return f"{self.name!r} is an unrecognized object."
+
+
 class InvalidRollException(DigiException):
     def __init__(self, dString):
         self.dString = dString
