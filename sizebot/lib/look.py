@@ -7,6 +7,7 @@ from sizebot.lib.units import SV, WV
 
 class ObjectComparison:
     def __init__(self, userdata, obj):
+        self.userdata = userdata
         self.multiplier = self.userdata.viewscale
         self.obj = obj
 
