@@ -190,14 +190,5 @@ def getUserdata(memberOrSV, nickname = "Raw"):
     return userdata
 
 
-def isAnObject(s):
-    v, u = SV.getQuantityPair(s)
-    if u:
-        for o in DigiObject.objects:
-            if u in o.names:
-                return True
-    return False
-
-
 def setup(bot):
     bot.add_cog(StatsCog(bot))
