@@ -2,6 +2,7 @@ import json
 import importlib.resources as pkg_resources
 
 from sizebot.lib import errors
+from sizebot.lib.language import getPlural, getIndefiniteArticle
 from sizebot.lib.units import SV, WV, Unit, SystemUnit
 import sizebot.data
 
@@ -11,8 +12,11 @@ objects = []
 class DigiObject:
     def __init__(self, name, aliases=[], length=None, height=None, width=None, depth=None, weight=None):
         self.name = name
-        self.namePlural = namePlural
+        self.namePlural = getPlural(name)
         self.aliases = aliases
+        for alias in self.aliases:
+            self.aliases.append(getPlural(alias))
+        self.article = getIndefiniteArticle(self.name)
         self.length = length and SV(length)
         self.height = height and SV(height)
         self.width = width and SV(width)
