@@ -9,8 +9,6 @@ objects = []
 
 
 class DigiObject:
-    objects = []
-
     def __init__(self, name, namePlural=None, names=[], length=None, height=None, width=None, depth=None, weight=None):
         self.name = name
         self.namePlural = namePlural
@@ -50,7 +48,7 @@ class DigiObject:
     @classmethod
     def findByName(cls, name):
         lowerName = name.lower()
-        for o in cls.objects:
+        for o in objects:
             if o == lowerName:
                 return o
         return None
