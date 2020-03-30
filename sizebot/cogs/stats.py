@@ -5,8 +5,8 @@ import discord
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
-from sizebot.lib import proportions, userdb
-from sizebot.lib.decimal import Decimal
+from sizebot.lib import proportions, userdb, errors
+from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV
 from sizebot.lib.objs import DigiObject
 
@@ -132,15 +132,15 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(memberOrHeight)
 
-        goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2")
+        goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2%4&2")
         tmp = goodheight.split()
-        tmp[0] = format(Decimal(tmp[0]), "%4&2")
-        goodheightout = " ".join(tmp)
+        tmpout = [tmp[0]] + tmp[3:] + tmp[1:3]  # Move the paranthesis bit of the height string to the end.
+        goodheightout = " ".join(tmpout)
 
-        goodweight = userdata.weight.toGoodUnit('o', preferName=True, spec=".2")
+        goodweight = userdata.weight.toGoodUnit('o', preferName=True, spec=".2%4&2")
         tmp2 = goodweight.split()
-        tmp2[0] = format(Decimal(tmp2[0]), "%4&2")
-        goodweightout = " ".join(tmp2)
+        tmp2out = [tmp2[0]] + tmp2[3:] + tmp2[1:3]  # Move the paranthesis bit of the height string to the end.
+        goodweightout = " ".join(tmp2out)
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
         logger.info(f"Sent object comparison for {userdata.nickname}.")
@@ -160,20 +160,26 @@ class StatsCog(commands.Cog):
         `&examine building`"""
         logger.info(f"{ctx.message.author.display_name} looked at {what}.")
 
-        if what not in ["person", "man", "average", "average person", "average man", "average human", "human"]:
-            await ctx.send(f"Sorry, *{what}* is not a valid object.")
-            return
-
         userdata = getUserdata(ctx.message.author)
         userstats = proportions.PersonStats(userdata)
-        userheight = userstats.avgheightcomp
-        compdata = getUserdata(userheight)
 
-        stats = proportions.PersonStats(compdata)
-        embedtosend = stats.toEmbed()
-        if ctx.message.author.id != userdata.id:
-            embedtosend.description = f"Reverse stats for {userdata.nickname}*\n*Requested by *{ctx.message.author.display_name}*"
-        await ctx.send(embed = embedtosend)
+        if isAnObject(what):
+            await ctx.send(f"You definitely just said the name of an object! `{what}`")
+        else:  # then it's a person height.
+            if what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
+                compheight = userstats.avgheightcomp
+            else:
+                try:  # TODO: This breaks on Members.
+                    compheight = SV.parse(what)
+                except errors.InvalidSizeValue:
+                    await ctx.send(f"`{what}` is not a valid object, member, or height.")
+                    return
+            compdata = getUserdata(compheight)
+            stats = proportions.PersonStats(compdata)
+            embedtosend = stats.toEmbed()
+            if ctx.message.author.id != userdata.id:  # Future proofing for when you can do lookats for other people.
+                embedtosend.description = f"*Requested by *{ctx.message.author.display_name}*"
+            await ctx.send(embed = embedtosend)
 
 
 def getUserdata(memberOrSV, nickname = "Raw"):
@@ -184,6 +190,15 @@ def getUserdata(memberOrSV, nickname = "Raw"):
         userdata.nickname = nickname
         userdata.height = memberOrSV
     return userdata
+
+
+def isAnObject(s):
+    v, u = SV.getQuantityPair(s)
+    if u:
+        for o in DigiObject.objects:
+            if u in o.names:
+                return True
+    return False
 
 
 def setup(bot):

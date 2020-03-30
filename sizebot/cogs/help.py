@@ -65,15 +65,26 @@ class HelpCog(commands.Cog):
         ...
         """
 
-        embed = discord.Embed(title=f"Help [SizeBot {__version__}]")
+        embedCount = 1
+        pagesPerEmbed = 4
+
+        embeds = [discord.Embed(title=(f"Help [SizeBot {__version__}]" if n == 0 else None)) for n in range(embedCount)]
 
         commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
 
-        for n, fieldCommands in enumerate(utils.chunkList(commands, math.ceil(len(commands) / 2))):
-            fieldCommandsStr = "\n".join(f"**{c.name}**\n{c.short_doc or '-'}" for c in fieldCommands)
-            embed.add_field(name="Commands" if n == 0 else "\u200b", value=fieldCommandsStr, inline=True)
+        commandsPerPage = math.ceil(len(commands) / (embedCount * pagesPerEmbed))
 
-        await ctx.send(embed=embed)
+        commandStrings = [f"**{c.name}**\n{c.short_doc or '-'}" for c in commands]
+
+        pages = ["\n".join(p) for p in utils.chunkList(commandStrings, commandsPerPage)]
+
+        for n, p in enumerate(pages):
+            if n == 2:
+                embeds[math.floor(n / pagesPerEmbed)].add_field(name="\u200b", value="\u200b", inline=False)
+            embeds[math.floor(n / pagesPerEmbed)].add_field(name=("Commands" if n == 0 else "\u200b"), value=p, inline=True)
+
+        for e in embeds:
+            await ctx.send(embed=e)
 
     async def send_command_help(self, ctx, cmd):
         """Sends help for a command.
@@ -137,9 +148,9 @@ class HelpCog(commands.Cog):
         await ctx.send(f"Unrecognized command: `{cmdName}`.")
 
     @commandsplus.command(
+        hidden = True
     )
-    async def about(self, ctx):
-        """Get the credits and some facts about SizeBot."""
+    async def oldabout(self, ctx):
         now = datetime.now()
         await ctx.send(
             "```\n"
@@ -167,6 +178,39 @@ class HelpCog(commands.Cog):
             "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\"\" -- *Chocola*\n"
             "\n"
             f"Version {__version__} | {now.strftime('%d %b %Y')}")
+
+    @commandsplus.command()
+    async def about(self, ctx):
+        """Get the credits and some facts about SizeBot."""
+        now = datetime.now()
+        embed = discord.Embed(title = "SizeBot3½", description = "Think of a new slogan!", color = 0x11cccc)
+        embed.set_author(name = "DigiDuncan")
+        embed.set_image(url = "https://cdn.discordapp.com/attachments/650460192009617433/692133788116975676/sizebotlogo.png")
+        embed.add_field(name = "Credits",
+                        value = ("**Coding Assistance** *by Natalie*\n"
+                                 "**Additional Equations** *by Benyovski and Arceus3251*\n"
+                                 "**Alpha Tested** *by AWK_*\n"
+                                 "**Beta Tested** *by Kelly, worstgender, and Arceus3251*\n"
+                                 "**\"Moral Support\"** *by Chocola*"),
+                        inline = False)
+        embed.add_field(name = "Technical Details",
+                        value = "Written in Python 3.6, and slowly upgraded to 3.8. Originally written using Atom, and now Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
+                        inline = False)
+        embed.add_field(name = "Special Thanks",
+                        value = ("**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
+                                 "**Special thanks** *to the discord.py Community Discord for helping with code.*\n"
+                                 f"**Special thanks** *to the {userdb.count()} users of SizeBot3½.*"),
+                        inline = False)
+        embed.add_field(name = "Testimonials",
+                        value = ("\"She [SizeBot] is beautiful.\" *-- GoddessArete*\n"
+                                 "\"I want to put SizeBot in charge of the world government.\"* -- AWK*\n"
+                                 "\"Um... I like it?\" *-- Goddess Syn*\n"
+                                 # "\"Fix the bot.\" *-- Natalie*"
+                                 "\"I am the only person who has accidentally turned my fetish into a tech support job.\" *-- DigiDuncan*\n"
+                                 "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\"\" *-- Chocola*"),
+                        inline = False)
+        embed.set_footer(text = f"Version {__version__} | {now.strftime('%d %b %Y')}")
+        await ctx.send(embed = embed)
 
     @commandsplus.command(
         aliases = ["fund"]

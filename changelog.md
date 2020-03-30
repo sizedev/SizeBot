@@ -20,6 +20,11 @@
 - Added a new command, `&objcompare`, which lets you see what object you are closest to in height and weight.
     - Displays different, random comparisons from a list of close comparisons on every run.
     - Includes fractional output to the nearest eighth, and accuracy percentages!
+- Added a new command, `&lookat`, which allows you to see what an object or person looks like to you.
+    - Displays a different stats screen based on whether you're looking at a person, or an object.
+    - To look at an object, use `&lookat <object>`, e.g.: `&lookat lego brick`
+    - To look at a person, use `&lookat <@user>`, e.g.: `&lookat @Kelly`
+    - To look at a raw height (interpreted as a person), use `&lookat <height>`, e.g.: `&lookat 5'11`
 - Added the ability for administrators to set "edge" users, one "smallest" and one "largest", whose size will be auto-set to be the lowest or highest on the server.
     - Use `&edges` to see who is currently set to be the edge users.
     - Administrators can use `&setsmallest <@user>` and `&setlargest <@user>` to set the edge users, and `&clearsmallest` and `&clearlargest` to remove them.
@@ -66,7 +71,7 @@
 - Nicknames should now update as soon as your size changes, and not just when you first type.
 
 
-## New Commands and Changeed Command Syntax
+## New Commands and Changed Command Syntax
 
 ### New Commands
 

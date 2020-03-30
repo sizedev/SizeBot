@@ -77,6 +77,7 @@ class Menu:
 
         if self.delete_after:
             await self.message.delete()
+            self.message = None
 
         if reaction is None or reaction.emoji == self.cancel_emoji:
             # User took too long to respond
@@ -86,6 +87,9 @@ class Menu:
             # If the reaction is the right one, return what it is.
             answer = reaction.emoji
 
+        # Let's wrap things up.
+        if self.message:
+            await self.message.clear_reactions()
         return answer
 
     @classmethod

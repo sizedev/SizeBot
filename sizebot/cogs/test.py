@@ -29,8 +29,8 @@ class TestCog(commands.Cog):
     )
     @commands.is_owner()
     async def test(self, ctx):
-        
-        reactionmenu, answer = await Menu.display(ctx, numberemojis, cancel_emoji = emojis.cancel, initial_message = "This is a test menu!")
+        reactionmenu, answer = await Menu.display(ctx, numberemojis, cancel_emoji = emojis.cancel,
+                                                  initial_message = "This is a test menu!", delete_after = False)
         if answer in numberemojis:
             await reactionmenu.message.edit(content = reactionmenu.message.content + f"\nYou pressed {answer}. Good job!")
 
