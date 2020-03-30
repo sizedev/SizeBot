@@ -6,6 +6,7 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot.lib import proportions, userdb
+from sizebot.lib.look import ObjectComparison
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV
 
@@ -163,7 +164,8 @@ class StatsCog(commands.Cog):
         userstats = proportions.PersonStats(userdata)
 
         if isinstance(what, DigiObject):
-            await ctx.send(f"You definitely just said the name of an object! `{what}`")
+            oc = ObjectComparison(userdata, what)
+            await ctx.send(f"{oc}")
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):
             compdata = getUserdata(what, "Raw")
