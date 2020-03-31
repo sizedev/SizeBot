@@ -165,7 +165,7 @@ class StatsCog(commands.Cog):
         if isinstance(what, DigiObject):
             oc = ObjectComparison(userdata, what)
             await ctx.send(f"{oc}")
-            logger.info(f"{ctx.message.author.display_name} looked at {what.article}.")
+            logger.info(f"{ctx.message.author.display_name} looked at {what.article} {what.name}.")
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare.
             compdata = getUserdata(what, "Raw")

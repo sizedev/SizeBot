@@ -19,7 +19,7 @@ class ObjectComparison:
 
     def __str__(self):
         returnstr = f"__{self.userdata.nickname} is {self.userdata.height:,.3mu} tall.__\n"
-        returnstr += f"To {self.userdata.nickname}, {self.obj.article} looks...\n"
+        returnstr += f"To {self.userdata.nickname}, {self.obj.article} {self.obj.name} looks...\n"
         if not self.perceivedheight:
             returnstr += f"{emojis.blank}{self.perceivedlength:,.3mu} tall\n"
         if self.perceivedheight:
