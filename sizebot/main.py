@@ -1,17 +1,18 @@
+import logging
 import sys
 from datetime import datetime
-import logging
 
 import discord
 from discord.ext import commands
+
 from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
 from sizebot import conf
-from sizebot.lib import language, objs, proportions, status, units
-from sizebot.plugins import monika, meicros
 from sizebot.cogs import edge
+from sizebot.lib import language, objs, proportions, status, units
 from sizebot.lib.discordlogger import DiscordHandler
+from sizebot.plugins import monika, meicros
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("sizebot")
@@ -69,17 +70,21 @@ def main():
         bot.load_extension("sizebot.cogs." + cog)
 
     async def on_first_ready():
+        # Set up logging.
         logChannel = bot.get_channel(conf.logchannelid)
         discordhandler = DiscordHandler(logChannel)
         logger.addHandler(discordhandler)
         discordlogger = logging.getLogger("discord")
         discordlogger.addHandler(discordhandler)
 
+        # Start the language engine.
         language.load()
 
+        # Load the units and objects.
         await units.init()
         await objs.init()
 
+        # Print the splash screen.
         BANNER = digilogger.addLogLevel("banner", fg="orange_red_1", bg="deep_sky_blue_4b", attr="bold")
         LOGIN = digilogger.addLogLevel("login", fg="cyan")
         # Obviously we need the banner printed in the terminal
@@ -91,6 +96,7 @@ def main():
         if sys.gettrace() is not None:
             activity = discord.Activity(type=discord.ActivityType.listening, name = "DEBUGGER 🔧")
 
+        # More splash screen.
         await bot.change_presence(activity = activity)
         print(styles)
         logger.info(f"Prefix: {conf.prefix}")
@@ -104,6 +110,7 @@ def main():
 
     @bot.event
     async def on_ready():
+        # Split on_ready into two events: one when we first boot, and one for reconnects.
         nonlocal booting
         if booting:
             await on_first_ready()

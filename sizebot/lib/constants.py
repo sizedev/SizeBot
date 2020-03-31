@@ -1,4 +1,5 @@
 import importlib.resources as pkg_resources
+
 import toml
 
 import sizebot.data

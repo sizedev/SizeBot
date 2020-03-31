@@ -1,7 +1,7 @@
+from copy import copy
 import json
 from functools import total_ordering
 
-from copy import copy
 from sizebot import conf
 from sizebot.lib import errors
 from sizebot.lib.units import SV, WV

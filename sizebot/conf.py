@@ -56,7 +56,7 @@ def load():
     global prefix, name, activity, authtoken, admins, logchannelid
     configDict = toml.load(confpath)
 
-    # Sizebot
+    # SizeBot
     if utils.hasPath(configDict, "sizebot.prefix"):
         prefix = utils.getPath(configDict, "sizebot.prefix")
     if utils.hasPath(configDict, "sizebot.name"):

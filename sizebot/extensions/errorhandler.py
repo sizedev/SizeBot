@@ -1,8 +1,7 @@
+import logging
 import sys
 
 from discord.ext import commands
-
-import logging
 
 from sizebot.lib import errors, utils
 from sizebot.lib.telemetry import Telemetry

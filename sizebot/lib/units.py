@@ -1,14 +1,15 @@
-import json
-import re
 import collections
 import importlib.resources as pkg_resources
-from functools import total_ordering
+import json
 import logging
+import re
+from functools import total_ordering
 
+import sizebot.data
 from sizebot.lib import errors, utils
 from sizebot.lib.decimal import Decimal, DecimalSpec
 from sizebot.lib.picker import getRandomCloseUnit
-import sizebot.data
+
 
 __all__ = ["Rate", "Mult", "SV", "WV", "TV"]
 

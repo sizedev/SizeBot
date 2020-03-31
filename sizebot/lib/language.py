@@ -1,6 +1,7 @@
+import importlib.resources as pkg_resources
+
 import inflect
 import toml
-import importlib.resources as pkg_resources
 
 import sizebot.data
 

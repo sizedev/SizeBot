@@ -1,10 +1,11 @@
-import math
-import re
 import decimal
+import math
+import random
+import re
 from decimal import Decimal as RawDecimal
 from decimal import ROUND_DOWN
-import random
 from functools import total_ordering
+
 from sizebot.lib.utils import minmax
 
 __all__ = ["Decimal", "randRangeLog", "DecimalSpec"]

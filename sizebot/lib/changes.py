@@ -1,6 +1,6 @@
-import time
 import json
 import logging
+import time
 
 from sizebot import conf
 from sizebot.lib import proportions, userdb

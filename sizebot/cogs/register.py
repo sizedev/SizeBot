@@ -8,8 +8,8 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import conf
 from sizebot.lib import errors, proportions, userdb
-from sizebot.lib.units import SV, WV
 from sizebot.lib.constants import ids, emojis
+from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
 

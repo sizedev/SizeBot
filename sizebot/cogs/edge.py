@@ -3,6 +3,7 @@
 # to either 1.1x or 0.9x of the largest or smallest user (in the guild [SB4]), respectively.
 
 import logging
+
 import toml
 
 import discord

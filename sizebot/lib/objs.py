@@ -1,10 +1,10 @@
-import json
 import importlib.resources as pkg_resources
+import json
 
+import sizebot.data
 from sizebot.lib import errors
 from sizebot.lib.language import getPlural, getIndefiniteArticle
 from sizebot.lib.units import SV, WV, Unit, SystemUnit
-import sizebot.data
 
 objects = []
 

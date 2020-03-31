@@ -1,19 +1,19 @@
-import inspect
-import math
 import builtins
+import inspect
 import itertools
 import logging
-import os
+import math
 
 import discord
 
 from sizebot import conf
-from sizebot.lib import userdb, utils
-from sizebot.lib.decimal import Decimal
-from sizebot.lib.units import Rate, Mult, SV, WV, TV
-from sizebot.lib.objs import objects
-from sizebot.lib.constants import ids, emojis
 from sizebot.cogs import thistracker
+from sizebot.lib import userdb, utils
+from sizebot.lib.constants import ids, emojis
+from sizebot.lib.decimal import Decimal
+from sizebot.lib.objs import objects
+from sizebot.lib.units import Rate, Mult, SV, WV, TV
+
 
 logger = logging.getLogger("sizebot")
 

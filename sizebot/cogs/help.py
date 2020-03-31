@@ -1,6 +1,7 @@
-import math
-from datetime import datetime
 import logging
+import math
+
+from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -9,8 +10,8 @@ from sizebot.discordplus import commandsplus
 from sizebot import __version__
 from sizebot import conf
 from sizebot.lib import userdb, utils
-from sizebot.lib.units import SV, WV
 from sizebot.lib.constants import ids, emojis
+from sizebot.lib.units import SV, WV
 
 
 logger = logging.getLogger("sizebot")

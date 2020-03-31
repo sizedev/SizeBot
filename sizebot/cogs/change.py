@@ -1,5 +1,5 @@
-import random
 import logging
+import random
 
 from discord.ext import commands, tasks
 from sizebot.discordplus import commandsplus

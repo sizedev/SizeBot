@@ -1,7 +1,8 @@
-import pydoc
 import inspect
-import traceback
+import pydoc
 import re
+import traceback
+
 from functools import reduce
 
 re_num = r"\d+\.?\d*"

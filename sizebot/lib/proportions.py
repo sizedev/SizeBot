@@ -1,14 +1,15 @@
-from urllib.parse import quote
 import math
+from urllib.parse import quote
 
 import discord
 
 from sizebot import __version__
 from sizebot.lib import errors, userdb, utils
-from sizebot.lib.userdb import defaultheight, defaultweight
+from sizebot.lib.constants import emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
-from sizebot.lib.constants import emojis
+from sizebot.lib.userdb import defaultheight, defaultweight
+
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 

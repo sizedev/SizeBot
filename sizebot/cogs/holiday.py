@@ -1,10 +1,10 @@
 import logging
+from datetime import datetime, time, timedelta
 
 import discord
 from discord.ext import commands, tasks
-from datetime import datetime, time, timedelta
-from sizebot import conf
 
+from sizebot import conf
 from sizebot.lib.utils import intToRoman, formatTraceback
 
 logger = logging.getLogger("sizebot")

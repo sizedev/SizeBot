@@ -1,6 +1,6 @@
+import logging
 import re
 from datetime import datetime, timedelta
-import logging
 
 from discord.ext import commands
 from sizebot.discordplus import commandsplus
