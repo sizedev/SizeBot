@@ -75,7 +75,7 @@ class HelpCog(commands.Cog):
 
         commandsPerPage = math.ceil(len(commands) / (embedCount * pagesPerEmbed))
 
-        commandStrings = [f"**{c.name}**\n{c.short_doc or '-'}" for c in commands]
+        commandStrings = [f"**{c.name}** *({", ".join(cmd.aliases)})*\n{c.short_doc or '-'}" for c in commands]
 
         pages = ["\n".join(p) for p in utils.chunkList(commandStrings, commandsPerPage)]
 
