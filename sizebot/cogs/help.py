@@ -262,6 +262,7 @@ class HelpCog(commands.Cog):
 
     @commandsplus.command()
     async def changelog(self, ctx):
+        """See what's new in the latest SizeBot!"""
         await ctx.send("View the changelog here!:\nhttps://github.com/sizedev/SizeBot3AndAHalf/blob/develop/changelog.md")
 
 
