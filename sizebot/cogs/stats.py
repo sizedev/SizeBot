@@ -49,7 +49,8 @@ class StatsCog(commands.Cog):
         logger.info(f"Stats for {memberOrHeight} sent.")
 
     @commandsplus.command(
-        usage = "[user/height]"
+        usage = "[user/height]",
+        hidden = True
     )
     @commands.guild_only()
     async def statstxt(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
@@ -100,7 +101,8 @@ class StatsCog(commands.Cog):
         logger.info(f"Compared {userdata1} and {userdata2}")
 
     @commandsplus.command(
-        usage = "[user/height] <user/height>"
+        usage = "[user/height] <user/height>",
+        hidden = True
     )
     @commands.guild_only()
     async def comparetxt(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
