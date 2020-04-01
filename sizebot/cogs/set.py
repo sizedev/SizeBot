@@ -169,7 +169,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["inf"]
+    )
     @commands.guild_only()
     async def setinf(self, ctx):
         """Change height to infinity."""
@@ -184,7 +186,9 @@ class SetCog(commands.Cog):
         if userdata.display:
             await proportions.nickUpdate(ctx.message.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["0"]
+    )
     @commands.guild_only()
     async def set0(self, ctx):
         """Change height to a zero."""
