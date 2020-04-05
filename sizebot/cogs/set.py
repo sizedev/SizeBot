@@ -26,10 +26,10 @@ class SetCog(commands.Cog):
         userdata.nickname = newnick
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their nick to {userdata.nickname}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s nick is now {userdata.nickname}")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their nick to {userdata.nickname}.")
+        await ctx.send(f"<@{ctx.author.id}>'s nick is now {userdata.nickname}")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         usage = "<species>"
@@ -42,10 +42,10 @@ class SetCog(commands.Cog):
         userdata.species = newtag
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their species to {userdata.species}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s species is now a {userdata.species}.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their species to {userdata.species}.")
+        await ctx.send(f"<@{ctx.author.id}>'s species is now a {userdata.species}.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command()
     @commands.guild_only()
@@ -56,10 +56,10 @@ class SetCog(commands.Cog):
         userdata.species = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their species.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s species is now cleared.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their species.")
+        await ctx.send(f"<@{ctx.author.id}>'s species is now cleared.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         usage = "<height>"
@@ -74,10 +74,10 @@ class SetCog(commands.Cog):
         userdata.height = newheightsv
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now {userdata.height:m} tall.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:mu} tall.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now {userdata.height:m} tall.")
+        await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         aliases = ["resetheight", "reset"]
@@ -90,10 +90,10 @@ class SetCog(commands.Cog):
         userdata.height = userdata.baseheight
         userdb.save(userdata)
 
-        await ctx.send(f"{ctx.message.author.display_name} reset their size.")
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) reset their size.")
+        await ctx.send(f"{ctx.author.display_name} reset their size.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) reset their size.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         usage = "<Y/N>"
@@ -111,10 +111,10 @@ class SetCog(commands.Cog):
         userdata.display = newdisp
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their display to {newdisp}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s display is now set to {userdata.display}.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) set their display to {newdisp}.")
+        await ctx.send(f"<@{ctx.author.id}>'s display is now set to {userdata.display}.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         usage = "<M/U>"
@@ -132,10 +132,10 @@ class SetCog(commands.Cog):
         userdata.unitsystem = newsys
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set their system to {userdata.unitsystem}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s system is now set to {userdata.unitsystem}.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) set their system to {userdata.unitsystem}.")
+        await ctx.send(f"<@{ctx.author.id}>'s system is now set to {userdata.unitsystem}.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         usage = "<minheight> <maxheight>"
@@ -156,10 +156,10 @@ class SetCog(commands.Cog):
         userdata.height = newheightSV
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) set a random height, and are now {userdata.height:m} tall.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now {userdata.height:mu} tall.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) set a random height, and are now {userdata.height:m} tall.")
+        await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         aliases = ["inf"]
@@ -172,10 +172,10 @@ class SetCog(commands.Cog):
         userdata.height = "infinity"
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now infinitely tall.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now infinitely tall.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now infinitely tall.")
+        await ctx.send(f"<@{ctx.author.id}> is now infinitely tall.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         aliases = ["0"]
@@ -188,10 +188,10 @@ class SetCog(commands.Cog):
         userdata.height = 0
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) is now nothing.")
-        await ctx.send(f"<@{ctx.message.author.id}> is now nothing.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now nothing.")
+        await ctx.send(f"<@{ctx.author.id}> is now nothing.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         usage = "<height>"
@@ -204,10 +204,10 @@ class SetCog(commands.Cog):
         userdata.baseheight = SV.parse(newbaseheight)
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base height to {newbaseheight}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s base height is now {userdata.baseheight:mu} tall.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height to {newbaseheight}.")
+        await ctx.send(f"<@{ctx.author.id}>'s base height is now {userdata.baseheight:mu} tall.")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         usage = "<weight>"
@@ -220,10 +220,10 @@ class SetCog(commands.Cog):
         userdata.baseweight = WV.parse(newbaseweight)
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base weight to {newbaseweight}.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s base weight is now {userdata.baseweight:mu}")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base weight to {newbaseweight}.")
+        await ctx.send(f"<@{ctx.author.id}>'s base weight is now {userdata.baseweight:mu}")
 
-        await proportions.nickUpdate(ctx.message.author)
+        await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
         usage = "<height/weight> [height/weight]"
@@ -244,8 +244,8 @@ class SetCog(commands.Cog):
                 userdata.baseweight = arg
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
-        await ctx.send(f"{ctx.message.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
+        await ctx.send(f"{ctx.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
 
     # TODO: Make this accept shoe size as an input.
     @commandsplus.command(
@@ -261,8 +261,8 @@ class SetCog(commands.Cog):
         userdata.footlength = newfootsv
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name})'s foot is now {userdata.footlength:m} long.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s foot is now {userdata.footlength:mu} long.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long.")
 
     @commandsplus.command(
         aliases = ["clearfoot", "unsetfoot"]
@@ -275,8 +275,8 @@ class SetCog(commands.Cog):
         userdata.footlength = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their custom foot length.")
-        await ctx.send("<@{ctx.message.author.id}>'s foot length is now default.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom foot length.")
+        await ctx.send("<@{ctx.author.id}>'s foot length is now default.")
 
     @commandsplus.command(
         usage = "<length>"
@@ -291,8 +291,8 @@ class SetCog(commands.Cog):
         userdata.hairlength = newhairsv
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name})'s hair is now {userdata.hairlength:m} long.")
-        await ctx.send(f"<@{ctx.message.author.id}>'s hair is now {userdata.hairlength:mu} long.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s hair is now {userdata.hairlength:m} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
 
     @commandsplus.command(
         aliases = ["clearhair", "unsethair"]
@@ -305,8 +305,8 @@ class SetCog(commands.Cog):
         userdata.hairlength = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.message.author.id} ({ctx.message.author.display_name}) removed their custom hair length.")
-        await ctx.send("<@{ctx.message.author.id}>'s hair length is now default.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom hair length.")
+        await ctx.send("<@{ctx.author.id}>'s hair length is now default.")
 
     @commandsplus.command(
         usage = "<male/female/none>"

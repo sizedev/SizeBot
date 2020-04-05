@@ -28,7 +28,7 @@ class KeypadCog(commands.Cog):
     )
     async def keypad(self, ctx):
         """Test keypad command."""
-        author = ctx.message.author
+        author = ctx.author
         defaultmessage = f"**Input:**{emojis.blank}"
 
         outputmsg = await ctx.send(defaultmessage)

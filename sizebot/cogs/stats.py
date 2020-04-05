@@ -36,14 +36,14 @@ class StatsCog(commands.Cog):
         `&stats 10ft`
         """
         if memberOrHeight is None:
-            memberOrHeight = ctx.message.author
+            memberOrHeight = ctx.author
 
         userdata = getUserdata(memberOrHeight)
 
         stats = proportions.PersonStats(userdata)
         embedtosend = stats.toEmbed()
-        if ctx.message.author.id != userdata.id:
-            embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
+        if ctx.author.id != userdata.id:
+            embedtosend.description = f"Requested by *{ctx.author.display_name}*"
         await ctx.send(embed = embedtosend)
 
         logger.info(f"Stats for {memberOrHeight} sent.")
@@ -67,7 +67,7 @@ class StatsCog(commands.Cog):
         `&statstxt 10ft`
         """
         if memberOrHeight is None:
-            memberOrHeight = ctx.message.author
+            memberOrHeight = ctx.author
 
         userdata = getUserdata(memberOrHeight)
 
@@ -83,7 +83,7 @@ class StatsCog(commands.Cog):
     async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Compare two users' size."""
         if memberOrHeight2 is None:
-            memberOrHeight2 = ctx.message.author
+            memberOrHeight2 = ctx.author
 
         # TODO: Handle this in an error handler.
         if memberOrHeight1 is None:
@@ -95,7 +95,7 @@ class StatsCog(commands.Cog):
 
         comparison = proportions.PersonComparison(userdata1, userdata2)
         embedtosend = comparison.toEmbed()
-        embedtosend.description = f"Requested by *{ctx.message.author.display_name}*"
+        embedtosend.description = f"Requested by *{ctx.author.display_name}*"
         await ctx.send(embed = embedtosend)
 
         logger.info(f"Compared {userdata1} and {userdata2}")
@@ -108,7 +108,7 @@ class StatsCog(commands.Cog):
     async def comparetxt(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Compare two users' size, raw text version."""
         if memberOrHeight2 is None:
-            memberOrHeight2 = ctx.message.author
+            memberOrHeight2 = ctx.author
 
         # TODO: Handle this in an error handler.
         if memberOrHeight1 is None:
@@ -130,7 +130,7 @@ class StatsCog(commands.Cog):
     async def objcompare(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
-            memberOrHeight = ctx.message.author
+            memberOrHeight = ctx.author
 
         userdata = getUserdata(memberOrHeight)
 
@@ -161,28 +161,28 @@ class StatsCog(commands.Cog):
         `&look book`
         `&examine building`"""
 
-        userdata = getUserdata(ctx.message.author)
+        userdata = getUserdata(ctx.author)
         userstats = proportions.PersonStats(userdata)
 
         if isinstance(what, DigiObject):
             oc = ObjectComparison(userdata, what)
             await ctx.send(f"{oc}")
-            logger.info(f"{ctx.message.author.display_name} looked at {what.article} {what.name}.")
+            logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare.
             compdata = getUserdata(what, "Raw")
-            logger.info(f"{ctx.message.author.display_name} looked at {what}.")
+            logger.info(f"{ctx.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userstats.avgheightcomp
             compdata = getUserdata(compheight)
         else:
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
-            logger.info(f"{ctx.message.author.display_name} tried to look at {what}, but that's invalid.")
+            logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
         embedtosend = stats.toEmbed()
-        if ctx.message.author.id != userdata.id:  # Future proofing for when you can do lookats for other people.
-            embedtosend.description = f"*Requested by *{ctx.message.author.display_name}*"
+        if ctx.author.id != userdata.id:  # Future proofing for when you can do lookats for other people.
+            embedtosend.description = f"*Requested by *{ctx.author.display_name}*"
         await ctx.send(embed = embedtosend)
 
 

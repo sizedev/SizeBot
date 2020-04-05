@@ -19,7 +19,7 @@ class FunCog(commands.Cog):
     )
     @commands.is_owner()
     async def repeat(self, ctx, delay: float, *, message: str):
-        if ctx.message.author.id != ids.digiduncan:
+        if ctx.author.id != ids.digiduncan:
             return
         await ctx.message.delete(delay=0)
 
@@ -28,7 +28,7 @@ class FunCog(commands.Cog):
                 await ctx.send(message)
                 await asyncio.sleep(delay * 60)
         task = self.bot.loop.create_task(repeatTask())
-        tasks[ctx.message.author.id] = task
+        tasks[ctx.author.id] = task
 
     @commandsplus.command(
         hidden = True
@@ -36,8 +36,8 @@ class FunCog(commands.Cog):
     @commands.is_owner()
     async def stoprepeat(self, ctx):
         await ctx.message.delete(delay=0)
-        tasks[ctx.message.author.id].cancel()
-        del tasks[ctx.message.author.id]
+        tasks[ctx.author.id].cancel()
+        del tasks[ctx.author.id]
 
     @commandsplus.command(
         hidden = True

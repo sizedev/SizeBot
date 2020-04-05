@@ -184,7 +184,7 @@ class EdgeCog(commands.Cog):
         sm = edgedict.get("smallest", None)
         lg = edgedict.get("largest", None)
 
-        outstring = f"**CURRENT USER:**\nID: `{ctx.message.author.id}`\nHeight: `{userdata.height}`\n\n"
+        outstring = f"**CURRENT USER:**\nID: `{ctx.author.id}`\nHeight: `{userdata.height}`\n\n"
         outstring += f"**EDGES:**\nSmallest: {sm}\nLargest: {lg}\n\n"
         outstring += f"**SMALLEST USER:**\nID: `{usersizes['smallest']['id']}`\nHeight: `{usersizes['smallest']['size']}`\n\n"
         outstring += f"**LARGEST USER:**\nID: `{usersizes['largest']['id']}`\nHeight: `{usersizes['largest']['size']}`\n\n"

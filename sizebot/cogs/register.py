@@ -53,7 +53,7 @@ class RegisterCog(commands.Cog):
             return
 
         currentusers = userdb.listUsers()
-        guildsregisteredin = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == ctx.message.author.id]
+        guildsregisteredin = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == ctx.author.id]
         if guildsregisteredin != []:
             guildsstring = guildsregisteredin.join('\n')
             sentMsg = await ctx.send(f"You are already registed with SizeBot in these servers:\n{guildsstring}"
@@ -65,14 +65,14 @@ class RegisterCog(commands.Cog):
             # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
             def check(reaction, reacter):
                 return reaction.message.id == sentMsg.id \
-                    and reacter.id == ctx.message.author.id \
+                    and reacter.id == ctx.author.id \
                     and (
                         str(reaction.emoji) == emojis.check
                         or str(reaction.emoji) == emojis.cancel
                     )
 
             try:
-                reaction, ctx.message.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
+                reaction, ctx.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
             except asyncio.TimeoutError:
                 # User took too long to respond
                 await sentMsg.delete()
@@ -112,14 +112,14 @@ class RegisterCog(commands.Cog):
 
         userdb.save(userdata)
 
-        await addUserRole(ctx.message.author)
+        await addUserRole(ctx.author)
 
-        logger.warn(f"Made a new user: {ctx.message.author}!")
+        logger.warn(f"Made a new user: {ctx.author}!")
         logger.info(userdata)
-        await ctx.send(f"Registered <@{ctx.message.author.id}>. {readable}.")
+        await ctx.send(f"Registered <@{ctx.author.id}>. {readable}.")
 
         # user has display == "y" and is server owner
-        if userdata.display and userdata.id == ctx.message.author.guild.owner.id:
+        if userdata.display and userdata.id == ctx.author.guild.owner.id:
             await ctx.send("I can't update a server owner's nick. You'll have to manage it manually.")
             return
 
@@ -201,8 +201,8 @@ class RegisterCog(commands.Cog):
         }
 
         currentusers = userdb.listUsers()
-        guildsregisteredin = [g for g, u in currentusers if u == ctx.message.author.id]
-        guildsregisteredinnames = [self.bot.get_guild(g).name for g, u in currentusers if u == ctx.message.author.id]
+        guildsregisteredin = [g for g, u in currentusers if u == ctx.author.id]
+        guildsregisteredinnames = [self.bot.get_guild(g).name for g, u in currentusers if u == ctx.author.id]
 
         if guildsregisteredin == []:
             await ctx.send("You are not registered with SizeBot in any guilds."
@@ -235,14 +235,14 @@ class RegisterCog(commands.Cog):
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
         def check(reaction, reacter):
             return reaction.message.id == outmsg.id \
-                and reacter.id == ctx.message.author.id \
+                and reacter.id == ctx.author.id \
                 and (
                     str(reaction.emoji) == emojis.check
                     or str(reaction.emoji) in inputdict.keys()
                 )
 
         try:
-            reaction, ctx.message.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
+            reaction, ctx.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
         except asyncio.TimeoutError:
             # User took too long to respond
             await outmsg.delete()
@@ -257,8 +257,8 @@ class RegisterCog(commands.Cog):
             chosen = inputdict[reaction.emoji] - 1
             chosenguild = guildsregisteredin[chosen]
 
-            frompath = conf.guilddbpath / str(chosenguild) / "users" / f"{ctx.message.author.id}.json"
-            topath = conf.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.message.author.id}.json"
+            frompath = conf.guilddbpath / str(chosenguild) / "users" / f"{ctx.author.id}.json"
+            topath = conf.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.author.id}.json"
 
             topath.parent.mkdir(parents = True, exist_ok = True)
 

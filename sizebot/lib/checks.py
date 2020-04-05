@@ -3,7 +3,7 @@ from discord.ext import commands
 
 def is_mod():
     async def predicate(ctx):
-        author = ctx.message.author
+        author = ctx.author
         modness = False
         if ctx.bot.is_owner(author):
             modness = True

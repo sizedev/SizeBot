@@ -84,7 +84,7 @@ class ChangeMethodInvalidException(DigiContextException):
         self.changemethod = changemethod
 
     async def formatUserMessage(self, ctx):
-        usernick = ctx.message.author.display_name
+        usernick = ctx.author.display_name
         return f"Sorry, {usernick}! {self.changemethod} is not a valid change method."
 
 
@@ -142,11 +142,11 @@ class InvalidRollException(DigiException):
 
 class AdminPermissionException(DigiContextException):
     async def formatMessage(self, ctx):
-        usernick = ctx.message.author.display_name
+        usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command."
 
     async def formatUserMessage(self, ctx):
-        usernick = ctx.message.author.display_name
+        usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command. This incident will be reported."
 
 

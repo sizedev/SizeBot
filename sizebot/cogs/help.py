@@ -158,7 +158,7 @@ class HelpCog(commands.Cog):
             f"{conf.banner}\n"
             "```\n")
         await ctx.send(
-            f"<@{ctx.message.author.id}>\n"
+            f"<@{ctx.author.id}>\n"
             "***SizeBot3½ by DigiDuncan***\n"
             "*A big program for big people.*\n"  # TODO: Change this slogan.
             "**Written for** *Size Matters*\n"
@@ -219,7 +219,7 @@ class HelpCog(commands.Cog):
     async def donate(self, ctx):
         """Give some monetary love to your favorite bot developer!"""
         await ctx.send(
-            f"<@{ctx.message.author.id}>\n"
+            f"<@{ctx.author.id}>\n"
             "SizeBot is coded (mainly) and hosted by DigiDuncan, and for absolutely free.\n"
             "However, if you wish to contribute to DigiDuncan directly, you can do so here:\n"
             "https://donate.digiduncan.com\n"
@@ -231,16 +231,16 @@ class HelpCog(commands.Cog):
     )
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
-        logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-        await self.bot.get_user(ids.digiduncan).send(f"Bug report from <@{ctx.message.author.id}>: {message}")
+        logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
+        await self.bot.get_user(ids.digiduncan).send(f"Bug report from <@{ctx.author.id}>: {message}")
 
     @commandsplus.command(
         usage = "<message>"
     )
     async def suggest(self, ctx, *, message: str):
         """Suggest a feature for SizeBot!"""
-        logger.warn(f"{ctx.message.author.id} ({ctx.message.author.name}) sent a bug report.")
-        await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.message.author.id}>: {message}")
+        logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
+        await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.author.id}>: {message}")
 
     @commandsplus.command(
         usage = ["[type]"]

@@ -44,7 +44,7 @@ class Menu:
 
     @property
     def menu_owner(self):
-        return self.ctx.message.author
+        return self.ctx.author
 
     def __str__(self):
         return f"{self.ctx=} | {self.initial_message=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.allow_any=} | {self.cancel_emoji=}"
