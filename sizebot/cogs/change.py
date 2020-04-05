@@ -29,6 +29,7 @@ class ChangeCog(commands.Cog):
         userid = ctx.author.id
 
         proportions.changeUser(guildid, userid, style, amount)
+        await proportions.nickUpdate(ctx.author)
         userdata = userdb.load(guildid, userid)
 
         logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
@@ -96,9 +97,10 @@ class ChangeCog(commands.Cog):
         guildid = ctx.guild.id
         userid = ctx.author.id
 
+        userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
         proportions.changeUser(guildid, userid, "multiply", randmult)
-        userdata = userdb.load(guildid, userid)
+        await proportions.nickUpdate(ctx.author)
 
         # TODO: Randomize the italics message here
         await ctx.send(
@@ -118,6 +120,7 @@ class ChangeCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
         proportions.changeUser(guildid, ctx.author.id, "divide", randmult)
+        await proportions.nickUpdate(ctx.author)
 
         # TODO: Randomize the italics message here
         await ctx.send(
