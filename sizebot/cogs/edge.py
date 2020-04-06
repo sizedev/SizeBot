@@ -36,7 +36,7 @@ def getEdgesFile(gid):
     return edgedict
 
 
-def getUserSizes(gid):
+def getUserSizes(g):
     # Find the largest and smallest current users.
     # TODO: Check to see if these users are recently active, which would determine if they count towards the check.
     smallestuser = 000000000000000000
@@ -44,9 +44,9 @@ def getUserSizes(gid):
     largestuser = 000000000000000000
     largestsize = SV(0)
     allusers = {}
-    for _, testid in userdb.listUsers(gid):
-        if testid in list([m.id for m in ctx.guild.members if str(m.status) != "offline"]):
-            testdata = userdb.load(gid, testid)
+    for _, testid in userdb.listUsers(g.id):
+        if testid in list([m.id for m in g.members if str(m.status) != "offline"]):
+            testdata = userdb.load(g.id, testid)
             allusers[testid] = testdata.height
             if testdata.height <= 0 or testdata.height >= SV.infinity:
                 break
@@ -78,7 +78,7 @@ async def on_message(m):
 
     userdata = userdb.load(m.guild.id, m.author.id)
 
-    usersizes = getUserSizes(m.guild.id)
+    usersizes = getUserSizes(m.guild)
     smallestuser = usersizes["smallest"]["id"]
     smallestsize = usersizes["smallest"]["size"]
     largestuser = usersizes["largest"]["id"]
