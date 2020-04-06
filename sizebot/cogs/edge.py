@@ -45,16 +45,17 @@ def getUserSizes(gid):
     largestsize = SV(0)
     allusers = {}
     for _, testid in userdb.listUsers(gid):
-        testdata = userdb.load(gid, testid)
-        allusers[testid] = testdata.height
-        if testdata.height <= 0 or testdata.height >= SV.infinity:
-            break
-        if testdata.height > largestsize:
-            largestuser = testid
-            largestsize = testdata.height
-        if testdata.height < smallestsize:
-            smallestuser = testid
-            smallestsize = testdata.height
+        if testid in list([m.id for m in ctx.guild.members if str(m.status) != "offline"]):
+            testdata = userdb.load(gid, testid)
+            allusers[testid] = testdata.height
+            if testdata.height <= 0 or testdata.height >= SV.infinity:
+                break
+            if testdata.height > largestsize:
+                largestuser = testid
+                largestsize = testdata.height
+            if testdata.height < smallestsize:
+                smallestuser = testid
+                smallestsize = testdata.height
 
     smallestuser = int(smallestuser)
     largestuser = int(largestuser)
