@@ -3,16 +3,17 @@ import inspect
 import itertools
 import logging
 import math
+from datetime import date, datetime, time, timedelta
 
 import discord
 
 from sizebot import conf
 from sizebot.cogs import thistracker
 from sizebot.lib import userdb, utils
-from sizebot.lib.constants import ids, emojis
+from sizebot.lib.constants import emojis, ids
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.objs import objects
-from sizebot.lib.units import Rate, Mult, SV, WV, TV
+from sizebot.lib.units import Rate, Mult, SV, TV, WV
 
 
 logger = logging.getLogger("sizebot")
@@ -115,7 +116,11 @@ def getEvalGlobals():
         "emojis": emojis,
         "itertools": itertools,
         "conf": conf,
-        "findOne": utils.findOne
+        "findOne": utils.findOne,
+        "datetime": datetime,
+        "date": date,
+        "time": time,
+        "timedelta": timedelta
     }
 
     return evalGlobals
