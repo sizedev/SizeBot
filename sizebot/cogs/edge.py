@@ -180,7 +180,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def edgedebug(self, ctx):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
-        usersizes = getUserSizes(ctx.guild.id)
+        usersizes = getUserSizes(ctx.guild)
         edgedict = getEdgesFile(ctx.guild.id)
         sm = edgedict.get("smallest", None)
         lg = edgedict.get("largest", None)
