@@ -157,12 +157,10 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
         bigToSmallUserdata = userdb.User()
         bigToSmallUserdata.height = bigUserdata.height * self.small.viewscale
-        bigToSmallUserdata.baseweight = bigUserdata.baseweight * self.small.viewscale ** 3
         self.bigToSmall = PersonStats(bigToSmallUserdata)
 
         smallToBigUserdata = userdb.User()
         smallToBigUserdata.height = smallUserdata.height * self.big.viewscale
-        smallToBigUserdata.baseweight = smallUserdata.baseweight * self.big.viewscale ** 3
         self.smallToBig = PersonStats(smallToBigUserdata)
 
         viewangle = calcViewAngle(self.small.height, self.big.height)
