@@ -120,7 +120,8 @@ def getEvalGlobals():
         "datetime": datetime,
         "date": date,
         "time": time,
-        "timedelta": timedelta
+        "timedelta": timedelta,
+        "math": math
     }
 
     return evalGlobals
