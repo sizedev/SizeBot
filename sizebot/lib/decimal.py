@@ -343,6 +343,10 @@ class Decimal():
     def to_integral_value(self, *args, **kwargs):
         return Decimal(self._rawvalue.to_integral_value(*args, **kwargs))
 
+    @values
+    def log10(value):
+        return Decimal(value.log10())
+
 
 class DecimalSpec:
     formatSpecRe = re.compile(r"""\A
