@@ -464,7 +464,7 @@ def randRangeLog(minval, maxval, precision=26):
 
     newintlog = Decimal(random.randint(minintlog, maxintlog))
 
-    newlog = newintlog / precision
+    newlog = newintlog / prec
 
     newval = 10 ** newlog
 
