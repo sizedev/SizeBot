@@ -149,8 +149,7 @@
         "length": "0.025",
         "weight": "0.19",
         "aliases": [
-            "popcorn",
-            "popcorns"
+            "popcorn"
         ]
     },
     {
@@ -200,8 +199,7 @@
         "length": "0.04",
         "weight": "3",
         "aliases": [
-            "minifig",
-            "minifigs"
+            "minifig"
         ]
     },
     {
@@ -210,8 +208,7 @@
         "weight": "4",
         "aliases": [
             "earbud",
-            "airpod",
-            "airpods"
+            "airpod"
         ]
     },
     {
@@ -301,9 +298,7 @@
         "weight": "0.408233133",
         "aliases": [
             "cotton swab",
-            "swab",
-            "cotton swabs",
-            "swabs"
+            "swab"
         ]
     },
     {
@@ -316,8 +311,7 @@
         "length": "0.0762",
         "weight": "0.48194189",
         "aliases": [
-            "bandage",
-            "bandages"
+            "bandage"
         ]
     },
     {
@@ -330,7 +324,6 @@
         "length": "0.088",
         "weight": "1.8",
         "aliases": [
-            "card",
             "card"
         ]
     },
@@ -352,8 +345,7 @@
         "length": "0.1005",
         "weight": "40.53982",
         "aliases": [
-            "cassette",
-            "cassettes"
+            "cassette"
         ]
     },
     {
@@ -366,8 +358,7 @@
         "length": "0.10795",
         "weight": "255.146",
         "aliases": [
-            "cup",
-            "cups"
+            "cup"
         ]
     },
     {
@@ -549,7 +540,7 @@
         "length": "2.032",
         "aliases": [
             "doorway",
-            "doorways"
+            ""
         ]
     },
     {
@@ -584,7 +575,6 @@
         "length": "4.5",
         "weight": "25885610",
         "aliases": [
-            "bus",
             "double-decker bus"
         ]
     },
@@ -618,8 +608,7 @@
         "length": "13.716",
         "weight": "14514956",
         "aliases": [
-            "bus",
-            "buses"
+            "bus"
         ]
     },
     {
@@ -661,8 +650,7 @@
         "weight": "3168488761.2",
         "aliases": [
             "office building",
-            "office",
-            "offices"
+            "office"
         ]
     },
     {
@@ -713,7 +701,6 @@
         "weight": "204116566",
         "aliases": [
             "lady liberty",
-            "lady libertys",
             "lady liberties",
             "statue of liberties"
         ]
@@ -755,8 +742,7 @@
         "length": "324.0024",
         "weight": "9162570000",
         "aliases": [
-            "eiffel",
-            "eiffels"
+            "eiffel"
         ]
     },
     {
@@ -789,8 +775,7 @@
         "name": "Kármán line",
         "length": "100000",
         "aliases": [
-            "karman line",
-            "karman lines"
+            "karman line"
         ]
     },
     {
