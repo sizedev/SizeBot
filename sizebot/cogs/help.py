@@ -113,6 +113,8 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR BOT OWNERS ONLY** :rotating_light:\n"
         if "is_mod" in repr(cmd.checks):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
+        if "guild_only" in repr(cmd.checks):
+            description += "*This command can only be run in a server, and not in DMs.*\n"
         description += "\n\n".join(descriptionParts).replace("&", conf.prefix)
 
         embed = discord.Embed(
