@@ -73,7 +73,7 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False):
     if milliseconds >= MILLISECONDS_PER_MINUTE:
         s += f"{minutes:d} minutes, "
     if millisecondAccuracy:
-        s += f"{seconds:d}.{milliseconds:d} seconds"
+        s += f"{seconds:d}.{milliseconds:03d} seconds"
     else:
         s += f"{seconds:d} seconds"
 
