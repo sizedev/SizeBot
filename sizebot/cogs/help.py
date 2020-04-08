@@ -9,7 +9,7 @@ from sizebot.discordplus import commandsplus
 
 from sizebot import __version__
 from sizebot import conf
-from sizebot.lib import userdb, utils
+from sizebot.lib import objs, userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.units import SV, WV
 
@@ -51,6 +51,22 @@ class HelpCog(commands.Cog):
 
         for n, units in enumerate(utils.chunkList(weightunits, math.ceil(len(weightunits) / 3))):
             embed.add_field(name="Weight" if n == 0 else "\u200b", value="\n".join(units))
+
+        await ctx.send(embed=embed)
+
+    @commandsplus.command()
+    async def objects(self, ctx):
+        """Get a list of the various objects SizeBot accepts."""
+        objectunits = []
+        for obj in objs.objects:
+            objectunits += obj.singularNames
+
+        objectunits.sort()
+
+        embed = discord.Embed(title=f"Objects [SizeBot {__version__}]")
+
+        for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 3))):
+            embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
 
         await ctx.send(embed=embed)
 
