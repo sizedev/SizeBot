@@ -96,7 +96,7 @@ class Mult():
     multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
     divPrefixes = ["/", "÷", "div", "divide"]
     prefixes = '|'.join(re.escape(p) for p in multPrefixes + divPrefixes)
-    suffixes = '|'.join(re.escape(p) for p in ["x", "X"])
+    suffixes = '|'.join(re.escape(p) for p in ["x", "X", "%"])
     re_mult = re.compile(f"(?P<prefix>{prefixes})? *(?P<multValue>{utils.re_num}) *(?P<suffix>{suffixes})?")
 
     @classmethod
@@ -110,6 +110,8 @@ class Mult():
         isDivide = prefix in cls.divPrefixes
         if isDivide:
             multValue = 1 / multValue
+        if prefix == "%":
+            multValue = multValue / 100
 
         return multValue
 
