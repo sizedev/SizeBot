@@ -116,8 +116,10 @@ def changeUser(guildid, userid, changestyle, amount):
         changestyle = "multiply"
     if changestyle in ["divide", "d", "/", "div"]:
         changestyle = "divide"
+    if changestyle in ["percent", "per", "perc", "%"]:
+        changestyle = "percent"
 
-    if changestyle not in ["add", "subtract", "multiply", "divide", "power"]:
+    if changestyle not in ["add", "subtract", "multiply", "divide", "power", "percent"]:
         raise errors.ChangeMethodInvalidException(changestyle)
 
     if changestyle in ["add", "subtract"]:
@@ -126,6 +128,10 @@ def changeUser(guildid, userid, changestyle, amount):
         amountVal = Decimal(amount)
         if amountVal == 1:
             raise errors.ValueIsOneException
+        if amountVal == 0:
+            raise errors.ValueIsZeroException
+    elif changestyle in ["percent"]:
+        amountVal = Decimal(amount)
         if amountVal == 0:
             raise errors.ValueIsZeroException
 
@@ -141,6 +147,8 @@ def changeUser(guildid, userid, changestyle, amount):
         newamount = userdata.height / amountVal
     elif changestyle == "power":
         userdata = userdata ** amountVal
+    elif changestyle == "percent":
+        newamount = userdata.height * (amountVal / 100)
 
     if changestyle != "power":
         userdata.height = newamount

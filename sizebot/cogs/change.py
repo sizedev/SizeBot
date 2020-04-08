@@ -28,8 +28,8 @@ class ChangeCog(commands.Cog):
         guildid = ctx.guild.id
         userid = ctx.author.id
 
-        proportions.changeUser(guildid, userid, style, amount)
-        await proportions.nickUpdate(ctx.author)
+        proportions.changeUser(guildid, userid, style, amount)  # TODO: Switch to the method we use in Rates to parse this
+        await proportions.nickUpdate(ctx.author)                # instead of forcing users to use two arguments.
         userdata = userdb.load(guildid, userid)
 
         logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
