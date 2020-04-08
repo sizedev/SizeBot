@@ -59,12 +59,12 @@ class Change:
         return {
             "userid": self.userid,
             "guildid": self.guildid,
-            "addPerSec": self.addPerSec and str(self.addPerSec),
-            "mulPerSec": self.mulPerSec and str(self.mulPerSec),
-            "stopSV": self.stopSV and str(self.stopSV),
-            "stopTV": self.stopTV and str(self.stopTV),
-            "startTime": self.startTime and str(self.startTime),
-            "lastRan": self.lastRan and str(self.lastRan)
+            "addPerSec": None if self.addPerSec is None else str(self.addPerSec),
+            "mulPerSec": None if self.mulPerSec is None else str(self.mulPerSec),
+            "stopSV": None if self.stopSV is None else str(self.stopSV),
+            "stopTV": None if self.stopTV is None else str(self.stopTV),
+            "startTime": None if self.startTime is None else str(self.startTime),
+            "lastRan": None if self.lastRan is None else str(self.lastRan)
         }
 
 
