@@ -41,7 +41,7 @@ re_sizetag = re.compile(r"""
 # the species bit (optional)
 (,\s*.+)?   # a comma, a space, and some characters
 # and a right bracket at the end of the name
-\]\Z
+\]$
 """, re.VERBOSE)
 
 
