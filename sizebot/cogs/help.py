@@ -10,7 +10,7 @@ from sizebot.discordplus import commandsplus
 from sizebot import __version__
 from sizebot import conf
 from sizebot.lib import userdb, utils
-from sizebot.lib.constants import ids, emojis
+from sizebot.lib.constants import emojis, ids
 from sizebot.lib.units import SV, WV
 
 
@@ -178,7 +178,7 @@ class HelpCog(commands.Cog):
             "\"I want to put SizeBot in charge of the world government.\" -- *AWK*\n"
             "\"Um... I like it?\" -- *Goddess Syn*\n"
             "\"I am the only person who has accidentally turned my fetish into a tech support job.\" -- *DigiDuncan*\n"
-            "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\"\" -- *Chocola*\n"
+            "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\"\" -- *Chocola*\n"  # TODO: Change this quote.
             "\n"
             f"Version {__version__} | {now.strftime('%d %b %Y')}")
 
