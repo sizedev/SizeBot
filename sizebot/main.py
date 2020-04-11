@@ -74,8 +74,6 @@ def main():
         logChannel = bot.get_channel(conf.logchannelid)
         discordhandler = DiscordHandler(logChannel)
         logger.addHandler(discordhandler)
-        discordlogger = logging.getLogger("discord")
-        discordlogger.addHandler(discordhandler)
 
         # Start the language engine.
         language.load()
