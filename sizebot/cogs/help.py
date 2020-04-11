@@ -204,7 +204,7 @@ class HelpCog(commands.Cog):
         now = datetime.now()
         embed = discord.Embed(title = "SizeBot3½", description = "Think of a new slogan!", color = 0x11cccc)
         embed.set_author(name = "DigiDuncan")
-        embed.set_image(url = "https://cdn.discordapp.com/attachments/650460192009617433/692133788116975676/sizebotlogo.png")
+        embed.set_image(url = "https://cdn.discordapp.com/attachments/650460192009617433/698529527965417552/sizebotlogot.png")
         embed.add_field(name = "Credits",
                         value = ("**Coding Assistance** *by Natalie*\n"
                                  "**Additional Equations** *by Benyovski and Arceus3251*\n"
@@ -230,7 +230,7 @@ class HelpCog(commands.Cog):
                                  "\"Um... I like it?\" *-- Goddess Syn*\n"
                                  # "\"Fix the bot.\" *-- Natalie*"
                                  "\"I am the only person who has accidentally turned my fetish into a tech support job.\" *-- DigiDuncan*\n"
-                                 "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\"\" *-- Chocola*"),
+                                 "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\" \\*-- DigiDuncan\\*\" *-- Chocola*"),
                         inline = False)
         embed.set_footer(text = f"Version {__version__} | {now.strftime('%d %b %Y')}")
         await ctx.send(embed = embed)
