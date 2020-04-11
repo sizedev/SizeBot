@@ -212,6 +212,10 @@ class HelpCog(commands.Cog):
                                  "**Beta Tested** *by Kelly, worstgender, and Arceus3251*\n"
                                  "**\"Moral Support\"** *by Chocola*"),
                         inline = False)
+        embed.add_field(name = "Servers",
+                        value = ("**[SizeDev](https://discord.gg/j2WpxS)**: support and beta testing for SizeBot and other bots, like Chocola's *Mei.*\n"
+                                 "**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*"),
+                        inline = False)
         embed.add_field(name = "Technical Details",
                         value = "Written in Python 3.6, and slowly upgraded to 3.8. Originally written using Atom, and now Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
                         inline = False)
