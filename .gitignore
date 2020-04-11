@@ -1,5 +1,6 @@
 # Compiled python
 *.pyc
+.pytest_cache
 
 # Visual Studio
 .vs
@@ -15,4 +16,3 @@
 text/hexstring.txt
 text/ids.txt
 text/winkcount.txt
-.pytest_cache
