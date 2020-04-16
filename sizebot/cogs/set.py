@@ -124,8 +124,11 @@ class SetCog(commands.Cog):
         """Set measurement system."""
         newsys = newsys.lower()
         if newsys not in ["m", "u"]:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/m]`.")
+            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/i/m]`.")
             return
+
+        if newsys == "i":
+            newsys == "u"
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 

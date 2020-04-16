@@ -94,10 +94,14 @@ class RegisterCog(commands.Cog):
             return
 
         # Invalid unit value
-        if unitsystem.lower() not in ["m", "u"]:
-            logger.warn(f"unitsystem was {unitsystem}, must be M or U.")
-            await ctx.send("Unitsystem must be `M` or `U`.")
+        if unitsystem.lower() not in ["m", "u", "i"]:
+            logger.warn(f"unitsystem was {unitsystem}, must be M or U/I.")
+            await ctx.send("Unitsystem must be `M` or `U`/`I`.")
             raise errors.InvalidUnitSystemException
+
+        # I system is really U.
+        if unitsystem.lower() == "i":
+            unitsystem = "u"
 
         userdata = userdb.User()
         userdata.guildid = ctx.guild.id
