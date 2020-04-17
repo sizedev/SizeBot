@@ -209,8 +209,7 @@ class HelpCog(commands.Cog):
                         value = ("**Coding Assistance** *by Natalie*\n"
                                  "**Additional Equations** *by Benyovski and Arceus3251*\n"
                                  "**Alpha Tested** *by AWK_*\n"
-                                 "**Beta Tested** *by Kelly, worstgender, and Arceus3251*\n"
-                                 "**\"Moral Support\"** *by Chocola*"),
+                                 "**Beta Tested** *by Kelly, worstgender, and Arceus3251*\n"),
                         inline = False)
         embed.add_field(name = "Servers",
                         value = ("**[SizeDev](https://discord.gg/j2WpxS)**: support and beta testing for SizeBot and other bots, like Chocola's [https://discordapp.com/oauth2/authorize?client_id=309220487957839872&scope=bot&permissions=527825985](*Mei.*)\n"
@@ -221,6 +220,7 @@ class HelpCog(commands.Cog):
                         inline = False)
         embed.add_field(name = "Special Thanks",
                         value = ("**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
+                                 "**Special thanks** *to Chocola, the creator of Mei and Arachne, for inspiration and moral support.*\n"
                                  "**Special thanks** *to the discord.py Community Discord for helping with code.*\n"
                                  f"**Special thanks** *to the {userdb.count()} users of SizeBot3½.*"),
                         inline = False)
@@ -230,7 +230,7 @@ class HelpCog(commands.Cog):
                                  "\"Um... I like it?\" *-- Goddess Syn*\n"
                                  # "\"Fix the bot.\" *-- Natalie*"
                                  "\"I am the only person who has accidentally turned my fetish into a tech support job.\" *-- DigiDuncan*\n"
-                                 "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\" \\*-- DigiDuncan\\*\" *-- Chocola*"),
+                                 "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\" *-- DigiDuncan*\" *-- Chocola*"),
                         inline = False)
         embed.set_footer(text = f"Version {__version__} | {now.strftime('%d %b %Y')}")
         await ctx.send(embed = embed)
