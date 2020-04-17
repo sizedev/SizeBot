@@ -37,3 +37,11 @@ def test_minmax_incorrect():
 
 def test_minmax_same():
     assert utils.minmax(20, 20) == (20, 20)
+
+
+def test_inttoroman_2020():
+    assert utils.intToRoman(2020) == "MMXX"
+
+
+def test_inttoroman_1994():
+    assert utils.intToRoman(1994) == "MCMXCIV"
