@@ -25,3 +25,15 @@ def test_clamp_up():
 
 def test_clamp_down():
     assert utils.clamp(10, 100, 20) == 20
+
+
+def test_minmax_correct():
+    assert utils.minmax(10, 20) == (10, 20)
+
+
+def test_minmax_incorrect():
+    assert utils.minmax(20, 10) == (10, 20)
+
+
+def test_minmax_same():
+    assert utils.minmax(20, 20) == (20, 20)
