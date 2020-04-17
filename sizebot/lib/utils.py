@@ -3,8 +3,6 @@ import pydoc
 import re
 import traceback
 
-from functools import reduce
-
 re_num = r"\d+\.?\d*"
 re_sizetag = re.compile(r"""
 \s+\[  # start with a left bracket
@@ -114,11 +112,6 @@ def getPath(root, path, default=None):
         except (KeyError, IndexError):
             return default
     return branch
-
-
-def deepgetattr(obj, attr):
-    """Recurses through an attribute chain to get the ultimate value."""
-    return reduce(lambda o, a: getattr(o, a, None), attr.split("."), obj)
 
 
 def chunkList(lst, chunklen):
