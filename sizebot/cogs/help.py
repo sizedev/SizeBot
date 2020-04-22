@@ -275,7 +275,7 @@ class HelpCog(commands.Cog):
     )
     async def suggest(self, ctx, *, message: str):
         """Suggest a feature for SizeBot!"""
-        logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
+        logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.author.id}>: {message}")
 
     @commandsplus.command(
