@@ -21,7 +21,7 @@ class StatsCog(commands.Cog):
         usage = "[user/height]"
     )
     @commands.guild_only()
-    async def stats(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
+    async def stats(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None, customName = None):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
@@ -40,6 +40,11 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(memberOrHeight)
 
         stats = proportions.PersonStats(userdata)
+
+        if customName:
+            stats.nickname = customName
+            stats.tag = customName
+
         embedtosend = stats.toEmbed()
         if ctx.author.id != userdata.id:
             embedtosend.description = f"Requested by *{ctx.author.display_name}*"
@@ -79,7 +84,7 @@ class StatsCog(commands.Cog):
         usage = "<stat> [user/height]"
     )
     @commands.guild_only()
-    async def stat(self, ctx, stat, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
+    async def stat(self, ctx, stat, *, memberOrHeight: typing.Union[discord.Member, SV] = None, customName = None):
         """User stat command.
 
         Get a single stat about yourself, a user, or a raw height.
@@ -133,6 +138,10 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(memberOrHeight)
 
         stats = proportions.PersonStats(userdata)
+
+        if customName:
+            stats.nickname = customName
+            stats.tag = customName
 
         logger.info(f"Stat {stat} for {memberOrHeight} sent.")
 
