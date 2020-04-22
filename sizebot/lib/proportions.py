@@ -247,8 +247,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{emojis.blank}{emojis.blank} **Height:** {self.small.height:,.3mu}\n"
             f"{emojis.blank}{emojis.blank} **Weight:** {self.small.weight:,.3mu}\n"), inline=True)
         embed.add_field(name="\u200b", value=(
-            f"{emojis.comparebigcenter} looks like {emojis.comparebig} to {emojis.comparesmallcenter}\n"
-            f"{emojis.comparesmallcenter} looks like {emojis.comparesmall} to {emojis.comparebigcenter}"), inline=False)
+            f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big.nickname}** looks to {emojis.comparesmallcenter} **{self.small.nickname}**\n"
+            f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big.nickname}**"), inline=False)
         embed.add_field(name="Height", value=(
             f"{emojis.comparebig}{self.bigToSmall.height:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.height:,.3mu}"), inline=False)
