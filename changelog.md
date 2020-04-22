@@ -7,6 +7,7 @@
     - Keeping your profiles on multiple servers synced to each other is not yet possible.
     - **NOTE:** *This is in beta stages, and is being rolled out slowly. Contact DigiDuncan if you are interested in having SizeBot on your server.*
 - Added customizable foot length with `&setfoot`. You can turn off custom foot length with `&resetfoot`.
+- Added customizable hair length with `&sethair`. You can turn off custom foot length with `&resethair`.
 - Added shoeprint depth, nail thickness, clothing thread thickness, eye width, walk speed, run speed, and viewing angle to stats and comparisons.
 - Added a link to a visual comparison when using `&compare`.
 - Slow changes now support stop conditions, either a time or a size.
@@ -17,6 +18,7 @@
 - Added the ability to use exponents in changes, for instance `&change ^ 2`.
     - For instance, running `&change ^ 2` while 10ft tall would set you to a height that makes you appear 10 ft tall to a 10 ft tall person.
 - Inches are now displayed in fraction increments in sizetags.
+- Added a new command, `&stat`, which lets you get a single stat about a user.
 - Added a new command, `&objcompare`, which lets you see what object you are closest to in height and weight.
     - Displays different, random comparisons from a list of close comparisons on every run.
     - Includes fractional output to the nearest eighth, and accuracy percentages!
@@ -55,6 +57,7 @@
     - `&setbase 100lb` sets your base weight to 100lb.
     - `&setbase 5ft 100lb` sets both base height and base weight simultaneously.
     - `&setbaseheight` and `&setbaseweight` still exist for convenience.
+- `&change` now accepts "%" as an option. For example, `&change % 50` sets you to half height.
 
 ## Fixes
 
