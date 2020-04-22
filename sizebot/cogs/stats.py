@@ -18,7 +18,6 @@ class StatsCog(commands.Cog):
         self.bot = bot
 
     @commandsplus.command(
-        aliases = ["stat"],
         usage = "[user/height]"
     )
     @commands.guild_only()
@@ -75,6 +74,82 @@ class StatsCog(commands.Cog):
         await ctx.send(str(stats))
 
         logger.info(f"Stats for {memberOrHeight} sent.")
+
+    @commandsplus.command(
+        usage = "<stat> [user/height]"
+    )
+    @commands.guild_only()
+    async def stat(self, ctx, stat, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
+        """User stat command.
+
+        Get a single stat about yourself, a user, or a raw height.
+
+        Available stats are: height, weight, foot/feet/shoe, toe, shoeprint/footprint,
+        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair,
+        speed/walk/run, base/baseheight/baseweight, compare/look, scale/multiplier/mult.
+
+        Examples:
+        `&stat height` (not specifying a user returns a stat about yourself.)
+        `&stats @User weight`
+        `&stats 10ft foot`
+        """
+
+        statmap = {
+            "height":      "height",
+            "weight":      "weight",
+            "foot":        "foot",
+            "feet":        "foot",
+            "shoe":        "foot",
+            "shoes":       "foot",
+            "toe":         "toe",
+            "shoeprint":   "shoeprint",
+            "footprint":   "shoeprint",
+            "finger":      "finger",
+            "pointer":     "finger",
+            "thumb":       "thumb",
+            "nail":        "nail",
+            "fingernail":  "fingernail",
+            "fingerprint": "fingerprint",
+            "thread":      "thread",
+            "eye":         "eye",
+            "eyes":        "eye",
+            "hair":        "hair",
+            "speed":       "speed",
+            "walk":        "speed",
+            "run":         "speed",
+            "base":        "base",
+            "baseheight":  "base",
+            "baseweight":  "base",
+            "compare":     "compare",
+            "look":        "compare",
+            "scale":       "scale",
+            "multiplier":  "scale",
+            "mult":        "scale"
+        }
+
+        if memberOrHeight is None:
+            memberOrHeight = ctx.author
+
+        userdata = getUserdata(memberOrHeight)
+
+        stats = proportions.PersonStats(userdata)
+
+        logger.info(f"Stat {stat} for {memberOrHeight} sent.")
+
+        if stat not in statmap.keys():
+            await ctx.send(f"The `{stat}` stat is not an available option.")
+            logger.info(f"Tried to send info on stat {stat}, but that's not a valid stat.")
+            return
+
+        stat = statmap[stat]
+        stattosend = stats.getFormattedStat(stat)
+
+        if stattosend is None:
+            await ctx.send(f"The `{stat}` stat is unavailable for this user.")
+            logger.info(f"Tried to send info on stat {stat}, but this user doesn't have it.")
+            return
+
+        await ctx.send(stattosend)
 
     @commandsplus.command(
         usage = "[user/height] <user/height>"

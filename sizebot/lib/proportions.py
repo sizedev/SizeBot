@@ -387,6 +387,35 @@ class PersonStats:
         self.walkperhour = SV(defaultwalkspeed * self.averageheightmult)
         self.runperhour = SV(defaultrunspeed * self.averageheightmult)
 
+    def getFormattedStat(self, stat):
+        returndict = {
+            "height": f"'s  current height is **{self.height:,.3mu}**.",
+            "weight": f"'s  current weight is **{self.weight:,.3mu}**.",
+            "foot": f"'s foot is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
+            "toe": f"'s toe is **{self.toeheight:,.3mu}** thick.",
+            "shoeprint": f"'s shoe print is **{self.shoeprintdepth:,.3mu}** deep.",
+            "finger": f"'s pointer finger is **{self.pointerlength:,.3mu}** long.",
+            "thumb": f"'s thumb is **{self.thumbwidth:,.3mu}** wide.",
+            "nail": f"'s nail is **{self.nailthickness:,.3mu}** thick.",
+            "fingerprint": f"'s fingerprint is **{self.fingerprintdepth:,.3mu}** deep.",
+            "thread": f"'s clothing threads are **{self.threadthickness:,.3mu}** thick.",
+            "eye": f"'s eye is **{self.eyewidth:,.3mu}** wide.",
+            "speed": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), and runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour).",
+            "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
+            "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**."
+        }
+        if self.scale > 1:
+            returndict["scale"] = f" is **{self.scale:,.3}x** normal height, or ~**1/{1/self.scale:,.3}x**."
+        else:
+            returndict["scale"] = f" is **{self.scale:,.3}x** normal height."
+        if self.hairlength:
+            returndict["hair"] = f"'s hair is **{self.hairlength:,.3mu}** long."
+
+        for k, v in returndict.items():
+            returndict[k] = self.tag + v
+
+        return returndict.get(stat)
+
     def __str__(self):
         returnstr = (
             f"**{self.tag} Stats:**\n"
