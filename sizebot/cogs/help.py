@@ -48,6 +48,8 @@ class HelpCog(commands.Cog):
         heightunits = [str(u) for u in sorted(SV._units)]
         weightunits = [str(u) for u in sorted(WV._units)]
 
+        # TODO: This only seems to half work?
+
         for unit in heightunits:
             if unit in objectunits:
                 heightunits.remove(unit)
