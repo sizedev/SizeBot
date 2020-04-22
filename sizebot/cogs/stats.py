@@ -37,13 +37,9 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        userdata = getUserdata(memberOrHeight)
+        userdata = getUserdata(memberOrHeight, customName)
 
         stats = proportions.PersonStats(userdata)
-
-        if customName:
-            stats.nickname = customName
-            stats.tag = customName
 
         embedtosend = stats.toEmbed()
         if ctx.author.id != userdata.id:
@@ -135,13 +131,9 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        userdata = getUserdata(memberOrHeight)
+        userdata = getUserdata(memberOrHeight, customName)
 
         stats = proportions.PersonStats(userdata)
-
-        if customName:
-            stats.nickname = customName
-            stats.tag = customName
 
         logger.info(f"Stat {stat} for {memberOrHeight} sent.")
 
@@ -271,6 +263,8 @@ class StatsCog(commands.Cog):
 
 
 def getUserdata(memberOrSV, nickname = "Raw"):
+    if nickname = None:
+        nickname = "Raw"
     if isinstance(memberOrSV, discord.Member):
         userdata = userdb.load(memberOrSV.guild.id, memberOrSV.id)
     else:
