@@ -321,16 +321,16 @@ class SetCog(commands.Cog):
         user = ctx.author
 
         gendermap = {
-            "m": "m",
-            "male": "m",
-            "man": "m",
-            "boy": "m",
-            "f": "f",
+            "m":      "m",
+            "male":   "m",
+            "man":    "m",
+            "boy":    "m",
+            "f":      "f",
             "female": "f",
-            "woman": "f",
-            "girl": "f",
-            "none": None,
-            None: None
+            "woman":  "f",
+            "girl":   "f",
+            "none":   None,
+            None:     None
         }
         try:
             gender = gendermap[gender]

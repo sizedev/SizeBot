@@ -307,8 +307,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
     @property
     def url(self):
         gendermap = {
-            "m": "male",
-            "f": "female",
+            "m":  "male",
+            "f":  "female",
             None: "male"
         }
 
