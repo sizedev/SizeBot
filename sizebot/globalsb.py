@@ -277,13 +277,13 @@ def isFeetAndInchesAndIfSoFixIt(input):
 
 
 # Count users.
-members = 0
-path = folder + '/users'
-listing = os.listdir(path)
-for infile in listing:
-    if infile.endswith(".txt"):
-        members += 1
-logger.load("Loaded {0} users.".format(members))
+def getMemberCount():
+    path = folder + '/users'
+    files = os.listdir(path)
+    memberCount = len([f for f in files if f.endswith(".txt")])
+    return memberCount
+
+logger.load("Loaded {0} users.".format(getMemberCount()))
 
 enspace = "\u2002"
 printtab = enspace * 4
