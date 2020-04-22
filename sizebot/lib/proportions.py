@@ -389,8 +389,8 @@ class PersonStats:
 
     def getFormattedStat(self, stat):
         returndict = {
-            "height": f"'s  current height is **{self.height:,.3mu}**.",
-            "weight": f"'s  current weight is **{self.weight:,.3mu}**.",
+            "height": f"'s current height is **{self.height:,.3mu}**.",
+            "weight": f"'s current weight is **{self.weight:,.3mu}**.",
             "foot": f"'s foot is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
             "toe": f"'s toe is **{self.toeheight:,.3mu}** thick.",
             "shoeprint": f"'s shoe print is **{self.shoeprintdepth:,.3mu}** deep.",
@@ -404,7 +404,7 @@ class PersonStats:
             "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
             "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**."
         }
-        if self.scale > 1:
+        if self.scale < 1:
             returndict["scale"] = f" is **{self.scale:,.3}x** normal height, or ~**1/{1/self.scale:,.3}x**."
         else:
             returndict["scale"] = f" is **{self.scale:,.3}x** normal height."
