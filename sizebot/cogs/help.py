@@ -212,7 +212,7 @@ class HelpCog(commands.Cog):
                                  "**Beta Tested** *by Kelly, worstgender, and Arceus3251*\n"),
                         inline = False)
         embed.add_field(name = "Servers",
-                        value = ("**[SizeDev](https://discord.gg/j2WpxS)**: support and beta testing for SizeBot and other bots, like Chocola's [*Mei.*](https://discordapp.com/oauth2/authorize?client_id=309220487957839872&scope=bot&permissions=527825985)\n"
+                        value = ("**[SizeDev](https://discord.gg/j2WpxS)**: support and beta testing for SizeBot and other bots, like Chocola's [*Mei.*](https://chocola.codes/)\n"
                                  "**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*"),
                         inline = False)
         embed.add_field(name = "Technical Details",
