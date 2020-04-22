@@ -41,8 +41,20 @@ class HelpCog(commands.Cog):
     @commandsplus.command()
     async def units(self, ctx):
         """Get a list of the various units SizeBot accepts."""
+        objectunits = []
+        for obj in objs.objects:
+            objectunits += obj.singularNames
+
         heightunits = [str(u) for u in sorted(SV._units)]
         weightunits = [str(u) for u in sorted(WV._units)]
+
+        for unit in heightunits:
+            if unit in objectunits:
+                heightunits.remove(unit)
+
+        for unit in weightunits:
+            if unit in objectunits:
+                weightunits.remove(unit)
 
         embed = discord.Embed(title=f"Units [SizeBot {__version__}]")
 
