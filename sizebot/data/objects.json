@@ -1,22 +1,42 @@
 [
     {
+        "name": "proton",
+        "length": "1.7E-15",
+        "width": "1.7E-15",
+        "weight": "1.67262192E-24"
+    },
+    {
         "name": "DNA",
         "length": "2.5e-9",
-        "weight": "1.67e-24"
+        "height": "2.5e-9",
+        "weight": "1.67E-24"
     },
     {
         "name": "transistor",
-        "length": "7e-9"
+        "length": "7e-9",
+        "height": "7e-9"
+    },
+    {
+        "name": "green light wavelength",
+        "length": "5.4e-7",
+        "height": "5.4e-7",
+        "aliases": [
+            "light",
+            "light wavelength",
+            "green light"
+        ]
     },
     {
         "name": "E. coli",
         "length": "0.000007",
-        "weight": "1e-12"
+        "height": "0.000007",
+        "weight": "1E-12"
     },
     {
         "name": "red blood cell",
         "length": "0.000007",
-        "weight": "2.7e-11",
+        "width": "0.000007",
+        "weight": "1E-12",
         "aliases": [
             "blood",
             "blood cell"
@@ -25,6 +45,7 @@
     {
         "name": "hair width",
         "length": "0.00005",
+        "height": "0.00005",
         "weight": "0.00062",
         "aliases": [
             "hair",
@@ -33,27 +54,52 @@
     },
     {
         "name": "thickness of a sheet of paper",
-        "length": "0.0001"
+        "length": "0.0001",
+        "height": "0.0001"
+    },
+    {
+        "name": "dust",
+        "length": "0.0001",
+        "height": "0.0001",
+        "weight": "1.1e-10",
+        "aliases": [
+            "dust particle"
+        ]
+    },
+    {
+        "name": "pixel",
+        "length": "0.0001801",
+        "height": "0.0001801"
     },
     {
         "name": "font point",
-        "length": "0.000352778"
+        "length": "0.000352778",
+        "height": "0.000352778"
     },
     {
         "name": "grain of sand",
         "length": "0.001",
+        "height": "0.001",
         "weight": "0.00005",
         "aliases": [
             "sand"
         ]
     },
     {
+        "name": "flea",
+        "length": "0.0015",
+        "height": "0.0015",
+        "weight": "0.00075"
+    },
+    {
         "name": "pinhead",
-        "length": "0.002"
+        "length": "0.002",
+        "height": "0.002"
     },
     {
         "name": "drop of water",
         "length": "0.002",
+        "width": "0.002",
         "weight": "0.05",
         "aliases": [
             "water drop",
@@ -63,6 +109,7 @@
     {
         "name": "grain of rice",
         "length": "0.006",
+        "height": "0.006",
         "weight": "0.029",
         "aliases": [
             "rice grain",
@@ -71,8 +118,18 @@
         ]
     },
     {
+        "name": "sunflower seed",
+        "length": "0.0071",
+        "height": "0.0071",
+        "weight": "0.0909",
+        "aliases": [
+            "seed"
+        ]
+    },
+    {
         "name": "lego brick",
         "length": "0.0096",
+        "height": "0.0096",
         "weight": "1.152",
         "aliases": [
             "lego"
@@ -81,36 +138,55 @@
     {
         "name": "staple",
         "length": "0.01",
+        "height": "0.01",
         "weight": "0.0323995"
     },
     {
         "name": "ant",
         "length": "0.01",
+        "height": "0.01",
         "weight": "0.0025"
+    },
+    {
+        "name": "marble",
+        "length": "0.0142875",
+        "width": "0.0142875",
+        "weight": "4.535924",
+        "aliases": [
+            "marble ball",
+            "glass marble"
+        ]
     },
     {
         "name": "keyboard key",
         "length": "0.015",
+        "height": "0.015",
         "weight": "0.91"
     },
     {
         "name": "fruit loop",
         "length": "0.015",
+        "width": "0.015",
         "weight": "0.24"
     },
     {
         "name": "MicroSD card",
         "length": "0.015",
+        "height": "0.015",
         "weight": "0.25"
     },
     {
         "name": "dime",
         "length": "0.01791",
+        "width": "0.01791",
         "weight": "2.268"
     },
     {
         "name": "USB dongle",
         "length": "0.019",
+        "height": "0.019",
+        "width": "0.014",
+        "depth": "0.005",
         "weight": "1.77",
         "aliases": [
             "Logitech USB",
@@ -120,6 +196,7 @@
     {
         "name": "Scotch tape width",
         "length": "0.01905",
+        "height": "0.01905",
         "aliases": [
             "tape width"
         ]
@@ -127,26 +204,31 @@
     {
         "name": "penny",
         "length": "0.01905",
+        "width": "0.01905",
         "weight": "2.5"
     },
     {
         "name": "die",
         "length": "0.02",
+        "height": "0.02",
         "weight": "3.714285"
     },
     {
         "name": "push pin",
         "length": "0.023",
+        "height": "0.023",
         "weight": "0.41"
     },
     {
         "name": "quarter",
         "length": "0.02426",
+        "width": "0.02426",
         "weight": "5.67"
     },
     {
         "name": "piece of popcorn",
         "length": "0.025",
+        "height": "0.025",
         "weight": "0.19",
         "aliases": [
             "popcorn"
@@ -155,11 +237,13 @@
     {
         "name": "safety pin",
         "length": "0.028575",
+        "height": "0.028575",
         "weight": "0.31"
     },
     {
         "name": "bottlecap",
         "length": "0.029718",
+        "width": "0.029718",
         "weight": "2",
         "aliases": [
             "cap"
@@ -168,11 +252,13 @@
     {
         "name": "SD card",
         "length": "0.032",
+        "height": "0.032",
         "weight": "2"
     },
     {
         "name": "pin",
         "length": "0.034",
+        "height": "0.034",
         "weight": "28.3495",
         "aliases": [
             "needle",
@@ -182,29 +268,38 @@
     {
         "name": "paperclip",
         "length": "0.034925",
+        "height": "0.034925",
         "weight": "0.5"
     },
     {
         "name": "tea light",
         "length": "0.038",
+        "height": "0.038",
         "weight": "9.071847"
     },
     {
         "name": "poker chip",
         "length": "0.039",
+        "width": "0.039",
         "weight": "10"
     },
     {
         "name": "lego minifig",
         "length": "0.04",
+        "height": "0.04",
         "weight": "3",
         "aliases": [
-            "minifig"
+            "minifig",
+            "lego guy",
+            "lego man",
+            "lego person",
+            "lego people"
         ]
     },
     {
         "name": "AirPod™",
         "length": "0.04",
+        "height": "0.04",
         "weight": "4",
         "aliases": [
             "earbud",
@@ -214,24 +309,27 @@
     {
         "name": "golf ball",
         "length": "0.04267",
+        "width": "0.04267",
         "weight": "45.93"
     },
     {
         "name": "door key",
         "length": "0.045",
+        "height": "0.045",
         "weight": "14",
         "aliases": [
-            "key",
-            "keys"
+            "key"
         ]
     },
     {
         "name": "duct tape width",
-        "length": "0.049"
+        "length": "0.049",
+        "height": "0.049"
     },
     {
         "name": "AA battery",
         "length": "0.049784",
+        "height": "0.049784",
         "weight": "31",
         "aliases": [
             "battery"
@@ -240,6 +338,7 @@
     {
         "name": "hairpin",
         "length": "0.0508",
+        "height": "0.0508",
         "weight": "0.70873808",
         "aliases": [
             "bobby pin"
@@ -248,16 +347,19 @@
     {
         "name": "bullet vibe",
         "length": "0.053",
+        "height": "0.053",
         "weight": "45.3592"
     },
     {
         "name": "egg",
         "length": "0.05312",
+        "height": "0.05312",
         "weight": "48.1942"
     },
     {
         "name": "flash drive",
         "length": "0.0568",
+        "height": "0.0568",
         "weight": "5.102914",
         "aliases": [
             "USB stick",
@@ -267,11 +369,13 @@
     {
         "name": "Rubik's cube",
         "length": "0.057",
+        "height": "0.057",
         "weight": "84.6"
     },
     {
         "name": "Zippo lighter",
         "length": "0.060325",
+        "height": "0.060325",
         "weight": "56.699",
         "aliases": [
             "lighter"
@@ -280,21 +384,25 @@
     {
         "name": "toothpick",
         "length": "0.065",
+        "height": "0.065",
         "weight": "0.1"
     },
     {
         "name": "baseball",
         "length": "0.0745",
+        "width": "0.0745",
         "weight": "149"
     },
     {
         "name": "apple",
         "length": "0.075",
+        "height": "0.075",
         "weight": "85"
     },
     {
         "name": "Q-tip",
         "length": "0.076",
+        "height": "0.076",
         "weight": "0.408233133",
         "aliases": [
             "cotton swab",
@@ -304,11 +412,13 @@
     {
         "name": "Post-it note",
         "length": "0.0762",
+        "height": "0.0762",
         "weight": "0.015"
     },
     {
         "name": "band-aid",
         "length": "0.0762",
+        "height": "0.0762",
         "weight": "0.48194189",
         "aliases": [
             "bandage"
@@ -317,24 +427,40 @@
     {
         "name": "credit card",
         "length": "0.0856",
+        "height": "0.0856",
         "weight": "5"
     },
     {
         "name": "playing card",
         "length": "0.088",
+        "height": "0.088",
+        "width": "0.062",
         "weight": "1.8",
         "aliases": [
             "card"
         ]
     },
     {
+        "name": "Nintendo Entertainment System",
+        "length": "0.0889",
+        "height": "0.0889",
+        "width": "0.256",
+        "depth": "0.2032",
+        "weight": "400",
+        "aliases": [
+            "NES"
+        ]
+    },
+    {
         "name": "crayon",
         "length": "0.092075",
+        "height": "0.092075",
         "weight": "5"
     },
     {
         "name": "coffee mug",
         "length": "0.095",
+        "height": "0.095",
         "weight": "368.544",
         "aliases": [
             "mug"
@@ -343,19 +469,31 @@
     {
         "name": "audio cassette",
         "length": "0.1005",
+        "height": "0.1005",
         "weight": "40.53982",
         "aliases": [
             "cassette"
         ]
     },
     {
+        "name": "Joy-Con",
+        "length": "0.1016",
+        "height": "0.1016",
+        "weight": "50.603899",
+        "aliases": [
+            "joycon"
+        ]
+    },
+    {
         "name": "juice box",
         "length": "0.1056386",
+        "height": "0.1056386",
         "weight": "170.097"
     },
     {
         "name": "Solo cup",
         "length": "0.10795",
+        "height": "0.10795",
         "weight": "255.146",
         "aliases": [
             "cup"
@@ -364,31 +502,39 @@
     {
         "name": "lightbulb",
         "length": "0.11",
+        "height": "0.11",
         "weight": "34"
     },
     {
         "name": "CD",
         "length": "0.12",
+        "width": "0.12",
         "weight": "113.398"
     },
     {
         "name": "computer mouse",
         "length": "0.12",
+        "height": "0.12",
         "weight": "127.573"
     },
     {
         "name": "can of soda",
         "length": "0.122682",
+        "height": "0.122682",
         "weight": "368.7",
         "aliases": [
             "can"
         ]
     },
     {
-        "name": "iPhone",
-        "length": "0.1436",
-        "weight": "173.998",
+        "name": "Apple iPhone XS",
+        "length": "0.143",
+        "height": "0.143",
+        "width": "0.0709",
+        "depth": "0.0077",
+        "weight": "177",
         "aliases": [
+            "iPhone",
             "phone",
             "cell phone"
         ]
@@ -396,11 +542,13 @@
     {
         "name": "toothbrush",
         "length": "0.1778",
+        "height": "0.1778",
         "weight": "20"
     },
     {
         "name": "VHS tape",
         "length": "0.187",
+        "height": "0.187",
         "weight": "198.447",
         "aliases": [
             "video tape"
@@ -409,6 +557,8 @@
     {
         "name": "pencil",
         "length": "0.1905",
+        "height": "0.1905",
+        "width": "0.006",
         "weight": "42.5243",
         "aliases": [
             "pen"
@@ -417,25 +567,37 @@
     {
         "name": "banana",
         "length": "0.1905",
+        "height": "0.1905",
         "weight": "120"
     },
     {
-        "name": "stair",
-        "length": "0.1905"
+        "name": "stair height",
+        "length": "0.1905",
+        "height": "0.1905",
+        "aliases": [
+            "stair"
+        ]
     },
     {
         "name": "remote",
         "length": "0.2032",
-        "weight": "680.389"
+        "height": "0.2032",
+        "weight": "680.389",
+        "aliases": [
+            "remote control",
+            "TV remote"
+        ]
     },
     {
         "name": "bowling ball",
         "length": "0.2159",
+        "width": "0.2159",
         "weight": "5896.7"
     },
     {
         "name": "soccer ball",
         "length": "0.22",
+        "width": "0.22",
         "weight": "450",
         "aliases": [
             "football"
@@ -444,31 +606,61 @@
     {
         "name": "spoon",
         "length": "0.223",
+        "height": "0.223",
         "weight": "45.3592"
     },
     {
         "name": "chopstick",
         "length": "0.23",
+        "height": "0.23",
         "weight": "4.72492052"
+    },
+    {
+        "name": "Nintendo Switch",
+        "length": "0.239",
+        "height": "0.239",
+        "width": "0.102",
+        "depth": "0.0139",
+        "weight": "398.3108",
+        "aliases": [
+            "switch",
+            "nintendo switch"
+        ]
     },
     {
         "name": "cat",
         "length": "0.24",
-        "weight": "4500"
+        "height": "0.24",
+        "width": "0.46",
+        "weight": "4500",
+        "aliases": [
+            "Yukio"
+        ]
     },
     {
         "name": "basketball",
         "length": "0.240538",
+        "height": "0.240538",
         "weight": "623.69"
     },
     {
         "name": "shoe",
         "length": "0.2504",
+        "height": "0.2504",
         "weight": "272.155"
+    },
+    {
+        "name": "microwave",
+        "length": "0.256",
+        "height": "0.256",
+        "width": "0.439",
+        "depth": "0.358",
+        "weight": "9900"
     },
     {
         "name": "letter paper",
         "length": "0.2794",
+        "height": "0.2794",
         "weight": "4.5",
         "aliases": [
             "paper"
@@ -477,6 +669,7 @@
     {
         "name": "Barbie",
         "length": "0.2921",
+        "height": "0.2921",
         "weight": "205.534",
         "aliases": [
             "doll"
@@ -485,35 +678,60 @@
     {
         "name": "vinyl record",
         "length": "0.3",
+        "width": "0.3",
         "weight": "100",
         "aliases": [
             "record"
         ]
     },
     {
+        "name": "Pringles can",
+        "length": "0.3",
+        "height": "0.3",
+        "weight": "149",
+        "aliases": [
+            "chip can",
+            "chip tube",
+            "Pringles tube"
+        ]
+    },
+    {
+        "name": "Pikachu",
+        "length": "0.4064",
+        "height": "0.4064",
+        "weight": "6000"
+    },
+    {
         "name": "beach ball",
         "length": "0.508",
+        "width": "0.508",
         "weight": "110"
     },
     {
+        "name": "exercise ball",
+        "length": "0.65",
+        "width": "0.65"
+    },
+    {
         "name": "doorknob height",
-        "length": "0.864"
+        "length": "0.864",
+        "height": "0.864"
     },
     {
         "name": "countertop height",
-        "length": "0.9144"
+        "length": "0.9144",
+        "height": "0.9144"
     },
     {
-        "name": "guitar length",
+        "name": "guitar",
         "length": "0.9652",
-        "weight": "4000",
-        "aliases": [
-            "guitar"
-        ]
+        "height": "0.9652",
+        "weight": "4000"
     },
     {
         "name": "Sonic the Hedgehog",
         "length": "1",
+        "height": "1",
         "weight": "35000",
         "aliases": [
             "sonic"
@@ -521,23 +739,44 @@
     },
     {
         "name": "sidewalk width",
-        "length": "1.2192"
+        "length": "1.2192",
+        "width": "1.2192"
     },
     {
         "name": "railway track width",
-        "length": "1.4351"
+        "length": "1.4351",
+        "width": "1.4351"
     },
     {
         "name": "fridge",
         "length": "1.7399",
+        "height": "1.7399",
         "weight": "136078",
         "aliases": [
             "refrigerator"
         ]
     },
     {
+        "name": "Minecraft character",
+        "length": "1.8",
+        "height": "1.8",
+        "weight": "72151",
+        "aliases": [
+            "Steve"
+        ]
+    },
+    {
+        "name": "vending machine",
+        "length": "1.829",
+        "height": "1.829",
+        "width": "1.194",
+        "depth": "0.813",
+        "weight": "289846"
+    },
+    {
         "name": "doorway height",
         "length": "2.032",
+        "height": "2.032",
         "aliases": [
             "doorway",
             ""
@@ -546,33 +785,51 @@
     {
         "name": "bed",
         "length": "2.032",
+        "height": "2.032",
         "weight": "73028.4",
         "aliases": [
             "bed"
         ]
     },
     {
+        "name": "Shaq",
+        "length": "2.16",
+        "height": "2.16",
+        "weight": "147000",
+        "aliases": [
+            "Shaquille O'Neal"
+        ]
+    },
+    {
         "name": "elephant",
         "length": "3.048",
+        "height": "3.048",
         "weight": "5896700.8"
     },
     {
         "name": "light pole",
         "length": "3.5052",
+        "height": "3.5052",
         "weight": "326587"
     },
     {
         "name": "story",
-        "length": "4.3"
+        "length": "4.3",
+        "height": "4.3",
+        "aliases": [
+            "floor"
+        ]
     },
     {
         "name": "car",
         "length": "4.5",
+        "height": "4.5",
         "weight": "1814369"
     },
     {
         "name": "double decker bus",
         "length": "4.5",
+        "height": "4.5",
         "weight": "25885610",
         "aliases": [
             "double-decker bus"
@@ -581,6 +838,7 @@
     {
         "name": "Tyrannosaurus Rex",
         "length": "4.572",
+        "height": "4.572",
         "weight": "7257477.9",
         "aliases": [
             "T-rex",
@@ -594,6 +852,7 @@
     {
         "name": "2-lane road width",
         "length": "6",
+        "width": "6",
         "aliases": [
             "road width"
         ]
@@ -601,11 +860,13 @@
     {
         "name": "giraffe",
         "length": "6.75",
+        "height": "6.75",
         "weight": "1032500"
     },
     {
         "name": "city bus",
         "length": "13.716",
+        "height": "13.716",
         "weight": "14514956",
         "aliases": [
             "bus"
@@ -614,6 +875,7 @@
     {
         "name": "humpback whale",
         "length": "16",
+        "height": "16",
         "weight": "30000000",
         "aliases": [
             "whale"
@@ -622,11 +884,13 @@
     {
         "name": "train car",
         "length": "16.1798",
+        "height": "16.1798",
         "weight": "25400000"
     },
     {
         "name": "oak tree",
         "length": "18",
+        "height": "18",
         "weight": "7500000",
         "aliases": [
             "tree"
@@ -634,11 +898,13 @@
     },
     {
         "name": "bowling alley",
-        "length": "18.288"
+        "length": "18.288",
+        "height": "18.288"
     },
     {
         "name": "semi truck",
         "length": "21.336",
+        "height": "21.336",
         "weight": "15422140",
         "aliases": [
             "truck"
@@ -647,6 +913,7 @@
     {
         "name": "7-story office building",
         "length": "22",
+        "height": "22",
         "weight": "3168488761.2",
         "aliases": [
             "office building",
@@ -656,6 +923,7 @@
     {
         "name": "swimming pool",
         "length": "50",
+        "height": "50",
         "weight": "2499999748",
         "aliases": [
             "pool"
@@ -664,16 +932,19 @@
     {
         "name": "Leaning Tower of Pisa",
         "length": "56.6928",
+        "height": "56.6928",
         "weight": "13154200000"
     },
     {
         "name": "redwood tree",
         "length": "60.96",
+        "height": "60.96",
         "weight": "725747792"
     },
     {
         "name": "Falcon Heavy",
         "length": "70",
+        "height": "70",
         "weight": "1420651303",
         "aliases": [
             "rocket"
@@ -682,6 +953,7 @@
     {
         "name": "Boeing 747",
         "length": "70.7136",
+        "height": "70.7136",
         "weight": "183523473",
         "aliases": [
             "747",
@@ -691,6 +963,7 @@
     {
         "name": "city block",
         "length": "80",
+        "height": "80",
         "aliases": [
             "block"
         ]
@@ -698,6 +971,7 @@
     {
         "name": "Statue of Liberty",
         "length": "93",
+        "height": "93",
         "weight": "204116566",
         "aliases": [
             "lady liberty",
@@ -707,16 +981,19 @@
     },
     {
         "name": "Big Ben",
-        "length": "96.012"
+        "length": "96.012",
+        "height": "96.012"
     },
     {
         "name": "ferris wheel",
         "length": "100",
+        "height": "100",
         "weight": "7257480"
     },
     {
         "name": "football field",
         "length": "109.728",
+        "height": "109.728",
         "aliases": [
             "field"
         ]
@@ -724,6 +1001,7 @@
     {
         "name": "Washington monument",
         "length": "169.164",
+        "height": "169.164",
         "weight": "82421400000",
         "aliases": [
             "washington"
@@ -732,6 +1010,7 @@
     {
         "name": "Battleship Iowa",
         "length": "270",
+        "height": "270",
         "weight": "44081921000",
         "aliases": [
             "battleship"
@@ -740,6 +1019,7 @@
     {
         "name": "Eiffel Tower",
         "length": "324.0024",
+        "height": "324.0024",
         "weight": "9162570000",
         "aliases": [
             "eiffel"
@@ -748,16 +1028,19 @@
     {
         "name": "cruise ship",
         "length": "360",
+        "height": "360",
         "weight": "90718500000"
     },
     {
         "name": "Empire State Building",
         "length": "443.1792",
+        "height": "443.1792",
         "weight": "331122400000"
     },
     {
         "name": "Grand Canyon",
         "length": "1828.8",
+        "height": "1828.8",
         "aliases": [
             "canyon"
         ]
@@ -765,6 +1048,7 @@
     {
         "name": "Mount Everest",
         "length": "8848",
+        "height": "8848",
         "weight": "161932476090000000",
         "aliases": [
             "everest",
@@ -772,42 +1056,67 @@
         ]
     },
     {
+        "name": "marathon",
+        "length": "42195",
+        "height": "42195"
+    },
+    {
         "name": "Kármán line",
         "length": "100000",
+        "height": "100000",
         "aliases": [
             "karman line"
         ]
     },
     {
+        "name": "Pluto",
+        "length": "2376600",
+        "width": "2376600",
+        "weight": "1.25e+25"
+    },
+    {
         "name": "moon",
         "length": "3474200",
+        "width": "3474200",
         "weight": "7.35e+25"
     },
     {
         "name": "Australia",
-        "length": "4000000"
+        "length": "4000000",
+        "height": "4000000"
+    },
+    {
+        "name": "The Great Wall Of China",
+        "length": "6400000",
+        "height": "6400000",
+        "weight": "52702897500000",
+        "aliases": [
+            "great wall",
+            "wall of china"
+        ]
     },
     {
         "name": "Earth",
         "length": "12742000",
-        "weight": "5.972000000000001e+27"
+        "width": "12742000",
+        "weight": "5.972000000000001e+27",
+        "aliases": [
+            "Terra"
+        ]
     },
     {
         "name": "Jupiter",
         "length": "139820000",
+        "width": "139820000",
         "weight": "1.898e+30"
     },
     {
         "name": "Sun",
         "length": "1391000000",
-        "weight": "1.989e+33"
-    },
-    {
-        "name": "Minecraft character",
-        "length": "1.8",
-        "weight": "72151",
+        "width": "1391000000",
+        "weight": "1.989e+33",
         "aliases": [
-            "Steve"
+            "Sol"
         ]
     }
 ]
