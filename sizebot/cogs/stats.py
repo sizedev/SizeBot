@@ -6,10 +6,9 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot.lib import proportions, userdb
-from sizebot.lib.constants import emojis
-from sizebot.lib.look import ObjectComparison
+from sizebot.lib.look import ObjectComparison, ObjectStats
 from sizebot.lib.objs import DigiObject
-from sizebot.lib.units import SV, WV
+from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
 
@@ -276,26 +275,7 @@ class StatsCog(commands.Cog):
             await ctx.send(f"`{what}` is not a valid object.")
             return
 
-        perceivedlength = what.length and SV(what.length)
-        perceivedheight = what.height and SV(what.height)
-        perceivedwidth = what.width and SV(what.width)
-        perceiveddepth = what.depth and SV(what.depth)
-        perceivedweight = what.weight and WV(what.weight)
-
-        returnstr = f"{what.article.capitalize()} {what.name} is...\n"
-        if not perceivedheight:
-            returnstr += f"{emojis.blank}{perceivedlength:,.3mu} tall\n"
-        if perceivedheight:
-            returnstr += f"{emojis.blank}{perceivedheight:,.3mu} tall\n"
-        if perceivedwidth:
-            returnstr += f"{emojis.blank}{perceivedwidth:,.3mu} wide\n"
-        if perceiveddepth:
-            returnstr += f"{emojis.blank}{perceiveddepth:,.3mu} deep\n"
-        if perceivedweight:
-            returnstr += "and weighs...\n"
-            returnstr += f"{emojis.blank}{perceivedweight:,.3mu}"
-
-        await ctx.send(returnstr)
+        await ctx.send(ObjectStats(what))
 
 
 def getUserdata(memberOrSV, nickname = "Raw"):

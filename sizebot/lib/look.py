@@ -34,3 +34,28 @@ class ObjectComparison:
         return returnstr
 
     # TODO: Add a toEmbed() method.
+
+
+class ObjectStats:
+    def __init__(self, obj):
+        self.perceivedlength = self.obj.length and SV(self.obj.length)
+        self.perceivedheight = self.obj.height and SV(self.obj.height)
+        self.perceivedwidth = self.obj.width and SV(self.obj.width)
+        self.perceiveddepth = self.obj.depth and SV(self.obj.depth)
+        self.perceivedweight = self.obj.weight and WV(self.obj.weight)
+
+    def __str__(self):
+        returnstr = f"{self.obj.article.capitalize()} {self.obj.name} is...\n"
+        if not self.perceivedheight:
+            returnstr += f"{emojis.blank}{self.perceivedlength:,.3mu} tall\n"
+        if self.perceivedheight:
+            returnstr += f"{emojis.blank}{self.perceivedheight:,.3mu} tall\n"
+        if self.perceivedwidth:
+            returnstr += f"{emojis.blank}{self.perceivedwidth:,.3mu} wide\n"
+        if self.perceiveddepth:
+            returnstr += f"{emojis.blank}{self.perceiveddepth:,.3mu} deep\n"
+        if self.perceivedweight:
+            returnstr += "and weighs...\n"
+            returnstr += f"{emojis.blank}{self.perceivedweight:,.3mu}"
+
+        return returnstr
