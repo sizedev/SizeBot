@@ -26,7 +26,7 @@ class DigiObject:
         if self.length is not None:
             SV.addUnit(Unit(factor=self.length, name=self.name, namePlural=self.namePlural, names=self.aliases))
             SV.addSystemUnit("o", SystemUnit(self.name))
-        if self.width is not None:
+        elif self.width is not None:
             SV.addUnit(Unit(factor=self.width, name=self.name, namePlural=self.namePlural, names=self.aliases))
             SV.addSystemUnit("o", SystemUnit(self.name))
         elif self.height is not None:
