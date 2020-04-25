@@ -123,10 +123,12 @@ class DigiObject:
             + self.getStats(userdata.viewscale)
 
     def relativestatsembed(self, userdata):
-        embed = self.getStatsEmbed(userdata.viewscale)
+        embed = discord.Embed()
         embed.title = self.name + " *[relative]*"
+        embed.set_author(name = f"SizeBot {__version__}")
         embed.description = (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
-                             f"To {userdata.nickname}, {self.article} {self.name} looks...\n")
+                             f"To {userdata.nickname}, {self.article} {self.name} looks...\n"
+                             f"\n") + self.getStats(userdata.viewscale)
         return embed
 
     def __eq__(self, other):
