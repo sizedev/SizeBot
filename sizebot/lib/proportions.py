@@ -436,20 +436,25 @@ class PersonStats:
         return returndict.get(stat)
 
     def __str__(self):
-        returnstr = (
-            f"**{self.tag} Stats:**\n"
-            f"*Current Height:*  {self.height:,.3mu} ({self.averageheightmult:,.3}x average height)\n"
-            f"*Current Weight:*  {self.weight:,.3mu} ({self.averageweightmult:,.3}x average weight\n"
-            f"\n"
-            f"Foot Length: {self.footlength:,.3mu} ({self.shoesize})\n"
-            f"Foot Width: {self.footwidth:,.3mu}\n"
-            f"Toe Height: {self.toeheight:,.3mu}\n"
-            f"Shoeprint Depth: {self.shoeprintdepth:,.3mu}\n"
-            f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
-            f"Thumb Width: {self.thumbwidth:,.3mu}\n"
-            f"Nail Thickness: {self.nailthickness:,.3mu}\n"
-            f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
-            f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n")
+        returnstr = f"**{self.tag} Stats:**\n"
+        if self.averageheightmult < 1:
+            returnstr += f"*Current Height:*  {self.height:,.3mu} (1/{1/self.averageheightmult:,.3}x average height)\n"
+        else:
+            returnstr += f"*Current Height:*  {self.height:,.3mu} ({self.averageheightmult:,.3}x average height)\n"
+        if self.averageweightmult < 1:
+            returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1/{1/self.averageweightmult:,.3}x average weight)\n"
+        else:
+            returnstr += f"*Current Weight:*  {self.weight:,.3mu} ({self.averageweightmult:,.3}x average weight)\n"
+        returnstr += (f"\n"
+                      f"Foot Length: {self.footlength:,.3mu} ({self.shoesize})\n"
+                      f"Foot Width: {self.footwidth:,.3mu}\n"
+                      f"Toe Height: {self.toeheight:,.3mu}\n"
+                      f"Shoeprint Depth: {self.shoeprintdepth:,.3mu}\n"
+                      f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
+                      f"Thumb Width: {self.thumbwidth:,.3mu}\n"
+                      f"Nail Thickness: {self.nailthickness:,.3mu}\n"
+                      f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
+                      f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n")
         if self.hairlength:
             returnstr += f"Hair Length: {self.hairlength:,.3mu}\n"
         if self.taillength:
@@ -470,8 +475,14 @@ class PersonStats:
     def toEmbed(self):
         embed = discord.Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
         embed.set_author(name=f"SizeBot {__version__}")
-        embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({self.averageheightmult:,.3}x average height)", inline=True)
-        embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({self.averageweightmult:,.3}x average weight)", inline=True)
+        if self.averageheightmult < 1:
+            embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n(1/{1/self.averageheightmult:,.3}x average height)", inline=True)
+        else:
+            embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({self.averageheightmult:,.3}x average height)", inline=True)
+        if self.averageweightmult < 1:
+            embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n(1/{1/self.averageweightmult:,.3}x average weight)", inline=True)
+        else:
+            embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({self.averageweightmult:,.3}x average weight)", inline=True)
         embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
