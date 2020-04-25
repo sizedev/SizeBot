@@ -82,22 +82,22 @@ class DigiObject:
     def getStatsSentence(self, multiplier = 1, system: Literal["m", "u"] = "m"):
         statsstrings = []
         if self.height:
-            statsstrings.append(f"{SV(self.height * multiplier):,.3{system}} tall")
+            statsstrings.append(f"**{SV(self.height * multiplier):,.3{system}}** tall")
         if self.length:
-            statsstrings.append(f"{SV(self.length * multiplier):,.3{system}} long")
+            statsstrings.append(f"**{SV(self.length * multiplier):,.3{system}}** long")
         if self.width:
-            statsstrings.append(f"{SV(self.width * multiplier):,.3{system}} wide")
+            statsstrings.append(f"**{SV(self.width * multiplier):,.3{system}}** wide")
         if self.diameter:
-            statsstrings.append(f"{SV(self.diameter * multiplier):,.3{system}} across")
+            statsstrings.append(f"**{SV(self.diameter * multiplier):,.3{system}}** across")
         if self.depth:
-            statsstrings.append(f"{SV(self.depth * multiplier):,.3{system}} deep")
+            statsstrings.append(f"**{SV(self.depth * multiplier):,.3{system}}** deep")
         if self.thickness:
-            statsstrings.append(f"{SV(self.thickness * multiplier):,.3{system}} thick")
+            statsstrings.append(f"**{SV(self.thickness * multiplier):,.3{system}}** thick")
         if self.weight:
-            statsstrings.append(f"weighs {WV(self.weight * multiplier ** 3):,.3{system}}")
+            statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
 
         returnstr = " , ".join(statsstrings[:-1])
-        returnstr += " , and " + statsstrings[-1]
+        returnstr += " , and " + statsstrings[-1] + "."
 
         return returnstr
 
