@@ -1,5 +1,6 @@
 import importlib.resources as pkg_resources
 import json
+from typing import Literal
 
 import discord
 
@@ -78,6 +79,28 @@ class DigiObject:
             returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
         return returnstr
 
+    def getStatsSentence(self, multiplier = 1, system: Literal["m", "u"] = "m"):
+        statsstrings = []
+        if self.height:
+            statsstrings.append(f"{SV(self.height * multiplier):,.3{system}} tall")
+        if self.length:
+            statsstrings.append(f"{SV(self.length * multiplier):,.3{system}} long")
+        if self.width:
+            statsstrings.append(f"{SV(self.width * multiplier):,.3{system}} wide")
+        if self.diameter:
+            statsstrings.append(f"{SV(self.diameter * multiplier):,.3{system}} across")
+        if self.depth:
+            statsstrings.append(f"{SV(self.depth * multiplier):,.3{system}} deep")
+        if self.thickness:
+            statsstrings.append(f"{SV(self.thickness * multiplier):,.3{system}} thick")
+        if self.weight:
+            statsstrings.append(f"weighs {SV(self.weight * multiplier):,.3{system}}")
+
+        returnstr = " , ".join(statsstrings[:-1])
+        returnstr += " , and " + statsstrings[-1]
+
+        return returnstr
+
     def getStatsEmbed(self, multiplier = 1):
         embed = discord.Embed()
         embed.set_author(name = f"SizeBot {__version__}")
@@ -121,6 +144,11 @@ class DigiObject:
         return (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
                 f"To {userdata.nickname}, {self.article} {self.name} looks...\n") \
             + self.getStats(userdata.viewscale)
+
+    def relativestatssentence(self, userdata):
+        return (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
+                f"To {userdata.nickname}, {self.article} {self.name} looks ") \
+            + self.getStatsSentence(userdata.viewscale, userdata.unitsystem)
 
     def relativestatsembed(self, userdata):
         embed = self.getStatsEmbed(userdata.viewscale)
