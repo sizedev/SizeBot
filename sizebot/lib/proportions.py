@@ -440,15 +440,15 @@ class PersonStats:
     def __str__(self):
         returnstr = f"**{self.tag} Stats:**\n"
         if self.averageheightmult < .1:
-            returnstr += f"*Current Height:*  {self.height:,.3mu} (1/{1/self.averageheightmult:,}x average height)\n"
+            returnstr += f"*Current Height:*  {self.height:,.3mu} (1:{1/self.averageheightmult:,}x average height)\n"
         elif self.averageheightmult < 1:
-            returnstr += f"*Current Height:*  {self.height:,.3mu} (1/{1/self.averageheightmult:,.1}x average height)\n"
+            returnstr += f"*Current Height:*  {self.height:,.3mu} (1:{1/self.averageheightmult:,.1}x average height)\n"
         else:
             returnstr += f"*Current Height:*  {self.height:,.3mu} ({self.averageheightmult:,.3}x average height)\n"
         if self.averageweightmult < .1:
-            returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1/{1/self.averageweightmult:,}x average weight)\n"
+            returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1:{1/self.averageweightmult:,}x average weight)\n"
         elif self.averageweightmult < 1:
-            returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1/{1/self.averageweightmult:,.1}x average weight)\n"
+            returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1:{1/self.averageweightmult:,.1}x average weight)\n"
         else:
             returnstr += f"*Current Weight:*  {self.weight:,.3mu} ({self.averageweightmult:,.3}x average weight)\n"
         returnstr += (f"\n"
@@ -482,15 +482,15 @@ class PersonStats:
         embed = discord.Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
         embed.set_author(name=f"SizeBot {__version__}")
         if self.averageheightmult < .1:
-            embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n(1/{1/self.averageheightmult:,}x average height)", inline=True)
+            embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n(1:{1/self.averageheightmult:,}x average height)", inline=True)
         elif self.averageheightmult < 1:
-            embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n(1/{1/self.averageheightmult:,.1}x average height)", inline=True)
+            embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n(1:{1/self.averageheightmult:,.1}x average height)", inline=True)
         else:
             embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({self.averageheightmult:,.3}x average height)", inline=True)
         if self.averageweightmult < .1:
-            embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n(1/{1/self.averageweightmult:,}x average weight)", inline=True)
+            embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n(1:{1/self.averageweightmult:,}x average weight)", inline=True)
         elif self.averageweightmult < 1:
-            embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n(1/{1/self.averageweightmult:,.1}x average weight)", inline=True)
+            embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n(1:{1/self.averageweightmult:,.1}x average weight)", inline=True)
         else:
             embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({self.averageweightmult:,.3}x average weight)", inline=True)
         embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
