@@ -10,34 +10,44 @@ objects = []
 
 
 class DigiObject:
-    def __init__(self, name, aliases=[], length=None, height=None, width=None, depth=None, weight=None):
+    def __init__(self, name, dimension, aliases=[], symbol = None, height = None, length = None,
+                 width = None, diameter = None, depth = None, thickness = None, weight = None):
+
         self.name = name
         self.namePlural = getPlural(name)
         self.singularNames = aliases + [self.name]
         self.aliases = aliases + [getPlural(a) for a in aliases]
         self.article = getIndefiniteArticle(self.name).split(" ")[0]
-        self.length = length and SV(length)
+        self.symbol = symbol
+
         self.height = height and SV(height)
+        self.length = length and SV(length)
         self.width = width and SV(width)
+        self.diameter = diameter and SV(diameter)
         self.depth = depth and SV(depth)
+        self.thickness = thickness and SV(thickness)
         self.weight = weight and WV(weight)
 
+        dimensionmap = {
+            "h": "height",
+            "l": "length",
+            "w": "width",
+            "d": "diameter",
+            "p": "depth",
+            "t": "thickness"
+        }
+
+        self.unitlength = getattr(self, dimensionmap[dimension])
+
     def addToUnits(self):
-        if self.length is not None:
-            SV.addUnit(Unit(factor=self.length, name=self.name, namePlural=self.namePlural, names=self.aliases))
-            SV.addSystemUnit("o", SystemUnit(self.name))
-        elif self.width is not None:
-            SV.addUnit(Unit(factor=self.width, name=self.name, namePlural=self.namePlural, names=self.aliases))
-            SV.addSystemUnit("o", SystemUnit(self.name))
-        elif self.height is not None:
-            SV.addUnit(Unit(factor=self.height, name=self.name, namePlural=self.namePlural, names=self.aliases))
-            SV.addSystemUnit("o", SystemUnit(self.name))
-        elif self.depth is not None:
-            SV.addUnit(Unit(factor=self.depth, name=self.name, namePlural=self.namePlural, names=self.aliases))
+        if self.unitlength is not None:
+            SV.addUnit(Unit(factor=self.unitlength, name=self.name, namePlural=self.namePlural,
+                            names=self.aliases, symbol = self.symbol))
             SV.addSystemUnit("o", SystemUnit(self.name))
 
         if self.weight is not None:
-            WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural, names=self.aliases))
+            WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural,
+                            names=self.aliases, symbol = self.symbol))
             WV.addSystemUnit("o", SystemUnit(self.name))
 
     def __eq__(self, other):
