@@ -85,7 +85,7 @@ class StatsCog(commands.Cog):
         Get a single stat about yourself, a user, or a raw height.
 
         Available stats are: height, weight, foot/feet/shoe, toe, shoeprint/footprint,
-        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair,
+        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair, tail,
         speed/walk/run, base/baseheight/baseweight, compare/look, scale/multiplier/mult.
 
         Examples:
