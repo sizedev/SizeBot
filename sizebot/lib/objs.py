@@ -124,7 +124,7 @@ class DigiObject:
 
     def relativestatsembed(self, userdata):
         embed = self.getStatsEmbed(userdata.viewscale)
-        embed.title = self.name + "*[relative]*"
+        embed.title = self.name + " *[relative]*"
         embed.description = (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
                              f"To {userdata.nickname}, {self.article} {self.name} looks...\n")
         return embed
