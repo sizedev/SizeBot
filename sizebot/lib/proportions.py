@@ -423,7 +423,7 @@ class PersonStats:
         }
         if self.scale < .1:
             returndict["scale"] = f" is **{self.scale:,.3}x** normal height, or ~**1:{1/self.scale:,.0}**."
-        if self.scale < 1:
+        elif self.scale < 1:
             returndict["scale"] = f" is **{self.scale:,.3}x** normal height, or ~**1:{1/self.scale:,.1}**."
         else:
             returndict["scale"] = f" is **{self.scale:,.3}x** normal height."
