@@ -127,8 +127,8 @@ class DigiObject:
         embed.title = self.name + " *[relative]*"
         embed.set_author(name = f"SizeBot {__version__}")
         embed.description = (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
-                             f"To {userdata.nickname}, {self.article} {self.name} looks...\n"
-                             f"\n") + self.getStats(userdata.viewscale)
+                             f"To {userdata.nickname}, {self.article} {self.name} looks...\n") \
+            + self.getStats(userdata.viewscale)
         return embed
 
     def __eq__(self, other):
