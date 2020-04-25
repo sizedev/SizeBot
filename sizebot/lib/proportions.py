@@ -356,8 +356,10 @@ class PersonStats:
         self.baseheight = userdata.baseheight
         self.viewscale = userdata.viewscale
         self.scale = userdata.scale
+        self.formattedscale = userdata.getFormattedScale(verbose = True)
         self.baseweight = userdata.baseweight
         self.weight = userdata.weight
+        self.formattedweightscale = userdata.getFormattedScale(scaletype = "weight", verbose = True)
 
         self.averageheightmult = self.height / defaultheight
         self.averageweightmult = self.weight / defaultweight
@@ -419,14 +421,9 @@ class PersonStats:
             "eye": f"'s eye is **{self.eyewidth:,.3mu}** wide.",
             "speed": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), and runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour).",
             "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
-            "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**."
+            "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
+            "scale": f" is **{self.formattedscale}** their base height."
         }
-        if self.scale < .1:
-            returndict["scale"] = f" is **{self.scale:,.3}x** normal height, or ~**1:{1/self.scale:,.0}**."
-        elif self.scale < 1:
-            returndict["scale"] = f" is **{self.scale:,.3}x** normal height, or ~**1:{1/self.scale:,.1}**."
-        else:
-            returndict["scale"] = f" is **{self.scale:,.3}x** normal height."
         if self.hairlength:
             returndict["hair"] = f"'s hair is **{self.hairlength:,.3mu}** long."
         if self.taillength:
@@ -438,29 +435,20 @@ class PersonStats:
         return returndict.get(stat)
 
     def __str__(self):
-        returnstr = f"**{self.tag} Stats:**\n"
-        if self.averageheightmult < .1:
-            returnstr += f"*Current Height:*  {self.height:,.3mu} (1:{1/self.averageheightmult:,.0} average height)\n"
-        elif self.averageheightmult < 1:
-            returnstr += f"*Current Height:*  {self.height:,.3mu} (1:{1/self.averageheightmult:,.1} average height)\n"
-        else:
-            returnstr += f"*Current Height:*  {self.height:,.3mu} ({self.averageheightmult:,.3}x average height)\n"
-        if self.averageweightmult < .1:
-            returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1:{1/self.averageweightmult:,.0}x average weight)\n"
-        elif self.averageweightmult < 1:
-            returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1:{1/self.averageweightmult:,.1}x average weight)\n"
-        else:
-            returnstr += f"*Current Weight:*  {self.weight:,.3mu} ({self.averageweightmult:,.3}x average weight)\n"
-        returnstr += (f"\n"
-                      f"Foot Length: {self.footlength:,.3mu} ({self.shoesize})\n"
-                      f"Foot Width: {self.footwidth:,.3mu}\n"
-                      f"Toe Height: {self.toeheight:,.3mu}\n"
-                      f"Shoeprint Depth: {self.shoeprintdepth:,.3mu}\n"
-                      f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
-                      f"Thumb Width: {self.thumbwidth:,.3mu}\n"
-                      f"Nail Thickness: {self.nailthickness:,.3mu}\n"
-                      f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
-                      f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n")
+        returnstr = (
+            f"**{self.tag} Stats:**\n"
+            f"*Current Height:*  {self.height:,.3mu} *{self.formattedscale} scale*\n"
+            f"*Current Weight:*  {self.weight:,.3mu} *{self.formattedweightscale} scale*\n"
+            f"\n"
+            f"Foot Length: {self.footlength:,.3mu} ({self.shoesize})\n"
+            f"Foot Width: {self.footwidth:,.3mu}\n"
+            f"Toe Height: {self.toeheight:,.3mu}\n"
+            f"Shoeprint Depth: {self.shoeprintdepth:,.3mu}\n"
+            f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
+            f"Thumb Width: {self.thumbwidth:,.3mu}\n"
+            f"Nail Thickness: {self.nailthickness:,.3mu}\n"
+            f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
+            f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n")
         if self.hairlength:
             returnstr += f"Hair Length: {self.hairlength:,.3mu}\n"
         if self.taillength:
@@ -481,18 +469,8 @@ class PersonStats:
     def toEmbed(self):
         embed = discord.Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
         embed.set_author(name=f"SizeBot {__version__}")
-        if self.averageheightmult < .1:
-            embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n(1:{1/self.averageheightmult:,} average height)", inline=True)
-        elif self.averageheightmult < 1:
-            embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n(1:{1/self.averageheightmult:,.1} average height)", inline=True)
-        else:
-            embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n({self.averageheightmult:,.3}x average height)", inline=True)
-        if self.averageweightmult < .1:
-            embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n(1:{1/self.averageweightmult:,}x average weight)", inline=True)
-        elif self.averageweightmult < 1:
-            embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n(1:{1/self.averageweightmult:,.1}x average weight)", inline=True)
-        else:
-            embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n({self.averageweightmult:,.3}x average weight)", inline=True)
+        embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n*{self.formattedscale} scale*", inline=True)
+        embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n*{self.formattedweightscale} scale*", inline=True)
         embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)

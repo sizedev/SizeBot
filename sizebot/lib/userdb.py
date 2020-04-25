@@ -1,6 +1,7 @@
-from copy import copy
 import json
+from copy import copy
 from functools import total_ordering
+from typing import Literal
 
 from sizebot import conf
 from sizebot.lib import errors
@@ -154,6 +155,15 @@ class User:
         """Scale the user height to match the scale"""
         self.height = SV(self.baseheight * scale)
 
+    def formattedscale(self):
+        """For printing scale in strings."""
+        if self.scale < 0.1:
+            return f"1:{1/self.scale:,.0}"
+        elif self.scale < 1:
+            return f"1:{1/self.scale:,.1}"
+        else:
+            return f"{self.scale:,.3}x"
+
     @property
     def tag(self):
         if self.id is not None:
@@ -162,7 +172,39 @@ class User:
             tag = self.nickname
         return tag
 
+    def getFormattedScale(self, scaletype: Literal["height", "weight"] = "height", verbose = False):
+        if scaletype == "height":
+            reversescale = 1 / self.scale
+            if reversescale > 10:
+                if verbose:
+                    return f"{self.scale:,.3}x (1:{reversescale:,.0})"
+                else:
+                    return f"1:{reversescale:,.0}"
+            elif reversescale > 1:
+                if verbose:
+                    return f"{self.scale:,.3}x (1:{reversescale:,.1})"
+                else:
+                    return f"1:{reversescale:,.1}"
+            else:
+                return f"{self.scale:,.3}x"
+        elif scaletype == "weight":
+            weightscale = self.scale ** 3
+            reverseweightscale = 1 / weightscale
+            if reverseweightscale > 10:
+                if verbose:
+                    return f"{weightscale:,.3}x (1:{reverseweightscale:,.0})"
+                else:
+                    return f"1:{reverseweightscale:,.0}"
+            elif reverseweightscale > 1:
+                if verbose:
+                    return f"{weightscale:,.3}x (1:{reverseweightscale:,.1})"
+                else:
+                    return f"1:{reverseweightscale:,.1}"
+            else:
+                return f"{weightscale:,.3}x"
+
     # Act like an array for legacy usage
+    # TODO: Deprecated? I don't think this is used.
 
     def __getitem__(self, key):
         attrname = DEPRECATED_NAME_MAP[key]
@@ -194,7 +236,7 @@ class User:
     @classmethod
     def fromJSON(cls, jsondata):
         userdata = User()
-        userdata.guildid = jsondata.get("guildid", 350429009730994199)
+        userdata.guildid = jsondata.get("guildid", 350429009730994199)  # Default to Size Matters.
         userdata.id = jsondata["id"]
         userdata.nickname = jsondata["nickname"]
         userdata.gender = jsondata.get("gender")
