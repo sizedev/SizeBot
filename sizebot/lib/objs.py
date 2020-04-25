@@ -61,20 +61,20 @@ class DigiObject:
     def getStats(self, multiplier = 1):
         returnstr = ""
         if self.height:
-            returnstr += f"{emojis.blank}{SV(self.height * multiplier):,.3mu} tall\n"
+            returnstr += f"{emojis.blank}**{SV(self.height * multiplier):,.3mu}** tall\n"
         if self.length:
-            returnstr += f"{emojis.blank}{SV(self.length * multiplier):,.3mu} long\n"
+            returnstr += f"{emojis.blank}**{SV(self.length * multiplier):,.3mu}** long\n"
         if self.width:
-            returnstr += f"{emojis.blank}{SV(self.width * multiplier):,.3mu} wide\n"
+            returnstr += f"{emojis.blank}**{SV(self.width * multiplier):,.3mu}** wide\n"
         if self.diameter:
-            returnstr += f"{emojis.blank}{SV(self.diameter * multiplier):,.3mu} across\n"
+            returnstr += f"{emojis.blank}**{SV(self.diameter * multiplier):,.3mu}** across\n"
         if self.depth:
-            returnstr += f"{emojis.blank}{SV(self.depth * multiplier):,.3mu} deep\n"
+            returnstr += f"{emojis.blank}**{SV(self.depth * multiplier):,.3mu}** deep\n"
         if self.thickness:
-            returnstr += f"{emojis.blank}{SV(self.depth * multiplier):,.3mu} thick\n"
+            returnstr += f"{emojis.blank}**{SV(self.depth * multiplier):,.3mu}** thick\n"
         if self.weight:
             returnstr += "and weighs...\n"
-            returnstr += f"{emojis.blank}{WV(self.weight * (multiplier ** 3)):,.3mu}"
+            returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
         return returnstr
 
     def getStatsEmbed(self, multiplier = 1):
@@ -83,25 +83,25 @@ class DigiObject:
 
         if self.height:
             embed.add_field(name = "Height",
-                            value = f"{SV(self.height * multiplier):,.3mu}\n")
+                            value = f"**{SV(self.height * multiplier):,.3mu}** tall\n")
         if self.length:
             embed.add_field(name = "Length",
-                            value = f"{SV(self.length * multiplier):,.3mu}\n")
+                            value = f"**{SV(self.length * multiplier):,.3mu}** long\n")
         if self.width:
             embed.add_field(name = "Width",
-                            value = f"{SV(self.width * multiplier):,.3mu}\n")
+                            value = f"**{SV(self.width * multiplier):,.3mu}** wide\n")
         if self.diameter:
             embed.add_field(name = "Diameter",
-                            value = f"{SV(self.diameter * multiplier):,.3mu}\n")
+                            value = f"**{SV(self.diameter * multiplier):,.3mu}** across\n")
         if self.depth:
             embed.add_field(name = "Depth",
-                            value = f"{SV(self.depth * multiplier):,.3mu}\n")
+                            value = f"**{SV(self.depth * multiplier):,.3mu}** deep\n")
         if self.thickness:
             embed.add_field(name = "Thickness",
-                            value = f"{SV(self.depth * multiplier):,.3mu}\n")
+                            value = f"**{SV(self.depth * multiplier):,.3mu}** thick\n")
         if self.weight:
             embed.add_field(name = "Weight",
-                            value = f"{WV(self.weight * (multiplier ** 3)):,.3mu}")
+                            value = f"**{WV(self.weight * (multiplier ** 3)):,.3mu}**")
 
         if self.image:
             embed.set_image(self.image)
