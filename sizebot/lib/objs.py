@@ -3,6 +3,7 @@ import json
 
 import sizebot.data
 from sizebot.lib import errors
+from sizebot.lib.constants import emojis
 from sizebot.lib.language import getPlural, getIndefiniteArticle
 from sizebot.lib.units import SV, WV, Unit, SystemUnit
 
@@ -49,6 +50,33 @@ class DigiObject:
             WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural,
                             names=self.aliases, symbol = self.symbol))
             WV.addSystemUnit("o", SystemUnit(self.name))
+
+    def getStats(self, multiplier = 1):
+        returnstr = ""
+        if self.height:
+            returnstr += f"{emojis.blank}{SV(self.height * multiplier):,.3mu} tall\n"
+        if self.length:
+            returnstr += f"{emojis.blank}{SV(self.length * multiplier):,.3mu} long\n"
+        if self.width:
+            returnstr += f"{emojis.blank}{SV(self.width * multiplier):,.3mu} wide\n"
+        if self.diameter:
+            returnstr += f"{emojis.blank}{SV(self.diameter * multiplier):,.3mu} across\n"
+        if self.depth:
+            returnstr += f"{emojis.blank}{SV(self.depth * multiplier):,.3mu} deep\n"
+        if self.thickness:
+            returnstr += f"{emojis.blank}{SV(self.depth * multiplier):,.3mu} thick\n"
+        if self.weight:
+            returnstr += "and weighs...\n"
+            returnstr += f"{emojis.blank}{WV(self.weight * (multiplier ** 3)):,.3mu}"
+        return returnstr
+
+    def stats(self):
+        return f"{self.article.capitalize()} {self.name} is...\n" + self.getStats()
+
+    def relativestats(self, userdata):
+        return (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
+                f"To {userdata.nickname}, {self.article} {self.name} looks...\n") \
+            + self.getStats(userdata.viewscale)
 
     def __eq__(self, other):
         if isinstance(other, str):
