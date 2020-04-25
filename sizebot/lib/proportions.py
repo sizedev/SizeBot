@@ -201,7 +201,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         returnstr += (
             f"\tHair Width: {self.bigToSmall.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.bigToSmall.eyewidth:,.3mu}\n"
-            f"\tWalk Speed: {self.bigToSmall.walkperhour,:.3mu}\n"
+            f"\tWalk Speed: {self.bigToSmall.walkperhour:,.3mu}\n"
             f"\tRun Speed: {self.bigToSmall.runperhour:,.3mu}\n"
             "\n"
             f"{self.big.tag} is {self.multiplier:,.3}x taller than {self.small.tag}.\n"
