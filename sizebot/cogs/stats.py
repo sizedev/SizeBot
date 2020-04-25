@@ -114,6 +114,7 @@ class StatsCog(commands.Cog):
             "eye":         "eye",
             "eyes":        "eye",
             "hair":        "hair",
+            "tail":        "tail",
             "speed":       "speed",
             "walk":        "speed",
             "run":         "speed",

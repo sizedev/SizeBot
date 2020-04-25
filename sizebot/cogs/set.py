@@ -312,6 +312,36 @@ class SetCog(commands.Cog):
         await ctx.send("<@{ctx.author.id}>'s hair length is now default.")
 
     @commandsplus.command(
+        usage = "<length>"
+    )
+    @commands.guild_only()
+    async def settail(self, ctx, *, newtail):
+        """Set a custom tail length."""
+        newtailsv = SV.parse(newtail)
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.taillength = newtailsv
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s tail is now {userdata.taillength:m} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
+
+    @commandsplus.command(
+        aliases = ["cleartail", "unsettail"]
+    )
+    @commands.guild_only()
+    async def resettail(self, ctx):
+        """Remove custom tail length."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.taillength = None
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom tail length.")
+        await ctx.send("<@{ctx.author.id}>'s tail length is now default.")
+
+    @commandsplus.command(
         usage = "<male/female/none>"
     )
     @commands.guild_only()

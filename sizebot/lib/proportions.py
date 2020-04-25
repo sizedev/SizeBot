@@ -196,6 +196,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"\tClothing Thread Thickness: {self.bigToSmall.threadthickness:,.3mu}\n")
         if self.bigToSmall.hairlength:
             returnstr += f"\tHair Length: {self.bigToSmall.hairlength:,.3mu}\n"
+        if self.bigToSmall.taillength:
+            returnstr += f"\tTail Length: {self.bigToSmall.taillength:,.3mu}\n"
         returnstr += (
             f"\tHair Width: {self.bigToSmall.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.bigToSmall.eyewidth:,.3mu}\n"
@@ -221,6 +223,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"\tClothing Thread Thickness: {self.smallToBig.threadthickness:,.3mu}\n")
         if self.smallToBig.hairlength:
             returnstr += f"\tHair Length: {self.smallToBig.hairlength:,.3mu}\n"
+        if self.smallToBig.taillength:
+            returnstr += f"\tHair Length: {self.smallToBig.taillength:,.3mu}\n"
         returnstr += (
             f"\tHair Width: {self.smallToBig.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.smallToBig.eyewidth:,.3mu}\n"
@@ -287,6 +291,14 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
                 hairfield += f"{emojis.comparebig}{self.smallToBig.hairlength:,.3mu}\n"
             hairfield = hairfield.strip()
             embed.add_field(name="Hair Length", value=hairfield, inline=True)
+        if self.bigToSmall.taillength or self.smallToBig.hairlength:
+            tailfield = ""
+            if self.bigToSmall.taillength:
+                tailfield += f"{emojis.comparebig}{self.bigToSmall.taillength:,.3mu}\n"
+            if self.smallToBig.taillength:
+                tailfield += f"{emojis.comparebig}{self.smallToBig.taillength:,.3mu}\n"
+            tailfield = tailfield.strip()
+            embed.add_field(name="Tail Length", value=tailfield, inline=True)
         embed.add_field(name="Hair Width", value=(
             f"{emojis.comparebig}{self.bigToSmall.hairwidth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.hairwidth:,.3mu}"), inline=True)
@@ -355,6 +367,11 @@ class PersonStats:
         else:
             self.hairlength = SV(userdata.hairlength / self.viewscale)
 
+        if userdata.taillength is None:
+            self.taillength = None
+        else:
+            self.taillength = SV(userdata.taillength / self.viewscale)
+
         if userdata.footlength is None:
             self.footlength = SV(self.height * self.footfactor)
         else:
@@ -410,6 +427,8 @@ class PersonStats:
             returndict["scale"] = f" is **{self.scale:,.3}x** normal height."
         if self.hairlength:
             returndict["hair"] = f"'s hair is **{self.hairlength:,.3mu}** long."
+        if self.taillength:
+            returndict["tail"] = f"'s tail is **{self.taillength:,.3mu}** long."
 
         for k, v in returndict.items():
             returndict[k] = self.tag + v
@@ -433,6 +452,8 @@ class PersonStats:
             f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n")
         if self.hairlength:
             returnstr += f"Hair Length: {self.hairlength:,.3mu}\n"
+        if self.taillength:
+            returnstr += f"Tail Length: {self.taillength:,.3mu}\n"
         returnstr += (
             f"Hair Width: {self.hairwidth:,.3mu}\n"
             f"Eye Width: {self.eyewidth:,.3mu}\n"
@@ -462,6 +483,8 @@ class PersonStats:
         embed.add_field(name="Clothing Thread Thickness", value=format(self.threadthickness, ",.3mu"), inline=True)
         if self.hairlength:
             embed.add_field(name="Hair Length", value=format(self.hairlength, ",.3mu"), inline=True)
+        if self.taillength:
+            embed.add_field(name="Tail Length", value=format(self.taillength, ",.3mu"), inline=True)
         embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)", inline=True)

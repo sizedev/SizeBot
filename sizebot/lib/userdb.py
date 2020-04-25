@@ -11,6 +11,7 @@ defaultheight = SV("1.754")  # meters
 defaultweight = WV("66760")  # grams
 
 # Map the deprecated user array constants to the new names
+# TODO: This is used never, I think?
 #                      NICK        DISP       CHEI      BHEI          BWEI          UNIT          SPEC
 DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweight", "unitsystem", "species"]
 
@@ -18,7 +19,7 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 @total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["guildid", "id", "nickname", "_gender", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_hairlength", "_unitsystem", "species"]
+    __slots__ = ["guildid", "id", "nickname", "_gender", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem", "species"]
 
     def __init__(self):
         self.guildid = None
@@ -31,11 +32,12 @@ class User:
         self._baseweight = defaultweight
         self._footlength = None
         self._hairlength = None
+        self._taillength = None
         self._unitsystem = "m"
         self.species = None
 
     def __str__(self):
-        return f"GUILDID {self.guildid}, ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, HAIR {self.hairlength}, UNIT {self.unitsystem}, SPEC {self.species}"
+        return f"GUILDID {self.guildid}, ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, HAIR {self.hairlength}, TAIL {self.taillength}, UNIT {self.unitsystem}, SPEC {self.species}"
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
@@ -75,6 +77,17 @@ class User:
             self._hairlength = None
             return
         self._hairlength = SV(max(0, SV(value)))
+
+    @property
+    def taillength(self):
+        return self._taillength
+
+    @taillength.setter
+    def taillength(self, value):
+        if value is None:
+            self._taillength = None
+            return
+        self._taillength = SV(max(0, SV(value)))
 
     @property
     def gender(self):
@@ -172,6 +185,7 @@ class User:
             "baseweight": str(self.baseweight),
             "footlength": None if self.footlength is None else str(self.footlength),
             "hairlength": None if self.hairlength is None else str(self.hairlength),
+            "taillength": None if self.taillength is None else str(self.taillength),
             "unitsystem": self.unitsystem,
             "species": self.species
         }
@@ -190,6 +204,7 @@ class User:
         userdata.baseweight = jsondata["baseweight"]
         userdata.footlength = jsondata.get("footlength")
         userdata.hairlength = jsondata.get("hairlength")
+        userdata.taillength = jsondata.get("taillength")
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         return userdata
