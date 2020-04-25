@@ -122,7 +122,8 @@ class EdgeCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["smallest"],
-        usage = "[user]"
+        usage = "[user]",
+        hidden = True
     )
     @is_mod()
     async def setsmallest(self, ctx, *, member: discord.Member):
@@ -136,7 +137,8 @@ class EdgeCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["largest"],
-        usage = "[user]"
+        usage = "[user]",
+        hidden = True
     )
     @is_mod()
     async def setlargest(self, ctx, *, member: discord.Member):
@@ -149,7 +151,8 @@ class EdgeCog(commands.Cog):
         logger.info(f"{member.name} ({member.id}) is now the largest user.")
 
     @commandsplus.command(
-        aliases = ["resetsmallest", "removesmallest"]
+        aliases = ["resetsmallest", "removesmallest"],
+        hidden = True
     )
     @is_mod()
     async def clearsmallest(self, ctx):
@@ -162,7 +165,8 @@ class EdgeCog(commands.Cog):
         logger.info("Smallest user unset.")
 
     @commandsplus.command(
-        aliases = ["resetlargest", "removelargest"]
+        aliases = ["resetlargest", "removelargest"],
+        hidden = True
     )
     @is_mod()
     async def clearlargest(self, ctx):
