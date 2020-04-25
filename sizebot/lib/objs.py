@@ -1,6 +1,8 @@
 import importlib.resources as pkg_resources
 import json
 
+import discord
+
 import sizebot.data
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
@@ -69,6 +71,33 @@ class DigiObject:
             returnstr += "and weighs...\n"
             returnstr += f"{emojis.blank}{WV(self.weight * (multiplier ** 3)):,.3mu}"
         return returnstr
+
+    def getStatsEmbed(self, multiplier = 1):
+        embed = discord.Embed()
+
+        if self.height:
+            embed.add_field(name = "Height",
+                            value = f"{SV(self.height * multiplier):,.3mu}\n")
+        if self.length:
+            embed.add_field(name = "Length",
+                            value = f"{SV(self.length * multiplier):,.3mu}\n")
+        if self.width:
+            embed.add_field(name = "Width",
+                            value = f"{SV(self.width * multiplier):,.3mu}\n")
+        if self.diameter:
+            embed.add_field(name = "Diameter",
+                            value = f"{SV(self.diameter * multiplier):,.3mu}\n")
+        if self.depth:
+            embed.add_field(name = "Depth",
+                            value = f"{SV(self.depth * multiplier):,.3mu}\n")
+        if self.thickness:
+            embed.add_field(name = "Thickness",
+                            value = f"{SV(self.depth * multiplier):,.3mu}\n")
+        if self.weight:
+            embed.add_field(name = "Weight",
+                            value = f"{WV(self.weight * (multiplier ** 3)):,.3mu}")
+
+        return embed
 
     def stats(self):
         return f"{self.article.capitalize()} {self.name} is...\n" + self.getStats()
