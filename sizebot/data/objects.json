@@ -461,14 +461,15 @@
         ]
     },
     {
-        "name": "Nintendo Entertainment System",
+        "name": "Nintendo Entertainment System™",
         "dimension": "h",
         "height": "0.0889",
         "width": "0.256",
         "depth": "0.2032",
         "weight": "400",
         "aliases": [
-            "NES"
+            "NES",
+            "nintendo entertainment system"
         ]
     },
     {
@@ -496,12 +497,13 @@
         ]
     },
     {
-        "name": "Joy-Con",
+        "name": "Joy-Con™",
         "dimension": "l",
         "length": "0.1016",
         "weight": "50.603899",
         "aliases": [
-            "joycon"
+            "joycon",
+            "joy-con"
         ]
     },
     {
@@ -534,14 +536,15 @@
         "weight": "34"
     },
     {
-        "name": "Nintendo Gamecube",
+        "name": "Nintendo Gamecube™",
         "dimension": "h",
         "height": "0.11",
         "length": "0.161",
         "width": "0.15",
         "weight": "2400",
         "aliases": [
-            "gamecube"
+            "gamecube",
+            "nintendo gamecube"
         ]
     },
     {
@@ -575,18 +578,20 @@
         ]
     },
     {
-        "name": "Nintendo DS Lite",
+        "name": "Nintendo DS Lite™",
         "dimension": "w",
         "length": "0.0739",
         "width": "0.133",
         "weight": "218",
         "aliases": [
             "nintendo ds",
-            "ds"
+            "ds",
+            "ds lite",
+            "nintendo ds lite"
         ]
     },
     {
-        "name": "Apple iPhone XS",
+        "name": "Apple iPhone XS™",
         "dimension": "l",
         "length": "0.143",
         "width": "0.0709",
@@ -595,7 +600,10 @@
         "aliases": [
             "iPhone",
             "phone",
-            "cell phone"
+            "cell phone",
+            "iPhone XS",
+            "Apple iPhone",
+            "Apple iPhone XS"
         ]
     },
     {
@@ -684,7 +692,7 @@
         "weight": "4.72492052"
     },
     {
-        "name": "Nintendo Switch",
+        "name": "Nintendo Switch™",
         "dimension": "w",
         "length": "0.102",
         "width": "0.239",
@@ -735,12 +743,13 @@
         ]
     },
     {
-        "name": "Barbie",
+        "name": "Barbie™",
         "dimension": "h",
         "height": "0.2921",
         "weight": "205.534",
         "aliases": [
-            "doll"
+            "doll",
+            "Barbie"
         ]
     },
     {
@@ -753,28 +762,37 @@
         ]
     },
     {
-        "name": "Pringles can",
+        "name": "Pringles™ can",
         "dimension": "h",
         "height": "0.3",
         "weight": "149",
         "aliases": [
             "chip can",
             "chip tube",
-            "Pringles tube"
+            "Pringles tube",
+            "Pringles can"
         ]
     },
     {
-        "name": "medium Domino's pizza",
+        "name": "medium Dominos™ pizza",
         "dimension": "d",
         "diameter": "0.3",
         "aliases": [
-            "pizza"
+            "pizza",
+            "medium pizza",
+            "Dominos pizza",
+            "medium Dominos pizza"
         ]
     },
     {
         "name": "Subway Footlong™",
         "dimension": "l",
-        "length": "0.3048"
+        "length": "0.3048",
+        "aliases": [
+            "footlong",
+            "subway footlong",
+            "sub"
+        ]
     },
     {
         "name": "Pikachu",
