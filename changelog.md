@@ -28,6 +28,7 @@
     - To look at an object, use `&lookat <object>`, e.g.: `&lookat lego brick`
     - To look at a person, use `&lookat <@user>`, e.g.: `&lookat @Kelly`
     - To look at a raw height (interpreted as a person), use `&lookat <height>`, e.g.: `&lookat 5'11`
+- Added a new command, `&objstats`, to get the raw stats about an object.
 - Added the ability for administrators to set "edge" users, one "smallest" and one "largest", whose size will be auto-set to be the lowest or highest on the server.
     - Use `&edges` to see who is currently set to be the edge users.
     - Administrators can use `&setsmallest <@user>` and `&setlargest <@user>` to set the edge users, and `&clearsmallest` and `&clearlargest` to remove them.
