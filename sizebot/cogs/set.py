@@ -279,7 +279,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom foot length.")
-        await ctx.send("<@{ctx.author.id}>'s foot length is now default.")
+        await ctx.send(f"<@{ctx.author.id}>'s foot length is now default.")
 
     @commandsplus.command(
         usage = "<length>"
@@ -309,7 +309,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom hair length.")
-        await ctx.send("<@{ctx.author.id}>'s hair length is now default.")
+        await ctx.send(f"<@{ctx.author.id}>'s hair length is now default.")
 
     @commandsplus.command(
         usage = "<length>"
@@ -339,7 +339,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom tail length.")
-        await ctx.send("<@{ctx.author.id}>'s tail length is now default.")
+        await ctx.send(f"<@{ctx.author.id}>'s tail length is now default.")
 
     @commandsplus.command(
         usage = "<male/female/none>"
