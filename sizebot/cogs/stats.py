@@ -261,6 +261,40 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = embedtosend)
 
     @commandsplus.command(
+        usage = "[object]",
+        hidden = True
+    )
+    @commands.guild_only()
+    async def lookattxt(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):
+        """See what an object looks like to you.
+
+        Used to see how an object would look at your scale.
+        Examples:
+        `&lookattxt man`"""
+
+        userdata = getUserdata(ctx.author)
+        userstats = proportions.PersonStats(userdata)
+
+        if isinstance(what, DigiObject):
+            oc = what.relativestats(userdata)
+            await ctx.send(oc)
+            logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
+            return
+        elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare.
+            compdata = getUserdata(what, "Raw")
+            logger.info(f"{ctx.author.display_name} looked at {what}.")
+        elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
+            compheight = userstats.avgheightcomp
+            compdata = getUserdata(compheight)
+        else:
+            await ctx.send(f"`{what}` is not a valid object, member, or height.")
+            logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
+            return
+        stats = proportions.PersonComparison(userdata, compdata)
+        statstosend = str(stats)
+        await ctx.send(statstosend)
+
+    @commandsplus.command(
         aliases = ["objectstats"],
         usage = "[object]"
     )
@@ -275,6 +309,22 @@ class StatsCog(commands.Cog):
             return
 
         await ctx.send(embed = what.statsembed())
+
+    @commandsplus.command(
+        usage = "[object]",
+        hidden = True
+    )
+    async def objstatstxt(self, ctx, *, what: typing.Union[DigiObject, str]):
+        """Get stats about an object. (text version)
+
+        Example:
+        `&objstatstxt book`"""
+
+        if isinstance(what, str):
+            await ctx.send(f"`{what}` is not a valid object.")
+            return
+
+        await ctx.send(what.stats())
 
 
 def getUserdata(memberOrSV, nickname = "Raw"):
