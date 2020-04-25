@@ -146,8 +146,8 @@ class DigiObject:
             + self.getStats(userdata.viewscale)
 
     def relativestatssentence(self, userdata):
-        return (f"{userdata.nickname} is {userdata.height:,.3{userdata.unitsystem}} tall.\n"
-                f"To them, {self.article} {self.name} looks ") \
+        return (f"{userdata.nickname} is {userdata.height:,.3{userdata.unitsystem}} tall."
+                f" To them, {self.article} {self.name} looks ") \
             + self.getStatsSentence(userdata.viewscale, userdata.unitsystem)
 
     def relativestatsembed(self, userdata):
