@@ -200,10 +200,10 @@ class StatsCog(commands.Cog):
         logger.info(f"Compared {userdata1} and {userdata2}")
 
     @commandsplus.command(
-        aliases = ["objectcompare", "objcomp"]
+        aliases = ["natstats", "natstat"]
     )
     @commands.guild_only()
-    async def objcompare(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
+    async def naturalstats(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -224,11 +224,11 @@ class StatsCog(commands.Cog):
         logger.info(f"Sent object comparison for {userdata.nickname}.")
 
     @commandsplus.command(
-        aliases = ["look", "examine"],
-        usage = "[object]"
+        aliases = ["onewaycomp", "owc"],
+        usage = "[object/user]"
     )
     @commands.guild_only()
-    async def lookat(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):
+    async def onewaycompare(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):  # TODO: Allow a second argument here.
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -245,7 +245,7 @@ class StatsCog(commands.Cog):
             await ctx.send(embed = oc)
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
             return
-        elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare.
+        elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make one sided)
             compdata = getUserdata(what, "Raw")
             logger.info(f"{ctx.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
@@ -257,31 +257,31 @@ class StatsCog(commands.Cog):
             return
         stats = proportions.PersonComparison(userdata, compdata)
         embedtosend = stats.toEmbed()
-        if ctx.author.id != userdata.id:  # Future proofing for when you can do lookats for other people.
+        if ctx.author.id != userdata.id:  # Future proofing for when you can do owcs for other people.
             embedtosend.description = f"*Requested by *{ctx.author.display_name}*"
         await ctx.send(embed = embedtosend)
 
     @commandsplus.command(
-        usage = "[object]",
-        hidden = True
+        aliases = ["look", "examine"],
+        usage = "[object]"
     )
     @commands.guild_only()
-    async def lookattxt(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):
+    async def lookat(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
         Examples:
-        `&lookattxt man`"""
-
+        `&lookat man`
+        `&look book`
+        `&examine building`"""
         userdata = getUserdata(ctx.author)
         userstats = proportions.PersonStats(userdata)
 
         if isinstance(what, DigiObject):
-            oc = what.relativestats(userdata)
-            await ctx.send(oc)
+            la = what.relativestatssentence(userdata)
+            await ctx.send(la)
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
-            return
-        elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare.
+        elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
             compdata = getUserdata(what, "Raw")
             logger.info(f"{ctx.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
@@ -292,8 +292,8 @@ class StatsCog(commands.Cog):
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
-        statstosend = str(stats)
-        await ctx.send(statstosend)
+        embedtosend = stats.toEmbed()
+        await ctx.send(embed = embedtosend)
 
     @commandsplus.command(
         aliases = ["objectstats"],
