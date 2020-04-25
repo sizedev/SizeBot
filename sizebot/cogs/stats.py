@@ -281,6 +281,7 @@ class StatsCog(commands.Cog):
             la = what.relativestatssentence(userdata)
             await ctx.send(la)
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
+            return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
             compdata = getUserdata(what, "Raw")
             logger.info(f"{ctx.author.display_name} looked at {what}.")

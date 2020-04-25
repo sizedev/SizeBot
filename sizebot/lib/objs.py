@@ -94,7 +94,7 @@ class DigiObject:
         if self.thickness:
             statsstrings.append(f"{SV(self.thickness * multiplier):,.3{system}} thick")
         if self.weight:
-            statsstrings.append(f"weighs {SV(self.weight * multiplier):,.3{system}}")
+            statsstrings.append(f"weighs {WV(self.weight * multiplier ** 3):,.3{system}}")
 
         returnstr = " , ".join(statsstrings[:-1])
         returnstr += " , and " + statsstrings[-1]
