@@ -6,7 +6,6 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot.lib import proportions, userdb
-from sizebot.lib.look import ObjectComparison, ObjectStats
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV
 
@@ -241,8 +240,8 @@ class StatsCog(commands.Cog):
         userstats = proportions.PersonStats(userdata)
 
         if isinstance(what, DigiObject):
-            oc = ObjectComparison(userdata, what)
-            await ctx.send(f"{oc}")
+            oc = what.relativestatsembed(userdata)
+            await ctx.send(embed = oc)
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare.
@@ -275,7 +274,7 @@ class StatsCog(commands.Cog):
             await ctx.send(f"`{what}` is not a valid object.")
             return
 
-        await ctx.send(ObjectStats(what))
+        await ctx.send(embed = what.statsembed())
 
 
 def getUserdata(memberOrSV, nickname = "Raw"):
