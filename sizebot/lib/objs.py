@@ -4,6 +4,7 @@ import json
 import discord
 
 import sizebot.data
+from sizebot import __version__
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.language import getPlural, getIndefiniteArticle
@@ -42,6 +43,10 @@ class DigiObject:
 
         self.unitlength = getattr(self, dimensionmap[dimension])
 
+    @property
+    def image(self):
+        return None
+
     def addToUnits(self):
         if self.unitlength is not None:
             SV.addUnit(Unit(factor=self.unitlength, name=self.name, namePlural=self.namePlural,
@@ -74,6 +79,7 @@ class DigiObject:
 
     def getStatsEmbed(self, multiplier = 1):
         embed = discord.Embed()
+        embed.set_author(name = f"SizeBot {__version__}")
 
         if self.height:
             embed.add_field(name = "Height",
@@ -97,15 +103,30 @@ class DigiObject:
             embed.add_field(name = "Weight",
                             value = f"{WV(self.weight * (multiplier ** 3)):,.3mu}")
 
+        if self.image:
+            embed.set_image(self.image)
+
         return embed
 
     def stats(self):
         return f"{self.article.capitalize()} {self.name} is...\n" + self.getStats()
 
+    def statsembed(self):
+        embed = self.getStatsEmbed()
+        embed.title = self.name
+        return embed
+
     def relativestats(self, userdata):
         return (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
                 f"To {userdata.nickname}, {self.article} {self.name} looks...\n") \
             + self.getStats(userdata.viewscale)
+
+    def relativestatsembed(self, userdata):
+        embed = self.getStatsEmbed(userdata.viewscale)
+        embed.title = self.name + "*[relative]*"
+        embed.description = (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
+                             f"To {userdata.nickname}, {self.article} {self.name} looks...\n")
+        return embed
 
     def __eq__(self, other):
         if isinstance(other, str):
