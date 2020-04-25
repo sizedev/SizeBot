@@ -425,7 +425,7 @@ class PersonStats:
             f"Foot Length: {self.footlength:,.3mu} ({self.shoesize})\n"
             f"Foot Width: {self.footwidth:,.3mu}\n"
             f"Toe Height: {self.toeheight:,.3mu}\n"
-            f"Shoeprint Depth: {self.shoeprintdepth:,.3mu}"
+            f"Shoeprint Depth: {self.shoeprintdepth:,.3mu}\n"
             f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
             f"Thumb Width: {self.thumbwidth:,.3mu}\n"
             f"Nail Thickness: {self.nailthickness:,.3mu}\n"
