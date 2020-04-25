@@ -101,6 +101,7 @@ class ChangeCog(commands.Cog):
         randmult = round(random.randint(2, 20), 1)
         proportions.changeUser(guildid, userid, "multiply", randmult)
         await proportions.nickUpdate(ctx.author)
+        userdata = userdb.load(guildid, userid)
 
         # TODO: Randomize the italics message here
         await ctx.send(
@@ -121,6 +122,7 @@ class ChangeCog(commands.Cog):
         randmult = round(random.randint(2, 20), 1)
         proportions.changeUser(guildid, ctx.author.id, "divide", randmult)
         await proportions.nickUpdate(ctx.author)
+        userdata = userdb.load(guildid, userid)
 
         # TODO: Randomize the italics message here
         await ctx.send(
