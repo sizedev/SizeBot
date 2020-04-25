@@ -96,8 +96,8 @@ class DigiObject:
         if self.weight:
             statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
 
-        returnstr = " , ".join(statsstrings[:-1])
-        returnstr += " , and " + statsstrings[-1] + "."
+        returnstr = ", ".join(statsstrings[:-1])
+        returnstr += ", and " + statsstrings[-1] + "."
 
         return returnstr
 
@@ -146,8 +146,8 @@ class DigiObject:
             + self.getStats(userdata.viewscale)
 
     def relativestatssentence(self, userdata):
-        return (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
-                f"To {userdata.nickname}, {self.article} {self.name} looks ") \
+        return (f"{userdata.nickname} is {userdata.height:,.3{userdata.unitsystem}} tall.\n"
+                f"To them, {self.article} {self.name} looks ") \
             + self.getStatsSentence(userdata.viewscale, userdata.unitsystem)
 
     def relativestatsembed(self, userdata):
