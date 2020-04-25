@@ -40,6 +40,8 @@ class ObjectComparison:
 
 class ObjectStats:
     def __init__(self, obj):
+        self.obj = obj
+
         self.height = self.obj.height and SV(self.obj.height)
         self.length = self.obj.length and SV(self.obj.length)
         self.width = self.obj.width and SV(self.obj.width)
