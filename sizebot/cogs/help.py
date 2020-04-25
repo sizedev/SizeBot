@@ -57,8 +57,10 @@ class HelpCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commandsplus.command()
-    async def objects(self, ctx):
+    @commandsplus.command(
+        aliases = ["objects"]
+    )
+    async def objs(self, ctx):
         """Get a list of the various objects SizeBot accepts."""
         objectunits = []
         for obj in objs.objects:
