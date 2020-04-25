@@ -18,7 +18,7 @@ class DigiObject:
         self.singularNames = aliases + [self.name]
         self.aliases = aliases + [getPlural(a) for a in aliases]
         self.article = getIndefiniteArticle(self.name).split(" ")[0]
-        self.symbol = symbol
+        self.symbol = symbol or None
 
         self.height = height and SV(height)
         self.length = length and SV(length)
