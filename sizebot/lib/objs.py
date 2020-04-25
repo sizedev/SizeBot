@@ -45,6 +45,7 @@ class DigiObject:
 
     @property
     def image(self):
+        # TODO: See issue #153.
         return None
 
     def addToUnits(self):
