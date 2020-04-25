@@ -422,7 +422,7 @@ class PersonStats:
             "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**."
         }
         if self.scale < .1:
-            returndict["scale"] = f" is **{self.scale:,.3}x** normal height, or ~**1:{1/self.scale:,}**."
+            returndict["scale"] = f" is **{self.scale:,.3}x** normal height, or ~**1:{1/self.scale:,.0}**."
         if self.scale < 1:
             returndict["scale"] = f" is **{self.scale:,.3}x** normal height, or ~**1:{1/self.scale:,.1}**."
         else:
@@ -440,13 +440,13 @@ class PersonStats:
     def __str__(self):
         returnstr = f"**{self.tag} Stats:**\n"
         if self.averageheightmult < .1:
-            returnstr += f"*Current Height:*  {self.height:,.3mu} (1:{1/self.averageheightmult:,}x average height)\n"
+            returnstr += f"*Current Height:*  {self.height:,.3mu} (1:{1/self.averageheightmult:,.0}x average height)\n"
         elif self.averageheightmult < 1:
             returnstr += f"*Current Height:*  {self.height:,.3mu} (1:{1/self.averageheightmult:,.1}x average height)\n"
         else:
             returnstr += f"*Current Height:*  {self.height:,.3mu} ({self.averageheightmult:,.3}x average height)\n"
         if self.averageweightmult < .1:
-            returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1:{1/self.averageweightmult:,}x average weight)\n"
+            returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1:{1/self.averageweightmult:,.0}x average weight)\n"
         elif self.averageweightmult < 1:
             returnstr += f"*Current Weight:*  {self.weight:,.3mu} (1:{1/self.averageweightmult:,.1}x average weight)\n"
         else:
