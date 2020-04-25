@@ -7,7 +7,8 @@
     - Keeping your profiles on multiple servers synced to each other is not yet possible.
     - **NOTE:** *This is in beta stages, and is being rolled out slowly. Contact DigiDuncan if you are interested in having SizeBot on your server.*
 - Added customizable foot length with `&setfoot`. You can turn off custom foot length with `&resetfoot`.
-- Added customizable hair length with `&sethair`. You can turn off custom foot length with `&resethair`.
+- Added customizable hair length with `&sethair`. You can turn off custom hair length with `&resethair`.
+- Added customizable tail length with `&settail`. You can turn off custom tail length with `&resettail`.
 - Added shoeprint depth, nail thickness, clothing thread thickness, eye width, walk speed, run speed, and viewing angle to stats and comparisons.
 - Added a link to a visual comparison when using `&compare`.
 - Slow changes now support stop conditions, either a time or a size.
