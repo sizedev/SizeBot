@@ -228,7 +228,7 @@ class StatsCog(commands.Cog):
         usage = "[object/user]"
     )
     @commands.guild_only()
-    async def onewaycompare(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):  # TODO: Allow a second argument here.
+    async def onewaycompare(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str], who: typing.Union[discord.Member, SV] = None):  # TODO: Allow a second argument here.
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -237,7 +237,10 @@ class StatsCog(commands.Cog):
         `&look book`
         `&examine building`"""
 
-        userdata = getUserdata(ctx.author)
+        if who is None:
+            who = ctx.author
+
+        userdata = getUserdata(who)
         userstats = proportions.PersonStats(userdata)
 
         if isinstance(what, DigiObject):
@@ -274,6 +277,7 @@ class StatsCog(commands.Cog):
         `&lookat man`
         `&look book`
         `&examine building`"""
+
         userdata = getUserdata(ctx.author)
         userstats = proportions.PersonStats(userdata)
 
