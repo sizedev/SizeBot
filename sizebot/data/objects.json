@@ -1346,5 +1346,15 @@
         "aliases": [
             "black hole"
         ]
+    },
+    {
+        "name": "asprin",
+        "dimension": "d",
+        "diameter": "0.01397",
+        "weight": "0.317",
+        "aliases": [
+            "ibupofen",
+            "advil"
+        ]
     }
 ]
