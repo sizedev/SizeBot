@@ -30,7 +30,10 @@
         "name": "E. coli",
         "dimension": "l",
         "length": "0.000007",
-        "weight": "1E-12"
+        "weight": "1E-12",
+        "aliases": [
+            "bacteria"
+        ]
     },
     {
         "name": "red blood cell",
@@ -70,12 +73,14 @@
         "name": "pixel",
         "dimension": "h",
         "height": "0.0001801",
+        "width": "0.0001801",
         "symbol": "px"
     },
     {
         "name": "font point",
         "dimension": "h",
         "height": "0.000352778",
+        "width": "0.000352778",
         "symbol": "pt"
     },
     {
@@ -142,6 +147,7 @@
     {
         "name": "staple",
         "dimension": "l",
+        "height": "0.0035",
         "length": "0.01",
         "weight": "0.0323995"
     },
@@ -258,6 +264,7 @@
     {
         "name": "bottlecap",
         "dimension": "d",
+        "height": "0.00597",
         "diameter": "0.029718",
         "weight": "2",
         "aliases": [
@@ -269,6 +276,7 @@
         "dimension": "l",
         "length": "0.032",
         "width": "0.032",
+        "thickness": "0.0021",
         "weight": "2"
     },
     {
@@ -292,12 +300,14 @@
         "name": "tea light",
         "dimension": "h",
         "height": "0.038",
+        "diameter": "0.038",
         "weight": "9.071847"
     },
     {
         "name": "poker chip",
         "dimension": "d",
         "diameter": "0.039",
+        "thickness": "0.0033",
         "weight": "10"
     },
     {
@@ -377,6 +387,8 @@
         "name": "flash drive",
         "dimension": "l",
         "length": "0.0568",
+        "width": "0.0173",
+        "depth": "0.00905",
         "weight": "5.102914",
         "aliases": [
             "USB stick",
@@ -404,6 +416,7 @@
         "name": "toothpick",
         "dimension": "l",
         "length": "0.065",
+        "thickness": "0.005",
         "weight": "0.1"
     },
     {
@@ -433,12 +446,14 @@
         "dimension": "l",
         "length": "0.0762",
         "width": "0.0762",
+        "thickness": "0.0000762",
         "weight": "0.015"
     },
     {
         "name": "band-aid",
         "dimension": "l",
         "length": "0.0762",
+        "width": "0.01905",
         "weight": "0.48194189",
         "aliases": [
             "bandage"
@@ -448,6 +463,8 @@
         "name": "credit card",
         "dimension": "l",
         "length": "0.0856",
+        "width": "0.05398",
+        "thickness": "0.00076",
         "weight": "5"
     },
     {
@@ -455,6 +472,7 @@
         "dimension": "l",
         "length": "0.088",
         "width": "0.062",
+        "thickness": "0.000205",
         "weight": "1.8",
         "aliases": [
             "card"
@@ -482,6 +500,8 @@
         "name": "coffee mug",
         "dimension": "h",
         "height": "0.095",
+        "diameter": "0.082",
+        "depth": "0.091",
         "weight": "368.544",
         "aliases": [
             "mug"
@@ -490,7 +510,9 @@
     {
         "name": "audio cassette",
         "dimension": "l",
+        "height": "0.064",
         "length": "0.1005",
+        "thickness": "0.01524",
         "weight": "40.53982",
         "aliases": [
             "cassette"
@@ -524,6 +546,7 @@
         "name": "Solo cup",
         "dimension": "h",
         "height": "0.10795",
+        "diameter": "0.0889",
         "weight": "255.146",
         "aliases": [
             "cup"
@@ -552,6 +575,7 @@
         "dimension": "l",
         "length": "0.1143",
         "width": "0.0762",
+        "weight": "47.9815679",
         "aliases": [
             "poptart"
         ]
@@ -560,6 +584,7 @@
         "name": "CD",
         "dimension": "d",
         "diameter": "0.12",
+        "thickness": "0.00127",
         "weight": "113.398"
     },
     {
@@ -572,6 +597,7 @@
         "name": "can of soda",
         "dimension": "h",
         "height": "0.122682",
+        "diameter": "0.0762",
         "weight": "368.7",
         "aliases": [
             "can"
@@ -689,6 +715,7 @@
         "name": "chopstick",
         "dimension": "l",
         "length": "0.23",
+        "thickness": "0.005",
         "weight": "4.72492052"
     },
     {
@@ -734,9 +761,25 @@
         "weight": "9900"
     },
     {
+        "name": "desert eagle",
+        "dimension": "l",
+        "height": "0.15875",
+        "length": "0.27305",
+        "width": "0.03175",
+        "weight": "2041.17",
+        "aliases": [
+            "deagle",
+            "pistol",
+            "handgun",
+            "gun"
+        ]
+    },
+    {
         "name": "letter paper",
         "dimension": "l",
         "length": "0.2794",
+        "width": "0.2159",
+        "thickness": "0.0001",
         "weight": "4.5",
         "aliases": [
             "paper"
@@ -765,6 +808,7 @@
         "name": "Pringles™ can",
         "dimension": "h",
         "height": "0.3",
+        "diameter": "0.08",
         "weight": "149",
         "aliases": [
             "chip can",
@@ -777,6 +821,7 @@
         "name": "medium Dominos™ pizza",
         "dimension": "d",
         "diameter": "0.3",
+        "weight": "726",
         "aliases": [
             "pizza",
             "medium pizza",
@@ -788,6 +833,7 @@
         "name": "Subway Footlong™",
         "dimension": "l",
         "length": "0.3048",
+        "weight": "907.185",
         "aliases": [
             "footlong",
             "subway footlong",
@@ -809,7 +855,8 @@
     {
         "name": "exercise ball",
         "dimension": "d",
-        "diameter": "0.65"
+        "diameter": "0.65",
+        "weight": "1360.78"
     },
     {
         "name": "Kerbal",
@@ -880,6 +927,16 @@
         ]
     },
     {
+        "name": "bed",
+        "dimension": "l",
+        "length": "1.8288",
+        "width": "2.032",
+        "weight": "73028.4",
+        "aliases": [
+            "bed"
+        ]
+    },
+    {
         "name": "vending machine",
         "dimension": "h",
         "height": "1.829",
@@ -890,16 +947,8 @@
     {
         "name": "doorway",
         "dimension": "h",
-        "height": "2.032"
-    },
-    {
-        "name": "bed",
-        "dimension": "l",
-        "length": "2.032",
-        "weight": "73028.4",
-        "aliases": [
-            "bed"
-        ]
+        "height": "2.032",
+        "width": "0.8128"
     },
     {
         "name": "Shaq",
@@ -1045,6 +1094,7 @@
         "name": "swimming pool",
         "dimension": "l",
         "length": "50",
+        "depth": "3",
         "weight": "2499999748",
         "aliases": [
             "pool"
@@ -1115,6 +1165,7 @@
         "name": "football field",
         "dimension": "l",
         "length": "109.728",
+        "width": "48.768",
         "aliases": [
             "field"
         ]
@@ -1177,6 +1228,15 @@
         ]
     },
     {
+        "name": "cloud layer",
+        "dimension": "h",
+        "height": "1981.2",
+        "aliases": [
+            "cloud",
+            "cloud line"
+        ]
+    },
+    {
         "name": "Las Vegas Strip",
         "dimension": "l",
         "length": "6800"
@@ -1223,7 +1283,10 @@
         "name": "moon",
         "dimension": "d",
         "diameter": "3474200",
-        "weight": "7.35e+25"
+        "weight": "7.35e+25",
+        "aliases": [
+            "Luna"
+        ]
     },
     {
         "name": "Australia",
@@ -1273,6 +1336,15 @@
         "weight": "1.989e+33",
         "aliases": [
             "Sol"
+        ]
+    },
+    {
+        "name": "M87 Black Hole",
+        "dimension": "d",
+        "diameter": "38000000000000",
+        "weight": "1.3e+43",
+        "aliases": [
+            "black hole"
         ]
     }
 ]
