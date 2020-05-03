@@ -48,9 +48,11 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        aliases = ["clearspecies"]
+    )
     @commands.guild_only()
-    async def clearspecies(self, ctx):
+    async def resetspecies(self, ctx):
         """Remove species."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
