@@ -5,7 +5,7 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot.lib import decimal, errors, proportions, userdb, utils
-from sizebot.lib.proportions import fromShoeSize
+from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
@@ -257,7 +257,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setfoot(self, ctx, *, newfoot: typing.Union[decimal.Decimal, SV]):
         """Set a custom foot length.
-        
+
         Accepts either a length or a US Shoe Size."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
