@@ -263,7 +263,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         if isinstance(newfoot, decimal.Decimal):
-            newfoot = fromShoeSize(newfoot)
+            newfoot = fromShoeSize(str(newfoot))
 
         userdata.footlength = newfoot
         userdb.save(userdata)
