@@ -379,7 +379,7 @@ class PersonStats:
             self.footlength = SV(self.height * self.footfactor)
         else:
             self.footlength = SV(userdata.footlength / self.viewscale)
-        self.shoesize = formatShoeSize(self.footlength)
+        self.shoesize = formatShoeSize(self.footlength, self.gender == "f")
         self.footwidth = SV(self.height * self.footwidthfactor)
         self.toeheight = SV(self.height * self.toeheightfactor)
         self.shoeprintdepth = SV(self.height * self.toeheightfactor)
