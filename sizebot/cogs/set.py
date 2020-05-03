@@ -256,14 +256,31 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def setfoot(self, ctx, *, newfoot: typing.Union[decimal.Decimal, SV]):
-        """Set a custom foot length.
-
-        Accepts either a length or a US Shoe Size."""
+        """Set a custom foot length."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
-        if isinstance(newfoot, decimal.Decimal):
-            newfoot = fromShoeSize(str(newfoot))
+        userdata.footlength = newfoot
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+
+    @commandsplus.command(
+        aliases = ["setshoesize"],
+        usage = "<length>"
+    )
+    @commands.guild_only()
+    async def setshoe(self, ctx, *, newfoot: str):
+        """Set a custom base shoe size.
+
+        Accepts a US Shoe Size.
+        If a W is in the shoe size anywhere, it is parsed as a Women's size.
+        If a C is in the show size anywhere, it is parsed as a Children's size."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        newfoot = fromShoeSize(newfoot)
 
         userdata.footlength = newfoot
         userdb.save(userdata)
