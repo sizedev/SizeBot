@@ -495,7 +495,7 @@ class PersonStats:
         return embed
 
 
-def formatShoeSize(footlength):
+def formatShoeSize(footlength, women = False):
     # Inch in meters
     inch = Decimal("0.0254")
     footlengthinches = footlength / inch
@@ -506,13 +506,20 @@ def formatShoeSize(footlength):
         shoesizeNum += 12 + Decimal("1/3")
     if shoesizeNum < 0:
         return "No shoes exist this small!"
-    shoesize = format(Decimal(shoesizeNum), ",.2%2")
+    if women:
+        shoesize = format(Decimal(shoesizeNum + 1), ",.2%2")
+    else:
+        shoesize = format(Decimal(shoesizeNum), ",.2%2")
+    if women:
+        return f"Size US Women's {prefix}{shoesize}"
     return f"Size US {prefix}{shoesize}"
 
 
 def fromShoeSize(shoesize):
     shoesizenum = Decimal(re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)[0])
-    if "c" in shoesize.lower():
+    if "w" in shoesize.lower():
+        shoesizenum += 1
+    if "c" in shoesize.lower():  # Intentional override, children's sizes have no women/men distinction.
         shoesizenum -= (12 + Decimal("1/3"))
     footlengthinches = ((shoesizenum + 24) / 3) - Decimal("2/3")
     return SV.parse(f"{footlengthinches}in")
