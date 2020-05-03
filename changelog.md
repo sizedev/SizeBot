@@ -6,9 +6,11 @@
     - You can copy your profile from one guild to the other with `&copy`.
     - Keeping your profiles on multiple servers synced to each other is not yet possible.
     - **NOTE:** *This is in beta stages, and is being rolled out slowly. Contact DigiDuncan if you are interested in having SizeBot on your server.*
-- Added customizable foot length with `&setfoot`. You can turn off custom foot length with `&resetfoot`.
-- Added customizable hair length with `&sethair`. You can turn off custom hair length with `&resethair`.
-- Added customizable tail length with `&settail`. You can turn off custom tail length with `&resettail`.
+- Added customizable foot length with `&setbasefoot`. You can turn off custom foot length with `&resetfoot`.
+    - You can set your foot length based on your US Shoe Size with `&setbaseshoe`.
+- Added customizable hair length with `&setbasehair`. You can turn off custom hair length with `&resethair`.
+- Added customizable tail length with `&setbasetail`. You can turn off custom tail length with `&resettail`.
+- You can adjust your base stats to line up with what you'd like your current stat to be automatically now using `&setweight`, `&setfoot`/`&setshoe`, `&sethair`, and `&settail`.
 - Added shoeprint depth, nail thickness, clothing thread thickness, eye width, walk speed, run speed, and viewing angle to stats and comparisons.
 - Added a link to a visual comparison when using `&compare`.
 - Slow changes now support stop conditions, either a time or a size.
@@ -18,6 +20,7 @@
     - Many commands now have helpful aliases, which you can find by running `&help [command]`.
 - Added the ability to use exponents in changes, for instance `&change ^ 2`.
     - For instance, running `&change ^ 2` while 10ft tall would set you to a height that makes you appear 10 ft tall to a 10 ft tall person.
+- `&change` now accepts "%" as an option. For example, `&change % 50` sets you to half height.
 - Inches are now displayed in fraction increments in sizetags.
 - Added a new command, `&stat`, which lets you get a single stat about a user.
 - Added a new command, `&naturalstats`, which lets you see what object you are closest to in height and weight.
@@ -52,6 +55,7 @@
 - Stats and comparisons now come in the form of clean, compact embeds.
 - Slow changes now operate on a 6-second loop, so all slow changes are constant and consistent.
 - Slow changes now use a "rate" as input, for instance `&slowchange 1m/s`.
+- All set commands now begin with `set`, all set-base commands with `setbase`, and all reset commands with `reset` (and optionally `clear`).
 - Unregistering is far more easy to confirm, requiring you to click an emoji, rather than copy and paste a hex code.
 - Changed the way 0 and Infinity are handled as heights, making their stats and comparisons make much more sense.
 - The about section now is more accurate, and has new information.
@@ -61,7 +65,6 @@
     - `&setbase 100lb` sets your base weight to 100lb.
     - `&setbase 5ft 100lb` sets both base height and base weight simultaneously.
     - `&setbaseheight` and `&setbaseweight` still exist for convenience.
-- `&change` now accepts "%" as an option. For example, `&change % 50` sets you to half height.
 
 ## Fixes
 
@@ -76,6 +79,7 @@
 - A bug where sometimes SizeBot would spit way too many decimal places out should be corrected.
 - All commands should now give feedback to the user, so you actually know if something happened.
 - Nicknames should now update as soon as your size changes, and not just when you first type.
+- Shoe size 0 would never show up, which is technically incorrect.
 
 
 ## New Commands and Changed Command Syntax
