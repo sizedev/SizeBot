@@ -63,40 +63,6 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<height>"
-    )
-    @commands.guild_only()
-    async def setheight(self, ctx, *, newheight):
-        """Change height."""
-        newheightsv = SV.parse(newheight)
-
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
-
-        userdata.height = newheightsv
-        userdb.save(userdata)
-
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now {userdata.height:m} tall.")
-        await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
-
-        await proportions.nickUpdate(ctx.author)
-
-    @commandsplus.command(
-        aliases = ["resetheight", "reset"]
-    )
-    @commands.guild_only()
-    async def resetsize(self, ctx):
-        """Reset size."""
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
-
-        userdata.height = userdata.baseheight
-        userdb.save(userdata)
-
-        await ctx.send(f"{ctx.author.display_name} reset their size.")
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) reset their size.")
-
-        await proportions.nickUpdate(ctx.author)
-
-    @commandsplus.command(
         usage = "<Y/N>"
     )
     @commands.guild_only()
@@ -138,6 +104,40 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) set their system to {userdata.unitsystem}.")
         await ctx.send(f"<@{ctx.author.id}>'s system is now set to {userdata.unitsystem}.")
+
+        await proportions.nickUpdate(ctx.author)
+
+    @commandsplus.command(
+        usage = "<height>"
+    )
+    @commands.guild_only()
+    async def setheight(self, ctx, *, newheight):
+        """Change height."""
+        newheightsv = SV.parse(newheight)
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.height = newheightsv
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now {userdata.height:m} tall.")
+        await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
+
+        await proportions.nickUpdate(ctx.author)
+
+    @commandsplus.command(
+        aliases = ["resetsize", "reset"]
+    )
+    @commands.guild_only()
+    async def resetheight(self, ctx):
+        """Reset height/size."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.height = userdata.baseheight
+        userdb.save(userdata)
+
+        await ctx.send(f"{ctx.author.display_name} reset their size.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) reset their size.")
 
         await proportions.nickUpdate(ctx.author)
 
@@ -216,6 +216,21 @@ class SetCog(commands.Cog):
     @commandsplus.command(
         usage = "<weight>"
     )
+    async def setweight(self, ctx, *, newweight):
+        """Set your current weight."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.baseweight = WV(WV.parse(newweight) * (userdata.viewscale ** 3))
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their weight to {newweight}.")
+        await ctx.send(f"<@{ctx.author.id}>'s weight is now {userdata.weight:mu}")
+
+        await proportions.nickUpdate(ctx.author)
+
+    @commandsplus.command(
+        usage = "<weight>"
+    )
     @commands.guild_only()
     async def setbaseweight(self, ctx, *, newbaseweight):
         """Change base weight."""
@@ -252,10 +267,24 @@ class SetCog(commands.Cog):
         await ctx.send(f"{ctx.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
 
     @commandsplus.command(
+        usage = "<foot>"
+    )
+    async def setfoot(self, ctx, *, newfoot):
+        """Set your current foot length."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.footlength = SV(SV.parse(newfoot) * userdata.viewscale)
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+
+    @commandsplus.command(
         usage = "<length>"
     )
     @commands.guild_only()
-    async def setfoot(self, ctx, *, newfoot: typing.Union[decimal.Decimal, SV]):
+    async def setbasefoot(self, ctx, *, newfoot: typing.Union[decimal.Decimal, SV]):
         """Set a custom foot length."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
@@ -267,11 +296,31 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
     @commandsplus.command(
-        aliases = ["setshoesize"],
+        usage = "<shoe>"
+    )
+    async def setshoe(self, ctx, *, newshoe):
+        """Set your current shoe size.
+
+        Accepts a US Shoe Size.
+        If a W is in the shoe size anywhere, it is parsed as a Women's size.
+        If a C is in the show size anywhere, it is parsed as a Children's size."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        newfoot = fromShoeSize(newshoe)
+
+        userdata.footlength = SV(newfoot * userdata.viewscale)
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+
+    @commandsplus.command(
+        aliases = ["setbaseshoesize"],
         usage = "<length>"
     )
     @commands.guild_only()
-    async def setshoe(self, ctx, *, newfoot: str):
+    async def setbaseshoe(self, ctx, *, newshoe: str):
         """Set a custom base shoe size.
 
         Accepts a US Shoe Size.
@@ -280,7 +329,7 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
-        newfoot = fromShoeSize(newfoot)
+        newfoot = fromShoeSize(newshoe)
 
         userdata.footlength = newfoot
         userdb.save(userdata)
@@ -303,11 +352,26 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s foot length is now default.")
 
     @commandsplus.command(
+        usage = "<hair>"
+    )
+    async def sethair(self, ctx, *, newhair):
+        """Set your current hair length."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        newhairsv = SV(SV.parse(newhair) * userdata.viewscale)
+
+        userdata.hairlength = newhairsv
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s hair is now {userdata.hairlength:m} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
+
+    @commandsplus.command(
         usage = "<length>"
     )
     @commands.guild_only()
-    async def sethair(self, ctx, *, newhair):
-        """Set a custom hair length."""
+    async def setbasehair(self, ctx, *, newhair):
+        """Set a custom base hair length."""
         newhairsv = SV.parse(newhair)
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
@@ -333,10 +397,25 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s hair length is now cleared.")
 
     @commandsplus.command(
+        usage = "<tail>"
+    )
+    async def settail(self, ctx, *, newtail):
+        """Set your current tail length."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        newtailsv = SV(SV.parse(newtail) * userdata.viewscale)
+
+        userdata.taillength = newtailsv
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s tail is now {userdata.taillength:m} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
+
+    @commandsplus.command(
         usage = "<length>"
     )
     @commands.guild_only()
-    async def settail(self, ctx, *, newtail):
+    async def setbasetail(self, ctx, *, newtail):
         """Set a custom tail length."""
         newtailsv = SV.parse(newtail)
 
