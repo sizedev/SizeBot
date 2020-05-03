@@ -5,6 +5,7 @@ from discord.ext import commands
 from sizebot.discordplus import commandsplus
 
 from sizebot.lib import decimal, errors, proportions, userdb, utils
+from sizebot.lib.proportions import fromShoeSize
 from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
@@ -250,22 +251,25 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
         await ctx.send(f"{ctx.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
 
-    # TODO: Make this accept shoe size as an input.
     @commandsplus.command(
         usage = "<length>"
     )
     @commands.guild_only()
-    async def setfoot(self, ctx, *, newfoot):
-        """Set a custom foot length."""
-        newfootsv = SV.parse(newfoot)
+    async def setfoot(self, ctx, *, newfoot: typing.Union[decimal.Decimal, SV]):
+        """Set a custom foot length.
+        
+        Accepts either a length or a US Shoe Size."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
-        userdata.footlength = newfootsv
+        if isinstance(newfoot, decimal.Decimal):
+            newfoot = fromShoeSize(newfoot)
+
+        userdata.footlength = newfoot
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
-        await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
     @commandsplus.command(
         aliases = ["clearfoot", "unsetfoot"]

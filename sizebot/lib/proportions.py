@@ -1,4 +1,5 @@
 import math
+import re
 from urllib.parse import quote
 
 import discord
@@ -507,6 +508,14 @@ def formatShoeSize(footlength):
         return "No shoes exist this small!"
     shoesize = format(Decimal(shoesizeNum), ",.2%2")
     return f"Size US {prefix}{shoesize}"
+
+
+def fromShoeSize(shoesize):
+    shoesizenum = Decimal(re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)[0])
+    if "c" in shoesize.lower():
+        shoesizenum -= (12 + Decimal("1/3"))
+    footlengthinches = ((shoesizenum + 24) / 3) - Decimal("2/3")
+    return SV.parse(f"{footlengthinches}in")
 
 
 def calcViewAngle(viewer, viewee):

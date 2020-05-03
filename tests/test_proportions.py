@@ -3,8 +3,8 @@ import asyncio
 from decimal import Decimal
 
 from sizebot.lib import units
+from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV, TV, Mult, Rate
-
 
 asyncio.run(units.init())
 
@@ -174,3 +174,10 @@ def test_negative_WV_format():
 def test_feetinch_noinchunit():
     result = SV.parse("5ft8")
     assert result == SV("1.7272")
+
+
+def test_reverse_shoesize_calc():
+    insize = SV.parse("10in")
+    shoesize = formatShoeSize(insize)
+    outsize = fromShoeSize(shoesize)
+    assert insize == outsize
