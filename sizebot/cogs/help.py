@@ -104,16 +104,28 @@ class HelpCog(commands.Cog):
                 cmd_category = "misc"
             commands_by_cat[cmd_category].append(c)
 
-        # Add each category to the embed as a field
-        for n, cat in enumerate(categories):
+        cat_max = 8
+        fields = []
+
+        # Add each category to one or more fields
+        for cat in categories:
             cat_cmds = commands_by_cat.get(cat.cid, [])
             if not cat_cmds:
                 logger.warn(f"Command category {cat.cid!r} is empty.")
                 continue
-            category_text = "\n".join([c.short_doc for c in cat_cmds])
-            embed.add_field(name=cat.name, value=category_text, inline=True)
+
+            for n, page_cmds in enumerate(utils.chunkList(cat_cmds, cat_max)):
+                category_name = cat.name
+                if n > 0:
+                    category_name += ", cont."
+                category_text = "\n".join(c.short_doc for c in page_cmds)
+                fields.append((category_name, category_text))
+
+        # Add each field to the embed
+        for n, (name, description) in enumerate(fields):
+            embed.add_field(name=name, value=description, inline=True)
             if n % 2 == 1:
-                embed.add_field(name="", inline=False)
+                embed.add_field(inline=False)
 
         await ctx.send(embed=embed)
 
