@@ -313,6 +313,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
     @commands.command(
+        aliases = ["setshoesize"],
         usage = "<shoe>",
         category = "set"
     )
