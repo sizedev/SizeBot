@@ -78,7 +78,8 @@ class WinksCog(commands.Cog):
             await sayMilestone(message.channel, winkcount)
 
     @commandsplus.command(
-        hidden = True
+        hidden = True,
+        category = "misc"
     )
     async def winkcount(self, ctx):
         winkcount = getWinks()

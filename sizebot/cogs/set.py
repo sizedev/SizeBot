@@ -17,7 +17,8 @@ class SetCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["changenick", "nick"],
-        usage = "<nick>"
+        usage = "<nick>",
+        category = "set"
     )
     @commands.guild_only()
     async def setnick(self, ctx, *, newnick):
@@ -33,7 +34,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<species>"
+        usage = "<species>",
+        category = "set"
     )
     @commands.guild_only()
     async def setspecies(self, ctx, *, newtag):
@@ -49,7 +51,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        aliases = ["clearspecies"]
+        aliases = ["clearspecies"],
+        category = "set"
     )
     @commands.guild_only()
     async def resetspecies(self, ctx):
@@ -65,7 +68,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<Y/N>"
+        usage = "<Y/N>",
+        category = "set"
     )
     @commands.guild_only()
     async def setdisplay(self, ctx, newdisp):
@@ -86,7 +90,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<M/U>"
+        usage = "<M/U>",
+        category = "set"
     )
     @commands.guild_only()
     async def setsystem(self, ctx, newsys):
@@ -110,7 +115,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<height>"
+        usage = "<height>",
+        category = "set"
     )
     @commands.guild_only()
     async def setheight(self, ctx, *, newheight):
@@ -128,7 +134,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        aliases = ["resetsize", "reset"]
+        aliases = ["resetsize", "reset"],
+        category = "set"
     )
     @commands.guild_only()
     async def resetheight(self, ctx):
@@ -144,7 +151,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<minheight> <maxheight>"
+        usage = "<minheight> <maxheight>",
+        category = "set"
     )
     @commands.guild_only()
     async def setrandomheight(self, ctx, minheight, maxheight):
@@ -168,7 +176,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        aliases = ["inf"]
+        aliases = ["inf"],
+        category = "set"
     )
     @commands.guild_only()
     async def setinf(self, ctx):
@@ -184,7 +193,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        aliases = ["0"]
+        aliases = ["0"],
+        category = "set"
     )
     @commands.guild_only()
     async def set0(self, ctx):
@@ -200,7 +210,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<height>"
+        usage = "<height>",
+        category = "setbase"
     )
     @commands.guild_only()
     async def setbaseheight(self, ctx, *, newbaseheight):
@@ -216,7 +227,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<weight>"
+        usage = "<weight>",
+        category = "set"
     )
     async def setweight(self, ctx, *, newweight):
         """Set your current weight."""
@@ -231,7 +243,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<weight>"
+        usage = "<weight>",
+        category = "setbase"
     )
     @commands.guild_only()
     async def setbaseweight(self, ctx, *, newbaseweight):
@@ -247,7 +260,8 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
 
     @commandsplus.command(
-        usage = "<height/weight> [height/weight]"
+        usage = "<height/weight> [height/weight]",
+        category = "setbase"
     )
     @commands.guild_only()
     async def setbase(self, ctx, arg1: typing.Union[SV, WV], arg2: typing.Union[SV, WV] = None):
@@ -269,7 +283,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"{ctx.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
 
     @commandsplus.command(
-        usage = "<foot>"
+        usage = "<foot>",
+        category = "set"
     )
     async def setfoot(self, ctx, *, newfoot):
         """Set your current foot length."""
@@ -283,7 +298,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
     @commandsplus.command(
-        usage = "<length>"
+        usage = "<length>",
+        category = "setbase"
     )
     @commands.guild_only()
     async def setbasefoot(self, ctx, *, newfoot: typing.Union[decimal.Decimal, SV]):
@@ -298,7 +314,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
     @commandsplus.command(
-        usage = "<shoe>"
+        usage = "<shoe>",
+        category = "set"
     )
     async def setshoe(self, ctx, *, newshoe):
         """Set your current shoe size.
@@ -319,7 +336,8 @@ class SetCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["setbaseshoesize"],
-        usage = "<length>"
+        usage = "<length>",
+        category = "setbase"
     )
     @commands.guild_only()
     async def setbaseshoe(self, ctx, *, newshoe: str):
@@ -340,7 +358,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
     @commandsplus.command(
-        aliases = ["clearfoot", "unsetfoot"]
+        aliases = ["clearfoot", "unsetfoot"],
+        category = "set"
     )
     @commands.guild_only()
     async def resetfoot(self, ctx):
@@ -354,7 +373,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s foot length is now default.")
 
     @commandsplus.command(
-        usage = "<hair>"
+        usage = "<hair>",
+        category = "set"
     )
     async def sethair(self, ctx, *, newhair):
         """Set your current hair length."""
@@ -369,7 +389,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
 
     @commandsplus.command(
-        usage = "<length>"
+        usage = "<length>",
+        category = "setbase"
     )
     @commands.guild_only()
     async def setbasehair(self, ctx, *, newhair):
@@ -385,7 +406,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
 
     @commandsplus.command(
-        aliases = ["clearhair", "unsethair"]
+        aliases = ["clearhair", "unsethair"],
+        category = "set"
     )
     @commands.guild_only()
     async def resethair(self, ctx):
@@ -399,7 +421,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s hair length is now cleared.")
 
     @commandsplus.command(
-        usage = "<tail>"
+        usage = "<tail>",
+        category = "set"
     )
     async def settail(self, ctx, *, newtail):
         """Set your current tail length."""
@@ -414,7 +437,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
 
     @commandsplus.command(
-        usage = "<length>"
+        usage = "<length>",
+        category = "setbase"
     )
     @commands.guild_only()
     async def setbasetail(self, ctx, *, newtail):
@@ -430,7 +454,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
 
     @commandsplus.command(
-        aliases = ["cleartail", "unsettail"]
+        aliases = ["cleartail", "unsettail"],
+        category = "set"
     )
     @commands.guild_only()
     async def resettail(self, ctx):
@@ -444,7 +469,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s tail length is now cleared.")
 
     @commandsplus.command(
-        usage = "<male/female/none>"
+        usage = "<male/female/none>",
+        category = "set"
     )
     @commands.guild_only()
     async def setgender(self, ctx, gender):
@@ -480,7 +506,8 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.")
 
     @commandsplus.command(
-        aliases = ["cleargender", "unsetgender"]
+        aliases = ["cleargender", "unsetgender"],
+        category = "set"
     )
     @commands.guild_only()
     async def resetgender(self, ctx):

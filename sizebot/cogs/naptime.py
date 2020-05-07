@@ -22,7 +22,7 @@ class NaptimeCog(commands.Cog):
     @commandsplus.command(
         aliases = ["chloroform"],
         usage="<duration>",
-        hidden = True
+        category = "fun"
     )
     async def naptime(self, ctx, *, duration: TV):
         """Go to bed in a set amount of time.
@@ -36,7 +36,7 @@ class NaptimeCog(commands.Cog):
         await ctx.send(f"See you in {duration:m}!")
 
     @commandsplus.command(
-        hidden = True
+        category = "fun"
     )
     async def grump(self, ctx):
         """Too grumpy for bed time.
@@ -49,7 +49,8 @@ class NaptimeCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["nanny"],
-        hidden = True
+        hidden = True,
+        category = "mod"
     )
     @commands.is_owner()
     async def nannies(self, ctx):

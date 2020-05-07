@@ -38,7 +38,9 @@ class HelpCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command()
+    @commandsplus.command(
+        category = "help"
+    )
     async def units(self, ctx):
         """Get a list of the various units SizeBot accepts."""
         heightobjectunits = [su.unit for su in SV._systems["o"]._systemunits]
@@ -58,7 +60,8 @@ class HelpCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commandsplus.command(
-        aliases = ["objects"]
+        aliases = ["objects"],
+        category = "help"
     )
     async def objs(self, ctx):
         """Get a list of the various objects SizeBot accepts."""
@@ -151,7 +154,8 @@ class HelpCog(commands.Cog):
     @commandsplus.command(
         description="[description]",
         usage="[usage]",
-        aliases=["helpme", "wtf"]
+        aliases=["helpme", "wtf"],
+        category = "help"
     )
     async def help(self, ctx, cmdName: str = None):
         """[cmd.help[0]]
@@ -203,7 +207,9 @@ class HelpCog(commands.Cog):
             "\n"
             f"Version {__version__} | {now.strftime('%d %b %Y')}")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        category = "help"
+    )
     async def about(self, ctx):
         """Get the credits and some facts about SizeBot."""
         now = datetime.now()
@@ -241,7 +247,8 @@ class HelpCog(commands.Cog):
         await ctx.send(embed = embed)
 
     @commandsplus.command(
-        aliases = ["fund"]
+        aliases = ["fund"],
+        category = "help"
     )
     async def donate(self, ctx):
         """Give some monetary love to your favorite bot developer!"""
@@ -254,7 +261,8 @@ class HelpCog(commands.Cog):
             "Thank you so much for being here throughout this journey!")
 
     @commandsplus.command(
-        usage = "<message>"
+        usage = "<message>",
+        category = "misc"
     )
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
@@ -262,7 +270,8 @@ class HelpCog(commands.Cog):
         await self.bot.get_user(ids.digiduncan).send(f"Bug report from <@{ctx.author.id}>: {message}")
 
     @commandsplus.command(
-        usage = "<message>"
+        usage = "<message>",
+        category = "misc"
     )
     async def suggest(self, ctx, *, message: str):
         """Suggest a feature for SizeBot!"""
@@ -271,7 +280,8 @@ class HelpCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["objsuggest"],
-        usage = "<message>"
+        usage = "<message>",
+        category = "misc"
     )
     async def suggestobject(self, ctx, *, message: str):
         """Suggest an object for SizeBot! (See help.)
@@ -285,7 +295,8 @@ class HelpCog(commands.Cog):
         await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.author.id}>: {message}")
 
     @commandsplus.command(
-        usage = ["[type]"]
+        usage = ["[type]"],
+        category = "help"
     )
     async def ping(self, ctx, subcommand: str = ""):
         """Pong!
@@ -302,7 +313,9 @@ class HelpCog(commands.Cog):
             response = f"Pong! :ping_pong:\nCommand latency: {utils.prettyTimeDelta(messageLatency.total_seconds(), True)}"
         await waitMsg.edit(content = response)
 
-    @commandsplus.command()
+    @commandsplus.command(
+        category = "help"
+    )
     async def changelog(self, ctx):
         """See what's new in the latest SizeBot!"""
         await ctx.send("View the changelog here!:\nhttps://github.com/sizedev/SizeBot3AndAHalf/blob/develop/changelog.md")

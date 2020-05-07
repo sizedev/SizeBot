@@ -17,7 +17,8 @@ class StatsCog(commands.Cog):
         self.bot = bot
 
     @commandsplus.command(
-        usage = "[user/height]"
+        usage = "[user/height]",
+        category = "stats"
     )
     @commands.guild_only()
     async def stats(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None, customName = None):
@@ -49,7 +50,8 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command(
         usage = "[user/height]",
-        hidden = True
+        hidden = True,
+        category = "stats"
     )
     @commands.guild_only()
     async def statstxt(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
@@ -76,7 +78,8 @@ class StatsCog(commands.Cog):
         logger.info(f"Stats for {memberOrHeight} sent.")
 
     @commandsplus.command(
-        usage = "<stat> [user/height]"
+        usage = "<stat> [user/height]",
+        category = "stats"
     )
     @commands.guild_only()
     async def stat(self, ctx, stat, *, memberOrHeight: typing.Union[discord.Member, SV] = None, customName = None):
@@ -153,7 +156,8 @@ class StatsCog(commands.Cog):
         await ctx.send(stattosend)
 
     @commandsplus.command(
-        usage = "[user/height] <user/height>"
+        usage = "[user/height] <user/height>",
+        category = "stats"
     )
     @commands.guild_only()
     async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
@@ -178,7 +182,8 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command(
         usage = "[user/height] <user/height>",
-        hidden = True
+        hidden = True,
+        category = "stats"
     )
     @commands.guild_only()
     async def comparetxt(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
@@ -200,7 +205,8 @@ class StatsCog(commands.Cog):
         logger.info(f"Compared {userdata1} and {userdata2}")
 
     @commandsplus.command(
-        aliases = ["natstats", "natstat"]
+        aliases = ["natstats", "natstat"],
+        category = "stats"
     )
     @commands.guild_only()
     async def naturalstats(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
@@ -225,7 +231,8 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["onewaycomp", "owc"],
-        usage = "[object/user]"
+        usage = "[object/user]",
+        category = "stats"
     )
     @commands.guild_only()
     async def onewaycompare(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str], who: typing.Union[discord.Member, SV] = None):  # TODO: Allow a second argument here.
@@ -266,7 +273,8 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["look", "examine"],
-        usage = "[object]"
+        usage = "[object]",
+        category = "stats"
     )
     @commands.guild_only()
     async def lookat(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):
@@ -302,7 +310,8 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["objectstats"],
-        usage = "[object]"
+        usage = "[object]",
+        category = "stats"
     )
     async def objstats(self, ctx, *, what: typing.Union[DigiObject, str]):
         """Get stats about an object.
@@ -318,7 +327,8 @@ class StatsCog(commands.Cog):
 
     @commandsplus.command(
         usage = "[object]",
-        hidden = True
+        hidden = True,
+        category = "stats"
     )
     async def objstatstxt(self, ctx, *, what: typing.Union[DigiObject, str]):
         """Get stats about an object. (text version)

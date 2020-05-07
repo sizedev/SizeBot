@@ -48,7 +48,8 @@ class FunCog(commands.Cog):
         await ctx.send(message)
 
     @commandsplus.command(
-        usage = "<message>"
+        usage = "<message>",
+        category = "fun"
     )
     async def sing(self, ctx, *, s: str):
         """Make SizeBot sing a message!"""

@@ -85,7 +85,8 @@ class RunCog(commands.Cog):
         self.runTask.cancel()
 
     @commandsplus.command(
-        hidden = True
+        hidden = True,
+        category = "fun"
     )
     async def run(self, ctx, duration: TV, mode: str = ""):
         nyan = mode == "nyan"

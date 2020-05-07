@@ -79,7 +79,8 @@ class ThisCog(commands.Cog):
         self.bot = bot
 
     @commandsplus.command(
-        aliases = ["points", "board"]
+        aliases = ["points", "board"],
+        category = "misc"
     )
     @commands.guild_only()
     async def leaderboard(self, ctx):

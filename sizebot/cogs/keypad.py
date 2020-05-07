@@ -24,7 +24,8 @@ class KeypadCog(commands.Cog):
         self.bot = bot
 
     @commandsplus.command(
-        hidden = True
+        hidden = True,
+        category = "fun"
     )
     async def keypad(self, ctx):
         """Test keypad command."""

@@ -36,7 +36,8 @@ class RegisterCog(commands.Cog):
 
     # TODO: Change the way this works.
     @commandsplus.command(
-        aliases = ["signup"]
+        aliases = ["signup"],
+        category = "setup"
     )
     @commands.guild_only()
     async def register(self, ctx, nick: str, display: str = "y", currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
@@ -137,7 +138,9 @@ class RegisterCog(commands.Cog):
             return
         raise error
 
-    @commandsplus.command()
+    @commandsplus.command(
+        category = "setup"
+    )
     @commands.guild_only()
     async def unregister(self, ctx):
         """Unregister your SizeBot profile."""
@@ -186,7 +189,9 @@ class RegisterCog(commands.Cog):
         logger.warn(f"User {user.id} successfully unregistered.")
         await ctx.send(f"Unregistered {user.name}.")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        category = "setup"
+    )
     @commands.guild_only()
     async def copy(self, ctx):
         """Copy your SizeBot profile from a different guild to this one."""

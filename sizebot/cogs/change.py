@@ -20,7 +20,8 @@ class ChangeCog(commands.Cog):
         self.changeTask.cancel()
 
     @commandsplus.command(
-        usage = "<x,-,/,+> <amount>"
+        usage = "<x,-,/,+> <amount>",
+        category = "change"
     )
     @commands.guild_only()
     async def change(self, ctx, style, *, amount):
@@ -51,7 +52,8 @@ class ChangeCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the running changes.")
 
     @commandsplus.command(
-        usage = "<rate>"
+        usage = "<rate>",
+        category = "change"
     )
     @commands.guild_only()
     async def slowchange(self, ctx, *, rateStr: str):
@@ -72,7 +74,9 @@ class ChangeCog(commands.Cog):
         await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{rateStr}`.")
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        category = "change"
+    )
     @commands.guild_only()
     async def stopchange(self, ctx):
         """Stop a currently active slow change."""
@@ -88,7 +92,9 @@ class ChangeCog(commands.Cog):
             await ctx.send(f"{ctx.author.display_name} has stopped slow-changing.")
             logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) stopped slow-changing.")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        category = "change"
+    )
     @commands.guild_only()
     async def eatme(self, ctx):
         """Eat me!
@@ -109,7 +115,9 @@ class ChangeCog(commands.Cog):
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
         logger.info(f"User {userid} ({ctx.author.display_name}) ate a cake and multiplied {randmult}.")
 
-    @commandsplus.command()
+    @commandsplus.command(
+        category = "change"
+    )
     @commands.guild_only()
     async def drinkme(self, ctx):
         """Drink me!

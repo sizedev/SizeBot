@@ -26,7 +26,8 @@ class ColorCog(commands.Cog):
 
     @commandsplus.command(
         aliases = ["colour"],
-        usage = "[hex/rgb/hsv/hsl/cymk] <colorcode>"
+        usage = "[hex/rgb/hsv/hsl/cymk] <colorcode>",
+        category = "fun"
     )
     async def color(self, ctx, arg1: str, *, arg2: str = None):
         """Get info about a color."""

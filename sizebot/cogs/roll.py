@@ -16,7 +16,9 @@ class RollCog(commands.Cog):
 
     @commandsplus.command(
         aliases=["dice", "calc"],
-        usage="<dice>d<sides>"
+        usage="<dice>d<sides>[d/k/dl/kh][num]",
+        category = "fun"
+
     )
     async def roll(self, ctx, *, dString):
         """Verbose die rolling command.
@@ -48,7 +50,8 @@ class RollCog(commands.Cog):
         await ctx.send(sendstring)
 
     @commandsplus.command(
-        usage="<dice>d<sides>"
+        usage="<dice>d<sides>[d/k/dl/kh][num]",
+        category = "fun"
     )
     async def r(self, ctx, *, dString):
         """Simplified die rolling command.
