@@ -1,5 +1,6 @@
 import logging
 
+import discord
 from sizebot.discordplus import commands, Embed
 
 from sizebot.lib import utils
