@@ -124,7 +124,7 @@ class HelpCog(commands.Cog):
 
         if answer in categoryoptions.keys():
             selectedcategory = categoryoptions[answer]
-            deepembed = Embed(title=f"{cat.name} Help [SizeBot {__version__}]")
+            deepembed = Embed(title=f"{selectedcategory.name} Help [SizeBot {__version__}]")
             cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
             fields_text = f"**{selectedcategory.emoji}{selectedcategory.name}**\n\n" + ("\n".join(f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cat_cmds))
             deepembed.add_field(value=fields_text)
