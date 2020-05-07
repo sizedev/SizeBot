@@ -9,6 +9,7 @@ from sizebot import __version__
 from sizebot import conf
 from sizebot.lib import objs, userdb, utils
 from sizebot.lib.constants import emojis, ids
+from sizebot.lib.menu import Menu
 from sizebot.lib.units import SV, WV
 
 
@@ -115,7 +116,17 @@ class HelpCog(commands.Cog):
 
         embed.add_field(value=fields_text)
 
-        await ctx.send(embed=embed)
+        categoryoptions = {cat.emoji: cat.name for cat in categories}
+
+        reactionmenu, answer = await Menu.display(ctx, categoryoptions.keys(), cancel_emoji = emojis.cancel,
+                                                  initial_embed = embed, delete_after = False)
+
+        if answer in categoryoptions.keys():
+            deepembed = Embed(title=f"Help [SizeBot {__version__}]")
+            cat_cmds = commands_by_cat.get(cat.cid, [])
+            fields_text += f"\n\n**{cat.emoji}{cat.name}**\n" + (", ".join(f"`{c.name}` {c.aliases}\n{c.short_doc}" for c in cat_cmds))
+            deepembed.add_field(value=fields_text)
+            await reactionmenu.message.edit(embed = deepembed)
 
     async def send_command_help(self, ctx, cmd):
         """Sends help for a command.

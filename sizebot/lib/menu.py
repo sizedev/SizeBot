@@ -1,6 +1,7 @@
 import asyncio
 
 import discord
+from sizebot.discordplus import Embed
 
 from sizebot.lib.errors import DigiException
 
@@ -28,10 +29,11 @@ class Menu:
     """
 
     def __init__(self, ctx: discord.ext.commands.context.Context, options: list, *,
-                 initial_message: str = "", timeout: float = 60, delete_after: bool = True,
-                 allow_any: bool = False, cancel_emoji: None):
+                 initial_message: str = None, initial_embed: Embed = None, timeout: float = 60,
+                 delete_after: bool = True, allow_any: bool = False, cancel_emoji: None):
         self.ctx = ctx
         self.initial_message = initial_message
+        self.initial_embed = initial_embed
         self.message = None
         self.options = options
         self.timeout = timeout
@@ -50,7 +52,7 @@ class Menu:
         return f"{self.ctx=} | {self.initial_message=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.allow_any=} | {self.cancel_emoji=}"
 
     async def run(self):
-        self.message = await self.ctx.send(self.initial_message)
+        self.message = await self.ctx.send(self.initial_message, embed = self.initial_embed)
 
         # Add all the reactions we need.
         for option in self.options:

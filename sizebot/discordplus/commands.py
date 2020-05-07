@@ -54,10 +54,15 @@ class Command(discord.ext.commands.Command):
         return super().short_doc or "-"
 
     @property
-    def name_string(self):
+    def alias_string(self):
         aliases = ""
         if self.aliases:
-            aliases = " *(" + ", ".join(self.aliases) + ")*"
+            aliases = "*(" + ", ".join(self.aliases) + ")*"
+        return aliases
+
+    @property
+    def name_string(self):
+        aliases = self.alias_string
         return f"**{self.name}**"
 
 
