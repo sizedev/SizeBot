@@ -7,6 +7,10 @@ from discord.ext.commands.errors import CommandError, CommandInvokeError
 
 
 class Command(commands.Command):
+    def __init__(self, *args, category=None, **kwargs):
+        self.category = category
+        super().__init__(*args, **kwargs)
+
     async def dispatch_error(self, ctx, error):
         ctx.command_failed = True
         cog = self.cog
