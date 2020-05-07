@@ -91,7 +91,7 @@ class HelpCog(commands.Cog):
 
         embed = Embed(title=f"Help [SizeBot {__version__}]")
         embed.description = "*Select an emoji to see details about a category.*"
-        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar)
+        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
 
         # Get all non-hidden commands, sorted by name
         commands = (c for c in ctx.bot.commands if not c.hidden)
