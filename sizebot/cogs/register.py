@@ -36,7 +36,7 @@ class RegisterCog(commands.Cog):
     # TODO: Change the way this works.
     @commands.command(
         aliases = ["signup"],
-        usage = "<nick> <display: Y/N>, <current height> <base height> <base weight> <system: M/U> [species]",
+        usage = "<nick> <display: Y/N> <current height> <base height> <base weight> <system: M/U> [species]",
         category = "setup"
     )
     @commands.guild_only()
