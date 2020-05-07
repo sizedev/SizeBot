@@ -24,19 +24,17 @@ class HolidayCog(commands.Cog):
     async def holidayTask(self):
         """Holiday checker"""
         try:
-            logger.debug("Checking for holidays")
+            logger.info("Checking for holidays")
             now = datetime.now()
-            nowtime = now.time()
             TWENTY_FOUR_HOURS = timedelta(hours = 24)
             tomorrow = now + TWENTY_FOUR_HOURS
             midnight = time(hour = 0, minute = 0, second = 0)
             midnighttime = datetime.combine(tomorrow, midnight)
 
             # Make sure our loop point is midnight.
-            if nowtime != midnight:
-                timeuntilmidnight = midnighttime - now
-                secondsuntilmidnight = timeuntilmidnight.total_seconds()
-                self.holidayTask.change_interval(seconds = secondsuntilmidnight)
+            timeuntilmidnight = midnighttime - now
+            secondsuntilmidnight = timeuntilmidnight.total_seconds()
+            self.holidayTask.change_interval(seconds = secondsuntilmidnight)
 
             # Holiday checks.
             newnick = conf.name
@@ -63,13 +61,14 @@ class HolidayCog(commands.Cog):
                 newnick = "SizeSanta 🎄"
                 newactivityname = "Merry Christmas!"
             else:
-                logger.debug("Just another boring non-holiday...")
+                logger.info("Just another boring non-holiday...")
 
-            if newnick != self.bot.user.name:
-                logger.debug(f"Updating bot nick to \"{newnick}\".")
-                await self.bot.user.edit(username = newnick)
+            for guild in self.bot.guilds:
+                if newnick != guild.me.display_name:
+                    logger.info(f"Updating bot nick to \"{newnick}\" in {guild.name}.")
+                    await guild.me.edit(nick = newnick)
             if newactivityname != self.bot.guilds[0].get_member(self.bot.user.id).activity:
-                logger.debug(f"Updating bot activity to \"{newactivityname}\".")
+                logger.info(f"Updating bot activity to \"{newactivityname}\".")
                 newactivity = discord.Game(name = newactivityname)
                 await self.bot.change_presence(activity = newactivity)
 
