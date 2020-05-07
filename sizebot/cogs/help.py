@@ -90,6 +90,7 @@ class HelpCog(commands.Cog):
         """
 
         embed = Embed(title=f"Help [SizeBot {__version__}]")
+        embed.description = "*Select an emoji to see details about a category.*"
 
         # Get all non-hidden commands, sorted by name
         commands = (c for c in ctx.bot.commands if not c.hidden)
@@ -119,7 +120,6 @@ class HelpCog(commands.Cog):
         categoryoptions = {cat.emoji: cat for cat in categories}
 
         reactionmenu, answer = await Menu.display(ctx, categoryoptions.keys(), cancel_emoji = emojis.cancel,
-                                                  initial_message = "*Select an emoji to see details about each category.*",
                                                   initial_embed = embed, delete_after = False)
 
         if answer in categoryoptions.keys():
@@ -128,7 +128,7 @@ class HelpCog(commands.Cog):
             cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
             fields_text = f"**{selectedcategory.emoji}{selectedcategory.name}**\n\n" + ("\n".join(f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cat_cmds))
             deepembed.add_field(value=fields_text)
-            await reactionmenu.message.edit(content = "", embed = deepembed)
+            await reactionmenu.message.edit(embed = deepembed)
 
     async def send_command_help(self, ctx, cmd):
         """Sends help for a command.
