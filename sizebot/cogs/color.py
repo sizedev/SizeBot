@@ -1,9 +1,7 @@
 import re
 import requests
 
-
-import discord
-from sizebot.discordplus import commands
+from sizebot.discordplus import commands, Embed
 
 from sizebot import __version__
 from sizebot import conf
@@ -109,7 +107,7 @@ class ColorCog(commands.Cog):
         colorhsv = colorjson["hsv"]["value"]
         colorcmyk = colorjson["cmyk"]["value"]
 
-        embed = discord.Embed(title=f"{colorname} [{printhex}]",
+        embed = Embed(title=f"{colorname} [{printhex}]",
                               description="",
                               color=hexvalue,
                               url=colorscheme)

@@ -2,7 +2,7 @@ import importlib.resources as pkg_resources
 import json
 from typing import Literal
 
-import discord
+from sizebot.discordplus import Embed
 
 import sizebot.data
 from sizebot import __version__
@@ -102,7 +102,7 @@ class DigiObject:
         return returnstr
 
     def getStatsEmbed(self, multiplier = 1):
-        embed = discord.Embed()
+        embed = Embed()
         embed.set_author(name = f"SizeBot {__version__}")
 
         if self.height:

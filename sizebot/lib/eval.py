@@ -6,6 +6,7 @@ import math
 from datetime import date, datetime, time, timedelta
 
 import discord
+from sizebot.discordplus import Embed
 
 from sizebot import conf
 from sizebot.cogs import thistracker
@@ -52,11 +53,11 @@ def eformat(name, value):
 
 def edir(o):
     """send embed of an object's attributes, with type notation"""
-    e = discord.Embed(title=utils.getFullname(o))
+    e = Embed(title=utils.getFullname(o))
     attrs = [eformat(n, v) for n, v in utils.ddir(o).items()]
     pageLen = math.ceil(len(attrs) / 3)
     for page in utils.chunkList(attrs, pageLen):
-        e.add_field(name="\u200b", value="\n".join(page))
+        e.add_field(value="\n".join(page))
     return e
 
 

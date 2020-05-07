@@ -1,7 +1,6 @@
 import logging
 
-import discord
-from sizebot.discordplus import commands
+from sizebot.discordplus import commands, Embed
 
 from sizebot.lib import utils
 from sizebot.lib.constants import emojis
@@ -42,7 +41,7 @@ class EvalCog(commands.Cog):
                 if waitMsg:
                     await waitMsg.delete(delay=0)
 
-        if isinstance(result, discord.Embed):
+        if isinstance(result, Embed):
             await ctx.send(embed=result)
         else:
             strResult = str(result).replace("```", r"\`\`\`")

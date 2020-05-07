@@ -113,7 +113,7 @@ class HelpCog(commands.Cog):
             category_text = "\n".join([c.short_doc for c in cat_cmds])
             embed.add_field(name=cat.name, value=category_text, inline=True)
             if n % 2 == 1:
-                embed.add_field(name="", value="\u200b", inline=False)
+                embed.add_field(name="", inline=False)
 
         await ctx.send(embed=embed)
 

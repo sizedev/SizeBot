@@ -3,6 +3,7 @@ import re
 from urllib.parse import quote
 
 import discord
+from sizebot.discordplus import Embed
 
 from sizebot import __version__
 from sizebot.lib import errors, userdb, utils
@@ -240,7 +241,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         return returnstr
 
     def toEmbed(self):
-        embed = discord.Embed(title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
+        embed = Embed(title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
                               description="",
                               color=0x31eff9,
                               url=self.url)
@@ -251,7 +252,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name=f"{emojis.comparesmallcenter} **{self.small.nickname}**", value=(
             f"{emojis.blank}{emojis.blank} **Height:** {self.small.height:,.3mu}\n"
             f"{emojis.blank}{emojis.blank} **Weight:** {self.small.weight:,.3mu}\n"), inline=True)
-        embed.add_field(name="\u200b", value=(
+        embed.add_field(value=(
             f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big.nickname}** looks to {emojis.comparesmallcenter} **{self.small.nickname}**.\n"
             f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big.nickname}**."), inline=False)
         embed.add_field(name="Height", value=(
@@ -468,7 +469,7 @@ class PersonStats:
         return returnstr
 
     def toEmbed(self):
-        embed = discord.Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
+        embed = Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
         embed.set_author(name=f"SizeBot {__version__}")
         embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n*{self.formattedscale} scale*", inline=True)
         embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n*{self.formattedweightscale} scale*", inline=True)
@@ -489,7 +490,7 @@ class PersonStats:
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)", inline=True)
         embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)", inline=True)
-        embed.add_field(name="\u200b", value="\u200b", inline=False)
+        embed.add_field(inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
         return embed

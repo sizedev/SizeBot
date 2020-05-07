@@ -3,7 +3,7 @@ from datetime import datetime
 from dateutil.tz import tzlocal
 
 import discord
-from sizebot.discordplus import commands
+from sizebot.discordplus import commands, Embed
 
 from sizebot import __version__
 from sizebot import conf
@@ -87,7 +87,7 @@ class ThisCog(commands.Cog):
         now = datetime.now(tzlocal())
         tracker = ThisTracker.load()
         trackerlist = sorted(tracker.points.items(), key=lambda i: i[1], reverse= True)
-        embed = discord.Embed(title=f"The Most Agreeable Users", color=0x31eff9)
+        embed = Embed(title=f"The Most Agreeable Users", color=0x31eff9)
         embed.set_author(name=f"SizeBot {__version__}")
         messagetosend = ""
         totalpoints = sum(tracker.points.values())
