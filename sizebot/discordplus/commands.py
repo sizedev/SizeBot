@@ -55,6 +55,7 @@ class Command(discord.ext.commands.Command):
         if self.aliases:
             aliases = " *(" + ", ".join(self.aliases) + ")*"
 
+        # super().short_doc = self.brief or help.split("\n")[0]
         short_doc = super().short_doc or "-"
 
         return f"**{self.name}**{aliases}\n{short_doc}"
