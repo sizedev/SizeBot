@@ -91,6 +91,7 @@ class HelpCog(commands.Cog):
 
         embed = Embed(title=f"Help [SizeBot {__version__}]")
         embed.description = "*Select an emoji to see details about a category.*"
+        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar)
 
         # Get all non-hidden commands, sorted by name
         commands = (c for c in ctx.bot.commands if not c.hidden)
@@ -125,6 +126,7 @@ class HelpCog(commands.Cog):
         if answer in categoryoptions.keys():
             selectedcategory = categoryoptions[answer]
             deepembed = Embed(title=f"{selectedcategory.name} Help [SizeBot {__version__}]")
+            deepembed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar)
             cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
             fields_text = f"**{selectedcategory.emoji}{selectedcategory.name}**\n\n" + ("\n".join(f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cat_cmds))
             deepembed.add_field(value=fields_text)
