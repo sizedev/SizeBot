@@ -308,5 +308,23 @@ class HelpCog(commands.Cog):
         await ctx.send("View the changelog here!:\nhttps://github.com/sizedev/SizeBot3AndAHalf/blob/develop/changelog.md")
 
 
+class HelpCategory:
+    def __init__(self, cid: str, name: str, description: str):
+        self.cid = cid
+        self.name = name
+        self.description = description
+
+
+categories = [HelpCategory("help", "Help Commands", "Commands that help you."),
+              HelpCategory("setup", "Setup Commands", "Commands for setting up your SizeBot account."),
+              HelpCategory("set", "Set Commands", "Commands for setting various stats."),
+              HelpCategory("setbase", "Set Base Commands", "Commands for setting various base stats."),
+              HelpCategory("change", "Change Commands", "Commands for changing your stats."),
+              HelpCategory("set", "Stats Commands", "Commands for outputting yours and others stats."),
+              HelpCategory("fun", "Fun Commands", "Commands that aren't size-based, but are still fun!"),
+              HelpCategory("misc", "Miscellaneous Commands", "Commands that defy category!"),
+              HelpCategory("mod", "Mod Commands", "Commands for server mods.")]
+
+
 def setup(bot):
     bot.add_cog(HelpCog(bot))
