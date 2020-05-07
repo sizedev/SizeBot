@@ -111,7 +111,7 @@ class HelpCog(commands.Cog):
             if not cat_cmds:
                 logger.warn(f"Command category {cat.cid!r} is empty.")
                 continue
-            fields_text += f"\n\n**{cat.name}**\n" + ("\n".join(c.name for c in cat_cmds))
+            fields_text += f"\n\n**{cat.name}**\n" + (", ".join(f"`{c.name}`" for c in cat_cmds))
 
         embed.add_field(value=fields_text)
 
