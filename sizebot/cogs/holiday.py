@@ -26,17 +26,15 @@ class HolidayCog(commands.Cog):
         try:
             logger.info("Checking for holidays")
             now = datetime.now()
-            nowtime = now.time()
             TWENTY_FOUR_HOURS = timedelta(hours = 24)
             tomorrow = now + TWENTY_FOUR_HOURS
             midnight = time(hour = 0, minute = 0, second = 0)
             midnighttime = datetime.combine(tomorrow, midnight)
 
             # Make sure our loop point is midnight.
-            if nowtime != midnight:
-                timeuntilmidnight = midnighttime - now
-                secondsuntilmidnight = timeuntilmidnight.total_seconds()
-                self.holidayTask.change_interval(seconds = secondsuntilmidnight)
+            timeuntilmidnight = midnighttime - now
+            secondsuntilmidnight = timeuntilmidnight.total_seconds()
+            self.holidayTask.change_interval(seconds = secondsuntilmidnight)
 
             # Holiday checks.
             newnick = conf.name
@@ -62,9 +60,6 @@ class HolidayCog(commands.Cog):
                 logger.debug("Merry Christmas!")
                 newnick = "SizeSanta 🎄"
                 newactivityname = "Merry Christmas!"
-            elif now.month == 5 and now.day == 7:
-                newnick += " [TEST]"
-                newactivityname = "It's Testing Day!"
             else:
                 logger.info("Just another boring non-holiday...")
 
