@@ -125,7 +125,7 @@ class HelpCog(commands.Cog):
             selectedcategory = categoryoptions[answer]
             deepembed = Embed(title=f"{cat.name} Help [SizeBot {__version__}]")
             cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
-            fields_text = f"\n\n**{selectedcategory.emoji}{selectedcategory.name}**\n" + ("\n".join(f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cat_cmds))
+            fields_text = f"**{selectedcategory.emoji}{selectedcategory.name}**\n\n" + ("\n".join(f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cat_cmds))
             deepembed.add_field(value=fields_text)
             await reactionmenu.message.edit(embed = deepembed)
 
