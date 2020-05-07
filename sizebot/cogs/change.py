@@ -1,8 +1,8 @@
 import logging
 import random
 
-from discord.ext import commands, tasks
-from sizebot.discordplus import commandsplus
+from discord.ext import tasks
+from sizebot.discordplus import commands
 
 from sizebot.lib import changes, proportions, userdb
 from sizebot.lib.units import Rate
@@ -19,7 +19,7 @@ class ChangeCog(commands.Cog):
     def cog_unload(self):
         self.changeTask.cancel()
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<x,-,/,+> <amount>",
         category = "change"
     )
@@ -36,7 +36,7 @@ class ChangeCog(commands.Cog):
         logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
         await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True
     )
     @commands.is_owner()
@@ -51,7 +51,7 @@ class ChangeCog(commands.Cog):
         await ctx.author.send("**ACTIVE CHANGES**\n" + changeDump)
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the running changes.")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<rate>",
         category = "change"
     )
@@ -74,7 +74,7 @@ class ChangeCog(commands.Cog):
         await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{rateStr}`.")
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
-    @commandsplus.command(
+    @commands.command(
         category = "change"
     )
     @commands.guild_only()
@@ -92,7 +92,7 @@ class ChangeCog(commands.Cog):
             await ctx.send(f"{ctx.author.display_name} has stopped slow-changing.")
             logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) stopped slow-changing.")
 
-    @commandsplus.command(
+    @commands.command(
         category = "change"
     )
     @commands.guild_only()
@@ -115,7 +115,7 @@ class ChangeCog(commands.Cog):
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
         logger.info(f"User {userid} ({ctx.author.display_name}) ate a cake and multiplied {randmult}.")
 
-    @commandsplus.command(
+    @commands.command(
         category = "change"
     )
     @commands.guild_only()

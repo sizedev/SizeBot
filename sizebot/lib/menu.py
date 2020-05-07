@@ -1,6 +1,6 @@
 import asyncio
 
-from discord.ext import commands
+import discord
 
 from sizebot.lib.errors import DigiException
 
@@ -27,7 +27,7 @@ class Menu:
     menu_owner: the Member object that asked for this menu.
     """
 
-    def __init__(self, ctx: commands.context.Context, options: list, *,
+    def __init__(self, ctx: discord.ext.commands.context.Context, options: list, *,
                  initial_message: str = "", timeout: float = 60, delete_after: bool = True,
                  allow_any: bool = False, cancel_emoji: None):
         self.ctx = ctx

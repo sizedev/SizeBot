@@ -2,9 +2,8 @@ import logging
 from copy import copy
 
 import discord
-from discord.ext import commands
 
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 logger = logging.getLogger("sizebot")
 
@@ -13,7 +12,7 @@ class AdminCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True
     )
     @commands.is_owner()
@@ -23,7 +22,7 @@ class AdminCog(commands.Cog):
         await ctx.send("Stopping SizeBot. ☠️")
         await ctx.bot.close()
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True
     )
     @commands.is_owner()

@@ -1,8 +1,7 @@
 import logging
 import typing
 
-from discord.ext import commands
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 from sizebot.lib import decimal, errors, proportions, userdb, utils
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
@@ -15,7 +14,7 @@ class SetCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["changenick", "nick"],
         usage = "<nick>",
         category = "set"
@@ -33,7 +32,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<species>",
         category = "set"
     )
@@ -50,7 +49,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["clearspecies"],
         category = "set"
     )
@@ -67,7 +66,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<Y/N>",
         category = "set"
     )
@@ -89,7 +88,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<M/U>",
         category = "set"
     )
@@ -114,7 +113,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<height>",
         category = "set"
     )
@@ -133,7 +132,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["resetsize", "reset"],
         category = "set"
     )
@@ -150,7 +149,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<minheight> <maxheight>",
         category = "set"
     )
@@ -175,7 +174,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["inf"],
         category = "set"
     )
@@ -192,7 +191,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["0"],
         category = "set"
     )
@@ -209,7 +208,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<height>",
         category = "setbase"
     )
@@ -226,7 +225,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<weight>",
         category = "set"
     )
@@ -242,7 +241,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<weight>",
         category = "setbase"
     )
@@ -259,7 +258,7 @@ class SetCog(commands.Cog):
 
         await proportions.nickUpdate(ctx.author)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<height/weight> [height/weight]",
         category = "setbase"
     )
@@ -282,7 +281,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
         await ctx.send(f"{ctx.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<foot>",
         category = "set"
     )
@@ -297,7 +296,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<length>",
         category = "setbase"
     )
@@ -313,7 +312,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<shoe>",
         category = "set"
     )
@@ -334,7 +333,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["setbaseshoesize"],
         usage = "<length>",
         category = "setbase"
@@ -357,7 +356,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["clearfoot", "unsetfoot"],
         category = "set"
     )
@@ -372,7 +371,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom foot length.")
         await ctx.send(f"<@{ctx.author.id}>'s foot length is now default.")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<hair>",
         category = "set"
     )
@@ -388,7 +387,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s hair is now {userdata.hairlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<length>",
         category = "setbase"
     )
@@ -405,7 +404,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s hair is now {userdata.hairlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["clearhair", "unsethair"],
         category = "set"
     )
@@ -420,7 +419,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom hair length.")
         await ctx.send(f"<@{ctx.author.id}>'s hair length is now cleared.")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<tail>",
         category = "set"
     )
@@ -436,7 +435,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s tail is now {userdata.taillength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<length>",
         category = "setbase"
     )
@@ -453,7 +452,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s tail is now {userdata.taillength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["cleartail", "unsettail"],
         category = "set"
     )
@@ -468,7 +467,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom tail length.")
         await ctx.send(f"<@{ctx.author.id}>'s tail length is now cleared.")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<male/female/none>",
         category = "set"
     )
@@ -505,7 +504,7 @@ class SetCog(commands.Cog):
         logger.info(f"User {user.id} ({user.display_name}) set their gender to {userdata.gender}.")
         await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["cleargender", "unsetgender"],
         category = "set"
     )

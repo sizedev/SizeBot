@@ -3,8 +3,7 @@ from datetime import datetime
 from dateutil.tz import tzlocal
 
 import discord
-from discord.ext import commands
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 from sizebot import __version__
 from sizebot import conf
@@ -78,7 +77,7 @@ class ThisCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["points", "board"],
         category = "misc"
     )

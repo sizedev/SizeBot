@@ -1,8 +1,8 @@
 import logging
 from time import time
 
-from discord.ext import commands, tasks
-from sizebot.discordplus import commandsplus
+from discord.ext import tasks
+from sizebot.discordplus import commands
 
 from sizebot.lib import utils
 from sizebot.lib.decimal import Decimal
@@ -84,7 +84,7 @@ class RunCog(commands.Cog):
     def cog_unload(self):
         self.runTask.cancel()
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True,
         category = "fun"
     )

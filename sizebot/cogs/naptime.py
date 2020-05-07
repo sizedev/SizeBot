@@ -1,7 +1,7 @@
 import logging
 
-from discord.ext import commands, tasks
-from sizebot.discordplus import commandsplus
+from discord.ext import tasks
+from sizebot.discordplus import commands
 
 from sizebot.lib import naps
 from sizebot.lib.units import TV
@@ -19,7 +19,7 @@ class NaptimeCog(commands.Cog):
     def cog_unload(self):
         self.nannyTask.cancel()
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["chloroform"],
         usage="<duration>",
         category = "fun"
@@ -35,7 +35,7 @@ class NaptimeCog(commands.Cog):
 
         await ctx.send(f"See you in {duration:m}!")
 
-    @commandsplus.command(
+    @commands.command(
         category = "fun"
     )
     async def grump(self, ctx):
@@ -47,7 +47,7 @@ class NaptimeCog(commands.Cog):
         if nanny is not None:
             await ctx.send("Naptime has been cancelled.")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["nanny"],
         hidden = True,
         category = "mod"

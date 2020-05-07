@@ -1,7 +1,6 @@
 import asyncio
 
-from discord.ext import commands
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 from sizebot.lib.constants import ids
 
@@ -14,7 +13,7 @@ class FunCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True
     )
     @commands.is_owner()
@@ -30,7 +29,7 @@ class FunCog(commands.Cog):
         task = self.bot.loop.create_task(repeatTask())
         tasks[ctx.author.id] = task
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True
     )
     @commands.is_owner()
@@ -39,7 +38,7 @@ class FunCog(commands.Cog):
         tasks[ctx.author.id].cancel()
         del tasks[ctx.author.id]
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True
     )
     @commands.is_owner()
@@ -47,7 +46,7 @@ class FunCog(commands.Cog):
         await ctx.message.delete(delay=0)
         await ctx.send(message)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<message>",
         category = "fun"
     )

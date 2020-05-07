@@ -2,8 +2,7 @@ import typing
 import logging
 
 import discord
-from discord.ext import commands
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 from sizebot.lib import proportions, userdb
 from sizebot.lib.objs import DigiObject
@@ -16,7 +15,7 @@ class StatsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         usage = "[user/height]",
         category = "stats"
     )
@@ -48,7 +47,7 @@ class StatsCog(commands.Cog):
 
         logger.info(f"Stats for {memberOrHeight} sent.")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "[user/height]",
         hidden = True,
         category = "stats"
@@ -77,7 +76,7 @@ class StatsCog(commands.Cog):
 
         logger.info(f"Stats for {memberOrHeight} sent.")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<stat> [user/height]",
         category = "stats"
     )
@@ -155,7 +154,7 @@ class StatsCog(commands.Cog):
 
         await ctx.send(stattosend)
 
-    @commandsplus.command(
+    @commands.command(
         usage = "[user/height] <user/height>",
         category = "stats"
     )
@@ -180,7 +179,7 @@ class StatsCog(commands.Cog):
 
         logger.info(f"Compared {userdata1} and {userdata2}")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "[user/height] <user/height>",
         hidden = True,
         category = "stats"
@@ -204,7 +203,7 @@ class StatsCog(commands.Cog):
 
         logger.info(f"Compared {userdata1} and {userdata2}")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["natstats", "natstat"],
         category = "stats"
     )
@@ -229,7 +228,7 @@ class StatsCog(commands.Cog):
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
         logger.info(f"Sent object comparison for {userdata.nickname}.")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["onewaycomp", "owc"],
         usage = "[object/user]",
         category = "stats"
@@ -271,7 +270,7 @@ class StatsCog(commands.Cog):
             embedtosend.description = f"*Requested by *{ctx.author.display_name}*"
         await ctx.send(embed = embedtosend)
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["look", "examine"],
         usage = "[object]",
         category = "stats"
@@ -308,7 +307,7 @@ class StatsCog(commands.Cog):
         embedtosend = stats.toEmbed()
         await ctx.send(embed = embedtosend)
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["objectstats"],
         usage = "[object]",
         category = "stats"
@@ -325,7 +324,7 @@ class StatsCog(commands.Cog):
 
         await ctx.send(embed = what.statsembed())
 
-    @commandsplus.command(
+    @commands.command(
         usage = "[object]",
         hidden = True,
         category = "stats"

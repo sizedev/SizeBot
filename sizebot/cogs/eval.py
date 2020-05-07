@@ -1,8 +1,7 @@
 import logging
 
 import discord
-from discord.ext import commands
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 from sizebot.lib import utils
 from sizebot.lib.constants import emojis
@@ -16,7 +15,7 @@ class EvalCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True
     )
     @commands.is_owner()
@@ -50,7 +49,7 @@ class EvalCog(commands.Cog):
             for m in utils.chunkMsg(strResult):
                 await ctx.send(m)
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True
     )
     @commands.is_owner()

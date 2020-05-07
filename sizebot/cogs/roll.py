@@ -1,7 +1,6 @@
 import logging
 
-from discord.ext import commands
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 from sizebot.lib import roller
 
@@ -14,7 +13,7 @@ class RollCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         aliases=["dice", "calc"],
         usage="<dice>d<sides>[d/k/dl/kh][num]",
         category = "fun"
@@ -49,7 +48,7 @@ class RollCog(commands.Cog):
 
         await ctx.send(sendstring)
 
-    @commandsplus.command(
+    @commands.command(
         usage="<dice>d<sides>[d/k/dl/kh][num]",
         category = "fun"
     )

@@ -7,10 +7,9 @@ import logging
 import toml
 
 import discord
-from discord.ext import commands
 
 from sizebot import conf
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 from sizebot.lib import proportions
 from sizebot.lib import userdb
 from sizebot.lib.checks import is_mod
@@ -114,7 +113,7 @@ class EdgeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         category = "misc"
     )
     async def edges(self, ctx):
@@ -122,7 +121,7 @@ class EdgeCog(commands.Cog):
         edgedict = getEdgesFile(ctx.guild.id)
         await ctx.send(f"**SERVER-SET SMALLEST AND LARGEST USERS:**\nSmallest: {edgedict.get('smallest', '*Unset*')}\nLargest: {edgedict.get('largest', '*Unset*')}")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["smallest"],
         usage = "[user]",
         hidden = True,
@@ -138,7 +137,7 @@ class EdgeCog(commands.Cog):
         await ctx.send(f"<@{member.id}> is now the smallest user. They will be automatically adjusted to be the smallest user until they are removed from this role.")
         logger.info(f"{member.name} ({member.id}) is now the smallest user.")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["largest"],
         usage = "[user]",
         hidden = True,
@@ -154,7 +153,7 @@ class EdgeCog(commands.Cog):
         await ctx.send(f"<@{member.id}> is now the largest user. They will be automatically adjusted to be the largest user until they are removed from this role.")
         logger.info(f"{member.name} ({member.id}) is now the largest user.")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["resetsmallest", "removesmallest"],
         hidden = True,
         category = "mod"
@@ -169,7 +168,7 @@ class EdgeCog(commands.Cog):
         await ctx.send("Smallest user unset.")
         logger.info("Smallest user unset.")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["resetlargest", "removelargest"],
         hidden = True,
         category = "mod"
@@ -184,7 +183,7 @@ class EdgeCog(commands.Cog):
         await ctx.send("Largest user unset.")
         logger.info("Largest user unset.")
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True,
         category = "mod"
     )

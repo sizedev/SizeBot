@@ -2,8 +2,7 @@ import logging
 import re
 from datetime import datetime, timedelta
 
-from discord.ext import commands
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 from sizebot import conf
 from sizebot.lib import utils
@@ -77,7 +76,7 @@ class WinksCog(commands.Cog):
         if winkcount in milestones:
             await sayMilestone(message.channel, winkcount)
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True,
         category = "misc"
     )

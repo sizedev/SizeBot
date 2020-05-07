@@ -2,9 +2,8 @@ import asyncio
 import logging
 from shutil import copyfile
 
-from discord.ext import commands
 from discord.utils import get
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 from sizebot import conf
 from sizebot.lib import errors, proportions, userdb
@@ -35,7 +34,7 @@ class RegisterCog(commands.Cog):
         self.bot = bot
 
     # TODO: Change the way this works.
-    @commandsplus.command(
+    @commands.command(
         aliases = ["signup"],
         category = "setup"
     )
@@ -138,7 +137,7 @@ class RegisterCog(commands.Cog):
             return
         raise error
 
-    @commandsplus.command(
+    @commands.command(
         category = "setup"
     )
     @commands.guild_only()
@@ -189,7 +188,7 @@ class RegisterCog(commands.Cog):
         logger.warn(f"User {user.id} successfully unregistered.")
         await ctx.send(f"Unregistered {user.name}.")
 
-    @commandsplus.command(
+    @commands.command(
         category = "setup"
     )
     @commands.guild_only()

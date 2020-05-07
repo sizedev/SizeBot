@@ -3,9 +3,7 @@ import math
 
 from datetime import datetime
 
-import discord
-from discord.ext import commands
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands, Embed
 
 from sizebot import __version__
 from sizebot import conf
@@ -38,7 +36,7 @@ class HelpCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         category = "help"
     )
     async def units(self, ctx):
@@ -49,7 +47,7 @@ class HelpCog(commands.Cog):
         heightunits = [str(u) for u in sorted(SV._units) if u not in heightobjectunits]
         weightunits = [str(u) for u in sorted(WV._units) if u not in weightobjectunits]
 
-        embed = discord.Embed(title=f"Units [SizeBot {__version__}]")
+        embed = Embed(title=f"Units [SizeBot {__version__}]")
 
         for n, units in enumerate(utils.chunkList(heightunits, math.ceil(len(heightunits) / 3))):
             embed.add_field(name="Height" if n == 0 else "\u200b", value="\n".join(units))
@@ -59,7 +57,7 @@ class HelpCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["objects"],
         category = "help"
     )
@@ -71,7 +69,7 @@ class HelpCog(commands.Cog):
 
         objectunits.sort()
 
-        embed = discord.Embed(title=f"Objects [SizeBot {__version__}]")
+        embed = Embed(title=f"Objects [SizeBot {__version__}]")
 
         for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 3))):
             embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
@@ -90,26 +88,34 @@ class HelpCog(commands.Cog):
         ...
         """
 
-        embedCount = 1
-        pagesPerEmbed = 4
+        embed = Embed(title=f"Help [SizeBot {__version__}]")
 
-        embeds = [discord.Embed(title=(f"Help [SizeBot {__version__}]" if n == 0 else None)) for n in range(embedCount)]
+        # Get all non-hidden commands, sorted by name
+        commands = (c for c in ctx.bot.commands if not c.hidden)
+        commands = sorted(commands, key=lambda c: c.name)
 
-        commands = sorted((c for c in ctx.bot.commands if not c.hidden), key=lambda c: c.name)
+        # Divide commands into categories
+        commands_by_cat = {cat.cid: [] for cat in categories}
 
-        commandsPerPage = math.ceil(len(commands) / (embedCount * pagesPerEmbed))
+        for c in commands:
+            cmd_category = c.category or "misc"
+            if cmd_category not in commands_by_cat:
+                logger.warn(f"Command category {cmd_category!r} does not exist.")
+                cmd_category = "misc"
+            commands_by_cat[cmd_category].append(c)
 
-        commandStrings = [f"**{c.name}**{' *(' + ', '.join(c.aliases) + ')*' if c.aliases else ''}\n{c.short_doc or '-'}" for c in commands]
+        # Add each category to the embed as a field
+        for n, cat in enumerate(categories):
+            cat_cmds = commands_by_cat.get(cat.cid, [])
+            if not cat_cmds:
+                logger.warn(f"Command category {cat.cid!r} is empty.")
+                continue
+            category_text = "\n".join([c.short_doc for c in cat_cmds])
+            embed.add_field(name=cat.name, value=category_text, inline=True)
+            if n % 2 == 1:
+                embed.add_field(name="", value="\u200b", inline=False)
 
-        pages = ["\n".join(p) for p in utils.chunkList(commandStrings, commandsPerPage)]
-
-        for n, p in enumerate(pages):
-            if n == 2:
-                embeds[math.floor(n / pagesPerEmbed)].add_field(name="\u200b", value="\u200b", inline=False)
-            embeds[math.floor(n / pagesPerEmbed)].add_field(name=("Commands" if n == 0 else "\u200b"), value=p, inline=True)
-
-        for e in embeds:
-            await ctx.send(embed=e)
+        await ctx.send(embed=embed)
 
     async def send_command_help(self, ctx, cmd):
         """Sends help for a command.
@@ -141,7 +147,7 @@ class HelpCog(commands.Cog):
             description += "*This command can only be run in a server, and not in DMs.*\n"
         description += "\n\n".join(descriptionParts).replace("&", conf.prefix)
 
-        embed = discord.Embed(
+        embed = Embed(
             title=signature,
             description=description
         ).set_author(name=f"Help [SizeBot {__version__}]")
@@ -151,7 +157,7 @@ class HelpCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commandsplus.command(
+    @commands.command(
         description="[description]",
         usage="[usage]",
         aliases=["helpme", "wtf"],
@@ -175,7 +181,7 @@ class HelpCog(commands.Cog):
 
         await ctx.send(f"Unrecognized command: `{cmdName}`.")
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True
     )
     async def oldabout(self, ctx):
@@ -207,13 +213,13 @@ class HelpCog(commands.Cog):
             "\n"
             f"Version {__version__} | {now.strftime('%d %b %Y')}")
 
-    @commandsplus.command(
+    @commands.command(
         category = "help"
     )
     async def about(self, ctx):
         """Get the credits and some facts about SizeBot."""
         now = datetime.now()
-        embed = discord.Embed(title = "SizeBot3½", description = "Think of a new slogan!", color = 0x11cccc)
+        embed = Embed(title = "SizeBot3½", description = "Think of a new slogan!", color = 0x11cccc)
         embed.set_author(name = "DigiDuncan")
         embed.set_image(url = "https://cdn.discordapp.com/attachments/650460192009617433/698529527965417552/sizebotlogot.png")
         embed.add_field(name = "Credits",
@@ -246,7 +252,7 @@ class HelpCog(commands.Cog):
         embed.set_footer(text = f"Version {__version__} | {now.strftime('%d %b %Y')}")
         await ctx.send(embed = embed)
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["fund"],
         category = "help"
     )
@@ -260,7 +266,7 @@ class HelpCog(commands.Cog):
             "SizeBot has been a passion project coded over a period of three years and learning a lot of Python along the way.\n"
             "Thank you so much for being here throughout this journey!")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<message>",
         category = "misc"
     )
@@ -269,7 +275,7 @@ class HelpCog(commands.Cog):
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
         await self.bot.get_user(ids.digiduncan).send(f"Bug report from <@{ctx.author.id}>: {message}")
 
-    @commandsplus.command(
+    @commands.command(
         usage = "<message>",
         category = "misc"
     )
@@ -278,7 +284,7 @@ class HelpCog(commands.Cog):
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.author.id}>: {message}")
 
-    @commandsplus.command(
+    @commands.command(
         aliases = ["objsuggest"],
         usage = "<message>",
         category = "misc"
@@ -294,7 +300,7 @@ class HelpCog(commands.Cog):
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         await self.bot.get_user(ids.digiduncan).send(f"Feature request from <@{ctx.author.id}>: {message}")
 
-    @commandsplus.command(
+    @commands.command(
         usage = ["[type]"],
         category = "help"
     )
@@ -313,7 +319,7 @@ class HelpCog(commands.Cog):
             response = f"Pong! :ping_pong:\nCommand latency: {utils.prettyTimeDelta(messageLatency.total_seconds(), True)}"
         await waitMsg.edit(content = response)
 
-    @commandsplus.command(
+    @commands.command(
         category = "help"
     )
     async def changelog(self, ctx):
@@ -328,15 +334,17 @@ class HelpCategory:
         self.description = description
 
 
-categories = [HelpCategory("help", "Help Commands", "Commands that help you."),
-              HelpCategory("setup", "Setup Commands", "Commands for setting up your SizeBot account."),
-              HelpCategory("set", "Set Commands", "Commands for setting various stats."),
-              HelpCategory("setbase", "Set Base Commands", "Commands for setting various base stats."),
-              HelpCategory("change", "Change Commands", "Commands for changing your stats."),
-              HelpCategory("set", "Stats Commands", "Commands for outputting yours and others stats."),
-              HelpCategory("fun", "Fun Commands", "Commands that aren't size-based, but are still fun!"),
-              HelpCategory("misc", "Miscellaneous Commands", "Commands that defy category!"),
-              HelpCategory("mod", "Mod Commands", "Commands for server mods.")]
+categories = [
+    HelpCategory("help", "Help Commands", "Commands that help you."),
+    HelpCategory("setup", "Setup Commands", "Commands for setting up your SizeBot account."),
+    HelpCategory("set", "Set Commands", "Commands for setting various stats."),
+    HelpCategory("setbase", "Set Base Commands", "Commands for setting various base stats."),
+    HelpCategory("change", "Change Commands", "Commands for changing your stats."),
+    HelpCategory("stats", "Stats Commands", "Commands for outputting yours and others stats."),
+    HelpCategory("fun", "Fun Commands", "Commands that aren't size-based, but are still fun!"),
+    HelpCategory("mod", "Mod Commands", "Commands for server mods."),
+    HelpCategory("misc", "Miscellaneous Commands", "Commands that defy category!")
+]
 
 
 def setup(bot):

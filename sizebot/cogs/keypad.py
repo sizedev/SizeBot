@@ -1,7 +1,6 @@
 import asyncio
 
-from discord.ext import commands
-from sizebot.discordplus import commandsplus
+from sizebot.discordplus import commands
 
 from sizebot.lib.constants import emojis
 
@@ -23,7 +22,7 @@ class KeypadCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commandsplus.command(
+    @commands.command(
         hidden = True,
         category = "fun"
     )

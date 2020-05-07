@@ -1,12 +1,15 @@
 import asyncio
 import functools
 
-from discord.ext import commands
-from discord.ext.commands.cog import Cog
-from discord.ext.commands.errors import CommandError, CommandInvokeError
+import discord
+from discord.ext.commands import Cog
+from discord.ext.commands import CommandError, CommandInvokeError, MissingRequiredArgument
+from discord.ext.commands import is_owner, guild_only
+
+__all__ = ["Cog", "MissingRequiredArgument", "is_owner", "guild_only", "command"]
 
 
-class Command(commands.Command):
+class Command(discord.ext.commands.Command):
     def __init__(self, *args, category=None, **kwargs):
         self.category = category
         super().__init__(*args, **kwargs)
@@ -45,6 +48,16 @@ class Command(commands.Command):
 
         if not handled:
             ctx.bot.dispatch("command_error", ctx, error)
+
+    @property
+    def short_doc(self):
+        aliases = ""
+        if self.aliases:
+            aliases = " *(" + ", ".join(self.aliases) + ")*"
+
+        short_doc = super().short_doc or "-"
+
+        return f"**{self.name}**{aliases}\n{short_doc}"
 
 
 def command(name=None, cls=None, **attrs):

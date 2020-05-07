@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 
 import discord
-from discord.ext import commands
+from discord.ext.commands import Bot
 
 from digiformatter import styles, logger as digilogger
 
@@ -60,7 +60,7 @@ def main():
     booting = True
     launchtime = datetime.now()
 
-    bot = commands.Bot(command_prefix = conf.prefix, description = conf.description)
+    bot = Bot(command_prefix = conf.prefix, description = conf.description)
 
     bot.remove_command("help")
 
