@@ -65,9 +65,10 @@ class HolidayCog(commands.Cog):
             else:
                 logger.debug("Just another boring non-holiday...")
 
-            if newnick != self.bot.user.name:
-                logger.debug(f"Updating bot nick to \"{newnick}\".")
-                await self.bot.user.edit(username = newnick)
+            for guild in self.bot.guilds:
+                if newnick != guild.me.display_name:
+                    logger.debug(f"Updating bot nick to \"{newnick}\" in {guild.name}.")
+                    await guild.me.edit(nick = newnick)
             if newactivityname != self.bot.guilds[0].get_member(self.bot.user.id).activity:
                 logger.debug(f"Updating bot activity to \"{newactivityname}\".")
                 newactivity = discord.Game(name = newactivityname)
