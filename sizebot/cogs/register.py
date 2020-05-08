@@ -44,18 +44,18 @@ class RegisterCog(commands.Cog):
         """Registers a user for SizeBot.
 
         Parameters:
-        `nick`: Your nickname. This will be the first thing displayed in your nickname.
+        • `nick`: Your nickname. This will be the first thing displayed in your nickname.
         For a nickname with spaces, this must be wrapped in quotes.
-        `display`: Whether or not to have SizeBot manage your server nickname for you,
+        • `display`: Whether or not to have SizeBot manage your server nickname for you,
         allowing for an automatically updated sizetag appended to your nickname at all times.
-        `currentheight`: Self-explnatory. Accepts a wide variety of units as shown in `&units`.
-        `baseheight`: The default height of your character. It is recommended that this is a vaugely
+        • `currentheight`: Self-explnatory. Accepts a wide variety of units as shown in `&units`.
+        • `baseheight`: The default height of your character. It is recommended that this is a vaugely
         reasonable, human-like value, for instance your IRL height, except in rare circumnstances
         (for instance, if your character is a cat, or an orc, etc.)
-        `baseweight`: The default weight of your character. All the recommendations for baseheight apply here.
-        `unitsystem`: The unit system your size tag, and basic versions of your stats, will be displayed in by default.
+        • `baseweight`: The default weight of your character. All the recommendations for baseheight apply here.
+        • `unitsystem`: The unit system your size tag, and basic versions of your stats, will be displayed in by default.
         Accepts `M` for Metric, and `U` or `I` for U.S./Imperial.
-        `species`: Optional, a string to be appened after your size in your sizetag. Appears in the format `<nick> [<size>, <species>]`.
+        • `species`: Optional, a string to be appened after your size in your sizetag. Appears in the format `<nick> [<size>, <species>]`.
         If `species` is to contain a space, wrap it in quotes.
 
         Examples:
