@@ -2,11 +2,13 @@ import typing
 import logging
 
 import discord
+from discord.ext.commands.converter import MemberConverter
 from sizebot.discordplus import commands
 
 from sizebot.lib import proportions, userdb
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV
+from sizebot.lib.utils import parseMany
 
 logger = logging.getLogger("sizebot")
 
@@ -230,20 +232,34 @@ class StatsCog(commands.Cog):
 
     @commands.command(
         aliases = ["onewaycomp", "owc"],
-        usage = "[object/user]",
+        usage = "<object/user> [as user/height]",
         category = "stats"
     )
     @commands.guild_only()
-    async def onewaycompare(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str], who: typing.Union[discord.Member, SV] = None):  # TODO: Allow a second argument here.
+    async def onewaycompare(self, ctx, *, args: str):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
         Examples:
-        `&lookat man`
-        `&look book`
-        `&examine building`"""
+        `&onewaycompare lego`
+        `&owc moon as @Kelly`
+        """
+
+        argslist = args.rsplit(" as ", 1)
+        if len(argslist) == 1:
+            what = argslist[0]
+            who = None
+        else:
+            what = argslist[0]
+            who = argslist[1]
+
+        mc = MemberConverter()
+
+        what = await parseMany(ctx, what, [DigiObject, mc, SV])
+        who = await parseMany(ctx, who, [mc, SV])
 
         if who is None:
+            what = await parseMany(ctx, args, [DigiObject, mc, SV])
             who = ctx.author
 
         userdata = getUserdata(who)

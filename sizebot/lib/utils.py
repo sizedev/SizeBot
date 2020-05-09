@@ -308,3 +308,12 @@ def findOne(iterator):
     except StopIteration:
         val = None
     return val
+
+
+async def parseMany(ctx, arg, types: list, default = None):
+    for t in types:
+        try:
+            return await t.convert(ctx, arg)
+        except Exception:
+            pass
+    return default
