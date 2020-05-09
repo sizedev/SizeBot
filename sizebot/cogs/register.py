@@ -40,12 +40,12 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def register(self, ctx, nick: str, display: str = "y", currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
+    async def register(self, ctx, nick: str, display: bool = True, currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot.
 
         Parameters:
         • `nick`: Your nickname. This will be the first thing displayed in your nickname. For a nickname with spaces, this must be wrapped in quotes.
-        • `display`: Whether or not to have SizeBot manage your server nickname for you, allowing for an automatically updated sizetag appended to your nickname at all times.
+        • `display`: Whether or not to have SizeBot manage your server nickname for you, allowing for an automatically updated sizetag appended to your nickname at all times. Accepts a variety of booleany values, such as `true`/`false`, `Y`/`N`, `enable`/`disable`, `yes`/`no`, etc.
         • `currentheight`: Self-explnatory. Accepts a wide variety of units as shown in `&units`.
         • `baseheight`: The default height of your character. It is recommended that this is a vaugely reasonable, human-like value, for instance your IRL height, except in rare circumnstances (for instance, if your character is a cat, or an orc, etc.)
         • `baseweight`: The default weight of your character. All the recommendations for baseheight apply here.
