@@ -131,8 +131,7 @@ def main():
         await bot.process_commands(after)
         await proportions.nickUpdate(after.author)
 
-    @bot.event
-    async def on_disconnect():
+    def on_disconnect():
         logger.error("SizeBot has been disconnected from Discord!")
 
     if not conf.authtoken:
@@ -140,6 +139,7 @@ def main():
         return
 
     bot.run(conf.authtoken)
+    on_disconnect()
 
 
 if __name__ == "__main__":
