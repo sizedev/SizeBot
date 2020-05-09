@@ -3,6 +3,7 @@ from datetime import datetime, time, timedelta
 
 import discord
 from discord.ext import commands, tasks
+from discord.utils import sleep_until
 
 from sizebot import conf
 from sizebot.lib.utils import intToRoman, formatTraceback
@@ -25,16 +26,8 @@ class HolidayCog(commands.Cog):
         """Holiday checker"""
         try:
             logger.info("Checking for holidays")
-            now = datetime.now()
-            TWENTY_FOUR_HOURS = timedelta(hours = 24)
-            tomorrow = now + TWENTY_FOUR_HOURS
-            midnight = time(hour = 0, minute = 0, second = 0)
-            midnighttime = datetime.combine(tomorrow, midnight)
 
-            # Make sure our loop point is midnight.
-            timeuntilmidnight = midnighttime - now
-            secondsuntilmidnight = timeuntilmidnight.total_seconds()
-            self.holidayTask.change_interval(seconds = secondsuntilmidnight)
+            now = datetime.now()
 
             # Holiday checks.
             newnick = conf.name
@@ -71,6 +64,10 @@ class HolidayCog(commands.Cog):
                 logger.info(f"Updating bot activity to \"{newactivityname}\".")
                 newactivity = discord.Game(name = newactivityname)
                 await self.bot.change_presence(activity = newactivity)
+
+            midnight = datetime.combine(now, time(hour = 0, minute = 0, second = 0))
+            next_midnight = midnight + timedelta(days = 1)
+            await sleep_until(next_midnight)
 
         except Exception as err:
             logger.error(formatTraceback(err))
