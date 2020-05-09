@@ -75,6 +75,9 @@ def main():
         discordhandler = DiscordHandler(logChannel)
         logger.addHandler(discordhandler)
 
+        # Set the bots name to what's set in the config.
+        await bot.edit(username = conf.name)
+
         # Start the language engine.
         language.load()
 
