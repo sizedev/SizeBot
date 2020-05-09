@@ -71,11 +71,11 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setdisplay(self, ctx, newdisp):
+    async def setdisplay(self, ctx, newdisp: bool):
         """Set display mode."""
         newdisp = newdisp.upper()
-        if newdisp not in ["Y", "N"]:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N]`.")
+        if newdisp not in [True, False]:
+            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N/true/false/yes/no/enable/disable...]`.")
             return
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
