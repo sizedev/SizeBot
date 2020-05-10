@@ -8,3 +8,4 @@ digiformatter==0.5.2
 python-dateutil==2.8.1
 requests==2.22.0
 inflect==4.1.0
+arrow==0.15.6

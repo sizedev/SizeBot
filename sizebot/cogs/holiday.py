@@ -1,6 +1,8 @@
 import logging
 from datetime import datetime, time, timedelta
 
+import arrow
+
 import discord
 from discord.ext import commands, tasks
 from discord.utils import sleep_until
@@ -27,7 +29,7 @@ class HolidayCog(commands.Cog):
         try:
             logger.info("Checking for holidays")
 
-            now = datetime.now()
+            now = arrow.now()
 
             # Holiday checks.
             newnick = conf.name
@@ -65,9 +67,8 @@ class HolidayCog(commands.Cog):
                 newactivity = discord.Game(name = newactivityname)
                 await self.bot.change_presence(activity = newactivity)
 
-            midnight = datetime.combine(now, time(hour = 0, minute = 0, second = 0))
-            next_midnight = midnight + timedelta(days = 1)
-            await sleep_until(next_midnight)
+            next_midnight = arrow.get(now).replace(hour=0, minute=0, second=0).shift(days=1)
+            await sleep_until(next_midnight.datetime)
 
         except Exception as err:
             logger.error(formatTraceback(err))
