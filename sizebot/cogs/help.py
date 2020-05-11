@@ -102,21 +102,20 @@ class HelpCog(commands.Cog):
                 logger.warn(f"Command category {cmd_category!r} does not exist.")
                 cmd_category = "misc"
             commands_by_cat[cmd_category].append(c)
-        helping = True
-        while helping:
 
+        fields_text = ""
+
+        for cat in categories:
+            cat_cmds = commands_by_cat.get(cat.cid, [])
+            if not cat_cmds:
+                logger.warn(f"Command category {cat.cid!r} is empty.")
+                continue
+            fields_text += f"\n\n**{cat.emoji} {cat.name}**\n" + (", ".join(f"`{c.name}`" for c in cat_cmds))
+
+        while True:
             embed = Embed(title=f"Help [SizeBot {__version__}]")
             embed.description = "*Select an emoji to see details about a category.*"
             embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-
-            fields_text = ""
-
-            for cat in categories:
-                cat_cmds = commands_by_cat.get(cat.cid, [])
-                if not cat_cmds:
-                    logger.warn(f"Command category {cat.cid!r} is empty.")
-                    continue
-                fields_text += f"\n\n**{cat.emoji} {cat.name}**\n" + (", ".join(f"`{c.name}`" for c in cat_cmds))
 
             embed.add_field(value=fields_text)
 
@@ -124,10 +123,13 @@ class HelpCog(commands.Cog):
 
             reactionmenu, answer = await Menu.display(ctx, categoryoptions.keys(), cancel_emoji = emojis.cancel,
                                                       initial_embed = embed, delete_after = False)
+            if not answer:
+                return
 
-            if answer in categoryoptions.keys():
+            if answer in categoryoptions:
                 await reactionmenu.message.delete()
                 selectedcategory = categoryoptions[answer]
+
                 deepembed = Embed(title=f"{selectedcategory.name} Help [SizeBot {__version__}]")
                 deepembed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
                 cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
@@ -137,14 +139,10 @@ class HelpCog(commands.Cog):
                 deepreactionmenu, deepanswer = await Menu.display(ctx, ["🔙"], cancel_emoji = emojis.cancel,
                                                                   initial_embed = deepembed, delete_after = False)
 
+                if not deepanswer:
+                    return
                 if deepanswer == "🔙":
                     await deepreactionmenu.message.delete()
-                elif deepanswer == emojis.cancel:
-                    helping = False
-                    break
-            elif answer == emojis.cancel:
-                helping = False
-                break
 
     async def send_command_help(self, ctx, cmd):
         """Sends help for a command.
