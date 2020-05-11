@@ -3,6 +3,8 @@ from copy import copy
 from functools import total_ordering
 from typing import Literal
 
+from validator_collection import url
+
 from sizebot import conf
 from sizebot.lib import errors
 from sizebot.lib.units import SV, WV
@@ -20,12 +22,15 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 @total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["guildid", "id", "nickname", "_gender", "display", "_height", "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem", "species"]
+    __slots__ = ["guildid", "id", "nickname", "picture_url", "decription", "_gender", "display", "_height",
+                 "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem", "species"]
 
     def __init__(self):
         self.guildid = None
         self.id = None
         self.nickname = None
+        self._picture_url = None
+        self.description = None
         self._gender = None
         self.display = True
         self._height = defaultheight
@@ -41,6 +46,16 @@ class User:
         return f"GUILDID {self.guildid}, ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, HAIR {self.hairlength}, TAIL {self.taillength}, UNIT {self.unitsystem}, SPEC {self.species}"
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
+    @property
+    def picture_url(self):
+        return self._picture_url
+
+    @picture_url.setter
+    def picture_url(self, value):
+        if not url(value):
+            raise ValueError(f"{value} is not a valid URL.")
+        self._picture_url = value
+
     @property
     def height(self):
         return self._height
