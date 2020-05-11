@@ -22,7 +22,7 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 @total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["guildid", "id", "nickname", "picture_url", "decription", "_gender", "display", "_height",
+    __slots__ = ["guildid", "id", "nickname", "_picture_url", "decription", "_gender", "display", "_height",
                  "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem", "species"]
 
     def __init__(self):
