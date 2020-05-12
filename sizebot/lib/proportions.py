@@ -355,7 +355,7 @@ class PersonStats:
     def __init__(self, userdata):
         self.nickname = userdata.nickname
         self.tag = userdata.tag
-        self.gender = userdata.gender
+        self.gender = userdata.autogender
         self.height = userdata.height
         self.baseheight = userdata.baseheight
         self.viewscale = userdata.viewscale

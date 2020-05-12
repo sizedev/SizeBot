@@ -362,7 +362,7 @@ def getUserdata(memberOrSV, nickname = "Raw"):
     if nickname is None:
         nickname = "Raw"
     if isinstance(memberOrSV, discord.Member):
-        userdata = userdb.load(memberOrSV.guild.id, memberOrSV.id)
+        userdata = userdb.load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV)
     else:
         userdata = userdb.User()
         userdata.nickname = nickname

@@ -23,7 +23,7 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 class User:
     # __slots__ declares to python what attributes to expect.
     __slots__ = ["guildid", "id", "nickname", "_picture_url", "description", "_gender", "display", "_height",
-                 "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem", "species"]
+                 "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem", "species", "soft_gender"]
 
     def __init__(self):
         self.guildid = None
@@ -41,6 +41,7 @@ class User:
         self._taillength = None
         self._unitsystem = "m"
         self.species = None
+        self.soft_gender = None
 
     def __str__(self):
         return f"GUILDID {self.guildid}, ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, HAIR {self.hairlength}, TAIL {self.taillength}, UNIT {self.unitsystem}, SPEC {self.species}"
@@ -121,10 +122,7 @@ class User:
 
     @property
     def autogender(self):
-        if self.gender:
-            return self.gender
-        # TODO: Search the roles for a gender.
-        return "m"
+        return self.gender or self._soft_gender or "m"
 
     @property
     def baseweight(self):
@@ -310,14 +308,17 @@ def save(userdata):
         json.dump(jsondata, f, indent = 4)
 
 
-def load(guildid, userid):
+def load(guildid, userid, *, member=None):
     path = getUserPath(guildid, userid)
     try:
         with open(path, "r") as f:
             jsondata = json.load(f)
     except FileNotFoundError:
         raise errors.UserNotFoundException(guildid, userid)
-    return User.fromJSON(jsondata)
+    user = User.fromJSON(jsondata)
+    if member and not user.gender:
+        user.soft_gender = member.gender
+    return user
 
 
 def delete(guildid, userid):
