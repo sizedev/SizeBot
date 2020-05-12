@@ -122,7 +122,7 @@ class User:
 
     @property
     def autogender(self):
-        return self.gender or self._soft_gender or "m"
+        return self.gender or self.soft_gender or "m"
 
     @property
     def baseweight(self):
