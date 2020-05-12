@@ -64,7 +64,10 @@ def main():
     booting = True
     launchtime = datetime.now()
 
-    bot = Bot(command_prefix = conf.prefix, description = conf.description, allowed_mentions = discord.AllowedMentions(everyone=False))
+    bot = Bot(command_prefix = conf.prefix, description = conf.description)
+    # Disabled allow_mentions until next release of discord.py
+    #bot = Bot(command_prefix = conf.prefix, description = conf.description, allowed_mentions = discord.AllowedMentions(everyone=False))
+    
 
     bot.remove_command("help")
 
