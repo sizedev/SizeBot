@@ -369,6 +369,7 @@ categories = [
     HelpCategory("setbase", "Set Base Commands", "Commands for setting various base stats.", "🖋️"),
     HelpCategory("change", "Change Commands", "Commands for changing your stats.", "📈"),
     HelpCategory("stats", "Stats Commands", "Commands for outputting yours and others stats.", "📊"),
+    HelpCategory("profile", "Profil Commands", "Commands for updating and displaying profiles.", "🆔"),
     HelpCategory("fun", "Fun Commands", "Commands that aren't size-based, but are still fun!", "🎉"),
     HelpCategory("mod", "Mod Commands", "Commands for server mods.", "⚙️"),
     HelpCategory("misc", "Miscellaneous Commands", "Commands that defy category!", "🌐")
