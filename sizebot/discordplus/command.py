@@ -1,6 +1,8 @@
 from discord.ext.commands import Command, Cog
 from discord.ext.commands.core import wrap_callback
+
 old_init = Command.__init__
+old_short_doc = Command.short_doc
 
 
 def __init__(self, *args, category=None, **kwargs):
@@ -46,7 +48,7 @@ async def dispatch_error(self, ctx, error):
 
 @property
 def short_doc(self):
-    return super().short_doc or "-"
+    return old_short_doc.fget(self) or "-"
 
 
 @property
