@@ -41,7 +41,7 @@ def gender(self):
         if self.pronoun == "she":
             foundfemale = True
 
-    if foundmale ^ foundfemale:
+    if not foundmale ^ foundfemale:
         return None
     if foundmale:
         return "m"
@@ -69,7 +69,7 @@ def pronoun(self):
         if self.gender == "f":
             foundshe = True
 
-    if foundhe ^ foundshe ^ foundthey:
+    if not foundhe ^ foundshe ^ foundthey:
         return None
     if foundhe:
         return "he"
