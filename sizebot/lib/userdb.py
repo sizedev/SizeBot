@@ -23,7 +23,7 @@ DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweigh
 class User:
     # __slots__ declares to python what attributes to expect.
     __slots__ = ["guildid", "id", "nickname", "_picture_url", "description", "_gender", "display", "_height",
-                 "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem", "species", "soft_gender"]
+                 "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem", "species", "soft_gender", "avatar_url"]
 
     def __init__(self):
         self.guildid = None
@@ -42,6 +42,7 @@ class User:
         self._unitsystem = "m"
         self.species = None
         self.soft_gender = None
+        self.avatar_url = None
 
     def __str__(self):
         return f"GUILDID {self.guildid}, ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, HAIR {self.hairlength}, TAIL {self.taillength}, UNIT {self.unitsystem}, SPEC {self.species}"
@@ -56,6 +57,10 @@ class User:
         if not url(value):
             raise ValueError(f"{value} is not a valid URL.")
         self._picture_url = value
+
+    @property
+    def auto_picture_url(self):
+        return self.picture_url or self.avatar_url
 
     @property
     def height(self):
@@ -316,8 +321,11 @@ def load(guildid, userid, *, member=None):
     except FileNotFoundError:
         raise errors.UserNotFoundException(guildid, userid)
     user = User.fromJSON(jsondata)
-    if member and not user.gender:
-        user.soft_gender = member.gender
+    if member:
+        if not user.gender:
+            user.soft_gender = member.gender
+        user.avatar_url = member.avatar_url
+
     return user
 
 
