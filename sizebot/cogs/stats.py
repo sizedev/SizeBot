@@ -3,7 +3,7 @@ import logging
 
 import discord
 from discord.ext.commands.converter import MemberConverter
-from sizebot.discordplus import commands
+from discord.ext import commands
 
 from sizebot.lib import proportions, userdb
 from sizebot.lib.objs import DigiObject

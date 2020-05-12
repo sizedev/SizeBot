@@ -3,7 +3,8 @@ import math
 
 from datetime import datetime
 
-from sizebot.discordplus import commands, Embed
+from discord import Embed
+from discord.ext import commands
 
 from sizebot import __version__
 from sizebot import conf
@@ -11,7 +12,6 @@ from sizebot.lib import objs, userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.menu import Menu
 from sizebot.lib.units import SV, WV
-
 
 logger = logging.getLogger("sizebot")
 

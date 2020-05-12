@@ -1,7 +1,7 @@
 import logging
 import typing
 
-from sizebot.discordplus import commands
+from discord.ext import commands
 
 from sizebot.lib import decimal, errors, proportions, userdb, utils
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize

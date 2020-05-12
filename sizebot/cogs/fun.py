@@ -1,6 +1,6 @@
 import asyncio
 
-from sizebot.discordplus import commands
+from discord.ext import commands
 
 from sizebot.lib.constants import ids
 

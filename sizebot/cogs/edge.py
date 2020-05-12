@@ -7,9 +7,9 @@ import logging
 import toml
 
 import discord
+from discord.ext import commands
 
 from sizebot import conf
-from sizebot.discordplus import commands
 from sizebot.lib import proportions
 from sizebot.lib import userdb
 from sizebot.lib.checks import is_mod

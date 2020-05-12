@@ -2,8 +2,7 @@ import itertools
 import logging
 
 import discord
-from discord.ext import tasks
-from sizebot.discordplus import commands
+from discord.ext import commands, tasks
 
 from sizebot.lib.utils import formatTraceback
 

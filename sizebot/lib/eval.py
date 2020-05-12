@@ -6,7 +6,7 @@ import math
 from datetime import date, datetime, time, timedelta
 
 import discord
-from sizebot.discordplus import Embed
+from discord import Embed
 
 from sizebot import conf
 from sizebot.cogs import thistracker

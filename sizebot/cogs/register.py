@@ -3,7 +3,7 @@ import logging
 from shutil import copyfile
 
 from discord.utils import get
-from sizebot.discordplus import commands
+from discord.ext import commands
 
 from sizebot import conf
 from sizebot.lib import errors, proportions, userdb

@@ -1,8 +1,7 @@
 import logging
 import random
 
-from discord.ext import tasks
-from sizebot.discordplus import commands
+from discord.ext import commands, tasks
 
 from sizebot.lib import changes, proportions, userdb
 from sizebot.lib.units import Rate

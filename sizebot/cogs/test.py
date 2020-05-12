@@ -1,4 +1,4 @@
-from sizebot.discordplus import commands
+from discord.ext import commands
 
 from sizebot.lib.constants import emojis
 from sizebot.lib.menu import Menu

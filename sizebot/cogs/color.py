@@ -1,7 +1,8 @@
 import re
 import requests
 
-from sizebot.discordplus import commands, Embed
+from discord import Embed
+from discord.ext import commands
 
 from sizebot import __version__
 from sizebot import conf

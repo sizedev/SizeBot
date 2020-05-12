@@ -2,8 +2,7 @@ import logging
 from copy import copy
 
 import discord
-
-from sizebot.discordplus import commands
+from discord.ext import commands
 
 logger = logging.getLogger("sizebot")
 

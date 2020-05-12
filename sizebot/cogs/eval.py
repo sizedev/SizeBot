@@ -1,7 +1,8 @@
 import logging
 
 import discord
-from sizebot.discordplus import commands, Embed
+from discord import Embed
+from discord.ext import commands
 
 from sizebot.lib import utils
 from sizebot.lib.constants import emojis

@@ -1,7 +1,6 @@
 import logging
 
-from discord.ext import tasks
-from sizebot.discordplus import commands
+from discord.ext import commands, tasks
 
 from sizebot.lib import naps
 from sizebot.lib.units import TV

@@ -1,7 +1,7 @@
 import asyncio
 
 import discord
-from sizebot.discordplus import Embed
+from discord import Embed
 
 from sizebot.lib.errors import DigiException
 

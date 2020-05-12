@@ -2,7 +2,7 @@ import logging
 import re
 from datetime import datetime, timedelta
 
-from sizebot.discordplus import commands
+from discord.ext import commands
 
 from sizebot import conf
 from sizebot.lib import utils

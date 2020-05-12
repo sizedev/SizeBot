@@ -3,7 +3,7 @@ import re
 from urllib.parse import quote
 
 import discord
-from sizebot.discordplus import Embed
+from discord import Embed
 
 from sizebot import __version__
 from sizebot.lib import errors, userdb, utils
@@ -241,10 +241,12 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         return returnstr
 
     def toEmbed(self):
-        embed = Embed(title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
-                              description="",
-                              color=0x31eff9,
-                              url=self.url)
+        embed = Embed(
+            title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
+            description="",
+            color=0x31eff9,
+            url=self.url
+        )
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
         embed.add_field(name=f"{emojis.comparebigcenter} **{self.big.nickname}**", value=(
             f"{emojis.blank}{emojis.blank} **Height:** {self.big.height:,.3mu}\n"

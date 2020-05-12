@@ -2,7 +2,7 @@ import importlib.resources as pkg_resources
 import json
 from typing import Literal
 
-from sizebot.discordplus import Embed
+from discord import Embed
 
 import sizebot.data
 from sizebot import __version__
