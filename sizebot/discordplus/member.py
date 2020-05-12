@@ -2,8 +2,8 @@ from discord import Member
 
 # List of roles that map to each gender
 gender_roles = {
-    "m": ["male", "boy", "man", "ftm"],
-    "f": ["female", "girl", "woman", "mtf"],
+    "m": ["male", "boy", "man", "masculine", "ftm"],
+    "f": ["female", "girl", "woman", "feminine", "mtf"],
     "x": ["non-binary"]
 }
 # Add "trans " prefix alterative for each role
