@@ -9,15 +9,15 @@ def getLongDescription():
     return longDescription
 
 
+# Parse the requirements.txt file for requirements (package==version) and dependencies (git+git://myrepo@branch)
 def getRequirements():
-    requirements = []
     with open("requirements.txt") as f:
         requirements = f.read().splitlines()
     return requirements
 
 
-def getVersion():
-    path = Path(__file__).parent.resolve() / "sizebot" / "__init__.py"
+def getVersion(package):
+    path = Path(__file__).parent.resolve() / package / "__init__.py"
     with open(path, "r") as fp:
         version_file = fp.read()
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
@@ -29,7 +29,7 @@ def getVersion():
 
 setuptools.setup(
     name="sizebot",
-    version=getVersion(),
+    version=getVersion("sizebot"),
     author="DigiDuncan",
     author_email="digiduncan@gmail.com",
     description="SizeBot3, Cogs Edition, rewritten.",
