@@ -27,6 +27,9 @@ def gender(self):
     foundfemale = False
 
     for role in self.rolelist:
+        role = role.lower()
+        if role.startswith("trans "):
+            role = role[6:]
         if genderrolemap[role] == "m":
             foundmale = True
         elif genderrolemap[role] == "f":
