@@ -1,12 +1,14 @@
 from discord import Member
 
 genderrolemap = {
-    "male":   "m",
-    "boy":    "m",
-    "man":    "m",
-    "female": "f",
-    "girl":   "f",
-    "woman":  "f"
+    "male":      "m",
+    "boy":       "m",
+    "man":       "m",
+    "masculine": "m",
+    "female":    "f",
+    "girl":      "f",
+    "woman":     "f",
+    "feminine":  "f"
 }
 
 pronounrolemap = {
