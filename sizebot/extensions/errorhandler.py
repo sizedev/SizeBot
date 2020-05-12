@@ -53,6 +53,8 @@ def setup(bot):
             await ctx.send("Mismatched quotes in command.")
         elif isinstance(err, commands.errors.InvalidEndOfQuotedStringError):
             await ctx.send("No space after a quote in command. Are your arguments smushed together?")
+        elif isinstance(err, commands.errors.UnexpectedQuoteError):
+            await ctx.send("Why is there a quote here? I'm confused...")
         else:
             # Default command error handling
             await ctx.send("Something went wrong.")
