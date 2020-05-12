@@ -4,7 +4,7 @@ from discord import Member
 gender_roles = {
     "m": ["male", "boy", "man", "masculine", "ftm"],
     "f": ["female", "girl", "woman", "feminine", "mtf"],
-    "x": ["non-binary"]
+    "x": ["non-binary", "nonbinary"]
 }
 # Add "trans " prefix alterative for each role
 for gender, roles in gender_roles.items():
@@ -14,9 +14,9 @@ for gender, roles in gender_roles.items():
 
 # List of roles that map to each pronoun
 pronoun_roles = {
-    "he": ["he/his"],
-    "she": ["she/her"],
-    "they": ["they/them"]
+    "he": ["he/his", "he"],
+    "she": ["she/her", "she"],
+    "they": ["they/them", "they"]
 }
 
 # Map each gender to a pronoun
