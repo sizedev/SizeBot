@@ -8,7 +8,7 @@ def __init__(self, *args, category=None, **kwargs):
     old_init(self, *args, **kwargs)
 
 
-def dispatch_error(self, ctx, error):
+async def dispatch_error(self, ctx, error):
     ctx.command_failed = True
     cog = self.cog
     try:
