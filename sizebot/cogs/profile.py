@@ -64,7 +64,7 @@ class ProfileCog(commands.Cog):
             member = ctx.author
         userdata = userdb.load(ctx.guild.id, member.id, member = member)
         profileembed = Embed(title = userdata.nickname, description = userdata.description)
-        profileembed.set_image(userdata.auto_picture_url)
+        profileembed.set_image(url = userdata.auto_picture_url)
 
         await ctx.send(embed = profileembed)
 
