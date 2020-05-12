@@ -238,6 +238,8 @@ class User:
             "guildid": self.guildid,
             "id": self.id,
             "nickname": self.nickname,
+            "picture_url": self.picture_url,
+            "description": self.description,
             "gender": self.gender,
             "display": self.display,
             "height": str(self.height),
@@ -257,6 +259,8 @@ class User:
         userdata.guildid = jsondata.get("guildid", 350429009730994199)  # Default to Size Matters.
         userdata.id = jsondata["id"]
         userdata.nickname = jsondata["nickname"]
+        userdata.picture_url = jsondata.get("picture_url")
+        userdata.description = jsondata.get("description")
         userdata.gender = jsondata.get("gender")
         userdata.display = jsondata["display"]
         userdata.height = jsondata["height"]
