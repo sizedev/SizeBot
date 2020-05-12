@@ -62,7 +62,7 @@ class ProfileCog(commands.Cog):
         """See the profile of you or another SizeBot user."""
         if member is None:
             member = ctx.author
-        userdata = userdb.load(ctx.guild.id, member.id, member)
+        userdata = userdb.load(ctx.guild.id, member.id, member = member)
         profileembed = Embed(title = userdata.nickname, description = userdata.description)
         profileembed.set_image(userdata.auto_picture_url)
 
