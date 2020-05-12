@@ -7,7 +7,7 @@ gender_roles = {
     "x": ["non-binary", "nonbinary"]
 }
 # Add "trans " prefix alterative for each role
-for gender, roles in gender_roles:
+for gender, roles in gender_roles.items():
     # Iterate over tuple(roles) so that we append to the same list we are iterating
     for role in tuple(roles):
         roles.append("trans " + role)
@@ -41,7 +41,7 @@ def rolelist(self):
 
 def get_genders(roles):
     genders = []
-    for gender, roles_list in gender_roles:
+    for gender, roles_list in gender_roles.items():
         if any(role.name.lower() in roles_list for role in roles):
             genders.append(gender)
     return genders
@@ -49,7 +49,7 @@ def get_genders(roles):
 
 def get_pronouns(roles):
     pronouns = []
-    for pronoun, roles_list in pronoun_roles:
+    for pronoun, roles_list in pronoun_roles.items():
         if any(role.name.lower() in roles_list for role in roles):
             pronouns.append(pronoun)
     return pronouns
@@ -86,7 +86,7 @@ def gender(self):
 
 
 @property
-def pronoun(self):
+def pronouns(self):
     pronouns = get_pronouns(self.roles)
 
     # One pronoun found
@@ -112,4 +112,4 @@ def pronoun(self):
 def patch():
     Member.rolelist = rolelist
     Member.gender = gender
-    Member.pronoun = pronoun
+    Member.pronouns = pronouns
