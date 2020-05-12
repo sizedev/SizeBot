@@ -3,8 +3,7 @@ import pydoc
 import re
 import traceback
 
-import validator_collection.errors.EmptyValueError
-from validator_collection import url
+import validator_collection
 
 re_num = r"\d+\.?\d*"
 re_sizetag = re.compile(r"""
@@ -322,10 +321,8 @@ async def parseMany(ctx, arg, types: list, default = None):
     return default
 
 
-async def isURL(value):
+def isURL(value):
     try:
-        if not url(value):
-            return False
+        return validator_collection.url(value)
     except validator_collection.errors.EmptyValueError:
         return False
-    return True
