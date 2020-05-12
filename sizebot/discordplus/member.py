@@ -1,18 +1,36 @@
 from discord import Member
 
-genderrolemap = {
-    "male":   "m",
-    "boy":    "m",
-    "man":    "m",
-    "female": "f",
-    "girl":   "f",
-    "woman":  "f"
+# List of roles that map to each gender
+gender_roles = {
+    "m": ["male", "boy", "man", "ftm"],
+    "f": ["female", "girl", "woman", "mtf"],
+    "x": ["non-binary"]
+}
+# Add "trans " prefix alterative for each role
+for gender, roles in gender_roles:
+    # Iterate over tuple(roles) so that we append to the same list we are iterating
+    for role in tuple(roles):
+        roles.append("trans " + role)
+
+# List of roles that map to each pronoun
+pronoun_roles = {
+    "he": ["he/his"],
+    "she": ["she/her"],
+    "they": ["they/them"]
 }
 
-pronounrolemap = {
-    "he/his":    "he",
-    "she/her":   "she",
-    "they/them": "they"
+# Map each gender to a pronoun
+gender_to_pronoun = {
+    "m": "he",
+    "f": "she",
+    "x": "they",
+}
+
+# Map each pronoun to a gender
+pronoun_to_gender = {
+    "he": "m",
+    "she": "f",
+    "they": "x"
 }
 
 
@@ -21,62 +39,74 @@ def rolelist(self):
     return [role.name for role in self.roles]
 
 
+def get_genders(roles):
+    genders = []
+    for gender, roles_list in gender_roles:
+        if any(role.name.lower() in roles_list for role in roles):
+            genders.append(roles)
+    return genders
+
+
+def get_pronouns(roles):
+    pronouns = []
+    for pronoun, roles_list in pronoun_roles:
+        if any(role.name.lower() in roles_list for role in roles):
+            pronouns.append(roles)
+    return pronouns
+
+
 @property
 def gender(self):
-    foundmale = False
-    foundfemale = False
+    genders = get_genders(self.roles)
 
-    for role in self.rolelist:
-        role = role.lower()
-        if role.startswith("trans "):
-            role = role[6:]
-        if genderrolemap[role] == "m":
-            foundmale = True
-        elif genderrolemap[role] == "f":
-            foundfemale = True
+    # One gender found
+    if len(genders) == 1:
+        gender = genders[0]
+        # We don't support non-binary gender, yet.
+        if gender == "x":
+            gender = None
+        return gender
 
-    if not foundmale and not foundfemale:
-        if self.pronoun == "he":
-            foundmale = True
-        if self.pronoun == "she":
-            foundfemale = True
-
-    if foundmale ^ foundfemale:
+    # Multiple genders found, result is ambigious
+    if len(genders) > 1:
         return None
-    if foundmale:
-        return "m"
-    if foundfemale:
-        return "f"
+
+    # No genders found, fallback to pronouns
+    pronouns = get_pronouns(self.roles)
+    # One pronoun found
+    if len(pronouns) == 1:
+        gender = pronoun_to_gender[pronouns[0]]
+        # We don't support non-binary gender, yet.
+        if gender == "x":
+            gender = None
+        return gender
+
+    # No genders found, and either ambigious or no pronouns found
+    return None
 
 
 @property
 def pronoun(self):
-    foundhe = False
-    foundshe = False
-    foundthey = False
+    pronouns = get_pronouns(self.roles)
 
-    for role in self.rolelist:
-        if pronounrolemap[role] == "he":
-            foundhe = True
-        elif pronounrolemap[role] == "she":
-            foundshe = True
-        elif pronounrolemap[role] == "they":
-            foundthey = True
+    # One pronoun found
+    if len(pronouns) == 1:
+        pronoun = pronouns[0]
+        return pronoun
 
-    if not foundhe and not foundshe and not foundthey:
-        if self.gender == "m":
-            foundhe = True
-        if self.gender == "f":
-            foundshe = True
-
-    if foundhe ^ foundshe ^ foundthey:
+    # Multiple pronouns found, result is ambigious
+    if len(pronouns) > 1:
         return None
-    if foundhe:
-        return "he"
-    if foundshe:
-        return "she"
-    if foundthey:
-        return "they"
+
+    # No pronouns found, fallback to gender
+    genders = get_genders(self.roles)
+    # One gender found
+    if len(genders) == 1:
+        pronoun = gender_to_pronoun[genders[0]]
+        return pronoun
+
+    # No pronouns found, and either ambigious or no genders found
+    return None
 
 
 def patch():
