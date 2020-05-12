@@ -3,11 +3,10 @@ from copy import copy
 from functools import total_ordering
 from typing import Literal
 
-from validator_collection import url
-
 from sizebot import conf
 from sizebot.lib import errors
 from sizebot.lib.units import SV, WV
+from sizebot.lib.utils import isURL
 
 # Defaults
 defaultheight = SV("1.754")  # meters
@@ -54,7 +53,7 @@ class User:
 
     @picture_url.setter
     def picture_url(self, value):
-        if not url(value):
+        if not isURL(value):
             raise ValueError(f"{value} is not a valid URL.")
         self._picture_url = value
 

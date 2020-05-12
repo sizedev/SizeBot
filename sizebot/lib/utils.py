@@ -3,6 +3,9 @@ import pydoc
 import re
 import traceback
 
+import validator_collection.errors.EmptyValueError
+from validator_collection import url
+
 re_num = r"\d+\.?\d*"
 re_sizetag = re.compile(r"""
 \s+\[  # start with a left bracket
@@ -317,3 +320,12 @@ async def parseMany(ctx, arg, types: list, default = None):
         except Exception:
             pass
     return default
+
+
+async def isURL(value):
+    try:
+        if not url(value):
+            return False
+    except validator_collection.errors.EmptyValueError:
+        return False
+    return True
