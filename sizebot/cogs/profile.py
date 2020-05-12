@@ -66,8 +66,8 @@ class ProfileCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, member.id, member = member)
         profileembed = Embed(title = userdata.nickname, description = userdata.description)
         profileembed.set_image(url = userdata.auto_picture_url)
-        profileembed.add_field(name = "Height", value = f"{userdata.height:,.3mu}, inline = True")
-        profileembed.add_field(name = "Weight", value = f"{userdata.weight:,.3mu}, inline = True")
+        profileembed.add_field(name = "Height", value = f"{userdata.height:,.3mu}", inline = True)
+        profileembed.add_field(name = "Weight", value = f"{userdata.weight:,.3mu}", inline = True)
 
         await ctx.send(embed = profileembed)
 
