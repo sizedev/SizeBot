@@ -80,5 +80,6 @@ def pronoun(self):
 
 
 def patch():
+    Member.rolelist = rolelist
     Member.gender = gender
     Member.pronoun = pronoun
