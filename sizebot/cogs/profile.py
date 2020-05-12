@@ -16,6 +16,7 @@ class ProfileCog(commands.Cog):
         usage = "<url>",
         category = "profile"
     )
+    @commands.guild_only()
     async def setpicture(self, ctx, *, url):
         """ Set your profile's image. Must be a valid image URL."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
@@ -28,6 +29,7 @@ class ProfileCog(commands.Cog):
         usage = "<description...>",
         category = "profile"
     )
+    @commands.guild_only()
     async def setdescription(self, ctx, *, desc):
         """Set your profile description.
 
@@ -41,6 +43,7 @@ class ProfileCog(commands.Cog):
         aliases = ["clearpic", "unsetpic", "resetpic", "clearpicture", "unsetpicture"],
         category = "profile"
     )
+    @commands.guild_only()
     async def resetpicture(self, ctx):
         """Reset your profile's image."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
@@ -52,6 +55,7 @@ class ProfileCog(commands.Cog):
         aliases = ["cleardesc", "unsetdesc", "resetdesc", "cleardescription", "unsetdescription"],
         category = "profile"
     )
+    @commands.guild_only()
     async def resetdescription(self, ctx):
         """Remove your profile description."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
@@ -64,6 +68,7 @@ class ProfileCog(commands.Cog):
         usage = "[user]",
         category = "profile"
     )
+    @commands.guild_only()
     async def profile(self, ctx, member: discord.Member = None):
         """See the profile of you or another SizeBot user."""
         if member is None:
