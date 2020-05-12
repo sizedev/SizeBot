@@ -109,9 +109,9 @@ class ColorCog(commands.Cog):
         colorcmyk = colorjson["cmyk"]["value"]
 
         embed = Embed(title=f"{colorname} [{printhex}]",
-                              description="",
-                              color=hexvalue,
-                              url=colorscheme)
+                            description="",
+                            color=hexvalue,
+                            url=colorscheme)
         embed.set_author(name=f"SizeBot {__version__} [{conf.prefix}color]", icon_url=coloricon)
         embed.add_field(name="Hex Value", value = printhex, inline = True)
         embed.add_field(name="RGB Value", value = colorrgb, inline = True)
