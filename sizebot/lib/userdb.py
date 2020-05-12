@@ -40,10 +40,10 @@ class User:
         self.avatar_url = None
 
     def __str__(self):
-        return f"GUILDID {self.guildid}, ID {self.id}, NICK {self.nickname}, GEND {self.gender}, \
-                 DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, \
-                 FOOT {self.footlength}, HAIR {self.hairlength}, TAIL {self.taillength}, \
-                 UNIT {self.unitsystem}, SPEC {self.species}"
+        return (f"GUILDID `{self.guildid}`, ID `{self.id}`, NICK `{self.nickname}`, GEND `{self.gender}`, "
+                f"DISP `{self.display}`, CHEI `{self.height}`, BHEI `{self.baseheight}`, BWEI `{self.baseweight}`, "
+                f"FOOT `{self.footlength}`, HAIR `{self.hairlength}`, TAIL `{self.taillength}`, "
+                f"UNIT `{self.unitsystem}`, SPEC `{self.species}`")
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
