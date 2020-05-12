@@ -19,7 +19,7 @@ class ProfileCog(commands.Cog):
         """ Set your profile's image. Must be a valid image URL."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.picture_url = url
-        userdata.save()
+        userdb.save(userdata)
 
     @commands.command(
         aliases = ["setdesc"],
@@ -32,7 +32,7 @@ class ProfileCog(commands.Cog):
         Accepts slightly more markdown than usual, see https://leovoel.github.io/embed-visualizer/"""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.description = desc
-        userdata.save()
+        userdb.save(userdata)
 
     @commands.command(
         aliases = ["clearpic", "unsetpic", "resetpic", "clearpicture", "unsetpicture"],
@@ -42,7 +42,7 @@ class ProfileCog(commands.Cog):
         """Reset your profile's image."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.picture_url = None
-        userdata.save()
+        userdb.save(userdata)
 
     @commands.command(
         aliases = ["cleardesc", "unsetdesc", "resetdesc", "cleardescription", "unsetdescription"],
