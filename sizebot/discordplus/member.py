@@ -86,7 +86,7 @@ def gender(self):
 
 
 @property
-def pronoun(self):
+def pronouns(self):
     pronouns = get_pronouns(self.roles)
 
     # One pronoun found
@@ -112,4 +112,4 @@ def pronoun(self):
 def patch():
     Member.rolelist = rolelist
     Member.gender = gender
-    Member.pronoun = pronoun
+    Member.pronouns = pronouns
