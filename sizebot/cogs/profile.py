@@ -19,7 +19,7 @@ class ProfileCog(commands.Cog):
         """ Set your profile's image. Must be a valid image URL."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.picture_url = url
-        userdata.save()
+        userdb.save(userdata)
 
     @commands.command(
         aliases = ["setdesc"],
@@ -32,7 +32,7 @@ class ProfileCog(commands.Cog):
         Accepts slightly more markdown than usual, see https://leovoel.github.io/embed-visualizer/"""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.description = desc
-        userdata.save()
+        userdb.save(userdata)
 
     @commands.command(
         aliases = ["clearpic", "unsetpic", "resetpic", "clearpicture", "unsetpicture"],
@@ -42,7 +42,7 @@ class ProfileCog(commands.Cog):
         """Reset your profile's image."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.picture_url = None
-        userdata.save()
+        userdb.save(userdata)
 
     @commands.command(
         aliases = ["cleardesc", "unsetdesc", "resetdesc", "cleardescription", "unsetdescription"],
@@ -55,6 +55,7 @@ class ProfileCog(commands.Cog):
         userdb.save(userdata)
 
     @commands.command(
+        aliases = ["pokedex"],
         usage = "[user]",
         category = "profile"
     )
@@ -65,6 +66,8 @@ class ProfileCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, member.id, member = member)
         profileembed = Embed(title = userdata.nickname, description = userdata.description)
         profileembed.set_image(url = userdata.auto_picture_url)
+        profileembed.add_field(name = "Height", value = f"{userdata.height:,.3mu}", inline = True)
+        profileembed.add_field(name = "Weight", value = f"{userdata.weight:,.3mu}", inline = True)
 
         await ctx.send(embed = profileembed)
 
