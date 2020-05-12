@@ -1,3 +1,4 @@
+import discord
 from discord import Embed
 from discord.ext import commands
 
@@ -59,7 +60,7 @@ class ProfileCog(commands.Cog):
         usage = "[user]",
         category = "profile"
     )
-    async def profile(self, ctx, member = None):
+    async def profile(self, ctx, member: discord.Member = None):
         """See the profile of you or another SizeBot user."""
         if member is None:
             member = ctx.author

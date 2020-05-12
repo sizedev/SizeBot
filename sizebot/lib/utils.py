@@ -325,4 +325,5 @@ def isURL(value):
     try:
         return validator_collection.url(value)
     except validator_collection.errors.EmptyValueError:
+        # Pretend None is a valid URL.
         return True
