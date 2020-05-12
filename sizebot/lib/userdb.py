@@ -12,17 +12,13 @@ from sizebot.lib.utils import isURL
 defaultheight = SV("1.754")  # meters
 defaultweight = WV("66760")  # grams
 
-# Map the deprecated user array constants to the new names
-# TODO: This is used never, I think?
-#                      NICK        DISP       CHEI      BHEI          BWEI          UNIT          SPEC
-DEPRECATED_NAME_MAP = ["nickname", "display", "height", "baseheight", "baseweight", "unitsystem", "species"]
-
 
 @total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.
     __slots__ = ["guildid", "id", "nickname", "_picture_url", "description", "_gender", "display", "_height",
-                 "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem", "species", "soft_gender", "avatar_url"]
+                 "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem",
+                 "species", "soft_gender", "avatar_url"]
 
     def __init__(self):
         self.guildid = None
@@ -44,7 +40,10 @@ class User:
         self.avatar_url = None
 
     def __str__(self):
-        return f"GUILDID {self.guildid}, ID {self.id}, NICK {self.nickname}, GEND {self.gender}, DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, FOOT {self.footlength}, HAIR {self.hairlength}, TAIL {self.taillength}, UNIT {self.unitsystem}, SPEC {self.species}"
+        return f"GUILDID {self.guildid}, ID {self.id}, NICK {self.nickname}, GEND {self.gender}, \
+                 DISP {self.display}, CHEI {self.height}, BHEI {self.baseheight}, BWEI {self.baseweight}, \
+                 FOOT {self.footlength}, HAIR {self.hairlength}, TAIL {self.taillength}, \
+                 UNIT {self.unitsystem}, SPEC {self.species}"
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
@@ -219,17 +218,6 @@ class User:
                     return f"1:{reverseweightscale:,.1}"
             else:
                 return f"{weightscale:,.3}x"
-
-    # Act like an array for legacy usage
-    # TODO: Deprecated? I don't think this is used.
-
-    def __getitem__(self, key):
-        attrname = DEPRECATED_NAME_MAP[key]
-        return getattr(self, attrname)
-
-    def __setitem__(self, key, value):
-        attrname = DEPRECATED_NAME_MAP[key]
-        return setattr(self, attrname, value)
 
     # Return an python dictionary for json exporting
     def toJSON(self):
