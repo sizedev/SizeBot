@@ -43,7 +43,7 @@ def get_genders(roles):
     genders = []
     for gender, roles_list in gender_roles:
         if any(role.name.lower() in roles_list for role in roles):
-            genders.append(roles)
+            genders.append(gender)
     return genders
 
 
@@ -51,7 +51,7 @@ def get_pronouns(roles):
     pronouns = []
     for pronoun, roles_list in pronoun_roles:
         if any(role.name.lower() in roles_list for role in roles):
-            pronouns.append(roles)
+            pronouns.append(pronoun)
     return pronouns
 
 
