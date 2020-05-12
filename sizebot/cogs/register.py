@@ -36,21 +36,22 @@ class RegisterCog(commands.Cog):
     # TODO: Change the way this works.
     @commands.command(
         aliases = ["signup"],
-        usage = "<nick> <display: Y/N> <currentheight> <baseheight> <baseweight> <system: M/U> [species]",
+        usage = "<nick> <currentheight> <baseheight> <baseweight> <system: M/U> [species]",
         category = "setup"
     )
     @commands.guild_only()
-    async def register(self, ctx, nick: str, display: bool = True, currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
+    async def register(self, ctx, nick: str, currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot.
 
         Parameters:
         • `nick`: Your nickname. This will be the first thing displayed in your nickname. For a nickname with spaces, this must be wrapped in quotes.
-        • `display`: Whether or not to have SizeBot manage your server nickname for you, allowing for an automatically updated sizetag appended to your nickname at all times. Accepts a variety of booleany values, such as `true`/`false`, `Y`/`N`, `enable`/`disable`, `yes`/`no`, etc.
-        • `currentheight`: Self-explnatory. Accepts a wide variety of units as shown in `&units`.
+        • `currentheight`: Self-explnatory.
         • `baseheight`: The default height of your character. It is recommended that this is a vaugely reasonable, human-like value, for instance your IRL height, except in rare circumnstances (for instance, if your character is a cat, or an orc, etc.)
         • `baseweight`: The default weight of your character. All the recommendations for baseheight apply here.
         • `unitsystem`: The unit system your size tag, and basic versions of your stats, will be displayed in by default. Accepts `M` for Metric, and `U` or `I` for U.S./Imperial.
         • `species`: Optional, a string to be appened after your size in your sizetag. Appears in the format `<nick> [<size>, <species>]`. If `species` is to contain a space, wrap it in quotes.
+
+        Measurement parameters can accept a wide variety of units, as listed in `&units`.
 
         Examples:
         `&register DigiDuncan Y 0.5in 5'7.5 120lb U`
@@ -58,7 +59,7 @@ class RegisterCog(commands.Cog):
         `&register "Speck Boi" Y 0.1mm 190cm 120kg M`
         """
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
-        logger.warn(f"New user attempt! Nickname: {nick}, Display: {display}")
+        logger.warn(f"New user attempt! Nickname: {nick}")
         logger.info(readable)
 
         # Already registered
@@ -103,12 +104,6 @@ class RegisterCog(commands.Cog):
             await ctx.send("All values must be an integer greater than zero.")
             return
 
-        # Invalid display value
-        if display.lower() not in ["y", "n"]:
-            logger.warn(f"display was {display}, must be Y or N.")
-            await ctx.send(f"display was {display}, must be Y or N.")
-            return
-
         # Invalid unit value
         if unitsystem.lower() not in ["m", "u", "i"]:
             logger.warn(f"unitsystem was {unitsystem}, must be M or U/I.")
@@ -123,7 +118,7 @@ class RegisterCog(commands.Cog):
         userdata.guildid = ctx.guild.id
         userdata.id = ctx.author.id
         userdata.nickname = nick
-        userdata.display = display.lower() == "y"
+        userdata.display = "y"
         userdata.height = currentheight
         userdata.baseheight = baseheight
         userdata.baseweight = baseweight
@@ -149,7 +144,7 @@ class RegisterCog(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
                 "Not enough variables for `register`.\n"
-                "Use `&register [nick] [display (Y/N)] [currentheight] [baseheight] [baseweight] [M/U]`.")
+                "See `&help register`.".replace("&", self.bot.command_prefix))
             return
         raise error
 
