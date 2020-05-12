@@ -131,7 +131,7 @@ class RegisterCog(commands.Cog):
 
         logger.warn(f"Made a new user: {ctx.author}!")
         logger.info(userdata)
-        await ctx.send(f"Registered <@{ctx.author.id}>. {readable}.")
+        await ctx.send(f"Registered <@{ctx.author.id}>. {userdata}.")
 
         # user has display == "y" and is server owner
         if userdata.display and userdata.id == ctx.author.guild.owner.id:
