@@ -21,6 +21,7 @@ class ProfileCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.picture_url = url
         userdb.save(userdata)
+        await ctx.send("Profile image set.")
 
     @commands.command(
         aliases = ["setdesc"],
@@ -34,6 +35,7 @@ class ProfileCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.description = desc
         userdb.save(userdata)
+        await ctx.send("Profile description set.")
 
     @commands.command(
         aliases = ["clearpic", "unsetpic", "resetpic", "clearpicture", "unsetpicture"],
@@ -44,6 +46,7 @@ class ProfileCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.picture_url = None
         userdb.save(userdata)
+        await ctx.send("Profile image reset.")
 
     @commands.command(
         aliases = ["cleardesc", "unsetdesc", "resetdesc", "cleardescription", "unsetdescription"],
@@ -54,6 +57,7 @@ class ProfileCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.description = None
         userdb.save(userdata)
+        await ctx.send("Profile description reset.")
 
     @commands.command(
         aliases = ["pokedex"],
