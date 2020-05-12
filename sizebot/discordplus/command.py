@@ -1,5 +1,5 @@
-from discord.ext.commands import Command, Cog, wrap_callback
-
+from discord.ext.commands import Command, Cog
+from discord.ext.commands.core import wrap_callback
 old_init = Command.__init__
 
 
