@@ -33,6 +33,23 @@ logger = logging.getLogger("sizebot")
 # aliases = []
 
 
+def get_cat_cmds(commands):
+    # Get all non-hidden commands, sorted by name
+    commands = (c for c in commands if not c.hidden)
+    commands = sorted(commands, key=lambda c: c.name)
+
+    # Divide commands into categories
+    commands_by_cat = {cat.cid: [] for cat in categories}
+
+    for c in commands:
+        cmd_category = c.category or "misc"
+        if cmd_category not in commands_by_cat:
+            logger.warn(f"Command category {cmd_category!r} does not exist.")
+            cmd_category = "misc"
+        commands_by_cat[cmd_category].append(c)
+    return commands_by_cat
+
+
 class HelpCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -89,20 +106,14 @@ class HelpCog(commands.Cog):
         ...
         """
 
-        # Get all non-hidden commands, sorted by name
-        commands = (c for c in ctx.bot.commands if not c.hidden)
-        commands = sorted(commands, key=lambda c: c.name)
+        # Get commands grouped by category
+        commands_by_cat = get_cat_cmds(ctx.bot.commands)
 
-        # Divide commands into categories
-        commands_by_cat = {cat.cid: [] for cat in categories}
+        embed = Embed(title=f"Help [SizeBot {__version__}]")
+        embed.set_footer(text = "Select an emoji to see details about a category.")
+        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
 
-        for c in commands:
-            cmd_category = c.category or "misc"
-            if cmd_category not in commands_by_cat:
-                logger.warn(f"Command category {cmd_category!r} does not exist.")
-                cmd_category = "misc"
-            commands_by_cat[cmd_category].append(c)
-
+        # Add each category to a field
         fields_text = ""
 
         for cat in categories:
@@ -112,37 +123,52 @@ class HelpCog(commands.Cog):
                 continue
             fields_text += f"\n\n**{cat.emoji} {cat.name}**\n" + (", ".join(f"`{c.name}`" for c in cat_cmds))
 
-        while True:
-            embed = Embed(title=f"Help [SizeBot {__version__}]")
-            embed.set_footer(text = "Select an emoji to see details about a category.")
-            embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+        embed.add_field(value=fields_text)
 
-            embed.add_field(value=fields_text)
+        # Display the embed with a reaction menu
+        categoryoptions = {cat.emoji: cat for cat in categories if commands_by_cat.get(cat.cid, [])}
 
-            categoryoptions = {cat.emoji: cat for cat in categories}
+        reactionmenu, answer = await Menu.display(
+            ctx,
+            categoryoptions.keys(),
+            cancel_emoji = emojis.cancel,
+            initial_embed = embed,
+            delete_after = False
+        )
 
-            reactionmenu, answer = await Menu.display(ctx, categoryoptions.keys(), cancel_emoji = emojis.cancel,
-                                                      initial_embed = embed, delete_after = False)
-            if not answer:
-                return
+        # User clicked cancel emoji or menu timed out
+        if not answer:
+            return
 
-            if answer in categoryoptions:
-                await reactionmenu.message.delete()
-                selectedcategory = categoryoptions[answer]
+        # User clicked a category emoji
+        await reactionmenu.message.delete()
+        selectedcategory = categoryoptions[answer]
+        cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
+        await self.send_category_help(ctx, selectedcategory, cat_cmds)
 
-                deepembed = Embed(title=f"{selectedcategory.name} Help [SizeBot {__version__}]")
-                deepembed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-                cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
-                deep_fields_text = f"**{selectedcategory.emoji}{selectedcategory.name}**\n\n" + ("\n".join(f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cat_cmds))
-                deepembed.add_field(value=deep_fields_text)
+    async def send_category_help(self, ctx, category, cmds):
+        # Prepare the embed for the category
+        embed = Embed(title=f"{category.name} Help [SizeBot {__version__}]")
+        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+        text = f"**{category.emoji}{category.name}**\n\n" + ("\n".join(f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cmds))
+        embed.add_field(value=text)
 
-                deepreactionmenu, deepanswer = await Menu.display(ctx, ["🔙"], cancel_emoji = emojis.cancel,
-                                                                  initial_embed = deepembed, delete_after = False)
+        # Display the embed with a reaction menu
+        reactionmenu, answer = await Menu.display(
+            ctx,
+            ["🔙"],
+            cancel_emoji = emojis.cancel,
+            initial_embed = embed,
+            delete_after = False
+        )
 
-                if not deepanswer:
-                    return
-                if deepanswer == "🔙":
-                    await deepreactionmenu.message.delete()
+        # User clicked cancel emoji or menu timed out
+        if not answer:
+            return
+
+        # User clicked the back emoji
+        await reactionmenu.message.delete()
+        await self.send_summary_help(ctx)
 
     async def send_command_help(self, ctx, cmd):
         """Sends help for a command.
