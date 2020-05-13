@@ -114,7 +114,7 @@ class HelpCog(commands.Cog):
 
         while True:
             embed = Embed(title=f"Help [SizeBot {__version__}]")
-            embed.set_footer(text = "*Select an emoji to see details about a category.*")
+            embed.set_footer(text = "Select an emoji to see details about a category.")
             embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
 
             embed.add_field(value=fields_text)
