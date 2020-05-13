@@ -51,10 +51,9 @@ class ThisTracker():
 
 
 def isAgreementEmoji(emoji):
-    discordagreements = ["this", "brilliancethis", "braverythis", "balancethis", "123this"]
     unicodeagreements = ["🔼", "⬆️", "⤴️", "☝️", "👆"]
     if isinstance(emoji, (discord.Emoji, discord.PartialEmoji)):
-        if emoji.name.lower() in discordagreements:
+        if "this" in emoji.name.lower():
             return True
     else:
         if emoji in unicodeagreements:
