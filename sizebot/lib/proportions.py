@@ -410,6 +410,8 @@ class PersonStats:
         self.walkperhour = SV(defaultwalkspeed * self.averageheightmult)
         self.runperhour = SV(defaultrunspeed * self.averageheightmult)
 
+        self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
+
     def getFormattedStat(self, stat):
         returndict = {
             "height": f"'s current height is **{self.height:,.3mu}**.",
@@ -426,7 +428,8 @@ class PersonStats:
             "speed": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), and runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour).",
             "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
             "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
-            "scale": f" is **{self.formattedscale}** their base height."
+            "scale": f" is **{self.formattedscale}** their base height.",
+            "horizondistance": f" can see for **{self.horizondistance:,.3mu}** to the horizon."
         }
         if self.hairlength:
             returndict["hair"] = f"'s hair is **{self.hairlength:,.3mu}** long."
@@ -462,6 +465,7 @@ class PersonStats:
             f"Eye Width: {self.eyewidth:,.3mu}\n"
             f"Walk Speed: {self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)\n"
             f"Run Speed: {self.runperhour:,.1M} per hour ({self.runperhour:,.1U} per hour)\n"
+            f"Distance to Horizon: {self.horizondistance:,.3mu}\n"
             f"\n"
             f"Size of a Normal Person (Comparative): {self.avgheightcomp:,.3mu}\n"
             f"Weight of a Normal Person (Comparative): {self.avgweightcomp:,.3mu}\n"
@@ -492,6 +496,7 @@ class PersonStats:
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)", inline=True)
         embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)", inline=True)
+        embed.add_field(name="Distance to Horizon", value=format(self.horizondistance, ",.3mu"), inline=True)
         embed.add_field(inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
