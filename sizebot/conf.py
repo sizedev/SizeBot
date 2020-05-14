@@ -37,7 +37,6 @@ prefix = "&"
 name = "SizeBot"
 activity = "Ratchet and Clank: Size Matters"
 authtoken = None
-admins = []             # List of admins # TODO: (deprecated?)
 logchannelid = None
 
 # File paths
@@ -53,7 +52,7 @@ confpath = datadir / "sizebot.conf"
 
 
 def load():
-    global prefix, name, activity, authtoken, admins, logchannelid
+    global prefix, name, activity, authtoken, logchannelid
     configDict = toml.load(confpath)
 
     # SizeBot
@@ -67,8 +66,6 @@ def load():
     # Discord
     if utils.hasPath(configDict, "discord.authtoken"):
         authtoken = utils.getPath(configDict, "discord.authtoken")
-    if utils.hasPath(configDict, "discord.admins"):
-        admins = utils.getPath(configDict, "discord.admins")
 
     logchannelid = utils.getPath(configDict, "discord.logchannelid")
     if logchannelid is not None:
