@@ -22,11 +22,7 @@ banner = (
     r"  ____) | |/ /  __/ |_) | (_) | |_ ___) | ___) |""\n"
     r" |_____/|_/___\___|____/ \___/ \__|____(_)____/ ""\n"
     r"                                                ")
-description = (
-    "SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.\n"
-    "SizeBot3½ is a refactorization for SB3 and way more features than originally intended.\n"
-    "Written by DigiDuncan.\n"
-    "The SizeBot Team: DigiDuncan, Natalie, Kelly, Chocola, AWK_, Benyovski, Arceus3521, Surge The Raichu.")
+
 winkpath = None
 guilddbpath = None
 telemetrypath = None
