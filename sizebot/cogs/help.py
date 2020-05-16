@@ -256,7 +256,7 @@ class HelpCog(commands.Cog):
             "**written with** *Atom* and *Visual Studio Code*\n"
             "**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
             "**Special thanks** *to the discord.py Community Discord for helping with code*\n"
-            f"**Special thanks** *to the {userdb.count()} users of SizeBot3½.*\n"
+            f"**Special thanks** *to the {userdb.countusers()} users of SizeBot3½.*\n"
             "\n"
             "\"She [*SizeBot*] is beautiful.\" -- *GoddessArete*\n"
             "\"I want to put SizeBot in charge of the world government.\" -- *AWK*\n"
@@ -292,7 +292,7 @@ class HelpCog(commands.Cog):
                         value = ("**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
                                  "**Special thanks** *to Chocola, the creator of Mei and Arachne, for inspiration and moral support.*\n"
                                  "**Special thanks** *to the discord.py Community Discord for helping with code.*\n"
-                                 f"**Special thanks** *to the {userdb.count()} users of SizeBot3½.*"),
+                                 f"**Special thanks** *to the {userdb.countusers()} users of SizeBot3½.*"),
                         inline = False)
         embed.add_field(name = "Testimonials",
                         value = ("\"I want to put SizeBot in charge of the world government.\"* -- AWK*\n"

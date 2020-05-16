@@ -1,4 +1,5 @@
 import json
+import re
 from copy import copy
 from functools import total_ordering
 from typing import Literal
@@ -336,8 +337,19 @@ def exists(guildid, userid):
     return exists
 
 
-def count():
+def countprofiles():
     usercount = len(list(conf.guilddbpath.glob("*/users/*.json")))
+    return usercount
+
+
+def countusers():
+    userlist = list(conf.guilddbpath.glob("*/users/*.json"))
+    userids = []
+    for user in userlist:
+        m = re.match(r"\/users(.*)\.json", user)
+        if m:
+            userids.append(m.group(1))
+    usercount = len(set(userids))
     return usercount
 
 
