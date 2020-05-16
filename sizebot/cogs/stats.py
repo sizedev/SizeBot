@@ -94,8 +94,8 @@ class StatsCog(commands.Cog):
 
         Examples:
         `&stat height` (not specifying a user returns a stat about yourself.)
-        `&stats @User weight`
-        `&stats 10ft foot`
+        `&stat weight @User`
+        `&stat foot 10ft`
         """
 
         statmap = {
