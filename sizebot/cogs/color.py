@@ -122,7 +122,7 @@ class ColorCog(commands.Cog):
 
         embed.set_image(url = f"http://www.singlecolorimage.com/get/{hexstring}/400x200.png")
 
-        await outmessage.edit(content = "", embed = embed)
+        await outmessage.edit(embed = embed)
 
 
 def setup(bot):
