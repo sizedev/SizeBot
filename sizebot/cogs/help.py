@@ -83,11 +83,11 @@ class HelpCog(commands.Cog):
         """Get a list of the various objects SizeBot accepts."""
         objectunits = []
         for obj in objs.objects:
-            objectunits += obj.singularNames
+            objectunits += obj.name
 
         objectunits.sort()
 
-        embed = Embed(title=f"Objects [SizeBot {__version__}]")
+        embed = Embed(title=f"Objects [SizeBot {__version__}]", description = f"*NOTE: All of these object have multiple aliases. If there is an alias for an object here that isn't working taht you think makes sense, report it with `{conf.prefix}suggestobject` and note that it's a prefix.*")
 
         for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 6))):
             embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
