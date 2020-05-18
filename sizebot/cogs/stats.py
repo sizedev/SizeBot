@@ -310,9 +310,10 @@ class StatsCog(commands.Cog):
             la = what.relativestatssentence(userdata)
             # Easter egg.
             if what.name == "photograph":
-                la += "\n\nhttps://www.youtube.com/watch?v=BB0DU4DoPP4"
+                la += "\n\nhttps://www.youtube.com/watch?v=BB0DU4DoPP4"  # TODO: Supress embeds.
             await ctx.send(la)
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
+            logger.info(f"{ctx.author.display_name} is jamming to Nickleback.")  # TODO: Make an "egg" log level.
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
             compdata = getUserdata(what, "Raw")
@@ -321,7 +322,7 @@ class StatsCog(commands.Cog):
             compheight = userstats.avgheightcomp
             compdata = getUserdata(compheight)
         else:
-            # Easter eggs
+            # Easter eggs.
             if what in ["all those chickens", "chickens"]:
                 await ctx.send("https://www.youtube.com/watch?v=NsLKQTh-Bqo")
                 logger.info(f"{ctx.author.display_name} looked at all those chickens.")  # TODO: Make an "egg" log level.
