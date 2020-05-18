@@ -346,7 +346,7 @@ def countusers():
     userlist = list(conf.guilddbpath.glob("*/users/*.json"))
     userids = []
     for user in userlist:
-        m = re.match(r"\/users\/(.*)\.json", user)
+        m = re.match(r"\/users\/(.*)\.json", str(user))
         if m:
             userids.append(m.group(1))
     usercount = len(set(userids))
