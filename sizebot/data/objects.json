@@ -1361,5 +1361,14 @@
             "ibupofen",
             "advil"
         ]
+    },
+    {
+        "name": "photograph",
+        "dimension": "h",
+        "height": "0.1016",
+        "width": "0.1524",
+        "aliases": [
+            "photo"
+        ]
     }
 ]

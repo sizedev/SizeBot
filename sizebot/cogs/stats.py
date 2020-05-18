@@ -308,6 +308,9 @@ class StatsCog(commands.Cog):
 
         if isinstance(what, DigiObject):
             la = what.relativestatssentence(userdata)
+            # Easter egg.
+            if what.name == "photograph":
+                la += "\n\nhttps://www.youtube.com/watch?v=BB0DU4DoPP4"
             await ctx.send(la)
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
             return
@@ -321,7 +324,7 @@ class StatsCog(commands.Cog):
             # Easter eggs
             if what in ["all those chickens", "chickens"]:
                 await ctx.send("https://www.youtube.com/watch?v=NsLKQTh-Bqo")
-                logger.info(f"{ctx.author.display_name} looked at all those chickens.") # TODO: Make an "egg" log level.
+                logger.info(f"{ctx.author.display_name} looked at all those chickens.")  # TODO: Make an "egg" log level.
                 return
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
