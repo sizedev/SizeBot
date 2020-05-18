@@ -318,6 +318,11 @@ class StatsCog(commands.Cog):
             compheight = userstats.avgheightcomp
             compdata = getUserdata(compheight)
         else:
+            # Easter eggs
+            if what in ["all those chickens", "chickens"]:
+                await ctx.send("https://www.youtube.com/watch?v=NsLKQTh-Bqo")
+                logger.info(f"{ctx.author.display_name} looked at all those chickens.") # TODO: Make an "egg" log level.
+                return
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return
