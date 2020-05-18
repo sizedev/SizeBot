@@ -401,7 +401,12 @@
         "height": "0.057",
         "width": "0.057",
         "depth": "0.057",
-        "weight": "84.6"
+        "weight": "84.6",
+        "aliases" [
+            "rubiks cube",
+            "rubix cube",
+            "puzzle cube"
+        ]
     },
     {
         "name": "Zippo lighter",
