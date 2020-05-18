@@ -89,7 +89,7 @@ class HelpCog(commands.Cog):
 
         embed = Embed(title=f"Objects [SizeBot {__version__}]")
 
-        for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 4))):
+        for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 6))):
             embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
 
         await ctx.send(embed=embed)
