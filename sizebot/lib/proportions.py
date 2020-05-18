@@ -414,7 +414,7 @@ class PersonStats:
 
     def getFormattedStat(self, stat):
         returndict = {
-            "height": f"'s current height is **{self.height:,.3mu}**.",
+            "height": f"'s current height is **{self.height:,.3mu}** ({self.formattedscale}).",
             "weight": f"'s current weight is **{self.weight:,.3mu}**.",
             "foot": f"'s foot is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
             "toe": f"'s toe is **{self.toeheight:,.3mu}** thick.",
