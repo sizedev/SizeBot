@@ -430,9 +430,9 @@ def getUserdata(memberOrSV, nickname = None):
     else:
         userdata = userdb.User()
         userdata.height = memberOrSV
-    if nickname is None:
-        nickname = f"{userdata.height:,.3mu}"
-    userdata.nickname = nickname
+        if nickname is None:
+            nickname = f"{userdata.height:,.3mu}"
+        userdata.nickname = nickname
     return userdata
 
 
