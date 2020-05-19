@@ -235,38 +235,6 @@ class HelpCog(commands.Cog):
         await ctx.send(f"Unrecognized command: `{cmdName}`.")
 
     @commands.command(
-        hidden = True
-    )
-    async def oldabout(self, ctx):
-        now = datetime.now()
-        await ctx.send(
-            "```\n"
-            f"{conf.banner}\n"
-            "```\n")
-        await ctx.send(
-            f"<@{ctx.author.id}>\n"
-            "***SizeBot3½ by DigiDuncan***\n"
-            "*A big program for big people.*\n"  # TODO: Change this slogan.
-            "**Written for** *Size Matters*\n"
-            "**Coding Assistance** *by Natalie*\n"
-            "**Additional equations** *by Benyovski and Arceus3251*\n"
-            "**Alpha Tested** *by AWK_*\n"
-            "**Beta Tested** *by Kelly, worstgender, and Arceus3251.*\n"
-            "**written in** *Python 3.7/8 with discord.py rewrite*\n"
-            "**written with** *Atom* and *Visual Studio Code*\n"
-            "**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
-            "**Special thanks** *to the discord.py Community Discord for helping with code*\n"
-            f"**Special thanks** *to the {str(userdb.countusers())} users of SizeBot3½.*\n"
-            "\n"
-            "\"She [*SizeBot*] is beautiful.\" -- *GoddessArete*\n"
-            "\"I want to put SizeBot in charge of the world government.\" -- *AWK*\n"
-            "\"Um... I like it?\" -- *Goddess Syn*\n"
-            "\"I am the only person who has accidentally turned my fetish into a tech support job.\" -- *DigiDuncan*\n"
-            "\"\"I am the only person who has accidentally turned my fetish into a tech support job.\"\" -- *Chocola*\n"  # TODO: Change this quote.
-            "\n"
-            f"Version {__version__} | {now.strftime('%d %b %Y')}")
-
-    @commands.command(
         category = "help"
     )
     async def about(self, ctx):
