@@ -5,7 +5,7 @@ import discord
 from discord.ext.commands.converter import MemberConverter
 from discord.ext import commands
 
-from sizebot.lib import proportions, userdb
+from sizebot.lib import errors, proportions, userdb
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV
 from sizebot.lib.utils import parseMany
@@ -41,6 +41,44 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(memberOrHeight, customName)
 
         stats = proportions.PersonStats(userdata)
+
+        embedtosend = stats.toEmbed()
+        if ctx.author.id != userdata.id:
+            embedtosend.description = f"Requested by *{ctx.author.display_name}*"
+        await ctx.send(embed = embedtosend)
+
+        logger.info(f"Stats for {memberOrHeight} sent.")
+
+    @commands.command(
+        usage = "[user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def statsas(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None,
+                      memberOrHeight2: typing.Union[discord.Member, SV] = None, customName = None):
+        """User stats command with modified bases.
+
+        Get tons of user stats about yourself, a user, or a raw height, as if they were a different height.
+        Stats: current height, current weight, base height, base weight,
+        foot length, foot width, toe height, pointer finger length, thumb width,
+        fingerprint depth, hair width, multiplier.
+
+        Examples:
+        `&statsas 100ft` (defaults to stats about you, if you were a certain height.)
+        `&statsas 100ft @User` (get stats about @User if they were a certain height.)
+        `&statsas @User @User2` (get stats about @User2 if they were as tall as @User.)
+        """
+        if memberOrHeight is None:
+            raise errors.ArgumentException
+        if memberOrHeight2 is None:
+            memberOrHeight2 = ctx.author
+
+        userdata = getUserdata(memberOrHeight)
+        userdata2 = getUserdata(memberOrHeight2, customName)
+        userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
+        userdata2.height = userdata.height
+
+        stats = proportions.PersonStats(userdata2)
 
         embedtosend = stats.toEmbed()
         if ctx.author.id != userdata.id:
@@ -111,6 +149,92 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(memberOrHeight, customName)
 
         stats = proportions.PersonStats(userdata)
+
+        logger.info(f"Stat {stat} for {memberOrHeight} sent.")
+
+        if stat not in statmap.keys():
+            await ctx.send(f"The `{stat}` stat is not an available option.")
+            logger.info(f"Tried to send info on stat {stat}, but that's not a valid stat.")
+            return
+
+        stat = statmap[stat]
+        stattosend = stats.getFormattedStat(stat)
+
+        if stattosend is None:
+            await ctx.send(f"The `{stat}` stat is unavailable for this user.")
+            logger.info(f"Tried to send info on stat {stat}, but this user doesn't have it.")
+            return
+
+        await ctx.send(stattosend)
+
+    @commands.command(
+        usage = "<stat> [user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def statas(self, ctx, stat, *, memberOrHeight: typing.Union[discord.Member, SV] = None,
+                     memberOrHeight2: typing.Union[discord.Member, SV] = None, customName = None):
+        """User stat command with custom bases.
+
+        Get a single stat about yourself, a user, or a raw height, as if they were a different height.
+
+        Available stats are: height, weight, foot/feet/shoe, toe, shoeprint/footprint,
+        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair, tail,
+        speed/walk/run, base/baseheight/baseweight, compare/look, scale/multiplier/mult.
+
+        Examples:
+        `&statas weight 100ft` (defaults to stats about you, if you were a certain height.)
+        `&statas foot 100ft @User` (get stats about @User if they were a certain height.)
+        `&statas speed @User @User2` (get stats about @User2 if they were as tall as @User.)
+        """
+
+        statmap = {
+            "height":          "height",
+            "weight":          "weight",
+            "foot":            "foot",
+            "feet":            "foot",
+            "shoe":            "foot",
+            "shoes":           "foot",
+            "toe":             "toe",
+            "shoeprint":       "shoeprint",
+            "footprint":       "shoeprint",
+            "finger":          "finger",
+            "pointer":         "finger",
+            "thumb":           "thumb",
+            "nail":            "nail",
+            "fingernail":      "fingernail",
+            "fingerprint":     "fingerprint",
+            "thread":          "thread",
+            "eye":             "eye",
+            "eyes":            "eye",
+            "hair":            "hair",
+            "tail":            "tail",
+            "speed":           "speed",
+            "walk":            "speed",
+            "run":             "speed",
+            "base":            "base",
+            "baseheight":      "base",
+            "baseweight":      "base",
+            "compare":         "compare",
+            "look":            "compare",
+            "scale":           "scale",
+            "multiplier":      "scale",
+            "mult":            "scale",
+            "horizondistance": "horizondistance",
+            "horizon":         "horizondistance"
+        }
+
+        if memberOrHeight is None:
+            raise errors.ArgumentException
+        if memberOrHeight2 is None:
+            memberOrHeight2 = ctx.author
+
+        userdata = getUserdata(memberOrHeight)
+        userdata2 = getUserdata(memberOrHeight2, customName)
+        userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
+        userdata2.height = userdata.height
+
+        stats = proportions.PersonStats(userdata2)
 
         logger.info(f"Stat {stat} for {memberOrHeight} sent.")
 
@@ -300,15 +424,15 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = what.statsembed())
 
 
-def getUserdata(memberOrSV, nickname = "Raw"):
-    if nickname is None:
-        nickname = "Raw"
+def getUserdata(memberOrSV, nickname = None):
     if isinstance(memberOrSV, discord.Member):
         userdata = userdb.load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV)
     else:
         userdata = userdb.User()
-        userdata.nickname = nickname
         userdata.height = memberOrSV
+    if nickname is None:
+        nickname = f"{userdata.height:,.3mu}"
+    userdata.nickname = nickname
     return userdata
 
 

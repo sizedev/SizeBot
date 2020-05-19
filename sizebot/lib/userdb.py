@@ -86,6 +86,9 @@ class User:
         if value is None:
             self._footlength = None
             return
+        if value == 0:
+            self._footlength = None
+            return
         self._footlength = SV(max(0, SV(value)))
 
     @property
@@ -106,6 +109,9 @@ class User:
     @taillength.setter
     def taillength(self, value):
         if value is None:
+            self._taillength = None
+            return
+        if value == 0:
             self._taillength = None
             return
         self._taillength = SV(max(0, SV(value)))
