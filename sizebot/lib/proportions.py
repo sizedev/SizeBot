@@ -414,7 +414,7 @@ class PersonStats:
 
     def getFormattedStat(self, stat):
         returndict = {
-            "height": f"'s current height is **{self.height:,.3mu}** ({self.formattedscale}).",
+            "height": f"'s current height is **{self.height:,.3mu}**, or {self.formattedscale} scale.",
             "weight": f"'s current weight is **{self.weight:,.3mu}**.",
             "foot": f"'s foot is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
             "toe": f"'s toe is **{self.toeheight:,.3mu}** thick.",
@@ -465,7 +465,7 @@ class PersonStats:
             f"Eye Width: {self.eyewidth:,.3mu}\n"
             f"Walk Speed: {self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)\n"
             f"Run Speed: {self.runperhour:,.1M} per hour ({self.runperhour:,.1U} per hour)\n"
-            f"Distance to Horizon: {self.horizondistance:,.3mu}\n"
+            f"View Distance to Horizon: {self.horizondistance:,.3mu}\n"
             f"\n"
             f"Size of a Normal Person (Comparative): {self.avgheightcomp:,.3mu}\n"
             f"Weight of a Normal Person (Comparative): {self.avgweightcomp:,.3mu}\n"
@@ -496,7 +496,7 @@ class PersonStats:
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)", inline=True)
         embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)", inline=True)
-        embed.add_field(name="Distance to Horizon", value=format(self.horizondistance, ",.3mu"), inline=True)
+        embed.add_field(name="View Distance to Horizon", value=format(self.horizondistance, ",.3mu"), inline=True)
         embed.add_field(inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
