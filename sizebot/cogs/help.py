@@ -8,7 +8,7 @@ from discord.ext import commands
 
 from sizebot import __version__
 from sizebot import conf
-from sizebot.lib import objs, userdb, utils
+from sizebot.lib import checks, objs, userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.menu import Menu
 from sizebot.lib.units import SV, WV
@@ -346,6 +346,14 @@ class HelpCog(commands.Cog):
     async def changelog(self, ctx):
         """See what's new in the latest SizeBot!"""
         await ctx.send(f"View the changelog here!:\nhttps://github.com/sizedev/SizeBot3AndAHalf/blob/develop/changelogs/{__version__}.md")
+
+    @commands.command(
+        category = "mod"
+    )
+    @checks.is_mod
+    async def usercount(self, ctx):
+        """How many users are registered?"""
+        await ctx.send(f"There are **{userdb.countusers()}** users of SizeBot3½, with **{userdb.countprofiles()}** profiles created, <@!{ctx.message.author.id}>.")
 
 
 class HelpCategory:
