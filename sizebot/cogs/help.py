@@ -350,7 +350,7 @@ class HelpCog(commands.Cog):
     @commands.command(
         category = "mod"
     )
-    @checks.is_mod
+    @checks.is_mod()
     async def usercount(self, ctx):
         """How many users are registered?"""
         await ctx.send(f"There are **{userdb.countusers()}** users of SizeBot3½, with **{userdb.countprofiles()}** profiles created, <@!{ctx.message.author.id}>.")
