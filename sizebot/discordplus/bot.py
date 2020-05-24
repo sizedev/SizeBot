@@ -21,12 +21,11 @@ async def process_commands(self, message):
     else:
         lines = message.content.split("\n")
         for line in lines:
-            newctx = copy(ctx)
-            newctx.message.content = line
-            contexts.append(newctx)
+            ctx.message.content = line
+            contexts.append(copy(ctx))
 
     for context in contexts:
-        if ctx.command and ctx.command.multiline:  # This should only happen if they're the second arugment since we caught that earlier
+        if context.command and context.command.multiline:  # This should only happen if they're the second arugment since we caught that earlier
             raise errors.MultilineAsNonFirstCommandException()
 
     for context in contexts:
