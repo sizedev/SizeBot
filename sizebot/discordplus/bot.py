@@ -28,7 +28,7 @@ async def process_commands(self, message):
 
     for context in contexts:
         if context.command and context.command.multiline:  # This should only happen if they're the second arugment since we caught that earlier
-            context.command.dispatch_error(ctx, errors.MultilineAsNonFirstCommandException(ctx))
+            context.command.dispatch_error(context, errors.MultilineAsNonFirstCommandException(context))
             return
 
     for context in contexts:
