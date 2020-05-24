@@ -156,7 +156,7 @@ class MultilineAsNonFirstCommandException(DigiContextException):
         return f"{usernick} tried to run a multi-line command in the middle of a sequence."
 
     async def formatUserMessage(self, ctx):
-        return f"You are unable to run a command that takes a multi-line argument in the mmiddle of a multi-command sequence. Please try running these commands seperately."
+        return f"You are unable to run a command that takes a multi-line argument in the middle of a batch command sequence. Please try running these commands seperately."
 
 
 class ArgumentException(DigiContextException):
