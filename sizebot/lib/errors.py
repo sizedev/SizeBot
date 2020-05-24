@@ -149,6 +149,7 @@ class AdminPermissionException(DigiContextException):
         usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command. This incident will be reported."
 
+
 class MultilineAsNonFirstCommandException(DigiContextException):
     async def formatMessage(self, ctx):
         usernick = ctx.author.display_name
