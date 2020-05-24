@@ -5,8 +5,9 @@ old_init = Command.__init__
 old_short_doc = Command.short_doc
 
 
-def __init__(self, *args, category=None, **kwargs):
+def __init__(self, *args, category=None, multiline=False, **kwargs):
     self.category = category
+    self.multiline = multiline
     old_init(self, *args, **kwargs)
 
 
