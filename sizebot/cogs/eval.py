@@ -17,7 +17,8 @@ class EvalCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
-        hidden = True
+        hidden = True,
+        multiline = True
     )
     @commands.is_owner()
     async def eval(self, ctx, *, evalStr):
@@ -51,7 +52,8 @@ class EvalCog(commands.Cog):
                 await ctx.send(m)
 
     @commands.command(
-        hidden = True
+        hidden = True,
+        multiline = True
     )
     @commands.is_owner()
     async def evil(self, ctx, *, evalStr):

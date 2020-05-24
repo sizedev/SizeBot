@@ -14,7 +14,8 @@ class FunCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
-        hidden = True
+        hidden = True,
+        multiline = True
     )
     @commands.is_owner()
     async def repeat(self, ctx, delay: float, *, message: str):
@@ -39,7 +40,8 @@ class FunCog(commands.Cog):
         del tasks[ctx.author.id]
 
     @commands.command(
-        hidden = True
+        hidden = True,
+        multiline = True
     )
     @commands.is_owner()
     async def say(self, ctx, *, message: str):
@@ -48,7 +50,8 @@ class FunCog(commands.Cog):
 
     @commands.command(
         usage = "<message>",
-        category = "fun"
+        category = "fun",
+        multiline = True
     )
     async def sing(self, ctx, *, s: str):
         """Make SizeBot sing a message!"""

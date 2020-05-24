@@ -27,7 +27,8 @@ class ProfileCog(commands.Cog):
     @commands.command(
         aliases = ["setdesc"],
         usage = "<description...>",
-        category = "profile"
+        category = "profile",
+        multiline = True
     )
     @commands.guild_only()
     async def setdescription(self, ctx, *, desc):
