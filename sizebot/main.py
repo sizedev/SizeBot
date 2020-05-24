@@ -125,10 +125,7 @@ def main():
 
     @bot.event
     async def on_message(message):
-        lines = message.content.split("\n")
-        for line in lines:
-            message.content = line
-            await bot.process_commands(message)
+        await bot.process_commands(message)
         await edge.on_message(message)
         await proportions.nickUpdate(message.author)
         await meicros.on_message(message)
@@ -138,10 +135,7 @@ def main():
     async def on_message_edit(before, after):
         if before.content == after.content:
             return
-        lines = after.content.split("\n")
-        for line in lines:
-            after.content = line
-            await bot.process_commands(after)
+        await bot.process_commands(after)
         await proportions.nickUpdate(after.author)
 
     def on_disconnect():

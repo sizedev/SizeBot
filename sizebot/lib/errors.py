@@ -149,6 +149,14 @@ class AdminPermissionException(DigiContextException):
         usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command. This incident will be reported."
 
+class MultilineAsNonFirstCommandException(DigiContextException):
+    async def formatMessage(self, ctx):
+        usernick = ctx.author.display_name
+        return f"{usernick} tried to run a multi-line command in the middle of a sequence."
+
+    async def formatUserMessage(self, ctx):
+        return f"You are unable to run a command that takes a multi-line argument in the mmiddle of a multi-command sequence. Please try running these commands seperately."
+
 
 class ArgumentException(DigiContextException):
     async def formatUserMessage(self, ctx):
