@@ -1,7 +1,7 @@
 from discord.ext.commands.bot import BotBase
 import logging
 from sizebot.lib import errors
-from copy import copy
+# from copy import copy
 
 logger = logging.getLogger("sizebot")
 
@@ -11,6 +11,7 @@ async def process_commands(self, message):
         return
 
     contexts = []
+    oldcontent = message.content
 
     ctx = await self.get_context(message)
 
@@ -18,11 +19,12 @@ async def process_commands(self, message):
         contexts.append(ctx)
     elif not ctx.command:  # No command found, invoke will handle it
         contexts.append(ctx)
-    else:
+    else:  # The first command is not multiline
         lines = message.content.split("\n")
         for line in lines:
-            ctx.message.content = line
-            contexts.append(copy(ctx))
+            message.content = line
+            newctx = await self.get_context(message)
+            contexts.append(newctx)
 
     for context in contexts:
         if context.command and context.command.multiline:  # This should only happen if they're the second arugment since we caught that earlier
