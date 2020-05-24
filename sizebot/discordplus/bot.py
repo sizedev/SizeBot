@@ -11,7 +11,6 @@ async def process_commands(self, message):
         return
 
     contexts = []
-    oldcontent = message.content
 
     ctx = await self.get_context(message)
 
@@ -28,7 +27,7 @@ async def process_commands(self, message):
 
     for context in contexts:
         if context.command and context.command.multiline:  # This should only happen if they're the second arugment since we caught that earlier
-            context.command.dispatch_error(context, errors.MultilineAsNonFirstCommandException(context))
+            await context.command.dispatch_error(context, errors.MultilineAsNonFirstCommandException(context))
             return
 
     for context in contexts:
