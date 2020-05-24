@@ -1,4 +1,4 @@
-from discord import bot
+from discord.ext.commands.bot import BotBase
 import logging
 
 logger = logging.getLogger("sizebot")
@@ -14,4 +14,4 @@ async def process_commands(self, message):
 
 
 def patch():
-    bot.process_commands = process_commands
+    BotBase.process_commands = process_commands
