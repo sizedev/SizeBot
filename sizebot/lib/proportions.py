@@ -355,7 +355,7 @@ class PersonStats:
     shoeprintfactor = 1 / Decimal("135")
     eyewidthfactor = 1 / Decimal("73.083")
     walksteplengthfactor = 1 / Decimal(6900)
-    runsteplengthfactor = walksteplengthfactor / Decimal(1.75)
+    runsteplengthfactor = walksteplengthfactor * Decimal(1.5)
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
