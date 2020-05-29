@@ -415,12 +415,12 @@ class PersonStats:
         self.walkperhour = SV(defaultwalkspeed * self.averageheightmult)
         self.runperhour = SV(defaultrunspeed * self.averageheightmult)
 
-        self.walksteplength = self.walkperhour * self.walksteplengthfactor
-        self.runsteplength = self.runperhour * self.runsteplengthfactor
+        self.walksteplength = SV(self.walkperhour * self.walksteplengthfactor)
+        self.runsteplength = SV(self.runperhour * self.runsteplengthfactor)
 
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 
-        self.terminalvelocity = defaultterminalvelocity * self.scale
+        self.terminalvelocity = SV(defaultterminalvelocity * self.scale)
         self.fallproof = defaultterminalvelocity < falllimit
         self.fallproofcheck = emojis.voteno
         if self.fallproof:
