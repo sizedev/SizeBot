@@ -10,7 +10,12 @@ from sizebot.lib import errors, userdb, utils
 from sizebot.lib.constants import emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
-from sizebot.lib.userdb import defaultheight, defaultweight
+
+# Defaults
+defaultheight = SV("1.754")            # meters
+defaultweight = WV("66760")            # grams
+defaultterminalvelocity = SV("63.63")  # meters/second
+falllimit = SV("7.73")                 # meters/second
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
@@ -178,7 +183,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         self.lookdirection = "up" if viewangle >= 0 else "down"
 
     def __str__(self):
-        # Print compare
+        # TODO: Unused on frontend, turn into debug
         returnstr = (
             "**Comparison:**\n"
             f"{self.big.tag} is really:\n"
@@ -315,6 +320,9 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name="Run Speed", value=(
             f"{emojis.comparebig}{self.bigToSmall.runperhour:,.1M} per hour ({self.bigToSmall.runperhour:,.1U} per hour)\n"
             f"{emojis.comparesmall}{self.smallToBig.runperhour:,.1M} per hour ({self.smallToBig.runperhour:,.1U} per hour)"), inline=True)
+        embed.add_field(name="Terminal Velocity", value=(
+            f"{emojis.comparebig}{self.bigToSmall.terminalvelocity:,.1M} per second\n({self.bigToSmall.terminalvelocity:,.1U} per second)\nFallproof: {self.fallproofcheck}\n"
+            f"{emojis.comparesmall}{self.smallToBig.terminalvelocity:,.1M} per second\n({self.smallToBig.terminalvelocity:,.1U} per second)\nFallproof: {self.fallproofcheck}"), inline=True)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}."))
@@ -351,6 +359,8 @@ class PersonStats:
     nailthickfactor = 1 / Decimal("2920")
     shoeprintfactor = 1 / Decimal("135")
     eyewidthfactor = 1 / Decimal("73.083")
+    walksteplengthfactor = 1 / Decimal(6900)
+    runsteplengthfactor = 1 / Decimal(20880)
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -404,13 +414,22 @@ class PersonStats:
         self.avglookangle = abs(viewangle)
         self.avglookdirection = "up" if viewangle >= 0 else "down"
 
-        defaultwalkspeed = SV.parse("2.5mi")
+        defaultwalkspeed = SV.parse("3.5mi")
         defaultrunspeed = SV.parse("7.5mi")
 
         self.walkperhour = SV(defaultwalkspeed * self.averageheightmult)
         self.runperhour = SV(defaultrunspeed * self.averageheightmult)
 
+        self.walksteplength = self.walkperhour * self.walksteplengthfactor
+        self.runlength = self.runperhour * self.runsteplengthfactor
+
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
+
+        self.terminalvelocity = defaultterminalvelocity * self.scale
+        self.fallproof = defaultterminalvelocity < falllimit
+        self.fallproofcheck = emojis.voteno
+        if self.fallproof:
+            self.fallproofcheck = emojis.voteyes
 
     def getFormattedStat(self, stat):
         returndict = {
@@ -425,7 +444,7 @@ class PersonStats:
             "fingerprint": f"'s fingerprint is **{self.fingerprintdepth:,.3mu}** deep.",
             "thread": f"'s clothing threads are **{self.threadthickness:,.3mu}** thick.",
             "eye": f"'s eye is **{self.eyewidth:,.3mu}** wide.",
-            "speed": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), and runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour).",
+            "speed": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), with {self.walksteplength:,.1M}/{self.walksteplength:,.1U} strides, and runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour), with {self.runsteplength:,.1M}/{self.runsteplength:,.1U} strides.",
             "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
             "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
             "scale": f" is **{self.formattedscale}** their base height.",
@@ -436,12 +455,18 @@ class PersonStats:
         if self.taillength:
             returndict["tail"] = f"'s tail is **{self.taillength:,.3mu}** long."
 
+        if self.fallproof:
+            returndict["terminalvelocity"] = f"'s terminal velocity is {self.terminalvelocity:,.1M} per second ({self.terminalvelocity:,.1U} per second). They can survive a fall from any height!"
+        else:
+            returndict["terminalvelocity"] = f"'s terminal velocity is {self.terminalvelocity:,.1M} per second ({self.terminalvelocity:,.1U} per second)."
+
         for k, v in returndict.items():
             returndict[k] = self.tag + v
 
         return returndict.get(stat)
 
     def __str__(self):
+        # TODO: Unused on frontend, turn into debug
         returnstr = (
             f"**{self.tag} Stats:**\n"
             f"*Current Height:*  {self.height:,.3mu} *{self.formattedscale} scale*\n"
@@ -494,9 +519,13 @@ class PersonStats:
             embed.add_field(name="Tail Length", value=format(self.taillength, ",.3mu"), inline=True)
         embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
-        embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)", inline=True)
-        embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)", inline=True)
+        embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)\n[{self.walksteplength:,.1MU} strides]", inline=True)
+        embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)\n[{self.runsteplength:,.1MU} strides]", inline=True)
         embed.add_field(name="View Distance to Horizon", value=format(self.horizondistance, ",.3mu"), inline=True)
+        if self.fallproof:
+            embed.add_field(name="Terminal Velocity", value = f"{self.terminalvelocity:,.1M} per second\n({self.terminalvelocity:,.1U} per second)", inline = True)
+        else:
+            embed.add_field(name="Terminal Velocity", value = f"{self.terminalvelocity:,.1M} per second\n({self.terminalvelocity:,.1U} per second)\n*This user can fall from any height.*", inline = True)
         embed.add_field(inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")

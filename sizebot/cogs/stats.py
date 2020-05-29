@@ -12,6 +12,44 @@ from sizebot.lib.utils import parseMany
 
 logger = logging.getLogger("sizebot")
 
+statmap = {
+    "height":          "height",
+    "weight":          "weight",
+    "foot":            "foot",
+    "feet":            "foot",
+    "shoe":            "foot",
+    "shoes":           "foot",
+    "toe":             "toe",
+    "shoeprint":       "shoeprint",
+    "footprint":       "shoeprint",
+    "finger":          "finger",
+    "pointer":         "finger",
+    "thumb":           "thumb",
+    "nail":            "nail",
+    "fingernail":      "fingernail",
+    "fingerprint":     "fingerprint",
+    "thread":          "thread",
+    "eye":             "eye",
+    "eyes":            "eye",
+    "hair":            "hair",
+    "tail":            "tail",
+    "speed":           "speed",
+    "walk":            "speed",
+    "run":             "speed",
+    "step":            "speed",
+    "stride":          "speed",
+    "base":            "base",
+    "baseheight":      "base",
+    "baseweight":      "base",
+    "compare":         "compare",
+    "look":            "compare",
+    "scale":           "scale",
+    "multiplier":      "scale",
+    "mult":            "scale",
+    "horizondistance": "horizondistance",
+    "horizon":         "horizondistance",
+}
+
 
 class StatsCog(commands.Cog):
     def __init__(self, bot):
@@ -97,51 +135,15 @@ class StatsCog(commands.Cog):
 
         Get a single stat about yourself, a user, or a raw height.
 
-        Available stats are: height, weight, foot/feet/shoe, toe, shoeprint/footprint,
-        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair, tail,
-        speed/walk/run, base/baseheight/baseweight, compare/look, scale/multiplier/mult.
+        Available stats are: height, weight, foot/feet/shoe, toe, shoeprint/footprint, \
+        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair, tail, \
+        speed/walk/run/step/stride, base/baseheight/baseweight, compare/look, scale/multiplier/mult.
 
         Examples:
         `&stat height` (not specifying a user returns a stat about yourself.)
         `&stat weight @User`
         `&stat foot 10ft`
         """
-
-        statmap = {
-            "height":          "height",
-            "weight":          "weight",
-            "foot":            "foot",
-            "feet":            "foot",
-            "shoe":            "foot",
-            "shoes":           "foot",
-            "toe":             "toe",
-            "shoeprint":       "shoeprint",
-            "footprint":       "shoeprint",
-            "finger":          "finger",
-            "pointer":         "finger",
-            "thumb":           "thumb",
-            "nail":            "nail",
-            "fingernail":      "fingernail",
-            "fingerprint":     "fingerprint",
-            "thread":          "thread",
-            "eye":             "eye",
-            "eyes":            "eye",
-            "hair":            "hair",
-            "tail":            "tail",
-            "speed":           "speed",
-            "walk":            "speed",
-            "run":             "speed",
-            "base":            "base",
-            "baseheight":      "base",
-            "baseweight":      "base",
-            "compare":         "compare",
-            "look":            "compare",
-            "scale":           "scale",
-            "multiplier":      "scale",
-            "mult":            "scale",
-            "horizondistance": "horizondistance",
-            "horizon":         "horizondistance"
-        }
 
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -178,51 +180,15 @@ class StatsCog(commands.Cog):
 
         Get a single stat about yourself, a user, or a raw height, as if they were a different height.
 
-        Available stats are: height, weight, foot/feet/shoe, toe, shoeprint/footprint,
-        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair, tail,
-        speed/walk/run, base/baseheight/baseweight, compare/look, scale/multiplier/mult.
+        Available stats are: height, weight, foot/feet/shoe, toe, shoeprint/footprint, \
+        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair, tail, \
+        speed/walk/run/step/stride, base/baseheight/baseweight, compare/look, scale/multiplier/mult.
 
         Examples:
         `&statas weight 100ft` (defaults to stats about you, if you were a certain height.)
         `&statas foot 100ft @User` (get stats about @User if they were a certain height.)
         `&statas speed @User @User2` (get stats about @User2 if they were as tall as @User.)
         """
-
-        statmap = {
-            "height":          "height",
-            "weight":          "weight",
-            "foot":            "foot",
-            "feet":            "foot",
-            "shoe":            "foot",
-            "shoes":           "foot",
-            "toe":             "toe",
-            "shoeprint":       "shoeprint",
-            "footprint":       "shoeprint",
-            "finger":          "finger",
-            "pointer":         "finger",
-            "thumb":           "thumb",
-            "nail":            "nail",
-            "fingernail":      "fingernail",
-            "fingerprint":     "fingerprint",
-            "thread":          "thread",
-            "eye":             "eye",
-            "eyes":            "eye",
-            "hair":            "hair",
-            "tail":            "tail",
-            "speed":           "speed",
-            "walk":            "speed",
-            "run":             "speed",
-            "base":            "base",
-            "baseheight":      "base",
-            "baseweight":      "base",
-            "compare":         "compare",
-            "look":            "compare",
-            "scale":           "scale",
-            "multiplier":      "scale",
-            "mult":            "scale",
-            "horizondistance": "horizondistance",
-            "horizon":         "horizondistance"
-        }
 
         if memberOrHeight is None:
             raise errors.ArgumentException
