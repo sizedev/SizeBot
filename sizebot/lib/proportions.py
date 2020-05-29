@@ -356,7 +356,7 @@ class PersonStats:
     eyewidthfactor = 1 / Decimal("73.083")
 
     walkstepsperhour = 6900
-    runstepsperhour = walkstepsperhour / Decimal(1.25)
+    runstepsperhour = 10200
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
