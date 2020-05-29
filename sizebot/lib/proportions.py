@@ -416,7 +416,7 @@ class PersonStats:
         self.runperhour = SV(defaultrunspeed * self.averageheightmult)
 
         self.walksteplength = self.walkperhour * self.walksteplengthfactor
-        self.runlength = self.runperhour * self.runsteplengthfactor
+        self.runsteplength = self.runperhour * self.runsteplengthfactor
 
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 
