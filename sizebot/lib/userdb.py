@@ -5,9 +5,14 @@ from typing import Literal
 
 from sizebot import conf
 from sizebot.lib import errors
-from sizebot.lib.proportions import defaultheight, defaultweight
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import isURL
+
+# Defaults
+defaultheight = SV("1.754")            # meters
+defaultweight = WV("66760")            # grams
+defaultterminalvelocity = SV("63.63")  # meters/second
+falllimit = SV("7.73")                 # meters/second
 
 
 @total_ordering

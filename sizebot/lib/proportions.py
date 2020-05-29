@@ -10,12 +10,7 @@ from sizebot.lib import errors, userdb, utils
 from sizebot.lib.constants import emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
-
-# Defaults
-defaultheight = SV("1.754")            # meters
-defaultweight = WV("66760")            # grams
-defaultterminalvelocity = SV("63.63")  # meters/second
-falllimit = SV("7.73")                 # meters/second
+from sizebot.lib.userdb import defaultheight, defaultweight, defaultterminalvelocity, falllimit
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
