@@ -354,8 +354,9 @@ class PersonStats:
     nailthickfactor = 1 / Decimal("2920")
     shoeprintfactor = 1 / Decimal("135")
     eyewidthfactor = 1 / Decimal("73.083")
-    walksteplengthfactor = 1 / Decimal(6900)
-    runsteplengthfactor = walksteplengthfactor * Decimal(1.5)
+
+    walkstepsperhour = 6900
+    runstepsperhour = walkstepsperhour / Decimal(1.25)
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -415,8 +416,8 @@ class PersonStats:
         self.walkperhour = SV(defaultwalkspeed * self.averageheightmult)
         self.runperhour = SV(defaultrunspeed * self.averageheightmult)
 
-        self.walksteplength = SV(self.walkperhour * self.walksteplengthfactor)
-        self.runsteplength = SV(self.runperhour * self.runsteplengthfactor)
+        self.walksteplength = SV(self.walkperhour / self.walkstepsperhour)
+        self.runsteplength = SV(self.runperhour / self.runstepsperhour)
 
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 
