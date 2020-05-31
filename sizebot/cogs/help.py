@@ -263,12 +263,12 @@ class HelpCog(commands.Cog):
                                  f"**Special thanks** *to the {userdb.countusers()} users of SizeBot3½.*"),
                         inline = False)
         embed.add_field(name = "Testimonials",
-                        value = ("\"I want to put SizeBot in charge of the world government.\"* -- AWK*\n"
-                                 "\"Insanity is doing the exact same thing over and over again expecting things to change.\"* -- Chocola*\n"
+                        value = ("\"I want to put SizeBot in charge of the world government.\" *-- AWK*\n"
+                                 "\"Insanity is doing the exact same thing over and over again expecting things to change.\" *-- Chocola*\n"
                                  "\"Um... I like it?\" *-- Goddess Syn*\n"
-                                 "\"I fixed the bot.\" *-- Natalie*"
+                                 "\"I fixed the bot.\" *-- Natalie*\n"
                                  "\"I am the only person who has accidentally turned my fetish into a tech support job.\" *-- DigiDuncan*\n"
-                                 "\"Insanity is doing the exact same thing over and over again expecting things to change.\"* -- Chocola*\n"),
+                                 "\"Insanity is doing the exact same thing over and over again expecting things to change.\" *-- Chocola*\n"),
                         inline = False)
         embed.set_footer(text = f"Version {__version__} | {now.strftime('%d %b %Y')}")
         await ctx.send(embed = embed)
