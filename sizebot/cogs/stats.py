@@ -393,7 +393,7 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = what.statsembed())
 
     @commands.command(
-        aliases = ["dist"],
+        aliases = ["dist", "walk", "run"],
         usage = "[length]",
         category = "stats"
     )
