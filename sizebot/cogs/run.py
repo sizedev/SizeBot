@@ -87,7 +87,7 @@ class RunCog(commands.Cog):
         hidden = True,
         category = "fun"
     )
-    async def run(self, ctx, duration: TV, mode: str = ""):
+    async def devrun(self, ctx, duration: TV, mode: str = ""):
         nyan = mode == "nyan"
         msg = await ctx.send("Ready... Set... GO")
         Runner.start(ctx.channel.id, msg.id, duration=duration, nyan=nyan)
