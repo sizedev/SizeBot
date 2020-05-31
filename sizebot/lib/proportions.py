@@ -422,7 +422,7 @@ class PersonStats:
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 
         self.terminalvelocity = SV(defaultterminalvelocity * self.scale)
-        self.fallproof = defaultterminalvelocity < falllimit
+        self.fallproof = self.terminalvelocity < falllimit
         self.fallproofcheck = emojis.voteyes if self.fallproof else emojis.voteno
 
     def getFormattedStat(self, stat):
