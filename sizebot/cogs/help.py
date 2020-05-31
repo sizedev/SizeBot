@@ -114,16 +114,13 @@ class HelpCog(commands.Cog):
         embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
 
         # Add each category to a field
-        fields_text = ""
-
         for cat in categories:
             cat_cmds = commands_by_cat.get(cat.cid, [])
             if not cat_cmds:
                 logger.warn(f"Command category {cat.cid!r} is empty.")
                 continue
-            fields_text += f"\n\n**{cat.emoji} {cat.name}**\n" + (", ".join(f"`{c.name}`" for c in cat_cmds))
-
-        embed.add_field(value=fields_text)
+            field_text = f"\n\n**{cat.emoji} {cat.name}**\n" + (", ".join(f"`{c.name}`" for c in cat_cmds))
+            embed.add_field(value=field_text, inline=False)
 
         # Display the embed with a reaction menu
         categoryoptions = {cat.emoji: cat for cat in categories if commands_by_cat.get(cat.cid, [])}
