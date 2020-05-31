@@ -397,7 +397,7 @@ class StatsCog(commands.Cog):
         usage = "[length]",
         category = "stats"
     )
-    async def distance(self, ctx, *, length: SV, who: typing.Union[discord.Member, SV] = None):
+    async def distance(self, ctx, length: SV, *, who: typing.Union[discord.Member, SV] = None):
         """How long will it take to walk or run a distance?.
 
         Example:
