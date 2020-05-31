@@ -158,6 +158,16 @@
         "weight": "0.0025"
     },
     {
+        "name": "asprin",
+        "dimension": "d",
+        "diameter": "0.01397",
+        "weight": "0.317",
+        "aliases": [
+            "ibupofen",
+            "advil"
+        ]
+    },
+    {
         "name": "marble",
         "dimension": "d",
         "diameter": "0.0142875",
@@ -401,12 +411,7 @@
         "height": "0.057",
         "width": "0.057",
         "depth": "0.057",
-        "weight": "84.6",
-        "aliases": [
-            "rubiks cube",
-            "rubix cube",
-            "puzzle cube"
-        ]
+        "weight": "84.6"
     },
     {
         "name": "Zippo lighter",
@@ -502,6 +507,18 @@
         "weight": "5"
     },
     {
+        "name": "Kinder Surprise egg",
+        "dimension": "h",
+        "height": "0.0925",
+        "width": "0.065",
+        "aliases": [
+            "kinder egg",
+            "surprise egg",
+            "candy egg",
+            "kinder"
+        ]
+    },
+    {
         "name": "coffee mug",
         "dimension": "h",
         "height": "0.095",
@@ -531,6 +548,15 @@
         "aliases": [
             "joycon",
             "joy-con"
+        ]
+    },
+    {
+        "name": "photograph",
+        "dimension": "h",
+        "height": "0.1016",
+        "aliases": [
+            "photo",
+            "this photograph"
         ]
     },
     {
@@ -912,6 +938,18 @@
         "name": "railway track width",
         "dimension": "w",
         "width": "1.4351"
+    },
+    {
+        "name": "D&D space",
+        "dimension": "l",
+        "length": "1.524",
+        "width": "1.524",
+        "symbol": "sp",
+        "aliases": [
+            "tile",
+            "square",
+            "space"
+        ]
     },
     {
         "name": "fridge",
@@ -1350,26 +1388,6 @@
         "weight": "1.3e+43",
         "aliases": [
             "black hole"
-        ]
-    },
-    {
-        "name": "asprin",
-        "dimension": "d",
-        "diameter": "0.01397",
-        "weight": "0.317",
-        "aliases": [
-            "ibupofen",
-            "advil"
-        ]
-    },
-    {
-        "name": "photograph",
-        "dimension": "h",
-        "height": "0.1016",
-        "width": "0.1524",
-        "aliases": [
-            "photo",
-            "this photograph"
         ]
     }
 ]
