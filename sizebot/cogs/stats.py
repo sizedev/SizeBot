@@ -8,7 +8,7 @@ from discord.ext import commands
 from sizebot.lib import errors, proportions, userdb
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV
-from sizebot.lib.utils import parseMany
+from sizebot.lib.utils import parseMany, prettyTimeDelta
 
 logger = logging.getLogger("sizebot")
 
@@ -391,6 +391,33 @@ class StatsCog(commands.Cog):
             return
 
         await ctx.send(embed = what.statsembed())
+
+    @commands.command(
+        aliases = ["dist"],
+        usage = "[length]",
+        category = "stats"
+    )
+    async def distance(self, ctx, *, length: SV, who: typing.Union[discord.Member, SV] = None):
+        """How long will it take to walk or run a distance?.
+
+        Example:
+        `&distance <length>`"""
+
+        if who is None:
+            who = ctx.message.author
+
+        userdata = getUserdata(who)
+        userstats = proportions.PersonStats(userdata)
+
+        walktimehours = length / userstats.walkperhour
+        walksteps = length / userstats.walksteplength
+        runtimehours = length / userstats.runperhour
+        runsteps = length / userstats.runsteplength
+
+        walktime = prettyTimeDelta(walktimehours * 60 * 60)
+        runtime = prettyTimeDelta(runtimehours * 60 * 60)
+
+        await ctx.send(f"{userstats.nickname} could walk {length:,.3mu} in **{walktime}** *({walksteps:.0f} steps)*, or run that distance in **{runtime}** *({runsteps:.0f} steps)*.")
 
 
 def getUserdata(memberOrSV, nickname = None):
