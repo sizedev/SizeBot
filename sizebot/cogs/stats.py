@@ -237,8 +237,8 @@ class StatsCog(commands.Cog):
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        userdata1 = getUserdata(memberOrHeight1, "Raw 1")
-        userdata2 = getUserdata(memberOrHeight2, "Raw 2")
+        userdata1 = getUserdata(memberOrHeight1)
+        userdata2 = getUserdata(memberOrHeight2)
 
         comparison = proportions.PersonComparison(userdata1, userdata2)
         embedtosend = comparison.toEmbed()
@@ -313,7 +313,7 @@ class StatsCog(commands.Cog):
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make one sided)
-            compdata = getUserdata(what, "Raw")
+            compdata = getUserdata(what)
             logger.info(f"{ctx.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userstats.avgheightcomp
@@ -356,7 +356,7 @@ class StatsCog(commands.Cog):
             logger.info(f"{ctx.author.display_name} is jamming to Nickleback.")  # TODO: Make an "egg" log level.
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
-            compdata = getUserdata(what, "Raw")
+            compdata = getUserdata(what)
             logger.info(f"{ctx.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userstats.avgheightcomp
