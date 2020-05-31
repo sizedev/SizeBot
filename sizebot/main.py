@@ -80,7 +80,10 @@ def main():
         logger.addHandler(discordhandler)
 
         # Set the bots name to what's set in the config.
-        await bot.user.edit(username = conf.name)
+        try:
+            await bot.user.edit(username = conf.name)
+        except discord.errors.HTTPException:
+            logger.warn("We can't change the username this much!")
 
         # Start the language engine.
         language.load()
