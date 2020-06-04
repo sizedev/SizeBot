@@ -547,7 +547,7 @@ def formatShoeSize(footlength, women = False):
 
 
 def fromShoeSize(shoesize):
-    unmodifiedshoesizenum = Decimal(re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)[0])
+    shoesizenum = unmodifiedshoesizenum = Decimal(re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)[0])
     if "w" in shoesize.lower():
         shoesizenum = unmodifiedshoesizenum - 1
     if "c" in shoesize.lower():  # Intentional override, children's sizes have no women/men distinction.
