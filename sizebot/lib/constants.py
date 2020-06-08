@@ -6,6 +6,7 @@ import sizebot.data
 
 ids = None
 emojis = None
+colors = None
 
 
 class AttrDict:
@@ -31,6 +32,16 @@ def loademojis(data):
     emojisdict = {name.lower(): emoji for name, emoji in emojisdict.items()}
     # create the enum
     emojis = AttrDict(emojisdict)
+
+
+def loadcolors(data):
+    global colors
+    # Get the ids dictionary (or an empty dict if none exists)
+    colorsdict = data.get("colors", {})
+    # make all names lowercase
+    colorsdict = {name.lower(): color for name, color in colorsdict.items()}
+    # create the enum
+    colors = AttrDict(colorsdict)
 
 
 def load():
