@@ -83,9 +83,7 @@ class StatsCog(commands.Cog):
 
         stats = proportions.PersonStats(userdata)
 
-        embedtosend = stats.toEmbed()
-        if ctx.author.id != userdata.id:
-            embedtosend.description = f"Requested by *{ctx.author.display_name}*"
+        embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
         logger.info(f"Stats for {memberOrHeight} sent.")
@@ -121,9 +119,7 @@ class StatsCog(commands.Cog):
 
         stats = proportions.PersonStats(userdata2)
 
-        embedtosend = stats.toEmbed()
-        if ctx.author.id != userdata.id:
-            embedtosend.description = f"Requested by *{ctx.author.display_name}*"
+        embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
         logger.info(f"Stats for {memberOrHeight} sent.")
@@ -241,8 +237,7 @@ class StatsCog(commands.Cog):
         userdata2 = getUserdata(memberOrHeight2)
 
         comparison = proportions.PersonComparison(userdata1, userdata2)
-        embedtosend = comparison.toEmbed()
-        embedtosend.description = f"Requested by *{ctx.author.display_name}*"
+        embedtosend = comparison.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
         logger.info(f"Compared {userdata1} and {userdata2}")
@@ -323,9 +318,7 @@ class StatsCog(commands.Cog):
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
-        embedtosend = stats.toEmbed()
-        if ctx.author.id != userdata.id:  # Future proofing for when you can do owcs for other people.
-            embedtosend.description = f"*Requested by *{ctx.author.display_name}*"
+        embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
     @commands.command(

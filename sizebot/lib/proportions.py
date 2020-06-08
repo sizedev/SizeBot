@@ -7,7 +7,7 @@ from discord import Embed
 
 from sizebot import __version__
 from sizebot.lib import errors, userdb, utils
-from sizebot.lib.constants import emojis
+from sizebot.lib.constants import colors, emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import defaultheight, defaultweight, defaultterminalvelocity, falllimit
@@ -240,13 +240,18 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         returnstr = returnstr.replace("\t", "\u2002" * 4)
         return returnstr
 
-    def toEmbed(self)
+    def toEmbed(self, requesterID = None):
+        requestertag = f"<@!<{requesterID}>"
         embed = Embed(
             title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
-            description="",
-            color=0x31eff9,
+            description=f"*Requested by {requestertag}*",
+            color=colors.purple,
             url=self.url
         )
+        if requestertag == self.big.tag:
+            embed.color = colors.blue
+        if requestertag == self.small.tag:
+            embed.color = colors.red
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
         embed.add_field(name=f"{emojis.comparebigcenter} **{self.big.nickname}**", value=(
             f"{emojis.blank}{emojis.blank} **Height:** {self.big.height:,.3mu}\n"
