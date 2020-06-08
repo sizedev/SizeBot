@@ -241,7 +241,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         return returnstr
 
     def toEmbed(self, requesterID = None):
-        requestertag = f"<@!<{requesterID}>"
+        requestertag = f"<@!{requesterID}>"
         embed = Embed(
             title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
             description=f"*Requested by {requestertag}*",
