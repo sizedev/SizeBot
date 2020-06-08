@@ -316,8 +316,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{emojis.comparebig}{self.bigToSmall.runperhour:,.1M} per hour ({self.bigToSmall.runperhour:,.1U} per hour)\n"
             f"{emojis.comparesmall}{self.smallToBig.runperhour:,.1M} per hour ({self.smallToBig.runperhour:,.1U} per hour)"), inline=True)
         embed.add_field(name="Terminal Velocity", value=(
-            f"{emojis.comparebig}{self.bigToSmall.terminalvelocity:,.1m} per second\n({self.bigToSmall.terminalvelocity:,.1u} per second)\nFallproof: {self.fallproofcheck}\n"
-            f"{emojis.comparesmall}{self.smallToBig.terminalvelocity:,.1m} per second\n({self.smallToBig.terminalvelocity:,.1u} per second)\nFallproof: {self.fallproofcheck}"), inline=True)
+            f"{emojis.comparebig}{self.bigToSmall.terminalvelocity:,.1m} per second\n({self.bigToSmall.terminalvelocity:,.1u} per second)\n{emojis.blank}Fallproof: {self.bigToSmall.fallproofcheck}\n"
+            f"{emojis.comparesmall}{self.smallToBig.terminalvelocity:,.1m} per second\n({self.smallToBig.terminalvelocity:,.1u} per second)\n{emojis.blank}Fallproof: {self.smallToBig.fallproofcheck}"), inline=True)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}."))
