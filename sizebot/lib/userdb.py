@@ -191,7 +191,7 @@ class User:
     @property
     def tag(self):
         if self.id is not None:
-            tag = f"<@{self.id}>"
+            tag = f"<@!{self.id}>"
         else:
             tag = self.nickname
         return tag
