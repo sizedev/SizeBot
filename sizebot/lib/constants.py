@@ -49,6 +49,7 @@ def load():
     data = toml.loads(pkg_resources.read_text(sizebot.data, "constants.ini"))
     loadids(data)
     loademojis(data)
+    loadcolors(data)
 
 
 load()
