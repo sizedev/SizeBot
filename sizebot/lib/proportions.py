@@ -495,8 +495,11 @@ class PersonStats:
             f"Character Bases: {self.baseheight:,.3mu} | {self.baseweight:,.3mu}")
         return returnstr
 
-    def toEmbed(self):
-        embed = Embed(title=f"Stats for {self.nickname}", color=0x31eff9)
+    def toEmbed(self, requesterID = None):
+        requestertag = f"<@!{requesterID}>"
+        embed = Embed(title=f"Stats for {self.nickname}",
+                      description=f"*Requested by {requestertag}*",
+                      color=colors.cyan)
         embed.set_author(name=f"SizeBot {__version__}")
         embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n*{self.formattedscale} scale*", inline=True)
         embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n*{self.formattedweightscale} scale*", inline=True)
