@@ -63,7 +63,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stats(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None, customName = None):
+    async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, customName = None):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
@@ -93,8 +93,8 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statsas(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None,
-                      memberOrHeight2: typing.Union[discord.Member, SV] = None, customName = None):
+    async def statsas(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None,
+                      memberOrHeight2: typing.Union[discord.Member, SV] = None, *, customName = None):
         """User stats command with modified bases.
 
         Get tons of user stats about yourself, a user, or a raw height, as if they were a different height.
@@ -129,7 +129,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stat(self, ctx, stat, *, memberOrHeight: typing.Union[discord.Member, SV] = None, customName = None):
+    async def stat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, SV] = None, *, customName = None):
         """User stat command.
 
         Get a single stat about yourself, a user, or a raw height.
@@ -173,8 +173,8 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statas(self, ctx, stat, *, memberOrHeight: typing.Union[discord.Member, SV] = None,
-                     memberOrHeight2: typing.Union[discord.Member, SV] = None, customName = None):
+    async def statas(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, SV] = None,
+                     memberOrHeight2: typing.Union[discord.Member, SV] = None, *, customName = None):
         """User stat command with custom bases.
 
         Get a single stat about yourself, a user, or a raw height, as if they were a different height.
