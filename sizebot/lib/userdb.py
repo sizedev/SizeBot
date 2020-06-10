@@ -121,7 +121,7 @@ class User:
 
     @property
     def liftstrength(self):
-        return self._hairlength
+        return self._liftstrength
 
     @liftstrength.setter
     def liftstrength(self, value):
