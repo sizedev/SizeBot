@@ -469,6 +469,52 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s tail length is now cleared.")
 
     @commands.command(
+        usage = "<weight>",
+        category = "set"
+    )
+    async def setstrength(self, ctx, *, newstrength):
+        """Set your current lift/carry strength."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.liftstrength = SV(SV.parse(newstrength) * (userdata.viewscale ** 3))
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.lift:m}")
+        await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.lift:mu}.")
+
+    @commands.command(
+        usage = "<weight>",
+        category = "setbase"
+    )
+    @commands.guild_only()
+    async def setbasestrength(self, ctx, *, newstrength: WV):
+        """Set a custom lift/carry strength."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.liftstrength = newstrength
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.lift:m}")
+        await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.lift:mu}.")
+
+    @commands.command(
+        aliases = ["clearstrength", "unsetstrength"],
+        category = "set"
+    )
+    @commands.guild_only()
+    async def resetstrength(self, ctx):
+        """Remove custom lift/carry strength."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.liftstrength = None
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom lift/carry strength.")
+        await ctx.send(f"<@{ctx.author.id}>'s lift/carry strength is now cleared.")
+
+    @commands.command(
         usage = "<male/female/none>",
         category = "set"
     )

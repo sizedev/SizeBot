@@ -13,14 +13,15 @@ defaultheight = SV("1.754")            # meters
 defaultweight = WV("66760")            # grams
 defaultterminalvelocity = SV("63.63")  # meters/second
 falllimit = SV("7.73")                 # meters/second
+defaultliftstrength = WV("18143.7")    # grams
 
 
 @total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.
     __slots__ = ["guildid", "id", "nickname", "_picture_url", "description", "_gender", "display", "_height",
-                 "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_unitsystem",
-                 "species", "soft_gender", "avatar_url"]
+                 "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength", "_liftstrength",
+                 "_unitsystem", "species", "soft_gender", "avatar_url"]
 
     def __init__(self):
         self.guildid = None
@@ -36,6 +37,7 @@ class User:
         self._footlength = None
         self._hairlength = None
         self._taillength = None
+        self._liftstrength = None
         self._unitsystem = "m"
         self.species = None
         self.soft_gender = None
@@ -44,7 +46,7 @@ class User:
     def __str__(self):
         return (f"GUILDID `{self.guildid}`, ID `{self.id}`, NICK `{self.nickname}`, GEND `{self.gender}`, "
                 f"DISP `{self.display}`, CHEI `{self.height}`, BHEI `{self.baseheight}`, BWEI `{self.baseweight}`, "
-                f"FOOT `{self.footlength}`, HAIR `{self.hairlength}`, TAIL `{self.taillength}`, "
+                f"FOOT `{self.footlength}`, HAIR `{self.hairlength}`, TAIL `{self.taillength}`, LIFT `{self.liftstrength}`, "
                 f"UNIT `{self.unitsystem}`, SPEC `{self.species}`")
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
@@ -116,6 +118,17 @@ class User:
             self._taillength = None
             return
         self._taillength = SV(max(0, SV(value)))
+
+    @property
+    def liftstrength(self):
+        return self._hairlength
+
+    @liftstrength.setter
+    def liftstrength(self, value):
+        if value is None:
+            self._liftstrength = None
+            return
+        self._liftstrength = WV(max(0, WV(value)))
 
     @property
     def gender(self):
@@ -243,6 +256,7 @@ class User:
             "footlength": None if self.footlength is None else str(self.footlength),
             "hairlength": None if self.hairlength is None else str(self.hairlength),
             "taillength": None if self.taillength is None else str(self.taillength),
+            "liftstrength": None if self.liftstrength is None else str(self.liftstrength),
             "unitsystem": self.unitsystem,
             "species": self.species
         }
@@ -264,6 +278,7 @@ class User:
         userdata.footlength = jsondata.get("footlength")
         userdata.hairlength = jsondata.get("hairlength")
         userdata.taillength = jsondata.get("taillength")
+        userdata.liftstrength = jsondata.get("liftstrength")
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         return userdata
