@@ -480,8 +480,8 @@ class SetCog(commands.Cog):
         userdata.liftstrength = SV(SV.parse(newstrength) * (userdata.viewscale ** 3))
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.lift:m}")
-        await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.lift:mu}.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.liftstrength:m}")
+        await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.liftstrength:mu}.")
 
     @commands.command(
         usage = "<weight>",
@@ -496,8 +496,8 @@ class SetCog(commands.Cog):
         userdata.liftstrength = newstrength
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.lift:m}")
-        await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.lift:mu}.")
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.liftstrength:m}")
+        await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.liftstrength:mu}.")
 
     @commands.command(
         aliases = ["clearstrength", "unsetstrength"],
