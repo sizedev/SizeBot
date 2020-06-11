@@ -477,7 +477,7 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
-        userdata.liftstrength = SV(SV.parse(newstrength) * (userdata.viewscale ** 3))
+        userdata.liftstrength = WV(WV.parse(newstrength) * (userdata.viewscale ** 3))
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.liftstrength:m}")
