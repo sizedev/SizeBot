@@ -72,6 +72,8 @@ class User:
         now = arrow.now()
         weekago = now.shift(weeks = -1)
         lastactive = self.lastactive
+        if self.lastactive is None:
+            return False
         return lastactive > weekago
 
     @property
