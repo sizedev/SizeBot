@@ -3,6 +3,8 @@ from copy import copy
 from functools import total_ordering
 from typing import Literal
 
+import arrow
+
 from sizebot import conf
 from sizebot.lib import errors
 from sizebot.lib.units import SV, WV
@@ -42,6 +44,7 @@ class User:
         self.species = None
         self.soft_gender = None
         self.avatar_url = None
+        self.lastactive = None
 
     def __str__(self):
         return (f"GUILDID `{self.guildid}`, ID `{self.id}`, NICK `{self.nickname}`, GEND `{self.gender}`, "
@@ -63,6 +66,13 @@ class User:
     @property
     def auto_picture_url(self):
         return self.picture_url or self.avatar_url
+
+    @property
+    def is_active(self):
+        now = arrow.now()
+        weekago = now.shift(weeks = -1)
+        lastactive = self.lastactive
+        return lastactive > weekago
 
     @property
     def height(self):
@@ -243,22 +253,23 @@ class User:
     # Return an python dictionary for json exporting
     def toJSON(self):
         return {
-            "guildid": self.guildid,
-            "id": self.id,
-            "nickname": self.nickname,
-            "picture_url": self.picture_url,
-            "description": self.description,
-            "gender": self.gender,
-            "display": self.display,
-            "height": str(self.height),
-            "baseheight": str(self.baseheight),
-            "baseweight": str(self.baseweight),
-            "footlength": None if self.footlength is None else str(self.footlength),
-            "hairlength": None if self.hairlength is None else str(self.hairlength),
-            "taillength": None if self.taillength is None else str(self.taillength),
+            "guildid":      self.guildid,
+            "id":           self.id,
+            "nickname":     self.nickname,
+            "lastactive":   None if self.lastactive is None else self.lastactive.isoformat(),
+            "picture_url":  self.picture_url,
+            "description":  self.description,
+            "gender":       self.gender,
+            "display":      self.display,
+            "height":       str(self.height),
+            "baseheight":   str(self.baseheight),
+            "baseweight":   str(self.baseweight),
+            "footlength":   None if self.footlength is None else str(self.footlength),
+            "hairlength":   None if self.hairlength is None else str(self.hairlength),
+            "taillength":   None if self.taillength is None else str(self.taillength),
             "liftstrength": None if self.liftstrength is None else str(self.liftstrength),
-            "unitsystem": self.unitsystem,
-            "species": self.species
+            "unitsystem":   self.unitsystem,
+            "species":      self.species
         }
 
     # Create a new object from a python dictionary imported using json
@@ -268,6 +279,10 @@ class User:
         userdata.guildid = jsondata.get("guildid", 350429009730994199)  # Default to Size Matters.
         userdata.id = jsondata["id"]
         userdata.nickname = jsondata["nickname"]
+        lastactive = jsondata.get("lastactive")
+        if lastactive is not None:
+            lastactive = arrow.get(lastactive)
+        userdata.lastactive = lastactive
         userdata.picture_url = jsondata.get("picture_url")
         userdata.description = jsondata.get("description")
         userdata.gender = jsondata.get("gender")

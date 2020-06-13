@@ -13,7 +13,7 @@ from sizebot import discordplus
 from sizebot.cogs import edge
 from sizebot.lib import language, objs, proportions, status, units
 from sizebot.lib.discordlogger import DiscordHandler
-from sizebot.plugins import monika, meicros
+from sizebot.plugins import active, monika
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("sizebot")
@@ -131,8 +131,9 @@ def main():
         await bot.process_commands(message)
         await edge.on_message(message)
         await proportions.nickUpdate(message.author)
-        await meicros.on_message(message)
+        # await meicros.on_message(message)
         await monika.on_message(message)
+        await active.on_message(message)
 
     @bot.event
     async def on_message_edit(before, after):
