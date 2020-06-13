@@ -21,7 +21,7 @@ defaultliftstrength = WV("18143.7")    # grams
 @total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.
-    __slots__ = ["guildid", "id", "nickname", "_lastactive" "_picture_url", "description", "_gender", "display",
+    __slots__ = ["guildid", "id", "nickname", "lastactive" "_picture_url", "description", "_gender", "display",
                  "_height", "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength",
                  "_liftstrength", "_unitsystem", "species", "soft_gender", "avatar_url"]
 
