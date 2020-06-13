@@ -5,6 +5,7 @@ import discord
 from discord.ext.commands.converter import MemberConverter
 from discord.ext import commands
 
+from sizebot import conf
 from sizebot.lib import errors, proportions, userdb
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV
@@ -344,22 +345,21 @@ class StatsCog(commands.Cog):
         `&examine building`"""
 
         userdata = getUserdata(ctx.author)
-        userstats = proportions.PersonStats(userdata)
 
         if isinstance(what, DigiObject):
             la = what.relativestatssentence(userdata)
             # Easter egg.
             if what.name == "photograph":
                 la += "\n\nhttps://www.youtube.com/watch?v=BB0DU4DoPP4"  # TODO: Supress embeds.
+                logger.info(f"{ctx.author.display_name} is jamming to Nickleback.")  # TODO: Make an "egg" log level.
             await ctx.send(la)
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
-            logger.info(f"{ctx.author.display_name} is jamming to Nickleback.")  # TODO: Make an "egg" log level.
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
             compdata = getUserdata(what)
             logger.info(f"{ctx.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
-            compheight = userstats.avgheightcomp
+            compheight = userdb.defaultheight
             compdata = getUserdata(compheight)
         else:
             # Easter eggs.
@@ -368,11 +368,11 @@ class StatsCog(commands.Cog):
                 logger.info(f"{ctx.author.display_name} looked at all those chickens.")  # TODO: Make an "egg" log level.
                 return
             await ctx.send(f"`{what}` is not a valid object, member, or height.\n"
-                           "If this is an object or alias you'd like added to SizeBot, use `{conf.prefix}suggestobject to suggest it (see `{conf.prefix}help suggestobject for instructions on doing that.)")
+                           f"If this is an object or alias you'd like added to SizeBot, use `{conf.prefix}suggestobject to suggest it (see `{conf.prefix}help suggestobject for instructions on doing that.)")
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
-        embedtosend = stats.toEmbed()
+        embedtosend = stats.toEmbed(requesterID = ctx.message.author.id)
         await ctx.send(embed = embedtosend)
 
     @commands.command(
