@@ -37,28 +37,27 @@ def getEdgesFile(gid):
 
 def getUserSizes(g):
     # Find the largest and smallest current users.
-    # TODO: Check to see if these users are recently active, which would determine if they count towards the check.
-    smallestuser = 000000000000000000
+    smallestuser = None
     smallestsize = SV(SV.infinity)
-    largestuser = 000000000000000000
+    largestuser = None
     largestsize = SV(0)
     allusers = {}
-    for _, testid in userdb.listUsers(g.id):
-        if testid in list([m.id for m in g.members if str(m.status) != "offline"]):
-            testdata = userdb.load(g.id, testid)
-            allusers[testid] = testdata.height
-            if testdata.height <= 0 or testdata.height >= SV.infinity:
-                break
-            if testdata.height > largestsize:
-                largestuser = testid
-                largestsize = testdata.height
-            if testdata.height < smallestsize:
-                smallestuser = testid
-                smallestsize = testdata.height
-
-    smallestuser = int(smallestuser)
-    largestuser = int(largestuser)
-
+    for _, userid in userdb.listUsers(g.id):
+        member = g.get_member(userid)
+        if not (member and str(member.status) != "offline"):
+            continue
+        userdata = userdb.load(g.id, userid)
+        if userdata.height == 0 or userdata.height == SV.infinity:
+            continue
+        if not userdata.is_active:
+            continue
+        if userdata.height > largestsize:
+            largestuser = userid
+            largestsize = userdata.height
+        if userdata.height < smallestsize:
+            smallestuser = userid
+            smallestsize = userdata.height
+        allusers[userid] = userdata.height
     return {"smallest": {"id": smallestuser, "size": smallestsize},
             "largest": {"id": largestuser, "size": largestsize},
             "users": allusers}
