@@ -1,4 +1,4 @@
-import conf
+from sizebot import conf
 
 
 # Ignore Tupperboxes being mistaken for commands.
