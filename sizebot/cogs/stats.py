@@ -418,7 +418,7 @@ class StatsCog(commands.Cog):
         walktime = prettyTimeDelta(walktimehours * 60 * 60)
         runtime = prettyTimeDelta(runtimehours * 60 * 60)
 
-        await ctx.send(f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}**\n{userstats.nickname} could walk {length:,.3mu} in **{walktime}** *({walksteps:,.0f} steps)*, or run that distance in **{runtime}** *({runsteps:,.0f} steps)*.")
+        await ctx.send(f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}.**\nThey could walk that distance in **{walktime}** *({walksteps:,.0f} steps)*, or run that distance in **{runtime}** *({runsteps:,.0f} steps)*.")
 
 
 def getUserdata(memberOrSV, nickname = None):
