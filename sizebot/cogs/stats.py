@@ -409,6 +409,7 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(who)
         userstats = proportions.PersonStats(userdata)
 
+        newlength = SV(length / userstats.scale)
         walktimehours = length / userstats.walkperhour
         walksteps = length / userstats.walksteplength
         runtimehours = length / userstats.runperhour
@@ -417,7 +418,7 @@ class StatsCog(commands.Cog):
         walktime = prettyTimeDelta(walktimehours * 60 * 60)
         runtime = prettyTimeDelta(runtimehours * 60 * 60)
 
-        await ctx.send(f"{userstats.nickname} could walk {length:,.3mu} in **{walktime}** *({walksteps:,.0f} steps)*, or run that distance in **{runtime}** *({runsteps:,.0f} steps)*.")
+        await ctx.send(f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}**\n{userstats.nickname} could walk {length:,.3mu} in **{walktime}** *({walksteps:,.0f} steps)*, or run that distance in **{runtime}** *({runsteps:,.0f} steps)*.")
 
 
 def getUserdata(memberOrSV, nickname = None):
