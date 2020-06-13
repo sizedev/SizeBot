@@ -360,7 +360,7 @@ class StatsCog(commands.Cog):
             logger.info(f"{ctx.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userdb.defaultheight
-            compdata = getUserdata(compheight)
+            compdata = getUserdata(compheight, nickname = "an average person")
         else:
             # Easter eggs.
             if what in ["all those chickens", "chickens"]:
