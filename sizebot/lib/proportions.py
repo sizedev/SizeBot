@@ -338,10 +338,10 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
         safeSmallNick = quote(self.small.nickname, safe=" ").replace(" ", "-")
         smallGender = gendermap[self.small.gender]
-        smallCm = round(self.small.height * 100, 1)
+        smallCm = round(self.small.height * 100, 5)
         safeBigNick = quote(self.big.nickname, safe=" ").replace(" ", "-")
         bigGender = gendermap[self.big.gender]
-        bigCm = round(self.big.height * 100, 1)
+        bigCm = round(self.big.height * 100, 5)
 
         compUrl = f"http://www.mrinitialman.com/OddsEnds/Sizes/compsizes.xhtml?{safeSmallNick}~{smallGender}~{smallCm}_{safeBigNick}~{bigGender}~{bigCm}"
         return compUrl
