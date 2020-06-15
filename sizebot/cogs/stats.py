@@ -365,7 +365,7 @@ class StatsCog(commands.Cog):
             compheight = userdb.defaultheight
             compdata = getUserdata(compheight, nickname = "an average person")
         elif isinstance(what, str) and what in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
-            compdata = getUserdata(SV.parse("11in"), nickname = "Chocolate")
+            compdata = getUserdata(SV.parse("11in"), nickname = "Chocolate [Stuffed Beaver]")
             compdata.baseweight = WV.parse("4.8oz")
             compdata.footlength = SV.parse("2.75in")
             compdata.taillength = SV.parse("12cm")
