@@ -8,7 +8,7 @@ from discord.ext import commands
 from sizebot import conf
 from sizebot.lib import errors, proportions, userdb
 from sizebot.lib.objs import DigiObject
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import parseMany, prettyTimeDelta
 
 logger = logging.getLogger("sizebot")
@@ -346,6 +346,9 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(ctx.author)
 
+        if isinstance(what, str):
+            what = what.lower()
+
         if isinstance(what, DigiObject):
             la = what.relativestatssentence(userdata)
             # Easter egg.
@@ -361,6 +364,11 @@ class StatsCog(commands.Cog):
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userdb.defaultheight
             compdata = getUserdata(compheight, nickname = "an average person")
+        elif isinstance(what, str) and what in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
+            compdata = getUserdata(SV.parse("11in"), nickname = "Chocolate")
+            compdata.baseweight = WV.parse("4.8oz")
+            compdata.footlength = SV.parse("2.75in")
+            compdata.taillength = SV.parse("12cm")
         else:
             # Easter eggs.
             if what in ["all those chickens", "chickens"]:
@@ -368,7 +376,7 @@ class StatsCog(commands.Cog):
                 logger.info(f"{ctx.author.display_name} looked at all those chickens.")  # TODO: Make an "egg" log level.
                 return
             await ctx.send(f"`{what}` is not a valid object, member, or height.\n"
-                           f"If this is an object or alias you'd like added to SizeBot, use `{conf.prefix}suggestobject to suggest it (see `{conf.prefix}help suggestobject for instructions on doing that.)")
+                           f"If this is an object or alias you'd like added to SizeBot, use `{conf.prefix}suggestobject` to suggest it (see `{conf.prefix}help suggestobject` for instructions on doing that.)")
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
