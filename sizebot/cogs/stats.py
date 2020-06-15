@@ -376,7 +376,9 @@ class StatsCog(commands.Cog):
                 logger.info(f"{ctx.author.display_name} looked at all those chickens.")  # TODO: Make an "egg" log level.
                 return
             await ctx.send(f"`{what}` is not a valid object, member, or height.\n"
-                           f"If this is an object or alias you'd like added to SizeBot, use `{conf.prefix}suggestobject` to suggest it (see `{conf.prefix}help suggestobject` for instructions on doing that.)")
+                           f"If this is an object or alias you'd like added to SizeBot, \
+                             use `{conf.prefix}suggestobject` to suggest it \
+                             (see `{conf.prefix}help suggestobject` for instructions on doing that.)")
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
