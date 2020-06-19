@@ -968,11 +968,12 @@
         "dimension": "l",
         "length": "1.524",
         "width": "1.524",
-        "symbol": "sp",
+        "symbol": "sq",
         "aliases": [
             "tile",
             "square",
-            "space"
+            "space",
+            "sp"
         ]
     },
     {
