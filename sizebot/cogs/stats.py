@@ -408,7 +408,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     async def distance(self, ctx, length: SV, *, who: typing.Union[discord.Member, SV] = None):
-        """How long will it take to walk or run a distance?.
+        """How long will it take to walk or run a distance?
 
         Example:
         `&distance <length>`"""
@@ -419,6 +419,14 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(who)
         userstats = proportions.PersonStats(userdata)
 
+        defaultdata = getUserdata(userdb.defaultheight, "an average person")
+        defaultstats = proportions.PersonStats(defaultdata)
+
+        defaultwalktimehours = length / defaultstats.walkperhour
+        defaultwalksteps = length / defaultstats.walksteplength
+        defaultruntimehours = length / defaultstats.runperhour
+        defaultrunsteps = length / defaultstats.runsteplength
+
         newlength = SV(length / userstats.scale)
         walktimehours = length / userstats.walkperhour
         walksteps = length / userstats.walksteplength
@@ -428,7 +436,16 @@ class StatsCog(commands.Cog):
         walktime = prettyTimeDelta(walktimehours * 60 * 60)
         runtime = prettyTimeDelta(runtimehours * 60 * 60)
 
-        await ctx.send(f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}.**\nThey could walk that distance in **{walktime}** *({walksteps:,.0f} steps)*, or run that distance in **{runtime}** *({runsteps:,.0f} steps)*.")
+        defaultwalktime = prettyTimeDelta(defaultwalktimehours * 60 * 60)
+        defaultruntime = prettyTimeDelta(defaultruntimehours * 60 * 60)
+
+        e = discord.Embed(title = f"{length:,.3mu} to {userstats.nickname}",
+                          description = (f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}.** "
+                                         f"They could walk that distance in **{walktime}** *({walksteps:,.0f} steps)*, \
+                                            or run that distance in **{runtime}** *({runsteps:,.0f} steps)*."))
+        e.set_footer(text = f"An average person could walk {length:,.3mu} in *{defaultwalktime} ({defaultwalksteps:,.0f} steps), or run that distance in {defaultruntime} ({defaultrunsteps:,.0f} steps).")
+
+        await ctx.send(embed = e)
 
 
 def getUserdata(memberOrSV, nickname = None):
