@@ -2,8 +2,7 @@ import base64
 import json
 from operator import itemgetter
 
-#from sizebot.lib.decimal import Decimal
-from decimal import Decimal
+from sizebot.lib.decimal import Decimal
 
 
 model_heights = {
@@ -61,18 +60,3 @@ def get_url(people):
     url_json_text = json.dumps(url_json)
     encoded = base64.urlsafe_b64encode(url_json_text.encode("ascii")).decode('ascii')
     return f"https://macrovision.crux.sexy/?scene={encoded}"
-
-
-if __name__ == "__main__":
-    print(get_url([
-        {
-            "name": "Duncan",
-            "model": "man1",
-            "height": Decimal("0.0127")
-        },
-        {
-            "name": "Natalie",
-            "model": "woman1",
-            "height": Decimal("0.1524")
-        }
-    ]))
