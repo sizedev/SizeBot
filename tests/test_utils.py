@@ -45,3 +45,11 @@ def test_inttoroman_2020():
 
 def test_inttoroman_1994():
     assert utils.intToRoman(1994) == "MCMXCIV"
+
+
+def test_sentence_join():
+    assert utils.sentence_join(['red', 'green', 'blue']) == 'red, green and blue'
+
+
+def test_sentence_join_with_joiner():
+    assert utils.sentence_join(['micro', 'tiny', 'normal', 'amazon', 'giantess'], joiner='or') == 'micro, tiny, normal, amazon or giantess'

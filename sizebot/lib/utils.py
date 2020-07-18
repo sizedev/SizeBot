@@ -327,3 +327,26 @@ def isURL(value):
     except validator_collection.errors.EmptyValueError:
         # Pretend None is a valid URL.
         return True
+
+
+def sentence_join(items, *, joiner=None):
+    """Join a list of strings like a sentence
+
+    >>> sentence_join(['red', 'green', 'blue'])
+    'red, green and blue'
+
+    Optionally, a different joiner can be provided
+
+    >>> sentence_join(['micro', 'tiny', 'normal', 'amazon', 'giantess'], joiner='or')
+    'micro, tiny, normal, amazon or giantess'
+    """
+    if joiner is None:
+        joiner = "and"
+
+    if not items:
+        return ""
+
+    if len(items) == 1:
+        return items[0]
+
+    return f"{', '.join(items[:-1])} {joiner} {items[-1]}"
