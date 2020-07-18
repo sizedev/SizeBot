@@ -472,7 +472,7 @@ class StatsCog(commands.Cog):
             except Exception:
                 failedusers.append(member.display_name)
         if failedusers:
-            ctx.send(f"{failedusers} are not SizeBot users.")
+            await ctx.send(f"{failedusers} are not SizeBot users.")
             return
         e = discord.Embed(
             title=f"Click here for lineup image!",
