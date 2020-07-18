@@ -57,6 +57,8 @@ def get_url(people):
         },
         "version": 3
     }
-    url_json_text = json.dumps(url_json)
-    encoded = base64.urlsafe_b64encode(url_json_text.encode("ascii")).decode('ascii')
-    return f"https://macrovision.crux.sexy/?scene={encoded}"
+    json_string = json.dumps(url_json)
+    json_bytes = json_string.encode("utf-8")
+    base64_bytes = base64.b64encode(json_bytes)
+    base64_string = base64_bytes.decode("ascii")
+    return f"https://macrovision.crux.sexy/?scene={base64_string}"
