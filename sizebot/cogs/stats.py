@@ -6,7 +6,7 @@ from discord.ext.commands.converter import MemberConverter
 from discord.ext import commands
 
 from sizebot import conf
-from sizebot.lib import errors, proportions, userdb
+from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import parseMany, prettyTimeDelta
@@ -446,6 +446,41 @@ class StatsCog(commands.Cog):
         e.set_footer(text = f"An average person could walk {length:,.3mu} in *{defaultwalktime} ({defaultwalksteps:,.0f} steps), or run that distance in {defaultruntime} ({defaultrunsteps:,.0f} steps).")
 
         await ctx.send(embed = e)
+
+    @commands.command(
+        aliases = [],
+        usage = "[users...]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def lineup(self, ctx):
+        """Lineup a bunch of people for comparison."""
+        modelmap = {
+            "m": "man1",
+            "f": "woman1",
+            None: "man1"
+        }
+        mentions = ctx.message.mentions
+        failedusers = []
+        successusers = []
+        users = []
+        for member in mentions:
+            try:
+                data = getUserdata(member)
+                users.append((data.nickname, modelmap[data.gender], data.height))
+                successusers.append(data.nickname)
+            except Exception:
+                failedusers.append(member.displayname)
+        if failedusers:
+            ctx.send(f"{failedusers} are not SizeBot users.")
+            return
+        e = discord.Embed(
+            title=f"Click here for lineup image!",
+            description=f"Lineup of {successusers}",
+            color=0x00FFFF,
+            url=macrovision.get_url(users)
+        )
+        ctx.send(embed = e)
 
 
 def getUserdata(memberOrSV, nickname = None):
