@@ -53,3 +53,7 @@ def test_sentence_join():
 
 def test_sentence_join_with_joiner():
     assert utils.sentence_join(['micro', 'tiny', 'normal', 'amazon', 'giantess'], joiner='or') == 'micro, tiny, normal, amazon or giantess'
+
+
+def test_sentence_join_from_generator():
+    assert utils.sentence_join(size for size in ['micro', 'tiny', 'normal', 'amazon', 'giantess']) == 'micro, tiny, normal, amazon and giantess'
