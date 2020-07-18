@@ -480,7 +480,7 @@ class StatsCog(commands.Cog):
             color=0x00FFFF,
             url=macrovision.get_url(users)
         )
-        ctx.send(embed = e)
+        await ctx.send(embed = e)
 
 
 def getUserdata(memberOrSV, nickname = None):
