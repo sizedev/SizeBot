@@ -9,7 +9,7 @@ from sizebot import conf
 from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import parseMany, prettyTimeDelta
+from sizebot.lib.utils import parseMany, prettyTimeDelta, sentence_join
 
 logger = logging.getLogger("sizebot")
 
@@ -460,23 +460,31 @@ class StatsCog(commands.Cog):
             "f": "woman1",
             None: "man1"
         }
-        mentions = ctx.message.mentions
+
         failedusers = []
-        successusers = []
-        users = []
-        for member in mentions:
+        userdatas = []
+        for member in ctx.message.mentions:
             try:
-                data = getUserdata(member)
-                users.append((data.nickname, modelmap[data.gender], data.height))
-                successusers.append(data.nickname)
-            except Exception:
-                failedusers.append(member.display_name)
+                userdatas.append(userdb.load(member.guild.id, member.id, member=member))
+            except errors.UserNotFoundException:
+                failedusers.append(member)
+
+        # TODO: Raise exception instead
         if failedusers:
-            await ctx.send(f"{failedusers} are not SizeBot users.")
+            nicks = sentence_join(u.display_name for u in failedusers)
+            if len(failedusers) == 1:
+                failmessage = f"{nicks} is not a SizeBot user"
+            else:
+                failmessage = f"{nicks} are not SizeBot users"
+            await ctx.send(failmessage)
             return
+
+        users = [(u.nickname, modelmap[u.gender], u.height) for u in userdatas]
+
+        nicks = sentence_join(u.nickname for u in userdatas)
         e = discord.Embed(
             title=f"Click here for lineup image!",
-            description=f"Lineup of {successusers}",
+            description=f"Lineup of {nicks}",
             color=0x00FFFF,
             url=macrovision.get_url(users)
         )
