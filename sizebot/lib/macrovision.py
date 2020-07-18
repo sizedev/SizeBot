@@ -31,7 +31,7 @@ def get_entity_json(name, model, height, x):
 
 
 def get_url(people):
-    """Accepts an array of dictionary objects with 'model' and 'height' properties"""
+    """Accepts an array of dictionary objects with 'model', 'name', and 'height' properties"""
     if len(people) <= 0:
         raise ValueError("At least one person is required")
 
