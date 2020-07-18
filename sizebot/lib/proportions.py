@@ -6,7 +6,7 @@ import discord
 from discord import Embed
 
 from sizebot import __version__
-from sizebot.lib import errors, userdb, utils
+from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
@@ -338,12 +338,21 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
         safeSmallNick = quote(self.small.nickname, safe=" ").replace(" ", "-")
         smallGender = gendermap[self.small.gender]
-        smallCm = round(self.small.height * 100, 5)
         safeBigNick = quote(self.big.nickname, safe=" ").replace(" ", "-")
         bigGender = gendermap[self.big.gender]
-        bigCm = round(self.big.height * 100, 5)
 
-        compUrl = f"http://www.mrinitialman.com/OddsEnds/Sizes/compsizes.xhtml?{safeSmallNick}~{smallGender}~{smallCm}_{safeBigNick}~{bigGender}~{bigCm}"
+        compUrl = macrovision.get_url([
+            {
+                "name": safeSmallNick,
+                "model": f"{smallGender}1",
+                "height": self.small.height
+            },
+            {
+                "name": safeBigNick,
+                "model": f"{bigGender}1",
+                "height": self.big.height
+            }
+        ])
         return compUrl
 
 
