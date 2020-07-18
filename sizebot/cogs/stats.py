@@ -470,7 +470,7 @@ class StatsCog(commands.Cog):
                 users.append((data.nickname, modelmap[data.gender], data.height))
                 successusers.append(data.nickname)
             except Exception:
-                failedusers.append(member.displayname)
+                failedusers.append(member.display_name)
         if failedusers:
             ctx.send(f"{failedusers} are not SizeBot users.")
             return
