@@ -35,14 +35,14 @@ def get_url(people):
     if len(people) <= 0:
         raise ValueError("At least one person is required")
 
-    people.sort(key=itemgetter("height"), reverse=True)
+    people.sort(key=itemgetter(2), reverse=True)
 
-    world_height = people[0]["height"]
+    world_height = people[0][2]
 
     entities = []
     x_offset = Decimal(0)
     for p in people:
-        name, model, height = p["name"], p["model"], p["height"]
+        name, model, height = p
         entities.append(get_entity_json(name, model, height, x_offset))
         # A crude width estimate for now
         x_offset += height / 4
