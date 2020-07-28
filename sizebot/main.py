@@ -16,11 +16,17 @@ from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.plugins import active, monika
 
 logging.basicConfig(level=logging.INFO)
+dfhandler = digilogger.DigiFormatterHandler()
+
 logger = logging.getLogger("sizebot")
 logger.handlers = []
 logger.propagate = False
-dfhandler = digilogger.DigiFormatterHandler()
 logger.addHandler(dfhandler)
+
+discordlogger = logging.getLogger("discord")
+discordlogger.handlers = []
+discordlogger.propagate = False
+discordlogger.addHandler(dfhandler)
 
 initial_cogs = [
     "admin",
