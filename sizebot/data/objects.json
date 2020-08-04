@@ -1,15 +1,15 @@
 [
     {
         "name": "proton",
-        "dimension": "w",
-        "diameter": "1.7E-15",
-        "weight": "1.67262192E-24"
+        "dimension": "d",
+        "diameter": "1.7e-15",
+        "weight": "1.67262192e-24"
     },
     {
         "name": "DNA",
         "dimension": "w",
         "width": "2.5e-9",
-        "weight": "1.67E-24"
+        "weight": "1.67e-24"
     },
     {
         "name": "transistor",
@@ -30,7 +30,7 @@
         "name": "E. coli",
         "dimension": "l",
         "length": "0.000007",
-        "weight": "1E-12",
+        "weight": "1e-12",
         "aliases": [
             "bacteria"
         ]
@@ -39,7 +39,7 @@
         "name": "red blood cell",
         "dimension": "d",
         "diameter": "0.000007",
-        "weight": "1E-12",
+        "weight": "1e-12",
         "aliases": [
             "blood",
             "blood cell"
@@ -415,6 +415,13 @@
         "width": "0.057",
         "depth": "0.057",
         "weight": "84.6"
+    },
+    {
+        "name": "shot glass",
+        "dimension": "h",
+        "height": "0.05715",
+        "diameter": "0.0508",
+        "weight": "77"
     },
     {
         "name": "Zippo lighter",
@@ -885,6 +892,19 @@
         ]
     },
     {
+        "name": "Hot Wheels™ car",
+        "dimension": "l",
+        "height": "0.1185",
+        "length": "0.381",
+        "width": "0.1503",
+        "weight": "34",
+        "aliases": [
+            "hot wheels car",
+            "hot wheels",
+            "toy car"
+        ]
+    },
+    {
         "name": "PlayStation 5",
         "dimension": "h",
         "height": "0.4",
@@ -964,7 +984,7 @@
         "width": "1.4351"
     },
     {
-        "name": "D&D space",
+        "name": "D&D square",
         "dimension": "l",
         "length": "1.524",
         "width": "1.524",
@@ -973,16 +993,17 @@
             "tile",
             "square",
             "space",
-            "sp"
+            "D&D tile",
+            "D&D space"
         ]
     },
     {
-        "name": "fridge",
+        "name": "refrigerator",
         "dimension": "h",
         "height": "1.7399",
         "weight": "136078",
         "aliases": [
-            "refrigerator"
+            "fridge"
         ]
     },
     {
