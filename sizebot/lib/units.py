@@ -4,6 +4,7 @@ import json
 import logging
 import re
 from functools import total_ordering
+from typing import Tuple
 
 import sizebot.data
 from sizebot.lib import errors, utils
@@ -392,7 +393,7 @@ class Dimension(Decimal):
         return cls.parse(argument)
 
     @classmethod
-    def getQuantityPair(cls, s):
+    def getQuantityPair(cls, s) -> Tuple:
         raise NotImplementedError
 
     def toBestUnit(self, sysname, *args, **kwargs):
