@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Pluto",
+        "dimension": "d",
+        "diameter": "2376600",
+        "weight": "1.25e+25"
+    },
+    {
+        "name": "moon",
+        "dimension": "d",
+        "diameter": "3474200",
+        "weight": "7.35e+25",
+        "aliases": [
+            "Luna"
+        ]
+    },
+    {
+        "name": "Earth",
+        "dimension": "d",
+        "diameter": "12742000",
+        "weight": "5.972000000000001e+27",
+        "aliases": [
+            "Terra"
+        ]
+    },
+    {
+        "name": "Jupiter",
+        "dimension": "d",
+        "diameter": "139820000",
+        "weight": "1.898e+30"
+    },
+    {
+        "name": "Sun",
+        "dimension": "d",
+        "diameter": "1391000000",
+        "weight": "1.989e+33",
+        "aliases": [
+            "Sol"
+        ]
+    },
+    {
+        "name": "M87 Black Hole",
+        "dimension": "d",
+        "diameter": "38000000000000",
+        "weight": "1.3e+43",
+        "aliases": [
+            "black hole"
+        ]
+    }
+]

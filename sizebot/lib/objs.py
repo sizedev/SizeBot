@@ -4,7 +4,7 @@ from typing import Literal
 
 from discord import Embed
 
-import sizebot.data
+import sizebot.data.objects
 from sizebot import __version__
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
@@ -187,7 +187,7 @@ class DigiObject:
 
 def loadObjFile(filename):
     try:
-        fileJson = json.loads(pkg_resources.read_text(sizebot.data, filename))
+        fileJson = json.loads(pkg_resources.read_text(sizebot.data.objects, filename))
     except FileNotFoundError:
         fileJson = None
     loadObjJson(fileJson)
@@ -199,6 +199,8 @@ def loadObjJson(fileJson):
 
 
 async def init():
-    loadObjFile("objects.json")
+    for filename in pkg_resources.contents(sizebot.data.objects):
+        if filename.endswith(".json"):
+            loadObjFile(filename)
     for o in objects:
         o.addToUnits()
