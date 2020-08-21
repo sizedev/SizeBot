@@ -168,7 +168,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         self.big = PersonStats(bigUserdata)
         self.small = PersonStats(smallUserdata)
         if self.big.height == 0 and self.small.height == 0:
-            self.multiplier = 1
+            self.multiplier = Decimal(1)
         else:
             self.multiplier = self.big.height / self.small.height
 
