@@ -479,7 +479,7 @@ class StatsCog(commands.Cog):
             await ctx.send(failmessage)
             return
 
-        users = [(u.nickname, modelmap[u.gender], u.height) for u in userdatas]
+        users = [{"nickname": u.nickname, "model": modelmap[u.gender], "height": u.height} for u in userdatas]
 
         nicks = sentence_join(u.nickname for u in userdatas)
         e = discord.Embed(
