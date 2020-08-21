@@ -58,7 +58,10 @@
     {
         "name": "thickness of a sheet of paper",
         "dimension": "t",
-        "thickness": "0.0001"
+        "thickness": "0.0001",
+        "aliases": [
+            "paper thickness"
+        ]
     },
     {
         "name": "dust",
@@ -117,6 +120,7 @@
         "name": "grain of rice",
         "dimension": "l",
         "length": "0.006",
+        "width": "0.002",
         "weight": "0.029",
         "aliases": [
             "rice grain",
@@ -159,6 +163,15 @@
         "weight": "0.0025"
     },
     {
+        "name": "shirt button",
+        "dimension": "d",
+        "diameter": "0.01016",
+        "thickness": "0.003",
+        "aliases": [
+            "button"
+        ]
+    },
+    {
         "name": "asprin",
         "dimension": "d",
         "diameter": "0.01397",
@@ -189,7 +202,11 @@
         "name": "fruit loop",
         "dimension": "d",
         "diameter": "0.015",
-        "weight": "0.24"
+        "thickness": "0.0051",
+        "weight": "0.24",
+        "aliases": [
+            "cheerio"
+        ]
     },
     {
         "name": "MicroSD card",
@@ -203,7 +220,10 @@
         "dimension": "d",
         "diameter": "0.01791",
         "thickness": "0.00135",
-        "weight": "2.268"
+        "weight": "2.268",
+        "aliases": [
+            "10 cents"
+        ]
     },
     {
         "name": "USB dongle",
@@ -214,7 +234,8 @@
         "weight": "1.77",
         "aliases": [
             "Logitech USB",
-            "dongle"
+            "dongle",
+            "usb"
         ]
     },
     {
@@ -222,7 +243,8 @@
         "dimension": "w",
         "width": "0.01905",
         "aliases": [
-            "tape width"
+            "tape width",
+            "tape"
         ]
     },
     {
@@ -230,7 +252,10 @@
         "dimension": "d",
         "diameter": "0.01905",
         "thickness": "0.00152",
-        "weight": "2.5"
+        "weight": "2.5",
+        "aliases": [
+            "1 cent"
+        ]
     },
     {
         "name": "die",
@@ -244,20 +269,29 @@
         "name": "nickel",
         "dimension": "d",
         "diameter": "0.02121",
-        "weight": "50"
+        "weight": "50",
+        "aliases": [
+            "5 cents"
+        ]
     },
     {
         "name": "push pin",
         "dimension": "h",
         "height": "0.023",
-        "weight": "0.41"
+        "weight": "0.41",
+        "aliases": [
+            "thumbtack"
+        ]
     },
     {
         "name": "quarter",
         "dimension": "d",
         "diameter": "0.02426",
         "thickness": "0.00175",
-        "weight": "5.67"
+        "weight": "5.67",
+        "aliases": [
+            "25 cents"
+        ]
     },
     {
         "name": "piece of popcorn",
@@ -272,6 +306,7 @@
         "name": "safety pin",
         "dimension": "l",
         "length": "0.028575",
+        "diameter": "0.0017",
         "weight": "0.31"
     },
     {
@@ -293,12 +328,12 @@
         "weight": "2"
     },
     {
-        "name": "pin",
+        "name": "needle",
         "dimension": "l",
         "length": "0.034",
         "weight": "28.3495",
         "aliases": [
-            "needle",
+            "pin",
             "sewing needle"
         ]
     },
@@ -333,7 +368,8 @@
             "lego guy",
             "lego man",
             "lego person",
-            "lego people"
+            "lego people",
+            "lego minifigure"
         ]
     },
     {
@@ -358,13 +394,17 @@
         "length": "0.045",
         "weight": "14",
         "aliases": [
+            "house key",
             "key"
         ]
     },
     {
         "name": "duct tape width",
         "dimension": "w",
-        "width": "0.049"
+        "width": "0.049",
+        "aliases": [
+            "duct tape"
+        ]
     },
     {
         "name": "AA battery",
@@ -372,7 +412,8 @@
         "height": "0.049784",
         "weight": "31",
         "aliases": [
-            "battery"
+            "battery",
+            "AA"
         ]
     },
     {
@@ -385,16 +426,29 @@
         ]
     },
     {
+        "name": "skateboard wheel",
+        "dimension": "d",
+        "diameter": "0.0525",
+        "thickness": "0.031",
+        "weight": "53"
+    },
+    {
         "name": "bullet vibe",
         "dimension": "l",
         "length": "0.053",
-        "weight": "45.3592"
+        "weight": "45.3592",
+        "aliases": [
+            "shake time"
+        ]
     },
     {
         "name": "egg",
         "dimension": "h",
         "height": "0.05312",
-        "weight": "48.1942"
+        "weight": "48.1942",
+        "aliases": [
+            "eggu"
+        ]
     },
     {
         "name": "flash drive",
@@ -414,7 +468,11 @@
         "height": "0.057",
         "width": "0.057",
         "depth": "0.057",
-        "weight": "84.6"
+        "weight": "84.6",
+        "aliases": [
+            "Rubik's",
+            "puzzle cube"
+        ]
     },
     {
         "name": "shot glass",
@@ -438,6 +496,19 @@
         "length": "0.065",
         "thickness": "0.005",
         "weight": "0.1"
+    },
+    {
+        "name": "Hot Wheels™ car",
+        "dimension": "l",
+        "height": "0.02223",
+        "length": "0.07144",
+        "width": "0.02818",
+        "weight": "34",
+        "aliases": [
+            "hot wheels car",
+            "hot wheels",
+            "toy car"
+        ]
     },
     {
         "name": "baseball",
@@ -467,7 +538,12 @@
         "length": "0.0762",
         "width": "0.0762",
         "thickness": "0.0000762",
-        "weight": "0.015"
+        "weight": "0.015",
+        "aliases": [
+            "sticky note",
+            "post-it",
+            "note"
+        ]
     },
     {
         "name": "band-aid",
@@ -480,12 +556,26 @@
         ]
     },
     {
+        "name": "Samus amiibo",
+        "dimension": "h",
+        "height": "0.082",
+        "diameter": "0.048",
+        "weight": "81.65",
+        "aliases": [
+            "amiibo"
+        ]
+    },
+    {
         "name": "credit card",
         "dimension": "l",
         "length": "0.0856",
         "width": "0.05398",
         "thickness": "0.00076",
-        "weight": "5"
+        "weight": "5",
+        "aliases": [
+            "debit card",
+            "license"
+        ]
     },
     {
         "name": "playing card",
@@ -514,13 +604,17 @@
         "name": "crayon",
         "dimension": "h",
         "height": "0.092075",
-        "weight": "5"
+        "weight": "5",
+        "aliases": [
+            "crayola"
+        ]
     },
     {
         "name": "Kinder Surprise egg",
         "dimension": "h",
         "height": "0.0925",
         "width": "0.065",
+        "weight": "20",
         "aliases": [
             "kinder egg",
             "surprise egg",
@@ -547,13 +641,16 @@
         "thickness": "0.01524",
         "weight": "40.53982",
         "aliases": [
-            "cassette"
+            "cassette",
+            "cassette tape"
         ]
     },
     {
         "name": "Joy-Con™",
         "dimension": "l",
         "length": "0.1016",
+        "width": "0.036",
+        "depth": "0.014",
         "weight": "50.603899",
         "aliases": [
             "joycon",
@@ -564,6 +661,7 @@
         "name": "photograph",
         "dimension": "h",
         "height": "0.1016",
+        "width": "0.1524",
         "aliases": [
             "photo",
             "this photograph"
@@ -573,6 +671,7 @@
         "name": "Kit-Kat",
         "dimension": "l",
         "length": "0.10541",
+        "weight": "42.5",
         "aliases": [
             "kitkat"
         ]
@@ -581,7 +680,11 @@
         "name": "juice box",
         "dimension": "h",
         "height": "0.1056386",
-        "weight": "170.097"
+        "weight": "170.097",
+        "aliases": [
+            "Hi-C",
+            "juice"
+        ]
     },
     {
         "name": "Solo cup",
@@ -597,7 +700,10 @@
         "name": "lightbulb",
         "dimension": "h",
         "height": "0.11",
-        "weight": "34"
+        "weight": "34",
+        "aliases": [
+            "bulb"
+        ]
     },
     {
         "name": "Nintendo Gamecube™",
@@ -609,6 +715,27 @@
         "aliases": [
             "gamecube",
             "nintendo gamecube"
+        ]
+    },
+    {
+        "name": "potato",
+        "dimension": "h",
+        "height": "0.11",
+        "diameter": "0.0953",
+        "weight": "320",
+        "aliases": [
+            "spud"
+        ]
+    },
+    {
+        "name": "computer mouse",
+        "dimension": "l",
+        "height": "0.04",
+        "length": "0.114",
+        "width": "0.06",
+        "weight": "127.573",
+        "aliases": [
+            "mouse"
         ]
     },
     {
@@ -626,22 +753,21 @@
         "dimension": "d",
         "diameter": "0.12",
         "thickness": "0.00127",
-        "weight": "113.398"
-    },
-    {
-        "name": "computer mouse",
-        "dimension": "l",
-        "length": "0.12",
-        "weight": "127.573"
-    },
-    {
-        "name": "can of soda",
-        "dimension": "h",
-        "height": "0.122682",
-        "diameter": "0.0762",
-        "weight": "368.7",
+        "weight": "113.398",
         "aliases": [
-            "can"
+            "compact disc"
+        ]
+    },
+    {
+        "name": "soda can",
+        "dimension": "h",
+        "height": "0.122",
+        "diameter": "0.058",
+        "weight": "355",
+        "aliases": [
+            "pop can",
+            "can",
+            "can of soda"
         ]
     },
     {
@@ -685,7 +811,8 @@
         "length": "0.187",
         "weight": "198.447",
         "aliases": [
-            "video tape"
+            "video tape",
+            "VHS"
         ]
     },
     {
@@ -702,7 +829,10 @@
         "name": "banana",
         "dimension": "l",
         "length": "0.1905",
-        "weight": "120"
+        "weight": "120",
+        "aliases": [
+            "rotat e"
+        ]
     },
     {
         "name": "stair height",
@@ -718,7 +848,21 @@
         "length": "0.19304",
         "width": "0.0794",
         "aliases": [
-            "hand"
+            "hand",
+            "glove"
+        ]
+    },
+    {
+        "name": "Yeti Rambler 30 oz Tumbler with MagSlider Lid",
+        "dimension": "h",
+        "height": "0.2",
+        "diameter": "0.1016",
+        "weight": "453.6",
+        "aliases": [
+            "big cup",
+            "yeti rambler",
+            "tumbler",
+            "thermos"
         ]
     },
     {
@@ -750,7 +894,10 @@
         "name": "spoon",
         "dimension": "l",
         "length": "0.223",
-        "weight": "45.3592"
+        "weight": "45.3592",
+        "aliases": [
+            "spork"
+        ]
     },
     {
         "name": "chopstick",
@@ -785,13 +932,19 @@
         "name": "basketball",
         "dimension": "d",
         "diameter": "0.240538",
-        "weight": "623.69"
+        "weight": "623.69",
+        "aliases": [
+            "b-ball"
+        ]
     },
     {
         "name": "shoe",
         "dimension": "l",
         "length": "0.2504",
-        "weight": "272.155"
+        "weight": "272.155",
+        "aliases": [
+            "sneaker"
+        ]
     },
     {
         "name": "microwave",
@@ -799,7 +952,10 @@
         "height": "0.256",
         "width": "0.439",
         "depth": "0.358",
-        "weight": "9900"
+        "weight": "9900",
+        "aliases": [
+            "microwave oven"
+        ]
     },
     {
         "name": "desert eagle",
@@ -823,7 +979,10 @@
         "thickness": "0.0001",
         "weight": "4.5",
         "aliases": [
-            "paper"
+            "paper",
+            "A4",
+            "A4 paper",
+            "sheet of paper"
         ]
     },
     {
@@ -887,21 +1046,10 @@
         "height": "0.3048",
         "width": "0.1524",
         "depth": "0.1524",
+        "weight": "4850",
         "aliases": [
-            "XSX"
-        ]
-    },
-    {
-        "name": "Hot Wheels™ car",
-        "dimension": "l",
-        "height": "0.1185",
-        "length": "0.381",
-        "width": "0.1503",
-        "weight": "34",
-        "aliases": [
-            "hot wheels car",
-            "hot wheels",
-            "toy car"
+            "XSX",
+            "Xbox"
         ]
     },
     {
@@ -912,7 +1060,8 @@
         "depth": "0.22352",
         "weight": "4450",
         "aliases": [
-            "PS5"
+            "PS5",
+            "PlayStation"
         ]
     },
     {
@@ -931,13 +1080,40 @@
         "name": "exercise ball",
         "dimension": "d",
         "diameter": "0.65",
-        "weight": "1360.78"
+        "weight": "1360.78",
+        "aliases": [
+            "yoga ball"
+        ]
+    },
+    {
+        "name": "OneWheel monoboard",
+        "dimension": "l",
+        "height": "0.14605",
+        "length": "0.7493",
+        "width": "0.241",
+        "diameter": "0.2921",
+        "weight": "12247",
+        "aliases": [
+            "monoboard",
+            "OneWheel"
+        ]
     },
     {
         "name": "Kerbal",
         "dimension": "h",
         "height": "0.75",
         "weight": "93750"
+    },
+    {
+        "name": "skateboard",
+        "dimension": "l",
+        "height": "0.081",
+        "length": "0.775",
+        "width": "0.225",
+        "weight": "3629",
+        "aliases": [
+            "sk8"
+        ]
     },
     {
         "name": "Miles \"Tails\" Prower",
@@ -956,7 +1132,10 @@
     {
         "name": "countertop height",
         "dimension": "h",
-        "height": "0.9144"
+        "height": "0.9144",
+        "aliases": [
+            "countertop"
+        ]
     },
     {
         "name": "guitar",
@@ -970,18 +1149,28 @@
         "height": "1",
         "weight": "35000",
         "aliases": [
-            "sonic"
+            "sonic",
+            "sanik"
         ]
     },
     {
         "name": "sidewalk width",
         "dimension": "w",
-        "width": "1.2192"
+        "width": "1.2192",
+        "aliases": [
+            "sidewalk"
+        ]
     },
     {
         "name": "railway track width",
         "dimension": "w",
-        "width": "1.4351"
+        "width": "1.4351",
+        "aliases": [
+            "railway",
+            "railroad",
+            "railroad track",
+            "railway track"
+        ]
     },
     {
         "name": "D&D square",
@@ -1022,7 +1211,9 @@
         "width": "2.032",
         "weight": "73028.4",
         "aliases": [
-            "bed"
+            "king-size bed",
+            "mattress",
+            "king-size mattress"
         ]
     },
     {
@@ -1037,7 +1228,10 @@
         "name": "doorway",
         "dimension": "h",
         "height": "2.032",
-        "width": "0.8128"
+        "width": "0.8128",
+        "aliases": [
+            "door arch"
+        ]
     },
     {
         "name": "Shaq",
@@ -1116,7 +1310,8 @@
         "dimension": "w",
         "width": "6",
         "aliases": [
-            "road width"
+            "road width",
+            "road"
         ]
     },
     {
@@ -1169,7 +1364,8 @@
         "length": "21.336",
         "weight": "15422140",
         "aliases": [
-            "truck"
+            "truck",
+            "lorry"
         ]
     },
     {
@@ -1197,7 +1393,11 @@
         "name": "Leaning Tower of Pisa",
         "dimension": "h",
         "height": "56.6928",
-        "weight": "13154200000"
+        "weight": "13154200000",
+        "aliases": [
+            "tower of Pisa",
+            "leaning tower"
+        ]
     },
     {
         "name": "redwood tree",
@@ -1221,7 +1421,9 @@
         "weight": "183523473",
         "aliases": [
             "747",
-            "jumbo jet"
+            "jumbo jet",
+            "jet",
+            "plane"
         ]
     },
     {
@@ -1246,7 +1448,10 @@
     {
         "name": "Big Ben",
         "dimension": "h",
-        "height": "96.012"
+        "height": "96.012",
+        "aliases": [
+            "Elizabeth Tower"
+        ]
     },
     {
         "name": "ferris wheel",
@@ -1258,10 +1463,7 @@
         "name": "football field",
         "dimension": "l",
         "length": "109.728",
-        "width": "48.768",
-        "aliases": [
-            "field"
-        ]
+        "width": "48.768"
     },
     {
         "name": "Washington monument",
@@ -1333,7 +1535,10 @@
     {
         "name": "Las Vegas Strip",
         "dimension": "l",
-        "length": "6800"
+        "length": "6800",
+        "aliases": [
+            "Vegas"
+        ]
     },
     {
         "name": "Mount Everest",
@@ -1385,7 +1590,10 @@
     {
         "name": "Australia",
         "dimension": "w",
-        "width": "4000000"
+        "width": "4000000",
+        "aliases": [
+            "down under"
+        ]
     },
     {
         "name": "United States of America",
@@ -1439,6 +1647,16 @@
         "weight": "1.3e+43",
         "aliases": [
             "black hole"
+        ]
+    },
+    {
+        "name": "chicken nugget",
+        "dimension": "h",
+        "weight": "16",
+        "aliases": [
+            "chicken McNugget",
+            "mcnugget",
+            "nugget"
         ]
     }
 ]
