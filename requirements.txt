@@ -1,6 +1,6 @@
 colored==1.4.2
-#discord.py==1.3.3
-discord.py @ git+git://github.com/Rapptz/discord.py.git@master
+discord.py==1.4.0
+#discord.py @ git+git://github.com/Rapptz/discord.py.git@master
 appdirs==1.4.3
 toml==0.10.0
 numexpr==2.7.0
