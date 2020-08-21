@@ -168,17 +168,25 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         self.big = PersonStats(bigUserdata)
         self.small = PersonStats(smallUserdata)
         if self.big.height == 0 and self.small.height == 0:
-            self.multiplier = 1
+            self.multiplier = Decimal(1)
+
+            bigToSmallUserdata = userdb.User()
+            bigToSmallUserdata.height = Decimal(0)
+            self.bigToSmall = PersonStats(bigToSmallUserdata)
+
+            smallToBigUserdata = userdb.User()
+            smallToBigUserdata.height = 0
+            self.smallToBig = PersonStats(smallToBigUserdata)
         else:
             self.multiplier = self.big.height / self.small.height
 
-        bigToSmallUserdata = userdb.User()
-        bigToSmallUserdata.height = bigUserdata.height * self.small.viewscale
-        self.bigToSmall = PersonStats(bigToSmallUserdata)
+            bigToSmallUserdata = userdb.User()
+            bigToSmallUserdata.height = bigUserdata.height * self.small.viewscale
+            self.bigToSmall = PersonStats(bigToSmallUserdata)
 
-        smallToBigUserdata = userdb.User()
-        smallToBigUserdata.height = smallUserdata.height * self.big.viewscale
-        self.smallToBig = PersonStats(smallToBigUserdata)
+            smallToBigUserdata = userdb.User()
+            smallToBigUserdata.height = smallUserdata.height * self.big.viewscale
+            self.smallToBig = PersonStats(smallToBigUserdata)
 
         viewangle = calcViewAngle(self.small.height, self.big.height)
         self.lookangle = abs(viewangle)
