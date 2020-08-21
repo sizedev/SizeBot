@@ -124,6 +124,10 @@ def changeUser(guildid, userid, changestyle, amount):
     if changestyle not in ["add", "subtract", "multiply", "divide", "power", "percent"]:
         raise errors.ChangeMethodInvalidException(changestyle)
 
+    amountSV = None
+    amountVal = None
+    newamount = None
+
     if changestyle in ["add", "subtract"]:
         amountSV = SV.parse(amount)
     elif changestyle in ["multiply", "divide", "power"]:
@@ -163,7 +167,10 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         smallUserdata, bigUserdata = utils.minmax(userdata1, userdata2)
         self.big = PersonStats(bigUserdata)
         self.small = PersonStats(smallUserdata)
-        self.multiplier = self.big.height / self.small.height
+        if self.big.height == 0 and self.small.height == 0:
+            self.multiplier = 1
+        else:
+            self.multiplier = self.big.height / self.small.height
 
         bigToSmallUserdata = userdb.User()
         bigToSmallUserdata.height = bigUserdata.height * self.small.viewscale
