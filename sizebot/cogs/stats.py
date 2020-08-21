@@ -377,8 +377,8 @@ class StatsCog(commands.Cog):
                 return
             await ctx.send(
                 f"`{what}` is not a valid object, member, or height.\n"
-                f"If this is an object or alias you'd like added to SizeBot, \n"
-                f"use `{conf.prefix}suggestobject` to suggest it \n"
+                f"If this is an object or alias you'd like added to SizeBot, "
+                f"use `{conf.prefix}suggestobject` to suggest it "
                 f"(see `{conf.prefix}help suggestobject` for instructions on doing that.)"
             )
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
