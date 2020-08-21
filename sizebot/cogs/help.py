@@ -87,7 +87,7 @@ class HelpCog(commands.Cog):
 
         objectunits.sort()
 
-        embed = Embed(title=f"Objects [SizeBot {__version__}]", description = f"*NOTE: All of these object have multiple aliases. If there is an alias for an object here that isn't working that you think makes sense, report it with `{conf.prefix}suggestobject` and note that it's a prefix.*")
+        embed = Embed(title=f"Objects [SizeBot {__version__}]", description = f"*NOTE: All of these objects have multiple aliases. If there is an alias that you think should work for a listed object but doesn't, report it with `{conf.prefix}suggestobject` and note that it's an alias.*")
 
         for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 6))):
             embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
