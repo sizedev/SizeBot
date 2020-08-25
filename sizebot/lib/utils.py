@@ -329,7 +329,7 @@ def isURL(value):
         return True
 
 
-def sentence_join(items, *, joiner=None):
+def sentence_join(items, *, joiner=None, oxford=False):
     """Join a list of strings like a sentence
 
     >>> sentence_join(['red', 'green', 'blue'])
@@ -345,6 +345,9 @@ def sentence_join(items, *, joiner=None):
 
     if joiner is None:
         joiner = "and"
+        
+    if oxford:
+        joiner += ","
 
     # Do this in case we received something like a generator, that needs to be wrapped in a list
     items = list(items)
