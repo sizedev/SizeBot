@@ -1,3 +1,4 @@
 include sizebot/data/*.txt
 include sizebot/data/*.json
 include sizebot/data/*.ini
+include sizebot/data/objects/*.json
