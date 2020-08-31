@@ -147,8 +147,16 @@ class HelpCog(commands.Cog):
         # Prepare the embed for the category
         embed = Embed(title=f"{category.name} Help [SizeBot {__version__}]")
         embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-        text = f"**{category.emoji}{category.name}**\n\n" + ("\n".join(f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cmds))
-        embed.add_field(value=text)
+
+        command_texts = [f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cmds]
+        embed.add_field(value=f"**{category.emoji}{category.name}**", inline=False)
+        field_texts = [""]
+        for t in command_texts:
+            if len(field_texts[-1] + "\n" + t) > 1024:
+                field_texts.append("")
+            field_texts[-1] = field_texts[-1] + "\n" + t
+        for text in field_texts:
+            embed.add_field(value=text)
 
         # Display the embed with a reaction menu
         reactionmenu, answer = await Menu.display(
