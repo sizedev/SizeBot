@@ -47,7 +47,7 @@ async def nickUpdate(user):
     nick = userdata.nickname
     species = userdata.species
 
-    if userdata.unitsystem in ["m", "u"]:
+    if userdata.unitsystem in ["m", "u", "o"]:
         sizetag = format(height, f",{userdata.unitsystem}%")
     else:
         sizetag = ""
