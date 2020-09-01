@@ -11,3 +11,4 @@ requests==2.22.0
 inflect==4.1.0
 arrow==0.15.6
 validator-collection==1.4.1
+flask==1.1.2
