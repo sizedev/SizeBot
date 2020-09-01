@@ -152,7 +152,7 @@ def main():
         logger.error("SizeBot has been disconnected from Discord!")
 
     if not conf.authtoken:
-        logger.error(f"Authentication token not found!")
+        logger.error("Authentication token not found!")
         return
 
     bot.run(conf.authtoken)
