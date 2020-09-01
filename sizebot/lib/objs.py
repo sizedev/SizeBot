@@ -1,5 +1,6 @@
 import importlib.resources as pkg_resources
 import json
+import random
 from typing import Literal
 
 from discord import Embed
@@ -10,18 +11,20 @@ from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.language import getPlural, getIndefiniteArticle
 from sizebot.lib.units import SV, WV, Unit, SystemUnit
+from sizebot.lib.utils import removeprefix
 
 objects = []
 
 
 class DigiObject:
-    def __init__(self, name, dimension, aliases=[], symbol = None, height = None, length = None,
+    def __init__(self, name, dimension, aliases=[], tags=[], symbol = None, height = None, length = None,
                  width = None, diameter = None, depth = None, thickness = None, weight = None):
 
         self.name = name
         self.namePlural = getPlural(name)
         self.singularNames = aliases + [self.name]
         self.aliases = aliases + [getPlural(a) for a in aliases]
+        self.tags = tags + [getPlural(t) for t in tags]
         self.article = getIndefiniteArticle(self.name).split(" ")[0]
         self.symbol = symbol or None
 
