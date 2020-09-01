@@ -10,7 +10,7 @@ from discord import Embed
 
 from sizebot import conf
 from sizebot.cogs import thistracker
-from sizebot.lib import userdb, utils, api
+from sizebot.lib import userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.objs import objects
@@ -122,8 +122,7 @@ def getEvalGlobals():
         "date": date,
         "time": time,
         "timedelta": timedelta,
-        "math": math,
-        "api": api
+        "math": math
     }
 
     return evalGlobals
