@@ -96,6 +96,7 @@ class SetCog(commands.Cog):
         """Set measurement system."""
         newsys = newsys.lower()
         if newsys not in ["m", "u"]:
+            # TODO: More aliases for the systems. (make it a map)
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/i/m]`.")
             return
 
