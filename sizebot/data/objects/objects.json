@@ -9,7 +9,10 @@
         "name": "DNA",
         "dimension": "w",
         "width": "2.5e-9",
-        "weight": "1.67e-24"
+        "weight": "1.67e-24",
+        "tags": [
+            "cell"
+        ]
     },
     {
         "name": "transistor",
@@ -31,6 +34,9 @@
         "dimension": "l",
         "length": "0.000007",
         "weight": "1e-12",
+        "tags": [
+            "cell"
+        ],
         "aliases": [
             "bacteria"
         ]
@@ -40,6 +46,9 @@
         "dimension": "d",
         "diameter": "0.000007",
         "weight": "1e-12",
+        "tags": [
+            "cell"
+        ],
         "aliases": [
             "blood",
             "blood cell"
@@ -56,20 +65,20 @@
         ]
     },
     {
-        "name": "thickness of a sheet of paper",
-        "dimension": "t",
-        "thickness": "0.0001",
-        "aliases": [
-            "paper thickness"
-        ]
-    },
-    {
         "name": "dust",
         "dimension": "l",
         "length": "0.0001",
         "weight": "1.1e-10",
         "aliases": [
             "dust particle"
+        ]
+    },
+    {
+        "name": "thickness of a sheet of paper",
+        "dimension": "t",
+        "thickness": "0.0001",
+        "aliases": [
+            "paper thickness"
         ]
     },
     {
@@ -102,11 +111,6 @@
         "weight": "0.00075"
     },
     {
-        "name": "pinhead",
-        "dimension": "d",
-        "diameter": "0.002"
-    },
-    {
         "name": "drop of water",
         "dimension": "d",
         "diameter": "0.002",
@@ -117,11 +121,19 @@
         ]
     },
     {
+        "name": "pinhead",
+        "dimension": "d",
+        "diameter": "0.002"
+    },
+    {
         "name": "grain of rice",
         "dimension": "l",
         "length": "0.006",
         "width": "0.002",
         "weight": "0.029",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "rice grain",
             "grain",
@@ -134,6 +146,9 @@
         "length": "0.0071",
         "width": "0.0025",
         "weight": "0.0909",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "seed"
         ]
@@ -145,8 +160,30 @@
         "width": "0.032",
         "depth": "0.016",
         "weight": "1.152",
+        "tags": [
+            "toy"
+        ],
         "aliases": [
             "lego"
+        ]
+    },
+    {
+        "name": "1/4 20 nut",
+        "dimension": "d",
+        "diameter": "0.0098",
+        "weight": "2",
+        "aliases": [
+            "hex nut",
+            "nut"
+        ]
+    },
+    {
+        "name": "ant",
+        "dimension": "l",
+        "length": "0.01",
+        "weight": "0.0025",
+        "tags": [
+            "insect"
         ]
     },
     {
@@ -157,16 +194,11 @@
         "weight": "0.0323995"
     },
     {
-        "name": "ant",
-        "dimension": "l",
-        "length": "0.01",
-        "weight": "0.0025"
-    },
-    {
         "name": "shirt button",
         "dimension": "d",
         "diameter": "0.01016",
         "thickness": "0.003",
+        "weight": "1",
         "aliases": [
             "button"
         ]
@@ -186,9 +218,25 @@
         "dimension": "d",
         "diameter": "0.0142875",
         "weight": "4.535924",
+        "tags": [
+            "toy"
+        ],
         "aliases": [
             "marble ball",
             "glass marble"
+        ]
+    },
+    {
+        "name": "fruit loop",
+        "dimension": "d",
+        "diameter": "0.015",
+        "thickness": "0.0051",
+        "weight": "0.24",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "cheerio"
         ]
     },
     {
@@ -197,16 +245,6 @@
         "length": "0.015",
         "width": "0.015",
         "weight": "0.91"
-    },
-    {
-        "name": "fruit loop",
-        "dimension": "d",
-        "diameter": "0.015",
-        "thickness": "0.0051",
-        "weight": "0.24",
-        "aliases": [
-            "cheerio"
-        ]
     },
     {
         "name": "MicroSD card",
@@ -221,6 +259,9 @@
         "diameter": "0.01791",
         "thickness": "0.00135",
         "weight": "2.268",
+        "tags": [
+            "coin"
+        ],
         "aliases": [
             "10 cents"
         ]
@@ -239,6 +280,19 @@
         ]
     },
     {
+        "name": "penny",
+        "dimension": "d",
+        "diameter": "0.01905",
+        "thickness": "0.00152",
+        "weight": "2.5",
+        "tags": [
+            "coin"
+        ],
+        "aliases": [
+            "1 cent"
+        ]
+    },
+    {
         "name": "Scotch tape width",
         "dimension": "w",
         "width": "0.01905",
@@ -248,28 +302,24 @@
         ]
     },
     {
-        "name": "penny",
-        "dimension": "d",
-        "diameter": "0.01905",
-        "thickness": "0.00152",
-        "weight": "2.5",
-        "aliases": [
-            "1 cent"
-        ]
-    },
-    {
         "name": "die",
         "dimension": "h",
         "height": "0.02",
         "width": "0.02",
         "depth": "0.02",
-        "weight": "3.714285"
+        "weight": "3.714285",
+        "tags": [
+            "toy"
+        ]
     },
     {
         "name": "nickel",
         "dimension": "d",
         "diameter": "0.02121",
         "weight": "50",
+        "tags": [
+            "coin"
+        ],
         "aliases": [
             "5 cents"
         ]
@@ -289,6 +339,9 @@
         "diameter": "0.02426",
         "thickness": "0.00175",
         "weight": "5.67",
+        "tags": [
+            "coin"
+        ],
         "aliases": [
             "25 cents"
         ]
@@ -298,6 +351,9 @@
         "dimension": "h",
         "height": "0.025",
         "weight": "0.19",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "popcorn"
         ]
@@ -359,20 +415,6 @@
         "weight": "10"
     },
     {
-        "name": "lego minifig",
-        "dimension": "h",
-        "height": "0.04",
-        "weight": "3",
-        "aliases": [
-            "minifig",
-            "lego guy",
-            "lego man",
-            "lego person",
-            "lego people",
-            "lego minifigure"
-        ]
-    },
-    {
         "name": "AirPod™",
         "dimension": "l",
         "length": "0.04",
@@ -383,10 +425,30 @@
         ]
     },
     {
+        "name": "lego minifig",
+        "dimension": "h",
+        "height": "0.04",
+        "weight": "3",
+        "tags": [
+            "toy"
+        ],
+        "aliases": [
+            "minifig",
+            "lego guy",
+            "lego man",
+            "lego person",
+            "lego people",
+            "lego minifigure"
+        ]
+    },
+    {
         "name": "golf ball",
         "dimension": "d",
         "diameter": "0.04267",
-        "weight": "45.93"
+        "weight": "45.93",
+        "tags": [
+            "ball"
+        ]
     },
     {
         "name": "door key",
@@ -414,6 +476,22 @@
         "aliases": [
             "battery",
             "AA"
+        ]
+    },
+    {
+        "name": "chicken nugget",
+        "dimension": "l",
+        "length": "0.05",
+        "width": "0.03",
+        "depth": "0.01",
+        "weight": "16",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "chicken McNugget",
+            "mcnugget",
+            "nugget"
         ]
     },
     {
@@ -446,6 +524,9 @@
         "dimension": "h",
         "height": "0.05312",
         "weight": "48.1942",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "eggu"
         ]
@@ -469,6 +550,9 @@
         "width": "0.057",
         "depth": "0.057",
         "weight": "84.6",
+        "tags": [
+            "toy"
+        ],
         "aliases": [
             "Rubik's",
             "puzzle cube"
@@ -504,6 +588,9 @@
         "length": "0.07144",
         "width": "0.02818",
         "weight": "34",
+        "tags": [
+            "toy"
+        ],
         "aliases": [
             "hot wheels car",
             "hot wheels",
@@ -514,13 +601,19 @@
         "name": "baseball",
         "dimension": "d",
         "diameter": "0.0745",
-        "weight": "149"
+        "weight": "149",
+        "tags": [
+            "ball"
+        ]
     },
     {
         "name": "apple",
         "dimension": "h",
         "height": "0.075",
-        "weight": "85"
+        "weight": "85",
+        "tags": [
+            "food"
+        ]
     },
     {
         "name": "Q-tip",
@@ -530,6 +623,27 @@
         "aliases": [
             "cotton swab",
             "swab"
+        ]
+    },
+    {
+        "name": "yeast packet",
+        "dimension": "h",
+        "height": "0.076",
+        "length": "0.0047",
+        "width": "0.063",
+        "weight": "6",
+        "aliases": [
+            "yeast"
+        ]
+    },
+    {
+        "name": "band-aid",
+        "dimension": "l",
+        "length": "0.0762",
+        "width": "0.01905",
+        "weight": "0.48194189",
+        "aliases": [
+            "bandage"
         ]
     },
     {
@@ -546,13 +660,16 @@
         ]
     },
     {
-        "name": "band-aid",
-        "dimension": "l",
-        "length": "0.0762",
-        "width": "0.01905",
-        "weight": "0.48194189",
+        "name": "0.7mm pencil lead",
+        "dimension": "h",
+        "height": "0.08",
+        "diameter": "0.0007",
+        "weight": "0.4",
         "aliases": [
-            "bandage"
+            "graphite lead",
+            "pencil lead",
+            "lead",
+            "graphite"
         ]
     },
     {
@@ -561,6 +678,9 @@
         "height": "0.082",
         "diameter": "0.048",
         "weight": "81.65",
+        "tags": [
+            "toy"
+        ],
         "aliases": [
             "amiibo"
         ]
@@ -595,6 +715,9 @@
         "width": "0.256",
         "depth": "0.2032",
         "weight": "400",
+        "tags": [
+            "console"
+        ],
         "aliases": [
             "NES",
             "nintendo entertainment system"
@@ -605,6 +728,9 @@
         "dimension": "h",
         "height": "0.092075",
         "weight": "5",
+        "tags": [
+            "toy"
+        ],
         "aliases": [
             "crayola"
         ]
@@ -652,6 +778,9 @@
         "width": "0.036",
         "depth": "0.014",
         "weight": "50.603899",
+        "tags": [
+            "console"
+        ],
         "aliases": [
             "joycon",
             "joy-con"
@@ -672,6 +801,9 @@
         "dimension": "l",
         "length": "0.10541",
         "weight": "42.5",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "kitkat"
         ]
@@ -680,7 +812,12 @@
         "name": "juice box",
         "dimension": "h",
         "height": "0.1056386",
+        "width": "0.06",
+        "depth": "0.04",
         "weight": "170.097",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "Hi-C",
             "juice"
@@ -712,6 +849,9 @@
         "length": "0.161",
         "width": "0.15",
         "weight": "2400",
+        "tags": [
+            "console"
+        ],
         "aliases": [
             "gamecube",
             "nintendo gamecube"
@@ -723,6 +863,9 @@
         "height": "0.11",
         "diameter": "0.0953",
         "weight": "320",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "spud"
         ]
@@ -744,6 +887,9 @@
         "length": "0.1143",
         "width": "0.0762",
         "weight": "47.9815679",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "poptart"
         ]
@@ -764,6 +910,9 @@
         "height": "0.122",
         "diameter": "0.058",
         "weight": "355",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "pop can",
             "can",
@@ -776,6 +925,9 @@
         "length": "0.0739",
         "width": "0.133",
         "weight": "218",
+        "tags": [
+            "console"
+        ],
         "aliases": [
             "nintendo ds",
             "ds",
@@ -816,6 +968,18 @@
         ]
     },
     {
+        "name": "banana",
+        "dimension": "l",
+        "length": "0.1905",
+        "weight": "120",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "rotat e"
+        ]
+    },
+    {
         "name": "pencil",
         "dimension": "l",
         "length": "0.1905",
@@ -823,15 +987,6 @@
         "weight": "42.5243",
         "aliases": [
             "pen"
-        ]
-    },
-    {
-        "name": "banana",
-        "dimension": "l",
-        "length": "0.1905",
-        "weight": "120",
-        "aliases": [
-            "rotat e"
         ]
     },
     {
@@ -879,13 +1034,19 @@
         "name": "bowling ball",
         "dimension": "d",
         "diameter": "0.2159",
-        "weight": "5896.7"
+        "weight": "5896.7",
+        "tags": [
+            "ball"
+        ]
     },
     {
         "name": "soccer ball",
         "dimension": "d",
         "diameter": "0.22",
         "weight": "450",
+        "tags": [
+            "ball"
+        ],
         "aliases": [
             "football"
         ]
@@ -895,8 +1056,21 @@
         "dimension": "l",
         "length": "0.223",
         "weight": "45.3592",
+        "tags": [
+            "utensil"
+        ],
         "aliases": [
             "spork"
+        ]
+    },
+    {
+        "name": "fork",
+        "dimension": "l",
+        "length": "0.2286",
+        "thickness": "0.03",
+        "weight": "22",
+        "tags": [
+            "utensil"
         ]
     },
     {
@@ -913,6 +1087,9 @@
         "width": "0.239",
         "depth": "0.0139",
         "weight": "398.3108",
+        "tags": [
+            "console"
+        ],
         "aliases": [
             "switch",
             "nintendo switch"
@@ -924,6 +1101,9 @@
         "height": "0.24",
         "length": "0.46",
         "weight": "4500",
+        "tags": [
+            "animal"
+        ],
         "aliases": [
             "Yukio"
         ]
@@ -933,8 +1113,21 @@
         "dimension": "d",
         "diameter": "0.240538",
         "weight": "623.69",
+        "tags": [
+            "ball"
+        ],
         "aliases": [
             "b-ball"
+        ]
+    },
+    {
+        "name": "knife",
+        "dimension": "l",
+        "length": "0.2477",
+        "thickness": "0.025",
+        "weight": "27",
+        "tags": [
+            "utensil"
         ]
     },
     {
@@ -953,6 +1146,9 @@
         "width": "0.439",
         "depth": "0.358",
         "weight": "9900",
+        "tags": [
+            "appliance"
+        ],
         "aliases": [
             "microwave oven"
         ]
@@ -964,6 +1160,9 @@
         "length": "0.27305",
         "width": "0.03175",
         "weight": "2041.17",
+        "tags": [
+            "gun"
+        ],
         "aliases": [
             "deagle",
             "pistol",
@@ -990,9 +1189,43 @@
         "dimension": "h",
         "height": "0.2921",
         "weight": "205.534",
+        "tags": [
+            "toy"
+        ],
         "aliases": [
             "doll",
             "Barbie"
+        ]
+    },
+    {
+        "name": "medium Dominos™ pizza",
+        "dimension": "d",
+        "diameter": "0.3",
+        "weight": "726",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "pizza",
+            "medium pizza",
+            "Dominos pizza",
+            "medium Dominos pizza"
+        ]
+    },
+    {
+        "name": "Pringles™ can",
+        "dimension": "h",
+        "height": "0.3",
+        "diameter": "0.08",
+        "weight": "149",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "chip can",
+            "chip tube",
+            "Pringles tube",
+            "Pringles can"
         ]
     },
     {
@@ -1005,35 +1238,13 @@
         ]
     },
     {
-        "name": "Pringles™ can",
-        "dimension": "h",
-        "height": "0.3",
-        "diameter": "0.08",
-        "weight": "149",
-        "aliases": [
-            "chip can",
-            "chip tube",
-            "Pringles tube",
-            "Pringles can"
-        ]
-    },
-    {
-        "name": "medium Dominos™ pizza",
-        "dimension": "d",
-        "diameter": "0.3",
-        "weight": "726",
-        "aliases": [
-            "pizza",
-            "medium pizza",
-            "Dominos pizza",
-            "medium Dominos pizza"
-        ]
-    },
-    {
         "name": "Subway Footlong™",
         "dimension": "l",
         "length": "0.3048",
         "weight": "907.185",
+        "tags": [
+            "food"
+        ],
         "aliases": [
             "footlong",
             "subway footlong",
@@ -1047,6 +1258,9 @@
         "width": "0.1524",
         "depth": "0.1524",
         "weight": "4850",
+        "tags": [
+            "console"
+        ],
         "aliases": [
             "XSX",
             "Xbox"
@@ -1059,6 +1273,9 @@
         "width": "0.1016",
         "depth": "0.22352",
         "weight": "4450",
+        "tags": [
+            "console"
+        ],
         "aliases": [
             "PS5",
             "PlayStation"
@@ -1068,19 +1285,28 @@
         "name": "Pikachu",
         "dimension": "h",
         "height": "0.4064",
-        "weight": "6000"
+        "weight": "6000",
+        "tags": [
+            "Pokemon"
+        ]
     },
     {
         "name": "beach ball",
         "dimension": "d",
         "diameter": "0.508",
-        "weight": "110"
+        "weight": "110",
+        "tags": [
+            "ball"
+        ]
     },
     {
         "name": "exercise ball",
         "dimension": "d",
         "diameter": "0.65",
         "weight": "1360.78",
+        "tags": [
+            "ball"
+        ],
         "aliases": [
             "yoga ball"
         ]
@@ -1093,6 +1319,9 @@
         "width": "0.241",
         "diameter": "0.2921",
         "weight": "12247",
+        "tags": [
+            "vehicle"
+        ],
         "aliases": [
             "monoboard",
             "OneWheel"
@@ -1102,7 +1331,10 @@
         "name": "Kerbal",
         "dimension": "h",
         "height": "0.75",
-        "weight": "93750"
+        "weight": "93750",
+        "tags": [
+            "character"
+        ]
     },
     {
         "name": "skateboard",
@@ -1111,6 +1343,10 @@
         "length": "0.775",
         "width": "0.225",
         "weight": "3629",
+        "tags": [
+            "toy",
+            "vehicle"
+        ],
         "aliases": [
             "sk8"
         ]
@@ -1120,6 +1356,9 @@
         "dimension": "h",
         "height": "0.7874",
         "weight": "19958.1",
+        "tags": [
+            "character"
+        ],
         "aliases": [
             "Tails"
         ]
@@ -1141,13 +1380,19 @@
         "name": "guitar",
         "dimension": "l",
         "length": "0.9652",
-        "weight": "4000"
+        "weight": "4000",
+        "tags": [
+            "instrument"
+        ]
     },
     {
         "name": "Sonic the Hedgehog",
         "dimension": "h",
         "height": "1",
         "weight": "35000",
+        "tags": [
+            "character"
+        ],
         "aliases": [
             "sonic",
             "sanik"
@@ -1191,6 +1436,9 @@
         "dimension": "h",
         "height": "1.7399",
         "weight": "136078",
+        "tags": [
+            "appliance"
+        ],
         "aliases": [
             "fridge"
         ]
@@ -1200,6 +1448,9 @@
         "dimension": "h",
         "height": "1.8",
         "weight": "72151",
+        "tags": [
+            "character"
+        ],
         "aliases": [
             "Steve"
         ]
@@ -1238,6 +1489,9 @@
         "dimension": "h",
         "height": "2.16",
         "weight": "147000",
+        "tags": [
+            "person"
+        ],
         "aliases": [
             "Shaquille O'Neal"
         ]
@@ -1257,7 +1511,10 @@
         "name": "elephant",
         "dimension": "h",
         "height": "3.048",
-        "weight": "5896700.8"
+        "weight": "5896700.8",
+        "tags": [
+            "animal"
+        ]
     },
     {
         "name": "light pole",
@@ -1278,7 +1535,10 @@
         "dimension": "l",
         "length": "4.5",
         "width": "1.905",
-        "weight": "1814369"
+        "weight": "1814369",
+        "tags": [
+            "vehicle"
+        ]
     },
     {
         "name": "double decker bus",
@@ -1296,6 +1556,9 @@
         "dimension": "h",
         "height": "4.572",
         "weight": "7257477.9",
+        "tags": [
+            "animal"
+        ],
         "aliases": [
             "T-rex",
             "T-rexes",
@@ -1318,13 +1581,19 @@
         "name": "giraffe",
         "dimension": "h",
         "height": "6.75",
-        "weight": "1032500"
+        "weight": "1032500",
+        "tags": [
+            "animal"
+        ]
     },
     {
         "name": "city bus",
         "dimension": "l",
         "length": "13.716",
         "weight": "14514956",
+        "tags": [
+            "vehicle"
+        ],
         "aliases": [
             "bus"
         ]
@@ -1334,6 +1603,9 @@
         "dimension": "l",
         "length": "16",
         "weight": "30000000",
+        "tags": [
+            "animal"
+        ],
         "aliases": [
             "whale"
         ]
@@ -1342,13 +1614,19 @@
         "name": "train car",
         "dimension": "l",
         "length": "16.1798",
-        "weight": "25400000"
+        "weight": "25400000",
+        "tags": [
+            "vehicle"
+        ]
     },
     {
         "name": "oak tree",
         "dimension": "h",
         "height": "18",
         "weight": "7500000",
+        "tags": [
+            "plant"
+        ],
         "aliases": [
             "tree"
         ]
@@ -1363,6 +1641,9 @@
         "dimension": "l",
         "length": "21.336",
         "weight": "15422140",
+        "tags": [
+            "vehicle"
+        ],
         "aliases": [
             "truck",
             "lorry"
@@ -1373,6 +1654,9 @@
         "dimension": "h",
         "height": "22",
         "weight": "3168488761.2",
+        "tags": [
+            "building"
+        ],
         "aliases": [
             "office building",
             "office"
@@ -1394,6 +1678,9 @@
         "dimension": "h",
         "height": "56.6928",
         "weight": "13154200000",
+        "tags": [
+            "building"
+        ],
         "aliases": [
             "tower of Pisa",
             "leaning tower"
@@ -1403,13 +1690,19 @@
         "name": "redwood tree",
         "dimension": "h",
         "height": "60.96",
-        "weight": "725747792"
+        "weight": "725747792",
+        "tags": [
+            "plant"
+        ]
     },
     {
         "name": "Falcon Heavy",
         "dimension": "h",
         "height": "70",
         "weight": "1420651303",
+        "tags": [
+            "vehicle"
+        ],
         "aliases": [
             "rocket"
         ]
@@ -1419,6 +1712,9 @@
         "dimension": "l",
         "length": "70.7136",
         "weight": "183523473",
+        "tags": [
+            "vehicle"
+        ],
         "aliases": [
             "747",
             "jumbo jet",
@@ -1439,6 +1735,9 @@
         "dimension": "h",
         "height": "93",
         "weight": "204116566",
+        "tags": [
+            "building"
+        ],
         "aliases": [
             "lady liberty",
             "lady liberties",
@@ -1449,6 +1748,9 @@
         "name": "Big Ben",
         "dimension": "h",
         "height": "96.012",
+        "tags": [
+            "building"
+        ],
         "aliases": [
             "Elizabeth Tower"
         ]
@@ -1466,30 +1768,15 @@
         "width": "48.768"
     },
     {
-        "name": "Washington monument",
-        "dimension": "h",
-        "height": "169.164",
-        "weight": "82421400000",
-        "aliases": [
-            "washington"
-        ]
-    },
-    {
         "name": "Battleship Iowa",
         "dimension": "l",
         "length": "270",
         "weight": "44081921000",
+        "tags": [
+            "vehicle"
+        ],
         "aliases": [
             "battleship"
-        ]
-    },
-    {
-        "name": "Eiffel Tower",
-        "dimension": "h",
-        "height": "324.0024",
-        "weight": "9162570000",
-        "aliases": [
-            "eiffel"
         ]
     },
     {
@@ -1499,6 +1786,9 @@
         "length": "332.8",
         "width": "252",
         "weight": "90528000000",
+        "tags": [
+            "vehicle"
+        ],
         "aliases": [
             "aircraft carrier"
         ]
@@ -1507,13 +1797,19 @@
         "name": "cruise ship",
         "dimension": "l",
         "length": "360",
-        "weight": "90718500000"
+        "weight": "90718500000",
+        "tags": [
+            "vehicle"
+        ]
     },
     {
         "name": "Empire State Building",
         "dimension": "h",
         "height": "443.1792",
-        "weight": "331122400000"
+        "weight": "331122400000",
+        "tags": [
+            "building"
+        ]
     },
     {
         "name": "Grand Canyon",
@@ -1545,9 +1841,56 @@
         "dimension": "h",
         "height": "8848",
         "weight": "161932476090000000",
+        "tags": [
+            "mountain"
+        ],
         "aliases": [
             "everest",
             "mountain"
+        ]
+    },
+    {
+        "name": "airliner altitude",
+        "dimension": "h",
+        "height": "11200",
+        "tags": [
+            "altitude"
+        ],
+        "aliases": [
+            "plane height",
+            "cruising altitude"
+        ]
+    },
+    {
+        "name": "stratosphere",
+        "dimension": "h",
+        "height": "13000",
+        "thickness": "42000",
+        "tags": [
+            "altitude"
+        ],
+        "aliases": [
+            "stratos"
+        ]
+    },
+    {
+        "name": "troposphere",
+        "dimension": "t",
+        "thickness": "13000",
+        "tags": [
+            "altitude"
+        ]
+    },
+    {
+        "name": "ozone layer",
+        "dimension": "h",
+        "height": "15000",
+        "thickness": "20000",
+        "tags": [
+            "altitude"
+        ],
+        "aliases": [
+            "ozone"
         ]
     },
     {
@@ -1556,11 +1899,32 @@
         "length": "42195"
     },
     {
+        "name": "mesosphere",
+        "dimension": "h",
+        "height": "55000",
+        "thickness": "55000",
+        "tags": [
+            "altitude"
+        ]
+    },
+    {
         "name": "Kármán line",
         "dimension": "h",
         "height": "100000",
+        "tags": [
+            "altitude"
+        ],
         "aliases": [
             "karman line"
+        ]
+    },
+    {
+        "name": "thermosphere",
+        "dimension": "h",
+        "height": "110000",
+        "thickness": "490000",
+        "tags": [
+            "altitude"
         ]
     },
     {
@@ -1573,42 +1937,16 @@
         ]
     },
     {
-        "name": "Australia",
-        "dimension": "w",
-        "width": "4000000",
-        "aliases": [
-            "down under"
-        ]
-    },
-    {
-        "name": "United States of America",
-        "dimension": "w",
-        "length": "2545982",
-        "width": "4313042",
-        "aliases": [
-            "us",
-            "america",
-            "united states"
-        ]
-    },
-    {
-        "name": "The Great Wall Of China",
-        "dimension": "l",
-        "length": "6400000",
-        "weight": "52702897500000",
-        "aliases": [
-            "great wall",
-            "wall of china"
-        ]
-    },
-    {
-        "name": "chicken nugget",
+        "name": "low-earth orbit",
         "dimension": "h",
-        "weight": "16",
+        "height": "250000",
+        "thickness": "300000",
+        "tags": [
+            "altitude"
+        ],
         "aliases": [
-            "chicken McNugget",
-            "mcnugget",
-            "nugget"
+            "leo",
+            "low earth obrit"
         ]
     }
 ]

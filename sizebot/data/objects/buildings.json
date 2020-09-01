@@ -1,0 +1,49 @@
+[
+    {
+        "name": "Washington monument",
+        "dimension": "h",
+        "height": "169.164",
+        "weight": "82421400000",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "washington"
+        ]
+    },
+    {
+        "name": "Eiffel Tower",
+        "dimension": "h",
+        "height": "324.0024",
+        "weight": "9162570000",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "eiffel"
+        ]
+    },
+    {
+        "name": "Burj Khalifa",
+        "dimension": "h",
+        "height": "829.7",
+        "weight": "4.536E+11",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "burj",
+            "khalifa"
+        ]
+    },
+    {
+        "name": "The Great Wall Of China",
+        "dimension": "l",
+        "length": "6400000",
+        "weight": "52702897500000",
+        "aliases": [
+            "great wall",
+            "wall of china"
+        ]
+    }
+]

@@ -3,7 +3,10 @@
         "name": "Pluto",
         "dimension": "d",
         "diameter": "2376600",
-        "weight": "1.25e+25"
+        "weight": "1.25e+25",
+        "tags": [
+            "planet"
+        ]
     },
     {
         "name": "moon",
@@ -19,6 +22,9 @@
         "dimension": "d",
         "diameter": "12742000",
         "weight": "5.972000000000001e+27",
+        "tags": [
+            "planet"
+        ],
         "aliases": [
             "Terra"
         ]
@@ -27,13 +33,19 @@
         "name": "Jupiter",
         "dimension": "d",
         "diameter": "139820000",
-        "weight": "1.898e+30"
+        "weight": "1.898e+30",
+        "tags": [
+            "planet"
+        ]
     },
     {
         "name": "Sun",
         "dimension": "d",
         "diameter": "1391000000",
         "weight": "1.989e+33",
+        "tags": [
+            "star"
+        ],
         "aliases": [
             "Sol"
         ]
