@@ -180,7 +180,7 @@ class User:
     @unitsystem.setter
     def unitsystem(self, value):
         value = value.lower()
-        if value not in ["m", "u"]:
+        if value not in ["m", "u", "o"]:
             raise ValueError(f"Invalid unitsystem: '{value}'")
         self._unitsystem = value
 
