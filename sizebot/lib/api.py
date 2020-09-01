@@ -4,7 +4,7 @@ from sizebot.lib.errors import UserNotFoundException
 
 def getSizebotUser(guildid, userid):
     try:
-        u = userdb.load()
+        u = userdb.load(guildid, userid)
     except UserNotFoundException:
         return None
     return u.nickname
