@@ -489,7 +489,7 @@ class StatsCog(commands.Cog):
 
         nicks = sentence_join(u.nickname for u in userdatas)
         e = discord.Embed(
-            title=f"Click here for lineup image!",
+            title="Click here for lineup image!",
             description=f"Lineup of {nicks}",
             color=0x00FFFF,
             url=macrovision.get_url(users)
