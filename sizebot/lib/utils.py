@@ -389,8 +389,8 @@ def regexbuild(li: list, capture = False) -> str:
                 escaped.append(re.escape(ii))
         else:
             escaped.append(re.escape(i))
-    li.sort(reverse = True)
-    returnstring = "|".join(li)
+    escaped.sort(reverse = True)
+    returnstring = "|".join(escaped)
     if capture:
         returnstring = f"({returnstring})"
     return returnstring
