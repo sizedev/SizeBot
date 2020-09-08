@@ -1,5 +1,5 @@
-from sizebot.lib.change import Diff
+from sizebot.lib.change import LimitedRate
 
 
 def test_change():
-    Diff.parse("+3ft")
+    LimitedRate.parse("3m/h until 50m")

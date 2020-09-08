@@ -38,9 +38,10 @@
 import asyncio
 import re
 from sizebot.lib import units
-from sizebot.lib.utils import regexbuild
+from sizebot.lib.errors import InvalidSizeValue
+from sizebot.lib.utils import regexbuild, tryOrNone
 from sizebot.lib.decimal import Decimal
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, TV
 from typing import Literal, Union
 
 add_prefixes = ["+", "add", "plus"]
@@ -118,6 +119,66 @@ class Diff:
             v = SV.parse(s)
 
         return Diff(ct, v)
+
+
+class Rate:
+    def __init__(self, diff, time):
+        self.diff = diff
+        self.time = time
+
+    @classmethod
+    def parse(cls, s):
+        d = None
+        t = None
+
+        match = r"(.*)\s*" + valid_rate_interfixes + r"\s*(.*)"
+        m = re.match(match, s)
+        if not m:
+            raise Exception
+        d = Diff.parse(m.group(1))
+        t = TV.parse(m.group(3))
+
+        return Rate(d, t)
+
+
+class LimitedRate:
+    def __init__(self, rate, stop):
+        self.rate = rate
+        self.stop = stop
+
+    @classmethod
+    def parse(cls, s):
+        r = None
+        st = None
+
+        match = r"(.*)\s*" + valid_limited_rate_interfixes + r"\s*(.*)"
+        m = re.match(match, s)
+        if not m:
+            raise Exception
+
+        r = Rate.parse(m.group(1))
+
+        st = tryOrNone(SV.parse, m.group(3), (InvalidSizeValue,)) or tryOrNone(TV.parse, m.group(3), (InvalidSizeValue,))
+
+        if st is None:
+            raise Exception
+
+        return LimitedRate(r, st)
+
+
+def parse_change(s):
+    r = None
+    try:
+        r = LimitedRate.parse(s)
+    except Exception:
+        try:
+            r = Rate.parse(s)
+        except Exception:
+            try:
+                r = Diff.parse(s)
+            except Exception:
+                Exception
+    return r
 
 
 print("hi")
