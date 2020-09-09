@@ -50,7 +50,7 @@ multiply_suffixes = ["x", "X"]
 divide_prefixes = ["/", "div", "divide", "divide by"]
 percent_prefixes = ["%"]
 percent_suffixes = ["%"]
-power_prefixes = ["**"]
+power_prefixes = ["**", "^"]
 
 valid_prefixes = regexbuild([add_prefixes, subtract_prefixes, multiply_prefixes, divide_prefixes, percent_prefixes, power_prefixes], capture = True)
 valid_suffixes = regexbuild([multiply_suffixes, percent_suffixes], capture = True)
