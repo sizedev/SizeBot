@@ -1,10 +1,11 @@
 import logging
 import random
+from typing import Union
 
 from discord.ext import commands, tasks
 
 from sizebot.lib import changes, proportions, userdb
-from sizebot.lib.units import Rate
+from sizebot.lib.change import Diff, Rate, LimitedRate
 
 logger = logging.getLogger("sizebot")
 
@@ -23,17 +24,45 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def change(self, ctx, style, *, amount):
-        """Change height."""
+    async def change(self, ctx, ratestring: Union[LimitedRate, Rate, Diff]):
+        """Change height, either one time or over time.
+
+        Syntax:
+        &change...
+        """
         guildid = ctx.guild.id
         userid = ctx.author.id
 
-        proportions.changeUser(guildid, userid, style, amount)  # TODO: Switch to the method we use in Rates to parse this
-        await proportions.nickUpdate(ctx.author)                # instead of forcing users to use two arguments.
-        userdata = userdb.load(guildid, userid)
+        if isinstance(ratestring, Diff):
 
-        logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
-        await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
+            style = ratestring.changetype
+            amount = ratestring.amount
+
+            proportions.changeUser(guildid, userid, style, amount)
+            await proportions.nickUpdate(ctx.author)
+            userdata = userdb.load(guildid, userid)
+
+            logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
+            await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
+
+        elif isinstance(ratestring, Rate):
+
+            addPerSec = 0
+            mulPerSec = 1
+
+            changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec)
+
+            await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{ratestring}`.")
+            logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
+
+        elif isinstance(ratestring, LimitedRate):
+
+            addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(rateStr)
+
+            changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
+
+            await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{ratestring}`.")
+            logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commands.command(
         hidden = True
@@ -49,29 +78,6 @@ class ChangeCog(commands.Cog):
 
         await ctx.author.send("**ACTIVE CHANGES**\n" + changeDump)
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the running changes.")
-
-    @commands.command(
-        usage = "<rate>",
-        category = "change"
-    )
-    @commands.guild_only()
-    async def slowchange(self, ctx, *, rateStr: str):
-        """Change your height steadily over time.
-
-        Set how fast or slow you'd like to change, and when you'd like to stop.
-        Examples:
-        `&slowchange 1m/s`
-        `&slowchange 1m/s until 10m`
-        `&slowchange 1m/s for 1h`"""
-        userid = ctx.author.id
-        guildid = ctx.guild.id
-
-        addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(rateStr)
-
-        changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
-
-        await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{rateStr}`.")
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commands.command(
         category = "change"
