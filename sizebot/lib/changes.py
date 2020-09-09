@@ -14,11 +14,12 @@ _activeChanges = {}
 
 
 class Change:
-    def __init__(self, userid, guildid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None, startTime=None, lastRan=None):
+    def __init__(self, userid, guildid, *, addPerSec=0, mulPerSec=1, powPerSec=1, stopSV=None, stopTV=None, startTime=None, lastRan=None):
         self.userid = userid
         self.guildid = guildid
         self.addPerSec = addPerSec and SV(addPerSec)
         self.mulPerSec = mulPerSec and Decimal(mulPerSec)
+        self.powPerSec = powPerSec and Decimal(powPerSec)
         self.stopSV = stopSV and SV(stopSV)
         self.stopTV = stopTV and TV(stopTV)
         self.startTime = startTime and Decimal(startTime)
@@ -34,8 +35,9 @@ class Change:
         self.lastRan = now
         addPerTick = self.addPerSec * seconds
         mulPerTick = self.mulPerSec ** seconds
+        powPerTick = self.powPerSec ** seconds
         userdata = userdb.load(self.guildid, self.userid)
-        newheight = (userdata.height * mulPerTick) + addPerTick
+        newheight = ((userdata.height ** powPerTick) * mulPerTick) + addPerTick
         if self.stopSV is not None and ((newheight < userdata.height and self.stopSV >= newheight) or (newheight > userdata.height and self.stopSV <= newheight)):
             newheight = self.stopSV
             running = False
@@ -61,6 +63,7 @@ class Change:
             "guildid": self.guildid,
             "addPerSec": None if self.addPerSec is None else str(self.addPerSec),
             "mulPerSec": None if self.mulPerSec is None else str(self.mulPerSec),
+            "powPerSec": None if self.powPerSec is None else str(self.powPerSec),
             "stopSV": None if self.stopSV is None else str(self.stopSV),
             "stopTV": None if self.stopTV is None else str(self.stopTV),
             "startTime": None if self.startTime is None else str(self.startTime),
