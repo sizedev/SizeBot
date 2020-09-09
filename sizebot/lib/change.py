@@ -120,6 +120,10 @@ class Diff:
 
         return Diff(ct, v)
 
+    @classmethod
+    async def convert(cls, ctx, argument):
+        return cls.parse(argument)
+
 
 class Rate:
     def __init__(self, diff, time):
@@ -139,6 +143,10 @@ class Rate:
         t = TV.parse(m.group(3))
 
         return Rate(d, t)
+
+    @classmethod
+    async def convert(cls, ctx, argument):
+        return cls.parse(argument)
 
 
 class LimitedRate:
@@ -164,6 +172,10 @@ class LimitedRate:
             raise Exception
 
         return LimitedRate(r, st)
+
+    @classmethod
+    async def convert(cls, ctx, argument):
+        return cls.parse(argument)
 
 
 def parse_change(s):
