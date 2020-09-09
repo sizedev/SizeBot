@@ -15,7 +15,6 @@
 # x2
 # 2x
 # /2
-# 1/2 <this doesn't make much sense>
 # **2
 
 ## RATE=
