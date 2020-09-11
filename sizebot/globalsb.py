@@ -719,7 +719,7 @@ def shoeFormat(v):
     if v > Decimal("1E15"):
         return f"{v:.2e}"
     else:
-        return f"{v:,.1}"
+        return f"{v:,.1f}"
 
 
 def toShoeSize(footlength):
