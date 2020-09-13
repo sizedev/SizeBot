@@ -67,9 +67,10 @@ asyncio.run(units.init())
 
 
 class Diff:
-    def __init__(self, changetype: Literal["add", "multiply", "power"], amount: Union[SV, Decimal]):
+    def __init__(self, original, changetype: Literal["add", "multiply", "power"], amount: Union[SV, Decimal]):
         self.changetype = changetype
         self.amount = amount
+        self.original = original
 
     @classmethod
     def parse(cls, s):
@@ -117,7 +118,7 @@ class Diff:
             ct = "add"
             v = SV.parse(s)
 
-        return Diff(ct, v)
+        return Diff(s, ct, v)
 
     @classmethod
     async def convert(cls, ctx, argument):
@@ -125,9 +126,10 @@ class Diff:
 
 
 class Rate:
-    def __init__(self, diff, time):
+    def __init__(self, original, diff, time):
         self.diff = diff
         self.time = time
+        self.original = original
 
     @classmethod
     def parse(cls, s):
@@ -141,7 +143,7 @@ class Rate:
         d = Diff.parse(m.group(1))
         t = TV.parse(m.group(3))
 
-        return Rate(d, t)
+        return Rate(s, d, t)
 
     @classmethod
     async def convert(cls, ctx, argument):
@@ -149,9 +151,10 @@ class Rate:
 
 
 class LimitedRate:
-    def __init__(self, rate, stop):
+    def __init__(self, original, rate, stop):
         self.rate = rate
         self.stop = stop
+        self.original = original
 
     @classmethod
     def parse(cls, s):
@@ -170,7 +173,7 @@ class LimitedRate:
         if st is None:
             raise Exception
 
-        return LimitedRate(r, st)
+        return LimitedRate(s, r, st)
 
     @classmethod
     async def convert(cls, ctx, argument):
