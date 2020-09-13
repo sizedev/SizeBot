@@ -1,5 +1,6 @@
 import logging
 import random
+from sizebot.lib.errors import ChangeMethodInvalidException
 from typing import Union
 
 from discord.ext import commands, tasks
@@ -33,9 +34,16 @@ class ChangeCog(commands.Cog):
             style = string.changetype
             amount = string.amount
 
-            proportions.changeUser(guildid, userid, style, amount)  # TODO: Switch to the method we use in Rates to parse this
-            await proportions.nickUpdate(ctx.author)                # instead of forcing users to use two arguments.
             userdata = userdb.load(guildid, userid)
+            if style == "add":
+                userdata.height += amount
+            elif style == "multiply":
+                userdata.height *= amount
+            elif style == "power":
+                userdata ** amount
+            else:
+                raise ChangeMethodInvalidException
+            await proportions.nickUpdate(ctx.author)
 
             logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
             await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
