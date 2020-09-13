@@ -5,7 +5,6 @@ from sizebot.lib import proportions
 from sizebot.lib import userdb
 
 from discord.ext import commands
-from discord.ext.commands.core import command
 
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
@@ -47,7 +46,7 @@ class ScaleWalkCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @command.command(
+    @commands.command(
         category = "stats",
         usage = "<change per step> <distance> [apply]"
     )
@@ -92,7 +91,7 @@ class ScaleWalkCog(commands.Cog):
         else:
             raise DigiContextException(f"Invalid flag {flag}.")
 
-    @command.command(
+    @commands.command(
         category = "stats",
         usage = "<change per step> <distance> [apply]"
     )
