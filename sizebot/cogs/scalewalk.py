@@ -59,7 +59,7 @@ class ScaleWalkCog(commands.Cog):
 
         stepcount, final_inc, final_ratio = steps(stats.walksteplength, change, dist)
 
-        finalheight = SV(userdb.height / final_ratio)
+        finalheight = SV(userdata.height / final_ratio)
 
         symbol = ""
         if change.changetype == "add":
