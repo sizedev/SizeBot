@@ -43,7 +43,7 @@ def steps(start_inc: SV, diff: Diff, goal: SV):
             raise DigiContextException("This change type is not yet supported for scale-walking.")
 
 
-class ChangeCog(commands.Cog):
+class ScaleWalkCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -136,3 +136,7 @@ class ChangeCog(commands.Cog):
             await ctx.send(embed = e)
         else:
             raise DigiContextException(f"Invalid flag {flag}.")
+
+
+def setup(bot):
+    bot.add_cog(ScaleWalkCog(bot))

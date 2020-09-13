@@ -44,6 +44,7 @@ initial_cogs = [
     "register",
     "roll",
     "run",
+    "scalewalk",
     "set",
     "stats",
     "test",
