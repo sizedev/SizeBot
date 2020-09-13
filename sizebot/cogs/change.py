@@ -23,12 +23,12 @@ class ChangeCog(commands.Cog):
         self.changeTask.cancel()
 
     @commands.command(
-        category = "change"
+        category = "change",
         usage = "<change> [rate] [stop]"
     )
     async def change(self, ctx, *, string: Union[LimitedRate, ParseableRate, Diff]):
         """Either change or slow-change your height.
-        
+
         Can be used in essentially the three following ways:
         `&change <amount>`
         `&change <amount>/<time>`
@@ -71,7 +71,6 @@ class ChangeCog(commands.Cog):
 
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{string.original}`.")
             logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
-
 
     @commands.command(
         hidden = True
