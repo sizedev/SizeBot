@@ -90,7 +90,7 @@ class Diff:
                 ct = "multiply"
                 v = Decimal(value)
             elif prefix in divide_prefixes:
-                ct = "divide"
+                ct = "multiply"
                 v = Decimal(1) / Decimal(value)
             elif prefix in percent_prefixes:
                 ct = "multiply"
