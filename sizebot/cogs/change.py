@@ -1,9 +1,12 @@
 import logging
 import random
+from typing import Union
 
 from discord.ext import commands, tasks
 
 from sizebot.lib import changes, proportions, userdb
+from sizebot.lib.diff import Diff, LimitedRate
+from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.units import Rate
 
 logger = logging.getLogger("sizebot")
@@ -17,6 +20,33 @@ class ChangeCog(commands.Cog):
 
     def cog_unload(self):
         self.changeTask.cancel()
+
+    @commands.command(
+        category = "change"
+    )
+    async def newchange(self, ctx, *, string: Union[LimitedRate, ParseableRate, Diff]):
+        """Either change or slow-change your height."""
+        guildid = ctx.guild.id
+        userid = ctx.author.id
+
+        if isinstance(string, Diff):
+            style = string.changetype
+            amount = string.amount
+
+            proportions.changeUser(guildid, userid, style, amount)  # TODO: Switch to the method we use in Rates to parse this
+            await proportions.nickUpdate(ctx.author)                # instead of forcing users to use two arguments.
+            userdata = userdb.load(guildid, userid)
+
+            logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
+            await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
+
+        elif isinstance(string, ParseableRate) or isinstance(string, LimitedRate):
+            addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(string.original)
+
+            changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
+
+            await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{string.original}`.")
+            logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commands.command(
         usage = "<x,-,/,+> <amount>",
