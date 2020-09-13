@@ -45,6 +45,8 @@ class ChangeCog(commands.Cog):
                 raise ChangeMethodInvalidException
             await proportions.nickUpdate(ctx.author)
 
+            userdb.save(userdata)
+
             logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
             await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
 
