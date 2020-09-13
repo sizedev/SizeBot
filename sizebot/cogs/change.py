@@ -24,9 +24,23 @@ class ChangeCog(commands.Cog):
 
     @commands.command(
         category = "change"
+        usage = "<change> [rate] [stop]"
     )
-    async def newchange(self, ctx, *, string: Union[LimitedRate, ParseableRate, Diff]):
-        """Either change or slow-change your height."""
+    async def change(self, ctx, *, string: Union[LimitedRate, ParseableRate, Diff]):
+        """Either change or slow-change your height.
+        
+        Can be used in essentially the three following ways:
+        `&change <amount>`
+        `&change <amount>/<time>`
+        `&change <amount>/<time> until <size/time>
+
+        Examples:
+        `&change +1ft`
+        `&change *2`
+        `&change 50ft/day`
+        `&change -1in/min until 1ft`
+        `&change -1mm/sec for 1hr`
+        """
         guildid = ctx.guild.id
         userid = ctx.author.id
 
@@ -58,22 +72,6 @@ class ChangeCog(commands.Cog):
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{string.original}`.")
             logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
-    @commands.command(
-        usage = "<x,-,/,+> <amount>",
-        category = "change"
-    )
-    @commands.guild_only()
-    async def change(self, ctx, style, *, amount):
-        """Change height."""
-        guildid = ctx.guild.id
-        userid = ctx.author.id
-
-        proportions.changeUser(guildid, userid, style, amount)  # TODO: Switch to the method we use in Rates to parse this
-        await proportions.nickUpdate(ctx.author)                # instead of forcing users to use two arguments.
-        userdata = userdb.load(guildid, userid)
-
-        logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
-        await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
 
     @commands.command(
         hidden = True
@@ -89,29 +87,6 @@ class ChangeCog(commands.Cog):
 
         await ctx.author.send("**ACTIVE CHANGES**\n" + changeDump)
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the running changes.")
-
-    @commands.command(
-        usage = "<rate>",
-        category = "change"
-    )
-    @commands.guild_only()
-    async def slowchange(self, ctx, *, rateStr: str):
-        """Change your height steadily over time.
-
-        Set how fast or slow you'd like to change, and when you'd like to stop.
-        Examples:
-        `&slowchange 1m/s`
-        `&slowchange 1m/s until 10m`
-        `&slowchange 1m/s for 1h`"""
-        userid = ctx.author.id
-        guildid = ctx.guild.id
-
-        addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(rateStr)
-
-        changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
-
-        await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{rateStr}`.")
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commands.command(
         category = "change"
