@@ -251,7 +251,12 @@
         "dimension": "l",
         "length": "0.015",
         "width": "0.015",
-        "weight": "0.25"
+        "weight": "0.25",
+        "aliases": [
+            "microsd",
+            "micro sd",
+            "micro sd card"
+        ]
     },
     {
         "name": "dime",
@@ -381,7 +386,10 @@
         "length": "0.032",
         "width": "0.032",
         "thickness": "0.0021",
-        "weight": "2"
+        "weight": "2",
+        "aliases": [
+            "sd"
+        ]
     },
     {
         "name": "needle",
