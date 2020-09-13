@@ -34,9 +34,7 @@
 # RATE for 10meters
 # RATE -> 10meters
 
-import asyncio
 import re
-from sizebot.lib import units
 from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.utils import regexbuild, tryOrNone
 from sizebot.lib.decimal import Decimal
@@ -62,8 +60,6 @@ valid_rate_interfixes = regexbuild(rate_interfixes, capture = True)
 limited_rate_interfixes = ["until", "for", "->", "-->"]
 
 valid_limited_rate_interfixes = regexbuild(limited_rate_interfixes, capture = True)
-
-asyncio.run(units.init())
 
 
 class Diff:
