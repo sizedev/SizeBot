@@ -15,6 +15,8 @@ from sizebot.lib.constants import emojis, ids
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.objs import objects
 from sizebot.lib.units import Rate, Mult, SV, TV, WV
+from sizebot.lib.diff import Diff, LimitedRate
+from sizebot.lib.diff import Rate as ParseableRate
 
 
 logger = logging.getLogger("sizebot")
@@ -107,6 +109,7 @@ def getEvalGlobals():
         "logging": logging,
         "logger": logger,
         "Rate": Rate, "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
+        "Diff": Diff, "ParseableRate": ParseableRate, "LimitedRate": LimitedRate,
         "objects": objects,
         "utils": utils,
         "pdir": utils.pdir,

@@ -447,8 +447,15 @@ class PersonStats:
         defaultwalkspeed = SV.parse("3.5mi")
         defaultrunspeed = SV.parse("7.5mi")
 
-        self.walkperhour = SV(defaultwalkspeed * self.averageheightmult)
-        self.runperhour = SV(defaultrunspeed * self.averageheightmult)
+        if userdata.walkperhour is None:
+            self.walkperhour = SV(defaultwalkspeed * self.averageheightmult)
+        else:
+            self.walkperhour = SV(userdata.walkperhour * self.averageheightmult)
+
+        if userdata.runperhour is None:
+            self.runperhour = SV(defaultrunspeed * self.averageheightmult)
+        else:
+            self.walkperhour = SV(userdata.runperhour * self.averageheightmult)
 
         self.walksteplength = SV(self.walkperhour / self.walkstepsperhour)
         self.runsteplength = SV(self.runperhour / self.runstepsperhour)
