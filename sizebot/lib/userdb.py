@@ -169,6 +169,26 @@ class User:
         self._walkperhour = SV(max(0, SV(dist)))
 
     @property
+    def runperhour(self):
+        return self._runperhour
+
+    @runperhour.setter
+    def runperhour(self, value):
+        if value is None:
+            self._runperhour = None
+            return
+        rate = ParseableRate.parse(value)
+
+        if rate.diff.changetype != "add":
+            raise ValueError("Invalid rate for speed parsing.")
+        if rate.diff.amount < 0:
+            raise ValueError("Speed can not go backwards!")
+
+        dist = rate.diff.amount / rate.time * Decimal("3600")
+
+        self._runperhour = SV(max(0, SV(dist)))
+
+    @property
     def gender(self):
         return self._gender
 
