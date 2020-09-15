@@ -19,7 +19,7 @@ class ProfileCog(commands.Cog):
     @commands.guild_only()
     async def setpicture(self, ctx, *, url):
         """ Set your profile's image. Must be a valid image URL."""
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.picture_url = url
         userdb.save(userdata)
         await ctx.send("Profile image set.")
@@ -35,7 +35,7 @@ class ProfileCog(commands.Cog):
         """Set your profile description.
 
         Accepts slightly more markdown than usual, see https://leovoel.github.io/embed-visualizer/"""
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.description = desc
         userdb.save(userdata)
         await ctx.send("Profile description set.")
@@ -47,7 +47,7 @@ class ProfileCog(commands.Cog):
     @commands.guild_only()
     async def resetpicture(self, ctx):
         """Reset your profile's image."""
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.picture_url = None
         userdb.save(userdata)
         await ctx.send("Profile image reset.")
@@ -59,7 +59,7 @@ class ProfileCog(commands.Cog):
     @commands.guild_only()
     async def resetdescription(self, ctx):
         """Remove your profile description."""
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.description = None
         userdb.save(userdata)
         await ctx.send("Profile description reset.")
@@ -74,7 +74,8 @@ class ProfileCog(commands.Cog):
         """See the profile of you or another SizeBot user."""
         if member is None:
             member = ctx.author
-        userdata = userdb.load(ctx.guild.id, member.id, member = member)
+        same_user = ctx.author.id == member.id
+        userdata = userdb.load(ctx.guild.id, member.id, member = member, allow_unreg=same_user)
         profileembed = Embed(title = userdata.nickname, description = userdata.description)
         profileembed.set_image(url = userdata.auto_picture_url)
         profileembed.add_field(name = "Height", value = f"{userdata.height:,.3mu}", inline = True)

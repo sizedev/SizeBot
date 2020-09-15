@@ -85,7 +85,8 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        userdata = getUserdata(memberOrHeight, customName)
+        same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
+        userdata = getUserdata(memberOrHeight, customName, allow_unreg=same_user)
 
         stats = proportions.PersonStats(userdata)
 
@@ -154,7 +155,8 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        userdata = getUserdata(memberOrHeight, customName)
+        same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
+        userdata = getUserdata(memberOrHeight, customName, allow_unreg=same_user)
 
         stats = proportions.PersonStats(userdata)
 
@@ -497,9 +499,9 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = e)
 
 
-def getUserdata(memberOrSV, nickname = None):
+def getUserdata(memberOrSV, nickname = None, *, allow_unreg=False):
     if isinstance(memberOrSV, discord.Member):
-        userdata = userdb.load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV)
+        userdata = userdb.load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
     else:
         userdata = userdb.User()
         userdata.height = memberOrSV
