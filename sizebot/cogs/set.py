@@ -523,7 +523,7 @@ class SetCog(commands.Cog):
     async def setwalk(self, ctx, *, newwalk: ParseableRate):
         """Set your current walk speed."""
 
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.walkperhour = ParseableRate(f"{newwalk.diff.amount * userdata.viewscale}/{newwalk.time}",
                                              Diff(f"{newwalk.diff.amount * userdata.viewscale}", "add", newwalk.diff.amount * userdata.viewscale),
@@ -541,7 +541,7 @@ class SetCog(commands.Cog):
     async def setbasewalk(self, ctx, *, newwalk: ParseableRate):
         """Set a custom walk speed."""
 
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.walkperhour = newwalk
         userdb.save(userdata)
@@ -556,7 +556,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def resetwalk(self, ctx):
         """Remove custom walk speed."""
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.walkperhour = None
         userdb.save(userdata)
@@ -571,7 +571,7 @@ class SetCog(commands.Cog):
     async def setrun(self, ctx, *, newrun: ParseableRate):
         """Set your current run speed."""
 
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.runperhour = ParseableRate(f"{newrun.diff.amount * userdata.viewscale}/{newrun.time}",
                                             Diff(f"{newrun.diff.amount * userdata.viewscale}", "add", newrun.diff.amount * userdata.viewscale),
@@ -589,7 +589,7 @@ class SetCog(commands.Cog):
     async def setbaserun(self, ctx, *, newrun: ParseableRate):
         """Set a custom run speed."""
 
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.runperhour = newrun
         userdb.save(userdata)
@@ -604,7 +604,7 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def resetrun(self, ctx):
         """Remove custom run speed."""
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.runperhour = None
         userdb.save(userdata)
