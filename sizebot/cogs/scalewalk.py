@@ -1,3 +1,4 @@
+import math
 import logging
 
 import discord
@@ -21,25 +22,44 @@ def steps(start_inc: SV, diff: Diff, goal: SV):
 
     Returns (steps, final increment, start inc. / final inc.)"""
 
-    steps = 0
-    current_pos = 0
-    last_pos = None
-    current_inc = start_inc
-
-    while not current_pos >= goal:
-        steps += 1
-        last_pos = current_pos
-        current_pos += current_inc
-        if current_pos >= goal:
-            return (Decimal(steps), current_inc, start_inc / current_inc)
-        if current_pos == last_pos:
+    if (diff.changetype == "add" and diff.amount == 0) or (diff.changetype == "multiply" and diff.amount == 1):
+        # TODO: Handle special case of walking without size change
+        if start_inc <= 0:
             return (Decimal("inf"), SV(0), Decimal("inf"))
-        if diff.changetype == "add":
-            current_inc += diff.amount
-        elif diff.changetype == "multiply":
-            current_inc *= diff.amount
-        else:
-            raise DigiContextException("This change type is not yet supported for scale-walking.")
+        # Calculate number of steps required to reach goal
+        steps = math.ceil(goal / start_inc)
+        # Calculate how far user got after those steps
+        #current_pos = start_inc * steps
+        return (Decimal(steps), start_inc, 1)
+    elif diff.changetype == "add":
+        if diff.amount < 0:
+            # Calculate max distance travelled, if each step is getting shorter
+            max_dist = ((diff.amount / 2) - start_inc) / diff.amount
+            if max_dist < goal:
+                return (Decimal("inf"), SV(0), Decimal("inf"))
+        # Calculate number of steps required to reach goal
+        steps = math.ceil((math.sqrt((diff.amount ** 2) - (4 * diff.amount * start_inc) + (8 * diff.amount * goal) + (4 * (start_inc ** 2))) + diff.amount - (2 * start_inc)) / (2 * diff.amount))
+        # Calculate how far user got after those steps
+        #current_pos = (start_inc * steps) + (diff.amount * ((steps - 1) * steps) / 2)
+        # Calculate length of last step
+        current_inc = start_inc + (diff.amount * (steps - 1))
+        return (Decimal(steps), current_inc, start_inc / current_inc)
+    elif diff.changetype == "multiply":
+        # https://en.wikipedia.org/wiki/Geometric_series
+        if diff.amount < 1:
+            # Calculate max distance travelled, if each step is getting shorter
+            max_dist = start_inc / (1 - diff.amount)
+            if max_dist < goal:
+                return (Decimal("inf"), SV(0), Decimal("inf"))
+        # Calculate number of steps required to reach goal
+        steps = math.ceil(math.log(-(goal * (1 - diff.amount) / start_inc) + 1, diff.amount))
+        # Calculate how far user got after those steps
+        #current_pos = start_inc * ((1 - diff.amount ** (steps - 1)) / (1 - diff.amount))
+        # Calculate length of last step
+        current_inc = start_inc * (diff.amount ** (steps - 1))
+        return (Decimal(steps), current_inc, start_inc / current_inc)
+    else:
+        raise DigiContextException("This change type is not yet supported for scale-walking.")
 
 
 class ScaleWalkCog(commands.Cog):
