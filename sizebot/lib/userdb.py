@@ -45,6 +45,7 @@ class User:
         self.soft_gender = None
         self.avatar_url = None
         self.lastactive = None
+        self.registration_steps_remaining = []
 
     def __str__(self):
         return (f"GUILDID `{self.guildid}`, ID `{self.id}`, NICK `{self.nickname}`, GEND `{self.gender}`, "
@@ -221,6 +222,10 @@ class User:
             tag = self.nickname
         return tag
 
+    @property
+    def registered(self):
+        return len(self.registration_steps_remaining) == 0
+
     def getFormattedScale(self, scaletype: Literal["height", "weight"] = "height", verbose = False):
         if scaletype == "height":
             reversescale = 1 / self.scale
@@ -272,6 +277,7 @@ class User:
             "liftstrength": None if self.liftstrength is None else str(self.liftstrength),
             "unitsystem":   self.unitsystem,
             "species":      self.species
+            "registration_steps_remaining": self.registration_steps_remaining
         }
 
     # Create a new object from a python dictionary imported using json
@@ -298,6 +304,7 @@ class User:
         userdata.liftstrength = jsondata.get("liftstrength")
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
+        userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
         return userdata
 
     def __lt__(self, other):
@@ -344,7 +351,7 @@ def save(userdata):
         json.dump(jsondata, f, indent = 4)
 
 
-def load(guildid, userid, *, member=None):
+def load(guildid, userid, *, member=None, reg_only=True):
     path = getUserPath(guildid, userid)
     try:
         with open(path, "r") as f:
@@ -356,6 +363,9 @@ def load(guildid, userid, *, member=None):
         if not user.gender:
             user.soft_gender = member.gender
         user.avatar_url = member.avatar_url
+
+    if reg_only and not user.registered:
+        raise errors.UserNotFoundException(guildid, userid)  # TODO: Raise a nice exception reminding the user to complete registration
 
     return user
 
