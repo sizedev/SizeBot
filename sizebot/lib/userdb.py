@@ -25,7 +25,8 @@ class User:
     # __slots__ declares to python what attributes to expect.
     __slots__ = ["guildid", "id", "nickname", "lastactive", "_picture_url", "description", "_gender", "display",
                  "_height", "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength",
-                 "_liftstrength", "_unitsystem", "species", "soft_gender", "avatar_url", "_walkperhour", "_runperhour"]
+                 "_liftstrength", "_unitsystem", "species", "soft_gender", "avatar_url", "_walkperhour", "_runperhour",
+                 "registration_steps_remaining"]
 
     def __init__(self):
         self.guildid = None
