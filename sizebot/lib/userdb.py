@@ -302,7 +302,7 @@ class User:
             "walkperhour":  None if self.walkperhour is None else str(self.walkperhour),
             "runperhour":   None if self.runperhour is None else str(self.runperhour),
             "unitsystem":   self.unitsystem,
-            "species":      self.species
+            "species":      self.species,
             "registration_steps_remaining": self.registration_steps_remaining
         }
 
