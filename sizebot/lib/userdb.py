@@ -351,7 +351,7 @@ def save(userdata):
         json.dump(jsondata, f, indent = 4)
 
 
-def load(guildid, userid, *, member=None, reg_only=True):
+def load(guildid, userid, *, member=None, allow_unreg=False):
     path = getUserPath(guildid, userid)
     try:
         with open(path, "r") as f:
@@ -364,7 +364,7 @@ def load(guildid, userid, *, member=None, reg_only=True):
             user.soft_gender = member.gender
         user.avatar_url = member.avatar_url
 
-    if reg_only and not user.registered:
+    if (not allow_unreg) and (not user.registered):
         raise errors.UserNotFoundException(guildid, userid)  # TODO: Raise a nice exception reminding the user to complete registration
 
     return user
