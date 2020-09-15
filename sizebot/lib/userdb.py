@@ -157,14 +157,15 @@ class User:
         if value is None:
             self._walkperhour = None
             return
-        rate = ParseableRate.parse(value)
+        if not isinstance(value, ParseableRate):
+            raise ValueError("Input was not a Rate.")
 
-        if rate.diff.changetype != "add":
+        if value.diff.changetype != "add":
             raise ValueError("Invalid rate for speed parsing.")
-        if rate.diff.amount < 0:
+        if value.diff.amount < 0:
             raise ValueError("Speed can not go backwards!")
 
-        dist = rate.diff.amount / rate.time * Decimal("3600")
+        dist = value.diff.amount / value.time * Decimal("3600")
 
         self._walkperhour = SV(max(0, SV(dist)))
 
@@ -177,14 +178,16 @@ class User:
         if value is None:
             self._runperhour = None
             return
-        rate = ParseableRate.parse(value)
 
-        if rate.diff.changetype != "add":
+        if not isinstance(value, ParseableRate):
+            raise ValueError("Input was not a Rate.")
+
+        if value.diff.changetype != "add":
             raise ValueError("Invalid rate for speed parsing.")
-        if rate.diff.amount < 0:
+        if value.diff.amount < 0:
             raise ValueError("Speed can not go backwards!")
 
-        dist = rate.diff.amount / rate.time * Decimal("3600")
+        dist = value.diff.amount / value.time * Decimal("3600")
 
         self._runperhour = SV(max(0, SV(dist)))
 
