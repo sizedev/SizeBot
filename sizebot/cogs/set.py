@@ -4,6 +4,8 @@ import typing
 from discord.ext import commands
 
 from sizebot.lib import decimal, errors, proportions, userdb, utils
+from sizebot.lib.diff import Diff
+from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
 
@@ -513,6 +515,102 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom lift/carry strength.")
         await ctx.send(f"<@{ctx.author.id}>'s lift/carry strength is now cleared.")
+
+    @commands.command(
+        usage = "<length>",
+        category = "set"
+    )
+    async def setwalk(self, ctx, *, newwalk: ParseableRate):
+        """Set your current walk speed."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.walkperhour = ParseableRate(f"{newwalk.diff.amount * userdata.viewscale}/{newwalk.time}",
+                                             Diff(f"{newwalk.diff.amount * userdata.viewscale}", "add", newwalk.diff.amount * userdata.viewscale),
+                                             newwalk.time)
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s walk is now {userdata.walkperhour:m}")
+        await ctx.send(f"<@{ctx.author.id}>'s walk is now {userdata.walkperhour:mu}.")
+
+    @commands.command(
+        usage = "<length>",
+        category = "setbase"
+    )
+    @commands.guild_only()
+    async def setbasewalk(self, ctx, *, newwalk: ParseableRate):
+        """Set a custom walk speed."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.walkperhour = newwalk
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s walk is now {userdata.walkperhour:m}")
+        await ctx.send(f"<@{ctx.author.id}>'s walk is now {userdata.walkperhour:mu}.")
+
+    @commands.command(
+        aliases = ["clearwalk", "unsetwalk"],
+        category = "set"
+    )
+    @commands.guild_only()
+    async def resetwalk(self, ctx):
+        """Remove custom walk speed."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.walkperhour = None
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom walk speed.")
+        await ctx.send(f"<@{ctx.author.id}>'s walk speed is now cleared.")
+
+    @commands.command(
+        usage = "<length>",
+        category = "set"
+    )
+    async def setrun(self, ctx, *, newrun: ParseableRate):
+        """Set your current run speed."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.runperhour = ParseableRate(f"{newrun.diff.amount * userdata.viewscale}/{newrun.time}",
+                                            Diff(f"{newrun.diff.amount * userdata.viewscale}", "add", newrun.diff.amount * userdata.viewscale),
+                                            newrun.time)
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s run is now {userdata.runperhour:m}")
+        await ctx.send(f"<@{ctx.author.id}>'s run is now {userdata.runperhour:mu}.")
+
+    @commands.command(
+        usage = "<length>",
+        category = "setbase"
+    )
+    @commands.guild_only()
+    async def setbaserun(self, ctx, *, newrun: ParseableRate):
+        """Set a custom run speed."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.runperhour = newrun
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s run is now {userdata.runperhour:m}")
+        await ctx.send(f"<@{ctx.author.id}>'s run is now {userdata.runperhour:mu}.")
+
+    @commands.command(
+        aliases = ["clearrun", "unsetrun"],
+        category = "set"
+    )
+    @commands.guild_only()
+    async def resetrun(self, ctx):
+        """Remove custom run speed."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        userdata.runperhour = None
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom run speed.")
+        await ctx.send(f"<@{ctx.author.id}>'s run speed is now cleared.")
 
     @commands.command(
         usage = "<male/female/none>",

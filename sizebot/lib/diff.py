@@ -53,7 +53,7 @@ power_prefixes = ["**", "^"]
 valid_prefixes = regexbuild([add_prefixes, subtract_prefixes, multiply_prefixes, divide_prefixes, percent_prefixes, power_prefixes], capture = True)
 valid_suffixes = regexbuild([multiply_suffixes, percent_suffixes], capture = True)
 
-rate_interfixes = ["/", "per", "every"]
+rate_interfixes = ["/", "per", "every", "p"]
 
 valid_rate_interfixes = regexbuild(rate_interfixes, capture = True)
 

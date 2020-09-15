@@ -1,6 +1,8 @@
 import json
 from copy import copy
 from functools import total_ordering
+from sizebot.lib.decimal import Decimal
+from sizebot.lib.diff import Rate as ParseableRate
 from typing import Literal
 
 import arrow
@@ -40,6 +42,8 @@ class User:
         self._hairlength = None
         self._taillength = None
         self._liftstrength = None
+        self._walkperhour = None
+        self._runperhour = None
         self._unitsystem = "m"
         self.species = None
         self.soft_gender = None
@@ -141,6 +145,26 @@ class User:
             self._liftstrength = None
             return
         self._liftstrength = WV(max(0, WV(value)))
+
+    @property
+    def walkperhour(self):
+        return self._walkperhour
+
+    @walkperhour.setter
+    def walkperhour(self, value):
+        if value is None:
+            self._walkperhour = None
+            return
+        rate = ParseableRate.parse(value)
+
+        if rate.diff.changetype != "add":
+            raise ValueError("Invalid rate for speed parsing.")
+        if rate.diff.amount < 0:
+            raise ValueError("Speed can not go backwards!")
+
+        dist = rate.diff.amount / rate.time * Decimal("3600")
+
+        self._walkperhour = SV(max(0, SV(dist)))
 
     @property
     def gender(self):
@@ -270,6 +294,8 @@ class User:
             "hairlength":   None if self.hairlength is None else str(self.hairlength),
             "taillength":   None if self.taillength is None else str(self.taillength),
             "liftstrength": None if self.liftstrength is None else str(self.liftstrength),
+            "walkperhour":  None if self.walkperhour is None else str(self.walkperhour),
+            "runperhour":   None if self.runperhour is None else str(self.runperhour),
             "unitsystem":   self.unitsystem,
             "species":      self.species
         }
@@ -296,6 +322,8 @@ class User:
         userdata.hairlength = jsondata.get("hairlength")
         userdata.taillength = jsondata.get("taillength")
         userdata.liftstrength = jsondata.get("liftstrength")
+        userdata.walkperhour = jsondata.get("walkperhour")
+        userdata.runperhour = jsondata.get("runperhour")
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         return userdata
