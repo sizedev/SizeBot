@@ -29,7 +29,7 @@ def steps(start_inc: SV, diff: Diff, goal: SV):
         # Calculate number of steps required to reach goal
         steps = math.ceil(goal / start_inc)
         # Calculate how far user got after those steps
-        #current_pos = start_inc * steps
+        # current_pos = start_inc * steps
         return (Decimal(steps), start_inc, 1)
     elif diff.changetype == "add":
         if diff.amount < 0:
@@ -40,7 +40,7 @@ def steps(start_inc: SV, diff: Diff, goal: SV):
         # Calculate number of steps required to reach goal
         steps = math.ceil((math.sqrt((diff.amount ** 2) - (4 * diff.amount * start_inc) + (8 * diff.amount * goal) + (4 * (start_inc ** 2))) + diff.amount - (2 * start_inc)) / (2 * diff.amount))
         # Calculate how far user got after those steps
-        #current_pos = (start_inc * steps) + (diff.amount * ((steps - 1) * steps) / 2)
+        # current_pos = (start_inc * steps) + (diff.amount * ((steps - 1) * steps) / 2)
         # Calculate length of last step
         current_inc = start_inc + (diff.amount * (steps - 1))
         return (Decimal(steps), current_inc, start_inc / current_inc)
@@ -54,7 +54,7 @@ def steps(start_inc: SV, diff: Diff, goal: SV):
         # Calculate number of steps required to reach goal
         steps = math.ceil(math.log(-(goal * (1 - diff.amount) / start_inc) + 1, diff.amount))
         # Calculate how far user got after those steps
-        #current_pos = start_inc * ((1 - diff.amount ** (steps - 1)) / (1 - diff.amount))
+        # current_pos = start_inc * ((1 - diff.amount ** (steps - 1)) / (1 - diff.amount))
         # Calculate length of last step
         current_inc = start_inc * (diff.amount ** (steps - 1))
         return (Decimal(steps), current_inc, start_inc / current_inc)
@@ -67,7 +67,7 @@ class ScaleWalkCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
-        category = "stats",
+        category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
     async def scalewalk(self, ctx, change: Diff, dist: SV, flag = None):
@@ -112,7 +112,7 @@ class ScaleWalkCog(commands.Cog):
             raise DigiContextException(f"Invalid flag {flag}.")
 
     @commands.command(
-        category = "stats",
+        category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
     async def scalerun(self, ctx, change: Diff, dist: SV, flag = None):
