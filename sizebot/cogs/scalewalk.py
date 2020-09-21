@@ -180,7 +180,7 @@ class ScaleWalkCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         userdata.currentscalestep = change
         userdb.save(userdata)
-        await ctx.send(f"{userdata.nickname}'s scale per step is now set to {change}.")
+        await ctx.send(f"{userdata.nickname}'s scale per step is now cleared.")
 
     @commands.command(
         category = "scalestep",
@@ -197,6 +197,8 @@ class ScaleWalkCog(commands.Cog):
             userdata.height *= (userdata.currentscalestep.amount ** steps)
         else:
             raise DigiContextException("This change type is not yet supported for scale-walking.")
+
+        # TODO: This needs output. How do you reverse calculate total distance traveled?
 
         userdb.save(userdata)
 

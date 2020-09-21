@@ -356,6 +356,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         safeBigNick = quote(self.big.nickname, safe=" ").replace(" ", "-")
         bigGender = gendermap[self.big.gender]
 
+        # TODO: Digi overrides.
         compUrl = macrovision.get_url([
             {
                 "name": safeSmallNick,
