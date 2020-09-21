@@ -15,7 +15,7 @@ from sizebot.lib.units import SV
 logger = logging.getLogger("sizebot")
 
 
-def steps(start_inc: SV, diff: Diff, goal: SV):
+def get_steps(start_inc: SV, diff: Diff, goal: SV):
     """Return the number of steps it would take to reach `goal` from 0,
     first by increasing by `start_inc`, then by `start_inc` * `mult`,
     repeating this process until `goal` is reached.
@@ -77,7 +77,7 @@ class ScaleWalkCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         stats = proportions.PersonStats(userdata)
 
-        stepcount, final_inc, final_ratio = steps(stats.walksteplength, change, dist)
+        stepcount, final_inc, final_ratio = get_steps(stats.walksteplength, change, dist)
 
         finalheight = SV(userdata.height / final_ratio)
 
@@ -122,7 +122,7 @@ class ScaleWalkCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         stats = proportions.PersonStats(userdata)
 
-        stepcount, final_inc, final_ratio = steps(stats.runsteplength, change, dist)
+        stepcount, final_inc, final_ratio = get_steps(stats.runsteplength, change, dist)
 
         finalheight = SV(userdb.height / final_ratio)
 
@@ -155,6 +155,50 @@ class ScaleWalkCog(commands.Cog):
             await ctx.send(embed = e)
         else:
             raise DigiContextException(f"Invalid flag {flag}.")
+
+    @commands.command(
+        category = "scalestep",
+        usage = "<change per step>"
+    )
+    async def setstepscale(self, ctx, change: Diff):
+        guildid = ctx.guild.id
+        userid = ctx.author.id
+
+        userdata = userdb.load(guildid, userid)
+        userdata.currentscalestep = change
+        userdb.save(userdata)
+        await ctx.send(f"{userdata.nickname}'s scale per step is now set to {change}.")
+
+    @commands.command(
+        category = "scalestep",
+        aliases = ["clearstepscale", "unsetstepscale"]
+    )
+    async def resetstepscale(self, ctx, change: Diff):
+        guildid = ctx.guild.id
+        userid = ctx.author.id
+
+        userdata = userdb.load(guildid, userid)
+        userdata.currentscalestep = change
+        userdb.save(userdata)
+        await ctx.send(f"{userdata.nickname}'s scale per step is now set to {change}.")
+
+    @commands.command(
+        category = "scalestep",
+    )
+    async def step(self, ctx, steps: int = 1):
+        guildid = ctx.guild.id
+        userid = ctx.author.id
+
+        userdata = userdb.load(guildid, userid)
+
+        if userdata.currentscalestep.changetype == "add":
+            userdata.height += (userdata.currentscalestep.amount * steps)
+        elif userdata.currentscalestep.changetype == "multiply":
+            userdata.height *= (userdata.currentscalestep.amount ** steps)
+        else:
+            raise DigiContextException("This change type is not yet supported for scale-walking.")
+
+        userdb.save(userdata)
 
 
 def setup(bot):

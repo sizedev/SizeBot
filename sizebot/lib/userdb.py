@@ -2,7 +2,7 @@ import json
 from copy import copy
 from functools import total_ordering
 from sizebot.lib.decimal import Decimal
-from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.diff import Diff, Rate as ParseableRate
 from typing import Literal
 
 import arrow
@@ -26,7 +26,7 @@ class User:
     __slots__ = ["guildid", "id", "nickname", "lastactive", "_picture_url", "description", "_gender", "display",
                  "_height", "_baseheight", "_baseweight", "_footlength", "_hairlength", "_taillength",
                  "_liftstrength", "_unitsystem", "species", "soft_gender", "avatar_url", "_walkperhour", "_runperhour",
-                 "registration_steps_remaining"]
+                 "_currentscalestep", "registration_steps_remaining"]
 
     def __init__(self):
         self.guildid = None
@@ -45,6 +45,7 @@ class User:
         self._liftstrength = None
         self._walkperhour = None
         self._runperhour = None
+        self._currentscalestep = None
         self._unitsystem = "m"
         self.species = None
         self.soft_gender = None
@@ -192,6 +193,21 @@ class User:
         self._runperhour = SV(max(0, SV(dist)))
 
     @property
+    def currentscalestep(self):
+        return self._currentscalestep
+
+    @currentscalestep.setter
+    def currentscalestep(self, value):
+        if value is None:
+            self._currentscalestep = None
+            return
+
+        if not isinstance(value, Diff):
+            raise ValueError("Input was not a Diff.")
+
+        self._currentscalestep = value
+
+    @property
     def gender(self):
         return self._gender
 
@@ -308,25 +324,26 @@ class User:
     # Return an python dictionary for json exporting
     def toJSON(self):
         return {
-            "guildid":      self.guildid,
-            "id":           self.id,
-            "nickname":     self.nickname,
-            "lastactive":   None if self.lastactive is None else self.lastactive.isoformat(),
-            "picture_url":  self.picture_url,
-            "description":  self.description,
-            "gender":       self.gender,
-            "display":      self.display,
-            "height":       str(self.height),
-            "baseheight":   str(self.baseheight),
-            "baseweight":   str(self.baseweight),
-            "footlength":   None if self.footlength is None else str(self.footlength),
-            "hairlength":   None if self.hairlength is None else str(self.hairlength),
-            "taillength":   None if self.taillength is None else str(self.taillength),
-            "liftstrength": None if self.liftstrength is None else str(self.liftstrength),
-            "walkperhour":  None if self.walkperhour is None else str(self.walkperhour),
-            "runperhour":   None if self.runperhour is None else str(self.runperhour),
-            "unitsystem":   self.unitsystem,
-            "species":      self.species,
+            "guildid":          self.guildid,
+            "id":               self.id,
+            "nickname":         self.nickname,
+            "lastactive":       None if self.lastactive is None else self.lastactive.isoformat(),
+            "picture_url":      self.picture_url,
+            "description":      self.description,
+            "gender":           self.gender,
+            "display":          self.display,
+            "height":           str(self.height),
+            "baseheight":       str(self.baseheight),
+            "baseweight":       str(self.baseweight),
+            "footlength":       None if self.footlength is None else str(self.footlength),
+            "hairlength":       None if self.hairlength is None else str(self.hairlength),
+            "taillength":       None if self.taillength is None else str(self.taillength),
+            "liftstrength":     None if self.liftstrength is None else str(self.liftstrength),
+            "walkperhour":      None if self.walkperhour is None else str(self.walkperhour),
+            "runperhour":       None if self.runperhour is None else str(self.runperhour),
+            "currentscalestep": None if self.currentscalestep is None else str(self.currentscalestep),
+            "unitsystem":       self.unitsystem,
+            "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining
         }
 
@@ -354,6 +371,7 @@ class User:
         userdata.liftstrength = jsondata.get("liftstrength")
         userdata.walkperhour = jsondata.get("walkperhour")
         userdata.runperhour = jsondata.get("runperhour")
+        userdata.currentscalestep = jsondata.get("currentscalestep")
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
