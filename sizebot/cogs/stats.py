@@ -20,6 +20,8 @@ statmap = {
     "feet":             "foot",
     "shoe":             "foot",
     "shoes":            "foot",
+    "paw":              "foot",
+    "paws":             "foot",
     "toe":              "toe",
     "shoeprint":        "shoeprint",
     "footprint":        "shoeprint",
@@ -188,7 +190,7 @@ class StatsCog(commands.Cog):
 
         Get a single stat about yourself, a user, or a raw height, as if they were a different height.
 
-        Available stats are: height, weight, foot/feet/shoe/shoes, toe, shoeprint/footprint, \
+        Available stats are: height, weight, foot/feet/shoe/shoes/paw/paws, toe, shoeprint/footprint, \
         finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair, tail, \
         speed/walk/run/step/stride, base/baseheight/baseweight, compare/look, scale/multiplier/mult, \
         horizon/horizondistance, terminalvelocity/velocity/fall, strength/lift/carry/liftstrength/carrystrength.

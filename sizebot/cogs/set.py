@@ -375,6 +375,20 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s foot length is now default.")
 
     @commands.command(
+        category = "set"
+    )
+    @commands.guild_only()
+    async def togglepaw(self, ctx):
+        """Switch between the word "foot" and "paw" for your stats."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        userdata.pawtoggle = not userdata.pawtoggle
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) toggled their foot word to {userdata.footname}.")
+        await ctx.send(f"The end of <@{ctx.author.id}>'s legs are now called a {userdata.footname.lower()}")
+
+    @commands.command(
         usage = "<hair>",
         category = "set"
     )

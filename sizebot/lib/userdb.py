@@ -40,6 +40,7 @@ class User:
         self._baseheight = defaultheight
         self._baseweight = defaultweight
         self._footlength = None
+        self._pawtoggle = False
         self._hairlength = None
         self._taillength = None
         self._liftstrength = None
@@ -112,6 +113,18 @@ class User:
             self._footlength = None
             return
         self._footlength = SV(max(0, SV(value)))
+
+    @property
+    def pawtoggle(self):
+        return self._pawtoggle
+
+    @pawtoggle.setter
+    def pawtoggle(self, value):
+        self._pawtoggle = bool(value)
+
+    @property
+    def footname(self):
+        return "Paw" if self.pawtoggle else "Foot"
 
     @property
     def hairlength(self):
@@ -336,6 +349,7 @@ class User:
             "baseheight":       str(self.baseheight),
             "baseweight":       str(self.baseweight),
             "footlength":       None if self.footlength is None else str(self.footlength),
+            "pawtoggle":        self.pawtoggle,
             "hairlength":       None if self.hairlength is None else str(self.hairlength),
             "taillength":       None if self.taillength is None else str(self.taillength),
             "liftstrength":     None if self.liftstrength is None else str(self.liftstrength),
@@ -366,6 +380,7 @@ class User:
         userdata.baseheight = jsondata["baseheight"]
         userdata.baseweight = jsondata["baseweight"]
         userdata.footlength = jsondata.get("footlength")
+        userdata.pawtoggle = jsondata["pawtoggle"]
         userdata.hairlength = jsondata.get("hairlength")
         userdata.taillength = jsondata.get("taillength")
         userdata.liftstrength = jsondata.get("liftstrength")

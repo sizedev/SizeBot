@@ -202,8 +202,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"To {self.small.tag}, {self.big.tag} looks:\n"
             f"\tHeight: {self.bigToSmall.height:,.3mu}\n"
             f"\tWeight: {self.bigToSmall.weight:,.3mu}\n"
-            f"\tFoot Length: {self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
-            f"\tFoot Width: {self.bigToSmall.footwidth:,.3mu}\n"
+            f"\t{self.bigToSmall.footname} Length: {self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
+            f"\t{self.bigToSmall.footname} Width: {self.bigToSmall.footwidth:,.3mu}\n"
             f"\tToe Height: {self.bigToSmall.toeheight:,.3mu}\n"
             f"\tShoeprint Depth: {self.bigToSmall.shoeprintdepth:,.3mu}\n"
             f"\tPointer Finger Length: {self.bigToSmall.pointerlength:,.3mu}\n"
@@ -229,8 +229,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"To {self.big.tag}, {self.small.tag} looks:\n"
             f"\tHeight: {self.smallToBig.height:,.3mu}\n"
             f"\tWeight: {self.smallToBig.weight:,.3mu}\n"
-            f"\tFoot Length: {self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})\n"
-            f"\tFoot Width: {self.smallToBig.footwidth:,.3mu}\n"
+            f"\t{self.smallToBig.footname} Length: {self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})\n"
+            f"\t{self.smallToBig.footname} Width: {self.smallToBig.footwidth:,.3mu}\n"
             f"\tToe Height: {self.smallToBig.toeheight:,.3mu}\n"
             f"\tShoeprint Depth: {self.smallToBig.shoeprintdepth:,.3mu}\n"
             f"\tPointer Finger Length: {self.smallToBig.pointerlength:,.3mu}\n"
@@ -283,10 +283,10 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name="Weight", value=(
             f"{emojis.comparebig}{self.bigToSmall.weight:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.weight:,.3mu}"), inline=True)
-        embed.add_field(name="Foot Length", value=(
+        embed.add_field(name=f"{self.bigToSmall.footname} Length", value=(
             f"{emojis.comparebig}{self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
             f"{emojis.comparesmall}{self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})"), inline=True)
-        embed.add_field(name="Foot Width", value=(
+        embed.add_field(name=f"{self.bigToSmall.footname} Width", value=(
             f"{emojis.comparebig}{self.bigToSmall.footwidth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.footwidth:,.3mu}"), inline=True)
         embed.add_field(name="Toe Height", value=(
@@ -471,7 +471,7 @@ class PersonStats:
         returndict = {
             "height": f"'s current height is **{self.height:,.3mu}**, or {self.formattedscale} scale.",
             "weight": f"'s current weight is **{self.weight:,.3mu}**.",
-            "foot": f"'s foot is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
+            "foot": f"'s {self.footname.lower()} is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
             "toe": f"'s toe is **{self.toeheight:,.3mu}** thick.",
             "shoeprint": f"'s shoe print is **{self.shoeprintdepth:,.3mu}** deep.",
             "finger": f"'s pointer finger is **{self.pointerlength:,.3mu}** long.",
@@ -509,8 +509,8 @@ class PersonStats:
             f"*Current Height:*  {self.height:,.3mu} *{self.formattedscale} scale*\n"
             f"*Current Weight:*  {self.weight:,.3mu} *{self.formattedweightscale} scale*\n"
             f"\n"
-            f"Foot Length: {self.footlength:,.3mu} ({self.shoesize})\n"
-            f"Foot Width: {self.footwidth:,.3mu}\n"
+            f"{self.footname} Length: {self.footlength:,.3mu} ({self.shoesize})\n"
+            f"{self.footname} Width: {self.footwidth:,.3mu}\n"
             f"Toe Height: {self.toeheight:,.3mu}\n"
             f"Shoeprint Depth: {self.shoeprintdepth:,.3mu}\n"
             f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
@@ -544,8 +544,8 @@ class PersonStats:
         embed.set_author(name=f"SizeBot {__version__}")
         embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n*{self.formattedscale} scale*", inline=True)
         embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n*{self.formattedweightscale} scale*", inline=True)
-        embed.add_field(name="Foot Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
-        embed.add_field(name="Foot Width", value=format(self.footwidth, ",.3mu"), inline=True)
+        embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
+        embed.add_field(name=f"{self.footname} Width", value=format(self.footwidth, ",.3mu"), inline=True)
         embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
         embed.add_field(name="Shoeprint Depth", value=format(self.shoeprintdepth, ",.3mu"), inline=True)
         embed.add_field(name="Pointer Finger Length", value=format(self.pointerlength, ",.3mu"), inline=True)
