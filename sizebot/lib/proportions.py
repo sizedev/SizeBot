@@ -400,6 +400,7 @@ class PersonStats:
         self.baseweight = userdata.baseweight
         self.weight = userdata.weight
         self.formattedweightscale = userdata.getFormattedScale(scaletype = "weight", verbose = True)
+        self.footname = userdata.footname
 
         self.averageheightmult = self.height / defaultheight
         self.averageweightmult = self.weight / defaultweight
