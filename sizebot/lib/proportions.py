@@ -188,6 +188,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             smallToBigUserdata.height = smallUserdata.height * self.big.viewscale
             self.smallToBig = PersonStats(smallToBigUserdata)
 
+        self.self.footlabel = "Foot/Paw" if self.big.pawtoggle or self.small.pawtoggle else "Foot"
+
         viewangle = calcViewAngle(self.small.height, self.big.height)
         self.lookangle = abs(viewangle)
         self.lookdirection = "up" if viewangle >= 0 else "down"
@@ -283,10 +285,10 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name="Weight", value=(
             f"{emojis.comparebig}{self.bigToSmall.weight:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.weight:,.3mu}"), inline=True)
-        embed.add_field(name=f"{self.bigToSmall.footname} Length", value=(
+        embed.add_field(name=f"{self.footlabel} Length", value=(
             f"{emojis.comparebig}{self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
             f"{emojis.comparesmall}{self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})"), inline=True)
-        embed.add_field(name=f"{self.bigToSmall.footname} Width", value=(
+        embed.add_field(name=f"{self.footlabel} Width", value=(
             f"{emojis.comparebig}{self.bigToSmall.footwidth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.footwidth:,.3mu}"), inline=True)
         embed.add_field(name="Toe Height", value=(
