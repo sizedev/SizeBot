@@ -405,6 +405,8 @@ class PersonStats:
         self.formattedweightscale = userdata.getFormattedScale(scaletype = "weight", verbose = True)
         self.footname = userdata.footname
         self.hairname = userdata.hairname
+        self.pawtoggle = userdata.pawtoggle
+        self.furtoggle = userdata.furtoggle
 
         self.averageheightmult = self.height / defaultheight
         self.averageweightmult = self.weight / defaultweight
