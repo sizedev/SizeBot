@@ -38,6 +38,7 @@ def get_steps(start_inc: SV, diff: Diff, goal: SV):
             if max_dist < goal:
                 return (Decimal("inf"), SV(0), Decimal("inf"))
         # Calculate number of steps required to reach goal
+        # https://www.wolframalpha.com/input/?i=g+%3D+%28s+*+t%29+%2B+%28a+*+%28%28t+-+1%29+*+t%29+%2F+2%29+solve+for+t
         steps = math.ceil((math.sqrt((diff.amount ** 2) - (4 * diff.amount * start_inc) + (8 * diff.amount * goal) + (4 * (start_inc ** 2))) + diff.amount - (2 * start_inc)) / (2 * diff.amount))
         # Calculate how far user got after those steps
         # current_pos = (start_inc * steps) + (diff.amount * ((steps - 1) * steps) / 2)
