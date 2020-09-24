@@ -495,7 +495,7 @@ class PersonStats:
             "liftstrength": f"can lift and carry **{self.liftstrength}."
         }
         if self.hairlength:
-            returndict["hair"] = f"'s {self.hairname} is **{self.hairlength:,.3mu}** long."
+            returndict["hair"] = f"'s {self.hairname.lower()} is **{self.hairlength:,.3mu}** long."
         if self.taillength:
             returndict["tail"] = f"'s tail is **{self.taillength:,.3mu}** long."
 
