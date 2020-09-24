@@ -24,9 +24,9 @@ defaultliftstrength = WV("18143.7")    # grams
 class User:
     # __slots__ declares to python what attributes to expect.
     __slots__ = ["guildid", "id", "nickname", "lastactive", "_picture_url", "description", "_gender", "display",
-                 "_height", "_baseheight", "_baseweight", "_footlength", "_pawtoggle", "_hairlength", "_taillength",
-                 "_liftstrength", "_unitsystem", "species", "soft_gender", "avatar_url", "_walkperhour", "_runperhour",
-                 "_currentscalestep", "registration_steps_remaining"]
+                 "_height", "_baseheight", "_baseweight", "_footlength", "_pawtoggle", "_furtoggle",
+                 "_hairlength", "_taillength", "_liftstrength", "_unitsystem", "species", "soft_gender",
+                 "avatar_url", "_walkperhour", "_runperhour", "_currentscalestep", "registration_steps_remaining"]
 
     def __init__(self):
         self.guildid = None
@@ -41,6 +41,7 @@ class User:
         self._baseweight = defaultweight
         self._footlength = None
         self._pawtoggle = False
+        self._furtoggle = False
         self._hairlength = None
         self._taillength = None
         self._liftstrength = None
@@ -123,8 +124,20 @@ class User:
         self._pawtoggle = bool(value)
 
     @property
+    def furtoggle(self):
+        return self._furtoggle
+
+    @furtoggle.setter
+    def furtoggle(self, value):
+        self._furtoggle = bool(value)
+
+    @property
     def footname(self):
         return "Paw" if self.pawtoggle else "Foot"
+
+    @property
+    def hairname(self):
+        return "Fur" if self.furtoggle else "Hair"
 
     @property
     def hairlength(self):
@@ -350,6 +363,7 @@ class User:
             "baseweight":       str(self.baseweight),
             "footlength":       None if self.footlength is None else str(self.footlength),
             "pawtoggle":        self.pawtoggle,
+            "furtoggle":        self.furtoggle,
             "hairlength":       None if self.hairlength is None else str(self.hairlength),
             "taillength":       None if self.taillength is None else str(self.taillength),
             "liftstrength":     None if self.liftstrength is None else str(self.liftstrength),
@@ -381,6 +395,7 @@ class User:
         userdata.baseweight = jsondata["baseweight"]
         userdata.footlength = jsondata.get("footlength")
         userdata.pawtoggle = jsondata.get("pawtoggle")
+        userdata.furtoggle = jsondata.get("furtoggle")
         userdata.hairlength = jsondata.get("hairlength")
         userdata.taillength = jsondata.get("taillength")
         userdata.liftstrength = jsondata.get("liftstrength")

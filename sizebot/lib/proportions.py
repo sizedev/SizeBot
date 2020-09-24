@@ -188,7 +188,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             smallToBigUserdata.height = smallUserdata.height * self.big.viewscale
             self.smallToBig = PersonStats(smallToBigUserdata)
 
-        self.self.footlabel = "Foot/Paw" if self.big.pawtoggle or self.small.pawtoggle else "Foot"
+        self.footlabel = "Foot/Paw" if self.big.pawtoggle or self.small.pawtoggle else "Foot"
+        self.hairlabel = "Hair/Fur" if self.big.furtoggle or self.small.furtoggle else "Hair"
 
         viewangle = calcViewAngle(self.small.height, self.big.height)
         self.lookangle = abs(viewangle)
@@ -214,11 +215,11 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:,.3mu}\n"
             f"\tClothing Thread Thickness: {self.bigToSmall.threadthickness:,.3mu}\n")
         if self.bigToSmall.hairlength:
-            returnstr += f"\tHair Length: {self.bigToSmall.hairlength:,.3mu}\n"
+            returnstr += f"\t{self.bigToSmall.hairname} Length: {self.bigToSmall.hairlength:,.3mu}\n"
         if self.bigToSmall.taillength:
             returnstr += f"\tTail Length: {self.bigToSmall.taillength:,.3mu}\n"
         returnstr += (
-            f"\tHair Width: {self.bigToSmall.hairwidth:,.3mu}\n"
+            f"\t{self.bigToSmall.hairname} Width: {self.bigToSmall.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.bigToSmall.eyewidth:,.3mu}\n"
             f"\tWalk Speed: {self.bigToSmall.walkperhour:,.3mu}\n"
             f"\tRun Speed: {self.bigToSmall.runperhour:,.3mu}\n"
@@ -241,11 +242,11 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"\tFingerprint Depth: {self.smallToBig.fingerprintdepth:,.3mu}\n"
             f"\tClothing Thread Thickness: {self.smallToBig.threadthickness:,.3mu}\n")
         if self.smallToBig.hairlength:
-            returnstr += f"\tHair Length: {self.smallToBig.hairlength:,.3mu}\n"
+            returnstr += f"\t{self.smallToBig.hairname} Length: {self.smallToBig.hairlength:,.3mu}\n"
         if self.smallToBig.taillength:
-            returnstr += f"\tHair Length: {self.smallToBig.taillength:,.3mu}\n"
+            returnstr += f"\tTail Length: {self.smallToBig.taillength:,.3mu}\n"
         returnstr += (
-            f"\tHair Width: {self.smallToBig.hairwidth:,.3mu}\n"
+            f"\t{self.smallToBig.hairname} Width: {self.smallToBig.hairwidth:,.3mu}\n"
             f"\tEye Width: {self.smallToBig.eyewidth:,.3mu}\n"
             f"\tWalk Speed: {self.smallToBig.walkperhour:,.1M} per hour ({self.smallToBig.walkperhour:,.1U} per hour)\n"
             f"\tRun Speed: {self.smallToBig.runperhour:,.1M} per hour ({self.smallToBig.runperhour:,.1U} per hour)\n"
@@ -316,7 +317,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             if self.smallToBig.hairlength:
                 hairfield += f"{emojis.comparebig}{self.smallToBig.hairlength:,.3mu}\n"
             hairfield = hairfield.strip()
-            embed.add_field(name="Hair Length", value=hairfield, inline=True)
+            embed.add_field(name=f"{self.hairlabel} Length", value=hairfield, inline=True)
         if self.bigToSmall.taillength or self.smallToBig.hairlength:
             tailfield = ""
             if self.bigToSmall.taillength:
@@ -325,7 +326,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
                 tailfield += f"{emojis.comparebig}{self.smallToBig.taillength:,.3mu}\n"
             tailfield = tailfield.strip()
             embed.add_field(name="Tail Length", value=tailfield, inline=True)
-        embed.add_field(name="Hair Width", value=(
+        embed.add_field(name=f"{self.hairlabel} Width", value=(
             f"{emojis.comparebig}{self.bigToSmall.hairwidth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.hairwidth:,.3mu}"), inline=True)
         embed.add_field(name="Eye Width", value=(
@@ -403,6 +404,7 @@ class PersonStats:
         self.weight = userdata.weight
         self.formattedweightscale = userdata.getFormattedScale(scaletype = "weight", verbose = True)
         self.footname = userdata.footname
+        self.hairname = userdata.hairname
 
         self.averageheightmult = self.height / defaultheight
         self.averageweightmult = self.weight / defaultweight
@@ -491,7 +493,7 @@ class PersonStats:
             "liftstrength": f"can lift and carry **{self.liftstrength}."
         }
         if self.hairlength:
-            returndict["hair"] = f"'s hair is **{self.hairlength:,.3mu}** long."
+            returndict["hair"] = f"'s {self.hairname} is **{self.hairlength:,.3mu}** long."
         if self.taillength:
             returndict["tail"] = f"'s tail is **{self.taillength:,.3mu}** long."
 
@@ -522,11 +524,11 @@ class PersonStats:
             f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
             f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n")
         if self.hairlength:
-            returnstr += f"Hair Length: {self.hairlength:,.3mu}\n"
+            returnstr += f"{self.hairname} Length: {self.hairlength:,.3mu}\n"
         if self.taillength:
             returnstr += f"Tail Length: {self.taillength:,.3mu}\n"
         returnstr += (
-            f"Hair Width: {self.hairwidth:,.3mu}\n"
+            f"{self.hairname} Width: {self.hairwidth:,.3mu}\n"
             f"Eye Width: {self.eyewidth:,.3mu}\n"
             f"Walk Speed: {self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)\n"
             f"Run Speed: {self.runperhour:,.1M} per hour ({self.runperhour:,.1U} per hour)\n"
@@ -557,10 +559,10 @@ class PersonStats:
         embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
         embed.add_field(name="Clothing Thread Thickness", value=format(self.threadthickness, ",.3mu"), inline=True)
         if self.hairlength:
-            embed.add_field(name="Hair Length", value=format(self.hairlength, ",.3mu"), inline=True)
+            embed.add_field(name=f"{self.hairname} Length", value=format(self.hairlength, ",.3mu"), inline=True)
         if self.taillength:
             embed.add_field(name="Tail Length", value=format(self.taillength, ",.3mu"), inline=True)
-        embed.add_field(name="Hair Width", value=format(self.hairwidth, ",.3mu"), inline=True)
+        embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)\n[{self.walksteplength:,.1mu} strides]", inline=True)
         embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)\n[{self.runsteplength:,.1mu} strides]", inline=True)

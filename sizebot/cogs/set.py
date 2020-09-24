@@ -389,6 +389,20 @@ class SetCog(commands.Cog):
         await ctx.send(f"The end of <@{ctx.author.id}>'s legs are now called a {userdata.footname.lower()}")
 
     @commands.command(
+        category = "set"
+    )
+    @commands.guild_only()
+    async def togglefur(self, ctx):
+        """Switch between the word "hair" and "fur" for your stats."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        userdata.furtoggle = not userdata.furtoggle
+        userdb.save(userdata)
+
+        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) toggled their hair word to {userdata.hairname}.")
+        await ctx.send(f"The hair of <@{ctx.author.id}> is now called {userdata.hairname.lower()}")
+
+    @commands.command(
         usage = "<hair>",
         category = "set"
     )
