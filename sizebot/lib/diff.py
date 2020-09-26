@@ -34,8 +34,9 @@
 # RATE for 10meters
 # RATE -> 10meters
 
+import json
 import re
-from sizebot.lib.errors import InvalidSizeValue
+from sizebot.lib.errors import InvalidSizeValue, ThisShouldNeverHappenException
 from sizebot.lib.utils import regexbuild, tryOrNone
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, TV
@@ -114,7 +115,25 @@ class Diff:
             ct = "add"
             v = SV.parse(s)
 
-        return Diff(s, ct, v)
+        return cls(s, ct, v)
+
+    def toJSON(self):
+        return {
+            "changetype": self.changetype,
+            "amount":     str(self.amount),
+            "original":   self.original
+        }
+
+    @classmethod
+    def fromJSON(cls, jsondata):
+        changetype = jsondata["changetype"]
+        if changetype == "add":
+            amount = SV(jsondata["amount"])
+        else:
+            amount = Decimal(jsondata["amount"])
+        original = jsondata["original"]
+
+        return cls(original, changetype, amount)
 
     @classmethod
     async def convert(cls, ctx, argument):
@@ -140,6 +159,20 @@ class Rate:
         t = TV.parse(m.group(3))
 
         return Rate(s, d, t)
+
+    def toJSON(self):
+        return {
+            "diff":     self.diff.toJSON(),
+            "time":     str(self.time),
+            "original": self.original
+        }
+
+    @classmethod
+    def fromJSON(cls, jsondata):
+        diff = Diff.fromJSON(jsondata["diff"])
+        time = TV(jsondata["time"])
+        original = jsondata["original"]
+        return cls(original, diff, time)
 
     @classmethod
     async def convert(cls, ctx, argument):
@@ -170,6 +203,29 @@ class LimitedRate:
             raise Exception
 
         return LimitedRate(s, r, st)
+
+    def toJSON(self):
+        stoptype = "SV" if isinstance(self.stop, SV) else "TV"
+        return {
+            "rate": self.rate,
+            "stop": self.stop,
+            "original": self.original,
+            "stoptype": stoptype
+        }
+
+    @classmethod
+    def fromJSON(cls, jsondata):
+        rate = Rate.fromJSON(jsondata["rate"])
+        original = jsondata["original"]
+        stoptype = jsondata["stoptype"]
+        if stoptype == "SV":
+            stop = SV(jsondata["stop"])
+        elif stoptype == "TV":
+            stop = TV(jsondata["stop"])
+        else:
+            raise ThisShouldNeverHappenException
+
+        return cls(original, rate, stop)
 
     @classmethod
     async def convert(cls, ctx, argument):

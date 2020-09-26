@@ -369,7 +369,7 @@ class User:
             "liftstrength":     None if self.liftstrength is None else str(self.liftstrength),
             "walkperhour":      None if self.walkperhour is None else str(self.walkperhour),
             "runperhour":       None if self.runperhour is None else str(self.runperhour),
-            "currentscalestep": None if self.currentscalestep is None else str(self.currentscalestep),
+            "currentscalestep": None if self.currentscalestep is None else self.currentscalestep.toJSON(),
             "unitsystem":       self.unitsystem,
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining
@@ -401,7 +401,10 @@ class User:
         userdata.liftstrength = jsondata.get("liftstrength")
         userdata.walkperhour = jsondata.get("walkperhour")
         userdata.runperhour = jsondata.get("runperhour")
-        userdata.currentscalestep = jsondata.get("currentscalestep")
+        currentscalestep = jsondata.get("currentscalestep")
+        if currentscalestep is not None:
+            currentscalestep = Diff.fromJSON(currentscalestep)
+        userdata.currentscalestep = currentscalestep
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
