@@ -56,6 +56,14 @@ class UserNotFoundException(DigiContextException):
             "To register, use the `&register` command.")
 
 
+class GuildNotFoundException(DigiException):
+    def __init__(self, guildid):
+        self.guildid = guildid
+
+    async def formatMessage(self):
+        return f"Guild {self.guildid} not found."
+
+
 class ValueIsZeroException(DigiException):
     def formatMessage(self):
         return "Value zero received when unexpected."
