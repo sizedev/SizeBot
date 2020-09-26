@@ -47,7 +47,8 @@ setuptools.setup(
     ],
     entry_points={
         "console_scripts": [
-            "sizebot=sizebot.main:main"
+            "sizebot=sizebot.main:main",
+            "sizebotapi=sizebotapi.main:main"
         ]
     }
 )
