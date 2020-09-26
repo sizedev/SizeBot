@@ -47,6 +47,13 @@ from sizebot.lib.objs import objects
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
 ```
 
+## Errors
+If you aren't passing in anything to an Exception, don't put () at the end of it.
+
+```python
+raise ThisShouldNeverHappenException
+raise GuildNotFoundException(1234567890)
+```
 -------
 
 <sup>1</sup> Much to DigiDuncan's dismay.
