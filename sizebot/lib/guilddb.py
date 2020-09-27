@@ -61,7 +61,7 @@ def getGuildPath(guildid):
 
 
 def getGuildDataPath(guildid):
-    return getGuildPath(guildid) / f"guild.json"
+    return getGuildPath(guildid) / "guild.json"
 
 
 def save(guilddata):
