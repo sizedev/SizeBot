@@ -6,7 +6,6 @@ from sizebot.lib import errors
 from sizebot.lib.units import SV
 
 
-@total_ordering
 class Guild:
     # __slots__ declares to python what attributes to expect.
     __slots__ = ["id", "small_edge", "large_edge", "_high_limit", "_low_limit"]
