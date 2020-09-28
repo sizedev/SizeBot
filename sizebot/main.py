@@ -10,8 +10,8 @@ from digiformatter import styles, logger as digilogger
 from sizebot import __version__
 from sizebot import conf
 from sizebot import discordplus
-from sizebot.cogs import edge
-from sizebot.lib import language, objs, proportions, status, units, limits
+from sizebot.cogs import edge, limits
+from sizebot.lib import language, objs, proportions, status, units
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.plugins import active, monika
 

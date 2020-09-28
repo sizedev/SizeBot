@@ -9,7 +9,6 @@ from discord.ext import commands
 
 from sizebot.lib import guilddb, proportions, userdb
 from sizebot.lib.checks import is_mod
-from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")

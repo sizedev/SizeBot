@@ -1,5 +1,4 @@
 import json
-from functools import total_ordering
 
 from sizebot import conf
 from sizebot.lib import errors
