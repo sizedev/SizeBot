@@ -1,6 +1,6 @@
-# The "edge" cog allows bot admins (and later guild owners [SB4]) to set a largest/smallest user (for their server [SB4]).
-# It does this by seeing if they are the largest or smallest user (in the guild [SB4]), and if they aren't setting their height
-# to either 1.1x or 0.9x of the largest or smallest user (in the guild [SB4]), respectively.
+# The "edge" cog allows and  guild owners to set a largest/smallest user for their server.
+# It does this by seeing if they are the largest or smallest user in the guild, and if they aren't setting their height
+# to either 1.1x or 0.9x of the largest or smallest user in the guild, respectively.
 
 import logging
 
