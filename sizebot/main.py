@@ -11,7 +11,7 @@ from sizebot import __version__
 from sizebot import conf
 from sizebot import discordplus
 from sizebot.cogs import edge
-from sizebot.lib import language, objs, proportions, status, units
+from sizebot.lib import language, objs, proportions, status, units, limits
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.plugins import active, monika
 
@@ -38,6 +38,7 @@ initial_cogs = [
     "help",
     "holiday",
     "keypad",
+    "limits",
     "naptime",
     "profile",
     # "rainbow",
@@ -137,6 +138,7 @@ def main():
     async def on_message(message):
         await bot.process_commands(message)
         await edge.on_message(message)
+        await limits.on_message(message)
         await proportions.nickUpdate(message.author)
         # await meicros.on_message(message)
         await monika.on_message(message)
