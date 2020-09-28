@@ -96,7 +96,7 @@ class EdgeCog(commands.Cog):
         logger.info(f"Cleared low size cap in guild {ctx.guild.id}.")
 
     @commands.command(
-        aliases = ["resethighlimit", "resethighcap", "clearhighcap", "resetfloor", "clearfloor"],
+        aliases = ["resethighlimit", "resethighcap", "clearhighcap", "resetceiling", "clearceiling"],
         usage = "[size]",
         hidden = True,
         category = "mod"
