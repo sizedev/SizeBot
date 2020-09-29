@@ -86,6 +86,15 @@ def load(guildid):
     return guild
 
 
+def loadOrCreate(guildid):
+    try:
+        guilddata = load(guildid)
+    except errors.GuildNotFoundException:
+        guilddata = Guild()
+        guilddata.id = guildid
+    return guilddata
+
+
 def delete(guildid):
     path = getGuildPath(guildid)
     path.unlink(missing_ok = True)

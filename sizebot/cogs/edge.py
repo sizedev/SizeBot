@@ -3,6 +3,7 @@
 # to either 1.1x or 0.9x of the largest or smallest user in the guild, respectively.
 
 import logging
+from sizebot.lib.errors import GuildNotFoundException
 
 import discord
 from discord.ext import commands
@@ -48,10 +49,14 @@ async def on_message(m):
     if not isinstance(m.author, discord.Member):
         return
 
-    guilddata = guilddb.load(m.guild.id)
+    try:
+        guilddata = guilddb.load(m.guild.id)
+    except GuildNotFoundException:
+        return  # Guild does not have edges set
+
     sm = guilddata.small_edge
     lg = guilddata.large_edge
-    if m.author.id != sm and m.author.id != lg:
+    if not (m.author.id == sm or m.author.id == lg):
         return  # The user is not set to be the smallest or the largest user.
 
     userdata = userdb.load(m.guild.id, m.author.id)
@@ -97,7 +102,7 @@ class EdgeCog(commands.Cog):
     )
     async def edges(self, ctx):
         """See who is set to be the smallest and largest users."""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         await ctx.send(f"**SERVER-SET SMALLEST AND LARGEST USERS:**\nSmallest: {'*Unset*' if guilddata.small_edge is None else guilddata.small_edge}\nLargest: {'*Unset*' if guilddata.large_edge is None else guilddata.large_edge}")
 
     @commands.command(
@@ -108,7 +113,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def setsmallest(self, ctx, *, member: discord.Member):
         """Set the smallest user."""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         guilddata.small_edge = member.id
         guilddb.save(guilddata)
         await ctx.send(f"<@{member.id}> is now the smallest user. They will be automatically adjusted to be the smallest user until they are removed from this role.")
@@ -123,7 +128,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def setlargest(self, ctx, *, member: discord.Member):
         """Set the largest user."""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         guilddata.large_edge = member.id
         guilddb.save(guilddata)
         await ctx.send(f"<@{member.id}> is now the largest user. They will be automatically adjusted to be the largest user until they are removed from this role.")
@@ -137,7 +142,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def clearsmallest(self, ctx):
         """Clear the role of 'smallest user.'"""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         guilddata.small_edge = None
         guilddb.save(guilddata)
         await ctx.send("Smallest user unset.")
@@ -151,7 +156,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def clearlargest(self, ctx):
         """Clear the role of 'largest user.'"""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         guilddata.large_edge = None
         guilddb.save(guilddata)
         await ctx.send("Largest user unset.")

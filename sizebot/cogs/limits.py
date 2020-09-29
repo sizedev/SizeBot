@@ -1,4 +1,5 @@
 import logging
+from sizebot.lib.errors import GuildNotFoundException
 
 import discord
 from discord.ext import commands
@@ -16,7 +17,10 @@ async def on_message(m):
         return
 
     userdata = userdb.load(m.guild.id, m.author.id)
-    guilddata = guilddb.load(m.guild.id)
+    try:
+        guilddata = guilddb.load(m.guild.id)
+    except GuildNotFoundException:
+        return
 
     if guilddata.low_limit:
         if userdata.height < guilddata.low_limit:
@@ -43,7 +47,7 @@ class EdgeCog(commands.Cog):
     )
     async def limits(self, ctx):
         """See the guild's current caps."""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {'*Unset*' if guilddata.low_limit is None else guilddata.low_limit}\nHigh Limit: {'*Unset*' if guilddata.high_limit is None else guilddata.high_limit}")
 
     @commands.command(
@@ -55,7 +59,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def setlowlimit(self, ctx, *, size: SV):
         """Set the low size limit (floor)."""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         guilddata.low_limit = size
         guilddb.save(guilddata)
         await ctx.send(f"<@{size:,.3mu}> is now the lowest allowed size in this guild.")
@@ -70,7 +74,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def sethighlimit(self, ctx, *, size: SV):
         """Set the high size limit (ceiling)."""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         guilddata.high_limit = size
         guilddb.save(guilddata)
         await ctx.send(f"<@{size:,.3mu}> is now the highest allowed size in this guild.")
@@ -85,7 +89,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def clearlowlimit(self, ctx):
         """Set the low size limit (floor)."""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         guilddata.low_limit = None
         guilddb.save(guilddata)
         await ctx.send("There is now no lowest allowed size in this guild.")
@@ -100,7 +104,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def clearhighlimit(self, ctx):
         """Set the high size limit (ceiling)."""
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.loadOrCreate(ctx.guild.id)
         guilddata.high_limit = None
         guilddb.save(guilddata)
         await ctx.send("There is now no highest allowed size in this guild.")
