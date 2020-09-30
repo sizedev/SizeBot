@@ -3,7 +3,7 @@
 # to either 1.1x or 0.9x of the largest or smallest user in the guild, respectively.
 
 import logging
-from sizebot.lib.errors import GuildNotFoundException
+from sizebot.lib.errors import GuildNotFoundException, UserNotFoundException
 
 import discord
 from discord.ext import commands
@@ -59,7 +59,10 @@ async def on_message(m):
     if not (m.author.id == sm or m.author.id == lg):
         return  # The user is not set to be the smallest or the largest user.
 
-    userdata = userdb.load(m.guild.id, m.author.id)
+    try:
+        userdata = userdb.load(m.guild.id, m.author.id)
+    except UserNotFoundException:
+        return
 
     usersizes = getUserSizes(m.guild)
     smallestuser = usersizes["smallest"]["id"]

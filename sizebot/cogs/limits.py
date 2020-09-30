@@ -1,5 +1,5 @@
 import logging
-from sizebot.lib.errors import GuildNotFoundException
+from sizebot.lib.errors import GuildNotFoundException, UserNotFoundException
 
 import discord
 from discord.ext import commands
@@ -16,7 +16,10 @@ async def on_message(m):
     if not isinstance(m.author, discord.Member):
         return
 
-    userdata = userdb.load(m.guild.id, m.author.id)
+    try:
+        userdata = userdb.load(m.guild.id, m.author.id)
+    except UserNotFoundException:
+        return
     try:
         guilddata = guilddb.load(m.guild.id)
     except GuildNotFoundException:
