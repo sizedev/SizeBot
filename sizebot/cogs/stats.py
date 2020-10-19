@@ -267,8 +267,7 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(ctx.message.author)
         asdata = getUserdata(asHeight, customName)
         userdata.height = asdata.height
-        if customName:
-            userdata.nickname += " as " + asdata.nickname
+        userdata.nickname += " as " + asdata.nickname
         comparedata = getUserdata(memberOrHeight)
 
         comparison = proportions.PersonComparison(userdata, comparedata)
