@@ -256,6 +256,28 @@ class StatsCog(commands.Cog):
         logger.info(f"Compared {userdata1} and {userdata2}")
 
     @commands.command(
+        usage = "[user/height] [user/height] <custom name>",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def compareas(self, ctx, asHeight: typing.Union[discord.Member, SV] = None,
+                        memberOrHeight: typing.Union[discord.Member, SV] = None, *, customName = None):
+        """Compare yourself as a different height and another user."""
+
+        userdata = getUserdata(ctx.message.author)
+        asdata = getUserdata(asHeight, customName)
+        userdata.height = asdata.height
+        if customName:
+            userdata.nickname += " as " + asdata.nickname
+        comparedata = getUserdata(memberOrHeight)
+
+        comparison = proportions.PersonComparison(userdata, comparedata)
+        embedtosend = comparison.toEmbed(ctx.author.id)
+        await ctx.send(embed = embedtosend)
+
+        logger.info(f"Compared {userdata} and {comparedata}")
+
+    @commands.command(
         aliases = ["natstats", "natstat"],
         category = "stats"
     )
