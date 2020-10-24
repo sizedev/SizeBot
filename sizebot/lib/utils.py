@@ -6,6 +6,8 @@ import traceback
 import validator_collection
 
 re_num = r"\d+\.?\d*"
+
+#TODO: This is far too strict.
 re_sizetag = re.compile(r"""
 \s+\[  # start with a left bracket
 # the size bit
@@ -43,6 +45,7 @@ re_sizetag = re.compile(r"""
 # and a right bracket at the end of the name
 \]$
 """, re.VERBOSE)
+re_sizetag_rational = r"(.*)(?: )(\[(?:\d+|∞).*\])"
 
 
 def clamp(minVal, val, maxVal):
@@ -281,7 +284,7 @@ def hasSizeTag(s):
 
 def stripSizeTag(s):
     if hasSizeTag(s):
-        re_sizetagloose = re.compile(r"^(.*) \[.*\]$", re.DOTALL)  # TODO: Make this less clumsy. Use the actual regex we made?
+        re_sizetagloose = re.compile(r"^(.*) \[.*\]$", re.DOTALL)
         s_sizetagloose = re.sub(re_sizetagloose, r"\1", s)
         return s_sizetagloose
     return s

@@ -478,8 +478,6 @@ def delete(guildid, userid):
     path.unlink(missing_ok = True)
 
 
-# TODO: Set this up as a User's __nonzero__ function
-# e.g.: bool(user) = user.id.exists()
 def exists(guildid, userid):
     exists = True
     try:

@@ -162,7 +162,7 @@ def test_pos__divmod__():
 
 def test_neg__divmod__():
     result = divmod(1, neginf)
-    assert result == (0, 1)     # TODO: Should this be negative?
+    assert result == (0, 1)
 
 
 def test_pos__rdivmod__():
