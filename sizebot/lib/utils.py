@@ -346,8 +346,9 @@ def sentence_join(items, *, joiner=None, oxford=False):
     if joiner is None:
         joiner = "and"
 
+    ox = ""
     if oxford:
-        joiner += ","
+        ox = ","
 
     # Do this in case we received something like a generator, that needs to be wrapped in a list
     items = list(items)
@@ -355,7 +356,7 @@ def sentence_join(items, *, joiner=None, oxford=False):
     if len(items) == 1:
         return items[0]
 
-    return f"{', '.join(items[:-1])} {joiner} {items[-1]}"
+    return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
 
 
 def removeprefix(self: str, prefix: str, /) -> str:
