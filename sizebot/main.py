@@ -13,6 +13,7 @@ from sizebot import discordplus
 from sizebot.cogs import edge, limits
 from sizebot.lib import language, objs, proportions, status, units
 from sizebot.lib.discordlogger import DiscordHandler
+from sizebot.lib.loglevels import BANNER, LOGIN
 from sizebot.plugins import active, monika
 
 logging.basicConfig(level=logging.INFO)
@@ -101,8 +102,6 @@ def main():
         await objs.init()
 
         # Print the splash screen.
-        BANNER = digilogger.addLogLevel("banner", fg="orange_red_1", bg="deep_sky_blue_4b", attr="bold")
-        LOGIN = digilogger.addLogLevel("login", fg="cyan")
         # Obviously we need the banner printed in the terminal
         logger.log(BANNER, conf.banner + " v" + __version__)
         logger.log(LOGIN, f"Logged in as: {bot.user.name} ({bot.user.id})\n------")
