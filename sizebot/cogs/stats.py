@@ -7,6 +7,7 @@ from discord.ext import commands
 
 from sizebot import conf
 from sizebot.lib import errors, proportions, userdb, macrovision
+from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import parseMany, prettyTimeDelta, sentence_join
@@ -380,7 +381,7 @@ class StatsCog(commands.Cog):
             # Easter egg.
             if what.name == "photograph":
                 la += "\n\n<https://www.youtube.com/watch?v=BB0DU4DoPP4>"
-                logger.info(f"{ctx.author.display_name} is jamming to Nickleback.")  # TODO: Make an "egg" log level.
+                logger.log(EGG, f"{ctx.author.display_name} is jamming to Nickleback.")
             await ctx.send(la)
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
             return
@@ -391,6 +392,7 @@ class StatsCog(commands.Cog):
             compheight = userdb.defaultheight
             compdata = getUserdata(compheight, nickname = "an average person")
         elif isinstance(what, str) and what in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
+            logger.log(EGG, f"{ctx.author.display_name} found Chocolate!")
             compdata = getUserdata(SV.parse("11in"), nickname = "Chocolate [Stuffed Beaver]")
             compdata.baseweight = WV.parse("4.8oz")
             compdata.footlength = SV.parse("2.75in")
@@ -399,11 +401,11 @@ class StatsCog(commands.Cog):
             # Easter eggs.
             if what in ["all those chickens", "chickens"]:
                 await ctx.send("https://www.youtube.com/watch?v=NsLKQTh-Bqo")
-                logger.info(f"{ctx.author.display_name} looked at all those chickens.")  # TODO: Make an "egg" log level.
+                logger.log(EGG, f"{ctx.author.display_name} looked at all those chickens.")
                 return
             if what == "that horse":
                 await ctx.send("https://www.youtube.com/watch?v=Uz4bW2yOLXA")
-                logger.info(f"{ctx.author.display_name} looked at that horse (it may in fact be a moth.)")  # TODO: Make an "egg" log level.
+                logger.log(EGG, f"{ctx.author.display_name} looked at that horse (it may in fact be a moth.)")
                 return
             await ctx.send(
                 f"Sorry, I don't know what `{what}` is.\n"
