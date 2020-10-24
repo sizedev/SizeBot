@@ -503,7 +503,7 @@ class StatsCog(commands.Cog):
 
         # TODO: Raise exception instead
         if failedusers:
-            nicks = sentence_join(u.display_name for u in failedusers)
+            nicks = sentence_join(u.display_name for u in failedusers, oxford=True)
             if len(failedusers) == 1:
                 failmessage = f"{nicks} is not a SizeBot user"
             else:
@@ -513,7 +513,7 @@ class StatsCog(commands.Cog):
 
         users = [{"name": u.nickname, "model": modelmap[u.gender], "height": u.height} for u in userdatas]
 
-        nicks = sentence_join(u.nickname for u in userdatas)
+        nicks = sentence_join(u.nickname for u in userdatas, oxford=True)
         e = discord.Embed(
             title="Click here for lineup image!",
             description=f"Lineup of {nicks}",

@@ -11,7 +11,7 @@ from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.language import getPlural, getIndefiniteArticle
 from sizebot.lib.units import SV, WV, Unit, SystemUnit
-from sizebot.lib.utils import removeprefix
+from sizebot.lib.utils import removeprefix, sentence_join
 
 objects = []
 
@@ -99,8 +99,7 @@ class DigiObject:
         if self.weight:
             statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
 
-        returnstr = ", ".join(statsstrings[:-1])
-        returnstr += ", and " + statsstrings[-1] + "."
+        returnstr = sentence_join(statsstrings, oxford=True) + "."
 
         return returnstr
 
