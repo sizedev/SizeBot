@@ -379,7 +379,7 @@ class StatsCog(commands.Cog):
             la = what.relativestatssentence(userdata)
             # Easter egg.
             if what.name == "photograph":
-                la += "\n\nhttps://www.youtube.com/watch?v=BB0DU4DoPP4"  # TODO: Supress embeds.
+                la += "\n\n<https://www.youtube.com/watch?v=BB0DU4DoPP4>"
                 logger.info(f"{ctx.author.display_name} is jamming to Nickleback.")  # TODO: Make an "egg" log level.
             await ctx.send(la)
             logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
@@ -400,6 +400,10 @@ class StatsCog(commands.Cog):
             if what in ["all those chickens", "chickens"]:
                 await ctx.send("https://www.youtube.com/watch?v=NsLKQTh-Bqo")
                 logger.info(f"{ctx.author.display_name} looked at all those chickens.")  # TODO: Make an "egg" log level.
+                return
+            if what == "that horse":
+                await ctx.send("https://www.youtube.com/watch?v=Uz4bW2yOLXA")
+                logger.info(f"{ctx.author.display_name} looked at that horse (it may in fact be a moth.)")  # TODO: Make an "egg" log level.
                 return
             await ctx.send(
                 f"Sorry, I don't know what `{what}` is.\n"
