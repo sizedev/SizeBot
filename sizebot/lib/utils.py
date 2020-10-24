@@ -7,7 +7,7 @@ import validator_collection
 
 re_num = r"\d+\.?\d*"
 
-#TODO: This is far too strict.
+# TODO: This is far too strict.
 re_sizetag = re.compile(r"""
 \s+\[  # start with a left bracket
 # the size bit
