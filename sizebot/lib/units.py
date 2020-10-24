@@ -471,6 +471,13 @@ class SV(Dimension):
     def getQuantityPair(cls, s):
         s = utils.removeBrackets(s)
         s = cls.isFeetAndInchesAndIfSoFixIt(s)
+        # TODO: These are temporary patches.
+        # Zero patch
+        if s in ["0", "zero"]:
+            return 0, "m"
+        # Infinity patch
+        if s in ["infinity", "inf", "∞"]:
+            return cls._infinity, "m"
         match = re.match(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\" ]+)", s)
         value, unit = None, None
         if match is not None:
@@ -508,6 +515,13 @@ class WV(Dimension):
     @classmethod
     def getQuantityPair(cls, s):
         s = utils.removeBrackets(s)
+        # TODO: These are temporary patches.
+        # Zero patch
+        if s in ["0", "zero"]:
+            return 0, "m"
+        # Infinity patch
+        if s in ["infinity", "inf", "∞"]:
+            return cls._infinity, "m"
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"]+)", s)
         value, unit = None, None
         if match is not None:
