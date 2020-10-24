@@ -13,10 +13,11 @@ from sizebot.cogs import thistracker
 from sizebot.lib import userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.decimal import Decimal
-from sizebot.lib.objs import objects
-from sizebot.lib.units import Rate, Mult, SV, TV, WV
 from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.loglevels import BANNER, EGG, LOGIN
+from sizebot.lib.objs import objects
+from sizebot.lib.units import Rate, Mult, SV, TV, WV
 
 
 logger = logging.getLogger("sizebot")
@@ -125,7 +126,8 @@ def getEvalGlobals():
         "date": date,
         "time": time,
         "timedelta": timedelta,
-        "math": math
+        "math": math,
+        "BANNER": BANNER, "EGG": EGG, "LOGIN": LOGIN
     }
 
     return evalGlobals
