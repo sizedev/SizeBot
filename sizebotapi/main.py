@@ -20,7 +20,6 @@ def user(guildid, userid):
         u = userdb.load(guildid, userid)
     except UserNotFoundException:
         abort(404)
-        return
 
     return json.dumps({"nickname": u.nickname})
 
