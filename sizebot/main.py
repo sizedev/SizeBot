@@ -150,6 +150,10 @@ def main():
         await bot.process_commands(after)
         await proportions.nickUpdate(after.author)
 
+    @bot.event
+    async def on_guild_join(guild):
+        logger.warn(f"SizeBot has been added to {guild.name}! ({guild.id})")
+
     def on_disconnect():
         logger.error("SizeBot has been disconnected from Discord!")
 
