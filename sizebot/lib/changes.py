@@ -120,7 +120,7 @@ def loadFromFile():
     except FileNotFoundError:
         changesJson = []
     for changeJson in changesJson:
-        change = Change(**changesJson)
+        change = Change(**changeJson)
         _activate(change)
 
 
