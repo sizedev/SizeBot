@@ -320,7 +320,7 @@ class HelpCog(commands.Cog):
 
         Suggest an object to be part of the lineup for commands like &natstats, &objcompare, and future fun!
         When suggesting an object, please give as many relavent measurements as you can.
-        Things like, height, length, width, diameter, depth, and thickness,are all things SizeBot uses
+        Things like, height, length, width, diameter, depth, and thickness, are all things SizeBot uses
         to make sure each object is a fun and exciting entry to pull up.
         Also include alternate names for the object, if it has them."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
