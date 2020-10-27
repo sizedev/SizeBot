@@ -29,7 +29,7 @@ async def nickUpdate(user):
     if user.bot:
         return
     # guild owner
-    if user.id == user.guild.owner.id:
+    if user.id == user.guild.owner_id:
         return
 
     try:
@@ -91,7 +91,7 @@ async def nickReset(user):
     if user.bot:
         return
     # guild owner
-    if user.id == user.guild.owner.id:
+    if user.id == user.guild.owner_id:
         return
 
     userdata = userdb.load(user.guild.id, user.id)
