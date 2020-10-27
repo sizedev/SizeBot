@@ -67,6 +67,8 @@ class ChangeCog(commands.Cog):
         elif isinstance(string, ParseableRate) or isinstance(string, LimitedRate):
             addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(string.original)
 
+            userdata = userdb.load(guildid, userid)  # Load this data but don't use it as an ad-hoc user test.
+
             changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
 
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{string.original}`.")
