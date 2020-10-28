@@ -149,7 +149,7 @@ async def nickupdate(user):
             return
         logger.warn(f"Attempted to update user {user.id} ({user.name}), but they DM'd SizeBot.")
     # Don't update owner's nick, permissions error.
-    if user.id == user.guild.owner.id:
+    if user.id == user.guild.owner_id:
         # logger.warn(f"Attempted to update user {user.id} ({user.name}), but they own this server.")
         return
     # Don't update users who aren't registered.
