@@ -6,23 +6,25 @@ from sizebot.lib.decimal import Decimal
 
 
 model_heights = {
-    "man1": Decimal("1.8034"),
-    "woman1": Decimal("1.7018")
+    "Human": {
+        "man1": Decimal("1.8034"),
+        "woman1": Decimal("1.7018")
+    }
 }
 
 
-def get_model_scale(model, height_in_meters):
-    normal_height = model_heights[model]
+def get_model_scale(model, view, height_in_meters):
+    normal_height = model_heights[model][view]
     return height_in_meters / normal_height
 
 
-def get_entity_json(name, model, height, x):
-    scale = get_model_scale(model, height)
+def get_entity_json(name, model, view, height, x):
+    scale = get_model_scale(model, view, height)
     return {
-        "name": "Human",
+        "name": model,
         "customName": name,
         "scale": float(scale),
-        "view": model,
+        "view": view,
         "x": str(x),
         "y": "0",
         "priority": 0,
@@ -42,8 +44,12 @@ def get_url(people):
     entities = []
     x_offset = Decimal(0)
     for p in people:
-        name, model, height = p["name"], p["model"], p["height"]
-        entities.append(get_entity_json(name, model, height, x_offset))
+        name, model, view, height = p["name"], p["model"], p.get("view"), p["height"]
+        # Backwards compatibility
+        if view is None:
+            view = model
+            model = "Human"
+        entities.append(get_entity_json(name, model, view, height, x_offset))
         # A crude width estimate for now
         x_offset += height / 4
 
