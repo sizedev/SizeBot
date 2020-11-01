@@ -446,8 +446,8 @@ class User:
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", []),
-        userdata.macrovision_model = jsondata.get("macrovision_model")
-        userdata.macrovision_view = jsondata.get("macrovision_view")
+        userdata._macrovision_model = jsondata.get("macrovision_model")
+        userdata._macrovision_view = jsondata.get("macrovision_view")
         return userdata
 
     def __lt__(self, other):
