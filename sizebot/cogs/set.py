@@ -1,6 +1,7 @@
 import logging
 import typing
 
+import discord
 from discord.ext import commands
 
 from sizebot.lib import decimal, errors, proportions, userdb, utils
@@ -696,6 +697,53 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {user.id} ({user.display_name}) reset their gender.")
         await ctx.send(f"<@{user.id}>'s gender is now reset.")
+
+    @commands.command(
+        category = "mod",
+        hidden = True
+    )
+    @commands.guild_only()
+    @commands.is_owner()
+    async def setmodel(self, ctx, user: discord.Member, *, model):
+        userdata = userdb.load(ctx.guild.id, user.id)
+        userdata.macrovision_model = model
+        userdb.save(userdata)
+
+    @commands.command(
+        aliases = ["resetmodel", "unsetmodel"],
+        category = "mod",
+        hidden = True
+    )
+    @commands.guild_only()
+    @commands.is_owner()
+    async def clearmodel(self, ctx, *, user: discord.Member):
+        userdata = userdb.load(ctx.guild.id, user.id)
+        userdata.macrovision_model = None
+        userdb.save(userdata)
+
+    @commands.command(
+        category = "mod",
+        hidden = True
+    )
+    @commands.guild_only()
+    @commands.is_owner()
+    async def setview(self, ctx, user: discord.Member, *, view):
+        userdata = userdb.load(ctx.guild.id, user.id)
+        userdata.macrovision_view = view
+        userdb.save(userdata)
+
+    @commands.command(
+        aliases = ["resetview", "unsetview"],
+        category = "mod",
+        hidden = True
+    )
+    @commands.guild_only()
+    @commands.is_owner()
+    async def clearview(self, ctx, *, user: discord.Member):
+        userdata = userdb.load(ctx.guild.id, user.id)
+        userdata.macrovision_view = None
+        userdb.save(userdata)
+
 
 
 def setup(bot):
