@@ -1,14 +1,16 @@
 import json
 from copy import copy
 from functools import total_ordering
-from sizebot.lib.decimal import Decimal
-from sizebot.lib.diff import Diff, Rate as ParseableRate
+import importlib.resources as pkg_resources
 from typing import Literal
 
 import arrow
 
 from sizebot import conf
+import sizebot.data
 from sizebot.lib import errors
+from sizebot.lib.decimal import Decimal
+from sizebot.lib.diff import Diff, Rate as ParseableRate
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import isURL
 
@@ -18,6 +20,8 @@ defaultweight = WV("66760")            # grams
 defaultterminalvelocity = SV("63.63")  # meters/second
 falllimit = SV("7.73")                 # meters/second
 defaultliftstrength = WV("18143.7")    # grams
+
+modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 
 @total_ordering
@@ -327,6 +331,8 @@ class User:
 
     @macrovision_model.setter
     def macrovision_model(self, value):
+        if value not in modelJSON.keys():
+            raise errors.InvalidMacrovisionModelException(value)
         self._macrovision_model = value
 
     @property
@@ -342,6 +348,8 @@ class User:
 
     @macrovision_view.setter
     def macrovision_view(self, value):
+        if value not in modelJSON[self.macrovision_model].keys():
+            raise errors.InvalidMacrovisionViewException(self.macrovision_model, value)
         self._macrovision_view = value
 
     def getFormattedScale(self, scaletype: Literal["height", "weight"] = "height", verbose = False):

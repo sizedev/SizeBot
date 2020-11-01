@@ -1,6 +1,11 @@
+import importlib.resources as pkg_resources
 import logging
+import json
 
+import sizebot.data
 from sizebot.lib import utils
+
+modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 
 # error.message will be printed when you do print(error)
@@ -140,6 +145,26 @@ class InvalidObject(DigiException):
         return f"{self.name!r} is an unrecognized object."
 
 
+class InvalidMacrovisionModelException(DigiException):
+    def __init__(self, name):
+        self.name = name
+
+    def formatUserMessage(self):
+        return f"{self.name!r} is an unrecognized Macrovision model."
+
+
+class InvalidMacrovisionViewException(DigiException):
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
+
+        if self.model not in modelJSON.keys():
+            raise InvalidMacrovisionModelException(self.model)
+
+    def formatUserMessage(self):
+        return f"{self.view!r} is an unrecognized view for the Macrovision model {self.model!r}."
+
+
 class InvalidRollException(DigiException):
     def __init__(self, dString):
         self.dString = dString
@@ -164,7 +189,7 @@ class MultilineAsNonFirstCommandException(DigiContextException):
         return f"{usernick} tried to run a multi-line command in the middle of a sequence."
 
     async def formatUserMessage(self, ctx):
-        return f"You are unable to run a command that takes a multi-line argument in the middle of a batch command sequence. Please try running these commands seperately."
+        return "You are unable to run a command that takes a multi-line argument in the middle of a batch command sequence. Please try running these commands seperately."
 
 
 class ArgumentException(DigiContextException):
