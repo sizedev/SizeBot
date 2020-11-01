@@ -2,6 +2,7 @@ import inspect
 import pydoc
 import re
 import traceback
+from urllib.parse import quote
 
 import validator_collection
 
@@ -398,3 +399,6 @@ def regexbuild(li: list, capture = False) -> str:
     if capture:
         returnstring = f"({returnstring})"
     return returnstring
+
+def url_safe(s):
+    return quote(s, safe=" ").replace(" ", "-")

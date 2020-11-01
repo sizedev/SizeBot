@@ -7,6 +7,7 @@ from discord.ext import commands
 
 from sizebot import conf
 from sizebot.lib import errors, proportions, userdb, macrovision
+from sizebot.lib.constants import colors
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, WV
@@ -493,11 +494,6 @@ class StatsCog(commands.Cog):
     @commands.guild_only()
     async def lineup(self, ctx):
         """Lineup a bunch of people for comparison."""
-        modelmap = {
-            "m": "man1",
-            "f": "woman1",
-            None: "man1"
-        }
 
         failedusers = []
         userdatas = []
@@ -517,13 +513,13 @@ class StatsCog(commands.Cog):
             await ctx.send(failmessage)
             return
 
-        users = [{"name": u.nickname, "model": modelmap[u.gender], "height": u.height} for u in userdatas]
+        users = [{"name": u.nickname, "model": u.macrovision_model, "view": u.macrovision_view, "height": u.height} for u in userdatas]
 
         nicks = sentence_join((u.nickname for u in userdatas), oxford=True)
         e = discord.Embed(
             title="Click here for lineup image!",
             description=f"Lineup of {nicks}",
-            color=0x00FFFF,
+            color=colors.cyan,
             url=macrovision.get_url(users)
         )
         await ctx.send(embed = e)

@@ -1,6 +1,5 @@
 import math
 import re
-from urllib.parse import quote
 
 import discord
 from discord import Embed
@@ -11,6 +10,7 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import defaultheight, defaultweight, defaultterminalvelocity, defaultliftstrength, falllimit
+from sizebot.lib.utils import url_safe
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
@@ -348,27 +348,20 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
     @property
     def url(self):
-        gendermap = {
-            "m":  "man",
-            "f":  "woman",
-            None: "man"
-        }
+        safeSmallNick = url_safe(self.small.nickname)
+        safeBigNick = url_safe(self.big.nickname)
 
-        safeSmallNick = quote(self.small.nickname, safe=" ").replace(" ", "-")
-        smallGender = gendermap[self.small.gender]
-        safeBigNick = quote(self.big.nickname, safe=" ").replace(" ", "-")
-        bigGender = gendermap[self.big.gender]
-
-        # TODO: Digi overrides.
         compUrl = macrovision.get_url([
             {
                 "name": safeSmallNick,
-                "model": f"{smallGender}1",
+                "model": self.small.macrovision_model,
+                "view": self.small.macrovision_view,
                 "height": self.small.height
             },
             {
                 "name": safeBigNick,
-                "model": f"{bigGender}1",
+                "model": self.big.macrovision_model,
+                "view": self.big.macrovision_view,
                 "height": self.big.height
             }
         ])
