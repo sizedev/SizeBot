@@ -233,7 +233,7 @@ class StatsCog(commands.Cog):
         await ctx.send(stattosend)
 
     @commands.command(
-        usage = "[user/height] <user/height>",
+        usage = "<user/height> [user/height]",
         category = "stats"
     )
     @commands.guild_only()
@@ -358,7 +358,7 @@ class StatsCog(commands.Cog):
 
     @commands.command(
         aliases = ["look", "examine"],
-        usage = "[object]",
+        usage = "<object>",
         category = "stats"
     )
     @commands.guild_only()
@@ -421,7 +421,7 @@ class StatsCog(commands.Cog):
 
     @commands.command(
         aliases = ["objectstats"],
-        usage = "[object]",
+        usage = "<object>",
         category = "stats"
     )
     async def objstats(self, ctx, *, what: typing.Union[DigiObject, str]):
@@ -438,7 +438,7 @@ class StatsCog(commands.Cog):
 
     @commands.command(
         aliases = ["dist", "walk", "run"],
-        usage = "[length]",
+        usage = "<length>",
         category = "stats"
     )
     async def distance(self, ctx, length: SV, *, who: typing.Union[discord.Member, SV] = None):
@@ -487,7 +487,7 @@ class StatsCog(commands.Cog):
 
     @commands.command(
         aliases = [],
-        usage = "[users...]",
+        usage = "<users...>",
         category = "stats"
     )
     @commands.guild_only()
