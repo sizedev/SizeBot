@@ -149,6 +149,9 @@ class InvalidMacrovisionModelException(DigiException):
     def __init__(self, name):
         self.name = name
 
+    def formatMessage(self):
+        return f"{self.name!r} is an unrecognized Macrovision model."
+
     def formatUserMessage(self):
         return f"{self.name!r} is an unrecognized Macrovision model."
 
@@ -160,6 +163,9 @@ class InvalidMacrovisionViewException(DigiException):
 
         if self.model not in modelJSON.keys():
             raise InvalidMacrovisionModelException(self.model)
+
+    def formatMessage(self):
+        return f"{self.view!r} is an unrecognized view for the Macrovision model {self.model!r}."
 
     def formatUserMessage(self):
         return f"{self.view!r} is an unrecognized view for the Macrovision model {self.model!r}."
