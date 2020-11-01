@@ -26,7 +26,8 @@ class User:
     __slots__ = ["guildid", "id", "nickname", "lastactive", "_picture_url", "description", "_gender", "display",
                  "_height", "_baseheight", "_baseweight", "_footlength", "_pawtoggle", "_furtoggle",
                  "_hairlength", "_taillength", "_liftstrength", "_unitsystem", "species", "soft_gender",
-                 "avatar_url", "_walkperhour", "_runperhour", "_currentscalestep", "registration_steps_remaining"]
+                 "avatar_url", "_walkperhour", "_runperhour", "_currentscalestep", "registration_steps_remaining"
+                 "_macrovision_model", "_macrovision_view"]
 
     def __init__(self):
         self.guildid = None
@@ -54,6 +55,8 @@ class User:
         self.avatar_url = None
         self.lastactive = None
         self.registration_steps_remaining = []
+        self._macrovision_model = None
+        self._macrovision_view = None
 
     def __str__(self):
         return (f"GUILDID `{self.guildid}`, ID `{self.id}`, NICK `{self.nickname}`, GEND `{self.gender}`, "
@@ -316,6 +319,31 @@ class User:
     def registered(self):
         return len(self.registration_steps_remaining) == 0
 
+    @property
+    def macrovision_model(self):
+        if self._macrovision_model is not None:
+            return self._macrovision_model
+        return "Human"
+
+    @macrovision_model.setter
+    def macrovision_model(self, value):
+        self._macrovision_model = value
+
+    @property
+    def macrovision_view(self):
+        if self._macrovision_view is not None:
+            return self._macrovision_view
+        human_views = {
+            "m": "man1",
+            "f": "woman1",
+            None: "man1"
+        }
+        return human_views[self.gender]
+
+    @macrovision_view.setter
+    def macrovision_view(self, value):
+        self._macrovision_view = value
+
     def getFormattedScale(self, scaletype: Literal["height", "weight"] = "height", verbose = False):
         if scaletype == "height":
             reversescale = 1 / self.scale
@@ -372,7 +400,9 @@ class User:
             "currentscalestep": None if self.currentscalestep is None else self.currentscalestep.toJSON(),
             "unitsystem":       self.unitsystem,
             "species":          self.species,
-            "registration_steps_remaining": self.registration_steps_remaining
+            "registration_steps_remaining": self.registration_steps_remaining,
+            "macrovision_model": self._macrovision_model,
+            "macrovision_view": self._macrovision_view
         }
 
     # Create a new object from a python dictionary imported using json
@@ -407,7 +437,9 @@ class User:
         userdata.currentscalestep = currentscalestep
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
-        userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
+        userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", []),
+        userdata.macrovision_model = "macrovision_model"
+        userdata.macrovision_view = "macrovision_view"
         return userdata
 
     def __lt__(self, other):
