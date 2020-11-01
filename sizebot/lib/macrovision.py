@@ -11,7 +11,7 @@ model_heights = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 
 def get_model_scale(model, view, height_in_meters):
-    normal_height = model_heights[model][view]
+    normal_height = Decimal(model_heights[model][view])
     return height_in_meters / normal_height
 
 
