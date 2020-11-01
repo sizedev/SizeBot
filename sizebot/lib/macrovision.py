@@ -1,16 +1,13 @@
 import base64
 import json
+import importlib.resources as pkg_resources
 from operator import itemgetter
 
+import sizebot.data
 from sizebot.lib.decimal import Decimal
 
 
-model_heights = {
-    "Human": {
-        "man1": Decimal("1.8034"),
-        "woman1": Decimal("1.7018")
-    }
-}
+model_heights = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 
 def get_model_scale(model, view, height_in_meters):
