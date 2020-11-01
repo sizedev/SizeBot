@@ -445,7 +445,7 @@ class User:
         userdata.currentscalestep = currentscalestep
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
-        userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", []),
+        userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
         userdata._macrovision_model = jsondata.get("macrovision_model")
         userdata._macrovision_view = jsondata.get("macrovision_view")
         return userdata
