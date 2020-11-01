@@ -438,8 +438,8 @@ class User:
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", []),
-        userdata.macrovision_model = "macrovision_model"
-        userdata.macrovision_view = "macrovision_view"
+        userdata.macrovision_model = jsondata.get("macrovision_model")
+        userdata.macrovision_view = jsondata.get("macrovision_view")
         return userdata
 
     def __lt__(self, other):
@@ -448,7 +448,10 @@ class User:
     def __eq__(self, other):
         return self.height == other.height
 
-    # TODO: Add __add__, which has to be able to take Users or SVs or Decimals as "other".
+    def __add__(self, other):
+        newuserdata = copy(self)
+        newuserdata.height = self.height + other
+        return newuserdata
 
     def __mul__(self, other):
         newuserdata = copy(self)

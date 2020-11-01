@@ -400,5 +400,6 @@ def regexbuild(li: list, capture = False) -> str:
         returnstring = f"({returnstring})"
     return returnstring
 
+
 def url_safe(s):
     return quote(s, safe=" ").replace(" ", "-")
