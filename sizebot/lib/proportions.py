@@ -3,6 +3,7 @@ import re
 
 import discord
 from discord import Embed
+from discord import user
 
 from sizebot import __version__
 from sizebot.lib import errors, macrovision, userdb, utils
@@ -400,6 +401,8 @@ class PersonStats:
         self.hairname = userdata.hairname
         self.pawtoggle = userdata.pawtoggle
         self.furtoggle = userdata.furtoggle
+        self.macrovision_model = userdata.macrovision_model
+        self.macrovision_view = userdata.macrovision_view
 
         self.averageheightmult = self.height / defaultheight
         self.averageweightmult = self.weight / defaultweight

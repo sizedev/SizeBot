@@ -708,6 +708,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_model = model
         userdb.save(userdata)
+        await ctx.send(f"{user.display_name}'s model is now {model}.")
 
     @commands.command(
         aliases = ["resetmodel", "unsetmodel"],
@@ -720,6 +721,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_model = None
         userdb.save(userdata)
+        await ctx.send(f"Cleared {user.display_name}'s model.")
 
     @commands.command(
         category = "mod",
@@ -731,6 +733,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_view = view
         userdb.save(userdata)
+        await ctx.send(f"{user.display_name}'s view is now {view}.")
 
     @commands.command(
         aliases = ["resetview", "unsetview"],
@@ -743,6 +746,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_view = None
         userdb.save(userdata)
+        await ctx.send(f"Cleared {user.display_name}'s view.")
 
 
 def setup(bot):
