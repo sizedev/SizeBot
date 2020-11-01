@@ -87,7 +87,7 @@ class ThisCog(commands.Cog):
         now = datetime.now(tzlocal())
         tracker = ThisTracker.load()
         trackerlist = sorted(tracker.points.items(), key=lambda i: i[1], reverse= True)
-        embed = Embed(title=f"The Most Agreeable Users", color=0x31eff9)
+        embed = Embed(title="The Most Agreeable Users", color=0x31eff9)
         embed.set_author(name=f"SizeBot {__version__}")
         messagetosend = ""
         totalpoints = sum(tracker.points.values())

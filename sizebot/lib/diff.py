@@ -34,7 +34,6 @@
 # RATE for 10meters
 # RATE -> 10meters
 
-import json
 import re
 from sizebot.lib.errors import InvalidSizeValue, ThisShouldNeverHappenException
 from sizebot.lib.utils import regexbuild, tryOrNone
@@ -245,6 +244,3 @@ def parse_change(s):
             except Exception:
                 Exception
     return r
-
-
-print("hi")

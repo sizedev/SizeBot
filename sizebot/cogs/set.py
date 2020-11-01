@@ -745,6 +745,5 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
 
-
 def setup(bot):
     bot.add_cog(SetCog(bot))
