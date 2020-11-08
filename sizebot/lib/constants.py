@@ -3,15 +3,11 @@ import importlib.resources as pkg_resources
 import toml
 
 import sizebot.data
+from sizebot.lib.attrdict import AttrDict
 
 ids = None
 emojis = None
 colors = None
-
-
-class AttrDict:
-    def __init__(self, data):
-        self.__dict__ = data
 
 
 def loadids(data):
