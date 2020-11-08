@@ -33,8 +33,9 @@ class ConfigField:
 
 class Config(AttrDict):
     def __init__(self, fields):
-        self.fields = fields
         super().__init__()
+        # This avoids an infinite recursion issue with __getattr__()
+        super(AttrDict, self).__setattr__("_fields", fields)
 
     def load(self):
         try:
@@ -43,7 +44,7 @@ class Config(AttrDict):
             raise ConfigError(f"Configuration file not found: {e.filename}")
 
         try:
-            for f in self.fields:
+            for f in self._fields:
                 f.load(self, configDict)
         except KeyError as e:
             raise ConfigError(f"Required configuration field not found: {e.path}")
@@ -54,7 +55,7 @@ class Config(AttrDict):
         paths.confpath.parent.mkdir(parents=True, exist_ok=True)
 
         configDict = PathDict()
-        for f in self.fields:
+        for f in self._fields:
             f.init(configDict)
         with open(paths.confpath, "w") as f:
             toml.dump(configDict.toDict(), f)

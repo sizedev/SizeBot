@@ -8,7 +8,7 @@ from datetime import date, datetime, time, timedelta
 import discord
 from discord import Embed
 
-from sizebot import conf
+from sizebot.conf import conf
 from sizebot.cogs import thistracker
 from sizebot.lib import userdb, utils
 from sizebot.lib.constants import emojis, ids
