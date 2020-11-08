@@ -3,7 +3,7 @@ from pathlib import Path
 import appdirs
 import toml
 
-from sizebot.lib import utils
+from sizebot.lib.pathdict import PathDict
 
 
 def getDataDir():
@@ -49,20 +49,16 @@ confpath = datadir / "sizebot.conf"
 
 def load():
     global prefix, name, activity, authtoken, logchannelid
-    configDict = toml.load(confpath)
+    configDict = PathDict(toml.load(confpath))
 
     # SizeBot
-    if utils.hasPath(configDict, "sizebot.prefix"):
-        prefix = utils.getPath(configDict, "sizebot.prefix")
-    if utils.hasPath(configDict, "sizebot.name"):
-        name = utils.getPath(configDict, "sizebot.name")
-    if utils.hasPath(configDict, "sizebot.activity"):
-        activity = utils.getPath(configDict, "sizebot.activity")
+    prefix = configDict.get("sizebot.prefix", prefix)
+    name = configDict.get("sizebot.name", name)
+    activity = configDict.get("sizebot.activity", activity)
 
     # Discord
-    if utils.hasPath(configDict, "discord.authtoken"):
-        authtoken = utils.getPath(configDict, "discord.authtoken")
+    authtoken = configDict.get("discord.authtoken", authtoken)
 
-    logchannelid = utils.getPath(configDict, "discord.logchannelid")
+    logchannelid = configDict.get("discord.logchannelid", logchannelid)
     if logchannelid is not None:
         logchannelid = int(logchannelid)
