@@ -4,8 +4,7 @@ from datetime import datetime, timedelta
 
 from discord.ext import commands
 
-from sizebot import conf
-from sizebot.lib import utils
+from sizebot.lib import utils, paths
 from sizebot.lib.constants import ids
 
 logger = logging.getLogger("sizebot")
@@ -17,7 +16,7 @@ milestones = [1000, 2500, 4200, 5000, 6900, 7500, 9001, 10000, 25000, 42000, 500
 
 def getWinks():
     try:
-        with open(conf.winkpath, "r") as f:
+        with open(paths.winkpath, "r") as f:
             winkcount = int(f.read())
     except (FileNotFoundError, ValueError):
         winkcount = 0
@@ -27,7 +26,7 @@ def getWinks():
 def addWinks(count = 1):
     winkcount = getWinks()
     winkcount += count
-    with open(conf.winkpath, "w") as winkfile:
+    with open(paths.winkpath, "w") as winkfile:
         winkfile.write(str(winkcount))
     return winkcount
 

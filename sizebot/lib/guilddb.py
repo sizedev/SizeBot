@@ -1,7 +1,6 @@
 import json
 
-from sizebot import conf
-from sizebot.lib import errors
+from sizebot.lib import errors, paths
 from sizebot.lib.units import SV
 
 
@@ -55,7 +54,7 @@ class Guild:
 
 
 def getGuildPath(guildid):
-    return conf.guilddbpath / f"{guildid}"
+    return paths.guilddbpath / f"{guildid}"
 
 
 def getGuildDataPath(guildid):

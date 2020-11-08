@@ -6,9 +6,8 @@ from typing import Literal
 
 import arrow
 
-from sizebot import conf
 import sizebot.data
-from sizebot.lib import errors
+from sizebot.lib import errors, paths
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff, Rate as ParseableRate
 from sizebot.lib.units import SV, WV
@@ -478,7 +477,7 @@ class User:
 
 
 def getGuildUsersPath(guildid):
-    return conf.guilddbpath / f"{guildid}" / "users"
+    return paths.guilddbpath / f"{guildid}" / "users"
 
 
 def getUserPath(guildid, userid):
@@ -543,6 +542,6 @@ def countusers():
 
 
 def listUsers(guildid = None):
-    userfiles = conf.guilddbpath.glob("*/users/*.json")
+    userfiles = paths.guilddbpath.glob("*/users/*.json")
     users = [(int(u.parent.parent.name), int(u.stem)) for u in userfiles]
     return users

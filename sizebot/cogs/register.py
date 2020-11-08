@@ -6,7 +6,7 @@ from discord.utils import get
 from discord.ext import commands
 
 from sizebot import conf
-from sizebot.lib import errors, proportions, userdb
+from sizebot.lib import errors, proportions, userdb, paths
 from sizebot.lib.constants import ids, emojis
 from sizebot.lib.units import SV, WV
 
@@ -276,8 +276,8 @@ class RegisterCog(commands.Cog):
             chosen = inputdict[reaction.emoji] - 1
             chosenguild = guildsregisteredin[chosen]
 
-            frompath = conf.guilddbpath / str(chosenguild) / "users" / f"{ctx.author.id}.json"
-            topath = conf.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.author.id}.json"
+            frompath = paths.guilddbpath / str(chosenguild) / "users" / f"{ctx.author.id}.json"
+            topath = paths.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.author.id}.json"
 
             topath.parent.mkdir(parents = True, exist_ok = True)
 

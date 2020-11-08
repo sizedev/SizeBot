@@ -2,8 +2,7 @@ import json
 import logging
 import time
 
-from sizebot import conf
-from sizebot.lib import proportions, userdb
+from sizebot.lib import proportions, userdb, paths
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, TV
 
@@ -115,7 +114,7 @@ def _deactivate(userid, guildid):
 def loadFromFile():
     """Load all change tasks from a file"""
     try:
-        with open(conf.changespath, "r") as f:
+        with open(paths.changespath, "r") as f:
             changesJson = json.load(f)
     except FileNotFoundError:
         changesJson = []
@@ -127,7 +126,7 @@ def loadFromFile():
 def saveToFile():
     """Save all change tasks to a file"""
     changesJson = [c.toJson() for c in _activeChanges.values()]
-    with open(conf.changespath, "w") as f:
+    with open(paths.changespath, "w") as f:
         json.dump(changesJson, f)
 
 

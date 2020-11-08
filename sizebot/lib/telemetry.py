@@ -1,6 +1,6 @@
 import json
 
-from sizebot import conf
+from sizebot.lib import paths
 
 
 class Telemetry():
@@ -27,9 +27,9 @@ class Telemetry():
         self.permissionerrors[name] = count + 1
 
     def save(self):
-        conf.telemetrypath.parent.mkdir(exist_ok = True)
+        paths.telemetrypath.parent.mkdir(exist_ok = True)
         jsondata = self.toJSON()
-        with open(conf.telemetrypath, "w") as f:
+        with open(paths.telemetrypath, "w") as f:
             json.dump(jsondata, f, indent = 4)
 
     def toJSON(self):
@@ -44,7 +44,7 @@ class Telemetry():
     @classmethod
     def load(cls):
         try:
-            with open(conf.telemetrypath, "r") as f:
+            with open(paths.telemetrypath, "r") as f:
                 jsondata = json.load(f)
         except FileNotFoundError:
             return Telemetry()

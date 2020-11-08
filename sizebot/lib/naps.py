@@ -2,7 +2,7 @@ import json
 import logging
 import time
 
-from sizebot import conf
+from sizebot.lib import paths
 from sizebot.lib.decimal import Decimal
 
 logger = logging.getLogger("sizebot")
@@ -79,7 +79,7 @@ def _deactivate(userid):
 def loadFromFile():
     """Load all naptime nannies from file"""
     try:
-        with open(conf.naptimepath, "r") as f:
+        with open(paths.naptimepath, "r") as f:
             nanniesJson = json.load(f)
     except FileNotFoundError:
         nanniesJson = []
@@ -91,7 +91,7 @@ def loadFromFile():
 def saveToFile():
     """Save all naptime nannies to a file"""
     nanniesJson = [n.toJson() for n in _activeNannies.values()]
-    with open(conf.naptimepath, "w") as f:
+    with open(paths.naptimepath, "w") as f:
         json.dump(nanniesJson, f)
 
 

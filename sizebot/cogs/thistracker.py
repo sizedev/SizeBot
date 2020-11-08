@@ -7,7 +7,7 @@ from discord import Embed
 from discord.ext import commands
 
 from sizebot import __version__
-from sizebot import conf
+from sizebot.lib import paths
 
 
 class ThisTracker():
@@ -24,9 +24,9 @@ class ThisTracker():
         self.points[id] = count + 1
 
     def save(self):
-        conf.thispath.parent.mkdir(exist_ok = True)
+        paths.thispath.parent.mkdir(exist_ok = True)
         jsondata = self.toJSON()
-        with open(conf.thispath, "w") as f:
+        with open(paths.thispath, "w") as f:
             json.dump(jsondata, f, indent = 4)
 
     def toJSON(self):
@@ -38,7 +38,7 @@ class ThisTracker():
     @classmethod
     def load(cls):
         try:
-            with open(conf.thispath, "r") as f:
+            with open(paths.thispath, "r") as f:
                 jsondata = json.load(f)
         except FileNotFoundError:
             return ThisTracker()
