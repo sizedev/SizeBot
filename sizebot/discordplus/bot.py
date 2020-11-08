@@ -1,13 +1,13 @@
 from copy import copy
 
 from discord.ext.commands.bot import BotBase
-from discord.ext.commands import errors
+from discord.ext import commands
 
 old_dispatch = BotBase.dispatch
 first_ready = True
 
 
-class BadMultilineCommand(errors.CommandError):
+class BadMultilineCommand(commands.errors.CommandError):
     """A multiline command is being run in the middle of a list of commands"""
     pass
 
@@ -61,7 +61,7 @@ async def process_commands(self, message):
     multiline_command = find_one(ctx for ctx in contexts if ctx.command.multiline)
     if multiline_command:
         username = multiline_command.author.display_name
-        await multiline_command.command.dispatch_error(multiline_command, errors.BadMultilineCommand(f"{username} tried to run a multi-line command in the middle of a sequence."))
+        await multiline_command.command.dispatch_error(multiline_command, commands.errors.BadMultilineCommand(f"{username} tried to run a multi-line command in the middle of a sequence."))
         return
 
     # If all the lines have a command, then run them in order
@@ -82,6 +82,7 @@ def dispatch(self, event_name, *args, **kwargs):
 
 
 def patch():
-    errors.BadMultilineCommand = BadMultilineCommand
+    commands.errors.BadMultilineCommand = BadMultilineCommand
+    commands.BadMultilineCommand = BadMultilineCommand
     BotBase.process_commands = process_commands
     BotBase.dispatch = dispatch
