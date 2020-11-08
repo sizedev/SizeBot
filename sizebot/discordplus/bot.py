@@ -1,12 +1,22 @@
-from discord.ext.commands.bot import BotBase
-import logging
-from sizebot.lib import errors
-# from copy import copy
+from copy import copy
 
-logger = logging.getLogger("sizebot")
+from discord.ext.commands.bot import BotBase
+from discord.ext.commands import errors
 
 old_dispatch = BotBase.dispatch
 first_ready = True
+
+
+class BadMultilineCommand(errors.CommandError):
+    """A multiline command is being run in the middle of a list of commands"""
+    pass
+
+
+def find_one(iterable):
+    try:
+        return next(iterable)
+    except StopIteration:
+        return None
 
 
 async def process_commands(self, message):
@@ -17,24 +27,46 @@ async def process_commands(self, message):
 
     ctx = await self.get_context(message)
 
-    if ctx.command and ctx.command.multiline:  # Command string starts with a multiline command, assume it's all one command
-        contexts.append(ctx)
-    elif not ctx.command:  # No command found, invoke will handle it
-        contexts.append(ctx)
-    else:  # The first command is not multiline
-        lines = message.content.split("\n")
-        for line in lines:
-            message.content = line
-            newctx = await self.get_context(message)
-            contexts.append(newctx)
+    # No command found, invoke will handle it
+    if not ctx.command:
+        await self.invoke(ctx)
+        return
 
-    for context in contexts:
-        if context.command and context.command.multiline and len(contexts) != 1:  # This should only happen if they're the second arugment since we caught that earlier
-            await context.command.dispatch_error(context, errors.MultilineAsNonFirstCommandException(context))
-            return
+    # One multiline command (command string starts with a multiline command)
+    if ctx.command.multiline:
+        await self.invoke(ctx)
+        return
 
-    for context in contexts:
-        await self.invoke(context)
+    # Multiple commands (first command is not multiline)
+    lines = message.content.split("\n")
+    messages = []
+    for line in lines:
+        msg = copy(message)
+        msg.content = line
+        messages.append(msg)
+    contexts = [await self.get_context(message) for msg in messages]
+
+    # If at least one of the lines does not start with a prefix, then ignore all the lines
+    not_command = find_one(ctx for ctx in contexts if ctx.invoked_with is None)
+    if not_command:
+        return
+
+    # If at least one of the lines don't match to a command, then throw an error for that command
+    bad_command = find_one(ctx for ctx in contexts if ctx.command is None)
+    if bad_command:
+        await self.invoke(bad_command)
+        return
+
+    # If at least one of the lines is a multi-line command (these are only allowed as the first command)
+    multiline_command = find_one(ctx for ctx in contexts if ctx.command.multiline)
+    if multiline_command:
+        username = multiline_command.author.display_name
+        await multiline_command.command.dispatch_error(multiline_command, errors.BadMultilineCommand(f"{username} tried to run a multi-line command in the middle of a sequence."))
+        return
+
+    # If all the lines have a command, then run them in order
+    for ctx in contexts:
+        await self.invoke(ctx)
 
 
 def dispatch(self, event_name, *args, **kwargs):
