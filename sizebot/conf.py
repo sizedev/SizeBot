@@ -22,7 +22,12 @@ class ConfigField:
 
     def load(self, config, configDict):
         if self.default is not SENTINEL:
-            config[self.var] = self.type(configDict.get(self.path, self.default))
+            val = configDict.get(self.path, SENTINEL)
+            if val is SENTINEL:
+                val = self.default
+            else:
+                val = self.type(val)
+            config[self.var] = val
         else:
             config[self.var] = self.type(configDict[self.path])
 
