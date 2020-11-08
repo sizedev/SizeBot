@@ -44,7 +44,7 @@ async def process_commands(self, message):
         msg = copy(message)
         msg.content = line
         messages.append(msg)
-    contexts = [await self.get_context(message) for msg in messages]
+    contexts = [await self.get_context(msg) for msg in messages]
 
     # If at least one of the lines does not start with a prefix, then ignore all the lines
     not_command = find_one(ctx for ctx in contexts if ctx.invoked_with is None)
