@@ -82,4 +82,6 @@ def dispatch(self, event_name, *args, **kwargs):
 
 
 def patch():
+    errors.BadMultilineCommand = BadMultilineCommand
     BotBase.process_commands = process_commands
+    BotBase.dispatch = dispatch
