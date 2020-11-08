@@ -70,7 +70,6 @@ def main():
         logger.error(f"Configuration file not found: {e.filename}")
         return
 
-    booting = True
     launchtime = datetime.now()
 
     bot = Bot(command_prefix = conf.prefix, allowed_mentions = discord.AllowedMentions(everyone=False))
@@ -82,6 +81,7 @@ def main():
     for cog in initial_cogs:
         bot.load_extension("sizebot.cogs." + cog)
 
+    @bot.event
     async def on_first_ready():
         # Set up logging.
         logChannel = bot.get_channel(conf.logchannelid)
@@ -120,18 +120,9 @@ def main():
         logger.debug(f"SizeBot launched in {round((elapsed.total_seconds() * 1000), 3)} milliseconds.\n")
         status.ready()
 
+    @bot.event
     async def on_reconnect_ready():
         logger.error("SizeBot has been reconnected to Discord.")
-
-    @bot.event
-    async def on_ready():
-        # Split on_ready into two events: one when we first boot, and one for reconnects.
-        nonlocal booting
-        if booting:
-            await on_first_ready()
-            booting = False
-        else:
-            await on_reconnect_ready()
 
     @bot.event
     async def on_message(message):

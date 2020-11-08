@@ -5,6 +5,9 @@ from sizebot.lib import errors
 
 logger = logging.getLogger("sizebot")
 
+old_dispatch = BotBase.dispatch
+first_ready = True
+
 
 async def process_commands(self, message):
     if message.author.bot:
@@ -32,6 +35,18 @@ async def process_commands(self, message):
 
     for context in contexts:
         await self.invoke(context)
+
+
+def dispatch(self, event_name, *args, **kwargs):
+    global first_ready
+    old_dispatch(self, event_name, *args, **kwargs)
+    if event_name == "ready":
+        if first_ready:
+            event_name = "first_ready"
+            first_ready = False
+        else:
+            event_name = "reconnect_ready"
+        old_dispatch(self, event_name, *args, **kwargs)
 
 
 def patch():
