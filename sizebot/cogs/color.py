@@ -5,7 +5,6 @@ from discord import Embed
 from discord.ext import commands
 
 from sizebot import __version__
-from sizebot import conf
 from sizebot.lib.constants import emojis
 
 
@@ -112,7 +111,7 @@ class ColorCog(commands.Cog):
                             description="",
                             color=hexvalue,
                             url=colorscheme)
-        embed.set_author(name=f"SizeBot {__version__} [{conf.prefix}color]", icon_url=coloricon)
+        embed.set_author(name=f"SizeBot {__version__} [{ctx.prefix}color]", icon_url=coloricon)
         embed.add_field(name="Hex Value", value = printhex, inline = True)
         embed.add_field(name="RGB Value", value = colorrgb, inline = True)
         embed.add_field(name="HSL Value", value = colorhsl, inline = True)

@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands, tasks
 from discord.utils import sleep_until
 
-from sizebot import conf
+from sizebot.conf import conf
 from sizebot.lib.utils import intToRoman, formatTraceback
 
 logger = logging.getLogger("sizebot")

@@ -1,9 +1,6 @@
-from sizebot import conf
-
-
 # Ignore Tupperboxes being mistaken for commands.
 def ignoreTupperbox(ctx):
-    return not (ctx.message.content.startswith(conf.prefix) and ctx.message.content.endswith(conf.prefix))
+    return not (ctx.message.content.startswith(ctx.prefix) and ctx.message.content.endswith(ctx.prefix))
 
 
 def setup(bot):

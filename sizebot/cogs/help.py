@@ -7,7 +7,6 @@ from discord import Embed
 from discord.ext import commands
 
 from sizebot import __version__
-from sizebot import conf
 from sizebot.lib import checks, objs, userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.menu import Menu
@@ -87,7 +86,7 @@ class HelpCog(commands.Cog):
 
         objectunits.sort()
 
-        embed = Embed(title=f"Objects [SizeBot {__version__}]", description = f"*NOTE: All of these objects have multiple aliases. If there is an alias that you think should work for a listed object but doesn't, report it with `{conf.prefix}suggestobject` and note that it's an alias.*")
+        embed = Embed(title=f"Objects [SizeBot {__version__}]", description = f"*NOTE: All of these objects have multiple aliases. If there is an alias that you think should work for a listed object but doesn't, report it with `{ctx.prefix}suggestobject` and note that it's an alias.*")
 
         for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 6))):
             embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
@@ -203,7 +202,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
         if "guild_only" in repr(cmd.checks):
             description += "*This command can only be run in a server, and not in DMs.*\n"
-        description += "\n\n".join(descriptionParts).replace("&", conf.prefix)
+        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix)
 
         embed = Embed(
             title=signature,

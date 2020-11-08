@@ -5,7 +5,6 @@ from shutil import copyfile
 from discord.utils import get
 from discord.ext import commands
 
-from sizebot import conf
 from sizebot.lib import errors, proportions, userdb, paths
 from sizebot.lib.constants import ids, emojis
 from sizebot.lib.units import SV, WV
@@ -74,7 +73,7 @@ class RegisterCog(commands.Cog):
         if guildsregisteredin != []:
             guildsstring = guildsregisteredin.join('\n')
             sentMsg = await ctx.send(f"You are already registed with SizeBot in these servers:\n{guildsstring}"
-                                     f"You can copy a profile from one of these guilds to this one using `{conf.prefix}copy.`\n"
+                                     f"You can copy a profile from one of these guilds to this one using `{ctx.prefix}copy.`\n"
                                      "Proceed with registration anyway?")
             await sentMsg.add_reaction(emojis.check)
             await sentMsg.add_reaction(emojis.cancel)
@@ -225,7 +224,7 @@ class RegisterCog(commands.Cog):
 
         if guildsregisteredin == []:
             await ctx.send("You are not registered with SizeBot in any guilds."
-                           f"To register, use `{conf.prefix}register`.")
+                           f"To register, use `{ctx.prefix}register`.")
             return
 
         # TODO: This doesn't seem to work.

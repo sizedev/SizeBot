@@ -5,7 +5,6 @@ import discord
 from discord.ext.commands.converter import MemberConverter
 from discord.ext import commands
 
-from sizebot import conf
 from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.constants import colors
 from sizebot.lib.loglevels import EGG
@@ -411,8 +410,8 @@ class StatsCog(commands.Cog):
             await ctx.send(
                 f"Sorry, I don't know what `{what}` is.\n"
                 f"If this is an object or alias you'd like added to SizeBot, "
-                f"use `{conf.prefix}suggestobject` to suggest it "
-                f"(see `{conf.prefix}help suggestobject` for instructions on doing that.)"
+                f"use `{ctx.prefix}suggestobject` to suggest it "
+                f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
             )
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return

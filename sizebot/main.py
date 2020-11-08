@@ -1,3 +1,4 @@
+import os
 import logging
 import sys
 from datetime import datetime
@@ -8,8 +9,8 @@ from discord.ext.commands import Bot
 from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
-from sizebot import conf
 from sizebot import discordplus
+from sizebot.conf import conf
 from sizebot.cogs import edge, limits
 from sizebot.lib import language, objs, proportions, status, units, paths
 from sizebot.lib.discordlogger import DiscordHandler
@@ -63,6 +64,17 @@ initial_extensions = [
 discordplus.patch()
 
 
+def initConf():
+    print("Initializing configuration file")
+    try:
+        conf.init()
+        print(f"Configuration file initialized: {paths.confpath}")
+    except FileExistsError as e:
+        print(e)
+        pass
+    os.startfile(paths.confpath.parent)
+
+
 def main():
     try:
         conf.load()
@@ -84,9 +96,10 @@ def main():
     @bot.event
     async def on_first_ready():
         # Set up logging.
-        logChannel = bot.get_channel(conf.logchannelid)
-        discordhandler = DiscordHandler(logChannel)
-        logger.addHandler(discordhandler)
+        if conf.logchannelid:
+            logChannel = bot.get_channel(conf.logchannelid)
+            discordhandler = DiscordHandler(logChannel)
+            logger.addHandler(discordhandler)
 
         # Set the bots name to what's set in the config.
         try:
@@ -103,7 +116,15 @@ def main():
 
         # Print the splash screen.
         # Obviously we need the banner printed in the terminal
-        logger.log(BANNER, conf.banner + " v" + __version__)
+        banner = (
+            r"   _____ _         ____        _   ____   _____ ""\n"
+            r"  / ____(_)       |  _ \      | | |___ \ | ____|""\n"
+            r" | (___  _ _______| |_) | ___ | |_  __) || |__  ""\n"
+            r"  \___ \| |_  / _ \  _ < / _ \| __||__ < |___ \ ""\n"
+            r"  ____) | |/ /  __/ |_) | (_) | |_ ___) | ___) |""\n"
+            r" |_____/|_/___\___|____/ \___/ \__|____(_)____/ ""\n"
+            r"                                                ")
+        logger.log(BANNER, banner + " v" + __version__)
         logger.log(LOGIN, f"Logged in as: {bot.user.name} ({bot.user.id})\n------")
 
         # Add a special message to bot status if we are running in debug mode
