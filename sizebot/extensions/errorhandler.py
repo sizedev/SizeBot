@@ -22,6 +22,9 @@ def setup(bot):
         if isinstance(err, commands.NotOwner):
             err = errors.AdminPermissionException()
 
+        if isinstance(err, commands.BadMultilineCommand):
+            err = errors.MultilineAsNonFirstCommandException()
+
         if isinstance(err, errors.AdminPermissionException):
             # Log Admin Permission Exceptions to telemetry
             telem = Telemetry.load()
