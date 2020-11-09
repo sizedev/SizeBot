@@ -7,7 +7,7 @@ from urllib.parse import quote
 import validator_collection
 
 re_num = r"\d+\.?\d*"
-re_sizetag = r"(?:.*)(?: )(\[(?:\d+|∞).*\])"
+re_sizetag = re.compile(r"(?:.*)(?: )(\[(?:\d+|∞).*\])")
 
 
 def clamp(minVal, val, maxVal):
