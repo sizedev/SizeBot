@@ -49,7 +49,6 @@ class RegisterCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # TODO: Change the way this works.
     @commands.command(
         aliases = ["signup"],
         category = "setup"

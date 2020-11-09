@@ -245,7 +245,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
-        # TODO: Handle this in an error handler.
         if memberOrHeight1 is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
