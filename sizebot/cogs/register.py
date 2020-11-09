@@ -34,12 +34,12 @@ async def showNextStep(ctx, userdata):
     next_step = random.choice(userdata.registration_steps_remaining)
     # TODO: Set these messages
     step_messages = {
-        "setheight": "Next step in registration is .setheight",
-        "setweight": "Next step in registration is .setweight",
-        "setsystem": "Next step in registration is .setsystem"
+        "setheight": "Next step is .setheight",
+        "setweight": "Next step is .setweight",
+        "setsystem": "Next step is .setsystem"
     }
     next_step_message = step_messages[next_step]
-    await ctx.send(next_step_message)
+    await ctx.send(f"You have {len(userdata.registration_steps_remaining)} registration steps remaining.\n{next_step_message}")
 
 
 class RegisterCog(commands.Cog):
@@ -144,6 +144,7 @@ class RegisterCog(commands.Cog):
         if userdata.display and userdata.id == ctx.author.guild.owner.id:
             await ctx.send("I can't update a server owner's nick. You'll have to manage it manually.")
 
+        await ctx.send("Initial registration completed! Registration can be finalized by running the following commands: INSERT COMMANDS HERE")
         await showNextStep(ctx, userdata)
 
     @register.error
