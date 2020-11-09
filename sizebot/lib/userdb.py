@@ -62,8 +62,9 @@ class User:
         self._macrovision_view = None
 
     def __str__(self):
+        desc = None if self.description is None else truncate(self.description, 50)
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r}, PICTURE_URL = {self.picture_url!r}, "
-                f"DESCRIPTION = '{truncate(self.description, 50)}', DISPLAY = {self.display!r}, "
+                f"DESCRIPTION = {desc}, DISPLAY = {self.display!r}, "
                 f"HEIGHT = {self.height!r}, BASEHEIGHT = {self.baseheight!r}, "
                 f"WEIGHT = {self.weight!r}, BASEWEIGHT = {self.baseweight!r}, "
                 f"FOOTLENGTH = {self.footlength!r}, HAIRLENGTH = {self.hairlength!r}, "
