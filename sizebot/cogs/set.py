@@ -132,10 +132,6 @@ class SetCog(commands.Cog):
         """Change height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        # Convenience for initial registration
-        if "setheight" in userdata.registration_steps_remaining:
-            userdata.baseheight = newheight
-
         userdata.height = newheight
         userdata.complete_step("setheight")
         userdb.save(userdata)
@@ -181,8 +177,6 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        if "setheight" in userdata.registration_steps_remaining:
-            userdata.baseheight = newheightSV
         userdata.height = newheightSV
         userdb.save(userdata)
 
@@ -201,8 +195,6 @@ class SetCog(commands.Cog):
         """Change height to infinity."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        if "setheight" in userdata.registration_steps_remaining:
-            userdata.baseheight = "infinity"
         userdata.height = "infinity"
         userdata.complete_step("setheight")
         userdb.save(userdata)
@@ -222,8 +214,6 @@ class SetCog(commands.Cog):
         """Change height to a zero."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        if "setheight" in userdata.registration_steps_remaining:
-            userdata.baseheight = 0
         userdata.height = 0
         userdata.complete_step("setheight")
         userdb.save(userdata)

@@ -1,4 +1,3 @@
-import random
 import asyncio
 import logging
 from shutil import copyfile
@@ -31,7 +30,7 @@ async def removeUserRole(member):
 async def showNextStep(ctx, userdata):
     if userdata.registered:
         return
-    next_step = random.choice(userdata.registration_steps_remaining)
+    next_step = userdata.registration_steps_remaining[0]
     # TODO: Set these messages
     step_messages = {
         "setheight": ".setheight",
