@@ -37,7 +37,7 @@ async def showNextStep(ctx, userdata):
         return
     next_step = userdata.registration_steps_remaining[0]
     step_messages = {
-        "setheight": f"To start, set your base height with `{conf.prefix}setbaseheight`. This should be roughly a human-sih size in order for comparisons to make better sense.",
+        "setheight": f"To start, set your base height with `{conf.prefix}setbaseheight`. This should be roughly a human height in order for comparisons to make better sense.",
         "setweight": f"Now, use `{conf.prefix}setbaseweight` to set your base weight. This should be whatever weight you'd be at your base height.",
         "setsystem": f"Finally, use `{conf.prefix}setsystem` to set what unit system you use: `M` for Metric, `U` for US."
     }

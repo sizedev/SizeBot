@@ -6,6 +6,7 @@ from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
 from sizebot.lib import decimal, errors, proportions, userdb, utils
+from sizebot.lib.constants import emojis
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
@@ -236,6 +237,8 @@ class SetCog(commands.Cog):
         # Convenience for initial registration
         if "setheight" in userdata.registration_steps_remaining:
             userdata.height = newbaseheight
+            if not (SV.parse("4ft") < newbaseheight < SV.parse("8ft")):
+                await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
 
         userdata.baseheight = newbaseheight
         userdata.complete_step("setheight")
@@ -274,6 +277,11 @@ class SetCog(commands.Cog):
         """Change base weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
+        if "setweight" in userdata.registration_steps_remaining:
+            userdata.height = newbaseweight
+            if not (WV.parse("10lb") < newbaseweight < WV.parse("1000lb")):
+                await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
+
         userdata.baseweight = newbaseweight
         userdata.complete_step("setweight")
         userdb.save(userdata)
@@ -308,8 +316,14 @@ class SetCog(commands.Cog):
             if "setheight" in userdata.registration_steps_remaining:
                 userdata.height = newbaseheight
             userdata.baseheight = newbaseheight
+            if "setheight" in userdata.registration_steps_remaining:
+                if not (SV.parse("4ft") < newbaseheight < SV.parse("8ft")):
+                    await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
             userdata.complete_step("setheight")
         if newbaseweight is not None:
+            if "setweight" in userdata.registration_steps_remaining:
+                if not (WV.parse("10lb") < newbaseheight < SV.parse("1000lb")):
+                    await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
             userdata.baseweight = newbaseweight
             userdata.complete_step("setweight")
         userdb.save(userdata)
