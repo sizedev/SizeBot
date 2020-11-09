@@ -51,7 +51,6 @@ class RegisterCog(commands.Cog):
     # TODO: Change the way this works.
     @commands.command(
         aliases = ["signup"],
-        usage = "<nick> <currentheight> <baseheight> <baseweight> <system: M/U> [species]",
         category = "setup"
     )
     @commands.guild_only()
@@ -62,23 +61,7 @@ class RegisterCog(commands.Cog):
         # baseweight: WV = userdb.defaultweight
         # unitsystem: str = "m"
         # species: str = None
-        """Registers a user for SizeBot.
-
-        Parameters:
-        • `nick`: Your nickname. This will be the first thing displayed in your nickname. For a nickname with spaces, this must be wrapped in quotes.
-        • `currentheight`: Self-explnatory.
-        • `baseheight`: The default height of your character. It is recommended that this is a vaugely reasonable, human-like value, for instance your IRL height, except in rare circumnstances (for instance, if your character is a cat, or an orc, etc.)
-        • `baseweight`: The default weight of your character. All the recommendations for baseheight apply here.
-        • `unitsystem`: The unit system your size tag, and basic versions of your stats, will be displayed in by default. Accepts `M` for Metric, and `U` or `I` for U.S./Imperial.
-        • `species`: Optional, a string to be appened after your size in your sizetag. Appears in the format `<nick> [<size>, <species>]`. If `species` is to contain a space, wrap it in quotes.
-
-        Measurement parameters can accept a wide variety of units, as listed in `&units`.
-
-        Examples:
-        `&register DigiDuncan 0.5in 5'7.5 120lb U`
-        `&register Surge 11ft 5'8 140lb U Raichu`
-        `&register "Speck Boi" 0.1mm 190cm 120kg M`
-        """
+        """Registers a user for SizeBot."""
         # Already registered
 
         userdata = None
