@@ -364,3 +364,9 @@ def regexbuild(li: list, capture = False) -> str:
 
 def url_safe(s):
     return quote(s, safe=" ").replace(" ", "-")
+
+
+def truncate(s, amount):
+    if len(s) > amount:
+        return s[:amount] + "..."
+    return s

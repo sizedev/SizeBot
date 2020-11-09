@@ -11,7 +11,7 @@ from sizebot.lib import errors, paths
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff, Rate as ParseableRate
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import isURL
+from sizebot.lib.utils import isURL, truncate
 
 # Defaults
 defaultheight = SV("1.754")            # meters
@@ -62,10 +62,21 @@ class User:
         self._macrovision_view = None
 
     def __str__(self):
-        return (f"GUILDID `{self.guildid}`, ID `{self.id}`, NICK `{self.nickname}`, GEND `{self.gender}`, "
-                f"DISP `{self.display}`, CHEI `{self.height}`, BHEI `{self.baseheight}`, BWEI `{self.baseweight}`, "
-                f"FOOT `{self.footlength}`, HAIR `{self.hairlength}`, TAIL `{self.taillength}`, LIFT `{self.liftstrength}`, "
-                f"UNIT `{self.unitsystem}`, SPEC `{self.species}`")
+        return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r}, PICTURE_URL = {self.picture_url!r}, "
+                f"DESCRIPTION = '{truncate(self.description, 50)}', DISPLAY = {self.display!r}, "
+                f"HEIGHT = {self.height!r}, BASEHEIGHT = {self.baseheight!r}, "
+                f"WEIGHT = {self.weight!r}, BASEWEIGHT = {self.baseweight!r}, "
+                f"FOOTLENGTH = {self.footlength!r}, HAIRLENGTH = {self.hairlength!r}, "
+                f"TAILLENGTH = {self.taillength!r}, LIFTSTRENGTH = {self.liftstrength!r}, "
+                f"PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
+                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, CURRENTSCALESTEP = {self.currentscalestep!r}, "
+                f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
+                f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
+                f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
+                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}>")
+
+    def __repr__(self):
+        return str(self)
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
