@@ -7,46 +7,7 @@ from urllib.parse import quote
 import validator_collection
 
 re_num = r"\d+\.?\d*"
-
-# TODO: This is far too strict.
-re_sizetag = re.compile(r"""
-\s+\[  # start with a left bracket
-# the size bit
-(
-    # a standard quantity + unit
-    (
-        # the quantity bit
-        (
-            (\d{1,3},)*      # which might have some groups of numbers with commas
-            (\d+|[⅛¼⅜½⅝¾⅞])  # but it will definitely have a group of numbers in it, or a single fraction
-            # maybe even a fraction or decimal part
-            (
-                \.\d+       # decimal
-                |[⅛¼⅜½⅝¾⅞]  # or fractional
-            )?
-            # it might even have Es
-            (
-                [Ee]   # uppercase or lowercase E
-                [-+]?  # it might have a sign
-                \d+    # E values are always integers
-            )?
-        )
-        # the unit bit
-        (
-            [YZEPTGMkcmµnpfazy]?    # might have a SI prefix
-            [a-zA-Z]{1,3}           # between 1-3 letters
-            |[\'\"]                 # or ' or "
-        )
-    ){1,2}  # either 1 or 2 units per tag
-    |0      # or the whole unit can just be zero
-    |∞   # or infinity
-)
-# the species bit (optional)
-(,\s*.+)?   # a comma, a space, and some characters
-# and a right bracket at the end of the name
-\]$
-""", re.VERBOSE)
-re_sizetag_rational = r"(.*)(?: )(\[(?:\d+|∞).*\])"
+re_sizetag = r"(?:.*)(?: )(\[(?:\d+|∞).*\])"
 
 
 def clamp(minVal, val, maxVal):

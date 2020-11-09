@@ -33,7 +33,6 @@ formatSpecRe = re.compile(r"""\A
 """, re.VERBOSE)
 
 
-# TODO: Deprecated?
 class Rate():
     """Rate"""
     re_num_unit = f"{utils.re_num} *[A-Za-z]+"
@@ -93,7 +92,6 @@ class Rate():
         return Decimal(addPerSec), Decimal(mulPerSec), stopSV, stopTV
 
 
-# TODO: Deprecated?
 class Mult():
     """Mult"""
     multPrefixes = ["x", "X", "*", "times", "mult", "multiply"]
