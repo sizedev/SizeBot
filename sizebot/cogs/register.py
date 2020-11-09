@@ -31,7 +31,7 @@ async def removeUserRole(member):
 async def showNextStep(ctx, userdata):
     if userdata.registered:
         return
-    next_step = random.choose(userdata.registration_steps_remaining)
+    next_step = random.choice(userdata.registration_steps_remaining)
     # TODO: Set these messages
     step_messages = {
         "setheight": "Next step in registration is .setheight",
