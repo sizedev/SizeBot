@@ -5,6 +5,7 @@ from shutil import copyfile
 from discord.utils import get
 from discord.ext import commands
 
+from sizebot import conf
 from sizebot.lib import errors, proportions, userdb, paths
 from sizebot.lib.constants import ids, emojis
 
@@ -28,17 +29,19 @@ async def removeUserRole(member):
 
 
 async def showNextStep(ctx, userdata):
+    congrats = False
+    if congrats:
+        await ctx.send(f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n* You can use `{conf.prefix}setspecies` to set your species to be shown in your sizetag.\n* You can adjust your current height with `{conf.prefix}setheight`.\n* You can turn off sizetags with `{conf.prefix}setdisplay`.")
     if userdata.registered:
         return
     next_step = userdata.registration_steps_remaining[0]
-    # TODO: Set these messages
     step_messages = {
-        "setheight": ".setheight",
-        "setweight": ".setweight",
-        "setsystem": ".setsystem"
+        "setheight": f"To start, set your base height with `{conf.prefix}setbaseheight`. This should be roughly a human-sih size in order for comparisons to make better sense.",
+        "setweight": f"Now, use `{conf.prefix}setbaseweight` to set your base weight. This should be whatever weight you'd be at your base height.",
+        "setsystem": f"Finally, use `{conf.prefix}setsystem` to set what unit system you use: `M` for Metric, `U` for US."
     }
     next_step_message = step_messages[next_step]
-    await ctx.send(f"You have {len(userdata.registration_steps_remaining)} registration steps remaining. Next step is {next_step_message}")
+    await ctx.send(f"You have {len(userdata.registration_steps_remaining)} registration steps remaining.\n{next_step_message}")
 
 
 class RegisterCog(commands.Cog):
