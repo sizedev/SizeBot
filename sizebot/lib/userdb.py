@@ -269,6 +269,10 @@ class User:
     def weight(self):
         return WV(self.baseweight * (self.scale ** 3))
 
+    @weight.setter
+    def weight(self, value):
+        self.baseweight = value * (self.viewscale ** 3)
+
     # Check that unitsystem is valid and lowercase
     @property
     def unitsystem(self):
@@ -321,6 +325,12 @@ class User:
     @property
     def registered(self):
         return len(self.registration_steps_remaining) == 0
+
+    def complete_step(self, step):
+        try:
+            self.registration_steps_remaining.remove(step)
+        except ValueError:
+            pass
 
     @property
     def macrovision_model(self):
@@ -541,7 +551,9 @@ def countusers():
     return usercount
 
 
-def listUsers(guildid = None):
-    userfiles = paths.guilddbpath.glob("*/users/*.json")
+def listUsers(*, guildid = None, userid = None):
+    guildid = int(guildid) if guildid else "*"
+    userid = int(userid) if userid else "*"
+    userfiles = paths.guilddbpath.glob(f"{guildid}/users/{userid}.json")
     users = [(int(u.parent.parent.name), int(u.stem)) for u in userfiles]
     return users

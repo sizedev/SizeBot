@@ -5,6 +5,7 @@ import discord
 from discord.ext.commands.converter import MemberConverter
 from discord.ext import commands
 
+from sizebot.cogs.register import showNextStep
 from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.constants import colors
 from sizebot.lib.loglevels import EGG
@@ -98,6 +99,7 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = embedtosend)
 
         logger.info(f"Stats for {memberOrHeight} sent.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "[user/height]",
@@ -180,6 +182,7 @@ class StatsCog(commands.Cog):
             return
 
         await ctx.send(stattosend)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<stat> [user/height]",

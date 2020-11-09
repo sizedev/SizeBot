@@ -1,3 +1,4 @@
+import random
 import asyncio
 import logging
 from shutil import copyfile
@@ -7,7 +8,6 @@ from discord.ext import commands
 
 from sizebot.lib import errors, proportions, userdb, paths
 from sizebot.lib.constants import ids, emojis
-from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
 
@@ -28,6 +28,20 @@ async def removeUserRole(member):
     await member.remove_roles(role, reason="Unregistered as sizebot user")
 
 
+async def showNextStep(ctx, userdata):
+    if userdata.registered:
+        return
+    next_step = random.choose(userdata.registration_steps_remaining)
+    # TODO: Set these messages
+    step_messages = {
+        "setheight": "Next step in registration is .setheight",
+        "setweight": "Next step in registration is .setweight",
+        "setsystem": "Next step in registration is .setsystem"
+    }
+    next_step_message = step_messages[next_step]
+    await ctx.send(next_step_message)
+
+
 class RegisterCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -39,7 +53,13 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def register(self, ctx, nick: str, currentheight: SV = proportions.defaultheight, baseheight: SV = proportions.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
+    async def register(self, ctx):
+        # nick: str
+        # currentheight: SV = proportions.defaultheight
+        # baseheight: SV = proportions.defaultheight
+        # baseweight: WV = userdb.defaultweight
+        # unitsystem: str = "m"
+        # species: str = None
         """Registers a user for SizeBot.
 
         Parameters:
@@ -57,22 +77,28 @@ class RegisterCog(commands.Cog):
         `&register Surge 11ft 5'8 140lb U Raichu`
         `&register "Speck Boi" 0.1mm 190cm 120kg M`
         """
-        readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
-        logger.warn(f"New user attempt! Nickname: {nick}")
-        logger.info(readable)
-
         # Already registered
-        if userdb.exists(ctx.guild.id, ctx.author.id):
-            await ctx.send("Sorry! You already registered with SizeBot.\n"
-                           "To unregister, use the `&unregister` command.")
-            logger.warn(f"User already registered on user registration: {ctx.author}.")
+
+        userdata = None
+        try:
+            userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+        except errors.UserNotFoundException:
+            userdata = None
+
+        # User data already exists
+        if userdata:
+            if userdata.registered:
+                await ctx.send("Sorry! You already registered with SizeBot.\n"
+                               "To unregister, use the `&unregister` command.")
+            else:
+                await showNextStep(ctx, userdata)
             return
 
-        currentusers = userdb.listUsers()
-        guildsregisteredin = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == ctx.author.id]
-        if guildsregisteredin != []:
-            guildsstring = guildsregisteredin.join('\n')
-            sentMsg = await ctx.send(f"You are already registed with SizeBot in these servers:\n{guildsstring}"
+        # User is already in different guilds, offer to copy profile to this guild?
+        guild_names = [self.bot.get_guild(int(g)).name for g, _ in userdb.listUsers(userid=ctx.author.id)]
+        if guild_names:
+            guildsstring = guild_names.join('\n')
+            sentMsg = await ctx.send(f"You are already registered with SizeBot in these servers:\n{guildsstring}"
                                      f"You can copy a profile from one of these guilds to this one using `{ctx.prefix}copy.`\n"
                                      "Proceed with registration anyway?")
             await sentMsg.add_reaction(emojis.check)
@@ -92,50 +118,33 @@ class RegisterCog(commands.Cog):
             except asyncio.TimeoutError:
                 # User took too long to respond
                 await sentMsg.delete()
+                return
 
             # if the reaction isn't the right one, stop.
             if reaction.emoji != emojis.check:
                 return
 
-        # Invalid size value
-        if (currentheight <= 0 or baseheight <= 0 or baseweight <= 0):
-            logger.warn("Invalid size value.")
-            await ctx.send("All values must be an integer greater than zero.")
-            return
-
-        # Invalid unit value
-        if unitsystem.lower() not in ["m", "u", "i"]:
-            logger.warn(f"unitsystem was {unitsystem}, must be M or U/I.")
-            await ctx.send("Unitsystem must be `M` or `U`/`I`.")
-            raise errors.InvalidUnitSystemException
-
-        # I system is really U.
-        if unitsystem.lower() == "i":
-            unitsystem = "u"
-
         userdata = userdb.User()
         userdata.guildid = ctx.guild.id
         userdata.id = ctx.author.id
-        userdata.nickname = nick
+        userdata.nickname = ctx.author.display_name
+        if any(c in ctx.author.display_name for c in "()[]"):
+            ctx.send("TODO: CLEANUP - If you have already have size tag in your name, you fix your nick with .setnick")
         userdata.display = "y"
-        userdata.height = currentheight
-        userdata.baseheight = baseheight
-        userdata.baseweight = baseweight
-        userdata.unitsystem = unitsystem
-        userdata.species = species
+        userdata.registration_steps_remaining = ["setheight", "setweight", "setsystem"]
 
         userdb.save(userdata)
 
         await addUserRole(ctx.author)
 
-        logger.warn(f"Made a new user: {ctx.author}!")
+        logger.warn(f"Started registration for a new user: {ctx.author}!")
         logger.info(userdata)
-        await ctx.send(f"Registered <@{ctx.author.id}>. {userdata}.")
 
         # user has display == "y" and is server owner
         if userdata.display and userdata.id == ctx.author.guild.owner.id:
             await ctx.send("I can't update a server owner's nick. You'll have to manage it manually.")
-            return
+
+        await showNextStep(ctx, userdata)
 
     @register.error
     async def register_handler(self, ctx, error):
@@ -218,9 +227,8 @@ class RegisterCog(commands.Cog):
             "0️⃣": 10
         }
 
-        currentusers = userdb.listUsers()
-        guildsregisteredin = [g for g, u in currentusers if u == ctx.author.id]
-        guildsregisteredinnames = [self.bot.get_guild(g).name for g, u in currentusers if u == ctx.author.id]
+        guildsregisteredin = [g for g, _ in userdb.listUsers(userid = ctx.author.id)]
+        guildsregisteredinnames = [self.bot.get_guild(g).name for g in guildsregisteredin]
 
         if guildsregisteredin == []:
             await ctx.send("You are not registered with SizeBot in any guilds."
