@@ -34,12 +34,12 @@ async def showNextStep(ctx, userdata):
     next_step = random.choice(userdata.registration_steps_remaining)
     # TODO: Set these messages
     step_messages = {
-        "setheight": "Next step is .setheight",
-        "setweight": "Next step is .setweight",
-        "setsystem": "Next step is .setsystem"
+        "setheight": ".setheight",
+        "setweight": ".setweight",
+        "setsystem": ".setsystem"
     }
     next_step_message = step_messages[next_step]
-    await ctx.send(f"You have {len(userdata.registration_steps_remaining)} registration steps remaining.\n{next_step_message}")
+    await ctx.send(f"You have {len(userdata.registration_steps_remaining)} registration steps remaining. Next step is {next_step_message}")
 
 
 class RegisterCog(commands.Cog):

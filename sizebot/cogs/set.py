@@ -1,5 +1,4 @@
 import logging
-from sizebotapi.main import user
 import typing
 
 import discord
@@ -134,7 +133,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         # Convenience for initial registration
-        if userdata.baseheight is None:
+        if "setheight" in userdata.registration_steps_remaining:
             userdata.baseheight = newheight
 
         userdata.height = newheight
@@ -170,18 +169,20 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setrandomheight(self, ctx, minheight, maxheight):
+    async def setrandomheight(self, ctx, minheight: SV, maxheight: SV):
         """Change height to a random value.
 
         Sets your height to a height between `minheight` and `maxheight`.
         Weighted on a logarithmic curve."""
-        minheightSV = utils.clamp(0, SV.parse(minheight), SV._infinity)
-        maxheightSV = utils.clamp(0, SV.parse(maxheight), SV._infinity)
+        minheightSV = utils.clamp(0, minheight, SV._infinity)
+        maxheightSV = utils.clamp(0, maxheight, SV._infinity)
 
         newheightSV = decimal.randRangeLog(minheightSV, maxheightSV)
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
+        if "setheight" in userdata.registration_steps_remaining:
+            userdata.baseheight = newheightSV
         userdata.height = newheightSV
         userdb.save(userdata)
 
@@ -200,7 +201,10 @@ class SetCog(commands.Cog):
         """Change height to infinity."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
+        if "setheight" in userdata.registration_steps_remaining:
+            userdata.baseheight = "infinity"
         userdata.height = "infinity"
+        userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now infinitely tall.")
@@ -218,7 +222,10 @@ class SetCog(commands.Cog):
         """Change height to a zero."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
+        if "setheight" in userdata.registration_steps_remaining:
+            userdata.baseheight = 0
         userdata.height = 0
+        userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now nothing.")
@@ -237,7 +244,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         # Convenience for initial registration
-        if userdata.height is None:
+        if "setheight" in userdata.registration_steps_remaining:
             userdata.height = newbaseheight
 
         userdata.baseheight = newbaseheight
@@ -300,11 +307,21 @@ class SetCog(commands.Cog):
         if (isinstance(arg1, SV) and isinstance(arg2, SV)) or (isinstance(arg1, WV) and isinstance(arg2, WV)):
             raise errors.UserMessedUpException("Please do not enter two heights or two weights.")
 
+        newbaseheight = None
+        newbaseweight = None
         for arg in [arg1, arg2]:
             if isinstance(arg, SV):
-                userdata.baseheight = arg
+                newbaseheight = arg
             if isinstance(arg, WV):
-                userdata.baseweight = arg
+                newbaseweight = arg
+        if newbaseheight is not None:
+            if "setheight" in userdata.registration_steps_remaining:
+                userdata.height = newbaseheight
+            userdata.baseheight = newbaseheight
+            userdata.complete_step("setheight")
+        if newbaseweight is not None:
+            userdata.baseweight = newbaseweight
+            userdata.complete_step("setweight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
