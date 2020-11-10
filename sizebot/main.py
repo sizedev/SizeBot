@@ -10,10 +10,10 @@ from discord.ext.commands import Bot
 from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
-from sizebot import discordplus, utils
+from sizebot import discordplus
 from sizebot.conf import conf
 from sizebot.cogs import edge, limits
-from sizebot.lib import language, objs, proportions, status, units, paths
+from sizebot.lib import language, objs, paths, proportions, status, units, utils
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN
 from sizebot.plugins import active, monika
