@@ -149,8 +149,7 @@ def main():
 
     @bot.event
     async def on_message(message):
-        if message.content.startswith(f"{conf.prefix}timeit"):
-            logger.info("Timing...")
+        if message.content.startswith(f"{conf.prefix}timeit") and bot.is_owner(message.author):
             await on_message_timed(message)
             return
         await bot.process_commands(message)
