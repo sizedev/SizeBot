@@ -79,6 +79,7 @@ class ThisCog(commands.Cog):
 
     @commands.command(
         aliases = ["points", "board"],
+        hidden = True,
         category = "misc"
     )
     @commands.guild_only()
