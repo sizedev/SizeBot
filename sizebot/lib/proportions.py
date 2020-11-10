@@ -3,7 +3,6 @@ import re
 
 import discord
 from discord import Embed
-from discord import user
 
 from sizebot import __version__
 from sizebot.lib import errors, macrovision, userdb, utils
@@ -176,7 +175,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             self.bigToSmall = PersonStats(bigToSmallUserdata)
 
             smallToBigUserdata = userdb.User()
-            smallToBigUserdata.height = 0
+            smallToBigUserdata.height = Decimal(0)
             self.smallToBig = PersonStats(smallToBigUserdata)
         else:
             self.multiplier = self.big.height / self.small.height
@@ -197,67 +196,10 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         self.lookdirection = "up" if viewangle >= 0 else "down"
 
     def __str__(self):
-        # TODO: Unused on frontend, turn into debug
-        returnstr = (
-            "**Comparison:**\n"
-            f"{self.big.tag} is really:\n"
-            f"\tReal Height: {self.big.height:,.3mu} ({self.big.scale:,.3}x scale)\n"
-            f"\tReal Weight: {self.big.weight:,.3mu}. ({self.big.scale ** 3:,.3}x scale)\n"
-            f"To {self.small.tag}, {self.big.tag} looks:\n"
-            f"\tHeight: {self.bigToSmall.height:,.3mu}\n"
-            f"\tWeight: {self.bigToSmall.weight:,.3mu}\n"
-            f"\t{self.bigToSmall.footname} Length: {self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
-            f"\t{self.bigToSmall.footname} Width: {self.bigToSmall.footwidth:,.3mu}\n"
-            f"\tToe Height: {self.bigToSmall.toeheight:,.3mu}\n"
-            f"\tShoeprint Depth: {self.bigToSmall.shoeprintdepth:,.3mu}\n"
-            f"\tPointer Finger Length: {self.bigToSmall.pointerlength:,.3mu}\n"
-            f"\tThumb Width: {self.bigToSmall.thumbwidth:,.3mu}\n"
-            f"\tNail Thickness: {self.bigToSmall.nailthickness:,.3mu}\n"
-            f"\tFingerprint Depth: {self.bigToSmall.fingerprintdepth:,.3mu}\n"
-            f"\tClothing Thread Thickness: {self.bigToSmall.threadthickness:,.3mu}\n")
-        if self.bigToSmall.hairlength:
-            returnstr += f"\t{self.bigToSmall.hairname} Length: {self.bigToSmall.hairlength:,.3mu}\n"
-        if self.bigToSmall.taillength:
-            returnstr += f"\tTail Length: {self.bigToSmall.taillength:,.3mu}\n"
-        returnstr += (
-            f"\t{self.bigToSmall.hairname} Width: {self.bigToSmall.hairwidth:,.3mu}\n"
-            f"\tEye Width: {self.bigToSmall.eyewidth:,.3mu}\n"
-            f"\tWalk Speed: {self.bigToSmall.walkperhour:,.3mu}\n"
-            f"\tRun Speed: {self.bigToSmall.runperhour:,.3mu}\n"
-            "\n"
-            f"{self.big.tag} is {self.multiplier:,.3}x taller than {self.small.tag}.\n"
-            "\n"
-            f"{self.small.tag} is really:\n"
-            f"\tReal Height: {self.small.height:,.3mu} ({self.small.scale:,.3}x scale)\n"
-            f"\tReal Weight: {self.small.weight:,.3mu}. ({self.small.scale ** 3:,.3}x scale)\n"
-            f"To {self.big.tag}, {self.small.tag} looks:\n"
-            f"\tHeight: {self.smallToBig.height:,.3mu}\n"
-            f"\tWeight: {self.smallToBig.weight:,.3mu}\n"
-            f"\t{self.smallToBig.footname} Length: {self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})\n"
-            f"\t{self.smallToBig.footname} Width: {self.smallToBig.footwidth:,.3mu}\n"
-            f"\tToe Height: {self.smallToBig.toeheight:,.3mu}\n"
-            f"\tShoeprint Depth: {self.smallToBig.shoeprintdepth:,.3mu}\n"
-            f"\tPointer Finger Length: {self.smallToBig.pointerlength:,.3mu}\n"
-            f"\tThumb Width: {self.smallToBig.thumbwidth:,.3mu}\n"
-            f"\tNail Thickness: {self.smallToBig.nailthickness:,.3mu}\n"
-            f"\tFingerprint Depth: {self.smallToBig.fingerprintdepth:,.3mu}\n"
-            f"\tClothing Thread Thickness: {self.smallToBig.threadthickness:,.3mu}\n")
-        if self.smallToBig.hairlength:
-            returnstr += f"\t{self.smallToBig.hairname} Length: {self.smallToBig.hairlength:,.3mu}\n"
-        if self.smallToBig.taillength:
-            returnstr += f"\tTail Length: {self.smallToBig.taillength:,.3mu}\n"
-        returnstr += (
-            f"\t{self.smallToBig.hairname} Width: {self.smallToBig.hairwidth:,.3mu}\n"
-            f"\tEye Width: {self.smallToBig.eyewidth:,.3mu}\n"
-            f"\tWalk Speed: {self.smallToBig.walkperhour:,.1M} per hour ({self.smallToBig.walkperhour:,.1U} per hour)\n"
-            f"\tRun Speed: {self.smallToBig.runperhour:,.1M} per hour ({self.smallToBig.runperhour:,.1U} per hour)\n"
-            "\n"
-            f"**Base Sizes:**\n"
-            f"\t{self.big.tag}: {self.big.baseheight:,.3mu} | {self.big.baseweight:,.3mu}\n"
-            f"\t{self.small.tag}: {self.small.baseheight:,.3mu} | {self.small.baseweight:,.3mu}"
-        )
-        returnstr = returnstr.replace("\t", "\u2002" * 4)
-        return returnstr
+        return f"<PersonComparison SMALL = {self.small!r}, BIG = {self.big!r}, SMALLTOBIG = {self.smallToBig!r}, BIGTOSMALL = {self.bigToSmall!r}, URL = {self.url!r}>"
+
+    def __repr__(self):
+        return str(self)
 
     def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
@@ -506,38 +448,17 @@ class PersonStats:
         return returndict.get(stat)
 
     def __str__(self):
-        # TODO: Unused on frontend, turn into debug
-        returnstr = (
-            f"**{self.tag} Stats:**\n"
-            f"*Current Height:*  {self.height:,.3mu} *{self.formattedscale} scale*\n"
-            f"*Current Weight:*  {self.weight:,.3mu} *{self.formattedweightscale} scale*\n"
-            f"\n"
-            f"{self.footname} Length: {self.footlength:,.3mu} ({self.shoesize})\n"
-            f"{self.footname} Width: {self.footwidth:,.3mu}\n"
-            f"Toe Height: {self.toeheight:,.3mu}\n"
-            f"Shoeprint Depth: {self.shoeprintdepth:,.3mu}\n"
-            f"Pointer Finger Length: {self.pointerlength:,.3mu}\n"
-            f"Thumb Width: {self.thumbwidth:,.3mu}\n"
-            f"Nail Thickness: {self.nailthickness:,.3mu}\n"
-            f"Fingerprint Depth: {self.fingerprintdepth:,.3mu}\n"
-            f"Clothing Thread Thickness: {self.threadthickness:,.3mu}\n")
-        if self.hairlength:
-            returnstr += f"{self.hairname} Length: {self.hairlength:,.3mu}\n"
-        if self.taillength:
-            returnstr += f"Tail Length: {self.taillength:,.3mu}\n"
-        returnstr += (
-            f"{self.hairname} Width: {self.hairwidth:,.3mu}\n"
-            f"Eye Width: {self.eyewidth:,.3mu}\n"
-            f"Walk Speed: {self.walkperhour:,.1M} per hour ({self.walkperhour:,.1U} per hour)\n"
-            f"Run Speed: {self.runperhour:,.1M} per hour ({self.runperhour:,.1U} per hour)\n"
-            f"View Distance to Horizon: {self.horizondistance:,.3mu}\n"
-            f"\n"
-            f"Size of a Normal Person (Comparative): {self.avgheightcomp:,.3mu}\n"
-            f"Weight of a Normal Person (Comparative): {self.avgweightcomp:,.3mu}\n"
-            f"To look {self.avglookdirection} at a average human, you'd have to look {self.avglookdirection} {self.avglookangle:.0f}°.\n"
-            f"\n"
-            f"Character Bases: {self.baseheight:,.3mu} | {self.baseweight:,.3mu}")
-        return returnstr
+        return (f"<PersonStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
+                f"HEIGHT = {self.height!r}, BASEHEIGHT = {self.baseheight!r}, VIEWSCALE = {self.viewscale!r}, "
+                f"WEIGHT = {self.weight!r}, BASEWEIGHT = {self.baseweight!r}, FOOTNAME = {self.footname!r}, "
+                f"HAIRNAME = {self.hairname!r}, PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
+                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}"
+                f"HAIRLENGTH = {self.hairlength!r}, TAILLENGTH = {self.taillength!r}, "
+                f"LIFTSTRENGTH = {self.liftstrength!r}, FOOTLENGTH = {self.footlength!r}, "
+                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}>")
+
+    def __repr__(self):
+        return str(self)
 
     def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"

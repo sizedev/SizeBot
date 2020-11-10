@@ -10,7 +10,7 @@ from discord import Embed
 
 from sizebot.conf import conf
 from sizebot.cogs import thistracker
-from sizebot.lib import userdb, utils
+from sizebot.lib import guilddb, proportions, userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff, LimitedRate
@@ -127,7 +127,9 @@ def getEvalGlobals():
         "time": time,
         "timedelta": timedelta,
         "math": math,
-        "BANNER": BANNER, "EGG": EGG, "LOGIN": LOGIN
+        "BANNER": BANNER, "EGG": EGG, "LOGIN": LOGIN,
+        "guilddb": guilddb,
+        "proportions": proportions
     }
 
     return evalGlobals

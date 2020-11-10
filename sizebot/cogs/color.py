@@ -68,7 +68,7 @@ class ColorCog(commands.Cog):
                 await outmessage.edit(content = f"A {colortype} color can only have 3 parts.")
                 return
             if not re_digits.match(colorvalues[0]):
-                await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
+                await outmessage.edit(content = f"{colorvalue} is not a valid color part for a {colortype}-type color.")
                 return
             for value in colorvalues[1:]:
                 if not re_percent.match(value):
@@ -121,7 +121,7 @@ class ColorCog(commands.Cog):
 
         embed.set_image(url = f"http://www.singlecolorimage.com/get/{hexstring}/400x200.png")
 
-        await outmessage.edit(embed = embed)
+        await outmessage.edit(content = "", embed = embed)
 
 
 def setup(bot):

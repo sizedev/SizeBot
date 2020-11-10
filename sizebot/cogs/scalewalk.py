@@ -17,7 +17,7 @@ logger = logging.getLogger("sizebot")
 
 def get_steps(start_inc: SV, diff: Diff, goal: SV):
     """Return the number of steps it would take to reach `goal` from 0,
-    first by increasing by `start_inc`, then by `start_inc` * `mult`,
+    first by increasing by `start_inc`, then by `start_inc` operator(`diff.changetype`) `diff.amount`,
     repeating this process until `goal` is reached.
 
     Returns (steps, final increment, start inc. / final inc.)"""
@@ -190,7 +190,7 @@ class ScaleWalkCog(commands.Cog):
         guildid = ctx.guild.id
         userid = ctx.author.id
 
-        userdata = userdb.load(guildid, userid)
+        originaldata = userdata = userdb.load(guildid, userid)
 
         if userdata.currentscalestep.changetype == "add":
             userdata.height += (userdata.currentscalestep.amount * steps)

@@ -4,7 +4,9 @@ import typing
 import discord
 from discord.ext import commands
 
+from sizebot.cogs.register import showNextStep
 from sizebot.lib import decimal, errors, proportions, userdb, utils
+from sizebot.lib.constants import emojis
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
@@ -34,6 +36,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s nick is now {userdata.nickname}")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<species>",
@@ -51,6 +54,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s species is now a {userdata.species}.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["clearspecies"],
@@ -68,6 +72,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s species is now cleared.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<Y/N>",
@@ -89,6 +94,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s display is now set to {userdata.display}.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<M/U>",
@@ -100,7 +106,7 @@ class SetCog(commands.Cog):
         newsys = newsys.lower()
         if newsys not in ["m", "u"]:
             # TODO: More aliases for the systems. (make it a map)
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [u/i/m]`.")
+            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.usage}`.")
             return
 
         if newsys == "i":
@@ -109,31 +115,33 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.unitsystem = newsys
+        userdata.complete_step("setsystem")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) set their system to {userdata.unitsystem}.")
         await ctx.send(f"<@{ctx.author.id}>'s system is now set to {userdata.unitsystem}.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<height>",
         category = "set"
     )
     @commands.guild_only()
-    async def setheight(self, ctx, *, newheight):
+    async def setheight(self, ctx, *, newheight: SV):
         """Change height."""
-        newheightsv = SV.parse(newheight)
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.height = newheightsv
+        userdata.height = newheight
+        userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now {userdata.height:m} tall.")
         await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["resetsize", "reset"],
@@ -151,19 +159,20 @@ class SetCog(commands.Cog):
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) reset their size.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<minheight> <maxheight>",
         category = "set"
     )
     @commands.guild_only()
-    async def setrandomheight(self, ctx, minheight, maxheight):
+    async def setrandomheight(self, ctx, minheight: SV, maxheight: SV):
         """Change height to a random value.
 
         Sets your height to a height between `minheight` and `maxheight`.
         Weighted on a logarithmic curve."""
-        minheightSV = utils.clamp(0, SV.parse(minheight), SV._infinity)
-        maxheightSV = utils.clamp(0, SV.parse(maxheight), SV._infinity)
+        minheightSV = utils.clamp(0, minheight, SV._infinity)
+        maxheightSV = utils.clamp(0, maxheight, SV._infinity)
 
         newheightSV = decimal.randRangeLog(minheightSV, maxheightSV)
 
@@ -176,6 +185,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["inf"],
@@ -187,12 +197,14 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.height = "infinity"
+        userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now infinitely tall.")
         await ctx.send(f"<@{ctx.author.id}> is now infinitely tall.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["0"],
@@ -204,62 +216,81 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.height = 0
+        userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now nothing.")
         await ctx.send(f"<@{ctx.author.id}> is now nothing.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<height>",
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseheight(self, ctx, *, newbaseheight):
+    async def setbaseheight(self, ctx, *, newbaseheight: SV):
         """Change base height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.baseheight = SV.parse(newbaseheight)
+        # Convenience for initial registration
+        if "setheight" in userdata.registration_steps_remaining:
+            userdata.height = newbaseheight
+            if not (SV.parse("4ft") < newbaseheight < SV.parse("8ft")):
+                await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
+
+        userdata.baseheight = newbaseheight
+        userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height to {newbaseheight}.")
         await ctx.send(f"<@{ctx.author.id}>'s base height is now {userdata.baseheight:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<weight>",
         category = "set"
     )
-    async def setweight(self, ctx, *, newweight):
+    async def setweight(self, ctx, *, newweight: WV):
         """Set your current weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.baseweight = WV(WV.parse(newweight) * (userdata.viewscale ** 3))
+        userdata.weight = newweight
+        userdata.complete_step("setweight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their weight to {newweight}.")
         await ctx.send(f"<@{ctx.author.id}>'s weight is now {userdata.weight:mu}")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<weight>",
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseweight(self, ctx, *, newbaseweight):
+    async def setbaseweight(self, ctx, *, newbaseweight: WV):
         """Change base weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.baseweight = WV.parse(newbaseweight)
+        if "setweight" in userdata.registration_steps_remaining:
+            userdata.height = newbaseweight
+            if not (WV.parse("10lb") < newbaseweight < WV.parse("1000lb")):
+                await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
+
+        userdata.baseweight = newbaseweight
+        userdata.complete_step("setweight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base weight to {newbaseweight}.")
         await ctx.send(f"<@{ctx.author.id}>'s base weight is now {userdata.baseweight:mu}")
 
         await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<height/weight> [height/weight]",
@@ -274,15 +305,32 @@ class SetCog(commands.Cog):
         if (isinstance(arg1, SV) and isinstance(arg2, SV)) or (isinstance(arg1, WV) and isinstance(arg2, WV)):
             raise errors.UserMessedUpException("Please do not enter two heights or two weights.")
 
+        newbaseheight = None
+        newbaseweight = None
         for arg in [arg1, arg2]:
             if isinstance(arg, SV):
-                userdata.baseheight = arg
+                newbaseheight = arg
             if isinstance(arg, WV):
-                userdata.baseweight = arg
+                newbaseweight = arg
+        if newbaseheight is not None:
+            if "setheight" in userdata.registration_steps_remaining:
+                userdata.height = newbaseheight
+            userdata.baseheight = newbaseheight
+            if "setheight" in userdata.registration_steps_remaining:
+                if not (SV.parse("4ft") < newbaseheight < SV.parse("8ft")):
+                    await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
+            userdata.complete_step("setheight")
+        if newbaseweight is not None:
+            if "setweight" in userdata.registration_steps_remaining:
+                if not (WV.parse("10lb") < newbaseheight < SV.parse("1000lb")):
+                    await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
+            userdata.baseweight = newbaseweight
+            userdata.complete_step("setweight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
         await ctx.send(f"{ctx.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<foot>",
@@ -298,6 +346,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -314,6 +363,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["setshoesize"],
@@ -336,6 +386,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["setbaseshoesize"],
@@ -359,6 +410,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["clearfoot", "unsetfoot"],
@@ -374,6 +426,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom foot length.")
         await ctx.send(f"<@{ctx.author.id}>'s foot length is now default.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         category = "set"
@@ -388,6 +441,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) toggled their foot word to {userdata.footname}.")
         await ctx.send(f"The end of <@{ctx.author.id}>'s legs are now called a {userdata.footname.lower()}")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         category = "set"
@@ -402,6 +456,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) toggled their hair word to {userdata.hairname}.")
         await ctx.send(f"The hair of <@{ctx.author.id}> is now called {userdata.hairname.lower()}")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<hair>",
@@ -418,6 +473,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s hair is now {userdata.hairlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -435,6 +491,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s hair is now {userdata.hairlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["clearhair", "unsethair"],
@@ -450,6 +507,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom hair length.")
         await ctx.send(f"<@{ctx.author.id}>'s hair length is now cleared.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<tail>",
@@ -466,6 +524,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s tail is now {userdata.taillength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -483,6 +542,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s tail is now {userdata.taillength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["cleartail", "unsettail"],
@@ -498,6 +558,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom tail length.")
         await ctx.send(f"<@{ctx.author.id}>'s tail length is now cleared.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<weight>",
@@ -513,6 +574,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.liftstrength:m}")
         await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.liftstrength:mu}.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<weight>",
@@ -529,6 +591,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.liftstrength:m}")
         await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.liftstrength:mu}.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["clearstrength", "unsetstrength"],
@@ -544,6 +607,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom lift/carry strength.")
         await ctx.send(f"<@{ctx.author.id}>'s lift/carry strength is now cleared.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -561,6 +625,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s walk is now {userdata.walkperhour:m}")
         await ctx.send(f"<@{ctx.author.id}>'s walk is now {userdata.walkperhour:mu}.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -577,6 +642,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s walk is now {userdata.walkperhour:m}")
         await ctx.send(f"<@{ctx.author.id}>'s walk is now {userdata.walkperhour:mu}.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["clearwalk", "unsetwalk"],
@@ -592,6 +658,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom walk speed.")
         await ctx.send(f"<@{ctx.author.id}>'s walk speed is now cleared.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -609,6 +676,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s run is now {userdata.runperhour:m}")
         await ctx.send(f"<@{ctx.author.id}>'s run is now {userdata.runperhour:mu}.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -625,6 +693,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s run is now {userdata.runperhour:m}")
         await ctx.send(f"<@{ctx.author.id}>'s run is now {userdata.runperhour:mu}.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["clearrun", "unsetrun"],
@@ -640,6 +709,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom run speed.")
         await ctx.send(f"<@{ctx.author.id}>'s run speed is now cleared.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         usage = "<male/female/none>",
@@ -677,6 +747,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {user.id} ({user.display_name}) set their gender to {userdata.gender}.")
         await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["cleargender", "unsetgender"],
@@ -697,6 +768,7 @@ class SetCog(commands.Cog):
 
         logger.info(f"User {user.id} ({user.display_name}) reset their gender.")
         await ctx.send(f"<@{user.id}>'s gender is now reset.")
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         category = "mod",

@@ -24,7 +24,6 @@ class Nanny:
         member = await guild.fetch_member(self.userid)
         await member.move_to(None, reason="Naptime!")
         # member = bot.get_guild(self.guildid).get_member(self.memberid)
-        # TODO: Kick user from their voice channel
         return False
 
     def toJson(self):
