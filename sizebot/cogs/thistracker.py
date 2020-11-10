@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 from dateutil.tz import tzlocal
 
@@ -8,6 +9,9 @@ from discord.ext import commands
 
 from sizebot import __version__
 from sizebot.lib import paths
+from sizebot.lib.loglevels import EGG
+
+logger = logging.get("sizebot")
 
 
 class ThisTracker():
@@ -85,6 +89,7 @@ class ThisCog(commands.Cog):
     @commands.guild_only()
     async def leaderboard(self, ctx):
         """See who's the most agreeable!"""
+        logger.log(EGG, f"{ctx.message.author.display_name} found the leaderboard!")
         now = datetime.now(tzlocal())
         tracker = ThisTracker.load()
         trackerlist = sorted(tracker.points.items(), key=lambda i: i[1], reverse= True)
