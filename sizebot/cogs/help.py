@@ -300,7 +300,7 @@ class HelpCog(commands.Cog):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
         try:
-            webhook = await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks()[0]
+            webhook = (await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks())[0]
             await webhook.send(f"**Bug report** from `{ctx.author}`:\n> {message}")
         except Forbidden:
             logger.error("I can't send webhooks in the bug reports channel!")
@@ -313,7 +313,7 @@ class HelpCog(commands.Cog):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         try:
-            webhook = await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks()[0]
+            webhook = (await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks())[0]
             await webhook.send(f"**Feature request** from `{ctx.author}`:\n> {message}")
         except Forbidden:
             logger.error("I can't send webhooks in the bug reports channel!")
@@ -333,7 +333,7 @@ class HelpCog(commands.Cog):
         Also include alternate names for the object, if it has them."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent an object request.")
         try:
-            webhook = await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks()[0]
+            webhook = (await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks())[0]
             await webhook.send(f"**Object request** from `{ctx.author}`:\n> {message}")
         except Forbidden:
             logger.error("I can't send webhooks in the bug reports channel!")
