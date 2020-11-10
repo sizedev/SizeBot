@@ -183,7 +183,7 @@ def main():
         limitslatency = nickupdatetime - limitstime
         nickupdatelatency = monikatime - nickupdatetime
         monikalatency = activetime - monikatime
-        activelatency = endtime = activetime
+        activelatency = endtime - activetime
         totaltime = endtime - starttime
         latency = (
             f"Discord Latency: {utils.prettyTimeDelta(discordlatency.total_seconds(), True)}\n"
