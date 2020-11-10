@@ -11,10 +11,12 @@ re_sizetag = re.compile(r"(?:.*)(?: )(\[(?:\d+|∞).*\])")
 
 
 def clamp(minVal, val, maxVal):
+    """Clamp a `val` to be no lower than `minVal`, and no higher than `maxVal`."""
     return max(minVal, min(maxVal, val))
 
 
-def prettyTimeDelta(totalSeconds, millisecondAccuracy = False):
+def prettyTimeDelta(totalSeconds, millisecondAccuracy = False) -> str:
+    """Get a human readable string representing an amount of time passed."""
     MILLISECONDS_PER_YEAR = 86400 * 365 * 1000
     MILLISECONDS_PER_DAY = 86400 * 1000
     MILLISECONDS_PER_HOUR = 3600 * 1000
@@ -46,6 +48,7 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False):
 
 
 def tryInt(val):
+    """Try to cast `val` to an `int`, if it can't, just return `val`."""
     try:
         val = int(val)
     except ValueError:
@@ -54,7 +57,7 @@ def tryInt(val):
 
 
 def hasPath(root, path):
-    """Get a value using a path in nested dicts/lists"""
+    """Get a value using a path in nested dicts/lists."""
     """utils.getPath(myDict, "path.to.value", default=100)"""
     branch = root
     components = path.split(".")
@@ -68,7 +71,7 @@ def hasPath(root, path):
 
 
 def getPath(root, path, default=None):
-    """Get a value using a path in nested dicts/lists"""
+    """Get a value using a path in nested dicts/lists."""
     """utils.getPath(myDict, "path.to.value", default=100)"""
     branch = root
     components = path.split(".")
@@ -102,7 +105,7 @@ def chunkStr(s, chunklen, prefix="", suffix=""):
         yield prefix + chunk + suffix
 
 
-def chunkMsg(m):
+def chunkMsg(m) -> list:
     p = "```\n"
     if m.startswith("Traceback") or m.startswith("eval error") or m.startswith("Executing eval"):
         p = "```python\n"
@@ -129,16 +132,17 @@ def chunkLines(s, chunklen):
         yield "\n".join(linesout)
 
 
-def removeBrackets(s):
+def removeBrackets(s) -> str:
+    """Remove all [] and <>s from a string."""
     s = re.sub(r"[\[\]<>]", "", s)
     return s
 
 
-def formatTraceback(err):
+def formatTraceback(err) -> str:
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
 
 
-def pformat(name, value):
+def pformat(name, value) -> str:
     if value is None:
         return f"{name}?"
     if callable(value):
@@ -153,12 +157,12 @@ def pformat(name, value):
 
 
 def pdir(o):
-    """return a list of an object's attributes, with type notation"""
+    """return a list of an object's attributes, with type notation."""
     return [pformat(n, v) for n, v in ddir(o).items()]
 
 
 def ddir(o):
-    """return a dictionary of an object's attributes"""
+    """return a dictionary of an object's attributes."""
     return {n: v for n, v in inspect.getmembers(o) if not n.startswith("_")}
     # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
 
@@ -175,7 +179,7 @@ def getFullname(o):
     return fullname
 
 
-def formatError(err):
+def formatError(err) -> str:
     fullname = getFullname(err)
 
     errMessage = str(err)
@@ -186,6 +190,7 @@ def formatError(err):
 
 
 def tryOrNone(fn, *args, ignore=(), **kwargs):
+    "Try to run a function. If it throws an error that's in `ignore`, just return `None`."""
     try:
         result = fn(*args, **kwargs)
     except ignore:
@@ -215,18 +220,19 @@ class iset(set):
         return super().remove(item)
 
 
-def strHelp(topic):
+def strHelp(topic) -> str:
     return pydoc.plain(pydoc.render_doc(topic))
 
 
-def minmax(first, second):
+def minmax(first, second) -> tuple:
+    """Return a tuple where item 0 is the smaller value, and item 1 is the larger value."""
     small, big = first, second
     if small > big:
         small, big = big, small
     return small, big
 
 
-def removeCodeBlock(s):
+def removeCodeBlock(s) -> str:
     re_codeblock = re.compile(r"^\s*```(?:python)?(.*)```\s*$", re.DOTALL)
     s_nocodeblock = re.sub(re_codeblock, r"\1", s)
     if s_nocodeblock != s:
@@ -240,11 +246,13 @@ def removeCodeBlock(s):
     return s
 
 
-def hasSizeTag(s):
+def hasSizeTag(s) -> bool:
+    """Return `True` if the string has a sizetag."""
     return re_sizetag.search(s) is not None
 
 
-def stripSizeTag(s):
+def stripSizeTag(s) -> str:
+    """Remove a sizetag from a string that has one."""
     if hasSizeTag(s):
         re_sizetagloose = re.compile(r"^(.*) \[.*\]$", re.DOTALL)
         s_sizetagloose = re.sub(re_sizetagloose, r"\1", s)
@@ -252,8 +260,8 @@ def stripSizeTag(s):
     return s
 
 
-def intToRoman(input):
-    """ Convert an integer to a Roman numeral. """
+def intToRoman(input) -> str:
+    """Convert an integer to a Roman numeral."""
 
     if not isinstance(input, type(1)):
         raise TypeError("expected integer, got %s" % type(input))
@@ -286,7 +294,8 @@ async def parseMany(ctx, arg, types: list, default = None):
     return default
 
 
-def isURL(value):
+def isURL(value) -> bool:
+    """Returns True when given either a valid URL, or `None`."""
     try:
         return validator_collection.url(value)
     except validator_collection.errors.EmptyValueError:
@@ -294,13 +303,13 @@ def isURL(value):
         return True
 
 
-def sentence_join(items, *, joiner=None, oxford=False):
-    """Join a list of strings like a sentence
+def sentence_join(items, *, joiner=None, oxford=False) -> str:
+    """Join a list of strings like a sentence.
 
     >>> sentence_join(['red', 'green', 'blue'])
     'red, green and blue'
 
-    Optionally, a different joiner can be provided
+    Optionally, a different joiner can be provided.
 
     >>> sentence_join(['micro', 'tiny', 'normal', 'amazon', 'giantess'], joiner='or')
     'micro, tiny, normal, amazon or giantess'
@@ -362,11 +371,13 @@ def regexbuild(li: list, capture = False) -> str:
     return returnstring
 
 
-def url_safe(s):
+def url_safe(s) -> str:
+    """Makes a string URL safe, and replaces spaces with hyphens."""
     return quote(s, safe=" ").replace(" ", "-")
 
 
-def truncate(s, amount):
+def truncate(s, amount) -> str:
+    """Return a string that is no longer than the amount specified."""
     if len(s) > amount:
-        return s[:amount] + "..."
+        return s[:amount - 3] + "..."
     return s
