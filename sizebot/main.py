@@ -19,9 +19,8 @@ from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.plugins import active, monika
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 dfhandler = digilogger.DigiFormatterHandler()
-dfhandler.setLevel(logging.DEBUG)
 
 logger = logging.getLogger("sizebot")
 logger.handlers = []
@@ -102,6 +101,7 @@ def main():
         if conf.logchannelid:
             logChannel = bot.get_channel(conf.logchannelid)
             discordhandler = DiscordHandler(logChannel)
+            dfhandler.setLevel(logging.INFO)
             logger.addHandler(discordhandler)
 
         # Set the bots name to what's set in the config.
