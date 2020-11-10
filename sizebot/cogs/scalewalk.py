@@ -34,7 +34,6 @@ def get_steps(start_inc: SV, diff: Diff, goal: SV):
     Returns (steps, final increment, start inc. / final inc.)"""
 
     if (diff.changetype == "add" and diff.amount == 0) or (diff.changetype == "multiply" and diff.amount == 1):
-        # TODO: Handle special case of walking without size change
         if start_inc <= 0:
             return (Decimal("inf"), SV(0), Decimal("inf"))
         # Calculate number of steps required to reach goal
