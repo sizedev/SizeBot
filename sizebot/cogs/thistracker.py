@@ -11,7 +11,7 @@ from sizebot import __version__
 from sizebot.lib import paths
 from sizebot.lib.loglevels import EGG
 
-logger = logging.get("sizebot")
+logger = logging.getLogger("sizebot")
 
 
 class ThisTracker():
