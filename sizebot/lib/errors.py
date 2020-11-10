@@ -216,3 +216,8 @@ class ThisShouldNeverHappenException(DigiException):
 
     def formatMessage(self):
         return "This should never happen. Something very wrong has occured."
+
+
+class ParseError(DigiException):
+    def formatMessage(self, s, t):
+        return f"Could not parse {s} into a {t}."

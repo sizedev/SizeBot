@@ -35,7 +35,7 @@
 # RATE -> 10meters
 
 import re
-from sizebot.lib.errors import InvalidSizeValue, ThisShouldNeverHappenException
+from sizebot.lib.errors import InvalidSizeValue, ParseError, ThisShouldNeverHappenException
 from sizebot.lib.utils import regexbuild, tryOrNone
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, TV
@@ -153,7 +153,7 @@ class Rate:
         match = r"(.*)\s*" + valid_rate_interfixes + r"\s*(.*)"
         m = re.match(match, s)
         if not m:
-            raise Exception
+            raise ParseError(s, "Rate")
         d = Diff.parse(m.group(1))
         t = TV.parse(m.group(3))
 
@@ -192,14 +192,14 @@ class LimitedRate:
         match = r"(.*)\s*" + valid_limited_rate_interfixes + r"\s*(.*)"
         m = re.match(match, s)
         if not m:
-            raise Exception
+            raise ParseError(s, "LimitedRate")
 
         r = Rate.parse(m.group(1))
 
         st = tryOrNone(SV.parse, m.group(3), (InvalidSizeValue,)) or tryOrNone(TV.parse, m.group(3), (InvalidSizeValue,))
 
         if st is None:
-            raise Exception
+            raise ParseError(s, "LimitedRate")
 
         return LimitedRate(s, r, st)
 
@@ -242,5 +242,5 @@ def parse_change(s):
             try:
                 r = Diff.parse(s)
             except Exception:
-                Exception
+                raise ParseError(s, "Diff")
     return r

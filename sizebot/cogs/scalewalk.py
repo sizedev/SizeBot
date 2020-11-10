@@ -9,7 +9,7 @@ from discord.ext import commands
 
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
-from sizebot.lib.errors import DigiContextException
+from sizebot.lib.errors import ChangeMethodInvalidException, DigiContextException
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
@@ -60,7 +60,7 @@ def get_steps(start_inc: SV, diff: Diff, goal: SV):
         current_inc = start_inc * (diff.amount ** (steps - 1))
         return (Decimal(steps), current_inc, start_inc / current_inc)
     else:
-        raise DigiContextException("This change type is not yet supported for scale-walking.")
+        raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
 
 
 class ScaleWalkCog(commands.Cog):
@@ -197,7 +197,7 @@ class ScaleWalkCog(commands.Cog):
         elif userdata.currentscalestep.changetype == "multiply":
             userdata.height *= (userdata.currentscalestep.amount ** steps)
         else:
-            raise DigiContextException("This change type is not yet supported for scale-walking.")
+            raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
 
         # TODO: This needs output. How do you reverse calculate total distance traveled?
 

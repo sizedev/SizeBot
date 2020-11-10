@@ -506,9 +506,9 @@ class StatsCog(commands.Cog):
         if failedusers:
             nicks = sentence_join((u.display_name for u in failedusers), oxford=True)
             if len(failedusers) == 1:
-                failmessage = f"{nicks} is not a SizeBot user"
+                failmessage = f"{nicks} is not a SizeBot user."
             else:
-                failmessage = f"{nicks} are not SizeBot users"
+                failmessage = f"{nicks} are not SizeBot users."
             await ctx.send(failmessage)
             return
 
