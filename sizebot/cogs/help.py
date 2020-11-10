@@ -4,7 +4,7 @@ import math
 from datetime import datetime
 
 import discord
-from discord import Embed
+from discord import Embed, Webhook, AsyncWebhookAdapter
 from discord.ext import commands
 
 from sizebot import __version__
@@ -299,7 +299,7 @@ class HelpCog(commands.Cog):
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
-        webhook = discord.Webhook.from_url("https://discordapp.com/api/webhooks/711856892422389770/dXJ0IQh2DJZzlaSrymzr-QjYNBrAGCBlljgY7dlAun8_XqGO3NAbzrPVoPZ3VgIcmhc3", adapter=discord.RequestsWebhookAdapter())
+        webhook = Webhook.from_url("https://discordapp.com/api/webhooks/711856892422389770/dXJ0IQh2DJZzlaSrymzr-QjYNBrAGCBlljgY7dlAun8_XqGO3NAbzrPVoPZ3VgIcmhc3", adapter=AsyncWebhookAdapter())
         await webhook.send(f"**Bug report** from `{ctx.author}`:\n> {message}")
 
     @commands.command(
@@ -309,7 +309,7 @@ class HelpCog(commands.Cog):
     async def suggest(self, ctx, *, message: str):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
-        webhook = discord.Webhook.from_url("https://discordapp.com/api/webhooks/711856892422389770/dXJ0IQh2DJZzlaSrymzr-QjYNBrAGCBlljgY7dlAun8_XqGO3NAbzrPVoPZ3VgIcmhc3", adapter=discord.RequestsWebhookAdapter())
+        webhook = Webhook.from_url("https://discordapp.com/api/webhooks/711856892422389770/dXJ0IQh2DJZzlaSrymzr-QjYNBrAGCBlljgY7dlAun8_XqGO3NAbzrPVoPZ3VgIcmhc3", adapter=AsyncWebhookAdapter())
         await webhook.send(f"**Feature request** from `{ctx.author}`:\n> {message}")
 
     @commands.command(
@@ -326,7 +326,7 @@ class HelpCog(commands.Cog):
         to make sure each object is a fun and exciting entry to pull up.
         Also include alternate names for the object, if it has them."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent an object request.")
-        webhook = discord.Webhook.from_url("https://discordapp.com/api/webhooks/711856892422389770/dXJ0IQh2DJZzlaSrymzr-QjYNBrAGCBlljgY7dlAun8_XqGO3NAbzrPVoPZ3VgIcmhc3", adapter=discord.RequestsWebhookAdapter())
+        webhook = Webhook.from_url("https://discordapp.com/api/webhooks/711856892422389770/dXJ0IQh2DJZzlaSrymzr-QjYNBrAGCBlljgY7dlAun8_XqGO3NAbzrPVoPZ3VgIcmhc3", adapter=AsyncWebhookAdapter())
         await webhook.send(f"**Object request** from `{ctx.author}`:\n> {message}")
 
     @commands.command(
