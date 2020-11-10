@@ -176,7 +176,7 @@ def main():
         activetime = arrow.now()
         await active.on_message(message)
         endtime = arrow.now()
-        starttime = message.created_at.replace(tzinfo=pytz.UTC)
+        starttime = arrow.get(message.created_at.replace(tzinfo=pytz.UTC))
         discordlatency = processtime - starttime
         processlatency = edgetime - processtime
         edgelatency = limitstime - edgetime
