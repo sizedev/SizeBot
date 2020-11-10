@@ -8,24 +8,17 @@ import validator_collection
 
 re_num = r"\d+\.?\d*"
 re_sizetag = re.compile(
-    r"""(?:.*)(?: )  # the name part
-    (\[ # a [, then
-        # the size part
-        (?:
-            [⅛¼⅜½⅝¾⅞]|  # just a fraction
-            \d+(?:,\d{1,3})?  # or some numbers (maybe with commas)
-                (?:
-                (?:\.\d+)?|  # with either a decimal point maybe
-                ⅛¼⅜½⅝¾⅞  # or a fraction at the end maybe
-                )?
-        )
-        .*|  # any then a unit (anything)
-        ∞|  # or just infinity
-        0  #or just 0
-        # the species part, maybe
-        (?:
-        , .*)?
-    \])""", re.VERBOSE)  # and finally a ]
+    r"""(?:.*)(?: )  # a name, then a space
+    (
+    \[(?:  # a [, then either
+        [⅛¼⅜½⅝¾⅞].*  # a fraction then a unit
+        |\d{1,3}(?:,\d{1,3})?(?:(?:\.\d+)?|⅛¼⅜½⅝¾⅞)?.*  # a number then a unit
+        |∞  # or infinity
+        |0  # or zero
+    )
+    (?:, .*)?  # maybe a species
+    \]  # and finally a ]
+    )""", re.VERBOSE)
 
 
 def clamp(minVal, val, maxVal):
