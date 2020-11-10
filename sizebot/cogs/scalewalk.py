@@ -15,6 +15,17 @@ from sizebot.lib.units import SV
 logger = logging.getLogger("sizebot")
 
 
+def get_dist(start_inc: SV, diff: Diff, steps: int):
+    if diff.changetype == "add":
+        current_pos = (start_inc * steps) + (diff.amount * ((steps - 1) * steps) / 2)
+        return SV(current_pos)
+    elif diff.changetype == "multiply":
+        current_pos = start_inc * ((1 - diff.amount ** (steps - 1)) / (1 - diff.amount))
+        return SV(current_pos)
+    else:
+        raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
+
+
 def get_steps(start_inc: SV, diff: Diff, goal: SV):
     """Return the number of steps it would take to reach `goal` from 0,
     first by increasing by `start_inc`, then by `start_inc` operator(`diff.changetype`) `diff.amount`,
@@ -190,7 +201,8 @@ class ScaleWalkCog(commands.Cog):
         guildid = ctx.guild.id
         userid = ctx.author.id
 
-        originaldata = userdata = userdb.load(guildid, userid)
+        userdata = userdb.load(guildid, userid)
+        stats = proportions.PersonStats(userdata)
 
         if userdata.currentscalestep.changetype == "add":
             userdata.height += (userdata.currentscalestep.amount * steps)
@@ -199,6 +211,7 @@ class ScaleWalkCog(commands.Cog):
         else:
             raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
 
+        dist_travelled = get_dist(stats.walksteplength, userdata.currentscalestep, steps)
         # TODO: This needs output. How do you reverse calculate total distance traveled?
 
         userdb.save(userdata)
