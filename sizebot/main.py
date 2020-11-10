@@ -16,7 +16,7 @@ from sizebot.conf import conf
 from sizebot.cogs import edge, limits
 from sizebot.lib import language, objs, paths, proportions, status, units, utils
 from sizebot.lib.discordlogger import DiscordHandler
-from sizebot.lib.loglevels import BANNER, LOGIN
+from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.plugins import active, monika
 
 logging.basicConfig(level=logging.INFO)
@@ -146,6 +146,10 @@ def main():
     @bot.event
     async def on_reconnect_ready():
         logger.error("SizeBot has been reconnected to Discord.")
+
+    @bot.event
+    async def on_command(ctx):
+        logger.log(CMD, ctx.message.content)
 
     @bot.event
     async def on_message(message):
