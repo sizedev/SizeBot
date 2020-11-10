@@ -1,8 +1,9 @@
+import arrow
 import os
 import logging
+import pytz
 import sys
 from datetime import datetime
-import arrow
 
 import discord
 from discord.ext.commands import Bot
@@ -175,14 +176,15 @@ def main():
         activetime = arrow.now()
         await active.on_message(message)
         endtime = arrow.now()
-        discordlatency = processtime - message.created_at
+        starttime = message.created_at.replace(tzinfo=pytz.UTC)
+        discordlatency = processtime - starttime
         processlatency = edgetime - processtime
         edgelatency = limitstime - edgetime
         limitslatency = nickupdatetime - limitstime
         nickupdatelatency = monikatime - nickupdatetime
         monikalatency = activetime - monikatime
         activelatency = endtime = activetime
-        totaltime = endtime - message.created_at
+        totaltime = endtime - starttime
         latency = (
             f"Discord Latency: {utils.prettyTimeDelta(discordlatency.total_seconds(), True)}\n"
             f"Command Process Latency: {utils.prettyTimeDelta(processlatency.total_seconds(), True)}\n"
