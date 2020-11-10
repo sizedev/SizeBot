@@ -18,6 +18,10 @@ colorgen = itertools.cycle([
 
 logger = logging.getLogger("sizebot")
 
+# According to a member of the Discord API guild, rainbow roles are
+# "[...] the one thing that [Discord] has publicly said not to do"
+# I did not know this at the time.
+# DO NOT USE THIS COG.
 
 class RainbowCog(commands.Cog):
     def __init__(self, bot):
