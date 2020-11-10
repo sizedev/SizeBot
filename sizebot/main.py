@@ -2,6 +2,7 @@ import os
 import logging
 import sys
 from datetime import datetime
+import arrow
 
 import discord
 from discord.ext.commands import Bot
@@ -9,7 +10,7 @@ from discord.ext.commands import Bot
 from digiformatter import styles, logger as digilogger
 
 from sizebot import __version__
-from sizebot import discordplus
+from sizebot import discordplus, utils
 from sizebot.conf import conf
 from sizebot.cogs import edge, limits
 from sizebot.lib import language, objs, proportions, status, units, paths
@@ -147,6 +148,9 @@ def main():
 
     @bot.event
     async def on_message(message):
+        if message.content == "{conf.prefix}timeit":
+            await on_message_timed(message)
+            return
         await bot.process_commands(message)
         await edge.on_message(message)
         await limits.on_message(message)
@@ -154,6 +158,41 @@ def main():
         # await meicros.on_message(message)
         await monika.on_message(message)
         await active.on_message(message)
+
+    async def on_message_timed(message):
+        message.content = message.content[len(conf.prefix + "timeit"):].lstrip()
+        processtime = arrow.now()
+        await bot.process_commands(message)
+        edgetime = arrow.now()
+        await edge.on_message(message)
+        limitstime = arrow.now()
+        await limits.on_message(message)
+        nickupdatetime = arrow.now()
+        await proportions.nickUpdate(message.author)
+        monikatime = arrow.now()
+        await monika.on_message(message)
+        activetime = arrow.now()
+        await active.on_message(message)
+        endtime = arrow.now()
+        discordlatency = processtime - message.created_at
+        processlatency = edgetime - processtime
+        edgelatency = limitstime - edgetime
+        limitslatency = nickupdatetime - limitstime
+        nickupdatelatency = monikatime - nickupdatetime
+        monikalatency = activetime - monikatime
+        activelatency = endtime = activetime
+        totaltime = endtime - message.created_at
+        latency = (
+            f"Discord Latency: {utils.prettyTimeDelta(discordlatency.total_seconds(), True)}\n"
+            f"Command Process Latency: {utils.prettyTimeDelta(processlatency.total_seconds(), True)}\n"
+            f"Edge Latency: {utils.prettyTimeDelta(edgelatency.total_seconds(), True)}\n"
+            f"Limits Latency: {utils.prettyTimeDelta(limitslatency.total_seconds(), True)}\n"
+            f"Nick Update Latency: {utils.prettyTimeDelta(nickupdatelatency.total_seconds(), True)}\n"
+            f"Monika Latency: {utils.prettyTimeDelta(monikalatency.total_seconds(), True)}\n"
+            f"User Active Check Latency: {utils.prettyTimeDelta(activelatency.total_seconds(), True)}\n"
+            f"**Total Latency: {utils.prettyTimeDelta(totaltime.total_seconds(), True)}\n**"
+        )
+        message.channel.send(latency)
 
     @bot.event
     async def on_message_edit(before, after):

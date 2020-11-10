@@ -23,6 +23,7 @@ logger = logging.getLogger("sizebot")
 # I did not know this at the time.
 # DO NOT USE THIS COG.
 
+
 class RainbowCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
