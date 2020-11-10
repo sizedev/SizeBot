@@ -195,7 +195,7 @@ def main():
             f"User Active Check Latency: {utils.prettyTimeDelta(activelatency.total_seconds(), True)}\n"
             f"**Total Latency: {utils.prettyTimeDelta(totaltime.total_seconds(), True)}\n**"
         )
-        message.channel.send(latency)
+        await message.channel.send(latency)
 
     @bot.event
     async def on_message_edit(before, after):
