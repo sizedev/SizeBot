@@ -300,7 +300,7 @@ class HelpCog(commands.Cog):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
         webhook = discord.Webhook.from_url("https://discordapp.com/api/webhooks/711856892422389770/dXJ0IQh2DJZzlaSrymzr-QjYNBrAGCBlljgY7dlAun8_XqGO3NAbzrPVoPZ3VgIcmhc3", adapter=discord.RequestsWebhookAdapter())
-        await webhook.send(f"Bug report from {ctx.author}: {message}")
+        await webhook.send(f"**Bug report** from `{ctx.author}`:\n> {message}")
 
     @commands.command(
         usage = "<message>",
@@ -310,7 +310,7 @@ class HelpCog(commands.Cog):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         webhook = discord.Webhook.from_url("https://discordapp.com/api/webhooks/711856892422389770/dXJ0IQh2DJZzlaSrymzr-QjYNBrAGCBlljgY7dlAun8_XqGO3NAbzrPVoPZ3VgIcmhc3", adapter=discord.RequestsWebhookAdapter())
-        await webhook.send(f"Feature request from {ctx.author}: {message}")
+        await webhook.send(f"**Feature request** from `{ctx.author}`:\n> {message}")
 
     @commands.command(
         aliases = ["objsuggest"],
@@ -327,7 +327,7 @@ class HelpCog(commands.Cog):
         Also include alternate names for the object, if it has them."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent an object request.")
         webhook = discord.Webhook.from_url("https://discordapp.com/api/webhooks/711856892422389770/dXJ0IQh2DJZzlaSrymzr-QjYNBrAGCBlljgY7dlAun8_XqGO3NAbzrPVoPZ3VgIcmhc3", adapter=discord.RequestsWebhookAdapter())
-        await webhook.send(f"Object request from {ctx.author}: {message}")
+        await webhook.send(f"**Object request** from `{ctx.author}`:\n> {message}")
 
     @commands.command(
         usage = ["[type]"],
