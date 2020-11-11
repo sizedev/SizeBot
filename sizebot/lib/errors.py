@@ -200,7 +200,7 @@ class MultilineAsNonFirstCommandException(DigiContextException):
 
 class ArgumentException(DigiContextException):
     async def formatUserMessage(self, ctx):
-        return f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.signature}`."
+        return f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.signature}`.\nSee `{ctx.prefix}help {ctx.invoked_with}` for details."
 
 
 class UserMessedUpException(DigiContextException):
