@@ -7,7 +7,7 @@ from discord import Embed
 from discord.errors import Forbidden
 from discord.ext import commands
 
-from sizebot import __version__
+from sizebot import __version__, conf
 from sizebot.lib import checks, objs, userdb, utils
 from sizebot.lib.constants import colors, emojis, ids
 from sizebot.lib.menu import Menu
@@ -208,7 +208,7 @@ class HelpCog(commands.Cog):
         embed = Embed(
             title=signature,
             description=description
-        ).set_author(name=f"Help [SizeBot {__version__}]")
+        ).set_author(name=f"Help [SizeBot {__version__}]").set_footer(text=f"See `{conf.prefix}help <command> for more details about a command and how to use it.")
 
         if cmd.aliases:
             embed.add_field(name="**Aliases:**", value=", ".join(cmd.aliases), inline=False)
