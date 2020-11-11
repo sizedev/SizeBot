@@ -32,7 +32,7 @@ class ChangeCog(commands.Cog):
         Can be used in essentially the three following ways:
         `&change <amount>`
         `&change <amount>/<time>`
-        `&change <amount>/<time> until <size/time>
+        `&change <amount>/<time> until <size/time>`
 
         Examples:
         `&change +1ft`
