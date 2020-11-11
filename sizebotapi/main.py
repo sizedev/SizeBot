@@ -5,9 +5,10 @@ import flask
 from flask import abort, request
 
 from sizebot.lib import userdb
-from sizebot.lib.errors import InvalidSizeValue, UserNotFoundException
+from sizebot.lib.errors import InvalidSizeValue, ParseError, UserNotFoundException
 
 from sizebot.lib import units
+from sizebot.lib.diff import Diff, Rate, LimitedRate
 from sizebot.lib.units import SV, WV, TV
 
 asyncio.run(units.init())
@@ -58,6 +59,36 @@ def TV_parse():
     except InvalidSizeValue:
         abort(404)
     return json.dumps({"TV": str(val)})
+
+
+@app.route("/unit/Diff/parse", methods=["GET"])
+def Diff_parse():
+    s = request.args.get("s")
+    try:
+        val = Diff.parse(s)
+    except (InvalidSizeValue, ParseError):
+        abort(404)
+    return json.dumps({"Diff": str(val)})
+
+
+@app.route("/unit/Rate/parse", methods=["GET"])
+def Rate_parse():
+    s = request.args.get("s")
+    try:
+        val = Rate.parse(s)
+    except (InvalidSizeValue, ParseError):
+        abort(404)
+    return json.dumps({"Rate": str(val)})
+
+
+@app.route("/unit/LimitedRate/parse", methods=["GET"])
+def LimitedRate_parse():
+    s = request.args.get("s")
+    try:
+        val = LimitedRate.parse(s)
+    except (InvalidSizeValue, ParseError):
+        abort(404)
+    return json.dumps({"LimitedRate": str(val)})
 
 
 def main():
