@@ -280,11 +280,11 @@ class StatsCog(commands.Cog):
         logger.info(f"Compared {userdata} and {comparedata}")
 
     @commands.command(
-        aliases = ["natstats", "natstat"],
+        aliases = ["natstats"],
         category = "stats"
     )
     @commands.guild_only()
-    async def naturalstats(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
+    async def lookslike(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.author
