@@ -68,7 +68,7 @@ def Diff_parse():
         val = Diff.parse(s)
     except (InvalidSizeValue, ParseError):
         abort(404)
-    return json.dumps({"Diff": str(val)})
+    return json.dumps({"Diff": val.toJSON()})
 
 
 @app.route("/unit/Rate/parse", methods=["GET"])
@@ -78,7 +78,7 @@ def Rate_parse():
         val = Rate.parse(s)
     except (InvalidSizeValue, ParseError):
         abort(404)
-    return json.dumps({"Rate": str(val)})
+    return json.dumps({"Rate": val.toJSON()})
 
 
 @app.route("/unit/LimitedRate/parse", methods=["GET"])
@@ -88,7 +88,7 @@ def LimitedRate_parse():
         val = LimitedRate.parse(s)
     except (InvalidSizeValue, ParseError):
         abort(404)
-    return json.dumps({"LimitedRate": str(val)})
+    return json.dumps({"LimitedRate": val.toJSON()})
 
 
 def main():
