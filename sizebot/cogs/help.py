@@ -251,19 +251,17 @@ class HelpCog(commands.Cog):
         embed.add_field(name = "Credits",
                         value = ("**Coding Assistance** *by Natalie*\n"
                                  "**Additional Equations** *by Benyovski and Arceus3251*\n"
-                                 "**Alpha Tested** *by AWK_*\n"
-                                 "**Beta Tested** *by Kelly, worstgender, and Arceus3251*\n"),
+                                 "**Originally Tested by AWK, Kelly, worstgender, and Arceus3251*\n"),
                         inline = False)
         embed.add_field(name = "Servers",
-                        value = ("**[SizeDev](https://discord.gg/j2WpxS)**: support and beta testing for SizeBot and other bots, like Chocola's [*Mei.*](https://chocola.codes/)\n"
-                                 "**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*"),
+                        value = ("**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*"),
                         inline = False)
         embed.add_field(name = "Technical Details",
-                        value = "Written in Python 3.6, and slowly upgraded to 3.8. Originally written using Atom, and now Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
+                        value = "Written in Python 3.6, and slowly upgraded to 3.9. Originally written using Atom, and now Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
                         inline = False)
         embed.add_field(name = "Special Thanks",
                         value = ("**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
-                                 "**Special thanks** *to Chocola, the creator of Mei and Arachne, for inspiration and moral support.*\n"
+                                 "**Special thanks** *to Chocola, the creator of [Mei](https://chocola.codes/) and Arachne, for inspiration and moral support.*\n"
                                  "**Special thanks** *to the discord.py Community Discord for helping with code.*\n"
                                  f"**Special thanks** *to the {userdb.countusers()} users of SizeBot3½.*"),
                         inline = False)
