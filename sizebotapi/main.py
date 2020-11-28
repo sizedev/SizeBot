@@ -8,6 +8,7 @@ from sizebot.lib import userdb
 from sizebot.lib.errors import InvalidSizeValue, ParseError, UserNotFoundException
 
 from sizebot.lib import units
+from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff, Rate, LimitedRate
 from sizebot.lib.units import SV, WV, TV
 
@@ -41,6 +42,17 @@ def SV_parse():
     return json.dumps({"SV": str(val)})
 
 
+@app.route("/unit/SV/format", methods=["GET"])
+def SV_format():
+    value = Decimal(request.args.get("value"))
+    system = request.args.get("system")
+    try:
+        val = SV(value)
+    except InvalidSizeValue:
+        abort(404)
+    return json.dumps({"formatted": format(val, system)})
+
+
 @app.route("/unit/WV/parse", methods=["GET"])
 def WV_parse():
     s = request.args.get("s")
@@ -51,6 +63,17 @@ def WV_parse():
     return json.dumps({"WV": str(val)})
 
 
+@app.route("/unit/WV/format", methods=["GET"])
+def WV_format():
+    value = Decimal(request.args.get("value"))
+    system = request.args.get("system")
+    try:
+        val = WV(value)
+    except InvalidSizeValue:
+        abort(404)
+    return json.dumps({"formatted": format(val, system)})
+
+
 @app.route("/unit/TV/parse", methods=["GET"])
 def TV_parse():
     s = request.args.get("s")
@@ -59,6 +82,17 @@ def TV_parse():
     except InvalidSizeValue:
         abort(404)
     return json.dumps({"TV": str(val)})
+
+
+@app.route("/unit/TV/format", methods=["GET"])
+def TV_format():
+    value = Decimal(request.args.get("value"))
+    system = request.args.get("system", "m")
+    try:
+        val = TV(value)
+    except InvalidSizeValue:
+        abort(404)
+    return json.dumps({"formatted": format(val, system)})
 
 
 @app.route("/unit/Diff/parse", methods=["GET"])
