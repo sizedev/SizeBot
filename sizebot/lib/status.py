@@ -1,5 +1,5 @@
 try:
-    from systemd import daemon
+    from cysystemd import daemon
 except ImportError:
     daemon = None
 
