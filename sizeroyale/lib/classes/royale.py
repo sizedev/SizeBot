@@ -1,16 +1,16 @@
 import logging
-from decimal import Decimal
-
-from sizeroyale.lib.loglevels import ROYALE
 from typing import Dict, Optional
 
-from sizeroyale.lib.attrdict import AttrDict
+from sizebot.lib.attrdict import AttrDict
+from sizebot.lib.decimal import Decimal
+from sizebot.lib.loglevels import ROYALE
+from sizebot.lib.units import SV
 from sizeroyale.lib.classes.event import Event
 from sizeroyale.lib.classes.parser import Parser
 from sizeroyale.lib.classes.player import Player
 from sizeroyale.lib.errors import GametimeError
 from sizeroyale.lib.img_utils import create_stats_screen, merge_images
-from sizeroyale.lib.units import SV
+
 
 logger = logging.getLogger("sizeroyale")
 
@@ -92,7 +92,7 @@ class Royale:
                 return None
         else:
             if self.remaining == 1:
-                return self.alive_players[0]
+                return [self.alive_players[k] for k in self.alive_players][0]
             elif self.remaining == 0:
                 return 0
             else:
@@ -203,7 +203,7 @@ class Royale:
                 if e.setsizes is not None:
                     edata += f"Set Sizes: {e.setsizes!r}, "
                 if e.sizes is not None:
-                    edata += "Sizes: " + repr({k: v["original"] for k, v in e.sizes}) + ", "
+                    edata += "Sizes: " + repr({k: v.original for k, v in e.sizes}) + ", "
                 if e.elims is not None:
                     edata += f"Elims: {e.elims!r}, "
                 if e.perps is not None:
@@ -239,7 +239,7 @@ class Royale:
                 if e.setsizes is not None:
                     edata += f"Set Sizes: {e.setsizes!r}, "
                 if e.sizes is not None:
-                    edata += "Sizes: " + repr({k: v["original"] for k, v in e.sizes}) + ", "
+                    edata += "Sizes: " + repr({k: v.original for k, v in e.sizes}) + ", "
                 if e.elims is not None:
                     edata += f"Elims: {e.elims!r}, "
                 if e.perps is not None:

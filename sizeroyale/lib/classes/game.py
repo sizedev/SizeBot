@@ -1,15 +1,15 @@
 import logging
 import random
 from copy import copy
-from sizeroyale.lib.img_utils import merge_images
-from sizeroyale.lib.loglevels import ROYALE
 
 import petname
 
+from sizebot.lib.loglevels import ROYALE
 from sizeroyale.lib.classes.royale import Royale
 from sizeroyale.lib.errors import OutOfEventsError, OutOfPlayersError, ThisShouldNeverHappenException
+from sizeroyale.lib.img_utils import merge_images
 
-logger = logging.getLogger("sizeroyale")
+logger = logging.getLogger("sizebot")
 
 
 class Game:

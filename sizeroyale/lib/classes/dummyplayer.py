@@ -1,7 +1,6 @@
-from decimal import Decimal
-
 from sizeroyale.lib.classes.player import Player
-from sizeroyale.lib.units import SV
+from sizebot.lib.decimal import Decimal
+from sizebot.lib.units import SV
 
 
 class DummyPlayer:

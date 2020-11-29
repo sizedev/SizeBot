@@ -47,7 +47,7 @@ class Parser:
     def parse(self):
         if not self.lines:
             raise ParseError("No lines to parse!")
-        for n in trange(len(self.lines), desc="Parsing..."):
+        for n in trange(len(self.lines), desc="Parsing..."):  # TODO: Make this tqdm go into Discord somehow?
             try:
                 self._parse_line(n)
             except ParseError as e:

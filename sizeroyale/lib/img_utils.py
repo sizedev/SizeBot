@@ -1,17 +1,16 @@
-from decimal import Decimal
 import io
 import importlib.resources as pkg_resources
 import math
 from functools import lru_cache
-from sizeroyale.lib.units import SV
 
 import requests
 from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageOps import grayscale
 
-import sizeroyale.data
+import sizebot.data.fonts
+from sizebot.lib.decimal import Decimal
+from sizebot.lib.utils import chunkList, truncate
 from sizeroyale.lib.errors import DownloadError
-from sizeroyale.lib.utils import chunkList, truncate
 
 discord_gray = (0x36, 0x39, 0x3F, 255)
 
@@ -80,7 +79,7 @@ def create_profile_picture(system: str, url: str, name: str, team, height: Decim
     size = (px, px)
 
     raw_image = download_image(url)
-    height_text = SV.format(height, system)
+    height_text = format(height, system)
 
     i = raw_image.convert("RGBA")
     i = crop_max_square(i)
@@ -90,11 +89,11 @@ def create_profile_picture(system: str, url: str, name: str, team, height: Decim
     rgbimg.paste(i, (0, 0), i)
     i = rgbimg
     d = ImageDraw.Draw(i)
-    with pkg_resources.path(sizeroyale.data, "Roobert-SemiBold.otf") as p:
+    with pkg_resources.path(sizebot.data.fonts, "Roobert-SemiBold.otf") as p:
         fnt_semibold = ImageFont.truetype(str(p.absolute()), size = 20)
-    with pkg_resources.path(sizeroyale.data, "Roobert-RegularItalic.otf") as p:
+    with pkg_resources.path(sizebot.data.fonts, "Roobert-RegularItalic.otf") as p:
         fnt_italic = ImageFont.truetype(str(p.absolute()), size = 14)
-    with pkg_resources.path(sizeroyale.data, "Roobert-Regular.otf") as p:
+    with pkg_resources.path(sizebot.data.fonts, "Roobert-Regular.otf") as p:
         fnt = ImageFont.truetype(str(p.absolute()), size = 14)
     tname = name
     while fnt_semibold.getsize(name)[0] > i.width:

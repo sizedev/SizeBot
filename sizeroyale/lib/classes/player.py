@@ -1,12 +1,11 @@
-from decimal import Decimal
-
 from PIL import Image
 
+from sizebot.lib.diff import Diff
+from sizebot.lib.units import SV
+from sizebot.lib.utils import isURL
 from sizeroyale.lib.classes.metaparser import MetaParser
 from sizeroyale.lib.errors import GametimeError, ThisShouldNeverHappenException
 from sizeroyale.lib.img_utils import create_profile_picture
-from sizeroyale.lib.units import SV, Diff
-from sizeroyale.lib.utils import isURL
 
 
 class Player:
@@ -110,9 +109,9 @@ class Player:
 
     def change_height(self, diff: Diff):
         if diff.changetype == "add":
-            self.height += Decimal(diff.amount)
+            self.height += diff.amount
         elif diff.changetype == "multiply":
-            self.height *= Decimal(diff.amount)
+            self.height *= diff.amount
 
         else:
             raise GametimeError(f"Unsupported changetype {diff.changetype!r}.")

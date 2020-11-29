@@ -1,10 +1,11 @@
 import re
-from decimal import Decimal
 from typing import Dict
 
+from sizebot.lib.decimal import Decimal
+from sizebot.lib.units import SV
+from sizebot.lib.diff import Diff
 from sizeroyale.lib.errors import OutOfPlayersError, ParseError
 from sizeroyale.lib.listdict import ListDict
-from sizeroyale.lib.units import Diff, SV
 from sizeroyale.lib.classes.dummyplayer import DummyPlayer
 from sizeroyale.lib.classes.metaparser import MetaParser
 from sizeroyale.lib.classes.player import Player

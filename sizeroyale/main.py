@@ -1,10 +1,12 @@
+import asyncio
 import logging
 from pathlib import Path
 
 from digiformatter import logger as digilogger
 
+from sizebot.lib import units
+from sizebot.lib.loglevels import ROYALE
 from sizeroyale.lib.classes.game import Game
-from sizeroyale.lib.loglevels import ROYALE
 
 # Logging stuff.
 logging.basicConfig(level=logging.INFO)
@@ -13,6 +15,8 @@ logger = logging.getLogger()
 logger.handlers = []
 logger.propagate = False
 logger.addHandler(dfhandler)
+
+asyncio.run(units.init())
 
 
 def main():

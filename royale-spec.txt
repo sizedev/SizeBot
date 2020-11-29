@@ -1,0 +1,187 @@
+## Size Royale Scenario File
+# This document serves as a documentation of the specification used for
+# defining a royale, as well as (if implemented correctly) is an example
+# of a correctly-formatted document.
+
+## Headers
+# Headers are contained in brackets, e.g.: [header]
+# Valid headers are setup, bloodbath, day, night, fatalday, fatalnight, feast, and arena.
+# Arena sub-headers are denoted by pointy brackets and then a description
+# and must be in the [arena] section,
+# e.g.: <real kelly> "A Giga-sized Kelly rolls over in her sleep and drools into the arena."
+
+## Comments
+# Comments, as you may have noticed, start with #. They (as well as empty lines) are ignored.
+
+## Setup
+# The setup header contains only metadata, in the form of:
+# autoelim:bool, minsize:size, maxsize:size, deathrate:int, arenafreq:int, unitsystem:s
+# Similar metadata structures are used multiple times throughout the document.
+# The Setup metadata works as follows:
+# * autoelim:bool, where bool is either "True" or "False". Whether or not to eliminate players
+# who are shorter than minsize or taller than maxsize.
+# * minsize:size and maxsize:size, the heights that will auto-eliminate players.
+# * deathrate:i, where i is an integer. Fatal events will occur every 1/i events.
+# * arenafreq:i, where i is an integer. Arenas will occur every 1/i rounds.
+# * unitsystem:s, where s is either "m", "u", or "o", corresponding to "metric", "US", and "objects",
+# respectively. ("objects" is a joke system and should not be used in real play.)
+# This affects the sizes printed on the stats screen.
+
+## Players
+# The player header and subsequent entries work similarly, with the quoted string
+# being a player name, and the following metadata being under it:
+# * team:n, n being an integer.
+# * gender:S, S being an uppercase letter. Accepts M, F, or X.
+# * size:n, n being a size value (e.g.: 5ft6in, or 175cm.) This is the character's starting height.
+# * url:s, s being a link to a valid image.
+# * attr:s, s being the name of an attribute. You can have many of these.
+
+## Events
+# Events are denoted by quoted strings contained under valid headers, one a single line.
+# They accept some formatting codes:
+
+### Player Tags
+# * %n% denotes a player of number n. All intergers between 1 and the number of tributes specified
+# in the metadata (up to 9, see below) must be present in the string, and no numbers outside that range
+# may exist.
+# * %n:>size% denotes a player larger than or equal to size. e.g.: %1>10ft%. (also available is <).
+# * %n:A% -> %n:Z% denotes a player on a team. This ensures the matched players are on a shared
+# or differing team. For example, %1:A% and %2:A% will always be on the same team, and
+# %1:A% and %2:B% will always be on different teams. If, for example, %1:A% and %1:B% both exist
+# in the same event, a parsing error will be thrown.
+# * %n:inv:item% will only match a player with the item specified in their inventory. Items must
+# be all lowercase, with underscores instead of spaces.
+# * %n:attr:name% will only match a player with the specified attribute. Attributes must
+# be all lowercase, with underscores instead of spaces.
+# * %n:g:S% will only match a player of one of genders S, accepts a combonation of M, F, and X.
+# (e.g.: %1:g:M% or %1:g:MX%)
+# * %n:elims:>x% will only match a player who has more than X eliminations. e.g.: %1:elims:>2%
+# (Also available, elims:<x and elims:=x)
+# Multiple player-tags can be added to one player with the & symbol, e.g.: %1:g:M&A%.
+
+### Pronoun Tags
+# * %p:n% is replaced by player n's third-person subject pronouns (he, she, they) e.g.: %p:1%
+# * %p:no% is replaced by player n's third-person object pronouns (him, her, them) e.g.: %p:1o%
+# * %p:ns% is replaced by player n's possesive pronouns (his, hers, their) e.g.: %p:1s%
+# * %p:nself% is replaced by player n's self pronouns (himself, herself, themself) e.g.: %p:1self%
+# * Replacing p with P will capitalize the pronoun.
+
+## Event Metadata
+# The line under a scenario should contain metadata about that scenario.
+# All metadata is optional, except for tributes, which must be a valid integer higher than 0.
+# * tributes:n denotes how many tributes are involved in this scenario. (up to 9)
+# * setsize:n:s changes player n's size to s.
+# * size:n:i changes player n's size by i amount. i can be any difference string, e.g.: 2x, /2,
+# +1ft, -6in, 50%, etc.
+# * elim:n eliminates player n.
+# * perp:n denotes that player n eliminated someone.
+# * give:n:item gives player n the item specified.
+# * remove:n:item removes the specified item from the player n. If the player doesn't have any
+# of the item, this does nothing.
+# * giveattr:n:attr gives player n the attribute specified.
+# * removeattr:n:attr removes the specified attribute from the player n. If the player doesn't have that
+# attribute, this does nothing.
+# * rarity:f denotes how rare an event is. f is a decimal number, which defaults to 1.
+# For example, an event of rarity 0.1 will be 10 times more rare than a standard event.
+
+## The Game
+# The game loop proceeds as follows:
+# One bloodbath occurs, in which something happens to each player.
+# One day then happens, in which something happens to each player.
+# One night happens, in which something happens to each player.
+# A fatal event can occur randomly within either of these time periods.
+# This day-night loop is the core of the game.
+# A feast event happens after roughly half the population is eliminated.
+# An arena event is rare and can happen at any time.
+# A player elims if they are shrunk beyond 1mm, grow beyond 8 miles, or are eliminated manually.
+
+# Below here is an example of an actual game. It is extremely abbreviated, for example purposes.
+
+[setup]
+autoelim:True, minsize:1mm, maxsize:8mi, deathrate:10, arenafreq:10, unitsystem:u
+
+[players]
+"DigiDuncan"
+team:1, gender:M, height:5ft7.5in, url:https://pbs.twimg.com/profile_images/1191182660099547143/oF-LRZHl_400x400.jpg
+"Kelly"
+team:2, gender:F, height:5ft11in, url:https://pbs.twimg.com/profile_images/1270704649646100480/7zQ8hckD_400x400.jpg
+"Cool Dude"
+team:3, gender:M, height:5ft9in, url:https://randomuser.me/api/portraits/men/90.jpg
+"Interesting Chick"
+team:4, gender:F, height:5ft3in, url:https://randomuser.me/api/portraits/women/50.jpg
+"Amazing Person"
+team:5, gender:X, height:6ft2in, url:https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg
+"The Other One"
+team:6, gender:X, height:2m, url:https://randomuser.me/api/portraits/lego/1.jpg
+"Slim Jim"
+team:7, gender:M, height:200ft, url:https://media.discordapp.net/attachments/751155300001775776/782441061640699904/felix_transparant.png
+"Smol"
+team:8, gender:X, height:5cm, url:https://i.pinimg.com/originals/cd/72/d2/cd72d2b4b12551a42c677b2266583aa7.jpg
+
+[bloodbath]
+"%1% drinks some shrinking serum."
+tributes:1, size:1:0.5x
+
+"%1% and %2% fight for a growth syringe. %1% accidentally uses it on %2% and runs away while %2% is busy growing."
+tributes:2, size:2:2x, rarity:0.5
+
+"%1<1ft% rides on top of %2% as %p:1% leaves."
+tributes:2
+
+[day]
+"%1% scares %2% off by roaring as loud as %p:1% can."
+tributes:2
+
+"%1% camouflages %p:1self% in the bushes, waiting for someone to come by."
+tributes:1
+
+"%1:g:M% is a guy, wow."
+tributes:1
+
+[night]
+"%1>10ft% uses %p:1s% supplies %p:1% gathered to get a better size."
+tributes:1, size:1:-3ft
+
+"%1%, %2%, %3%, and %4% tell each other lewd stories to get in the mood."
+tributes:4
+
+"%1:attr:tail% has a tail."
+tributes:1
+
+"%1% is asleep."
+tributes:1
+
+[fatalday]
+"%1% was disqualified for leaving the arena to get some snacks."
+tributes:1, elim:1
+
+"%1:A% kills %2:B% for the revolution."
+tributes:2, elim:2, perp:1
+
+"%1<6in% shrinks even smaller than they already were and is eliminated."
+tributes:1, elim:1
+
+[fatalnight]
+"%1:inv:shrinkgun% tracks down and shrinks %2% out of the contest."
+tributes:2, elim:2, perp:1
+
+"%1% takes %p:1s% heart out of %p:1s% own chest, for some reason."
+tributes:1, elim:1
+
+[feast]
+"%1>3ft% takes a strange glowing fruit that was hidden inside the supply building."
+tributes:1, give:1:fruit
+
+"%1% doesn't go to the feast, F that."
+tributes:1
+
+"%1% and %2% hug each other. Aw."
+tributes:2
+
+[arena]
+<Real Kelly> "A Giga-sized Kelly rolls over in her sleep and drools into the arena."
+"%1% avoids getting swept away."
+tributes:1
+
+"%1% is washed out of the arena by Kelly's drool."
+tributes:1, elim:1

@@ -1,6 +1,6 @@
 from typing import Type
 
-from sizeroyale.lib.attrdict import AttrDict
+from sizebot.lib.attrdict import AttrDict
 from sizeroyale.lib.errors import ParseError
 
 

@@ -132,7 +132,7 @@ class Decimal():
 
     @values
     def __hash__(value):
-        raise hash(value)
+        return hash(value)
 
     # Math Methods
     @values
