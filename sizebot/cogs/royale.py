@@ -1,5 +1,7 @@
 import asyncio
 from datetime import timedelta
+from pathlib import Path
+
 import arrow
 
 from discord.ext import commands
@@ -29,25 +31,31 @@ class RoyaleCog(commands.Cog):
                 await ctx.send("There is already a game running in this guild!")
                 return
             m = await ctx.send("Creating royale...")
-            if not ctx.message.attachments:
+            if not ctx.message.attachments and seed != "test":
                 await m.edit(content = "You didn't upload a royale sheet. Please see https://github.com/DigiDuncan/SizeRoyale/blob/master/royale-spec.txt")
                 return
-            sheet = ctx.message.attachments[0]
-            if not sheet.filename.endswith(".txt"):
-                await m.edit(content = f"{sheet.filename} is not a `txt` file.")
-                return
 
-            f = (await sheet.read()).decode("utf-8")
+            if not ctx.message.attachments and seed == "test":
+                with open(Path(__file__).parent.parent.parent / "royale-spec.txt") as f:
+                    data = f.read()
+                filename = "test"
+            else:
+                sheet = ctx.message.attachments[0]
+                filename = sheet.filename
+                if not sheet.filename.endswith(".txt"):
+                    await m.edit(content = f"{sheet.filename} is not a `txt` file.")
+                    return
+                data = (await sheet.read()).decode("utf-8")
             game = Game(seed = seed)
             loop = arrow.now()
             try:
-                async for progress in await game.load(f):
+                async for progress in await game.load(data):
                     looppoint = arrow.now()
                     if looppoint - loop >= timedelta(seconds = 1):
                         loop = looppoint
                         await m.edit(content = f"`{progress}` {emojis.loading}")
                 current_games[ctx.guild.id] = game
-                await m.edit(content = f"Royale loaded with file `{sheet.filename}` and seed `{current_games[ctx.guild.id].seed}`.")
+                await m.edit(content = f"Royale loaded with file `{filename}` and seed `{current_games[ctx.guild.id].seed}`.")
             except Exception:
                 await m.edit(content = f"Game failed to load.")
                 raise
@@ -78,7 +86,7 @@ class RoyaleCog(commands.Cog):
             # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
             def check(reaction, reacter):
                 return reaction.message.id == sentMsg.id \
-                    and reacter.id == user.id \
+                    and reacter.id == ctx.message.author.id \
                     and (
                         str(reaction.emoji) == emojis.check
                         or str(reaction.emoji) == emojis.cancel
@@ -98,6 +106,11 @@ class RoyaleCog(commands.Cog):
                 return
 
             current_games.pop(ctx.guild.id)
+        
+        elif subcommand == "create":
+            pass  # Fixed "invalid subcommand create" on tests
+        else:
+            await ctx.send(f"Invalid subcommand `{subcommand}` for royale.")
 
 def setup(bot):
     bot.add_cog(RoyaleCog(bot))
