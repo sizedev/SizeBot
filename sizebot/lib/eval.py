@@ -7,6 +7,7 @@ from datetime import date, datetime, time, timedelta
 
 import discord
 from discord import Embed
+import PIL
 
 from sizebot.conf import conf
 from sizebot.cogs import thistracker
@@ -129,7 +130,8 @@ def getEvalGlobals():
         "math": math,
         "BANNER": BANNER, "EGG": EGG, "LOGIN": LOGIN,
         "guilddb": guilddb,
-        "proportions": proportions
+        "proportions": proportions,
+        "PIL": PIL
     }
 
     return evalGlobals
