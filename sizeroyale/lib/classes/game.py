@@ -51,6 +51,8 @@ class Game:
     def round_title(self):
         if self.current_event_type == "bloodbath":
             event_type = "Cornucopia"
+        elif self.cannon_time:
+            event_type = "Mourning"
         else:
             event_type = self.current_event_type.capitalize()
 
@@ -166,14 +168,14 @@ class Game:
         else:
             raise ThisShouldNeverHappenException("Round type not valid.")
 
-        events = []
+        es = []
 
         if self.current_event_type == "arena":
             if not self.current_arena:
                 self.current_arena = self.random.choice(self.royale.arenas)
                 self.running_arena = True
                 logger.log(ROYALE, f"[ARENA] Running arena {self.current_arena.name}...")
-                events.append({"text": self.current_arena.description})
+                es.append({"text": self.current_arena.description})
             trying_events = True
             events = copy(self.current_arena.events)
             while trying_events:
@@ -184,7 +186,7 @@ class Game:
                     players = event.get_players(playerpool)
                     r = await self.royale._run_event(event, players)
                     trying_events = False
-                    events.append(r)
+                    es.append(r)
                 except OutOfPlayersError:
                     events.remove(event)
 
@@ -199,11 +201,11 @@ class Game:
                     players = event.get_players(playerpool)
                     r = await self.royale._run_event(event, players)
                     trying_events = False
-                    events.append(r)
+                    es.append(r)
                 except OutOfPlayersError:
                     events.remove(event)
 
-        return events
+        return es
 
     def __str__(self):
         return f"Game(seed={self.seed!r}\n{str(self.royale)}\n)"
