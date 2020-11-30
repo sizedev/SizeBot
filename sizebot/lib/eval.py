@@ -1,10 +1,10 @@
 import builtins
 import inspect
+import io
 import itertools
 import logging
 import math
 from datetime import date, datetime, time, timedelta
-
 
 import discord
 from discord import Embed
@@ -135,7 +135,9 @@ def getEvalGlobals():
         "proportions": proportions,
         "PIL": PIL,
         "Image": Image,
-        "ImageDraw": ImageDraw
+        "ImageDraw": ImageDraw,
+        "io": io,
+        "logger": logger
     }
 
     return evalGlobals
