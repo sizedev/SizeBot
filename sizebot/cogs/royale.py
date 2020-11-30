@@ -1,3 +1,4 @@
+from sizeroyale import Game
 from discord.ext import commands
 
 current_games = {}
@@ -25,6 +26,8 @@ class RoyaleCog(commands.Cog):
         if not sheet.filename.endswith(".txt"):
             m.edit(content = f"{sheet.filename} is not a `txt` file.")
             return
+
+        current_games[ctx.guild.id] = Game(seed = seed)
 
 
 def setup(bot):
