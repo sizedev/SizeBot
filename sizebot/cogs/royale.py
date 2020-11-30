@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-current_game = None
+current_games = {}
 
 
 class RoyaleCog(commands.Cog):
@@ -13,6 +13,9 @@ class RoyaleCog(commands.Cog):
         hidden = True
     )
     async def createroyale(self, ctx, seed = None):
+        if current_games[ctx.guild.id]:
+            await ctx.send("There is already a game running in this guild!")
+            return
         m = await ctx.send("Creating royale...")
         if not ctx.message.attachments:
             m.edit(content = "You didn't upload a royale sheet. Please see https://github.com/DigiDuncan/SizeRoyale/blob/master/royale-spec.txt")
