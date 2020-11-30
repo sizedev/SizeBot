@@ -2,7 +2,7 @@ import asyncio
 import io
 import importlib.resources as pkg_resources
 import math
-from functools import lru_cache
+from asyncstdlib.functools import lru_cache
 
 from aiohttp_requests import requests
 from PIL import Image, ImageDraw, ImageFont
@@ -15,35 +15,12 @@ from sizeroyale.lib.errors import DownloadError
 
 discord_gray = (0x36, 0x39, 0x3F, 255)
 
-# https://stackoverflow.com/a/46723144
-class Cacheable:
-    def __init__(self, co):
-        self.co = co
-        self.done = False
-        self.result = None
-        self.lock = asyncio.Lock()
-
-    def __await__(self):
-        with (yield from self.lock):
-            if self.done:
-                return self.result
-            self.result = yield from self.co.__await__()
-            self.done = True
-            return self.result
-
-def cacheable(f):
-    def wrapped(*args, **kwargs):
-        r = f(*args, **kwargs)
-        return Cacheable(r)
-    return wrapped
-
 
 @lru_cache(50)
-@cacheable
 async def download_image(url):
-    r = requests.get(url, stream=True)
-    if r.status_code == 200:
-        return Image.open(io.BytesIO(r.content))
+    r = await requests.get(url)
+    if r.status == 200:
+        return Image.open(io.BytesIO(await r.read()))
     else:
         raise DownloadError(f"Image could not be downloaded: {url!r}.")
 
