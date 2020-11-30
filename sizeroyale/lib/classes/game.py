@@ -33,7 +33,7 @@ class Game:
         self.feasted = False
         self.unreported_deaths = []
 
-    def load(self, data):
+    async def load(self, data):
         self.royale = Royale(self)
         return self.royale.load(data)
 
@@ -44,9 +44,8 @@ class Game:
     def cannon_time(self):
         return self.unreported_deaths != []
 
-    @property
-    def game_over(self):
-        return self.royale.game_over
+    async def game_over(self):
+        return await self.royale.game_over()
 
     @property
     def round_title(self):
@@ -61,27 +60,25 @@ class Game:
 
         return title
 
-    @property
-    def stats_screen(self):
+    async def stats_screen(self):
         return EmbedTemplate(title = f"Size Royale Stats ({self.round_title})",
-                             image = self.royale.stats_screen)
+                             image = await self.royale.stats_screen())
 
-    @property
-    def game_over_embed(self):
-        if self.game_over == 0:
+    async def game_over_embed(self):
+        if await self.game_over() == 0:
             return {"text": "GAME OVER! There are no winners."}
         if self.royale.teamwin:
             return {
-                "text": f"GAME OVER! Winning Team: {self.game_over[0]}",
-                "image": self.game_over[1]
+                "text": f"GAME OVER! Winning Team: {await self.game_over()[0]}",
+                "image": await self.game_over()[1]
             }
         return {
-            "text": f"GAME OVER! Winning Player: {self.game_over[0].name}",
-            "image": self.game_over[1]
+            "text": f"GAME OVER! Winning Player: {await self.game_over()[0].name}",
+            "image": await self.game_over()[1]
         }
 
-    def next(self) -> List[EmbedTemplate]:
-        if self.game_over:
+    async def next(self) -> List[EmbedTemplate]:
+        if await self.game_over():
             logger.log(ROYALE, "This game is already completed. Please start a new game.")
             return [EmbedTemplate(title = "Size Royale",
                                   description = "This game is already completed. Please start a new game.")]
@@ -91,8 +88,8 @@ class Game:
             logger.log(ROYALE, f"[GAME] {len(unreported_deaths)} cannon shots sound through the arena.")
             return [EmbedTemplate(title = self.round_title,
                                   description = f"{len(unreported_deaths)} cannon shot{'' if len(unreported_deaths) == 1 else 's'} sound through the arena.",
-                                  image = merge_images([p.image for p in unreported_deaths]))]
-        round = self._next_round()
+                                  image = merge_images([await p.get_image() for p in unreported_deaths]))]
+        round = await self._next_round()
         if round is None:
             return None
         events = [EmbedTemplate(title = self.round_title,
@@ -100,7 +97,7 @@ class Game:
                                 image = event['image']) for event in round]
         return events
 
-    def _next_round(self):
+    async def _next_round(self):
         # Reset player pool.
         playerpool = self.royale.alive_players
 
@@ -139,10 +136,10 @@ class Game:
         logger.log(ROYALE, "[ROUND] " + self.current_event_type.capitalize() + f", Day {self.current_day}")
         events = []
         while playerpool:
-            if self.game_over:
-                logger.log(ROYALE, f"[GAME] GAME OVER! Winner: {self.royale.game_over}")
-                return [self.game_over_embed]
-            es = self._next_event(playerpool)
+            if await self.game_over():
+                logger.log(ROYALE, f"[GAME] GAME OVER! Winner: {await self.royale.game_over()}")
+                return [await self.game_over_embed()]
+            es = await self._next_event(playerpool)
             for e in es:
                 for p in e["players"]:
                     playerpool.pop(p)
@@ -156,9 +153,9 @@ class Game:
 
         return events
 
-    def _next_event(self, playerpool: dict):
-        if self.royale.game_over is not None:
-            return [self.game_over_embed]
+    async def _next_event(self, playerpool: dict):
+        if await self.royale.game_over() is not None:
+            return [await self.game_over_embed()]
         if self.current_event_type in ["bloodbath", "feast", "arena"]:
             event_type = self.current_event_type
         elif self.current_event_type in ["day", "night"]:
@@ -185,7 +182,7 @@ class Game:
                 event = self.random.choices(events, [e.rarity for e in events])[0]
                 try:
                     players = event.get_players(playerpool)
-                    r = self.royale._run_event(event, players)
+                    r = await self.royale._run_event(event, players)
                     trying_events = False
                     events.append(r)
                 except OutOfPlayersError:
@@ -200,7 +197,7 @@ class Game:
                 event = self.random.choices(events, [e.rarity for e in events])[0]
                 try:
                     players = event.get_players(playerpool)
-                    r = self.royale._run_event(event, players)
+                    r = await self.royale._run_event(event, players)
                     trying_events = False
                     events.append(r)
                 except OutOfPlayersError:

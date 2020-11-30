@@ -1,9 +1,10 @@
+import asyncio
 import io
 import importlib.resources as pkg_resources
 import math
 from functools import lru_cache
 
-import requests
+from aiohttp_requests import requests
 from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageOps import grayscale
 
@@ -14,9 +15,32 @@ from sizeroyale.lib.errors import DownloadError
 
 discord_gray = (0x36, 0x39, 0x3F, 255)
 
+# https://stackoverflow.com/a/46723144
+class Cacheable:
+    def __init__(self, co):
+        self.co = co
+        self.done = False
+        self.result = None
+        self.lock = asyncio.Lock()
+
+    def __await__(self):
+        with (yield from self.lock):
+            if self.done:
+                return self.result
+            self.result = yield from self.co.__await__()
+            self.done = True
+            return self.result
+
+def cacheable(f):
+    def wrapped(*args, **kwargs):
+        r = f(*args, **kwargs)
+        return Cacheable(r)
+    return wrapped
+
 
 @lru_cache(50)
-def download_image(url):
+@cacheable
+async def download_image(url):
     r = requests.get(url, stream=True)
     if r.status_code == 200:
         return Image.open(io.BytesIO(r.content))
@@ -74,11 +98,11 @@ def merge_images_vertical(images: list) -> Image:
 
 
 @lru_cache(maxsize = 50)
-def create_profile_picture(system: str, url: str, name: str, team, height: Decimal, dead: bool):
+async def create_profile_picture(system: str, url: str, name: str, team, height: Decimal, dead: bool):
     px = 200
     size = (px, px)
 
-    raw_image = download_image(url)
+    raw_image = await download_image(url)
     height_text = format(height, system)
 
     i = raw_image.convert("RGBA")
@@ -129,8 +153,8 @@ def kill(image: Image, *, gray: bool = True, x: bool = True, color = (255, 0, 0)
     return i
 
 
-def create_stats_screen(players) -> Image:
-    image_list = [p.image for p in sorted(players.values())]
+async def create_stats_screen(players) -> Image:
+    image_list = [await p.get_image() for p in sorted(players.values())]
     height = math.ceil(math.sqrt(len(image_list)))
 
     images = [merge_images(chunk) for chunk in chunkList(image_list, height)]

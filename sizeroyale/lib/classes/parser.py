@@ -1,10 +1,9 @@
+import asyncio
 import io
 import re
-import time
 
 from tqdm import trange
 
-from sizebot.lib.constants import emojis
 from sizeroyale.lib.errors import ParseError
 from sizeroyale.lib.classes.arena import Arena
 from sizeroyale.lib.classes.event import Event
@@ -46,20 +45,19 @@ class Parser:
         # Setup
         self._clean_lines()
 
-    def parse(self):
+    async def parse(self):
         pbar = io.StringIO()
         if not self.lines:
             raise ParseError("No lines to parse!")
-        for n in trange(len(self.lines), desc="Parsing...", file = pbar,
-                        postfix = emojis.loading, ascii = False, ncols = 100):
+        for n in trange(len(self.lines), desc="Parsing...", file = pbar, ascii = False, ncols = 100):
             try:
-                self._parse_line(n)
+                await self._parse_line(n)
             except ParseError as e:
                 self.errors.append(f"Line {self.original_line_numbers[n]}: " + e.message)
             yield pbar.getvalue()
             pbar.seek(0)
             pbar.truncate()
-            time.sleep(0.1)
+            await asyncio.sleep(0.1)
         # If there is still a arena in the queue, add it.
         if self.arenas is not None:
             self.arenas.append(self._current_arena)
@@ -92,7 +90,7 @@ class Parser:
         self._skip_next_line = True
         return self._read_line(self._current_line + 1)
 
-    def _parse_line(self, n: int):
+    async def _parse_line(self, n: int):
         self._current_line = n
         line = self.lines[n]
 

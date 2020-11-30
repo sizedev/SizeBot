@@ -9,11 +9,11 @@ from sizeroyale.lib.classes.game import Game
 logger = logging.get("sizebot")
 
 
-def main():
-    test()
+async def main():
+    await test()
 
 
-def test():
+async def test():
     asyncio.run(units.init())
     logger.info("Welcome to the poopview!")
     game = Game(Path(__file__).parent.parent / "royale-spec.txt")
@@ -22,8 +22,8 @@ def test():
     print(game.royale.current_players)
     game.royale.stats_screen.show()
 
-    while game.game_over is None:
-        game.next()
+    while await game.game_over() is None:
+        await game.next()
 
     logger.info("Your poop has been viewed.")
 

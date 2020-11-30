@@ -19,9 +19,11 @@ class Royale:
     def __init__(self, game):
         self.game = game
 
-    def load(self, data: str):
+    async def load(self, data: str):
         self.parser = Parser(self.game, data)
-        yield from self.parser.parse()
+
+        async for progress in self.parser.parse():
+            yield progress
 
         self.minsize = SV.parse("1mm") if self.parser.minsize is None else SV.parse(self.parser.minsize)
         self.maxsize = SV.parse("4mi") if self.parser.maxsize is None else SV.parse(self.parser.maxsize)
@@ -76,12 +78,11 @@ class Royale:
             s.add(player.team)
         return list(s)
 
-    @property
-    def game_over(self) -> Optional[int]:
+    async def game_over(self) -> Optional[int]:
         """Returns the winning team, or None if the game isn't over."""
         if self.teamwin:
             if len(self.current_teams) == 1:
-                return (self.current_teams[0], merge_images([p.image for p in self.alive_players]))
+                return (self.current_teams[0], merge_images([p.get_image() for p in self.alive_players]))
             elif len(self.current_teams) == 0:
                 return 0
             else:
@@ -89,22 +90,21 @@ class Royale:
         else:
             if self.remaining == 1:
                 return ([self.alive_players[k] for k in self.alive_players][0],
-                        merge_images([p.image for p in self.alive_players]))
+                        merge_images([p.get_image() for p in self.alive_players]))
             elif self.remaining == 0:
                 return 0
             else:
                 return None
 
-    @property
-    def stats_screen(self):
-        return create_stats_screen(self.players)
+    async def stats_screen(self):
+        return await create_stats_screen(self.players)
 
     def is_player_alive(self, player) -> bool:
         if self.autoelim:
             return player.height > self.minsize and player.height < self.maxsize and player.dead is False
         return player.dead is False
 
-    def _run_event(self, event: Event, playerpool: Dict[str, Player]) -> dict:
+    async def _run_event(self, event: Event, playerpool: Dict[str, Player]) -> dict:
         """Runs an event, returning the string describing what happened and an image."""
         if event.tributes > len(playerpool):
             raise GametimeError("Not enough players to run this event!")
@@ -158,7 +158,7 @@ class Royale:
         if len(players) == 0:
             eventimage = None
         else:
-            eventimage = merge_images([self.players[p].image for p in players])
+            eventimage = merge_images([await self.players[p].get_image() for p in players])
 
         return {
             "text":    eventtext,

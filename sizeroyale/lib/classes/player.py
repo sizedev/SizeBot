@@ -28,9 +28,8 @@ class Player:
         self.dead = False
         self.elims = 0
 
-    @property
-    def image(self) -> Image:
-        return create_profile_picture(self._game.royale.unitsystem, self.url, self.name, self.team, self.height, self.dead)
+    async def get_image(self) -> Image:
+        return await create_profile_picture(self._game.royale.unitsystem, self.url, self.name, self.team, self.height, self.dead)
 
     @property
     def subject(self) -> str:

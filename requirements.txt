@@ -17,3 +17,4 @@ pytz==2020.4
 pillow==8.0.1
 petname==2.6
 tqdm==4.51.0
+aiohttp_requests==0.1.3
