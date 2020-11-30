@@ -15,12 +15,7 @@ logger = logging.getLogger("sizebot")
 
 
 class Game:
-    def __init__(self, filepath, *, seed = None):
-        self.royale = Royale(filepath, self)
-        if self.royale.parser.errors:
-            for e in self.royale.parser.errors:
-                logger.error(e)
-
+    def __init__(self, *, seed = None):
         if seed is None:
             self.seed = petname.generate(3, letters = 10)
         else:
@@ -30,12 +25,18 @@ class Game:
 
         self.random.seed(self.seed)
 
+        self.royale = None
         self.current_day = 0
         self.current_event_type = None
         self.current_arena = None
         self.running_arena = False
         self.feasted = False
         self.unreported_deaths = []
+
+    def load(self, file):
+        self.royale = Royale(file, self)
+        if self.royale.parser.errors:
+            return self.royale.parser.errors
 
     @property
     def cannon_time(self):

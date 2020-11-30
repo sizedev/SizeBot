@@ -17,15 +17,7 @@ logger = logging.getLogger("sizeroyale")
 
 class Royale:
     def __init__(self, file, game):
-        self._file = file
-
-        try:
-            with open(self._file) as f:
-                lines = f.readlines()
-                self.parser = Parser(game, lines)
-        except FileNotFoundError:
-            logger.error("The file {self._file} could not be found!")
-            exit(1)
+        self.parser = Parser(game, file)
 
         self.minsize = SV.parse("1mm") if self.parser.minsize is None else SV.parse(self.parser.minsize)
         self.maxsize = SV.parse("4mi") if self.parser.maxsize is None else SV.parse(self.parser.maxsize)
