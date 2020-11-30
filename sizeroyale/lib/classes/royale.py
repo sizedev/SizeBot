@@ -16,8 +16,12 @@ logger = logging.getLogger("sizeroyale")
 
 
 class Royale:
-    def __init__(self, file, game):
-        self.parser = Parser(game, file)
+    def __init__(self, game):
+        self.game = game
+
+    def load(self, data: str):
+        self.parser = Parser(self.game, data)
+        yield from self.parser.parse()
 
         self.minsize = SV.parse("1mm") if self.parser.minsize is None else SV.parse(self.parser.minsize)
         self.maxsize = SV.parse("4mi") if self.parser.maxsize is None else SV.parse(self.parser.maxsize)

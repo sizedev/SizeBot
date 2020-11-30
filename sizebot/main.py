@@ -19,7 +19,7 @@ from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.plugins import active, monika
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=CMD)
 dfhandler = digilogger.DigiFormatterHandler()
 
 logger = logging.getLogger("sizebot")
@@ -48,6 +48,7 @@ initial_cogs = [
     # "rainbow",
     "register",
     "roll",
+    "royale",
     "run",
     "scalewalk",
     "set",

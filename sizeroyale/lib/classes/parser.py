@@ -1,7 +1,10 @@
+import io
 import re
+import time
 
 from tqdm import trange
 
+from sizebot.lib.constants import emojis
 from sizeroyale.lib.errors import ParseError
 from sizeroyale.lib.classes.arena import Arena
 from sizeroyale.lib.classes.event import Event
@@ -15,9 +18,9 @@ re_digit = r"\d"
 
 
 class Parser:
-    def __init__(self, game, lines: list):
+    def __init__(self, game, data: str):
         self._game = game
-        self._lines = lines
+        self._lines = data.splitlines()
         self.original_line_numbers = {}
         self.errors = []
 
@@ -42,16 +45,21 @@ class Parser:
 
         # Setup
         self._clean_lines()
-        self.parse()
 
     def parse(self):
+        pbar = io.StringIO()
         if not self.lines:
             raise ParseError("No lines to parse!")
-        for n in trange(len(self.lines), desc="Parsing..."):  # TODO: Make this tqdm go into Discord somehow?
+        for n in trange(len(self.lines), desc="Parsing...", file = pbar,
+                        postfix = emojis.loading, ascii = False, ncols = 100):
             try:
                 self._parse_line(n)
             except ParseError as e:
                 self.errors.append(f"Line {self.original_line_numbers[n]}: " + e.message)
+            yield pbar.getvalue()
+            pbar.seek(0)
+            pbar.truncate()
+            time.sleep(0.1)
         # If there is still a arena in the queue, add it.
         if self.arenas is not None:
             self.arenas.append(self._current_arena)

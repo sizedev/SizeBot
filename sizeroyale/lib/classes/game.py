@@ -33,10 +33,12 @@ class Game:
         self.feasted = False
         self.unreported_deaths = []
 
-    def load(self, file):
-        self.royale = Royale(file, self)
-        if self.royale.parser.errors:
-            return self.royale.parser.errors
+    def load(self, data):
+        self.royale = Royale(self)
+        return self.royale.load(data)
+
+        # if self.royale.parser.errors:
+        #     return self.royale.parser.errors
 
     @property
     def cannon_time(self):
