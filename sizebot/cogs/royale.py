@@ -12,6 +12,7 @@ class RoyaleCog(commands.Cog):
     @commands.command(
         hidden = True
     )
+    @commands.has_any_role("Royale DM", "SizeBot Developer")
     async def createroyale(self, ctx, seed = None):
         if current_games[ctx.guild.id]:
             await ctx.send("There is already a game running in this guild!")
