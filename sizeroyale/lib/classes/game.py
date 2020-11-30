@@ -53,6 +53,8 @@ class Game:
             event_type = "Cornucopia"
         elif self.cannon_time:
             event_type = "Mourning"
+        elif self.current_event_type is None:
+            event_type = "[UNINITIALIZED]"
         else:
             event_type = self.current_event_type.capitalize()
 
