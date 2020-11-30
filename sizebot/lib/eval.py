@@ -5,9 +5,11 @@ import logging
 import math
 from datetime import date, datetime, time, timedelta
 
+
 import discord
 from discord import Embed
 import PIL
+from PIL import Image, ImageDraw
 
 from sizebot.conf import conf
 from sizebot.cogs import thistracker
@@ -131,7 +133,9 @@ def getEvalGlobals():
         "BANNER": BANNER, "EGG": EGG, "LOGIN": LOGIN,
         "guilddb": guilddb,
         "proportions": proportions,
-        "PIL": PIL
+        "PIL": PIL,
+        "Image": Image,
+        "ImageDraw": ImageDraw
     }
 
     return evalGlobals
