@@ -65,7 +65,8 @@ class RoyaleCog(commands.Cog):
                 await asyncio.sleep(1)
 
         if subcommand == "overview":
-            data = current_games[ctx.guild.id].stats_screen().to_embed()
+            stats = await current_games[ctx.guild.id].stats_screen()
+            data = stats.to_embed()
             await ctx.send(embed = data[0], file = data[1])
 
         if subcommand == "stop" or subcommand == "delete":
