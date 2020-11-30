@@ -8,14 +8,13 @@ from sizeroyale.lib.classes.game import Game
 
 logger = logging.get("sizebot")
 
-asyncio.run(units.init())
-
 
 def main():
     test()
 
 
 def test():
+    asyncio.run(units.init())
     logger.info("Welcome to the poopview!")
     game = Game(Path(__file__).parent.parent / "royale-spec.txt")
     logger.info(game)
