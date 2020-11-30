@@ -85,14 +85,15 @@ class Royale:
         """Returns the winning team, or None if the game isn't over."""
         if self.teamwin:
             if len(self.current_teams) == 1:
-                return self.current_teams[0]
+                return (self.current_teams[0], merge_images([p.image for p in self.alive_players]))
             elif len(self.current_teams) == 0:
                 return 0
             else:
                 return None
         else:
             if self.remaining == 1:
-                return [self.alive_players[k] for k in self.alive_players][0]
+                return ([self.alive_players[k] for k in self.alive_players][0],
+                        merge_images([p.image for p in self.alive_players]))
             elif self.remaining == 0:
                 return 0
             else:
