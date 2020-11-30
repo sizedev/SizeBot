@@ -149,7 +149,7 @@ class Royale:
 
         if event.setsizes is not None:
             for i, d in event.sizes:
-                player_by_id(i).height = d
+                player_by_id(i).height = SV(d)
 
         if event.sizes is not None:
             for i, d in event.sizes:

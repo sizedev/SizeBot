@@ -108,9 +108,9 @@ class Player:
 
     def change_height(self, diff: Diff):
         if diff.changetype == "add":
-            self.height += diff.amount
+            self.height = SV(self.height + diff.amount)
         elif diff.changetype == "multiply":
-            self.height *= diff.amount
+            self.height = SV(self.height * diff.amount)
 
         else:
             raise GametimeError(f"Unsupported changetype {diff.changetype!r}.")
