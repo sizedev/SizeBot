@@ -5,8 +5,7 @@ from typing import Optional, Union
 import arrow
 from PIL.Image import Image
 
-from discord import File
-from sizebot.discordplus.embed import Embed
+from discord import Embed, File
 
 def img_to_file(i, name="file.png", format="PNG"):
   b = io.BytesIO()
@@ -23,12 +22,17 @@ class EmbedTemplate:
     image: Union[Image, str, None] = None
 
     def to_embed(self):
+        NOTHING = "\u200b"
+        d = NOTHING if self. description is None else self.description
+        c = Embed.Empty if self.color is None else self.color
         e = Embed(title = self.title,
-                  description = self.description,
-                  color = self.color)
+                  description = d,
+                  color = c)
         if self.image:
-            i = img_to_file(self.image, name = 
-            "royale-" + arrow.now().timestamp + ".png")
-            e.set_image(i)
+            imagename = "royale-" + str(arrow.now().timestamp) + ".png"
+            i = img_to_file(self.image, name = imagename)
+            e.set_image(url = f"attachment://{imagename}")
+        else:
+            i = None
 
-        return e
+        return (e, i)
