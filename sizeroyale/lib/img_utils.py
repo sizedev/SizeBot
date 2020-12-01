@@ -100,13 +100,14 @@ async def create_profile_picture(system: str, url: str, name: str, team, height:
     while fnt_semibold.getsize(name)[0] > i.width:
         tname = truncate(name, len(name) - 1)
     textwidth, textheight = fnt_semibold.getsize(name)
+    sizewidth, _ = fnt.getsize(height_text)
     d.text(((i.width - textwidth) // 2, i.height - textheight - 20),
            tname, align = "center", font = fnt_semibold, fill = (0, 0, 0),
            stroke_width = 2, stroke_fill = (255, 255, 255))
     d.text((10, 10),
            team, align = "center", font = fnt_italic, fill = (0, 0, 0),
            stroke_width = 2, stroke_fill = (255, 255, 255))
-    d.text(((i.width - textwidth) // 2, i.height - textheight + 3),
+    d.text(((i.width - sizewidth) // 2, i.height - textheight + 3),
            height_text, align = "center", font = fnt, fill = (0, 0, 0),
            stroke_width = 2, stroke_fill = (255, 255, 255))
 

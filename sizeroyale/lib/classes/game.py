@@ -51,8 +51,6 @@ class Game:
     def round_title(self):
         if self.current_event_type == "bloodbath":
             event_type = "Cornucopia"
-        elif self.cannon_time:
-            event_type = "Mourning"
         elif self.current_event_type is None:
             event_type = "[UNINITIALIZED]"
         else:
@@ -90,7 +88,7 @@ class Game:
             unreported_deaths = self.unreported_deaths
             self.unreported_deaths = []
             logger.log(ROYALE, f"[GAME] {len(unreported_deaths)} cannon shots sound through the arena.")
-            return [EmbedTemplate(title = self.round_title,
+            return [EmbedTemplate(title = f"Day {self.current_day}: Those Who Fell",
                                   description = f"{len(unreported_deaths)} cannon shot{'' if len(unreported_deaths) == 1 else 's'} sound through the arena.",
                                   image = merge_images([await p.get_image() for p in unreported_deaths]))]
         round = await self._next_round()

@@ -12,7 +12,7 @@ from sizeroyale.lib.errors import GametimeError
 from sizeroyale.lib.img_utils import create_stats_screen, merge_images
 
 
-logger = logging.getLogger("sizeroyale")
+logger = logging.getLogger("sizebot")
 
 
 class Royale:
