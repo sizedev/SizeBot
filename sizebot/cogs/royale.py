@@ -23,7 +23,7 @@ class RoyaleCog(commands.Cog):
         hidden = True
     )
     @commands.has_any_role("Royale DM", "SizeBot Developer")
-    async def royale(self, ctx, subcommand, arg1 = None):
+    async def royale(self, ctx, subcommand, arg1 = None, arg2 = None):
         if subcommand == "create":
             seed = arg1
 
@@ -39,6 +39,7 @@ class RoyaleCog(commands.Cog):
                 with open(Path(__file__).parent.parent.parent / "royale-spec.txt") as f:
                     data = f.read()
                 filename = "test"
+                seed = arg2
             else:
                 sheet = ctx.message.attachments[0]
                 filename = sheet.filename
@@ -72,12 +73,12 @@ class RoyaleCog(commands.Cog):
                 await ctx.send(embed = data[0], file = data[1])
                 await asyncio.sleep(1)
 
-        if subcommand == "overview":
+        elif subcommand == "overview":
             stats = await current_games[ctx.guild.id].stats_screen()
             data = stats.to_embed()
             await ctx.send(embed = data[0], file = data[1])
 
-        if subcommand == "stop" or subcommand == "delete":
+        elif subcommand == "stop" or subcommand == "delete":
             sentMsg = await ctx.send(f"{emojis.warning} **WARNING!** Deleting your game will remove *all progress irrecoverably.* Are you sure?"
                 f"To delete your game, react with {emojis.check}.")
             await sentMsg.add_reaction(emojis.check)
