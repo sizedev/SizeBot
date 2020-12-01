@@ -67,11 +67,14 @@ class RoyaleCog(commands.Cog):
                 return
         
         if subcommand == "next":
-            round = await current_games[ctx.guild.id].next()
-            for e in round:
-                data = e.to_embed()
-                await ctx.send(embed = data[0], file = data[1])
-                await asyncio.sleep(1)
+            loops = int(arg1) if arg1 else 1
+
+            for i in range(loops):
+                round = await current_games[ctx.guild.id].next()
+                for e in round:
+                    data = e.to_embed()
+                    await ctx.send(embed = data[0], file = data[1])
+                    await asyncio.sleep(1)
 
         elif subcommand == "overview":
             stats = await current_games[ctx.guild.id].stats_screen()
