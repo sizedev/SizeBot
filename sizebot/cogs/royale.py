@@ -1,7 +1,7 @@
 import asyncio
 from datetime import timedelta
 from pathlib import Path
-from sizeroyale.lib.errors import GametimeError, ParseError
+from sizeroyale.lib.errors import GametimeError
 
 import arrow
 
