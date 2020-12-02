@@ -536,7 +536,7 @@ def load(guildid, userid, *, member=None, allow_unreg=False):
         user.avatar_url = member.avatar_url
 
     if (not allow_unreg) and (not user.registered):
-        raise errors.UserNotFoundException(guildid, userid)  # TODO: Raise a nice exception reminding the user to complete registration
+        raise errors.UserNotFoundException(guildid, userid)
 
     return user
 
