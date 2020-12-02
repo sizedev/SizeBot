@@ -79,9 +79,11 @@ class RegisterCog(commands.Cog):
             return
 
         # User is already in different guilds, offer to copy profile to this guild?
-        guild_names = [self.bot.get_guild(int(g)).name for g, _ in userdb.listUsers(userid=ctx.author.id)]
-        if guild_names:
-            guildsstring = guild_names.join('\n')
+        guilds = [self.bot.get_guild(g) for g, _ in userdb.listUsers(userid=ctx.author.id)]
+        guilds = [g for g in guilds if g is not None]
+        guilds_names = [g.name for g in guilds]
+        if guilds_names:
+            guildsstring = guilds_names.join('\n')
             sentMsg = await ctx.send(f"You are already registered with SizeBot in these servers:\n{guildsstring}"
                                      f"You can copy a profile from one of these guilds to this one using `{ctx.prefix}copy.`\n"
                                      "Proceed with registration anyway?")
@@ -176,10 +178,11 @@ class RegisterCog(commands.Cog):
             logger.warn(f"User already registered on user registration: {ctx.author}.")
             return
 
-        currentusers = userdb.listUsers()
-        guildsregisteredin = [self.bot.get_guild(int(g)).name for g, u in currentusers if u == ctx.author.id]
-        if guildsregisteredin != []:
-            guildsstring = guildsregisteredin.join('\n')
+        guilds = [self.bot.get_guild(g) for g, _ in userdb.listUsers(userid=ctx.author.id)]
+        guilds = [g for g in guilds if g is not None]
+        guilds_names = [g.name for g in guilds]
+        if guilds_names != []:
+            guildsstring = guilds_names.join('\n')
             sentMsg = await ctx.send(f"You are already registed with SizeBot in these servers:\n{guildsstring}"
                                      f"You can copy a profile from one of these guilds to this one using `{ctx.prefix}copy.`\n"
                                      "Proceed with registration anyway?")
@@ -327,16 +330,18 @@ class RegisterCog(commands.Cog):
             "0️⃣": 10
         }
 
-        guildsregisteredin = [g for g, _ in userdb.listUsers(userid = ctx.author.id)]
-        guildsregisteredinnames = [self.bot.get_guild(g).name for g in guildsregisteredin]
+        guilds = [self.bot.get_guild(g) for g, _ in userdb.listUsers(userid=ctx.author.id)]
+        guilds = [g for g in guilds if g is not None]
+        guilds_ids = [g.id for g in guilds]
+        guilds_names = [g.name for g in guilds]
 
-        if guildsregisteredin == []:
+        if guilds_ids == []:
             await ctx.send("You are not registered with SizeBot in any guilds."
                            f"To register, use `{ctx.prefix}register`.")
             return
 
         # TODO: This doesn't seem to work.
-        if guildsregisteredin == [ctx.guild.id]:
+        if guilds_ids == [ctx.guild.id]:
             await ctx.send("You are not registered with SizeBot in any other guilds.")
             return
 
@@ -349,8 +354,8 @@ class RegisterCog(commands.Cog):
         outstring += "Copy profile from what guild?\n"
 
         # TODO: Replace this with a Menu.
-        for i in range(min(len(guildsregisteredin), 10)):  # Loops over either the whole list of guilds, or if that's longer than 10, 10 times.
-            outstring += f"{list(inputdict.keys())[i]} *{guildsregisteredinnames[i]}*\n"
+        for i in range(min(len(guilds_ids), 10)):  # Loops over either the whole list of guilds, or if that's longer than 10, 10 times.
+            outstring += f"{list(inputdict.keys())[i]} *{guilds_names[i]}*\n"
             await outmsg.add_reaction(list(inputdict.keys())[i])
         await outmsg.add_reaction(emojis.cancel)
 
@@ -381,7 +386,7 @@ class RegisterCog(commands.Cog):
 
         if reaction.emoji in inputdict.keys():
             chosen = inputdict[reaction.emoji] - 1
-            chosenguild = guildsregisteredin[chosen]
+            chosenguild = guilds_ids[chosen]
 
             frompath = paths.guilddbpath / str(chosenguild) / "users" / f"{ctx.author.id}.json"
             topath = paths.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.author.id}.json"
