@@ -115,14 +115,14 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.unitsystem = newsys
-        userdata.complete_step("setsystem")
+        completed_registration = userdata.complete_step("setsystem")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) set their system to {userdata.unitsystem}.")
         await ctx.send(f"<@{ctx.author.id}>'s system is now set to {userdata.unitsystem}.")
 
         await proportions.nickUpdate(ctx.author)
-        await showNextStep(ctx, userdata)
+        await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<height>",
@@ -134,14 +134,14 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.height = newheight
-        userdata.complete_step("setheight")
+        completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now {userdata.height:m} tall.")
         await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
-        await showNextStep(ctx, userdata)
+        await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         aliases = ["resetsize", "reset"],
@@ -197,14 +197,14 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.height = "infinity"
-        userdata.complete_step("setheight")
+        completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now infinitely tall.")
         await ctx.send(f"<@{ctx.author.id}> is now infinitely tall.")
 
         await proportions.nickUpdate(ctx.author)
-        await showNextStep(ctx, userdata)
+        await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         aliases = ["0"],
@@ -216,14 +216,14 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.height = 0
-        userdata.complete_step("setheight")
+        completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now nothing.")
         await ctx.send(f"<@{ctx.author.id}> is now nothing.")
 
         await proportions.nickUpdate(ctx.author)
-        await showNextStep(ctx, userdata)
+        await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<height>",
@@ -241,14 +241,14 @@ class SetCog(commands.Cog):
                 await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
 
         userdata.baseheight = newbaseheight
-        userdata.complete_step("setheight")
+        completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height to {newbaseheight}.")
         await ctx.send(f"<@{ctx.author.id}>'s base height is now {userdata.baseheight:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
-        await showNextStep(ctx, userdata)
+        await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<weight>",
@@ -259,14 +259,14 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.weight = newweight
-        userdata.complete_step("setweight")
+        completed_registration = userdata.complete_step("setweight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their weight to {newweight}.")
         await ctx.send(f"<@{ctx.author.id}>'s weight is now {userdata.weight:mu}")
 
         await proportions.nickUpdate(ctx.author)
-        await showNextStep(ctx, userdata)
+        await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<weight>",
@@ -283,14 +283,14 @@ class SetCog(commands.Cog):
                 await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
 
         userdata.baseweight = newbaseweight
-        userdata.complete_step("setweight")
+        completed_registration = userdata.complete_step("setweight")
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base weight to {newbaseweight}.")
         await ctx.send(f"<@{ctx.author.id}>'s base weight is now {userdata.baseweight:mu}")
 
         await proportions.nickUpdate(ctx.author)
-        await showNextStep(ctx, userdata)
+        await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<height/weight> [height/weight]",
@@ -312,6 +312,7 @@ class SetCog(commands.Cog):
                 newbaseheight = arg
             if isinstance(arg, WV):
                 newbaseweight = arg
+        completed_registration = False
         if newbaseheight is not None:
             if "setheight" in userdata.registration_steps_remaining:
                 userdata.height = newbaseheight
@@ -319,18 +320,18 @@ class SetCog(commands.Cog):
             if "setheight" in userdata.registration_steps_remaining:
                 if not (SV.parse("4ft") < newbaseheight < SV.parse("8ft")):
                     await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
-            userdata.complete_step("setheight")
+            completed_registration = userdata.complete_step("setheight") or completed_registration
         if newbaseweight is not None:
             if "setweight" in userdata.registration_steps_remaining:
                 if not (WV.parse("10lb") < newbaseheight < SV.parse("1000lb")):
                     await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
             userdata.baseweight = newbaseweight
-            userdata.complete_step("setweight")
+            completed_registration = userdata.complete_step("setweight") or completed_registration
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
         await ctx.send(f"{ctx.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
-        await showNextStep(ctx, userdata)
+        await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<foot>",

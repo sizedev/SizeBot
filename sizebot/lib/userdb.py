@@ -339,10 +339,14 @@ class User:
         return len(self.registration_steps_remaining) == 0
 
     def complete_step(self, step):
+        was_completed = self.registered
         try:
             self.registration_steps_remaining.remove(step)
         except ValueError:
             pass
+        is_completed = self.registered
+        just_completed = (not was_completed) and is_completed
+        return just_completed
 
     @property
     def macrovision_model(self):

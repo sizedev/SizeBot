@@ -29,9 +29,8 @@ async def removeUserRole(member):
     await member.remove_roles(role, reason="Unregistered as sizebot user")
 
 
-async def showNextStep(ctx, userdata):
-    congrats = False
-    if congrats:
+async def showNextStep(ctx, userdata, completed=False):
+    if completed:
         await ctx.send(f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n* You can use `{conf.prefix}setspecies` to set your species to be shown in your sizetag.\n* You can adjust your current height with `{conf.prefix}setheight`.\n* You can turn off sizetags with `{conf.prefix}setdisplay`.")
     if userdata.registered:
         return
