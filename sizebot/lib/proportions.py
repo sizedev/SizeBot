@@ -94,7 +94,7 @@ async def nickReset(user):
     if user.id == user.guild.owner_id:
         return
 
-    userdata = userdb.load(user.guild.id, user.id)
+    userdata = userdb.load(user.guild.id, user.id, allow_unreg=True)
 
     # User's display setting is N. No sizetag.
     if not userdata.display:
