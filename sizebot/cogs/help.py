@@ -7,7 +7,8 @@ from discord import Embed
 from discord.errors import Forbidden
 from discord.ext import commands
 
-from sizebot import __version__, conf
+from sizebot import __version__
+from sizebot.conf import conf
 from sizebot.lib import checks, objs, userdb, utils
 from sizebot.lib.constants import colors, emojis, ids
 from sizebot.lib.menu import Menu

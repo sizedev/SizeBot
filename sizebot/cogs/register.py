@@ -5,7 +5,7 @@ from shutil import copyfile
 from discord.utils import get
 from discord.ext import commands
 
-from sizebot import conf
+from sizebot.conf import conf
 from sizebot.lib import errors, proportions, userdb, paths
 from sizebot.lib.constants import ids, emojis
 from sizebot.lib.units import SV, WV
