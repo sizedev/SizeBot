@@ -1,12 +1,13 @@
 import asyncio
 from datetime import timedelta
 from pathlib import Path
+from sizeroyale.lib.errors import GametimeError, ParseError
 
 import arrow
 
 from discord.ext import commands
 
-from sizebot.lib.constants import emojis
+from sizebot.lib.constants import emojis, ids
 from sizeroyale import Game
 
 
@@ -31,6 +32,7 @@ class RoyaleCog(commands.Cog):
                 await ctx.send("There is already a game running in this guild!")
                 return
             m = await ctx.send("Creating royale...")
+
             if not ctx.message.attachments and seed != "test":
                 await m.edit(content = "You didn't upload a royale sheet. Please see https://github.com/DigiDuncan/SizeRoyale/blob/master/royale-spec.txt")
                 return
@@ -47,6 +49,7 @@ class RoyaleCog(commands.Cog):
                     await m.edit(content = f"{sheet.filename} is not a `txt` file.")
                     return
                 data = (await sheet.read()).decode("utf-8")
+
             game = Game(seed = seed)
             loop = arrow.now()
             try:
@@ -55,6 +58,10 @@ class RoyaleCog(commands.Cog):
                     if looppoint - loop >= timedelta(seconds = 1):
                         loop = looppoint
                         await m.edit(content = f"`{progress}` {emojis.loading}")
+                if game.royale.parser.errors:
+                    await ctx.send(f"{emojis.warning} **Errors in parsing:**\n"
+                                   "\n".join(game.royale.parser.errors))
+                    return
                 current_games[ctx.guild.id] = game
                 await m.edit(content = f"Royale loaded with file `{filename}` and seed `{current_games[ctx.guild.id].seed}`.")
             except Exception:
@@ -70,7 +77,12 @@ class RoyaleCog(commands.Cog):
             loops = int(arg1) if arg1 else 1
 
             for i in range(loops):
-                round = await current_games[ctx.guild.id].next()
+                try:
+                    round = await current_games[ctx.guild.id].next()
+                except GametimeError as e:
+                    await ctx.send(f"Error in running event: {e}")
+                    await ctx.send(f"Please check your game file and consider contacting <@{ids.digiduncan}>.")
+                    return
                 for e in round:
                     data = e.to_embed()
                     await ctx.send(embed = data[0], file = data[1])
@@ -113,6 +125,7 @@ class RoyaleCog(commands.Cog):
         
         elif subcommand == "create":
             pass  # Fixed "invalid subcommand create" on tests
+
         else:
             await ctx.send(f"Invalid subcommand `{subcommand}` for royale.")
 
