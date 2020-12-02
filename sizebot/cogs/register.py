@@ -115,7 +115,7 @@ class RegisterCog(commands.Cog):
         userdata.id = ctx.author.id
         userdata.nickname = ctx.author.display_name
         if any(c in ctx.author.display_name for c in "()[]"):
-            ctx.send("TODO: CLEANUP - If you have already have size tag in your name, you fix your nick with .setnick")
+            await ctx.send(f"If you have already have size tag in your name, you can fix your nick with {conf.prefix}`setnick`.")
         userdata.display = "y"
         userdata.registration_steps_remaining = ["setheight", "setweight", "setsystem"]
 
