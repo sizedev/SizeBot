@@ -546,10 +546,10 @@ def delete(guildid, userid):
     path.unlink(missing_ok = True)
 
 
-def exists(guildid, userid):
+def exists(guildid, userid, allow_unreg=False):
     exists = True
     try:
-        load(guildid, userid)
+        load(guildid, userid, allow_unreg)
     except errors.UserNotFoundException:
         exists = False
     return exists

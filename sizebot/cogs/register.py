@@ -268,7 +268,7 @@ class RegisterCog(commands.Cog):
         guild = ctx.guild
         user = ctx.author
         # User is not registered
-        if not userdb.exists(guild.id, user.id):
+        if not userdb.exists(guild.id, user.id, allow_unreg=True):
             logger.warn(f"User {user.id} not registered with SizeBot, but tried to unregister anyway.")
             await ctx.send("Sorry! You aren't registered with SizeBot.\n"
                            "To register, use the `&register` command.")
