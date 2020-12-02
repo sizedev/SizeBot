@@ -7,18 +7,6 @@ from urllib.parse import quote
 import validator_collection
 
 re_num = r"\d+\.?\d*"
-re_sizetag = re.compile(
-    r"""(?:.*)(?: )  # a name, then a space
-    (
-    \[(?:  # a [, then either
-        [⅛¼⅜½⅝¾⅞].*  # a fraction then a unit
-        |\d{1,3}(?:,\d{1,3})?(?:(?:\.\d+)?|⅛¼⅜½⅝¾⅞)?.*  # a number then a unit
-        |∞  # or infinity
-        |0  # or zero
-    )
-    (?:, .*)?  # maybe a species
-    \]  # and finally a ]
-    )""", re.VERBOSE)
 
 
 def clamp(minVal, val, maxVal):
@@ -254,20 +242,6 @@ def removeCodeBlock(s) -> str:
     if s_nominiblock != s:
         return s_nominiblock
 
-    return s
-
-
-def hasSizeTag(s) -> bool:
-    """Return `True` if the string has a sizetag."""
-    return re_sizetag.search(s) is not None
-
-
-def stripSizeTag(s) -> str:
-    """Remove a sizetag from a string that has one."""
-    if hasSizeTag(s):
-        re_sizetagloose = re.compile(r"^(.*) \[.*\]$", re.DOTALL)
-        s_sizetagloose = re.sub(re_sizetagloose, r"\1", s)
-        return s_sizetagloose
     return s
 
 
