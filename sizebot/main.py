@@ -105,6 +105,7 @@ def main():
         if conf.logchannelid:
             logChannel = bot.get_channel(conf.logchannelid)
             discordhandler = DiscordHandler(logChannel)
+            discordhandler.setLevel(logging.INFO)
             logger.addHandler(discordhandler)
 
         # Set the bots name to what's set in the config.
