@@ -115,12 +115,6 @@ class NoPermissionsException(DigiException):
         return "SizeBot does not have the permssions to perform this action."
 
 
-# TODO: Unused
-class InvalidUserOrHeightException(DigiException):
-    def formatUserMessage(self):
-        return "Sorry! I didn't recognize that user or height."
-
-
 class InvalidUnitSystemException(DigiException):
     def __init__(self, unitsystem):
         self.unitsystem = unitsystem
