@@ -10,6 +10,7 @@ from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.constants import colors
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
+from sizebot.lib.telemetry import Telemetry
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import parseMany, prettyTimeDelta, sentence_join
 
@@ -351,6 +352,9 @@ class StatsCog(commands.Cog):
             compheight = userstats.avgheightcomp
             compdata = getUserdata(compheight)
         else:
+            telem = Telemetry.load()
+            telem.incrementUnknownObject(str(what))
+            telem.save()
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return
@@ -416,6 +420,9 @@ class StatsCog(commands.Cog):
                 f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
             )
             logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
+            telem = Telemetry.load()
+            telem.incrementUnknownObject(str(what))
+            telem.save()
             return
         stats = proportions.PersonComparison(userdata, compdata)
         embedtosend = stats.toEmbed(requesterID = ctx.message.author.id)
@@ -433,6 +440,9 @@ class StatsCog(commands.Cog):
         `&objstats book`"""
 
         if isinstance(what, str):
+            telem = Telemetry.load()
+            telem.incrementUnknownObject(str(what))
+            telem.save()
             await ctx.send(f"`{what}` is not a valid object.")
             return
 

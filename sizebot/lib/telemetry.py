@@ -4,8 +4,9 @@ from sizebot.lib import paths
 
 
 class Telemetry():
-    def __init__(self, unknowns=None, commands=None, ratelimits=None, permissionerrors=None):
+    def __init__(self, unknowns=None, unknownobjects=None, commands=None, ratelimits=None, permissionerrors=None):
         self.unknowns = unknowns or {}
+        self.unknownobjects = unknownobjects or {}
         self.commands = commands or {}
         self.ratelimits = ratelimits or {}
         self.permissionerrors = permissionerrors or {}
@@ -13,6 +14,10 @@ class Telemetry():
     def incrementUnknown(self, name):
         count = self.unknowns.get(name, 0)
         self.unknowns[name] = count + 1
+
+    def incrementUnknownObject(self, name):
+        count = self.unknownobjects.get(name, 0)
+        self.unknownobjects[name] = count + 1
 
     def incrementCommand(self, name):
         count = self.commands.get(name, 0)
@@ -36,6 +41,7 @@ class Telemetry():
         """Return a python dictionary for json exporting"""
         return {
             "unknowns": self.unknowns,
+            "unknownobjects": self.unknownobjects,
             "commands": self.commands,
             "ratelimits": self.ratelimits,
             "permissionerrors": self.permissionerrors
