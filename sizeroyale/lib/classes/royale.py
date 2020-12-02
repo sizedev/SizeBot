@@ -1,4 +1,5 @@
 import logging
+from sizeroyale.lib.runnableevent import RunnableEvent
 from typing import Dict, Optional
 
 from sizebot.lib.attrdict import AttrDict
@@ -82,7 +83,7 @@ class Royale:
         """Returns the winning team, or None if the game isn't over."""
         if self.teamwin:
             if len(self.current_teams) == 1:
-                return (self.current_teams[0], merge_images([p.get_image() for p in self.alive_players]))
+                return (self.current_teams[0], merge_images([await p.get_image() for p in self.alive_players.values()]))
             elif len(self.current_teams) == 0:
                 return 0
             else:
@@ -90,7 +91,7 @@ class Royale:
         else:
             if self.remaining == 1:
                 return ([self.alive_players[k] for k in self.alive_players][0],
-                        merge_images([p.get_image() for p in self.alive_players]))
+                        merge_images([await p.get_image() for p in self.alive_players.values()]))
             elif self.remaining == 0:
                 return 0
             else:
@@ -160,12 +161,12 @@ class Royale:
         else:
             eventimage = merge_images([await self.players[p].get_image() for p in players])
 
-        return {
-            "text":    eventtext,
-            "image":   eventimage,
-            "players": players,
-            "deaths":  deaths
-        }
+        return RunnableEvent(
+            text = eventtext,
+            image = eventimage,
+            players = players,
+            deaths = deaths
+        )
 
     def __str__(self):
         outstring = ""

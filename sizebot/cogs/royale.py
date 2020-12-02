@@ -39,7 +39,7 @@ class RoyaleCog(commands.Cog):
                 with open(Path(__file__).parent.parent.parent / "royale-spec.txt") as f:
                     data = f.read()
                 filename = "test"
-                seed = arg2
+                seed = arg2 if arg2 else "radically-key-gazelle"
             else:
                 sheet = ctx.message.attachments[0]
                 filename = sheet.filename

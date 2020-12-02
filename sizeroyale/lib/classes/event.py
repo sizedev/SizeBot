@@ -135,6 +135,9 @@ class Event:
         playerpool = [v for v in playerpool.values()]
         self._game.random.shuffle(playerpool)
 
+        if playerpool == []:
+            return []
+
         good_players = []
 
         if len(playerpool) < len(self.dummies):

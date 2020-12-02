@@ -1,6 +1,7 @@
 import logging
 import random
 from copy import copy
+from sizeroyale.lib.runnableevent import RunnableEvent
 from typing import List
 from sizeroyale.lib.embedtemplate import EmbedTemplate
 
@@ -68,16 +69,16 @@ class Game:
 
     async def game_over_embed(self):
         if await self.game_over() == 0:
-            return {"text": "GAME OVER! There are no winners."}
+            return RunnableEvent(text = "GAME OVER! There are no winners.")
         if self.royale.teamwin:
-            return {
-                "text": f"GAME OVER! Winning Team: {await self.game_over()[0]}",
-                "image": await self.game_over()[1]
-            }
-        return {
-            "text": f"GAME OVER! Winning Player: {await self.game_over()[0].name}",
-            "image": await self.game_over()[1]
-        }
+            return RunnableEvent(
+                text = f"GAME OVER! Winning Team: {await self.game_over()[0]}",
+                image = await self.game_over()[1]
+            )
+        return RunnableEvent(
+            text = f"GAME OVER! Winning Player: {await self.game_over()[0].name}",
+            image = await self.game_over()[1]
+        )
 
     async def next(self) -> List[EmbedTemplate]:
         if await self.game_over():
@@ -95,8 +96,8 @@ class Game:
         if round is None:
             return None
         events = [EmbedTemplate(title = self.round_title,
-                                description = event['text'],
-                                image = event['image']) for event in round]
+                                description = event.text,
+                                image = event.image) for event in round]
         return events
 
     async def _next_round(self):
@@ -143,15 +144,16 @@ class Game:
                 return [await self.game_over_embed()]
             es = await self._next_event(playerpool)
             for e in es:
-                for p in e["players"]:
+                for p in e.players:
                     playerpool.pop(p)
-                for d in e["deaths"]:
+                for d in e.deaths:
                     self.unreported_deaths.append(d)
                 events.append(e)
         if self.running_arena:
             self.running_arena = False
+            self.current_arena = None
             logger.log(ROYALE, "[ARENA] Arena over!")
-            events.append({"text": "The arena is over."})
+            events.append(RunnableEvent(text = "The arena is over."))
 
         return events
 
@@ -175,7 +177,7 @@ class Game:
                 self.current_arena = self.random.choice(self.royale.arenas)
                 self.running_arena = True
                 logger.log(ROYALE, f"[ARENA] Running arena {self.current_arena.name}...")
-                es.append({"text": self.current_arena.description})
+                es.append(RunnableEvent(text = self.current_arena.description))
             trying_events = True
             events = copy(self.current_arena.events)
             while trying_events:
