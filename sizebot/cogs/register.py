@@ -73,7 +73,7 @@ class RegisterCog(commands.Cog):
         if userdata:
             if userdata.registered:
                 await ctx.send("Sorry! You already registered with SizeBot.\n"
-                               "To unregister, use the `&unregister` command.")
+                               f"To unregister, use the `{conf.prefix}unregister` command.")
             else:
                 await showNextStep(ctx, userdata)
             return
@@ -139,7 +139,7 @@ class RegisterCog(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
                 "Not enough variables for `register`.\n"
-                "See `&help register`.".replace("&", self.bot.command_prefix))
+                f"See `{conf.prefix}help register`.")
             return
         raise error
 
@@ -255,7 +255,7 @@ class RegisterCog(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
                 "Not enough variables for `register`.\n"
-                "See `&help register`.".replace("&", self.bot.command_prefix))
+                f"See `{conf.prefix}help register`.")
             return
         raise error
 

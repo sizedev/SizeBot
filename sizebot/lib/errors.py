@@ -3,6 +3,7 @@ import logging
 import json
 
 import sizebot.data
+from sizebot.conf import conf
 from sizebot.lib import utils
 
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
@@ -58,7 +59,7 @@ class UserNotFoundException(DigiContextException):
         usernick = user.display_name
         return (
             f"Sorry, {usernick} isn't registered with SizeBot.\n"
-            "To register, use the `&register` command.")
+            f"To register, use the `{conf.prefix}register` command.")
 
 
 class GuildNotFoundException(DigiException):
