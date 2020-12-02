@@ -104,14 +104,29 @@ class SetCog(commands.Cog):
     async def setsystem(self, ctx, newsys):
         """Set measurement system."""
         newsys = newsys.lower()
-        if newsys not in ["m", "u"]:
-            # TODO: More aliases for the systems. (make it a map)
+        systemmap = {
+            "m":         "m",
+            "b":         "m",
+            "e":         "m",
+            "u":         "u",
+            "i":         "u",
+            "c":         "u",
+            "a":         "u",
+            "metric":    "m",
+            "british":   "m",
+            "europe":    "m",
+            "us":        "u",
+            "imperial":  "u",
+            "customary": "u",
+            "american":  "u"
+        }
+
+        if newsys not in systemmap:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.usage}`.")
             return
 
-        if newsys == "i":
-            newsys == "u"
-
+        newsys = systemmap[newsys]
+        
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.unitsystem = newsys
