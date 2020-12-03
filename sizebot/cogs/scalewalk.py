@@ -210,12 +210,16 @@ class ScaleWalkCog(commands.Cog):
         stats = proportions.PersonStats(userdata)
 
         steps = tryInt(steps)
-        if steps <= 0:
-            await ctx.send(f"You... stand... still.")
-            return
-        elif steps == "car":
+        if steps == "car":
             await ctx.send(f"Cronch.")
             logger.log(EGG, f"{ctx.author.display_name} stepped on a car.")
+            return
+
+        if not isinstance(steps, int):
+            await ctx.send(f"`{steps}` is not a number.")
+
+        if steps <= 0:
+            await ctx.send(f"You... stand... still.")
             return
 
         if userdata.currentscalestep == None:
