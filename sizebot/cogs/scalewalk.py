@@ -1,5 +1,7 @@
 import math
 import logging
+from sizebot.lib.loglevels import EGG
+from sizebot.lib.utils import tryInt
 
 import discord
 from sizebot.lib import proportions
@@ -200,12 +202,21 @@ class ScaleWalkCog(commands.Cog):
     @commands.command(
         category = "scalestep",
     )
-    async def step(self, ctx, steps: int = 1):
+    async def step(self, ctx, steps = None):
         guildid = ctx.guild.id
         userid = ctx.author.id
 
         userdata = userdb.load(guildid, userid)
         stats = proportions.PersonStats(userdata)
+
+        steps = tryInt(steps)
+        if steps == 0:
+            await ctx.send(f"You... stand... still.")
+            return
+        elif steps == "car":
+            await ctx.send(f"Cronch.")
+            logger.log(EGG, f"{ctx.user.display_name} stepped on a car.")
+            return
 
         if userdata.currentscalestep == None:
             await ctx.send(f"You do not have a stepscale set. Please use `{conf.prefix}setstepscale <amount>` to do so.")
