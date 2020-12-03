@@ -168,6 +168,7 @@ class ScaleWalkCog(commands.Cog):
             raise DigiContextException(f"Invalid flag {flag}.")
 
     @commands.command(
+        aliases = ["setscalestep"],
         category = "scalestep",
         usage = "<change per step>"
     )
@@ -211,7 +212,7 @@ class ScaleWalkCog(commands.Cog):
             raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
 
         dist_travelled = get_dist(stats.walksteplength, userdata.currentscalestep, steps)
-        await ctx.send(f"You walked {dist_travelled:,3mu} in {steps} {'step' if steps == 1 else 'steps'}.")
+        await ctx.send(f"You walked {dist_travelled:,.3mu} in {steps} {'step' if steps == 1 else 'steps'}.")
 
         userdb.save(userdata)
 
