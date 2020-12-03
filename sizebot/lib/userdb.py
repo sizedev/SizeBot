@@ -488,17 +488,17 @@ class User:
 
     def __mul__(self, other):
         newuserdata = copy(self)
-        newuserdata.scale = self.scale * other
+        newuserdata.scale = Decimal(self.scale) * other
         return newuserdata
 
     def __div__(self, other):
         newuserdata = copy(self)
-        newuserdata.scale = self.scale / other
+        newuserdata.scale = Decimal(self.scale) / other
         return newuserdata
 
     def __pow__(self, other):
         newuserdata = copy(self)
-        newuserdata.scale = self.scale ** other
+        newuserdata.scale = Decimal(self.scale) ** other
         return newuserdata
 
 
