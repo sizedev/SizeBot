@@ -62,6 +62,9 @@ class User:
         self._macrovision_view = None
 
     def __str__(self):
+        return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r}>")
+
+    def __repr__(self):
         desc = None if self.description is None else truncate(self.description, 50)
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r}, PICTURE_URL = {self.picture_url!r}, "
                 f"DESCRIPTION = {desc}, DISPLAY = {self.display!r}, "
@@ -75,9 +78,6 @@ class User:
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
                 f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}>")
-
-    def __repr__(self):
-        return str(self)
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
