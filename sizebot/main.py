@@ -21,7 +21,7 @@ from sizebot.plugins import active, monika
 
 logging.basicConfig(level=CMD)
 dfhandler = digilogger.DigiFormatterHandler()
-dfhandler.setLevel(logging.INFO)
+dfhandler.setLevel(CMD)
 
 logger = logging.getLogger("sizebot")
 logger.setLevel(CMD)
