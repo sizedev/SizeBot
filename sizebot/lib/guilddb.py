@@ -21,7 +21,7 @@ class Guild:
 
     @high_limit.setter
     def high_limit(self, value):
-        self._high_limit = SV(max(0, SV(value)))
+        self._high_limit = value if value is not None else SV(max(0, SV(value)))
 
     @property
     def low_limit(self):
@@ -29,7 +29,7 @@ class Guild:
 
     @low_limit.setter
     def low_limit(self, value):
-        self._low_limit = SV(max(0, SV(value)))
+        self._low_limit = value if value is not None else SV(max(0, SV(value)))
 
     def __str__(self):
         return (f"<Guild ID = {self.id!r}, "
@@ -43,8 +43,8 @@ class Guild:
     def toJSON(self):
         return {
             "id":         self.id,
-            "small_edge": self.small_edge,
-            "large_edge": self.large_edge,
+            "small_edge": None if self.small_edge is None else self.small_edge,
+            "large_edge": None if self.large_edge is None else self.large_edge,
             "high_limit": None if self.high_limit is None else str(self.high_limit),
             "low_limit":  None if self.low_limit is None else str(self.low_limit)
         }

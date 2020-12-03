@@ -111,6 +111,7 @@ class EdgeCog(commands.Cog):
     @commands.command(
         aliases = ["smallest"],
         usage = "[user]",
+        hidden = True,
         category = "mod"
     )
     @is_mod()
