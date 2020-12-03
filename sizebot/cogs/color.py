@@ -1,3 +1,4 @@
+from json.decoder import JSONDecodeError
 import re
 import requests
 
@@ -92,11 +93,16 @@ class ColorCog(commands.Cog):
             return
 
         r = requests.get(url + "/id?" + colortype + "=" + colorvalueout)
-        colorjson = r.json()
+        try:
+            colorjson = r.json()
+        except JSONDecodeError:
+            await outmessage.edit(emojis.warning + "The Color API is not working as expected. Please try again later.")
+            return
 
         if r.status_code != 200:
             await outmessage.edit(emojis.warning + "The Color API is not working as expected. Please try again later.")
-
+            return
+            
         hexstring = colorjson["hex"]["clean"]
         hexvalue = int(hexstring, 16)
         colorscheme = schemeurl.format(hexstring)
