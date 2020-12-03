@@ -217,6 +217,7 @@ class ScaleWalkCog(commands.Cog):
 
         if not isinstance(steps, int):
             await ctx.send(f"`{steps}` is not a number.")
+            return
 
         if steps <= 0:
             await ctx.send(f"You... stand... still.")
