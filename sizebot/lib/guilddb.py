@@ -21,7 +21,7 @@ class Guild:
 
     @high_limit.setter
     def high_limit(self, value):
-        self._high_limit = value if value is not None else SV(max(0, SV(value)))
+        self._high_limit = None if value is None else SV(max(0, SV(value)))
 
     @property
     def low_limit(self):
@@ -29,7 +29,7 @@ class Guild:
 
     @low_limit.setter
     def low_limit(self, value):
-        self._low_limit = value if value is not None else SV(max(0, SV(value)))
+        self._low_limit = None if value is None else SV(max(0, SV(value)))
 
     def __str__(self):
         return (f"<Guild ID = {self.id!r}, "
