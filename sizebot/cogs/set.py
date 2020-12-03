@@ -454,7 +454,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) toggled their foot word to {userdata.footname}.")
-        await ctx.send(f"The end of <@{ctx.author.id}>'s legs are now called a {userdata.footname.lower()}")
+        await ctx.send(f"The end of <@{ctx.author.id}>'s legs are now called a {userdata.footname.lower()}.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -469,7 +469,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) toggled their hair word to {userdata.hairname}.")
-        await ctx.send(f"The hair of <@{ctx.author.id}> is now called {userdata.hairname.lower()}")
+        await ctx.send(f"The hair of <@{ctx.author.id}> is now called {userdata.hairname.lower()}.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
