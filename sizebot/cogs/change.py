@@ -54,7 +54,7 @@ class ChangeCog(commands.Cog):
             elif style == "multiply":
                 userdata.height *= amount
             elif style == "power":
-                userdata ** amount
+                userdata = userdata ** amount
             else:
                 raise ChangeMethodInvalidException
             await proportions.nickUpdate(ctx.author)
