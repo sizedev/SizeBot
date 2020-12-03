@@ -7,9 +7,10 @@ from sizebot.lib import userdb
 
 from discord.ext import commands
 
+from sizebot.conf import conf
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
-from sizebot.lib.errors import ChangeMethodInvalidException, DigiContextException
+from sizebot.lib.errors import ChangeMethodInvalidException, DigiContextException, ValueIsZeroException
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
@@ -178,19 +179,21 @@ class ScaleWalkCog(commands.Cog):
 
         userdata = userdb.load(guildid, userid)
         userdata.currentscalestep = change
+        if change.amount == 0:
+            raise ValueIsZeroException
         userdb.save(userdata)
-        await ctx.send(f"{userdata.nickname}'s scale per step is now set to {change}.")
+        await ctx.send(f"{userdata.nickname}'s scale per step is now set to {change.original}.")
 
     @commands.command(
         category = "scalestep",
-        aliases = ["clearstepscale", "unsetstepscale"]
+        aliases = ["clearstepscale", "unsetstepscale", "resetscalestep", "clearscalestep", "unsetscalestep"]
     )
-    async def resetstepscale(self, ctx, change: Diff):
+    async def resetstepscale(self, ctx):
         guildid = ctx.guild.id
         userid = ctx.author.id
 
         userdata = userdb.load(guildid, userid)
-        userdata.currentscalestep = change
+        userdata.currentscalestep = None
         userdb.save(userdata)
         await ctx.send(f"{userdata.nickname}'s scale per step is now cleared.")
 
@@ -203,6 +206,10 @@ class ScaleWalkCog(commands.Cog):
 
         userdata = userdb.load(guildid, userid)
         stats = proportions.PersonStats(userdata)
+
+        if userdata.currentscalestep == None:
+            await ctx.send(f"You do not have a stepscale set. Please use `{conf.prefix}setstepscale <amount>` to do so.")
+            return
 
         if userdata.currentscalestep.changetype == "add":
             userdata.height += (userdata.currentscalestep.amount * steps)
