@@ -97,7 +97,7 @@ class Diff:
                 v = Decimal(value) / Decimal(100)
             elif prefix in power_prefixes:
                 ct = "power"
-                v = value
+                v = Decimal(value)
 
         elif m := re.match(suffixmatch, s):
             value = m.group(1)
