@@ -1,3 +1,4 @@
+from copy import copy
 from PIL import Image
 
 from sizebot.lib.diff import Diff
@@ -19,6 +20,7 @@ class Player:
         self.team = self._metadata.team
         self.gender = self._metadata.gender
         self.height = SV.parse(self._metadata.height) if isinstance(self._metadata.height, str) else SV.parse(str(self._metadata.height) + "m")
+        self.baseheight = copy(self.height)
         if not isURL(self._metadata.url):
             raise ValueError(f"{self._metadata.url} is not a URL.")
         self.url = self._metadata.url

@@ -1,14 +1,32 @@
 import asyncio
 from datetime import timedelta
 from pathlib import Path
-from sizeroyale.lib.errors import GametimeError
+
 
 import arrow
 
 from discord.ext import commands
 
+from sizebot.lib import userdb
 from sizebot.lib.constants import emojis, ids
+from sizebot.lib.decimal import Decimal
+from sizebot.lib.errors import DigiException
+from sizebot.lib.userdb import defaultheight, defaultweight
 from sizeroyale import Game
+from sizeroyale.lib.errors import GametimeError
+
+
+class NoGameFoundError(DigiException):
+    async def formatMessage(self):
+        return "Game not found."
+
+
+class NoPlayerFoundError(DigiException):
+    def __init__(self, player_name):
+        self.player_name = player_name
+
+    async def formatMessage(self):
+        return f"Player {self.player_name} not found."
 
 
 current_games = {}
@@ -128,6 +146,30 @@ class RoyaleCog(commands.Cog):
 
         else:
             await ctx.send(f"Invalid subcommand `{subcommand}` for royale.")
+
+
+def getPlayerData(guild: int, player: str) -> userdb.User:
+    if guild not in current_games:
+        raise NoGameFoundError
+    if player not in current_games[guild].royale.players:
+        raise NoPlayerFoundError(player)
+
+    userdata = userdb.User()
+    p = current_games[guild].royale.players[player]
+
+    userdata.baseheight = p.baseheight
+    userdata.baseweight = defaultweight * ((p.baseheight / defaultheight) ** 3)
+    userdata.height = p.height
+    userdata.nickname = p.name
+    userdata.gender = p.gender
+    if "paw" in p.attributes or "paws" in p.attributes:
+        userdata.pawtoggle = True
+    if "fur" in p.attributes:
+        userdata.furtoggle = True
+    if "tail" in p.attributes:
+        userdata.taillength = p.height * Decimal("94169/150000")
+
+    return userdata
 
 
 def setup(bot):

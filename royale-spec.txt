@@ -84,6 +84,12 @@
 # * rarity:f denotes how rare an event is. f is a decimal number, which defaults to 1.
 # For example, an event of rarity 0.1 will be 10 times more rare than a standard event.
 
+## Special Attributes
+# Some attributes you can add to a player have special functionality in SizeBot.
+# * If "tail" is in a player's attributes, they'll have a tail in their stats.
+# * If "fur" is in a player's attributes, they'll have fur instead of hair in stats.
+# * If "paw" or "paws" is in a player's attributes, they'll have paws instead of feet.
+
 ## The Game
 # The game loop proceeds as follows:
 # One bloodbath occurs, in which something happens to each player.
