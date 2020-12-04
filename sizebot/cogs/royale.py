@@ -65,14 +65,14 @@ class RoyaleCog(commands.Cog):
                 current_games[ctx.guild.id] = game
                 await m.edit(content = f"Royale loaded with file `{filename}` and seed `{current_games[ctx.guild.id].seed}`.")
             except Exception:
-                await m.edit(content = f"Game failed to load.")
+                await m.edit(content = "Game failed to load.")
                 raise
 
         else:
-            if not ctx.guild.id in current_games:
+            if ctx.guild.id not in current_games:
                 await ctx.send("There is no game running in this guild!")
                 return
-        
+
         if subcommand == "next":
             loops = int(arg1) if arg1 else 1
 
@@ -95,7 +95,7 @@ class RoyaleCog(commands.Cog):
 
         elif subcommand == "stop" or subcommand == "delete":
             sentMsg = await ctx.send(f"{emojis.warning} **WARNING!** Deleting your game will remove *all progress irrecoverably.* Are you sure?"
-                f"To delete your game, react with {emojis.check}.")
+                                     f"To delete your game, react with {emojis.check}.")
             await sentMsg.add_reaction(emojis.check)
             await sentMsg.add_reaction(emojis.cancel)
 
@@ -122,12 +122,13 @@ class RoyaleCog(commands.Cog):
                 return
 
             current_games.pop(ctx.guild.id)
-        
+
         elif subcommand == "create":
             pass  # Fixed "invalid subcommand create" on tests
 
         else:
             await ctx.send(f"Invalid subcommand `{subcommand}` for royale.")
+
 
 def setup(bot):
     bot.add_cog(RoyaleCog(bot))
