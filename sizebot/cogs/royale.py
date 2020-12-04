@@ -1,19 +1,27 @@
 import asyncio
+import logging
+import re
 from datetime import timedelta
 from pathlib import Path
-
 
 import arrow
 
 from discord.ext import commands
 
-from sizebot.lib import userdb
+from sizebot.conf import conf
+from sizebot.lib import proportions, userdb
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.errors import DigiException
+from sizebot.lib.loglevels import ROYALE
 from sizebot.lib.userdb import defaultheight, defaultweight
 from sizeroyale import Game
 from sizeroyale.lib.errors import GametimeError
+
+
+logger = logging.getLogger("sizebot")
+
+ok_roles = ["Royale DM", "SizeBot Developer"]
 
 
 class NoGameFoundError(DigiException):
@@ -26,7 +34,7 @@ class NoPlayerFoundError(DigiException):
         self.player_name = player_name
 
     async def formatMessage(self):
-        return f"Player {self.player_name} not found."
+        return f"Player {self.player_name} not found in this guild's game."
 
 
 current_games = {}
@@ -41,9 +49,13 @@ class RoyaleCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    @commands.has_any_role("Royale DM", "SizeBot Developer")
-    async def royale(self, ctx, subcommand, arg1 = None, arg2 = None):
+    @commands.guild_only()
+    async def royale(self, ctx, subcommand, *, args: str = None):
         if subcommand == "create":
+            if is_dm(ctx.author) is False:
+                return
+
+            arg1, arg2 = args.split(" ", 1)
             seed = arg1
 
             if ctx.guild.id in current_games:
@@ -92,6 +104,12 @@ class RoyaleCog(commands.Cog):
                 return
 
         if subcommand == "next":
+
+            arg1 = args
+
+            if is_dm(ctx.author) is False:
+                return
+
             loops = int(arg1) if arg1 else 1
 
             for i in range(loops):
@@ -112,6 +130,9 @@ class RoyaleCog(commands.Cog):
             await ctx.send(embed = data[0], file = data[1])
 
         elif subcommand == "stop" or subcommand == "delete":
+            if is_dm(ctx.author) is False:
+                return
+
             sentMsg = await ctx.send(f"{emojis.warning} **WARNING!** Deleting your game will remove *all progress irrecoverably.* Are you sure?"
                                      f"To delete your game, react with {emojis.check}.")
             await sentMsg.add_reaction(emojis.check)
@@ -141,6 +162,41 @@ class RoyaleCog(commands.Cog):
 
             current_games.pop(ctx.guild.id)
 
+        elif subcommand == "stats":
+            arg1 = args
+
+            if arg1.startswith("\"") and arg1.endswith("\""):
+                player = arg1
+            else:
+                await ctx.send(f"Player names must be in quotes. e.g.: `{conf.prefix}royale stats \"DigiDuncan\"`.")
+                return
+
+            userdata = getPlayerData(ctx.guild.id, player)
+
+            stats = proportions.PersonStats(userdata)
+
+            embedtosend = stats.toEmbed(ctx.author.id)
+            await ctx.send(embed = embedtosend)
+
+            logger.log(ROYALE, f"Stats for {player} sent.")
+
+        elif subcommand == "compare":
+            if match := re.match(r"\"(.*)\"\s*\"(.*)\""):
+                player1 = match.group(1)
+                player2 = match.group(2)
+            else:
+                await ctx.send(f"Player names must be in quotes. e.g.: `{conf.prefix}royale compare \"DigiDuncan\" \"Kelly\"`.")
+                return
+
+            userdata1 = getPlayerData(player1)
+            userdata2 = getPlayerData(player2)
+
+            comparison = proportions.PersonComparison(userdata1, userdata2)
+            embedtosend = comparison.toEmbed(ctx.author.id)
+            await ctx.send(embed = embedtosend)
+
+            logger.info(f"Compared {userdata1} and {userdata2}")
+
         elif subcommand == "create":
             pass  # Fixed "invalid subcommand create" on tests
 
@@ -148,10 +204,17 @@ class RoyaleCog(commands.Cog):
             await ctx.send(f"Invalid subcommand `{subcommand}` for royale.")
 
 
+def is_dm(user) -> bool:
+    for role in ok_roles:
+        if role in user.rolelist:
+            return True
+    return False
+
+
 def getPlayerData(guild: int, player: str) -> userdb.User:
     if guild not in current_games:
         raise NoGameFoundError
-    if player not in current_games[guild].royale.players:
+    if player not in current_games[guild].royale.players or player is None:
         raise NoPlayerFoundError(player)
 
     userdata = userdb.User()
