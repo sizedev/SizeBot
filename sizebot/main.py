@@ -55,6 +55,7 @@ initial_cogs = [
     "run",
     "scalewalk",
     "set",
+    "setbase",
     "stats",
     "test",
     "thistracker",
