@@ -48,6 +48,7 @@ class User:
         self._furtoggle = False
         self._hairlength = None
         self._taillength = None
+        self._earheight = None
         self._liftstrength = None
         self._walkperhour = None
         self._runperhour = None
@@ -71,7 +72,7 @@ class User:
                 f"HEIGHT = {self.height!r}, BASEHEIGHT = {self.baseheight!r}, "
                 f"WEIGHT = {self.weight!r}, BASEWEIGHT = {self.baseweight!r}, "
                 f"FOOTLENGTH = {self.footlength!r}, HAIRLENGTH = {self.hairlength!r}, "
-                f"TAILLENGTH = {self.taillength!r}, LIFTSTRENGTH = {self.liftstrength!r}, "
+                f"TAILLENGTH = {self.taillength!r}, EARHIEHGT = {self.earheight!r}, LIFTSTRENGTH = {self.liftstrength!r}, "
                 f"PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
                 f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, CURRENTSCALESTEP = {self.currentscalestep!r}, "
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
@@ -191,6 +192,20 @@ class User:
             self._taillength = None
             return
         self._taillength = SV(max(0, SV(value)))
+
+    @property
+    def earheight(self):
+        return self._taillength
+
+    @earheight.setter
+    def earheight(self, value):
+        if value is None:
+            self._earheight = None
+            return
+        if value == 0:
+            self._earheight = None
+            return
+        self._earheight = SV(max(0, SV(value)))
 
     @property
     def liftstrength(self):
@@ -442,6 +457,7 @@ class User:
             "furtoggle":        self.furtoggle,
             "hairlength":       None if self.hairlength is None else str(self.hairlength),
             "taillength":       None if self.taillength is None else str(self.taillength),
+            "earheight":        None if self.earheight is None else str(self.earheight),
             "liftstrength":     None if self.liftstrength is None else str(self.liftstrength),
             "walkperhour":      None if self.walkperhour is None else str(self.walkperhour),
             "runperhour":       None if self.runperhour is None else str(self.runperhour),
@@ -476,6 +492,7 @@ class User:
         userdata.furtoggle = jsondata.get("furtoggle")
         userdata.hairlength = jsondata.get("hairlength")
         userdata.taillength = jsondata.get("taillength")
+        userdata.earheight = jsondata.get("earheight")
         userdata.liftstrength = jsondata.get("liftstrength")
         userdata.walkperhour = jsondata.get("walkperhour")
         userdata.runperhour = jsondata.get("runperhour")

@@ -548,6 +548,55 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s tail length is now cleared.")
         await showNextStep(ctx, userdata)
 
+
+    @commands.command(
+        usage = "<ear>",
+        category = "set"
+    )
+    async def setear(self, ctx, *, newear):
+        """Set your current ear heightear."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        newearsv = SV(SV.parse(newear) * userdata.viewscale)
+
+        userdata.earheight = newearsv
+        userdb.save(userdata)
+
+        await ctx.send(f"<@{ctx.author.id}>'s ear is now {userdata.earheight:mu} long.")
+        await showNextStep(ctx, userdata)
+
+    @commands.command(
+        usage = "<length>",
+        category = "setbase"
+    )
+    @commands.guild_only()
+    async def setbaseear(self, ctx, *, newear):
+        """Set a custom tail length."""
+        newtailsv = SV.parse(newear)
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        userdata.earheight = newtailsv
+        userdb.save(userdata)
+
+        await ctx.send(f"<@{ctx.author.id}>'s ear is now {userdata.earheight:mu} long.")
+        await showNextStep(ctx, userdata)
+
+    @commands.command(
+        aliases = ["clearear", "unsetear"],
+        category = "set"
+    )
+    @commands.guild_only()
+    async def resetear(self, ctx):
+        """Remove custom ear height."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        userdata.earheight = None
+        userdb.save(userdata)
+
+        await ctx.send(f"<@{ctx.author.id}>'s ear height is now cleared.")
+        await showNextStep(ctx, userdata)
+
     @commands.command(
         usage = "<weight>",
         category = "set"

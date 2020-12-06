@@ -263,6 +263,14 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
                 tailfield += f"{emojis.comparebig}{self.smallToBig.taillength:,.3mu}\n"
             tailfield = tailfield.strip()
             embed.add_field(name="Tail Length", value=tailfield, inline=True)
+        if self.bigToSmall.earheight or self.smallToBig.earheight:
+            earfield = ""
+            if self.bigToSmall.earheight:
+                earfield += f"{emojis.comparebig}{self.bigToSmall.earheight:,.3mu}\n"
+            if self.smallToBig.earheight:
+                earfield += f"{emojis.comparebig}{self.smallToBig.earheight:,.3mu}\n"
+            earfield = earfield.strip()
+            embed.add_field(name="Ear Height", value=earfield, inline=True)
         embed.add_field(name=f"{self.hairlabel} Width", value=(
             f"{emojis.comparebig}{self.bigToSmall.hairwidth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.hairwidth:,.3mu}"), inline=True)
@@ -353,6 +361,11 @@ class PersonStats:
         else:
             self.taillength = SV(userdata.taillength / self.viewscale)
 
+        if userdata.earheight is None:
+            self.earheight = None
+        else:
+            self.earheight = SV(userdata.earheight / self.viewscale)
+
         if userdata.liftstrength is None:
             self.liftstrength = WV(defaultliftstrength / (self.viewscale ** 3))
         else:
@@ -430,6 +443,8 @@ class PersonStats:
             returndict["hair"] = f"'s {self.hairname.lower()} is **{self.hairlength:,.3mu}** long."
         if self.taillength:
             returndict["tail"] = f"'s tail is **{self.taillength:,.3mu}** long."
+        if self.earheight:
+            returndict["ear"] = f"'s tail is **{self.earheight:,.3mu}** long."
 
         if self.fallproof:
             returndict["terminalvelocity"] = f"'s terminal velocity is {self.terminalvelocity:,.1M} per second ({self.terminalvelocity:,.1U} per second). They can survive a fall from any height!"
@@ -447,7 +462,7 @@ class PersonStats:
                 f"WEIGHT = {self.weight!r}, BASEWEIGHT = {self.baseweight!r}, FOOTNAME = {self.footname!r}, "
                 f"HAIRNAME = {self.hairname!r}, PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
                 f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}"
-                f"HAIRLENGTH = {self.hairlength!r}, TAILLENGTH = {self.taillength!r}, "
+                f"HAIRLENGTH = {self.hairlength!r}, TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r},"
                 f"LIFTSTRENGTH = {self.liftstrength!r}, FOOTLENGTH = {self.footlength!r}, "
                 f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}>")
 
@@ -475,6 +490,8 @@ class PersonStats:
             embed.add_field(name=f"{self.hairname} Length", value=format(self.hairlength, ",.3mu"), inline=True)
         if self.taillength:
             embed.add_field(name="Tail Length", value=format(self.taillength, ",.3mu"), inline=True)
+        if self.earheight:
+            embed.add_field(name="Ear Height", value=format(self.earheight, ",.3mu"), inline=True)
         embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)\n[{self.walksteplength:,.1mu} strides]", inline=True)
