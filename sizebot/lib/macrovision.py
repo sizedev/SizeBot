@@ -5,7 +5,7 @@ import requests
 from operator import itemgetter
 
 import sizebot.data
-from sizebot import conf
+from sizebot.conf import conf
 from sizebot.lib.decimal import Decimal
 
 
