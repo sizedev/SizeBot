@@ -254,8 +254,8 @@ class RegisterCog(commands.Cog):
         # Check if required argument is missing
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
-                "Not enough variables for `register`.\n"
-                f"See `{conf.prefix}help register`.")
+                "Not enough variables for `advancedregister`.\n"
+                f"See `{conf.prefix}help advancedregister`.")
             return
         raise error
 
