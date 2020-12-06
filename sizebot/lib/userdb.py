@@ -109,7 +109,12 @@ class User:
 
     @height.setter
     def height(self, value):
-        self._height = SV(max(0, SV(value)))
+        newvalue = SV(max(0, SV(value)))
+        if newvalue < SV.parse("0.001ym"):
+            newvalue = SV(0)
+        elif newvalue > SV.parse("1000Yuni"):
+            newvalue = SV(SV.infinity)
+        self._height = newvalue
 
     @property
     def baseheight(self):
@@ -117,7 +122,12 @@ class User:
 
     @baseheight.setter
     def baseheight(self, value):
-        self._baseheight = SV(max(0, SV(value)))
+        newvalue = SV(max(0, SV(value)))
+        if newvalue < SV.parse("0.001ym"):
+            newvalue = SV(0)
+        elif newvalue > SV.parse("1000Yuni"):
+            newvalue = SV(SV.infinity)
+        self._baseheight = newvalue
 
     @property
     def footlength(self):
@@ -275,7 +285,12 @@ class User:
 
     @baseweight.setter
     def baseweight(self, value):
-        self._baseweight = WV(max(0, WV(value)))
+        newvalue = WV(max(0, SV(value)))
+        if newvalue < WV.parse("0.001yg"):
+            newvalue = WV(0)
+        elif newvalue > WV.parse("1000Yuni"):
+            newvalue = WV(WV.infinity)
+        self._baseweight = newvalue
 
     @property
     def weight(self):
