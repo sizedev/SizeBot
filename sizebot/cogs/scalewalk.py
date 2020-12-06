@@ -209,6 +209,9 @@ class ScaleWalkCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         stats = proportions.PersonStats(userdata)
 
+        if steps == None:
+            steps = 1
+
         steps = tryInt(steps)
         if steps == "car":
             await ctx.send(f"Cronch.")
