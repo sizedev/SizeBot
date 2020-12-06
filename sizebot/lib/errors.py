@@ -58,9 +58,11 @@ class UserNotFoundException(DigiContextException):
     async def formatUserMessage(self, ctx):
         user = await ctx.guild.fetch_member(self.userid)
         usernick = user.display_name
-        return (
-            f"Sorry, {usernick} isn't registered with SizeBot.\n"
-            f"To register, use the `{conf.prefix}register` command.")
+        returnstr = f"Sorry, {usernick} isn't registered with SizeBot."
+        if ctx.message.author.id == self.userid and not self.unreg:
+            returnstr += f"\nTo register, use the `{conf.prefix}register` command."
+        elif ctx.message.author.id == self.userid and self.unreg:
+            returnstr += f"\nTo complete registration, use the `{conf.prefix}register` command to see your next step."
 
 
 class GuildNotFoundException(DigiException):
