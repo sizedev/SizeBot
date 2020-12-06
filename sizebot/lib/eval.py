@@ -6,6 +6,7 @@ import logging
 import math
 from datetime import date, datetime, time, timedelta
 
+import arrow
 import discord
 from discord import Embed
 import PIL
@@ -53,6 +54,16 @@ def eformat(name, value):
         emojiType = "👤"
     elif isinstance(value, discord.ext.commands.Bot):
         emojiType = "🤖"
+    elif isinstance(value, discord.ext.commands.cog.Cog):
+        emojiType = "⚙️"
+    elif isinstance(value, SV):
+        emojiType = "🇸"
+    elif isinstance(value, WV):
+        emojiType = "🇼"
+    elif isinstance(value, TV):
+        emojiType = "🇹"
+    elif isinstance(value, arrow.arrow.Arrow):
+        emojiType = "🏹"
     else:
         emojiType = "▫️"
     return f"{emojiType} {name}"
