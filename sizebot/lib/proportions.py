@@ -1,3 +1,4 @@
+from copy import copy
 import math
 import re
 
@@ -167,31 +168,24 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         smallUserdata, bigUserdata = utils.minmax(userdata1, userdata2)
         self.big = PersonStats(bigUserdata)
         self.small = PersonStats(smallUserdata)
-        if self.big.height == 0 and self.small.height == 0:
+
+        bigToSmallUserdata = copy(bigUserdata)
+        smallToBigUserdata = copy(smallUserdata)
+
+        if bigUserdata.height == 0 and smallUserdata.height == 0:
             self.multiplier = Decimal(1)
-
-            bigToSmallUserdata = userdb.User()
-            bigToSmallUserdata.height = Decimal(0)
-            self.bigToSmall = PersonStats(bigToSmallUserdata)
-
-            smallToBigUserdata = userdb.User()
-            smallToBigUserdata.height = Decimal(0)
-            self.smallToBig = PersonStats(smallToBigUserdata)
         else:
-            self.multiplier = self.big.height / self.small.height
+            self.multiplier = bigUserdata.height / smallUserdata.height
+            bigToSmallUserdata.height = bigUserdata.height * smallUserdata.viewscale
+            smallToBigUserdata.height = smallUserdata.height * bigUserdata.viewscale
 
-            bigToSmallUserdata = userdb.User()
-            bigToSmallUserdata.height = bigUserdata.height * self.small.viewscale
-            self.bigToSmall = PersonStats(bigToSmallUserdata)
+        self.bigToSmall = PersonStats(bigToSmallUserdata)
+        self.smallToBig = PersonStats(smallToBigUserdata)
 
-            smallToBigUserdata = userdb.User()
-            smallToBigUserdata.height = smallUserdata.height * self.big.viewscale
-            self.smallToBig = PersonStats(smallToBigUserdata)
+        self.footlabel = "Foot/Paw" if bigUserdata.pawtoggle or smallUserdata.pawtoggle else "Foot"
+        self.hairlabel = "Hair/Fur" if bigUserdata.furtoggle or smallUserdata.furtoggle else "Hair"
 
-        self.footlabel = "Foot/Paw" if self.big.pawtoggle or self.small.pawtoggle else "Foot"
-        self.hairlabel = "Hair/Fur" if self.big.furtoggle or self.small.furtoggle else "Hair"
-
-        viewangle = calcViewAngle(self.small.height, self.big.height)
+        viewangle = calcViewAngle(smallUserdata.height, bigUserdata.height)
         self.lookangle = abs(viewangle)
         self.lookdirection = "up" if viewangle >= 0 else "down"
 
@@ -204,7 +198,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
     def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
-            title=f"Comparison of {self.big.nickname} and {self.small.nickname}",
+            title=f"Comparison of {self.big.nickname} and {self.small.nickname} 🔗",
             description=f"*Requested by {requestertag}*",
             color=colors.purple,
             url=self.url
