@@ -476,7 +476,7 @@ class SV(Dimension):
         # Infinity patch
         if s in ["infinity", "inf", "∞"]:
             return cls._infinity, "m"
-        match = re.match(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\" ]+)", s)
+        match = re.match(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"µ ]+)", s)
         value, unit = None, None
         if match is not None:
             value, unit = match.group("value"), match.group("unit")
