@@ -1,9 +1,11 @@
 import base64
 import json
 import importlib.resources as pkg_resources
+import requests
 from operator import itemgetter
 
 import sizebot.data
+from sizebot import conf
 from sizebot.lib.decimal import Decimal
 
 
@@ -64,4 +66,10 @@ def get_url(people):
     json_bytes = json_string.encode("utf-8")
     base64_bytes = base64.b64encode(json_bytes)
     base64_string = base64_bytes.decode("ascii")
-    return f"https://macrovision.crux.sexy/?scene={base64_string}"
+    raw_url = f"https://macrovision.crux.sexy/?scene={base64_string}"
+    if conf.cuttly_key:
+        r = requests.get(f"https://cutt.ly/api/api.php?key={conf.cuttly_key}&short={raw_url}")
+        cuttly = json.loads(r.text)
+        return cuttly["url"]["shortLink"]
+    else:
+        return raw_url
