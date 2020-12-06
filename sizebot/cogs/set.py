@@ -140,6 +140,7 @@ class SetCog(commands.Cog):
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
+        aliases = ["setsize"],
         usage = "<height>",
         category = "set"
     )
