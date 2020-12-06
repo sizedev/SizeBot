@@ -55,7 +55,8 @@ class RoyaleCog(commands.Cog):
             if is_dm(ctx.author) is False:
                 return
 
-            arg1, arg2 = args.split(" ", 1)
+            arg1, *arg2 = args.split(" ", 1)
+            arg2 = arg2[0] if arg2 else None  # This makes split not fail if there's only one element.
             seed = arg1
 
             if ctx.guild.id in current_games:
@@ -104,7 +105,6 @@ class RoyaleCog(commands.Cog):
                 return
 
         if subcommand == "next":
-
             arg1 = args
 
             if is_dm(ctx.author) is False:
