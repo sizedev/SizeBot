@@ -149,7 +149,7 @@ class ChangeCog(commands.Cog):
 
         # TODO: Randomize the italics message here
         await ctx.send(
-            f"<@{ctx.author.id}> ate a :milk:! *I mean it said \"Drink me...\"*\n"
+            f"<@{ctx.author.id}> drank a :milk:! *I mean it said \"Drink me...\"*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) drank a potion and shrunk {randmult}.")
 
