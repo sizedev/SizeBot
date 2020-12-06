@@ -130,7 +130,7 @@ class RegisterCog(commands.Cog):
         if userdata.display and userdata.id == ctx.author.guild.owner.id:
             await ctx.send("I can't update a server owner's nick. You'll have to manage it manually.")
 
-        await ctx.send("Initial registration completed! Registration can be finalized by running the following commands: INSERT COMMANDS HERE")
+        await ctx.send("Initial registration completed!")
         await showNextStep(ctx, userdata)
 
     @register.error
