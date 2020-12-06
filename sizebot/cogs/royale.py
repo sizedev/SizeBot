@@ -1,4 +1,5 @@
 import asyncio
+import importlib.resources as pkg_resources
 import logging
 import re
 from datetime import timedelta
@@ -8,6 +9,7 @@ import arrow
 
 from discord.ext import commands
 
+import sizebot.data
 from sizebot.conf import conf
 from sizebot.lib import proportions, userdb
 from sizebot.lib.constants import emojis, ids
@@ -82,8 +84,7 @@ class RoyaleCog(commands.Cog):
                 return
 
             if not ctx.message.attachments and seed == "test":
-                with open(Path(__file__).parent.parent.parent / "royale-spec.txt") as f:
-                    data = f.read()
+                data = pkg_resources.read_text(sizebot.data, "royale-spec.txt")
                 filename = "test"
                 seed = arg2 if arg2 else "radically-key-gazelle"
             else:
