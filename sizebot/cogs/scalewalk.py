@@ -85,6 +85,13 @@ class ScaleWalkCog(commands.Cog):
         usage = "<change per step> <distance> [apply]"
     )
     async def scalewalk(self, ctx, change: Diff, dist: SV, flag = None):
+        """Walk a certain distance, scaling by an amount each step you take.
+        Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
+        
+        Examples:
+        `&scalewalk 2x 50m
+        `&scalewalk -1mm 20ft"""
+
         guildid = ctx.guild.id
         userid = ctx.author.id
 
@@ -130,6 +137,13 @@ class ScaleWalkCog(commands.Cog):
         usage = "<change per step> <distance> [apply]"
     )
     async def scalerun(self, ctx, change: Diff, dist: SV, flag = None):
+        """Run a certain distance, scaling by an amount each step you take.
+        Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
+        
+        Examples:
+        `&scalewalk 2x 50m
+        `&scalewalk -1mm 20ft"""
+
         guildid = ctx.guild.id
         userid = ctx.author.id
 
@@ -176,6 +190,16 @@ class ScaleWalkCog(commands.Cog):
         usage = "<change per step>"
     )
     async def setstepscale(self, ctx, change: Diff):
+        """Set the amount you scale per step, for use with `&step`.
+
+        Sets the amount that you scale for each `&step` you take.
+        Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
+        
+        Examples:
+        `&setstepscale 2x
+        `&setstepscale -1mm
+        """
+
         guildid = ctx.guild.id
         userid = ctx.author.id
 
@@ -191,6 +215,8 @@ class ScaleWalkCog(commands.Cog):
         aliases = ["clearstepscale", "unsetstepscale", "resetscalestep", "clearscalestep", "unsetscalestep"]
     )
     async def resetstepscale(self, ctx):
+        """Clear your step-scale amount, for use with `&step`."""
+
         guildid = ctx.guild.id
         userid = ctx.author.id
 
@@ -203,6 +229,13 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
     )
     async def step(self, ctx, steps = None):
+        """Step a certain number of times, scaling by the amount set in `&setscalestep`.
+
+        Scales you the amount that you would change depending on the scale factor you
+        have set in `&setstepscale`.
+        Can take a number, e.g.: `&step 20`
+        """
+        
         guildid = ctx.guild.id
         userid = ctx.author.id
 
