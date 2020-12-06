@@ -198,12 +198,12 @@ class SetBaseCog(commands.Cog):
     )
     @commands.guild_only()
     async def setbaseear(self, ctx, *, newear):
-        """Set a custom tail length."""
-        newtailsv = SV.parse(newear)
+        """Set a custom ear length."""
+        newearsv = SV.parse(newear)
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.earheight = newtailsv
+        userdata.earheight = newearsv
         userdb.save(userdata)
 
         await ctx.send(f"<@{ctx.author.id}>'s ear is now {userdata.earheight:mu} long.")

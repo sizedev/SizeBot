@@ -72,7 +72,7 @@ class User:
                 f"HEIGHT = {self.height!r}, BASEHEIGHT = {self.baseheight!r}, "
                 f"WEIGHT = {self.weight!r}, BASEWEIGHT = {self.baseweight!r}, "
                 f"FOOTLENGTH = {self.footlength!r}, HAIRLENGTH = {self.hairlength!r}, "
-                f"TAILLENGTH = {self.taillength!r}, EARHIEHGT = {self.earheight!r}, LIFTSTRENGTH = {self.liftstrength!r}, "
+                f"TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r}, LIFTSTRENGTH = {self.liftstrength!r}, "
                 f"PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
                 f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, CURRENTSCALESTEP = {self.currentscalestep!r}, "
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
@@ -195,7 +195,7 @@ class User:
 
     @property
     def earheight(self):
-        return self._taillength
+        return self._earheight
 
     @earheight.setter
     def earheight(self, value):
