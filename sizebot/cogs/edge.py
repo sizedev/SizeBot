@@ -78,7 +78,6 @@ async def on_message(m):
         else:
             userdata.height = smallestsize * Decimal(0.9)
             userdb.save(userdata)
-            logger.info(f"User {m.author.id} ({m.author.display_name}) is now {userdata.height:m} tall, so that they stay the smallest.")
 
     if lg == m.author.id:
         if m.author.id == largestuser:
@@ -88,7 +87,6 @@ async def on_message(m):
         else:
             userdata.height = largestsize * Decimal(1.1)
             userdb.save(userdata)
-            logger.info(f"User {m.author.id} ({m.author.display_name}) is now {userdata.height:m} tall, so that they stay the largest.")
 
     if userdata.display:
         await proportions.nickUpdate(m.author)

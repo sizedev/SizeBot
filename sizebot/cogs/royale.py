@@ -209,8 +209,6 @@ class RoyaleCog(commands.Cog):
             embedtosend = comparison.toEmbed(ctx.author.id)
             await ctx.send(embed = embedtosend)
 
-            logger.info(f"Compared {userdata1} and {userdata2}")
-
         elif subcommand == "create":
             pass  # Fixed "invalid subcommand create" on tests
 

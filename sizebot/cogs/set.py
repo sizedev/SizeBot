@@ -32,7 +32,6 @@ class SetCog(commands.Cog):
         userdata.nickname = newnick
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their nick to {userdata.nickname}.")
         await ctx.send(f"<@{ctx.author.id}>'s nick is now {userdata.nickname}")
 
         await proportions.nickUpdate(ctx.author)
@@ -50,7 +49,6 @@ class SetCog(commands.Cog):
         userdata.species = newtag
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their species to {userdata.species}.")
         await ctx.send(f"<@{ctx.author.id}>'s species is now a {userdata.species}.")
 
         await proportions.nickUpdate(ctx.author)
@@ -68,7 +66,6 @@ class SetCog(commands.Cog):
         userdata.species = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their species.")
         await ctx.send(f"<@{ctx.author.id}>'s species is now cleared.")
 
         await proportions.nickUpdate(ctx.author)
@@ -90,7 +87,6 @@ class SetCog(commands.Cog):
         userdata.display = newdisp
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) set their display to {newdisp}.")
         await ctx.send(f"<@{ctx.author.id}>'s display is now set to {userdata.display}.")
 
         await proportions.nickUpdate(ctx.author)
@@ -133,7 +129,6 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setsystem")
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) set their system to {userdata.unitsystem}.")
         await ctx.send(f"<@{ctx.author.id}>'s system is now set to {userdata.unitsystem}.")
 
         await proportions.nickUpdate(ctx.author)
@@ -153,7 +148,6 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now {userdata.height:m} tall.")
         await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
@@ -172,7 +166,6 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{ctx.author.display_name} reset their size.")
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) reset their size.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
@@ -197,7 +190,6 @@ class SetCog(commands.Cog):
         userdata.height = newheightSV
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) set a random height, and are now {userdata.height:m} tall.")
         await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
@@ -216,7 +208,6 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now infinitely tall.")
         await ctx.send(f"<@{ctx.author.id}> is now infinitely tall.")
 
         await proportions.nickUpdate(ctx.author)
@@ -235,7 +226,6 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) is now nothing.")
         await ctx.send(f"<@{ctx.author.id}> is now nothing.")
 
         await proportions.nickUpdate(ctx.author)
@@ -260,7 +250,6 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height to {newbaseheight}.")
         await ctx.send(f"<@{ctx.author.id}>'s base height is now {userdata.baseheight:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
@@ -278,7 +267,6 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setweight")
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their weight to {newweight}.")
         await ctx.send(f"<@{ctx.author.id}>'s weight is now {userdata.weight:mu}")
 
         await proportions.nickUpdate(ctx.author)
@@ -301,7 +289,6 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setweight")
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base weight to {newbaseweight}.")
         await ctx.send(f"<@{ctx.author.id}>'s base weight is now {userdata.baseweight:mu}")
 
         await proportions.nickUpdate(ctx.author)
@@ -343,7 +330,6 @@ class SetCog(commands.Cog):
             completed_registration = userdata.complete_step("setweight") or completed_registration
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
         await ctx.send(f"{ctx.author.display_name} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
         await showNextStep(ctx, userdata, completed=completed_registration)
 
@@ -359,7 +345,6 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(SV.parse(newfoot) * userdata.viewscale)
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
         await showNextStep(ctx, userdata)
 
@@ -376,7 +361,6 @@ class SetCog(commands.Cog):
         userdata.footlength = newfoot
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
         await showNextStep(ctx, userdata)
 
@@ -399,7 +383,6 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(newfoot * userdata.viewscale)
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
         await showNextStep(ctx, userdata)
 
@@ -423,7 +406,6 @@ class SetCog(commands.Cog):
         userdata.footlength = newfoot
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s foot is now {userdata.footlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
         await showNextStep(ctx, userdata)
 
@@ -439,7 +421,6 @@ class SetCog(commands.Cog):
         userdata.footlength = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom foot length.")
         await ctx.send(f"<@{ctx.author.id}>'s foot length is now default.")
         await showNextStep(ctx, userdata)
 
@@ -454,7 +435,6 @@ class SetCog(commands.Cog):
         userdata.pawtoggle = not userdata.pawtoggle
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) toggled their foot word to {userdata.footname}.")
         await ctx.send(f"The end of <@{ctx.author.id}>'s legs are now called a {userdata.footname.lower()}.")
         await showNextStep(ctx, userdata)
 
@@ -469,7 +449,6 @@ class SetCog(commands.Cog):
         userdata.furtoggle = not userdata.furtoggle
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) toggled their hair word to {userdata.hairname}.")
         await ctx.send(f"The hair of <@{ctx.author.id}> is now called {userdata.hairname.lower()}.")
         await showNextStep(ctx, userdata)
 
@@ -486,7 +465,6 @@ class SetCog(commands.Cog):
         userdata.hairlength = newhairsv
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s hair is now {userdata.hairlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
         await showNextStep(ctx, userdata)
 
@@ -504,7 +482,6 @@ class SetCog(commands.Cog):
         userdata.hairlength = newhairsv
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s hair is now {userdata.hairlength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
         await showNextStep(ctx, userdata)
 
@@ -520,7 +497,6 @@ class SetCog(commands.Cog):
         userdata.hairlength = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom hair length.")
         await ctx.send(f"<@{ctx.author.id}>'s hair length is now cleared.")
         await showNextStep(ctx, userdata)
 
@@ -537,7 +513,6 @@ class SetCog(commands.Cog):
         userdata.taillength = newtailsv
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s tail is now {userdata.taillength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
         await showNextStep(ctx, userdata)
 
@@ -555,7 +530,6 @@ class SetCog(commands.Cog):
         userdata.taillength = newtailsv
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s tail is now {userdata.taillength:m} long.")
         await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
         await showNextStep(ctx, userdata)
 
@@ -571,7 +545,6 @@ class SetCog(commands.Cog):
         userdata.taillength = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom tail length.")
         await ctx.send(f"<@{ctx.author.id}>'s tail length is now cleared.")
         await showNextStep(ctx, userdata)
 
@@ -587,7 +560,6 @@ class SetCog(commands.Cog):
         userdata.liftstrength = WV(WV.parse(newstrength) * (userdata.viewscale ** 3))
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.liftstrength:m}")
         await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.liftstrength:mu}.")
         await showNextStep(ctx, userdata)
 
@@ -604,7 +576,6 @@ class SetCog(commands.Cog):
         userdata.liftstrength = newstrength
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s strength is now {userdata.liftstrength:m}")
         await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.liftstrength:mu}.")
         await showNextStep(ctx, userdata)
 
@@ -620,7 +591,6 @@ class SetCog(commands.Cog):
         userdata.liftstrength = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom lift/carry strength.")
         await ctx.send(f"<@{ctx.author.id}>'s lift/carry strength is now cleared.")
         await showNextStep(ctx, userdata)
 
@@ -638,7 +608,6 @@ class SetCog(commands.Cog):
                                              newwalk.time)
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s walk is now {userdata.walkperhour:m}")
         await ctx.send(f"<@{ctx.author.id}>'s walk is now {userdata.walkperhour:mu}.")
         await showNextStep(ctx, userdata)
 
@@ -655,7 +624,6 @@ class SetCog(commands.Cog):
         userdata.walkperhour = newwalk
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s walk is now {userdata.walkperhour:m}")
         await ctx.send(f"<@{ctx.author.id}>'s walk is now {userdata.walkperhour:mu}.")
         await showNextStep(ctx, userdata)
 
@@ -671,7 +639,6 @@ class SetCog(commands.Cog):
         userdata.walkperhour = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom walk speed.")
         await ctx.send(f"<@{ctx.author.id}>'s walk speed is now cleared.")
         await showNextStep(ctx, userdata)
 
@@ -689,7 +656,6 @@ class SetCog(commands.Cog):
                                             newrun.time)
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s run is now {userdata.runperhour:m}")
         await ctx.send(f"<@{ctx.author.id}>'s run is now {userdata.runperhour:mu}.")
         await showNextStep(ctx, userdata)
 
@@ -706,7 +672,6 @@ class SetCog(commands.Cog):
         userdata.runperhour = newrun
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name})'s run is now {userdata.runperhour:m}")
         await ctx.send(f"<@{ctx.author.id}>'s run is now {userdata.runperhour:mu}.")
         await showNextStep(ctx, userdata)
 
@@ -722,7 +687,6 @@ class SetCog(commands.Cog):
         userdata.runperhour = None
         userdb.save(userdata)
 
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) removed their custom run speed.")
         await ctx.send(f"<@{ctx.author.id}>'s run speed is now cleared.")
         await showNextStep(ctx, userdata)
 
@@ -760,7 +724,6 @@ class SetCog(commands.Cog):
         if userdata.display:
             await proportions.nickUpdate(user)
 
-        logger.info(f"User {user.id} ({user.display_name}) set their gender to {userdata.gender}.")
         await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.")
         await showNextStep(ctx, userdata)
 
@@ -781,7 +744,6 @@ class SetCog(commands.Cog):
         if userdata.display:
             await proportions.nickUpdate(user)
 
-        logger.info(f"User {user.id} ({user.display_name}) reset their gender.")
         await ctx.send(f"<@{user.id}>'s gender is now reset.")
         await showNextStep(ctx, userdata)
 

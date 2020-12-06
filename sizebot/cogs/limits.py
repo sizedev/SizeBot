@@ -66,7 +66,7 @@ class EdgeCog(commands.Cog):
         guilddata.low_limit = size
         guilddb.save(guilddata)
         await ctx.send(f"{size:,.3mu} is now the lowest allowed size in this guild.")
-        logger.info(f"{size:,.3mu} is the low size cap in guild {ctx.guild.id}.")
+        logger.info(f"{size:,.3mu} is now the low size cap in guild {ctx.guild.id}.")
 
     @commands.command(
         aliases = ["highlimit", "highcap", "sethighcap", "setceiling"],
@@ -81,7 +81,7 @@ class EdgeCog(commands.Cog):
         guilddata.high_limit = size
         guilddb.save(guilddata)
         await ctx.send(f"{size:,.3mu} is now the highest allowed size in this guild.")
-        logger.info(f"{size:,.3mu} is the high size cap in guild {ctx.guild.id}.")
+        logger.info(f"{size:,.3mu} is now the high size cap in guild {ctx.guild.id}.")
 
     @commands.command(
         aliases = ["resetlowlimit", "resetlowcap", "clearlowcap", "resetfloor", "clearfloor"],

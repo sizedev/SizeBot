@@ -99,7 +99,6 @@ class StatsCog(commands.Cog):
         embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
-        logger.info(f"Stats for {memberOrHeight} sent.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -136,8 +135,6 @@ class StatsCog(commands.Cog):
         embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
-        logger.info(f"Stats for {memberOrHeight} sent.")
-
     @commands.command(
         usage = "<stat> [user/height]",
         category = "stats"
@@ -167,11 +164,8 @@ class StatsCog(commands.Cog):
 
         stats = proportions.PersonStats(userdata)
 
-        logger.info(f"Stat {stat} for {memberOrHeight} sent.")
-
         if stat not in statmap.keys():
             await ctx.send(f"The `{stat}` stat is not an available option.")
-            logger.info(f"Tried to send info on stat {stat}, but that's not a valid stat.")
             return
 
         stat = statmap[stat]
@@ -179,7 +173,6 @@ class StatsCog(commands.Cog):
 
         if stattosend is None:
             await ctx.send(f"The `{stat}` stat is unavailable for this user.")
-            logger.info(f"Tried to send info on stat {stat}, but this user doesn't have it.")
             return
 
         await ctx.send(stattosend)
@@ -219,11 +212,8 @@ class StatsCog(commands.Cog):
 
         stats = proportions.PersonStats(userdata2)
 
-        logger.info(f"Stat {stat} for {memberOrHeight} sent.")
-
         if stat not in statmap.keys():
             await ctx.send(f"The `{stat}` stat is not an available option.")
-            logger.info(f"Tried to send info on stat {stat}, but that's not a valid stat.")
             return
 
         stat = statmap[stat]
@@ -231,7 +221,6 @@ class StatsCog(commands.Cog):
 
         if stattosend is None:
             await ctx.send(f"The `{stat}` stat is unavailable for this user.")
-            logger.info(f"Tried to send info on stat {stat}, but this user doesn't have it.")
             return
 
         await ctx.send(stattosend)
@@ -257,7 +246,6 @@ class StatsCog(commands.Cog):
         embedtosend = comparison.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
-        logger.info(f"Compared {userdata1} and {userdata2}")
 
     @commands.command(
         usage = "[user/height] [user/height] <custom name>",
@@ -277,8 +265,6 @@ class StatsCog(commands.Cog):
         comparison = proportions.PersonComparison(userdata, comparedata)
         embedtosend = comparison.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
-
-        logger.info(f"Compared {userdata} and {comparedata}")
 
     @commands.command(
         aliases = ["natstats"],
@@ -303,7 +289,6 @@ class StatsCog(commands.Cog):
         goodweightout = " ".join(tmp2out)
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
-        logger.info(f"Sent object comparison for {userdata.nickname}.")
 
     @commands.command(
         aliases = ["onewaycomp", "owc"],
@@ -343,11 +328,9 @@ class StatsCog(commands.Cog):
         if isinstance(what, DigiObject):
             oc = what.relativestatsembed(userdata)
             await ctx.send(embed = oc)
-            logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make one sided)
             compdata = getUserdata(what)
-            logger.info(f"{ctx.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userstats.avgheightcomp
             compdata = getUserdata(compheight)
@@ -356,7 +339,6 @@ class StatsCog(commands.Cog):
             telem.incrementUnknownObject(str(what))
             telem.save()
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
-            logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
         embedtosend = stats.toEmbed(ctx.author.id)
@@ -389,11 +371,9 @@ class StatsCog(commands.Cog):
                 la += "\n\n<https://www.youtube.com/watch?v=BB0DU4DoPP4>"
                 logger.log(EGG, f"{ctx.author.display_name} is jamming to Nickleback.")
             await ctx.send(la)
-            logger.info(f"{ctx.author.display_name} looked at {what.article} {what.name}.")
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
             compdata = getUserdata(what)
-            logger.info(f"{ctx.author.display_name} looked at {what}.")
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userdb.defaultheight
             compdata = getUserdata(compheight, nickname = "an average person")
@@ -419,7 +399,6 @@ class StatsCog(commands.Cog):
                 f"use `{ctx.prefix}suggestobject` to suggest it "
                 f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
             )
-            logger.info(f"{ctx.author.display_name} tried to look at {what}, but that's invalid.")
             telem = Telemetry.load()
             telem.incrementUnknownObject(str(what))
             telem.save()

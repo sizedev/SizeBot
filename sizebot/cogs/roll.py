@@ -29,7 +29,6 @@ class RollCog(commands.Cog):
         `&roll 4d6d1` will roll 4 six-sided dice, and  ignore the result of the lowest die.
         `&roll 5d4k2` will roll 5 4-sided dice, and keep the results of the 2 highest dice.
         """
-        logger.info(f"{ctx.author.display_name} rolled {dString} verbosely.")
         result = roller.roll(dString)
 
         header = (f"{ctx.author.display_name} rolled `{dString}`!\n"
@@ -61,7 +60,6 @@ class RollCog(commands.Cog):
         For example:
         `&r 4d6d1` will roll 4 six-sided dice, and  ignore the result of the lowest die.
         `&r 5d4k2` will roll 5 4-sided dice, and keep the results of the 2 highest dice."""
-        logger.info(f"{ctx.author.display_name} rolled {dString} non-verbosely.")
         result = roller.roll(dString)
         await ctx.send(f"{ctx.author.display_name} rolled `{dString}` = **{result.total}**")
 

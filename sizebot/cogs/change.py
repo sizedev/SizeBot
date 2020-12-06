@@ -61,7 +61,6 @@ class ChangeCog(commands.Cog):
 
             userdb.save(userdata)
 
-            logger.info(f"User {userid} ({ctx.author.display_name}) changed {style}-style {amount}.")
             await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
 
         elif isinstance(string, ParseableRate) or isinstance(string, LimitedRate):
@@ -72,7 +71,6 @@ class ChangeCog(commands.Cog):
             changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
 
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{string.original}`.")
-            logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) slow-changed {addPerSec}/sec and *{mulPerSec}/sec until {stopSV} for {stopTV} seconds.")
 
     @commands.command(
         hidden = True
@@ -87,7 +85,6 @@ class ChangeCog(commands.Cog):
             changeDump = "No active changes"
 
         await ctx.author.send("**ACTIVE CHANGES**\n" + changeDump)
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the running changes.")
 
     @commands.command(
         category = "change"
@@ -105,7 +102,6 @@ class ChangeCog(commands.Cog):
             logger.warn(f"User {ctx.author.id} ({ctx.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
         else:
             await ctx.send(f"{ctx.author.display_name} has stopped slow-changing.")
-            logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) stopped slow-changing.")
 
     @commands.command(
         category = "change"
@@ -128,7 +124,6 @@ class ChangeCog(commands.Cog):
         await ctx.send(
             f"<@{userid}> ate a :cake:! *I mean it said \"Eat me...\"*\n"
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
-        logger.info(f"User {userid} ({ctx.author.display_name}) ate a cake and multiplied {randmult}.")
 
     @commands.command(
         category = "change"
@@ -151,7 +146,6 @@ class ChangeCog(commands.Cog):
         await ctx.send(
             f"<@{ctx.author.id}> drank a :milk:! *I mean it said \"Drink me...\"*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
-        logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) drank a potion and shrunk {randmult}.")
 
     @tasks.loop(seconds=6)
     async def changeTask(self):
