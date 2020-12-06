@@ -39,6 +39,9 @@ class NoPlayerFoundError(DigiException):
 
 current_games = {}
 
+def get_royale(guildid):
+    return None if guildid not in current_games else current_games[guildid]
+
 
 class RoyaleCog(commands.Cog):
     """Play a game of Size Royale!"""
@@ -51,6 +54,16 @@ class RoyaleCog(commands.Cog):
     )
     @commands.guild_only()
     async def royale(self, ctx, subcommand, *, args: str = None):
+        """
+        Size Royale commands.
+        `&royale create [seed]`: create a new game in this guild, optionally with a seed.
+        Requires a file upload as per https://github.com/DigiDuncan/SizeRoyale/blob/master/royale-spec.txt
+        `&royale next [amount]`: Output the next round of events in the game, default 1.
+        `&royale overview`: See a stats screen of all players.
+        `&royale stats <player>`: Gets stats about a player in the game.
+        `&royale compare <player> <player2>`: Compares two players from the game.
+        `&royale delete` or `&royale stop`: Deletes the game in this guild (irreversable) 
+        """.replace("&", conf.prefix)
         if subcommand == "create":
             if is_dm(ctx.author) is False:
                 return

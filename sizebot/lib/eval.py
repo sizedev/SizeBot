@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw
 
 from sizebot.conf import conf
 from sizebot.cogs import thistracker
+from sizebot.cogs.royale import get_royale
 from sizebot.lib import guilddb, proportions, userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.decimal import Decimal
@@ -137,7 +138,8 @@ def getEvalGlobals():
         "Image": Image,
         "ImageDraw": ImageDraw,
         "io": io,
-        "logger": logger
+        "logger": logger,
+        "get_royale": get_royale
     }
 
     return evalGlobals
