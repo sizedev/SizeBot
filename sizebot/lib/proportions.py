@@ -261,7 +261,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
                 hairfield += f"{emojis.comparebig}{self.smallToBig.hairlength:,.3mu}\n"
             hairfield = hairfield.strip()
             embed.add_field(name=f"{self.hairlabel} Length", value=hairfield, inline=True)
-        if self.bigToSmall.taillength or self.smallToBig.hairlength:
+        if self.bigToSmall.taillength or self.smallToBig.taillength:
             tailfield = ""
             if self.bigToSmall.taillength:
                 tailfield += f"{emojis.comparebig}{self.bigToSmall.taillength:,.3mu}\n"
