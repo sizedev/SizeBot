@@ -141,6 +141,15 @@
         ]
     },
     {
+        "name": "fly",
+        "dimension": "l",
+        "length": "0.0065",
+        "weight": "0.0115",
+        "tags": [
+            "animal"
+        ]
+    },
+    {
         "name": "sunflower seed",
         "dimension": "l",
         "length": "0.0071",
@@ -151,6 +160,16 @@
         ],
         "aliases": [
             "seed"
+        ]
+    },
+    {
+        "name": "LED",
+        "dimension": "h",
+        "height": "0.0087",
+        "diameter": "0.005",
+        "weight": "0.0907",
+        "aliases": [
+            "light emitting diode"
         ]
     },
     {
@@ -204,6 +223,14 @@
         ]
     },
     {
+        "name": "iris",
+        "dimension": "d",
+        "diameter": "0.0121",
+        "aliases": [
+            "eye"
+        ]
+    },
+    {
         "name": "asprin",
         "dimension": "d",
         "diameter": "0.01397",
@@ -251,12 +278,7 @@
         "dimension": "l",
         "length": "0.015",
         "width": "0.015",
-        "weight": "0.25",
-        "aliases": [
-            "microsd",
-            "micro sd",
-            "micro sd card"
-        ]
+        "weight": "0.25"
     },
     {
         "name": "dime",
@@ -386,10 +408,7 @@
         "length": "0.032",
         "width": "0.032",
         "thickness": "0.0021",
-        "weight": "2",
-        "aliases": [
-            "sd"
-        ]
+        "weight": "2"
     },
     {
         "name": "needle",
@@ -456,6 +475,20 @@
         "weight": "45.93",
         "tags": [
             "ball"
+        ]
+    },
+    {
+        "name": "Oreo cookie",
+        "dimension": "d",
+        "diameter": "0.04445",
+        "thickness": "0.009",
+        "weight": "11.3",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "Oreo",
+            "cookie"
         ]
     },
     {
@@ -732,6 +765,17 @@
         ]
     },
     {
+        "name": "piece of cheese",
+        "dimension": "l",
+        "length": "0.0899",
+        "width": "0.0899",
+        "thickness": "0.003",
+        "weight": "17",
+        "aliases": [
+            "cheese"
+        ]
+    },
+    {
         "name": "crayon",
         "dimension": "h",
         "height": "0.092075",
@@ -899,8 +943,17 @@
             "food"
         ],
         "aliases": [
-            "poptart"
+            "poptart",
+            "nyan cat"
         ]
+    },
+    {
+        "name": "wallet",
+        "dimension": "l",
+        "length": "0.115",
+        "width": "0.092",
+        "thickness": "0.03",
+        "weight": "82.2136"
     },
     {
         "name": "CD",
@@ -1206,6 +1259,12 @@
         ]
     },
     {
+        "name": "plate",
+        "dimension": "d",
+        "diameter": "0.2921",
+        "weight": "816.466"
+    },
+    {
         "name": "medium Dominos™ pizza",
         "dimension": "d",
         "diameter": "0.3",
@@ -1290,6 +1349,15 @@
         ]
     },
     {
+        "name": "silverfish",
+        "dimension": "w",
+        "height": "0.3",
+        "width": "0.4",
+        "tags": [
+            "minecraft"
+        ]
+    },
+    {
         "name": "Pikachu",
         "dimension": "h",
         "height": "0.4064",
@@ -1297,6 +1365,12 @@
         "tags": [
             "Pokemon"
         ]
+    },
+    {
+        "name": "sock",
+        "dimension": "l",
+        "length": "0.4572",
+        "weight": "45"
     },
     {
         "name": "beach ball",
@@ -1440,6 +1514,15 @@
         ]
     },
     {
+        "name": "creeper",
+        "dimension": "h",
+        "height": "1.7",
+        "width": "0.6",
+        "tags": [
+            "minecraft"
+        ]
+    },
+    {
         "name": "refrigerator",
         "dimension": "h",
         "height": "1.7399",
@@ -1457,7 +1540,8 @@
         "height": "1.8",
         "weight": "72151",
         "tags": [
-            "character"
+            "character",
+            "minecraft"
         ],
         "aliases": [
             "Steve"
@@ -1482,6 +1566,29 @@
         "width": "1.194",
         "depth": "0.813",
         "weight": "289846"
+    },
+    {
+        "name": "Space Marine",
+        "dimension": "h",
+        "height": "2",
+        "weight": "350000",
+        "tags": [
+            "person",
+            "warhammer",
+            "40k"
+        ],
+        "aliases": [
+            "Adeptus Astartes",
+            "Astartes",
+            "Firstborn Space Marine",
+            "Firstborn",
+            "Firstborn Astartes"
+        ]
+    },
+    {
+        "name": "shower",
+        "dimension": "h",
+        "height": "2.03"
     },
     {
         "name": "doorway",
@@ -1516,6 +1623,24 @@
         ]
     },
     {
+        "name": "iron golem",
+        "dimension": "h",
+        "height": "2.7",
+        "width": "1.4",
+        "tags": [
+            "minecraft"
+        ]
+    },
+    {
+        "name": "enderman",
+        "dimension": "h",
+        "height": "2.9",
+        "width": "0.6",
+        "tags": [
+            "minecraft"
+        ]
+    },
+    {
         "name": "elephant",
         "dimension": "h",
         "height": "3.048",
@@ -1525,10 +1650,41 @@
         ]
     },
     {
+        "name": "Roboute Guilliman",
+        "dimension": "h",
+        "height": "3.05",
+        "tags": [
+            "person",
+            "warhammer",
+            "40k"
+        ],
+        "aliases": [
+            "Primarch"
+        ]
+    },
+    {
+        "name": "wither",
+        "dimension": "h",
+        "height": "3.5",
+        "width": "0.9",
+        "tags": [
+            "minecraft"
+        ]
+    },
+    {
         "name": "light pole",
         "dimension": "h",
         "height": "3.5052",
         "weight": "326587"
+    },
+    {
+        "name": "ghast",
+        "dimension": "h",
+        "height": "4",
+        "width": "4",
+        "tags": [
+            "minecraft"
+        ]
     },
     {
         "name": "story",
@@ -1592,6 +1748,16 @@
         "weight": "1032500",
         "tags": [
             "animal"
+        ]
+    },
+    {
+        "name": "ender dragon",
+        "dimension": "h",
+        "height": "8",
+        "length": "16",
+        "width": "16",
+        "tags": [
+            "minecraft"
         ]
     },
     {
