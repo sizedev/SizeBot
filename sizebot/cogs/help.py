@@ -252,7 +252,7 @@ class HelpCog(commands.Cog):
         embed.add_field(name = "Credits",
                         value = ("**Coding Assistance** *by Natalie*\n"
                                  "**Additional Equations** *by Benyovski and Arceus3251*\n"
-                                 "**Originally Tested by AWK, Kelly, worstgender, and Arceus3251*\n"),
+                                 "**Originally Tested** *by AWK, Kelly, worstgender, and Arceus3251*\n"),
                         inline = False)
         embed.add_field(name = "Servers",
                         value = ("**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*"),
