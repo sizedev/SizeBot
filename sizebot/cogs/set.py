@@ -454,7 +454,7 @@ class SetCog(commands.Cog):
                                              newwalk.time)
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s walk is now {userdata.walkperhour:mu}.")
+        await ctx.send(f"<@{ctx.author.id}>'s walk speed is now {userdata.walkperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -486,7 +486,7 @@ class SetCog(commands.Cog):
                                             newrun.time)
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s run is now {userdata.runperhour:mu}.")
+        await ctx.send(f"<@{ctx.author.id}>'s run speed is now {userdata.runperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
