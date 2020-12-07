@@ -538,13 +538,16 @@ class PersonBaseStats:
         self.walkperhour = userdata.walkperhour
         self.runperhour = userdata.runperhour
 
+        self.currentscalestep = userdata.currentscalestep
+        self.unitsystem = userdata.unitsystem
+
 
     def __str__(self):
         return (f"<PersonBaseStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
                 f"BASEHEIGHT = {self.baseheight!r}, BASEWEIGHT = {self.baseweight!r}, FOOTNAME = {self.footname!r}, "
                 f"HAIRNAME = {self.hairname!r}, PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
-                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}"
-                f"HAIRLENGTH = {self.hairlength!r}, TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r},"
+                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}, "
+                f"HAIRLENGTH = {self.hairlength!r}, TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r}, "
                 f"LIFTSTRENGTH = {self.liftstrength!r}, FOOTLENGTH = {self.footlength!r}, "
                 f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}>")
 
@@ -559,6 +562,7 @@ class PersonBaseStats:
         embed.set_author(name=f"SizeBot {__version__}")
         embed.add_field(name="Base Height", value=f"{self.baseheight:,.3mu}\n*{self.averageheightmult:,.3} average*", inline=True)
         embed.add_field(name="Base Weight", value=f"{self.baseweight:,.3mu}\n*{self.averageweightmult:,.3} average*", inline=True)
+        embed.add_field(name="Unit System", value=f"{self.unitsystem.capitalize()}", inline=True)
         if self.footlength:
             embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         if self.hairlength:
@@ -573,7 +577,7 @@ class PersonBaseStats:
             embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)", inline=True)
         if self.liftstrength:
             embed.add_field(name="Lift/Carry Strength", value=f"{self.liftstrength:,.3mu}", inline=True)
-        if self.macrovision_model:
+        if self.macrovision_model and self.macrovision_model != "Human":
             embed.add_field(name="Macrovision Custom Model", value=f"{self.macrovision_model}, {self.macrovision_view}", inline=True)
         return embed
 
