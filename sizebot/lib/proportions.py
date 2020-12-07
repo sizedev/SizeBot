@@ -532,8 +532,8 @@ class PersonBaseStats:
         else:
             self.shoesize = None
 
-        self.averageheightmult = self.height / defaultheight
-        self.averageweightmult = self.weight / defaultweight
+        self.averageheightmult = self.baseheight / defaultheight
+        self.averageweightmult = self.baseweight / defaultweight
 
         self.walkperhour = userdata.walkperhour
         self.runperhour = userdata.runperhour
