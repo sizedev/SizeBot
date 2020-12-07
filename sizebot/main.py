@@ -155,7 +155,7 @@ def main():
 
     @bot.event
     async def on_command(ctx):
-        logger.log(CMD, ctx.message.content)
+        logger.log(CMD, f"G {ctx.guild.name}, U {ctx.message.author.display_name}: {ctx.message.content}")
 
     @bot.event
     async def on_message(message):
