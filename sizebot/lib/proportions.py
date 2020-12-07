@@ -408,7 +408,7 @@ class PersonStats:
         if userdata.runperhour is None:
             self.runperhour = SV(defaultrunspeed * self.averageheightmult)
         else:
-            self.walkperhour = SV(userdata.runperhour * self.averageheightmult)
+            self.runperhour = SV(userdata.runperhour * self.averageheightmult)
 
         self.walksteplength = SV(self.walkperhour / self.walkstepsperhour)
         self.runsteplength = SV(self.runperhour / self.runstepsperhour)
