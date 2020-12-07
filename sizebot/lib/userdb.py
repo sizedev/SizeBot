@@ -227,6 +227,11 @@ class User:
         if value is None:
             self._walkperhour = None
             return
+
+        if isinstance(value, str):
+            self._walkperhour = SV(max(0, SV(value)))
+            return
+
         if not isinstance(value, ParseableRate):
             raise ValueError("Input was not a Rate.")
 
@@ -247,6 +252,10 @@ class User:
     def runperhour(self, value):
         if value is None:
             self._runperhour = None
+            return
+
+        if isinstance(value, str):
+            self._runperhour = SV(max(0, SV(value)))
             return
 
         if not isinstance(value, ParseableRate):
