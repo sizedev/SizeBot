@@ -507,6 +507,75 @@ class PersonStats:
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
         return embed
 
+class PersonBaseStats:
+    def __init__(self, userdata):
+        self.nickname = userdata.nickname
+        self.tag = userdata.tag
+        self.gender = userdata.autogender
+        self.baseheight = userdata.baseheight
+        self.baseweight = userdata.baseweight
+        self.footname = userdata.footname
+        self.hairname = userdata.hairname
+        self.pawtoggle = userdata.pawtoggle
+        self.macrovision_model = userdata.macrovision_model
+        self.macrovision_view = userdata.macrovision_view
+
+        self.hairlength = userdata.hairlength
+        self.taillength = userdata.taillength
+        self.earheight = userdata.earheight
+        self.liftstrength = userdata.liftstrength
+
+        self.footlength = userdata.footlength
+
+        if self.footlength:
+            self.shoesize = formatShoeSize(self.footlength, self.gender == "f")
+        else:
+            self.shoesize = None
+
+        self.averageheightmult = self.height / defaultheight
+        self.averageweightmult = self.weight / defaultweight
+
+        self.walkperhour = userdata.walkperhour
+        self.runperhour = userdata.runperhour
+
+
+    def __str__(self):
+        return (f"<PersonBaseStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
+                f"BASEHEIGHT = {self.baseheight!r}, BASEWEIGHT = {self.baseweight!r}, FOOTNAME = {self.footname!r}, "
+                f"HAIRNAME = {self.hairname!r}, PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
+                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}"
+                f"HAIRLENGTH = {self.hairlength!r}, TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r},"
+                f"LIFTSTRENGTH = {self.liftstrength!r}, FOOTLENGTH = {self.footlength!r}, "
+                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}>")
+
+    def __repr__(self):
+        return str(self)
+
+    def toEmbed(self, requesterID = None):
+        requestertag = f"<@!{requesterID}>"
+        embed = Embed(title=f"Base Stats for {self.nickname}",
+                      description=f"*Requested by {requestertag}*",
+                      color=colors.cyan)
+        embed.set_author(name=f"SizeBot {__version__}")
+        embed.add_field(name="Base Height", value=f"{self.baseheight:,.3mu}\n*{self.averageheightmult:,.3} average*", inline=True)
+        embed.add_field(name="Base Weight", value=f"{self.baseweight:,.3mu}\n*{self.averageweightmult:,.3} average*", inline=True)
+        if self.footlength:
+            embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
+        if self.hairlength:
+            embed.add_field(name=f"{self.hairname} Length", value=format(self.hairlength, ",.3mu"), inline=True)
+        if self.taillength:
+            embed.add_field(name="Tail Length", value=format(self.taillength, ",.3mu"), inline=True)
+        if self.earheight:
+            embed.add_field(name="Ear Height", value=format(self.earheight, ",.3mu"), inline=True)
+        if self.walkperhour:
+            embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)", inline=True)
+        if self.runperhour:
+            embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)", inline=True)
+        if self.liftstrength:
+            embed.add_field(name="Lift/Carry Strength", value=f"{self.liftstrength:,.3mu}", inline=True)
+        if self.macrovision_model:
+            embed.add_field(name="Macrovision Custom Model", value=f"{self.macrovision_model}, {self.macrovision_view}", inline=True)
+        return embed
 
 def formatShoeSize(footlength, women = False):
     # Inch in meters

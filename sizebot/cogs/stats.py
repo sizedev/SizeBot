@@ -106,6 +106,32 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
+    async def basestats(self, ctx, member: discord.Member = None, *, customName = None):
+        """User basestats command.
+
+        Get the base stats about yourself or a user.
+
+        Examples:
+        `&sbasetats` (defaults to stats about you.)
+        `&basestats @User`
+        """
+        if member is None:
+            member = ctx.author
+
+        userdata = userdb.load(ctx.guild.id, member.id)
+
+        stats = proportions.PersonBaseStats(userdata)
+
+        embedtosend = stats.toEmbed(ctx.author.id)
+        await ctx.send(embed = embedtosend)
+
+        await showNextStep(ctx, userdata)
+
+    @commands.command(
+        usage = "[user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
     async def statsas(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None,
                       memberOrHeight2: typing.Union[discord.Member, SV] = None, *, customName = None):
         """User stats command with modified bases.
