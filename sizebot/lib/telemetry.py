@@ -1,9 +1,11 @@
 import json
 
+import arrow
+
 from sizebot.lib import paths
 
 
-class Telemetry():
+class Telemetry:
     def __init__(self, unknowns=None, unknownobjects=None, commands=None, ratelimits=None, permissionerrors=None):
         self.unknowns = unknowns or {}
         self.unknownobjects = unknownobjects or {}
@@ -59,3 +61,28 @@ class Telemetry():
     @classmethod
     def fromJSON(cls, jsondata):
         return Telemetry(**jsondata)
+        
+
+class CommandFreq:
+    def __init__(self, text: str = None):
+        self.text = text
+
+    def add(self, command: str, args: str):
+        timestamp = arrow.now().timestamp
+        output = f"{{\"command\": \"{command}\", \"args\": \"{args}\", \"time\": {timestamp}}}"
+        self.text += "\n" + output
+
+    def save(self):
+        paths.telemetrypath.parent.mkdir(exist_ok = True)
+        jsondata = self.toJSON()
+        with open(paths.telemetrypath, "w") as f:
+            json.dump(jsondata, f, indent = 4)
+
+    @classmethod
+    def load(cls):
+        try:
+            with open(paths.commandfreqpath, "r") as f:
+                data = f.read()
+        except FileNotFoundError:
+            return CommandFreq()
+        return CommandFreq(data)
