@@ -94,12 +94,12 @@ class ColorCog(commands.Cog):
 
         r = await requests.get(url + "/id?" + colortype + "=" + colorvalueout)
         try:
-            colorjson = r.json()
+            colorjson = await r.json()
         except JSONDecodeError:
             await outmessage.edit(emojis.warning + "The Color API is not working as expected. Please try again later.")
             return
 
-        if r.status_code != 200:
+        if r.status != 200:
             await outmessage.edit(emojis.warning + "The Color API is not working as expected. Please try again later.")
             return
             
