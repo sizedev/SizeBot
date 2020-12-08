@@ -132,7 +132,9 @@ def main():
             r"  ____) | |/ /  __/ |_) | (_) | |_ ___) | ___) |""\n"
             r" |_____/|_/___\___|____/ \___/ \__|____(_)____/ ""\n"
             r"                                                ")
-        logger.log(BANNER, banner + " v" + __version__)
+        for line in banner.splitlines():
+            logger.log(BANNER, line)
+        logger.log(BANNER, banner + "                                                 v" + __version__)
         logger.log(LOGIN, f"Logged in as: {bot.user.name} ({bot.user.id})\n------")
 
         # Add a special message to bot status if we are running in debug mode
