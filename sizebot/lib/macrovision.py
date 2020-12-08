@@ -69,7 +69,7 @@ async def get_url(people, *, shorten = True):
     raw_url = f"https://macrovision.crux.sexy/?scene={base64_string}"
     if conf.cuttly_key and shorten:
         r = await requests.get(f"https://cutt.ly/api/api.php?key={conf.cuttly_key}&short={raw_url}")
-        cuttly = await r.json()
+        cuttly = json.loads(await r.text())
         return cuttly["url"]["shortLink"]
     else:
         return raw_url
