@@ -350,7 +350,7 @@ class PersonSpeedComparison:
         walksteps = math.ceil(dist / self.viewer.walksteplength)
         _runtime = (dist / self.viewer.runperhour) * 60 * 60
         runsteps = math.ceil(dist / self.viewer.runsteplength)
-        _climbtime = (dist / climbspeed) * 60 * 60
+        _climbtime = (dist / climbspeed / self.viewer.viewscale) * 60 * 60
         climbsteps = math.ceil(dist / climblength)
         walktime = prettyTimeDelta(_walktime)
         runtime = prettyTimeDelta(_runtime)
