@@ -407,8 +407,8 @@ class PersonStats:
 
     defaultthreadthickness = Decimal("0.001016")
 
-    defaultwalkspeed = SV.parse("5630")
-    defaultrunspeed = SV.parse("12100")
+    defaultwalkspeed = 5630
+    defaultrunspeed = 12100
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
