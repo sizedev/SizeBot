@@ -201,7 +201,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             title=f"Comparison of {self.big.nickname} and {self.small.nickname} 🔗",
             description=f"*Requested by {requestertag}*",
             color=colors.purple,
-            url=self.url()
+            url = await self.url()
         )
         if requestertag == self.big.tag:
             embed.color = colors.blue
