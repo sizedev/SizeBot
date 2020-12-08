@@ -278,9 +278,9 @@ class ScaleWalkCog(commands.Cog):
             return
 
         if userdata.currentscalestep.changetype == "add":
-            userdata.height += (userdata.currentscalestep.amount * steps)
+            userdata.height += (userdata.currentscalestep.amount * (steps + 1))
         elif userdata.currentscalestep.changetype == "multiply":
-            userdata.height *= (userdata.currentscalestep.amount ** steps)
+            userdata.height *= (userdata.currentscalestep.amount ** (steps + 1))
         else:
             raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
 
