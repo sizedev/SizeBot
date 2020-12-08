@@ -252,6 +252,7 @@ class StatsCog(commands.Cog):
         await ctx.send(stattosend)
 
     @commands.command(
+        aliases = ["comp"],
         usage = "<user/height> [user/height]",
         category = "stats"
     )
@@ -274,6 +275,7 @@ class StatsCog(commands.Cog):
 
 
     @commands.command(
+        aliases = ["compas"],
         usage = "[user/height] [user/height] <custom name>",
         category = "stats"
     )
@@ -321,12 +323,12 @@ class StatsCog(commands.Cog):
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
 
     @commands.command(
-        aliases = ["onewaycomp", "owc"],
+        aliases = ["objcompare", "objcomp"],
         usage = "<object/user> [as user/height]",
         category = "stats"
     )
     @commands.guild_only()
-    async def onewaycompare(self, ctx, *, args: str):
+    async def objectcompare(self, ctx, *, args: str):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -511,7 +513,7 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = e)
 
     @commands.command(
-        aliases = ["comparedistance", "comparedist", "distcompare"],
+        aliases = ["comparedistance", "comparedist", "distcompare", "compdist", "distcomp"],
         usage = "<user/height> [user/height]",
         category = "stats"
     )
