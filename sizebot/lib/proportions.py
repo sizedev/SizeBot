@@ -343,10 +343,10 @@ class PersonSpeedComparison:
         return str(self)
 
     def speedcalc(self, dist: SV):
-        _walktime = dist / self.viewer.walkperhour
-        walksteps = dist / self.viewer.walksteplength
-        _runtime = dist / self.viewer.runperhour
-        runsteps = dist / self.viewer.runsteplength
+        _walktime = (dist / self.viewer.walkperhour) * 60 * 60
+        walksteps = math.ceil(dist / self.viewer.walksteplength)
+        _runtime = (dist / self.viewer.runperhour) * 60 * 60
+        runsteps = math.ceil(dist / self.viewer.runsteplength)
         walktime = prettyTimeDelta(_walktime)
         runtime = prettyTimeDelta(_runtime)
         return (
