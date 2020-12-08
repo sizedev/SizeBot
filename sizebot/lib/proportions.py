@@ -324,8 +324,6 @@ class PersonSpeedComparison:
             self.multiplier = Decimal(1)
         else:
             self.multiplier = self.viewed.height / self.viewer.height
-            self.viewer.height = self.viewer.height * self.viewed.viewscale
-            self.viewertoviewed.height = self.viewer.height * self.viewed.viewscale
 
         self.viewedtoviewer = PersonStats(self.viewedtoviewerdata)
         self.viewertoviewed = PersonStats(self.viewertovieweddata)
