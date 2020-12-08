@@ -328,6 +328,11 @@ class PersonStats:
     walkstepsperhour = 6900
     runstepsperhour = 10200
 
+    defaultthreadthickness = SV.parse("1.016mm")
+
+    defaultwalkspeed = SV.parse("3.5mi")
+    defaultrunspeed = SV.parse("7.5mi")
+
     def __init__(self, userdata):
         self.nickname = userdata.nickname
         self.tag = userdata.tag
@@ -382,8 +387,7 @@ class PersonStats:
         self.thumbwidth = SV(self.height * self.thumbfactor)
         self.fingerprintdepth = SV(self.height * self.fingerprintfactor)
 
-        defaultthreadthickness = SV.parse("1.016mm")
-        self.threadthickness = SV(defaultthreadthickness * self.averageheightmult)
+        self.threadthickness = SV(self.defaultthreadthickness * self.averageheightmult)
 
         self.hairwidth = SV(self.height * self.hairfactor)
         self.nailthickness = SV(self.height * self.nailthickfactor)
@@ -396,16 +400,13 @@ class PersonStats:
         self.avglookangle = abs(viewangle)
         self.avglookdirection = "up" if viewangle >= 0 else "down"
 
-        defaultwalkspeed = SV.parse("3.5mi")
-        defaultrunspeed = SV.parse("7.5mi")
-
         if userdata.walkperhour is None:
-            self.walkperhour = SV(defaultwalkspeed * self.averageheightmult)
+            self.walkperhour = SV(self.defaultwalkspeed * self.averageheightmult)
         else:
             self.walkperhour = SV(userdata.walkperhour * self.averageheightmult)
 
         if userdata.runperhour is None:
-            self.runperhour = SV(defaultrunspeed * self.averageheightmult)
+            self.runperhour = SV(self.defaultrunspeed * self.averageheightmult)
         else:
             self.runperhour = SV(userdata.runperhour * self.averageheightmult)
 
@@ -579,6 +580,7 @@ class PersonBaseStats:
         if self.macrovision_model and self.macrovision_model != "Human":
             embed.add_field(name="Macrovision Custom Model", value=f"{self.macrovision_model}, {self.macrovision_view}", inline=True)
         return embed
+
 
 def formatShoeSize(footlength, women = False):
     # Inch in meters
