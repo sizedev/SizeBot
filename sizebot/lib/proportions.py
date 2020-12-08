@@ -351,8 +351,8 @@ class PersonSpeedComparison:
         runtime = prettyTimeDelta(_runtime)
         return (
             f"{emojis.ruler} {dist:,.3mu}\n"
-            f"{emojis.walk} {walktime} ({walksteps} steps)\n"
-            f"{emojis.run} {runtime} ({runsteps} steps)"
+            f"{emojis.walk} {walktime} ({walksteps:,.3} steps)\n"
+            f"{emojis.run} {runtime} ({runsteps:,.3} steps)"
         )
 
     async def toEmbed(self, requesterID = None):
