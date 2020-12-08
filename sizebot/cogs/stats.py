@@ -475,7 +475,7 @@ class StatsCog(commands.Cog):
         userstats = proportions.PersonStats(userdata)
 
         if userdata.height == 0:
-            await ctx.send(f"{userdata.tag} can't move...")
+            await ctx.send(f"{userdata.tag} doesn't exist...")
             return
 
         defaultdata = getUserdata(userdb.defaultheight, "an average person")
