@@ -343,16 +343,24 @@ class PersonSpeedComparison:
         return str(self)
 
     def speedcalc(self, dist: SV):
+        climblength = Decimal(0.3048)
+        climbspeed = Decimal(4828)
+
         _walktime = (dist / self.viewer.walkperhour) * 60 * 60
         walksteps = math.ceil(dist / self.viewer.walksteplength)
         _runtime = (dist / self.viewer.runperhour) * 60 * 60
         runsteps = math.ceil(dist / self.viewer.runsteplength)
+        _climbtime = (dist / climbspeed) * 60 * 60
+        climbsteps = math.ceil(dist / climblength)
         walktime = prettyTimeDelta(_walktime)
         runtime = prettyTimeDelta(_runtime)
+        climbtime = prettyTimeDelta(_climbtime)
+
         return (
             f"{emojis.ruler} {dist:,.3mu}\n"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps)\n"
-            f"{emojis.run} {runtime} ({runsteps:,.3} steps)"
+            f"{emojis.run} {runtime} ({runsteps:,.3} steps)\n"
+            f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls)"
         )
 
     async def toEmbed(self, requesterID = None):
