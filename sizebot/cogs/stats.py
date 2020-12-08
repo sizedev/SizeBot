@@ -528,7 +528,7 @@ class StatsCog(commands.Cog):
         userdata1 = getUserdata(memberOrHeight1)
         userdata2 = getUserdata(memberOrHeight2)
 
-        comparison = proportions.PersonStatsComparison(userdata2, userdata1)
+        comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
         embedtosend = await comparison.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
