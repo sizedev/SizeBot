@@ -358,12 +358,12 @@ class PersonSpeedComparison:
     async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
-            title=f"Speed/Distance Comparison of {self.big.nickname} and {self.small.nickname}",
+            title=f"Speed/Distance Comparison of {self.viewed.nickname} and {self.viewer.nickname}",
             description=f"*Requested by {requestertag}*",
             color=colors.purple
         )
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
-        embed.add_field(name=f"**{self.small.nickname}** Speeds", value=(
+        embed.add_field(name=f"**{self.viewer.nickname}** Speeds", value=(
             f"{emojis.blank}{emojis.blank} **Walk Speed:** {self.viewerdata.walkperhour:,.3mu} per hour\n"
             f"{emojis.blank}{emojis.blank} **Run Speed:** {self.viewerdata.runperhour:,.3mu} per hour"), inline=True)
         embed.add_field(name="Height", value=(self.speedcalc(self.viewedtoviewer.height)), inline=True)
