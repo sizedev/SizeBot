@@ -252,7 +252,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             if self.bigToSmall.hairlength:
                 hairfield += f"{emojis.comparebig}{self.bigToSmall.hairlength:,.3mu}\n"
             if self.smallToBig.hairlength:
-                hairfield += f"{emojis.comparebig}{self.smallToBig.hairlength:,.3mu}\n"
+                hairfield += f"{emojis.comparesmall}{self.smallToBig.hairlength:,.3mu}\n"
             hairfield = hairfield.strip()
             embed.add_field(name=f"{self.hairlabel} Length", value=hairfield, inline=True)
         if self.bigToSmall.taillength or self.smallToBig.taillength:
@@ -260,7 +260,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             if self.bigToSmall.taillength:
                 tailfield += f"{emojis.comparebig}{self.bigToSmall.taillength:,.3mu}\n"
             if self.smallToBig.taillength:
-                tailfield += f"{emojis.comparebig}{self.smallToBig.taillength:,.3mu}\n"
+                tailfield += f"{emojis.comparesmall}{self.smallToBig.taillength:,.3mu}\n"
             tailfield = tailfield.strip()
             embed.add_field(name="Tail Length", value=tailfield, inline=True)
         if self.bigToSmall.earheight or self.smallToBig.earheight:
@@ -268,7 +268,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             if self.bigToSmall.earheight:
                 earfield += f"{emojis.comparebig}{self.bigToSmall.earheight:,.3mu}\n"
             if self.smallToBig.earheight:
-                earfield += f"{emojis.comparebig}{self.smallToBig.earheight:,.3mu}\n"
+                earfield += f"{emojis.comparesmall}{self.smallToBig.earheight:,.3mu}\n"
             earfield = earfield.strip()
             embed.add_field(name="Ear Height", value=earfield, inline=True)
         embed.add_field(name=f"{self.hairlabel} Width", value=(
