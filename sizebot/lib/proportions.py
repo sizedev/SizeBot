@@ -405,10 +405,10 @@ class PersonStats:
     walkstepsperhour = 6900
     runstepsperhour = 10200
 
-    defaultthreadthickness = SV.parse("1.016mm")
+    defaultthreadthickness = Decimal("0.001016")
 
-    defaultwalkspeed = SV.parse("3.5mi")
-    defaultrunspeed = SV.parse("7.5mi")
+    defaultwalkspeed = SV.parse("5630")
+    defaultrunspeed = SV.parse("12100")
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
