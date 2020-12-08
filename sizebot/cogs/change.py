@@ -87,6 +87,7 @@ class ChangeCog(commands.Cog):
         await ctx.author.send("**ACTIVE CHANGES**\n" + changeDump)
 
     @commands.command(
+        aliases = ["changestop"],
         category = "change"
     )
     @commands.guild_only()
