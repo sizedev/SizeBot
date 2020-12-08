@@ -1,7 +1,7 @@
 import base64
 import json
 import importlib.resources as pkg_resources
-import requests
+from aiohttp_requests import requests
 from operator import itemgetter
 
 import sizebot.data
@@ -31,7 +31,7 @@ def get_entity_json(name, model, view, height, x):
     }
 
 
-def get_url(people):
+async def get_url(people, *, shorten = True):
     """Accepts an array of dictionary objects with 'model', 'name', and 'height' properties"""
     if len(people) <= 0:
         raise ValueError("At least one person is required")
@@ -67,9 +67,9 @@ def get_url(people):
     base64_bytes = base64.b64encode(json_bytes)
     base64_string = base64_bytes.decode("ascii")
     raw_url = f"https://macrovision.crux.sexy/?scene={base64_string}"
-    if conf.cuttly_key:
-        r = requests.get(f"https://cutt.ly/api/api.php?key={conf.cuttly_key}&short={raw_url}")
-        cuttly = json.loads(r.text)
+    if conf.cuttly_key and shorten:
+        r = await requests.get(f"https://cutt.ly/api/api.php?key={conf.cuttly_key}&short={raw_url}")
+        cuttly = r.json()
         return cuttly["url"]["shortLink"]
     else:
         return raw_url

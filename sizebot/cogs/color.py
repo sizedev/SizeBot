@@ -1,6 +1,6 @@
+from aiohttp_requests import requests
 from json.decoder import JSONDecodeError
 import re
-import requests
 
 from discord import Embed
 from discord.ext import commands
@@ -92,7 +92,7 @@ class ColorCog(commands.Cog):
             await outmessage.edit(content = f"`{colortype}` is not an accepted color type.\nAccepted types are hex, rgb, hsv, hsl, or cymk.")
             return
 
-        r = requests.get(url + "/id?" + colortype + "=" + colorvalueout)
+        r = await requests.get(url + "/id?" + colortype + "=" + colorvalueout)
         try:
             colorjson = r.json()
         except JSONDecodeError:

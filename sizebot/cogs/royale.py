@@ -206,7 +206,7 @@ class RoyaleCog(commands.Cog):
             userdata2 = getPlayerData(player2)
 
             comparison = proportions.PersonComparison(userdata1, userdata2)
-            embedtosend = comparison.toEmbed(ctx.author.id)
+            embedtosend = await comparison.toEmbed(ctx.author.id)
             await ctx.send(embed = embedtosend)
 
         elif subcommand == "create":

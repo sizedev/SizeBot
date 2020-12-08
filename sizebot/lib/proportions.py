@@ -190,18 +190,18 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         self.lookdirection = "up" if viewangle >= 0 else "down"
 
     def __str__(self):
-        return f"<PersonComparison SMALL = {self.small!r}, BIG = {self.big!r}, SMALLTOBIG = {self.smallToBig!r}, BIGTOSMALL = {self.bigToSmall!r}, URL = {self.url!r}>"
+        return f"<PersonComparison SMALL = {self.small!r}, BIG = {self.big!r}, SMALLTOBIG = {self.smallToBig!r}, BIGTOSMALL = {self.bigToSmall!r}>"
 
     def __repr__(self):
         return str(self)
 
-    def toEmbed(self, requesterID = None):
+    async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
             title=f"Comparison of {self.big.nickname} and {self.small.nickname} 🔗",
             description=f"*Requested by {requestertag}*",
             color=colors.purple,
-            url=self.url
+            url=self.url()
         )
         if requestertag == self.big.tag:
             embed.color = colors.blue
@@ -291,12 +291,11 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}."))
         return embed
 
-    @property
-    def url(self):
+    async def url(self):
         safeSmallNick = url_safe(self.small.nickname)
         safeBigNick = url_safe(self.big.nickname)
 
-        compUrl = macrovision.get_url([
+        compUrl = await macrovision.get_url([
             {
                 "name": safeSmallNick,
                 "model": self.small.macrovision_model,

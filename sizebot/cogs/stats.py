@@ -269,7 +269,7 @@ class StatsCog(commands.Cog):
         userdata2 = getUserdata(memberOrHeight2)
 
         comparison = proportions.PersonComparison(userdata1, userdata2)
-        embedtosend = comparison.toEmbed(ctx.author.id)
+        embedtosend = await comparison.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
 
@@ -289,7 +289,7 @@ class StatsCog(commands.Cog):
         comparedata = getUserdata(memberOrHeight)
 
         comparison = proportions.PersonComparison(userdata, comparedata)
-        embedtosend = comparison.toEmbed(ctx.author.id)
+        embedtosend = await comparison.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
     @commands.command(
@@ -536,7 +536,7 @@ class StatsCog(commands.Cog):
             title="Click here for lineup image!",
             description=f"Lineup of {nicks}",
             color=colors.cyan,
-            url=macrovision.get_url(users)
+            url = await macrovision.get_url(users)
         )
         await ctx.send(embed = e)
 

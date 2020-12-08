@@ -1,4 +1,3 @@
-import asyncio
 import io
 import importlib.resources as pkg_resources
 import math
