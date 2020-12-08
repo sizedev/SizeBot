@@ -511,6 +511,28 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = e)
 
     @commands.command(
+        aliases = ["comparedistance", "comparedist", "distcompare"],
+        usage = "<user/height> [user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def distancecompare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+        """Find how long it would take to travel across a person."""
+        if memberOrHeight2 is None:
+            memberOrHeight2 = ctx.author
+
+        if memberOrHeight1 is None:
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
+            return
+
+        userdata1 = getUserdata(memberOrHeight1)
+        userdata2 = getUserdata(memberOrHeight2)
+
+        comparison = proportions.PersonStatsComparison(userdata2, userdata1)
+        embedtosend = await comparison.toEmbed(ctx.author.id)
+        await ctx.send(embed = embedtosend)
+
+    @commands.command(
         aliases = [],
         usage = "<users...>",
         category = "stats"

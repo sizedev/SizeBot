@@ -11,7 +11,7 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import defaultheight, defaultweight, defaultterminalvelocity, defaultliftstrength, falllimit
-from sizebot.lib.utils import url_safe
+from sizebot.lib.utils import prettyTimeDelta, url_safe
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
@@ -310,6 +310,83 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             }
         ])
         return compUrl
+
+
+class PersonSpeedComparison:
+    def __init__(self, userdata1, userdata2):
+        self.viewer = PersonStats(userdata1)
+        self.viewed = PersonStats(userdata2)
+
+        self.viewertovieweddata = copy(userdata1)
+        self.viewedtoviewerdata = copy(userdata2)
+
+        if self.viewer.height == 0 and self.viewed.height == 0:
+            self.multiplier = Decimal(1)
+        else:
+            self.multiplier = self.viewed.height / self.viewer.height
+            self.viewer.height = self.viewer.height * self.viewed.viewscale
+            self.viewertoviewed.height = self.viewer.height * self.viewed.viewscale
+
+        self.viewedtoviewer = PersonStats(self.viewedtoviewerdata)
+        self.viewertoviewed = PersonStats(self.viewertovieweddata)
+
+        self.footlabel = "Foot/Paw" if self.viewed.pawtoggle else "Foot"
+        self.hairlabel = "Hair/Fur" if self.viewed.furtoggle else "Hair"
+
+        viewangle = calcViewAngle(self.viewer.height, self.viewed.height)
+        self.lookangle = abs(viewangle)
+        self.lookdirection = "up" if viewangle >= 0 else "down"
+
+    def __str__(self):
+        return f"<PersonSpeedComparison VIEWER = {self.viewer!r}, VIEWED = {self.viewed!r}, \
+            VIEWERTOVIEWED = {self.viewertoviewed!r}, VIEWEDTOVIEWER = {self.viewedtoviewer!r}>"
+
+    def __repr__(self):
+        return str(self)
+
+    def speedcalc(self, dist: SV):
+        _walktime = dist / self.viewer.walkperhour
+        walksteps = dist / self.viewer.walksteplength
+        _runtime = dist / self.viewer.runperhour
+        runsteps = dist / self.viewer.runsteplength
+        walktime = prettyTimeDelta(_walktime)
+        runtime = prettyTimeDelta(_runtime)
+        return (
+            f"{emojis.ruler} {dist:,.3mu}\n"
+            f"{emojis.walk} {walktime} ({walksteps} steps)\n"
+            f"{emojis.run} {runtime} ({runsteps} steps)"
+        )
+
+    async def toEmbed(self, requesterID = None):
+        requestertag = f"<@!{requesterID}>"
+        embed = Embed(
+            title=f"Speed/Distance Comparison of {self.big.nickname} and {self.small.nickname}",
+            description=f"*Requested by {requestertag}*",
+            color=colors.purple
+        )
+        embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
+        embed.add_field(name=f"**{self.small.nickname}** Speeds", value=(
+            f"{emojis.blank}{emojis.blank} **Walk Speed:** {self.viewerdata.walkperhour:,.3mu} per hour\n"
+            f"{emojis.blank}{emojis.blank} **Run Speed:** {self.viewerdata.runperhour:,.3mu} per hour"), inline=True)
+        embed.add_field(name="Height", value=(self.speedcalc(self.viewedtoviewer.height)), inline=True)
+        embed.add_field(name=f"{self.footlabel} Length", value=(self.speedcalc(self.viewedtoviewer.footlength)), inline=True)
+        embed.add_field(name=f"{self.footlabel} Width", value=(self.speedcalc(self.viewedtoviewer.footwidth)), inline=True)
+        embed.add_field(name="Toe Height", value=(self.speedcalc(self.viewedtoviewer.toeheight)), inline=True)
+        embed.add_field(name="Shoeprint Depth", value=(self.speedcalc(self.viewedtoviewer.shoeprintdepth)), inline=True)
+        embed.add_field(name="Pointer Finger Length", value=(self.speedcalc(self.viewedtoviewer.pointerlength)), inline=True)
+        embed.add_field(name="Thumb Width", value=(self.speedcalc(self.viewedtoviewer.thumbwidth)), inline=True)
+        embed.add_field(name="Nail Thickness", value=(self.speedcalc(self.viewedtoviewer.nailthickness)), inline=True)
+        embed.add_field(name="Fingerprint Depth", value=(self.speedcalc(self.viewedtoviewer.fingerprintdepth)), inline=True)
+        if self.viewedtoviewer.hairlength:
+            embed.add_field(name=f"{self.hairlabel} Length", value=(self.speedcalc(self.viewedtoviewer.hairlength)), inline=True)
+        if self.viewedtoviewer.taillength:
+            embed.add_field(name=f"Tail Length", value=(self.speedcalc(self.viewedtoviewer.taillength)), inline=True)
+        if self.viewedtoviewer.earheight:
+            embed.add_field(name=f"Ear Height", value=(self.speedcalc(self.viewedtoviewer.earheight)), inline=True)
+        embed.add_field(name=f"{self.hairlabel} Width", value=(self.speedcalc(self.viewedtoviewer.hairwidth)), inline=True)
+        embed.add_field(name="Eye Width", value=(self.speedcalc(self.viewedtoviewer.eyewidth)), inline=True)
+        embed.set_footer(text=(f"{self.viewed.nickname} is {self.multiplier:,.3}x taller than {self.viewer.nickname}."))
+        return embed
 
 
 class PersonStats:
