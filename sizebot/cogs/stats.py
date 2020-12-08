@@ -304,6 +304,10 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(memberOrHeight)
 
+        if userdata.height == 0:
+            await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about... huh. I can't find them.")
+            return
+
         goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2%4&2")
         tmp = goodheight.split()
         tmpout = [tmp[0]] + tmp[3:] + tmp[1:3]  # Move the paranthesis bit of the height string to the end.
@@ -469,6 +473,10 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(who)
         userstats = proportions.PersonStats(userdata)
+
+        if userdata.height == 0:
+            await ctx.send(f"{userdata.tag} can't move...")
+            return
 
         defaultdata = getUserdata(userdb.defaultheight, "an average person")
         defaultstats = proportions.PersonStats(defaultdata)
