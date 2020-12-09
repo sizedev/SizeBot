@@ -510,10 +510,10 @@ class StatsCog(commands.Cog):
             description = (
                 f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}.** "
                 f"They could walk that distance in **{walktime}** *({walksteps:,.0f} steps)*, "
-                f"or run that distance in **{runtime}** *({runsteps:,.0f} steps)*."
+                f"or run that distance in **{runtime}** *({runsteps:,.0f} strides)*."
             )
         )
-        e.set_footer(text = f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), or run that distance in {defaultruntime} ({defaultrunsteps:,.0f} steps).")
+        e.set_footer(text = f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), or run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides).")
 
         await ctx.send(embed = e)
 

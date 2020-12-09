@@ -365,7 +365,7 @@ class PersonSpeedComparison:
         return (
             f"{emojis.ruler} {dist:,.3mu}\n"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
-            f"{emojis.run} {runtime} ({runsteps:,.3} steps){runspeedstr if speed else ''}\n"
+            f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}"
         )
 
@@ -402,7 +402,8 @@ class PersonSpeedComparison:
         }
 
         statname = statnamemap[stat].replace("Foot", self.viewertovieweddata.footname) \
-                                    .replace("Hair", self.viewertovieweddata.hairname)
+                                    .replace("Hair", self.viewertovieweddata.hairname) \
+                                    .lower()
         return Embed(
             title = f"To move the distance of {self.viewedtoviewerdata.nickname}'s {statname}, it would take {self.viewertovieweddata.nickname}...",
             description = descmap[stat])
