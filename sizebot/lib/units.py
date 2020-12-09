@@ -472,11 +472,11 @@ class SV(Dimension):
         s = cls.isFeetAndInchesAndIfSoFixIt(s)
         # TODO: These are temporary patches.
         # Zero patch
-        if s in ["0", "zero"]:
+        if s.lower() in ["0", "zero"]:
             return 0, "m"
         # Infinity patch
-        if s in ["infinity", "inf", "∞", "yes"]:
-            if s == "yes":
+        if s.lower() in ["infinity", "inf", "∞", "yes"]:
+            if s.lower() == "yes":
                 logger.log(EGG, "Yes.")
             return cls._infinity, "m"
         match = re.match(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"µ ]+)", s)
@@ -518,11 +518,11 @@ class WV(Dimension):
         s = utils.removeBrackets(s)
         # TODO: These are temporary patches.
         # Zero patch
-        if s in ["0", "zero"]:
+        if s.lower() in ["0", "zero"]:
             return 0, "g"
         # Infinity patch
-        if s in ["infinity", "inf", "∞", "yes"]:
-            if s == "yes":
+        if s.lower()in ["infinity", "inf", "∞", "yes"]:
+            if s.lower() == "yes":
                 logger.log(EGG, "Yes.")
             return cls._infinity, "g"
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"]+)", s)
