@@ -97,11 +97,11 @@ class ColorCog(commands.Cog):
         try:
             colorjson = json.loads(await r.text())
         except JSONDecodeError:
-            await outmessage.edit(emojis.warning + "The Color API is not working as expected. Please try again later.")
+            await outmessage.edit(content = emojis.warning + "The Color API is not working as expected. Please try again later.")
             return
 
         if r.status != 200:
-            await outmessage.edit(emojis.warning + "The Color API is not working as expected. Please try again later.")
+            await outmessage.edit(content = emojis.warning + "The Color API is not working as expected. Please try again later.")
             return
             
         hexstring = colorjson["hex"]["clean"]
