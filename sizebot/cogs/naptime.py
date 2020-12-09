@@ -39,6 +39,8 @@ class NaptimeCog(commands.Cog):
     )
     async def grump(self, ctx):
         """Too grumpy for bed time.
+
+        Stops a &naptime command.
         """
         logger.info(f"{ctx.author.display_name} wants to cancel bedtime.")
 
