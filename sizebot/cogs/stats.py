@@ -513,12 +513,12 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = e)
 
     @commands.command(
-        aliases = ["comparedistance", "comparedist", "distcompare", "compdist", "distcomp"],
+        aliases = ["diststats"],
         usage = "<user/height> [user/height]",
         category = "stats"
     )
     @commands.guild_only()
-    async def distancecompare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def distancestats(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Find how long it would take to travel across a person."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
