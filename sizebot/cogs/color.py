@@ -1,6 +1,7 @@
+import json
+import re
 from aiohttp_requests import requests
 from json.decoder import JSONDecodeError
-import re
 
 from discord import Embed
 from discord.ext import commands
@@ -94,7 +95,7 @@ class ColorCog(commands.Cog):
 
         r = await requests.get(url + "/id?" + colortype + "=" + colorvalueout)
         try:
-            colorjson = await r.json()
+            colorjson = json.loads(await r.text())
         except JSONDecodeError:
             await outmessage.edit(emojis.warning + "The Color API is not working as expected. Please try again later.")
             return
