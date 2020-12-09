@@ -38,9 +38,9 @@ class RollCog(commands.Cog):
             rollheader = f"Roll {i+1}: **{r.total}** | "
             dicestrings = []
             if r.used:
-                dicestrings.append(f"{', '.join([str(u) for u in r.used])}")
+                dicestrings.append(f"{', '.join([str(u) for u in sorted(r.used)])}")
             if r.dropped:
-                dicestrings.append(f"~~{', '.join([str(d) for d in r.dropped])}~~")
+                dicestrings.append(f"~~{', '.join([str(d) for d in sorted(r.dropped)])}~~")
             rollstrings.append(rollheader + ", ".join(dicestrings))
 
         sendstring = header + "\n".join(rollstrings)
