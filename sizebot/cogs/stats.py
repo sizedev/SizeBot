@@ -2,6 +2,7 @@ import typing
 import logging
 
 import discord
+from discord.embeds import Embed
 from discord.ext.commands.converter import MemberConverter
 from discord.ext import commands
 
@@ -39,7 +40,12 @@ statmap = {
     "eyes":             "eye",
     "hair":             "hair",
     "fur":              "hair",
+    "hairlength":       "hair",
+    "furlength":        "hair",
+    "hairwidth":        "hairwidth",
+    "furwidth":         "hairwidth",
     "tail":             "tail",
+    "ear":              "ear",
     "speed":            "speed",
     "walk":             "speed",
     "run":              "speed",
@@ -64,7 +70,6 @@ statmap = {
     "liftstrength":     "liftstrength",
     "carrystrength":    "liftstrength"
 }
-
 
 class StatsCog(commands.Cog):
     def __init__(self, bot):
@@ -172,8 +177,8 @@ class StatsCog(commands.Cog):
         Get a single stat about yourself, a user, or a raw height.
 
         Available stats are: height, weight, foot/feet/shoe/shoes/paw/paws, toe, shoeprint/footprint, \
-        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair/fur, tail, \
-        speed/walk/run/step/stride, base/baseheight/baseweight, compare/look, scale/multiplier/mult, \
+        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair/fur, hairwidth/furlength, \
+        tail, ear, speed/walk/run/step/stride, base/baseheight/baseweight, compare/look, scale/multiplier/mult, \
         horizon/horizondistance, terminalvelocity/velocity/fall, strength/lift/carry/liftstrength/carrystrength.
 
         Examples:
@@ -532,6 +537,32 @@ class StatsCog(commands.Cog):
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
         embedtosend = await comparison.toEmbed(ctx.author.id)
+        await ctx.send(embed = embedtosend)
+
+    @commands.command(
+        aliases = ["diststat"],
+        usage = "<user/height> [user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def distancestat(self, ctx, stat, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+        """Find how long it would take to travel across a person."""
+        if memberOrHeight2 is None:
+            memberOrHeight2 = ctx.author
+
+        if memberOrHeight1 is None:
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
+            return
+
+        userdata1 = getUserdata(memberOrHeight1)
+        userdata2 = getUserdata(memberOrHeight2)
+
+        comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
+        embedtosend = comparison.getStatEmbed(statmap[stat])
+        if embedtosend is None:
+            await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
+            return
+
         await ctx.send(embed = embedtosend)
 
     @commands.command(

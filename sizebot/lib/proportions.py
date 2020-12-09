@@ -1,6 +1,7 @@
 from copy import copy
 import math
 import re
+from attr import __description__
 
 import discord
 from discord import Embed
@@ -342,9 +343,10 @@ class PersonSpeedComparison:
     def __repr__(self):
         return str(self)
 
-    def speedcalc(self, dist: SV):
+    def speedcalc(self, dist: SV, *, speed = False):
         climblength = Decimal(0.3048) / self.viewer.viewscale
         climbspeed = Decimal(4828) / self.viewer.viewscale
+        SVclimbspeed = SV(climbspeed)
 
         _walktime = (dist / self.viewer.walkperhour) * 60 * 60
         walksteps = math.ceil(dist / self.viewer.walksteplength)
@@ -356,12 +358,54 @@ class PersonSpeedComparison:
         runtime = prettyTimeDelta(_runtime)
         climbtime = prettyTimeDelta(_climbtime)
 
+        walkspeedstr = f" *{self.viewer.walkperhour:,.3mu} per hour*"
+        runspeedstr = f" *{self.viewer.runperhour:,.3mu} per hour*"
+        climbspeedstr = f" *{SVclimbspeed:,.3mu} per hour*"
+
         return (
             f"{emojis.ruler} {dist:,.3mu}\n"
-            f"{emojis.walk} {walktime} ({walksteps:,.3} steps)\n"
-            f"{emojis.run} {runtime} ({runsteps:,.3} steps)\n"
-            f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls)"
+            f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
+            f"{emojis.run} {runtime} ({runsteps:,.3} steps){runspeedstr if speed else ''}\n"
+            f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}"
         )
+
+    def getStatEmbed(self, stat):
+        statnamemap = {
+            "height":           self.speedcalc(self.viewedtoviewer.height, speed = True),
+            "foot":             self.speedcalc(self.viewedtoviewer.footlength, speed = True),
+            "toe":              self.speedcalc(self.viewedtoviewer.toeheight, speed = True),
+            "shoeprint":        self.speedcalc(self.viewedtoviewer.shoeprintdepth, speed = True),
+            "finger":           self.speedcalc(self.viewedtoviewer.fingerprintdepth, speed = True),
+            "thumb":            self.speedcalc(self.viewedtoviewer.thumbwidth, speed = True),
+            "eye":              self.speedcalc(self.viewedtoviewer.eyewidth, speed = True),
+            "hairwidth":        self.speedcalc(self.viewedtoviewer.hairwidth, speed = True),
+            "hair":             self.speedcalc(self.viewedtoviewer.hairlength, speed = True) if self.viewedtoviewer.hairlength is not None else None,
+            "tail":             self.speedcalc(self.viewedtoviewer.taillength, speed = True) if self.viewedtoviewer.taillength is not None else None,
+            "ear":              self.speedcalc(self.viewedtoviewer.earheight, speed = True) if self.viewedtoviewer.earheight is not None else None
+        }
+
+        if statnamemap[stat] is None:
+            return None
+
+        descmap = {
+            "height":           "Height",
+            "foot":             "Foot Length",
+            "toe":              "Toe Height",
+            "shoeprint":        "Shoeprint Depth",
+            "finger":           "Finger Length",
+            "thumb":            "Thumb Width",
+            "eye":              "Eye Width",
+            "hairwidth":        "Hair Width",
+            "hair":             "Hair Length",
+            "tail":             "Tail Length",
+            "ear":              "Ear Height",
+        }
+
+        statname = statnamemap[stat].replace("Foot", self.viewertovieweddata.footname) \
+                                    .replace("Hair", self.viewertovieweddata.hairname)
+        return Embed(
+            title = f"To move the distance of {self.viewedtoviewerdata.nickname}'s {statname}, it would take {self.viewertovieweddata.nickname}...",
+            description = descmap[statnamemap[stat]])
 
     async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
@@ -514,6 +558,7 @@ class PersonStats:
             "nail": f"'s nail is **{self.nailthickness:,.3mu}** thick.",
             "fingerprint": f"'s fingerprint is **{self.fingerprintdepth:,.3mu}** deep.",
             "thread": f"'s clothing threads are **{self.threadthickness:,.3mu}** thick.",
+            "hairwidth": f"'s {self.hairname.lower()} is **{self.hairwidth:,.3mu}** thick.",
             "eye": f"'s eye is **{self.eyewidth:,.3mu}** wide.",
             "speed": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), with {self.walksteplength:,.1m}/{self.walksteplength:,.1u} strides, and runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour), with {self.runsteplength:,.1m}/{self.runsteplength:,.1u} strides.",
             "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
