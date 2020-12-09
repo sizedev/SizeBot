@@ -373,7 +373,7 @@ class StatsCog(commands.Cog):
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
-        embedtosend = stats.toEmbed(ctx.author.id)
+        embedtosend = await stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
     @commands.command(
@@ -436,7 +436,7 @@ class StatsCog(commands.Cog):
             telem.save()
             return
         stats = proportions.PersonComparison(userdata, compdata)
-        embedtosend = stats.toEmbed(requesterID = ctx.message.author.id)
+        embedtosend = await stats.toEmbed(requesterID = ctx.message.author.id)
         await ctx.send(embed = embedtosend)
 
     @commands.command(
