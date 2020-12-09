@@ -4,6 +4,7 @@ import json
 import logging
 import re
 from functools import total_ordering
+from sizebot.lib.loglevels import EGG
 from typing import Tuple
 
 import sizebot.data
@@ -474,7 +475,9 @@ class SV(Dimension):
         if s in ["0", "zero"]:
             return 0, "m"
         # Infinity patch
-        if s in ["infinity", "inf", "∞"]:
+        if s in ["infinity", "inf", "∞", "yes"]:
+            if s == "yes":
+                logger.log(EGG, "Yes.")
             return cls._infinity, "m"
         match = re.match(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"µ ]+)", s)
         value, unit = None, None
@@ -516,10 +519,12 @@ class WV(Dimension):
         # TODO: These are temporary patches.
         # Zero patch
         if s in ["0", "zero"]:
-            return 0, "m"
+            return 0, "g"
         # Infinity patch
-        if s in ["infinity", "inf", "∞"]:
-            return cls._infinity, "m"
+        if s in ["infinity", "inf", "∞", "yes"]:
+            if s == "yes":
+                logger.log(EGG, "Yes.")
+            return cls._infinity, "g"
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"]+)", s)
         value, unit = None, None
         if match is not None:
