@@ -370,7 +370,7 @@ class PersonSpeedComparison:
         )
 
     def getStatEmbed(self, stat):
-        statnamemap = {
+        descmap = {
             "height":           self.speedcalc(self.viewedtoviewer.height, speed = True),
             "foot":             self.speedcalc(self.viewedtoviewer.footlength, speed = True),
             "toe":              self.speedcalc(self.viewedtoviewer.toeheight, speed = True),
@@ -384,10 +384,10 @@ class PersonSpeedComparison:
             "ear":              self.speedcalc(self.viewedtoviewer.earheight, speed = True) if self.viewedtoviewer.earheight is not None else None
         }
 
-        if statnamemap[stat] is None:
+        if descmap[stat] is None:
             return None
 
-        descmap = {
+        statnamemap = {
             "height":           "Height",
             "foot":             "Foot Length",
             "toe":              "Toe Height",
