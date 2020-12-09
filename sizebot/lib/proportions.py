@@ -358,9 +358,9 @@ class PersonSpeedComparison:
         runtime = prettyTimeDelta(_runtime)
         climbtime = prettyTimeDelta(_climbtime)
 
-        walkspeedstr = f" *{self.viewer.walkperhour:,.3mu} per hour*"
-        runspeedstr = f" *{self.viewer.runperhour:,.3mu} per hour*"
-        climbspeedstr = f" *{SVclimbspeed:,.3mu} per hour*"
+        walkspeedstr = f"\n*{emojis.blank}{self.viewer.walkperhour:,.3mu} per hour*"
+        runspeedstr = f"\n*{emojis.blank}{self.viewer.runperhour:,.3mu} per hour*"
+        climbspeedstr = f"\n*{emojis.blank}{SVclimbspeed:,.3mu} per hour*"
 
         return (
             f"{emojis.ruler} {dist:,.3mu}\n"
