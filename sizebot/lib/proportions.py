@@ -405,7 +405,7 @@ class PersonSpeedComparison:
                                     .replace("Hair", self.viewertovieweddata.hairname)
         return Embed(
             title = f"To move the distance of {self.viewedtoviewerdata.nickname}'s {statname}, it would take {self.viewertovieweddata.nickname}...",
-            description = descmap[statnamemap[stat]])
+            description = descmap[stat])
 
     async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
