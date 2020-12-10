@@ -300,7 +300,7 @@ class HelpCog(commands.Cog):
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
         try:
             webhook = (await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks())[0]
-            await webhook.send(f"**Bug report** from `{ctx.author}`:\n> {message}")
+            await webhook.send(f"**Bug report** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
         except Forbidden:
             logger.error("I can't send webhooks in the bug reports channel!")
 
