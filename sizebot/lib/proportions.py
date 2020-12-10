@@ -418,8 +418,9 @@ class PersonSpeedComparison:
         )
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
         embed.add_field(name=f"**{self.viewer.nickname}** Speeds", value=(
-            f"{emojis.blank} **Walk Speed:** {self.viewer.walkperhour:,.3mu} per hour\n"
-            f"{emojis.blank} **Run Speed:** {self.viewer.runperhour:,.3mu} per hour"), inline=False)
+            f"{emojis.walk} **Walk Speed:** {self.viewer.walkperhour:,.3mu} per hour\n"
+            f"{emojis.run} **Run Speed:** {self.viewer.runperhour:,.3mu} per hour\n"
+            f"{emojis.climb} **Climb Speed:** {SV(Decimal(4828) / self.viewer.viewscale):,.3mu} per hour"), inline=False)
         embed.add_field(name="Height", value=(self.speedcalc(self.viewedtoviewer.height)), inline=True)
         embed.add_field(name=f"{self.footlabel} Length", value=(self.speedcalc(self.viewedtoviewer.footlength)), inline=True)
         embed.add_field(name=f"{self.footlabel} Width", value=(self.speedcalc(self.viewedtoviewer.footwidth)), inline=True)
