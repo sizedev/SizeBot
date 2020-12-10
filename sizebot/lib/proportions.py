@@ -342,7 +342,7 @@ class PersonSpeedComparison:
     def __repr__(self):
         return str(self)
 
-    def speedcalc(self, dist: SV, *, speed = False):
+    def speedcalc(self, dist: SV, *, speed = False, foot = False):
         climblength = Decimal(0.3048) / self.viewer.viewscale
         climbspeed = Decimal(4828) / self.viewer.viewscale
         SVclimbspeed = SV(climbspeed)
@@ -361,8 +361,10 @@ class PersonSpeedComparison:
         runspeedstr = f"\n*{emojis.blank}{self.viewer.runperhour:,.3mu} per hour*"
         climbspeedstr = f"\n*{emojis.blank}{SVclimbspeed:,.3mu} per hour*"
 
+        shoesize = " (" + formatShoeSize(dist) + ")"
+
         return (
-            f"{emojis.ruler} {dist:,.3mu}\n"
+            f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
             f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}"
@@ -371,7 +373,7 @@ class PersonSpeedComparison:
     def getStatEmbed(self, stat):
         descmap = {
             "height":           self.speedcalc(self.viewedtoviewer.height, speed = True),
-            "foot":             self.speedcalc(self.viewedtoviewer.footlength, speed = True),
+            "foot":             self.speedcalc(self.viewedtoviewer.footlength, speed = True, foot = True),
             "toe":              self.speedcalc(self.viewedtoviewer.toeheight, speed = True),
             "shoeprint":        self.speedcalc(self.viewedtoviewer.shoeprintdepth, speed = True),
             "finger":           self.speedcalc(self.viewedtoviewer.fingerprintdepth, speed = True),
