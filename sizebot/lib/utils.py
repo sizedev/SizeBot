@@ -30,7 +30,7 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False, roundeventually =
     seconds, milliseconds = divmod(milliseconds, MILLISECONDS_PER_SECOND)
 
     s = ""
-    if not roundeventually or inputms >= MILLISECONDS_PER_DAY:
+    if not roundeventually or inputms <= MILLISECONDS_PER_DAY:
         if inputms >= MILLISECONDS_PER_YEAR:
             s += f"{years:d} years, "
         if inputms >= MILLISECONDS_PER_DAY:
