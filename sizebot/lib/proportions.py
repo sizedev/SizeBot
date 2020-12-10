@@ -364,7 +364,7 @@ class PersonSpeedComparison:
         shoesize = " (" + formatShoeSize(dist) + ")"
 
         return (
-            f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}"
+            f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}\n"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
             f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}"
@@ -422,7 +422,7 @@ class PersonSpeedComparison:
             f"{emojis.run} **Run Speed:** {self.viewer.runperhour:,.3mu} per hour\n"
             f"{emojis.climb} **Climb Speed:** {SV(Decimal(4828) / self.viewer.viewscale):,.3mu} per hour"), inline=False)
         embed.add_field(name="Height", value=(self.speedcalc(self.viewedtoviewer.height)), inline=True)
-        embed.add_field(name=f"{self.footlabel} Length", value=(self.speedcalc(self.viewedtoviewer.footlength)), inline=True)
+        embed.add_field(name=f"{self.footlabel} Length", value=(self.speedcalc(self.viewedtoviewer.footlength, foot = True)), inline=True)
         embed.add_field(name=f"{self.footlabel} Width", value=(self.speedcalc(self.viewedtoviewer.footwidth)), inline=True)
         embed.add_field(name="Toe Height", value=(self.speedcalc(self.viewedtoviewer.toeheight)), inline=True)
         embed.add_field(name="Shoeprint Depth", value=(self.speedcalc(self.viewedtoviewer.shoeprintdepth)), inline=True)
