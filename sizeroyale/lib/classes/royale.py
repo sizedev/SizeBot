@@ -1,15 +1,17 @@
 import logging
+from sizebot.lib.diff import Diff
+from sizebot.lib.utils import minmax
 from sizeroyale.lib.runnableevent import RunnableEvent
 from typing import Dict, Optional
 
 from sizebot.lib.attrdict import AttrDict
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.decimal import Decimal, randRangeLog
 from sizebot.lib.loglevels import ROYALE
 from sizebot.lib.units import SV
 from sizeroyale.lib.classes.event import Event
 from sizeroyale.lib.classes.parser import Parser
 from sizeroyale.lib.classes.player import Player
-from sizeroyale.lib.errors import GametimeError
+from sizeroyale.lib.errors import GametimeError, ThisShouldNeverHappenException
 from sizeroyale.lib.img_utils import create_stats_screen, merge_images
 
 
@@ -154,6 +156,25 @@ class Royale:
 
         if event.sizes is not None:
             for i, d in event.sizes:
+                player_by_id(i).change_height(d)
+
+        if event.setsizeranges is not None:
+            for i, d1, d2 in event.sizes:
+                small, large = minmax(d1, d2)
+                d = randRangeLog(small, large)
+                player_by_id(i).height = SV(d)
+
+        if event.sizeranges is not None:
+            for i, d1, d2 in event.sizes:
+                da = randRangeLog(d1.amount, d2.amount)
+                if d1.changetype == "add":
+                    ds = "+"
+                elif d1.changetype == "multiply":
+                    ds = "x"
+                else:
+                    raise ThisShouldNeverHappenException
+                do = ds + da
+                d = Diff(do, changetype = d1.changetype, amount = da)
                 player_by_id(i).change_height(d)
 
         if len(players) == 0:

@@ -73,6 +73,9 @@
 # * setsize:n:s changes player n's size to s.
 # * size:n:i changes player n's size by i amount. i can be any difference string, e.g.: 2x, /2,
 # +1ft, -6in, 50%, etc.
+# * setsizerange:n:s1:s2 changes player n's size to an amount between s1 and s2.
+# * sizerange:n:i1:i2 changes player n's size by an amount between i1 and i2 amount. i can be any difference string, e.g.: 2x, /2,
+# +1ft, -6in, 50%, etc.
 # * elim:n eliminates player n.
 # * perp:n denotes that player n eliminated someone.
 # * give:n:item gives player n the item specified.
