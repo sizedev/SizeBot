@@ -199,7 +199,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
     async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
-            title=f"Comparison of {self.big.nickname} and {self.small.nickname} 🔗",
+            title=f"Comparison of {self.big.nickname} and {self.small.nickname} {emojis.link}",
             description=f"*Requested by {requestertag}*",
             color=colors.purple,
             url = await self.url()
