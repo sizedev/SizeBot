@@ -2,7 +2,6 @@ import typing
 import logging
 
 import discord
-from discord.embeds import Embed
 from discord.ext.commands.converter import MemberConverter
 from discord.ext import commands
 
@@ -70,6 +69,7 @@ statmap = {
     "liftstrength":     "liftstrength",
     "carrystrength":    "liftstrength"
 }
+
 
 class StatsCog(commands.Cog):
     def __init__(self, bot):
@@ -277,7 +277,6 @@ class StatsCog(commands.Cog):
         comparison = proportions.PersonComparison(userdata1, userdata2)
         embedtosend = await comparison.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
-
 
     @commands.command(
         aliases = ["compas"],
