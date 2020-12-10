@@ -14,7 +14,7 @@ def clamp(minVal, val, maxVal):
     return max(minVal, min(maxVal, val))
 
 
-def prettyTimeDelta(totalSeconds, millisecondAccuracy = False) -> str:
+def prettyTimeDelta(totalSeconds, millisecondAccuracy = False, roundeventually = False) -> str:
     """Get a human readable string representing an amount of time passed."""
     MILLISECONDS_PER_YEAR = 86400 * 365 * 1000
     MILLISECONDS_PER_DAY = 86400 * 1000
@@ -30,18 +30,35 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False) -> str:
     seconds, milliseconds = divmod(milliseconds, MILLISECONDS_PER_SECOND)
 
     s = ""
-    if inputms >= MILLISECONDS_PER_YEAR:
-        s += f"{years:d} years, "
-    if inputms >= MILLISECONDS_PER_DAY:
-        s += f"{days:d} days, "
-    if inputms >= MILLISECONDS_PER_HOUR:
-        s += f"{hours:d} hours, "
-    if inputms >= MILLISECONDS_PER_MINUTE:
-        s += f"{minutes:d} minutes, "
-    if millisecondAccuracy:
-        s += f"{seconds:d}.{milliseconds:03d} seconds"
-    else:
-        s += f"{seconds:d} seconds"
+    if not roundeventually or days == 0:
+        if inputms >= MILLISECONDS_PER_YEAR:
+            s += f"{years:d} years, "
+        if inputms >= MILLISECONDS_PER_DAY:
+            s += f"{days:d} days, "
+        if inputms >= MILLISECONDS_PER_HOUR:
+            s += f"{hours:d} hours, "
+        if inputms >= MILLISECONDS_PER_MINUTE:
+            s += f"{minutes:d} minutes, "
+        if millisecondAccuracy:
+            s += f"{seconds:d}.{milliseconds:03d} seconds"
+        else:
+            s += f"{seconds:d} seconds"
+    elif years >= 1:
+        if inputms >= MILLISECONDS_PER_YEAR:
+            s += f"{years:d} years, "
+        if inputms >= MILLISECONDS_PER_DAY:
+            s += f"{days:d} days, "
+        if inputms >= MILLISECONDS_PER_HOUR:
+            s += f"{hours:d} hours"
+    elif days >= 1:
+        if inputms >= MILLISECONDS_PER_YEAR:
+            s += f"{years:d} years, "
+        if inputms >= MILLISECONDS_PER_DAY:
+            s += f"{days:d} days, "
+        if inputms >= MILLISECONDS_PER_HOUR:
+            s += f"{hours:d} hours, "
+        if inputms >= MILLISECONDS_PER_MINUTE:
+            s += f"{minutes:d} minutes"
 
     return s
 

@@ -509,13 +509,13 @@ class StatsCog(commands.Cog):
         climbtimehours = length / climbspeed
         climbsteps = length / climblength
 
-        walktime = prettyTimeDelta(walktimehours * 60 * 60)
-        runtime = prettyTimeDelta(runtimehours * 60 * 60)
-        climbtime = prettyTimeDelta(climbtimehours * 60 * 60)
+        walktime = prettyTimeDelta(walktimehours * 60 * 60, roundeventually = True)
+        runtime = prettyTimeDelta(runtimehours * 60 * 60, roundeventually = True)
+        climbtime = prettyTimeDelta(climbtimehours * 60 * 60, roundeventually = True)
 
-        defaultwalktime = prettyTimeDelta(defaultwalktimehours * 60 * 60)
-        defaultruntime = prettyTimeDelta(defaultruntimehours * 60 * 60)
-        defaultclimbtime = prettyTimeDelta(defaultclimbtimehours * 60 * 60)
+        defaultwalktime = prettyTimeDelta(defaultwalktimehours * 60 * 60, roundeventually = True)
+        defaultruntime = prettyTimeDelta(defaultruntimehours * 60 * 60, roundeventually = True)
+        defaultclimbtime = prettyTimeDelta(defaultclimbtimehours * 60 * 60, roundeventually = True)
 
         e = discord.Embed(
             title = f"{length:,.3mu} to {userstats.nickname}",
