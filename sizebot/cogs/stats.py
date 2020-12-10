@@ -487,10 +487,10 @@ class StatsCog(commands.Cog):
 
         defaultdata = getUserdata(userdb.defaultheight, "an average person")
         defaultstats = proportions.PersonStats(defaultdata)
-        defaultclimblength = Decimal(0.3048) / self.viewer.viewscale
-        defaultclimbspeed = Decimal(4828) / self.viewer.viewscale
-        climblength = Decimal(0.3048) / self.viewer.viewscale
-        climbspeed = Decimal(4828) / self.viewer.viewscale
+        defaultclimblength = Decimal(0.3048) / userdata.viewscale
+        defaultclimbspeed = Decimal(4828) / userdata.viewscale
+        climblength = Decimal(0.3048) / userdata.viewscale
+        climbspeed = Decimal(4828) / userdata.viewscale
 
         defaultwalktimehours = length / defaultstats.walkperhour
         defaultwalksteps = length / defaultstats.walksteplength
