@@ -1,12 +1,11 @@
 import asyncio
 import logging
-from shutil import copyfile
 
 from discord.utils import get
 from discord.ext import commands
 
 from sizebot.conf import conf
-from sizebot.lib import errors, proportions, userdb, paths
+from sizebot.lib import errors, proportions, userdb
 from sizebot.lib.constants import ids, emojis
 from sizebot.lib.units import SV, WV
 
@@ -384,23 +383,18 @@ class RegisterCog(commands.Cog):
             await outmsg.delete()
             return
 
-        if reaction.emoji in inputdict.keys():
-            chosen = inputdict[reaction.emoji] - 1
-            chosenguild = guilds_ids[chosen]
-
-            frompath = paths.guilddbpath / str(chosenguild) / "users" / f"{ctx.author.id}.json"
-            topath = paths.guilddbpath / str(ctx.guild.id) / "users" / f"{ctx.author.id}.json"
-
-            topath.parent.mkdir(parents = True, exist_ok = True)
-
-            copyfile(frompath, topath)
-
-            await outmsg.delete()
-            await ctx.send(f"Successfully copied profile from *{self.bot.get_guild(int(chosenguild)).name}* to here!")
-
-        else:
+        if reaction.emoji not in inputdict.keys():
             await outmsg.delete()
             raise errors.ThisShouldNeverHappenException
+
+        chosen = inputdict[reaction.emoji] - 1
+        chosenguildid = guilds_ids[chosen]
+        userdata = userdb.load(chosenguildid, ctx.author.id)
+        userdata.guildid = ctx.guild.id
+        userdb.save(userdata)
+
+        await outmsg.delete()
+        await ctx.send(f"Successfully copied profile from *{self.bot.get_guild(int(chosenguildid)).name}* to here!")
 
 
 def setup(bot):
