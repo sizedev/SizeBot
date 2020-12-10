@@ -30,7 +30,7 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False, roundeventually =
     seconds, milliseconds = divmod(milliseconds, MILLISECONDS_PER_SECOND)
 
     s = ""
-    if not roundeventually or days == 0:
+    if not roundeventually or inputms >= MILLISECONDS_PER_DAY:
         if inputms >= MILLISECONDS_PER_YEAR:
             s += f"{years:d} years, "
         if inputms >= MILLISECONDS_PER_DAY:
@@ -43,14 +43,14 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False, roundeventually =
             s += f"{seconds:d}.{milliseconds:03d} seconds"
         else:
             s += f"{seconds:d} seconds"
-    elif years >= 1:
+    elif inputms >= MILLISECONDS_PER_YEAR:
         if inputms >= MILLISECONDS_PER_YEAR:
             s += f"{years:d} years, "
         if inputms >= MILLISECONDS_PER_DAY:
             s += f"{days:d} days, "
         if inputms >= MILLISECONDS_PER_HOUR:
             s += f"{hours:d} hours"
-    elif days >= 1:
+    elif inputms >= MILLISECONDS_PER_DAY:
         if inputms >= MILLISECONDS_PER_YEAR:
             s += f"{years:d} years, "
         if inputms >= MILLISECONDS_PER_DAY:
