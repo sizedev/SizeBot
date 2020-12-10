@@ -63,6 +63,7 @@ class UserNotFoundException(DigiContextException):
             returnstr += f"\nTo register, use the `{conf.prefix}register` command."
         elif ctx.message.author.id == self.userid and self.unreg:
             returnstr += f"\nTo complete registration, use the `{conf.prefix}register` command to see your next step."
+        return returnstr
 
 
 class GuildNotFoundException(DigiException):
