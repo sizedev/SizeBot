@@ -521,7 +521,7 @@ class WV(Dimension):
         if s.lower() in ["0", "zero"]:
             return 0, "g"
         # Infinity patch
-        if s.lower()in ["infinity", "inf", "∞", "yes"]:
+        if s.lower() in ["infinity", "inf", "∞", "yes"]:
             if s.lower() == "yes":
                 logger.log(EGG, "Yes.")
             return cls._infinity, "g"

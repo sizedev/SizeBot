@@ -1,13 +1,11 @@
 import logging
 import typing
 
-import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
-from sizebot.lib import decimal, errors, proportions, userdb, utils
+from sizebot.lib import decimal, errors, proportions, userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV

@@ -61,7 +61,7 @@ class Telemetry:
     @classmethod
     def fromJSON(cls, jsondata):
         return Telemetry(**jsondata)
-        
+
 
 class CommandFreq:
     def __init__(self, text: str = None):

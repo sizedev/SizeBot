@@ -53,20 +53,19 @@ def get_steps(start_inc: SV, diff: Diff, goal: SV):
         # Calculate number of steps required to reach goal
         # https://www.wolframalpha.com/input/?i=g+%3D+%28s+*+t%29+%2B+%28a+*+%28%28t+-+1%29+*+t%29+%2F+2%29+solve+for+t
         steps = math.ceil(
+            Decimal(
                 Decimal(
-                        Decimal(math.sqrt(
-                            Decimal(diff.amount ** 2) - 
-                            Decimal(4 * diff.amount * start_inc) + 
-                            Decimal(8 * diff.amount * goal) + 
-                            Decimal(4 * 
-                                Decimal(start_inc ** 2)
-                            )
-                            ))
-                        + diff.amount
-                        - Decimal(2 * start_inc)
-                    )
-                / Decimal(2 * diff.amount)
+                    math.sqrt(
+                        Decimal(diff.amount ** 2)
+                        - Decimal(4 * diff.amount * start_inc)
+                        + Decimal(8 * diff.amount * goal)
+                        + Decimal(4 * Decimal(start_inc ** 2))
+                    ))
+                + diff.amount
+                - Decimal(2 * start_inc)
             )
+            / Decimal(2 * diff.amount)
+        )
         # Calculate how far user got after those steps
         # current_pos = (start_inc * steps) + (diff.amount * ((steps - 1) * steps) / 2)
         # Calculate length of last step
@@ -101,7 +100,7 @@ class ScaleWalkCog(commands.Cog):
     async def scalewalk(self, ctx, change: Diff, dist: SV, flag = None):
         """Walk a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
-        
+
         Examples:
         `&scalewalk 2x 50m
         `&scalewalk -1mm 20ft"""
@@ -153,7 +152,7 @@ class ScaleWalkCog(commands.Cog):
     async def scalerun(self, ctx, change: Diff, dist: SV, flag = None):
         """Run a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
-        
+
         Examples:
         `&scalewalk 2x 50m
         `&scalewalk -1mm 20ft"""
@@ -208,7 +207,7 @@ class ScaleWalkCog(commands.Cog):
 
         Sets the amount that you scale for each `&step` you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
-        
+
         Examples:
         `&setstepscale 2x
         `&setstepscale -1mm
@@ -249,19 +248,19 @@ class ScaleWalkCog(commands.Cog):
         have set in `&setstepscale`.
         Can take a number, e.g.: `&step 20`
         """
-        
+
         guildid = ctx.guild.id
         userid = ctx.author.id
 
         userdata = userdb.load(guildid, userid)
         stats = proportions.PersonStats(userdata)
 
-        if steps == None:
+        if steps is None:
             steps = 1
 
         steps = tryInt(steps)
         if steps == "car":
-            await ctx.send(f"Cronch.")
+            await ctx.send("Cronch.")
             logger.log(EGG, f"{ctx.author.display_name} stepped on a car.")
             return
 
@@ -270,10 +269,10 @@ class ScaleWalkCog(commands.Cog):
             return
 
         if steps <= 0:
-            await ctx.send(f"You... stand... still.")
+            await ctx.send("You... stand... still.")
             return
 
-        if userdata.currentscalestep == None:
+        if userdata.currentscalestep is None:
             await ctx.send(f"You do not have a stepscale set. Please use `{conf.prefix}setstepscale <amount>` to do so.")
             return
 

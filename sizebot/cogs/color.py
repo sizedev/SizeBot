@@ -103,7 +103,7 @@ class ColorCog(commands.Cog):
         if r.status != 200:
             await outmessage.edit(content = emojis.warning + "The Color API is not working as expected. Please try again later.")
             return
-            
+
         hexstring = colorjson["hex"]["clean"]
         hexvalue = int(hexstring, 16)
         colorscheme = schemeurl.format(hexstring)

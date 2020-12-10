@@ -1,12 +1,10 @@
 import logging
-import typing
 
 import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
 from sizebot.lib import decimal, errors, proportions, userdb, utils
-from sizebot.lib.constants import emojis
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
@@ -122,7 +120,7 @@ class SetCog(commands.Cog):
             return
 
         newsys = systemmap[newsys]
-        
+
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.unitsystem = newsys
@@ -231,7 +229,6 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
-
     @commands.command(
         usage = "<weight>",
         category = "set"
@@ -249,8 +246,6 @@ class SetCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
-    
-
     @commands.command(
         usage = "<foot>",
         category = "set"
@@ -265,7 +260,6 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
         await showNextStep(ctx, userdata)
-
 
     @commands.command(
         aliases = ["setshoesize"],

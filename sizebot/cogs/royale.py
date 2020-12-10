@@ -3,7 +3,6 @@ import importlib.resources as pkg_resources
 import logging
 import re
 from datetime import timedelta
-from pathlib import Path
 
 import arrow
 
@@ -41,6 +40,7 @@ class NoPlayerFoundError(DigiException):
 
 current_games = {}
 
+
 def get_royale(guildid):
     return None if guildid not in current_games else current_games[guildid]
 
@@ -64,7 +64,7 @@ class RoyaleCog(commands.Cog):
         `&royale overview`: See a stats screen of all players.
         `&royale stats <player>`: Gets stats about a player in the game.
         `&royale compare <player> <player2>`: Compares two players from the game.
-        `&royale delete` or `&royale stop`: Deletes the game in this guild (irreversable) 
+        `&royale delete` or `&royale stop`: Deletes the game in this guild (irreversable)
         """.replace("&", conf.prefix)
         if subcommand == "create":
             if is_dm(ctx.author) is False:

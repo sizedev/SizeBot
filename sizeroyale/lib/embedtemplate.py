@@ -7,12 +7,14 @@ from PIL.Image import Image
 
 from discord import Embed, File
 
+
 def img_to_file(i, name="file.png", format="PNG"):
-  b = io.BytesIO()
-  i.save(b, format)
-  b.seek(0)
-  f = File(b, name)
-  return f
+    b = io.BytesIO()
+    i.save(b, format)
+    b.seek(0)
+    f = File(b, name)
+    return f
+
 
 @dataclass
 class EmbedTemplate:

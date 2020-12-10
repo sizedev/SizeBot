@@ -1,7 +1,6 @@
 from copy import copy
 import math
 import re
-from attr import __description__
 
 import discord
 from discord import Embed
@@ -431,9 +430,9 @@ class PersonSpeedComparison:
         if self.viewedtoviewer.hairlength:
             embed.add_field(name=f"{self.hairlabel} Length", value=(self.speedcalc(self.viewedtoviewer.hairlength)), inline=True)
         if self.viewedtoviewer.taillength:
-            embed.add_field(name=f"Tail Length", value=(self.speedcalc(self.viewedtoviewer.taillength)), inline=True)
+            embed.add_field(name="Tail Length", value=(self.speedcalc(self.viewedtoviewer.taillength)), inline=True)
         if self.viewedtoviewer.earheight:
-            embed.add_field(name=f"Ear Height", value=(self.speedcalc(self.viewedtoviewer.earheight)), inline=True)
+            embed.add_field(name="Ear Height", value=(self.speedcalc(self.viewedtoviewer.earheight)), inline=True)
         embed.add_field(name=f"{self.hairlabel} Width", value=(self.speedcalc(self.viewedtoviewer.hairwidth)), inline=True)
         embed.add_field(name="Eye Width", value=(self.speedcalc(self.viewedtoviewer.eyewidth)), inline=True)
         embed.set_footer(text=(f"{self.viewed.nickname} is {self.multiplier:,.3}x taller than {self.viewer.nickname}."))
@@ -636,6 +635,7 @@ class PersonStats:
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
         return embed
 
+
 class PersonBaseStats:
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -669,7 +669,6 @@ class PersonBaseStats:
 
         self.currentscalestep = userdata.currentscalestep
         self.unitsystem = userdata.unitsystem
-
 
     def __str__(self):
         return (f"<PersonBaseStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
