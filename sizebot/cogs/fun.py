@@ -66,10 +66,8 @@ class FunCog(commands.Cog):
         hidden = True
     )
     async def digipee(self, ctx):
-        with pkg_resources.path(sizebot.data, "digipee.mp3") as p:
-            with open(p, "rb") as f:
-                digipee = File(f, "digipee.mp3")
-        await ctx.send(f"<@{ids.digiduncan}> also has to pee.", file = digipee)
+        with pkg_resources.open_binary(sizebot.data, "digipee.mp3") as f:
+            await ctx.send(f"<@{ids.digiduncan}> also has to pee.", file = File(f))
 
     @commands.Cog.listener()
     async def on_message(self, message):
