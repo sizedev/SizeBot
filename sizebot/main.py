@@ -160,6 +160,10 @@ def main():
 
     @bot.event
     async def on_message(message):
+        # F*** smart quotes.
+        message.content = message.content.replace("“", "\"")
+        message.content = message.content.replace("”", "\"")
+
         if message.content.startswith(f"{conf.prefix}timeit") and bot.is_owner(message.author):
             await on_message_timed(message)
             return
