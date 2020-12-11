@@ -43,6 +43,7 @@ class Event:
         self.rarity = 1 if self._metadata.rarity is None else float(self._metadata.rarity)
         self.dummies = {}
 
+        self.detect_meta_errors()
         self.parse(self.text)
 
         if self.tributes is None:
@@ -50,6 +51,9 @@ class Event:
 
         if self.tributes != len(self.dummies):
             raise ParseError(f"Tribute amount mismatch. ({self.tributes} != {len(self.dummies)})")
+
+    def detect_meta_errors(self):
+        pass
 
     def parse(self, s: str):
         """Fill in the properties of the Event."""
@@ -122,6 +126,7 @@ class Event:
                 else:
                     ParseError(f"Invalid format tag: {f}")
 
+            # Ignore bare players (%1%, etc) if there's already a more specific one
             if int(pid) in self.dummies and (lessthan is None and
                                              greaterthan is None and
                                              elimslessthan is None and
