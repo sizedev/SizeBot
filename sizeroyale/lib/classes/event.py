@@ -61,7 +61,7 @@ class Event:
             if f[0] not in formatchecker:
                 formatchecker[f[0]] = f[1:]
             else:
-                if formatchecker[f[0]] != f[1:]:
+                if formatchecker[f[0]] != f[1:] and f != f[0]:
                     raise ParseError("Multiple definitions for one player!")
 
         pids = [int(k) for k in formatchecker.keys()]
@@ -121,6 +121,17 @@ class Event:
                     pass
                 else:
                     ParseError(f"Invalid format tag: {f}")
+
+            if int(pid) in self.dummies and (lessthan is None and
+                                             greaterthan is None and
+                                             elimslessthan is None and
+                                             elimsgreaterthan is None and
+                                             elimsequal is None and
+                                             team is None and
+                                             items is None and
+                                             gender is None and
+                                             attributes is None):
+                return
 
             self.dummies[int(pid)] = DummyPlayer(lessthan = lessthan,
                                                  greaterthan = greaterthan,
