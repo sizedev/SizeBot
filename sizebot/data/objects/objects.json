@@ -96,6 +96,11 @@
         "symbol": "pt"
     },
     {
+        "name": "dust mite",
+        "dimension": "l",
+        "length": "0.00042"
+    },
+    {
         "name": "grain of sand",
         "dimension": "l",
         "length": "0.001",
@@ -124,6 +129,14 @@
         "name": "pinhead",
         "dimension": "d",
         "diameter": "0.002"
+    },
+    {
+        "name": "sugar cube",
+        "dimension": "l",
+        "length": "0.002",
+        "width": "0.002",
+        "depth": "0.002",
+        "weight": "2.3"
     },
     {
         "name": "grain of rice",
@@ -550,15 +563,6 @@
         "diameter": "0.0525",
         "thickness": "0.031",
         "weight": "53"
-    },
-    {
-        "name": "bullet vibe",
-        "dimension": "l",
-        "length": "0.053",
-        "weight": "45.3592",
-        "aliases": [
-            "shake time"
-        ]
     },
     {
         "name": "egg",
@@ -1019,6 +1023,15 @@
         "weight": "20"
     },
     {
+        "name": "headphones",
+        "dimension": "l",
+        "length": "0.181",
+        "width": "0.1515",
+        "diameter": "68.4",
+        "depth": "30",
+        "weight": "250"
+    },
+    {
         "name": "VHS tape",
         "dimension": "l",
         "length": "0.187",
@@ -1082,6 +1095,15 @@
         ]
     },
     {
+        "name": "avacado",
+        "dimension": "l",
+        "length": "0.2",
+        "weight": "500",
+        "tags": [
+            "food"
+        ]
+    },
+    {
         "name": "remote",
         "dimension": "l",
         "length": "0.2032",
@@ -1098,6 +1120,19 @@
         "weight": "5896.7",
         "tags": [
             "ball"
+        ]
+    },
+    {
+        "name": "drinking straw",
+        "dimension": "l",
+        "length": "0.2159",
+        "diameter": "0.006096",
+        "weight": "0.42",
+        "tags": [
+            "utensil"
+        ],
+        "aliases": [
+            "straw"
         ]
     },
     {
@@ -1133,6 +1168,14 @@
         "tags": [
             "utensil"
         ]
+    },
+    {
+        "name": "book",
+        "dimension": "l",
+        "length": "0.2286",
+        "width": "0.1524",
+        "depth": "0.0381",
+        "weight": "442.2526"
     },
     {
         "name": "chopstick",
@@ -1331,6 +1374,20 @@
         "aliases": [
             "XSX",
             "Xbox"
+        ]
+    },
+    {
+        "name": "wine bottle",
+        "dimension": "h",
+        "height": "0.306909",
+        "width": "0.076707",
+        "depth": "0.076707",
+        "weight": "1200",
+        "tags": [
+            "bottle"
+        ],
+        "aliases": [
+            "wine"
         ]
     },
     {
@@ -1837,6 +1894,12 @@
         ]
     },
     {
+        "name": "bowling pin",
+        "dimension": "h",
+        "height": "38.1",
+        "weight": "1500"
+    },
+    {
         "name": "swimming pool",
         "dimension": "l",
         "length": "50",
@@ -1989,6 +2052,7 @@
         "name": "Grand Canyon",
         "dimension": "p",
         "depth": "1828.8",
+        "weight": "0",
         "aliases": [
             "canyon"
         ]
@@ -2000,6 +2064,18 @@
         "aliases": [
             "cloud",
             "cloud line"
+        ]
+    },
+    {
+        "name": "Universal Union Citadel of Earth",
+        "dimension": "h",
+        "height": "2600",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "combine citadel",
+            "citadel"
         ]
     },
     {
