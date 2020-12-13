@@ -1,4 +1,5 @@
 import logging
+import re
 
 import discord
 from discord.ext import commands
@@ -152,7 +153,34 @@ class SetCog(commands.Cog):
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
-        aliases = ["resetsize", "reset"],
+        usage = "<scale>",
+        category = "set"
+    )
+    @commands.guild_only()
+    async def setscale(self, ctx, *, newscale):
+        """Change height by scale."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        re_scale = r"(\d+\.?\d*)[:/]?(\d+\.?\d*)?"
+        if m := re.match(re_scale, newscale):
+            multiplier = m.group(1)
+            factor = m.group(2) if m.group(2) else 1
+        else:
+            raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
+
+        scale = multiplier / factor
+
+        userdata.height = userdata.baseheight * scale
+        completed_registration = userdata.complete_step("setheight")
+        userdb.save(userdata)
+
+        await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
+
+        await proportions.nickUpdate(ctx.author)
+        await showNextStep(ctx, userdata, completed=completed_registration)
+
+    @commands.command(
+        aliases = ["resetsize", "reset", "resetscale"],
         category = "set"
     )
     @commands.guild_only()
