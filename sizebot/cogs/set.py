@@ -5,7 +5,8 @@ import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
-from sizebot.lib import decimal, errors, proportions, userdb, utils
+from sizebot.lib import errors, proportions, userdb, utils
+from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
@@ -168,7 +169,7 @@ class SetCog(commands.Cog):
         else:
             raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
 
-        scale = multiplier / factor
+        scale = Decimal(multiplier) / Decimal(factor)
 
         userdata.height = userdata.baseheight * scale
         completed_registration = userdata.complete_step("setheight")
