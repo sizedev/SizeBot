@@ -57,7 +57,7 @@ class Parser:
             yield pbar.getvalue()
             pbar.seek(0)
             pbar.truncate()
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.025)
         # If there is still a arena in the queue, add it.
         if self.arenas is not None:
             self.arenas.append(self._current_arena)
