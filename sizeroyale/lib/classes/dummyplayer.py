@@ -40,7 +40,7 @@ class DummyPlayer:
             return False
         if not (self.realteam is None or self.realteam == player.team):
             return False
-        if not (self.nsfw is None or (self.nsfw is True and player.nsfw is False)):
+        if self.nsfw is True and player.nsfw is False:
             return False
 
         return True
