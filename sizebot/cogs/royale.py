@@ -65,7 +65,9 @@ class RoyaleCog(commands.Cog):
         `&royale stats <player>`: Gets stats about a player in the game.
         `&royale compare <player> <player2>`: Compares two players from the game.
         `&royale delete` or `&royale stop`: Deletes the game in this guild (irreversable)
-        """.replace("&", conf.prefix)
+        """
+        global current_games
+
         if subcommand == "create":
             if is_dm(ctx.author) is False:
                 return
@@ -104,8 +106,8 @@ class RoyaleCog(commands.Cog):
                         loop = looppoint
                         await m.edit(content = f"`{progress}` {emojis.loading}")
                 if game.royale.parser.errors:
-                    await ctx.send(f"{emojis.warning} **Errors in parsing:**\n" + 
-                                   ("\n".join(game.royale.parser.errors)))
+                    await ctx.send(f"{emojis.warning} **Errors in parsing:**\n"
+                                   + ("\n".join(game.royale.parser.errors)))
                     return
                 current_games[ctx.guild.id] = game
                 await m.edit(content = f"Royale loaded with file `{filename}` and seed `{current_games[ctx.guild.id].seed}`.")
@@ -130,7 +132,7 @@ class RoyaleCog(commands.Cog):
                 try:
                     round = await current_games[ctx.guild.id].next()
                 except GametimeError as e:
-                    await ctx.send(f"Error in running event: {e.message}")
+                    await ctx.send(f"Error in running event: {e}")
                     await ctx.send(f"Please check your game file and consider contacting <@{ids.digiduncan}>.")
                     return
                 for e in round:
