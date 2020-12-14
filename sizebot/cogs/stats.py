@@ -487,8 +487,8 @@ class StatsCog(commands.Cog):
 
         defaultdata = getUserdata(userdb.defaultheight, "an average person")
         defaultstats = proportions.PersonStats(defaultdata)
-        defaultclimblength = Decimal(0.3048) / userdata.viewscale
-        defaultclimbspeed = Decimal(4828) / userdata.viewscale
+        defaultclimblength = Decimal(0.3048)
+        defaultclimbspeed = Decimal(4828)
         climblength = Decimal(0.3048) / userdata.viewscale
         climbspeed = Decimal(4828) / userdata.viewscale
 
