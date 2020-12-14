@@ -42,6 +42,7 @@ current_games = {}
 
 
 def get_royale(guildid):
+    global current_games
     return None if guildid not in current_games else current_games[guildid]
 
 
