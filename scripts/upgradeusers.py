@@ -31,7 +31,7 @@ def loadLegacy(path):
     userdata.guildid = 350429009730994199
     userdata.id = uid
     userdata.nickname = lines[NICK]
-    userdata.display = lines[DISP]
+    userdata.display = False if lines[DISP].lower() == "n" else True
     if lines[CHEI] != "None":
         userdata.height = Decimal(lines[CHEI])
         userdata.height /= Decimal("1e6")
