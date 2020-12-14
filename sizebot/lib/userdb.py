@@ -497,8 +497,8 @@ class User:
         userdata.baseheight = jsondata["baseheight"]
         userdata.baseweight = jsondata["baseweight"]
         userdata.footlength = jsondata.get("footlength")
-        userdata.pawtoggle = jsondata.get("pawtoggle")
-        userdata.furtoggle = jsondata.get("furtoggle")
+        userdata.pawtoggle = jsondata.get("pawtoggle", False)
+        userdata.furtoggle = jsondata.get("furtoggle", False)
         userdata.hairlength = jsondata.get("hairlength")
         userdata.taillength = jsondata.get("taillength")
         userdata.earheight = jsondata.get("earheight")
