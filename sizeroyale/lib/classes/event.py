@@ -81,18 +81,18 @@ class Event:
                 raise ParseError(f"{item} is not valid {metatype} metadata.")
 
     def detect_meta_errors(self):
-        if not self._metadata.tributes:
-            raise ParseError("No tributes defined.")
-        if not re.fullmatch(re_parse_tributes, self._metadata.tributes):
-            raise ParseError(f"{self._metadata.tributes!r} is not a valid amount of tributes.")
-        if self._metadata.rarity is not None and not re.fullmatch(re_parse_rarity, self._metadata.rarity):
-            raise ParseError(f"{self._metadata.rarity!r} is not a valid rarity.")
         for metatype in ["size", "setsize", "give", "remove", "giveattr", "removeattr"]:
             if getattr(self._metadata, metatype) is not None:
                 self.detect_meta_error(metatype, 2)
         for metatype in ["sizerange", "setsizerange"]:
             if getattr(self._metadata, metatype) is not None:
                 self.detect_meta_error(metatype, 3)
+        if not self._metadata.tributes:
+            raise ParseError("No tributes defined.")
+        if not re.fullmatch(re_parse_tributes, self._metadata.tributes):
+            raise ParseError(f"{self._metadata.tributes!r} is not a valid amount of tributes.")
+        if self._metadata.rarity is not None and not re.fullmatch(re_parse_rarity, self._metadata.rarity):
+            raise ParseError(f"{self._metadata.rarity!r} is not a valid rarity.")
 
     def parse(self, s: str):
         """Fill in the properties of the Event."""
