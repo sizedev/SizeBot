@@ -450,8 +450,8 @@ class User:
     # Return an python dictionary for json exporting
     def toJSON(self):
         return {
-            "guildid":          self.guildid,
-            "id":               self.id,
+            "guildid":          str(self.guildid),
+            "id":               str(self.id),
             "nickname":         self.nickname,
             "lastactive":       None if self.lastactive is None else self.lastactive.isoformat(),
             "picture_url":      self.picture_url,
@@ -483,7 +483,7 @@ class User:
     def fromJSON(cls, jsondata):
         userdata = User()
         userdata.guildid = jsondata.get("guildid", 350429009730994199)  # Default to Size Matters.
-        userdata.id = jsondata["id"]
+        userdata.id = int(jsondata["id"])
         userdata.nickname = jsondata["nickname"]
         lastactive = jsondata.get("lastactive")
         if lastactive is not None:
