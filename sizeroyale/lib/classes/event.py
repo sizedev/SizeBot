@@ -1,4 +1,5 @@
 import re
+from sizebot.lib import errors
 from typing import Dict
 
 from sizebot.lib.decimal import Decimal
@@ -16,6 +17,9 @@ re_gender = r"[MFX]"
 re_pronoun_weak = r"%[pP]:.*?%"
 re_pronoun = r"^([pP]):(\d)(|o|s|self)$"
 
+re_parse_tributes = r"\d+"
+re_parse_rarity = r"\d+\.?\d*?"
+
 
 class Event:
     valid_data = [("tributes", "single"), ("size", "compound"), ("setsize", "compound"),
@@ -28,11 +32,27 @@ class Event:
         self._original_metadata = meta
         self._metadata = MetaParser(type(self)).parse(meta)
         self.text = text
-        self.tributes = None if self._metadata.tributes is None else Decimal(self._metadata.tributes)
-        self.sizes = None if self._metadata.size is None else [(int(k), Diff.parse(v)) for k, v in self._metadata.size]
-        self.setsizes = None if self._metadata.setsize is None else [(int(k), SV.parse(v)) for k, v in self._metadata.setsize]
-        self.sizeranges = None if self._metadata.size is None else [(int(k), Diff.parse(v1), Diff.parse(v2)) for k, v1, v2 in self._metadata.sizerange]
-        self.setsizeranges = None if self._metadata.setsize is None else [(int(k), SV.parse(v1), SV.parse(v2)) for k, v1, v2 in self._metadata.setsizerange]
+
+        self.detect_meta_errors()
+
+        if re.fullmatch(re_parse_tributes, self._metadata.tributes):
+            self.tributes = None if self._metadata.tributes is None else Decimal(self._metadata.tributes)
+        try:
+            self.sizes = None if self._metadata.size is None else [(int(k), Diff.parse(v)) for k, v in self._metadata.size]
+        except errors.InvalidSizeValue as e:
+            raise ParseError(e.formatUserMessage())
+        try:
+            self.setsizes = None if self._metadata.setsize is None else [(int(k), SV.parse(v)) for k, v in self._metadata.setsize]
+        except errors.InvalidSizeValue as e:
+            raise ParseError(e.formatUserMessage())
+        try:
+            self.sizeranges = None if self._metadata.sizerange is None else [(int(k), Diff.parse(v1), Diff.parse(v2)) for k, v1, v2 in self._metadata.sizerange]
+        except errors.InvalidSizeValue as e:
+            raise ParseError(e.formatUserMessage())
+        try:
+            self.setsizeranges = None if self._metadata.setsizerange is None else [(int(k), SV.parse(v1), SV.parse(v2)) for k, v1, v2 in self._metadata.setsizerange]
+        except errors.InvalidSizeValue as e:
+            raise ParseError(e.formatUserMessage())
         self.elims = None if self._metadata.elim is None else [int(i) for i in self._metadata.elim]
         self.perps = None if self._metadata.perp is None else [int(i) for i in self._metadata.perp]
         self.gives = None if self._metadata.give is None else [(int(k), v) for k, v in self._metadata.give]
@@ -43,17 +63,29 @@ class Event:
         self.rarity = 1 if self._metadata.rarity is None else float(self._metadata.rarity)
         self.dummies = {}
 
-        self.detect_meta_errors()
         self.parse(self.text)
-
-        if self.tributes is None:
-            raise ParseError("Tribute amount not defined.")
 
         if self.tributes != len(self.dummies):
             raise ParseError(f"Tribute amount mismatch. ({self.tributes} != {len(self.dummies)})")
 
+    def detect_meta_error(self, metatype: str, desired_length: int):
+        for item in getattr(self._metadata, metatype):
+            if len(item) != desired_length:
+                raise ParseError(f"{item} is not valid {metatype} metadata.")
+
     def detect_meta_errors(self):
-        pass
+        if not self._metadata.tributes:
+            raise ParseError("No tributes defined.")
+        if not re.fullmatch(re_parse_tributes, self._metadata.tributes):
+            raise ParseError(f"{self._metadata.tributes!r} is not a valid amount of tributes.")
+        if self._metadata.rarity is not None and not re.fullmatch(re_parse_rarity, self._metadata.rarity):
+            raise ParseError(f"{self._metadata.rarity!r} is not a valid rarity.")
+        for metatype in ["size", "setsize", "give", "remove", "giveattr", "removeattr"]:
+            if getattr(self._metadata, metatype) is not None:
+                self.detect_meta_error(metatype, 2)
+        for metatype in ["sizerange", "setsizerange"]:
+            if getattr(self._metadata, metatype) is not None:
+                self.detect_meta_error(metatype, 3)
 
     def parse(self, s: str):
         """Fill in the properties of the Event."""
