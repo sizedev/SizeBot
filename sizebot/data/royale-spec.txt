@@ -35,6 +35,8 @@
 # * size:n, n being a size value (e.g.: 5ft6in, or 175cm.) This is the character's starting height.
 # * url:s, s being a link to a valid image.
 # * attr:s, s being the name of an attribute. You can have many of these.
+# * nsfw:b denotes if a player is cool with being in NSFW events. b must be "true" or "false",
+# defaults to true.
 
 ## Events
 # Events are denoted by quoted strings contained under valid headers, one a single line.
@@ -86,6 +88,7 @@
 # attribute, this does nothing.
 # * rarity:f denotes how rare an event is. f is a decimal number, which defaults to 1.
 # For example, an event of rarity 0.1 will be 10 times more rare than a standard event.
+# * nsfw:b denotes if an event is NSFW. b must be "true" or "false", defaults to false.
 
 ## Special Attributes
 # Some attributes you can add to a player have special functionality in SizeBot.
