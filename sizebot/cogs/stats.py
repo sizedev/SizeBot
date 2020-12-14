@@ -526,9 +526,9 @@ class StatsCog(commands.Cog):
                 f"or climb that distance in **{climbtime}** *({climbsteps:,.0f} pulls)*"
             )
         )
-        e.set_footer(text = f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), \
-            run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), \
-            or climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls).")
+        e.set_footer(text = f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), "
+                            f"run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), "
+                            f"or climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls).")
 
         await ctx.send(embed = e)
 
