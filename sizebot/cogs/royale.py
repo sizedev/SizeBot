@@ -104,8 +104,8 @@ class RoyaleCog(commands.Cog):
                         loop = looppoint
                         await m.edit(content = f"`{progress}` {emojis.loading}")
                 if game.royale.parser.errors:
-                    await ctx.send(f"{emojis.warning} **Errors in parsing:**\n"
-                                   "\n".join(game.royale.parser.errors))
+                    await ctx.send(f"{emojis.warning} **Errors in parsing:**\n" + 
+                                   ("\n".join(game.royale.parser.errors)))
                     return
                 current_games[ctx.guild.id] = game
                 await m.edit(content = f"Royale loaded with file `{filename}` and seed `{current_games[ctx.guild.id].seed}`.")
