@@ -183,7 +183,7 @@ class RoyaleCog(commands.Cog):
             arg1 = args
 
             if arg1.startswith("\"") and arg1.endswith("\""):
-                player = arg1
+                player = arg1[1:-1]
             else:
                 await ctx.send(f"Player names must be in quotes. e.g.: `{conf.prefix}royale stats \"DigiDuncan\"`.")
                 return
