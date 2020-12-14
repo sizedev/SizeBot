@@ -8,6 +8,9 @@ class CustomError(Exception):
         else:
             self.message = None
 
+    def __str__(self):
+        return f"{self.__name__}: {self.message}"
+
 
 class ParseError(CustomError):
     pass

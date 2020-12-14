@@ -26,7 +26,7 @@ ok_roles = ["Royale DM", "SizeBot Developer"]
 
 
 class NoGameFoundError(DigiException):
-    async def formatMessage(self):
+    def formatMessage(self):
         return "Game not found."
 
 
@@ -34,7 +34,7 @@ class NoPlayerFoundError(DigiException):
     def __init__(self, player_name):
         self.player_name = player_name
 
-    async def formatMessage(self):
+    def formatMessage(self):
         return f"Player {self.player_name} not found in this guild's game."
 
 
