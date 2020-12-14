@@ -1,5 +1,8 @@
+import asyncio
+from pathlib import Path
+
 from sizebot.lib.decimal import Decimal
-from sizebot.lib import userdb
+from sizebot.lib import units, userdb
 
 # Deprecated user array constants
 NICK = 0
@@ -11,26 +14,32 @@ DENS = 5
 UNIT = 6
 SPEC = 7
 
+asyncio.run(units.init())
 
-def loadLegacy(id):
+
+def loadLegacy(path):
     """Load a user from the old file format"""
-    with open(userdb.userdbpath / f"{id}.txt", "r") as f:
+    with open(path, "r", encoding = "utf-8") as f:
         # Make array of lines from file.
         lines = f.read().splitlines()
     lines = [line.strip() for line in lines]
+    if lines == []:
+        return
+    uid = path.stem
 
     userdata = userdb.User()
-    userdata.id = id
+    userdata.guildid = 350429009730994199
+    userdata.id = uid
     userdata.nickname = lines[NICK]
     userdata.display = lines[DISP]
     if lines[CHEI] != "None":
-        userdata.height = lines[CHEI]
+        userdata.height = Decimal(lines[CHEI])
         userdata.height /= Decimal("1e6")
     if lines[BHEI] != "None":
-        userdata.baseheight = lines[BHEI]
+        userdata.baseheight = Decimal(lines[BHEI])
         userdata.baseheight /= Decimal("1e6")
     if lines[BWEI] != "None":
-        userdata.baseweight = lines[BWEI] * lines[DENS]     # Drop density, and instead update base weight to match
+        userdata.baseweight = Decimal(lines[BWEI]) * Decimal(lines[DENS])  # Drop density, and instead update base weight to match
         userdata.baseweight /= Decimal("1e3")
     userdata.unitsystem = lines[UNIT]
     if lines[SPEC] != "None":
@@ -39,17 +48,16 @@ def loadLegacy(id):
     return userdata
 
 
-def upgradeusers():
-    print(f"Looking for user files in {userdb.userdbpath}")
-    filepaths = list(userdb.userdbpath.glob("*.txt"))
+def upgradeusers(path):
+    print(f"Looking for user files in {path}")
+    filepaths = list(path.glob("*.txt"))
     print(f"Found {len(filepaths)} users")
     for filepath in filepaths:
-        id = filepath.stem
-        print(f"Loading legacy user file for {id}")
-        userdata = loadLegacy(id)
-        print(f"Saving new user file for {id}")
-        userdb.save(userdata)
+        print(f"Loading legacy user file for {filepath}")
+        userdata = loadLegacy(filepath)
+        print(f"Saving new user file for {filepath}")
+        if userdata: userdb.save(userdata)
 
 
 if __name__ == "__main__":
-    upgradeusers()
+    upgradeusers(Path("."))
