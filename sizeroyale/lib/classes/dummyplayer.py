@@ -7,7 +7,7 @@ class DummyPlayer:
     def __init__(self, *, lessthan: str = None, greaterthan: str = None,
                  elimslessthan: str = None, elimsgreaterthan: str = None, elimsequal: str = None,
                  team: str = None, items: list = None, gender: str = None,
-                 attributes: list = None):
+                 attributes: list = None, nsfw = None):
         self.lessthan = None if lessthan is None else SV.parse(lessthan)
         self.greaterthan = None if greaterthan is None else SV.parse(greaterthan)
         self.elimslessthan = None if elimslessthan is None else Decimal(elimslessthan)
@@ -17,6 +17,7 @@ class DummyPlayer:
         self.items = items
         self.attributes = attributes
         self.gender = gender
+        self.nsfw = nsfw
 
         self.realteam = None
 
@@ -38,6 +39,8 @@ class DummyPlayer:
         if not (self.attributes is None or all(attribute in player.attributes for attribute in self.attributes)):
             return False
         if not (self.realteam is None or self.realteam == player.team):
+            return False
+        if not (self.nsfw is None or self.nsfw == player.nsfw):
             return False
 
         return True

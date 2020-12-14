@@ -25,7 +25,8 @@ class Event:
     valid_data = [("tributes", "single"), ("size", "compound"), ("setsize", "compound"),
                   ("sizerange", "compound"), ("setsizerange", "compound"),
                   ("elim", "list"), ("perp", "list"), ("give", "compound"), ("remove", "compound"),
-                  ("giveattr", "compound"), ("removeattr", "compound"), ("clear", "list"), ("rarity", "single")]
+                  ("giveattr", "compound"), ("removeattr", "compound"), ("clear", "list"), ("rarity", "single"),
+                  ("nsfw", "single")]
 
     def __init__(self, game, text: str, meta: str):
         self._game = game
@@ -61,6 +62,12 @@ class Event:
         self.removeattrs = None if self._metadata.removeattr is None else [(int(k), v) for k, v in self._metadata.removeattr]
         self.clears = None if self._metadata.clear is None else [int(i) for i in self._metadata.clear]
         self.rarity = 1 if self._metadata.rarity is None else float(self._metadata.rarity)
+        if self._metadata.nsfw is None or self._metadata.nsfw.lower() == "false":
+            self.nsfw = False
+        elif self._metadata.nsfw.lower() == "true":
+            self.nsfw = True
+        else:
+            raise ParseError(f"{self._metadata.nsfw!r} is not a valid NSFW flag.")
         self.dummies = {}
 
         self.parse(self.text)
@@ -178,7 +185,8 @@ class Event:
                                                  team = team,
                                                  items = items if items else None,
                                                  gender = gender,
-                                                 attributes = attributes if attributes else None)
+                                                 attributes = attributes if attributes else None,
+                                                 nsfw = self.nsfw)
 
     def get_players(self, playerpool: Dict[str, Player]) -> ListDict[str, Player]:
         """ Get an ordered dictionary of players that match the DummyPlayers

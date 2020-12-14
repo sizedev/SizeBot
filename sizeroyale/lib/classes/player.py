@@ -2,6 +2,7 @@ from copy import copy
 from PIL import Image
 
 from sizebot.lib.diff import Diff
+from sizeroyale.lib.errors import ParseError
 from sizebot.lib.units import SV
 from sizebot.lib.utils import isURL
 from sizeroyale.lib.classes.metaparser import MetaParser
@@ -10,7 +11,7 @@ from sizeroyale.lib.img_utils import create_profile_picture
 
 
 class Player:
-    valid_data = [("team", "single"), ("gender", "single"), ("height", "single"), ("url", "single"), ("attr", "list")]
+    valid_data = [("team", "single"), ("gender", "single"), ("height", "single"), ("url", "single"), ("attr", "list"), ("nsfw", "single")]
 
     def __init__(self, game, name: str, meta: str):
         self._game = game
@@ -25,6 +26,12 @@ class Player:
             raise ValueError(f"{self._metadata.url} is not a URL.")
         self.url = self._metadata.url
         self.attributes = [] if self._metadata.attr is None else self._metadata.attr
+        if self._metadata.nsfw is None or self._metadata.nsfw.lower() == "true":
+            self.nsfw = True
+        elif self._metadata.nsfw.lower() == "false":
+            self.nsfw = False
+        else:
+            raise ParseError(f"{self._metadata.nsfw!r} is not a valid NSFW flag.")
 
         self.inventory = []
         self.dead = False
