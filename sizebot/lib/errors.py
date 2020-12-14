@@ -213,8 +213,14 @@ class UserMessedUpException(DigiContextException):
 class ThisShouldNeverHappenException(DigiException):
     level = logging.CRITICAL
 
-    def formatMessage(self):
+    def __init__(self, custommessage):
+        self.custommessage = custommessage
+
+    def formatUserMessage(self, ctx):
         return "This should never happen. Something very wrong has occured."
+
+    def formatMessage(self):
+        return self.custommessage
 
 
 class ParseError(DigiException):
