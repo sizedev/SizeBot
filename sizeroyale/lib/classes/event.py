@@ -200,7 +200,7 @@ class Event:
         good_players = []
 
         if len(playerpool) < len(self.dummies):
-            raise OutOfPlayersError
+            raise OutOfPlayersError(self.text)
 
         # Assign dummy teams to real teams.
         teams = set()
@@ -225,7 +225,7 @@ class Event:
                     break
 
         if len(good_players) != len(self.dummies):
-            raise OutOfPlayersError
+            raise OutOfPlayersError(self.text)
 
         return ListDict({p.name: p for p in good_players})
 

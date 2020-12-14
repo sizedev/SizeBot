@@ -22,11 +22,13 @@ class GametimeError(CustomError):
 
 
 class OutOfPlayersError(GametimeError):
-    pass
+    def __init__(self, event):
+        self.message = f"Out of players to run event {event}."
 
 
 class OutOfEventsError(GametimeError):
-    pass
+    def __init__(self, round):
+        self.message = f"Out of events to finish round {round}."
 
 
 class ThisShouldNeverHappenException(CustomError):

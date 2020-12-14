@@ -130,7 +130,7 @@ class RoyaleCog(commands.Cog):
                 try:
                     round = await current_games[ctx.guild.id].next()
                 except GametimeError as e:
-                    await ctx.send(f"Error in running event: {e}")
+                    await ctx.send(f"Error in running event: {e.message}")
                     await ctx.send(f"Please check your game file and consider contacting <@{ids.digiduncan}>.")
                     return
                 for e in round:

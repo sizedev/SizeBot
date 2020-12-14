@@ -182,7 +182,7 @@ class Game:
             events = copy(self.current_arena.events)
             while trying_events:
                 if not events:
-                    raise OutOfEventsError
+                    raise OutOfEventsError(f"arena {self.current_arena.name}")
                 event = self.random.choices(events, [e.rarity for e in events])[0]
                 try:
                     players = event.get_players(playerpool)
@@ -197,7 +197,7 @@ class Game:
             events = copy(getattr(self.royale.events, event_type + "_events"))
             while trying_events:
                 if not events:
-                    raise OutOfEventsError
+                    raise OutOfEventsError(self.round_title)
                 event = self.random.choices(events, [e.rarity for e in events])[0]
                 try:
                     players = event.get_players(playerpool)
