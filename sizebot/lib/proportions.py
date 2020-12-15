@@ -721,6 +721,7 @@ def formatShoeSize(footlength, women = False):
     prefix = ""
     if shoesizeNum < 1:
         prefix = "Children's "
+        women = False
         shoesizeNum += 12 + Decimal("1/3")
     if shoesizeNum < 0:
         return "No shoes exist this small!"
