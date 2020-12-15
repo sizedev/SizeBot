@@ -11,7 +11,7 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import defaultheight, defaultweight, defaultterminalvelocity, defaultliftstrength, falllimit
-from sizebot.lib.utils import prettyTimeDelta, url_safe
+from sizebot.lib.utils import minmax, prettyTimeDelta, url_safe
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
@@ -314,11 +314,13 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
 class PersonSpeedComparison:
     def __init__(self, userdata1, userdata2):
-        self.viewer = PersonStats(userdata1)
-        self.viewed = PersonStats(userdata2)
+        self._viewer, self._viewed = minmax(userdata1, userdata2)
 
-        self.viewertovieweddata = copy(userdata1)
-        self.viewedtoviewerdata = copy(userdata2)
+        self.viewer = PersonStats(self._viewer)
+        self.viewed = PersonStats(self._viewed)
+
+        self.viewertovieweddata = copy(self._viewer)
+        self.viewedtoviewerdata = copy(self._viewed)
 
         if self.viewer.height == 0 and self.viewed.height == 0:
             self.multiplier = Decimal(1)
