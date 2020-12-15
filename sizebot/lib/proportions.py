@@ -344,7 +344,10 @@ class PersonSpeedComparison:
     def __repr__(self):
         return str(self)
 
-    def speedcalc(self, dist: SV, *, speed = False, foot = False):
+    def speedcalc(self, dist: SV, *, speed = False, foot = False, include_relative = False):
+        reldist = SV(dist * self.viewer.viewscale)
+        reldist_print = f"{reldist:,.3mu}"
+
         climblength = Decimal(0.3048) / self.viewer.viewscale
         climbspeed = Decimal(4828) / self.viewer.viewscale
         SVclimbspeed = SV(climbspeed)
@@ -367,6 +370,7 @@ class PersonSpeedComparison:
 
         return (
             f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}\n"
+            f"{emojis.eyes + reldist_print + '\n' if include_relative else ''}"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
             f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}"
@@ -374,17 +378,17 @@ class PersonSpeedComparison:
 
     def getStatEmbed(self, stat):
         descmap = {
-            "height":           self.speedcalc(self.viewedtoviewer.height, speed = True),
-            "foot":             self.speedcalc(self.viewedtoviewer.footlength, speed = True, foot = True),
-            "toe":              self.speedcalc(self.viewedtoviewer.toeheight, speed = True),
-            "shoeprint":        self.speedcalc(self.viewedtoviewer.shoeprintdepth, speed = True),
-            "finger":           self.speedcalc(self.viewedtoviewer.fingerprintdepth, speed = True),
-            "thumb":            self.speedcalc(self.viewedtoviewer.thumbwidth, speed = True),
-            "eye":              self.speedcalc(self.viewedtoviewer.eyewidth, speed = True),
-            "hairwidth":        self.speedcalc(self.viewedtoviewer.hairwidth, speed = True),
-            "hair":             self.speedcalc(self.viewedtoviewer.hairlength, speed = True) if self.viewedtoviewer.hairlength is not None else None,
-            "tail":             self.speedcalc(self.viewedtoviewer.taillength, speed = True) if self.viewedtoviewer.taillength is not None else None,
-            "ear":              self.speedcalc(self.viewedtoviewer.earheight, speed = True) if self.viewedtoviewer.earheight is not None else None
+            "height":           self.speedcalc(self.viewedtoviewer.height, speed = True, include_relative = True),
+            "foot":             self.speedcalc(self.viewedtoviewer.footlength, speed = True, foot = True, include_relative = True),
+            "toe":              self.speedcalc(self.viewedtoviewer.toeheight, speed = True, include_relative = True),
+            "shoeprint":        self.speedcalc(self.viewedtoviewer.shoeprintdepth, speed = True, include_relative = True),
+            "finger":           self.speedcalc(self.viewedtoviewer.fingerprintdepth, speed = True, include_relative = True),
+            "thumb":            self.speedcalc(self.viewedtoviewer.thumbwidth, speed = True, include_relative = True),
+            "eye":              self.speedcalc(self.viewedtoviewer.eyewidth, speed = True, include_relative = True),
+            "hairwidth":        self.speedcalc(self.viewedtoviewer.hairwidth, speed = True, include_relative = True),
+            "hair":             self.speedcalc(self.viewedtoviewer.hairlength, speed = True, include_relative = True) if self.viewedtoviewer.hairlength is not None else None,
+            "tail":             self.speedcalc(self.viewedtoviewer.taillength, speed = True, include_relative = True) if self.viewedtoviewer.taillength is not None else None,
+            "ear":              self.speedcalc(self.viewedtoviewer.earheight, speed = True, include_relative = True) if self.viewedtoviewer.earheight is not None else None
         }
 
         if descmap[stat] is None:
