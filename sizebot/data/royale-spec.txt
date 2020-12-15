@@ -83,6 +83,7 @@
 # * give:n:item gives player n the item specified.
 # * remove:n:item removes the specified item from the player n. If the player doesn't have any
 # of the item, this does nothing.
+# * clear:n clears the inventory of player n.
 # * giveattr:n:attr gives player n the attribute specified.
 # * removeattr:n:attr removes the specified attribute from the player n. If the player doesn't have that
 # attribute, this does nothing.
