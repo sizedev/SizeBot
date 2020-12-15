@@ -30,7 +30,7 @@ class EvalCog(commands.Cog):
         # Show user that bot is busy doing something
         waitMsg = None
         if isinstance(ctx.channel, discord.TextChannel):
-            waitMsg = await ctx.send(emojis.loading)
+            waitMsg = await ctx.send(f"{emojis.run_program} Running eval... {emojis.loading}")
 
         async with ctx.typing():
             try:

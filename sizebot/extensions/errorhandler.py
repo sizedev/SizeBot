@@ -4,6 +4,7 @@ import sys
 from discord.ext import commands
 
 from sizebot.lib import errors, utils
+from sizebot.lib.constants import emojis
 from sizebot.lib.telemetry import Telemetry
 
 logger = logging.getLogger("sizebot")
@@ -38,7 +39,7 @@ def setup(bot):
                 logger.log(err.level, message)
             userMessage = await err.formatUserMessage(ctx)
             if userMessage is not None:
-                await ctx.send(userMessage)
+                await ctx.send(f"{emojis.warning} {userMessage}")
         elif isinstance(err, errors.DigiException):
             # DigiException handling
             message = err.formatMessage()
@@ -46,21 +47,21 @@ def setup(bot):
                 logger.log(err.level, message)
             userMessage = err.formatUserMessage()
             if userMessage is not None:
-                await ctx.send(userMessage)
+                await ctx.send(f"{emojis.warning} {userMessage}")
         elif isinstance(err, commands.errors.CommandNotFound):
             # log unknown commmands to telemetry
             telem = Telemetry.load()
             telem.incrementUnknown(str(ctx.invoked_with))
             telem.save()
         elif isinstance(err, commands.errors.ExpectedClosingQuoteError):
-            await ctx.send("Mismatched quotes in command.")
+            await ctx.send(f"{emojis.warning} Mismatched quotes in command.")
         elif isinstance(err, commands.errors.InvalidEndOfQuotedStringError):
-            await ctx.send("No space after a quote in command. Are your arguments smushed together?")
+            await ctx.send(f"{emojis.warning} No space after a quote in command. Are your arguments smushed together?")
         elif isinstance(err, commands.errors.UnexpectedQuoteError):
-            await ctx.send("Why is there a quote here? I'm confused...")
+            await ctx.send(f"{emojis.warning} Why is there a quote here? I'm confused...")
         else:
             # Default command error handling
-            await ctx.send("Something went wrong.")
+            await ctx.send(f"{emojis.error} Something went wrong.")
             logger.error(f"Ignoring exception in command {ctx.command}:")
             logger.error(utils.formatTraceback(error))
 
