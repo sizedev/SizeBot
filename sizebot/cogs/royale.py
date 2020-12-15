@@ -105,7 +105,8 @@ class RoyaleCog(commands.Cog):
                     looppoint = arrow.now()
                     if looppoint - loop >= timedelta(seconds = 1):
                         loop = looppoint
-                        await m.edit(content = f"`{progress}` {emojis.loading}")
+                        if progress:
+                            await m.edit(content = f"`{progress}` {emojis.loading}")
                 if game.royale.parser.errors:
                     await ctx.send(f"{emojis.warning} **Errors in parsing:**\n"
                                    + ("\n".join(game.royale.parser.errors)))
