@@ -368,9 +368,11 @@ class PersonSpeedComparison:
 
         shoesize = " (" + formatShoeSize(dist) + ")"
 
+        newline = "\n"
+
         return (
             f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}\n"
-            f"{emojis.eyes + reldist_print + '\n' if include_relative else ''}"
+            f"{emojis.eyes + reldist_print + newline if include_relative else ''}"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
             f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}"
