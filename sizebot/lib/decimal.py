@@ -428,10 +428,11 @@ def roundFraction(number, denominator):
 def formatFraction(value):
     if value is None:
         return None
-    part = roundFraction(value % 1, 8)
     fractionStrings = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
+    part = roundFraction(value % 1, 8)
+    index = int(part * len(fractionStrings)) % len(fractionStrings)
     try:
-        fraction = fractionStrings[int(part * len(fractionStrings))]
+        fraction = fractionStrings[index]
     except IndexError as e:
         logger.error("Weird fraction IndexError:\n"
                      f"fractionStrings = {fractionStrings!r}\n"
