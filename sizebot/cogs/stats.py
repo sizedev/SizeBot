@@ -573,7 +573,11 @@ class StatsCog(commands.Cog):
         userdata2 = getUserdata(memberOrHeight2)
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
-        embedtosend = comparison.getStatEmbed(statmap[stat])
+        try:
+            embedtosend = comparison.getStatEmbed(statmap[stat])
+        except KeyError:
+            await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
+            return
         if embedtosend is None:
             await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
             return
