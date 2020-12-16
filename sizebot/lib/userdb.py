@@ -533,7 +533,7 @@ class User:
         if currentscaletalk is not None:
             currentscaletalk = Diff.fromJSON(currentscaletalk)
         userdata.currentscaletalk = currentscaletalk
-        userdata.scaletalklock = jsondata["scaletalklock"]
+        userdata.scaletalklock = jsondata.get("scaletalklock")
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
