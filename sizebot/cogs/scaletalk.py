@@ -6,6 +6,7 @@ from sizebot.lib.utils import tryInt
 from discord.ext import commands
 
 from sizebot.lib import userdb
+from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpException, UserNotFoundException, ValueIsZeroException
 
@@ -56,7 +57,7 @@ class ScaleTypeCog(commands.Cog):
             finaldiff.amount = finaldiff.amount / chars
         elif diff.changetype == "multiply":
             finaldiff = copy(diff)
-            finaldiff.amount = finaldiff.amount ** (1 / chars)
+            finaldiff.amount = finaldiff.amount ** Decimal(1 / chars)
         else:
             raise ChangeMethodInvalidException("This change type is not yet supported for scale-talking.")
 
