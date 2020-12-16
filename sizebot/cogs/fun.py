@@ -79,7 +79,15 @@ class FunCog(commands.Cog):
     )
     async def gamemode(self, ctx, *, mode):
         logger.log(EGG, f"{ctx.author.display_name} set their gamemode to {mode}.")
-        await ctx.send(f"Set own gamemode to `{mode.capitalize()} Mode`")
+        await ctx.send(f"Set own gamemode to `{mode.title()} Mode`")
+
+    @commands.command(
+        aliases = ["egg"],
+        hidden = True
+    )
+    async def easteregg(self, ctx, *, mode):
+        logger.log(EGG, f"{ctx.author.display_name} thought it was that easy, huh.")
+        await ctx.send("No.")
 
     @commands.Cog.listener()
     async def on_message(self, message):
