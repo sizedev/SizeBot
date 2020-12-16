@@ -527,7 +527,7 @@ class User:
         if currentscalestep is not None:
             currentscalestep = Diff.fromJSON(currentscalestep)
         userdata.currentscalestep = currentscalestep
-        currentscaletalk = jsondata.get("currentscalestep")
+        currentscaletalk = jsondata.get("currentscaletalk")
         if currentscaletalk is not None:
             currentscaletalk = Diff.fromJSON(currentscaletalk)
         userdata.currentscaletalk = currentscaletalk
