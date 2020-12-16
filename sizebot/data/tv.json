@@ -10,6 +10,15 @@
             ]
         },
         {
+            "factor": "6e0",
+            "symbol": "rnd",
+            "name": "round",
+            "namePlural": "rounds",
+            "symbols": [
+                "rnds"
+            ]
+        },
+        {
             "factor": "6e1",
             "symbol": "m",
             "name": "minute",
