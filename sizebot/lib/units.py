@@ -473,7 +473,9 @@ class SV(Dimension):
         s = cls.isFeetAndInchesAndIfSoFixIt(s)
         # TODO: These are temporary patches.
         # Zero patch
-        if s.lower() in ["0", "zero"]:
+        if s.lower() in ["0", "zero", "no"]:
+            if s.lower() == "no":
+                logger.log(EGG, "No.")
             return 0, "m"
         # Infinity patch
         if s.lower() in ["infinity", "inf", "∞", "yes"]:
