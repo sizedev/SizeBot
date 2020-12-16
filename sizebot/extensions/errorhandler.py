@@ -59,6 +59,8 @@ def setup(bot):
             await ctx.send(f"{emojis.warning} No space after a quote in command. Are your arguments smushed together?")
         elif isinstance(err, commands.errors.UnexpectedQuoteError):
             await ctx.send(f"{emojis.warning} Why is there a quote here? I'm confused...")
+        elif isinstance(err, commands.errors.CheckFailure):
+            await ctx.send(f"{emojis.error} You do not have permission to run this command.")
         else:
             # Default command error handling
             await ctx.send(f"{emojis.error} Something went wrong.")
