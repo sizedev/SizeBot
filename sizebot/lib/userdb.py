@@ -54,6 +54,7 @@ class User:
         self._runperhour = None
         self._currentscalestep = None
         self._currentscaletalk = None
+        self.scaletalklock = False
         self._unitsystem = "m"
         self.species = None
         self.soft_gender = None
@@ -489,6 +490,7 @@ class User:
             "runperhour":       None if self.runperhour is None else str(self.runperhour),
             "currentscalestep": None if self.currentscalestep is None else self.currentscalestep.toJSON(),
             "currentscaletalk": None if self.currentscaletalk is None else self.currentscaletalk.toJSON(),
+            "scaletalklock":    self.scaletalklock,
             "unitsystem":       self.unitsystem,
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining,
@@ -531,6 +533,7 @@ class User:
         if currentscaletalk is not None:
             currentscaletalk = Diff.fromJSON(currentscaletalk)
         userdata.currentscaletalk = currentscaletalk
+        userdata.scaletalklock = jsondata["scaletalklock"]
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])

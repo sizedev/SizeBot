@@ -60,9 +60,12 @@ class ScaleTypeCog(commands.Cog):
         else:
             raise ChangeMethodInvalidException("This change type is not yet supported for scale-talking.")
 
-        userdata.currentscaletalk = finaldiff
         if finaldiff.amount == 0:
             raise ValueIsZeroException
+
+        userdata.currentscaletalk = finaldiff
+        userdata.scaletalklock = True
+
         userdb.save(userdata)
         await ctx.send(f"{userdata.nickname}'s scale per character is now set to {finaldiff.original}.")
 
@@ -84,7 +87,6 @@ class ScaleTypeCog(commands.Cog):
 
 
 async def on_message(message):
-
     guildid = message.author.guild.id
     userid = message.author.id
     length = len(message.content)
@@ -92,6 +94,11 @@ async def on_message(message):
     try:
         userdata = userdb.load(guildid, userid)
     except UserNotFoundException:
+        return
+
+    if userdata.scaletalklock is True:
+        userdata.scaletalklock = False
+        userdb.save(userdata)
         return
 
     if userdata.currentscaletalk is None:
