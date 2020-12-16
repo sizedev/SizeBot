@@ -69,6 +69,7 @@ class FunCog(commands.Cog):
     @commands.command(
         hidden = True
     )
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def digipee(self, ctx):
         logger.log(EGG, f"{ctx.author.display_name} thinks Digi needs to pee.")
         with pkg_resources.open_binary(sizebot.data, "digipee.mp3") as f:
@@ -85,6 +86,7 @@ class FunCog(commands.Cog):
         aliases = ["egg"],
         hidden = True
     )
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def easteregg(self, ctx):
         logger.log(EGG, f"{ctx.author.display_name} thought it was that easy, huh.")
         await ctx.send("No.")

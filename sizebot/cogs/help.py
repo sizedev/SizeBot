@@ -222,6 +222,7 @@ class HelpCog(commands.Cog):
         aliases=["helpme", "wtf", "commands", "cmds"],
         category = "help"
     )
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def help(self, ctx, cmdName: str = None):
         """[cmd.help[0]]
 
@@ -243,6 +244,7 @@ class HelpCog(commands.Cog):
     @commands.command(
         category = "help"
     )
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def about(self, ctx):
         """Get the credits and some facts about SizeBot."""
         now = datetime.now()
@@ -296,6 +298,7 @@ class HelpCog(commands.Cog):
         category = "misc",
         multiline = True
     )
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
@@ -310,6 +313,7 @@ class HelpCog(commands.Cog):
         category = "misc",
         multiline = True
     )
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def suggest(self, ctx, *, message: str):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
@@ -325,6 +329,7 @@ class HelpCog(commands.Cog):
         category = "misc",
         multiline = True
     )
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def suggestobject(self, ctx, *, message: str):
         """Suggest an object for SizeBot! (See help.)
 
@@ -344,6 +349,7 @@ class HelpCog(commands.Cog):
         usage = ["[type]"],
         category = "help"
     )
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping(self, ctx, subcommand: str = ""):
         """Pong!
 

@@ -61,6 +61,8 @@ def setup(bot):
             await ctx.send(f"{emojis.warning} Why is there a quote here? I'm confused...")
         elif isinstance(err, commands.errors.CheckFailure):
             await ctx.send(f"{emojis.error} You do not have permission to run this command.")
+        elif isinstance(err, commands.CommandOnCooldown):
+            await ctx.send(f"{emojis.info} You're using that command too fast! Try again in a moment.")
         elif isinstance(err, OverflowError):
             await ctx.send("*SizeBot attempts to comprehend a being of inifinite height, and gives up before it explodes.*")
         else:
