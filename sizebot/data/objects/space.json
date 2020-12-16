@@ -18,6 +18,33 @@
         ]
     },
     {
+        "name": "Mercury",
+        "dimension": "d",
+        "diameter": "4879400",
+        "weight": "3.285e+26",
+        "tags": [
+            "planet"
+        ]
+    },
+    {
+        "name": "Mars",
+        "dimension": "d",
+        "diameter": "6779000",
+        "weight": "6.39e+26",
+        "tags": [
+            "planet"
+        ]
+    },
+    {
+        "name": "Venus",
+        "dimension": "d",
+        "diameter": "12104000",
+        "weight": "4.867e+27",
+        "tags": [
+            "planet"
+        ]
+    },
+    {
         "name": "Earth",
         "dimension": "d",
         "diameter": "12742000",
@@ -27,6 +54,36 @@
         ],
         "aliases": [
             "Terra"
+        ]
+    },
+    {
+        "name": "Neptune",
+        "dimension": "d",
+        "diameter": "49224000",
+        "weight": "1.024e+29",
+        "tags": [
+            "planet"
+        ]
+    },
+    {
+        "name": "Uranus",
+        "dimension": "d",
+        "diameter": "50724000",
+        "weight": "8.681e+28",
+        "tags": [
+            "planet"
+        ],
+        "aliases": [
+            "your anus"
+        ]
+    },
+    {
+        "name": "Saturn",
+        "dimension": "d",
+        "diameter": "116460000",
+        "weight": "5.683e+29",
+        "tags": [
+            "planet"
         ]
     },
     {
@@ -57,6 +114,15 @@
         "weight": "1.3e+43",
         "aliases": [
             "black hole"
+        ]
+    },
+    {
+        "name": "Milky Way",
+        "dimension": "d",
+        "diameter": "1e+24",
+        "weight": "2.983e+45",
+        "tags": [
+            "galaxy"
         ]
     }
 ]

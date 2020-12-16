@@ -330,8 +330,8 @@ class PersonSpeedComparison:
         self.viewedtoviewer = PersonStats(self.viewedtoviewerdata)
         self.viewertoviewed = PersonStats(self.viewertovieweddata)
 
-        self.footlabel = "Foot/Paw" if self.viewed.pawtoggle else "Foot"
-        self.hairlabel = "Hair/Fur" if self.viewed.furtoggle else "Hair"
+        self.footlabel = "Paw" if self.viewed.pawtoggle else "Foot"
+        self.hairlabel = "Fur" if self.viewed.furtoggle else "Hair"
 
         viewangle = calcViewAngle(self.viewer.height, self.viewed.height)
         self.lookangle = abs(viewangle)

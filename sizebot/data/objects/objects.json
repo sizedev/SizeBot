@@ -1391,6 +1391,12 @@
         ]
     },
     {
+        "name": "bowling pin",
+        "dimension": "h",
+        "height": "0.381",
+        "weight": "1500"
+    },
+    {
         "name": "PlayStation 5",
         "dimension": "h",
         "height": "0.4",
@@ -1557,6 +1563,14 @@
         ]
     },
     {
+        "name": "Natsuki",
+        "dimension": "h",
+        "height": "1.49",
+        "tags": [
+            "doki"
+        ]
+    },
+    {
         "name": "D&D square",
         "dimension": "l",
         "length": "1.524",
@@ -1568,6 +1582,30 @@
             "space",
             "D&D tile",
             "D&D space"
+        ]
+    },
+    {
+        "name": "Sayori",
+        "dimension": "h",
+        "height": "1.57",
+        "tags": [
+            "doki"
+        ]
+    },
+    {
+        "name": "Monika",
+        "dimension": "h",
+        "height": "1.6",
+        "tags": [
+            "doki"
+        ]
+    },
+    {
+        "name": "Yuri",
+        "dimension": "h",
+        "height": "1.65",
+        "tags": [
+            "doki"
         ]
     },
     {
@@ -1818,6 +1856,12 @@
         ]
     },
     {
+        "name": "phone pole",
+        "dimension": "h",
+        "height": "12",
+        "weight": "768839.1"
+    },
+    {
         "name": "city bus",
         "dimension": "l",
         "length": "13.716",
@@ -1894,12 +1938,6 @@
         ]
     },
     {
-        "name": "bowling pin",
-        "dimension": "h",
-        "height": "38.1",
-        "weight": "1500"
-    },
-    {
         "name": "swimming pool",
         "dimension": "l",
         "length": "50",
@@ -1966,6 +2004,11 @@
         "aliases": [
             "block"
         ]
+    },
+    {
+        "name": "cell tower",
+        "dimension": "h",
+        "height": "91.44"
     },
     {
         "name": "Statue of Liberty",
