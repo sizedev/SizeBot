@@ -32,9 +32,6 @@ def setup(bot):
             telem.incrementPermissionError(str(ctx.invoked_with))
             telem.save()
 
-        if isinstance(err, OverflowError):
-            await ctx.send("*SizeBot attempts to comprehend a being of inifinite height, and gives up before it explodes.*")
-
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
             message = await err.formatMessage(ctx)
@@ -64,6 +61,8 @@ def setup(bot):
             await ctx.send(f"{emojis.warning} Why is there a quote here? I'm confused...")
         elif isinstance(err, commands.errors.CheckFailure):
             await ctx.send(f"{emojis.error} You do not have permission to run this command.")
+        elif isinstance(err, OverflowError):
+            await ctx.send("*SizeBot attempts to comprehend a being of inifinite height, and gives up before it explodes.*")
         else:
             # Default command error handling
             await ctx.send(f"{emojis.error} Something went wrong.")
