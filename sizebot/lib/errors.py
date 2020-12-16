@@ -129,11 +129,11 @@ class InvalidUnitSystemException(DigiException):
 
 
 class InvalidSizeValue(DigiException):
-    def __init__(self, sizevalue):
+    def __init__(self, sizevalue, kind):
         self.sizevalue = sizevalue
 
     def formatUserMessage(self):
-        return f"{self.sizevalue!r} is an unrecognized size value."
+        return f"{self.sizevalue!r} is an unrecognized {self.kind} value."
 
 
 class InvalidObject(DigiException):
