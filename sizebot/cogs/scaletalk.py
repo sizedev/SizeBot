@@ -91,7 +91,7 @@ async def on_message(self, message):
 
     userdata = userdb.load(guildid, userid)
 
-    if userdata.currentscalestep is None:
+    if userdata.currentscaletalk is None:
         return
 
     if userdata.currentscaletalk.changetype == "add":
