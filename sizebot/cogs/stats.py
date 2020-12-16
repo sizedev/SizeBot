@@ -411,30 +411,36 @@ class StatsCog(commands.Cog):
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
             compdata = getUserdata(what)
-        elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
+        elif isinstance(what, str) and what.lower() in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userdb.defaultheight
             compdata = getUserdata(compheight, nickname = "an average person")
-        elif isinstance(what, str) and what in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
+        elif isinstance(what, str) and what.lower() in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
             logger.log(EGG, f"{ctx.author.display_name} found Chocolate!")
             compdata = getUserdata(SV.parse("11in"), nickname = "Chocolate [Stuffed Beaver]")
             compdata.baseweight = WV.parse("4.8oz")
             compdata.footlength = SV.parse("2.75in")
             compdata.taillength = SV.parse("12cm")
+        elif isinstance(what, str) and what.lower() in ["me", "myself"]:
+            compdata = userdb.load(ctx.guild.id, ctx.author.id)
         else:
             # Easter eggs.
-            if what in ["all those chickens", "chickens"]:
+            if what.lower() in ["all those chickens", "chickens"]:
                 await ctx.send("https://www.youtube.com/watch?v=NsLKQTh-Bqo")
                 logger.log(EGG, f"{ctx.author.display_name} looked at all those chickens.")
                 return
-            if what == "that horse":
+            if what.lower() == "that horse":
                 await ctx.send("https://www.youtube.com/watch?v=Uz4bW2yOLXA")
                 logger.log(EGG, f"{ctx.author.display_name} looked at that horse (it may in fact be a moth.)")
                 return
-            if what == "cake":
+            if what.lower() == "my horse":
+                await ctx.send("https://www.youtube.com/watch?v=o7cCJqya7wc")
+                logger.log(EGG, f"{ctx.author.display_name} looked at my horse (my horse is amazing.)")
+                return
+            if what.lower() == "cake":
                 await ctx.send("The cake is a lie.")
                 logger.log(EGG, f"{ctx.author.display_name} realized the cake was lie.")
                 return
-            if what == "snout":
+            if what.lower() == "snout":
                 await ctx.send("https://www.youtube.com/watch?v=k2mFvwDTTt0")
                 logger.log(EGG, f"{ctx.author.display_name} took a closer look at that snout.")
                 return
