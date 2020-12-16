@@ -466,7 +466,7 @@ class StatsCog(commands.Cog):
 
     @commands.command(
         aliases = ["dist", "walk", "run"],
-        usage = "<length>",
+        usage = "<length> [user]",
         category = "stats"
     )
     async def distance(self, ctx, length: SV, *, who: typing.Union[discord.Member, SV] = None):
