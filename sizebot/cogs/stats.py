@@ -430,6 +430,14 @@ class StatsCog(commands.Cog):
                 await ctx.send("https://www.youtube.com/watch?v=Uz4bW2yOLXA")
                 logger.log(EGG, f"{ctx.author.display_name} looked at that horse (it may in fact be a moth.)")
                 return
+            if what == "cake":
+                await ctx.send("The cake is a lie.")
+                logger.log(EGG, f"{ctx.author.display_name} realized the cake was lie.")
+                return
+            if what == "snout":
+                await ctx.send("https://www.youtube.com/watch?v=k2mFvwDTTt0")
+                logger.log(EGG, f"{ctx.author.display_name} took a closer look at that snout.")
+                return
             await ctx.send(
                 f"Sorry, I don't know what `{what}` is.\n"
                 f"If this is an object or alias you'd like added to SizeBot, "
