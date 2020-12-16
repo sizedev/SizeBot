@@ -85,7 +85,7 @@ class FunCog(commands.Cog):
         aliases = ["egg"],
         hidden = True
     )
-    async def easteregg(self, ctx, *, mode):
+    async def easteregg(self, ctx):
         logger.log(EGG, f"{ctx.author.display_name} thought it was that easy, huh.")
         await ctx.send("No.")
 
