@@ -72,7 +72,8 @@ class ScaleTypeCog(commands.Cog):
     @commands.command(
         category = "scalestep",
         aliases = ["cleartalkscale", "unsettalkscale", "resetscaletalk", "clearscaletalk", "unsetscaletalk",
-                   "cleartalkscale", "unsettalkscale", "resetscaletalk", "clearscaletalk", "unsetscaletalk"]
+                   "cleartypescale", "unsettypescale", "resetscaletype", "clearscaletype", "unsetscaletype",
+                   "resettypescale"]
     )
     async def resettalkscale(self, ctx):
         """Clear your talk-scale amount."""
