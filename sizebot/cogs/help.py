@@ -219,7 +219,7 @@ class HelpCog(commands.Cog):
     @commands.command(
         description="[description]",
         usage="[usage]",
-        aliases=["helpme", "wtf"],
+        aliases=["helpme", "wtf", "commands", "cmds"],
         category = "help"
     )
     async def help(self, ctx, cmdName: str = None):
