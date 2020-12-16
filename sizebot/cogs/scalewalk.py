@@ -1,19 +1,17 @@
 import math
 import logging
-from sizebot.lib.loglevels import EGG
-from sizebot.lib.utils import tryInt
 
 import discord
-from sizebot.lib import proportions
-from sizebot.lib import userdb
-
 from discord.ext import commands
 
 from sizebot.conf import conf
+from sizebot.lib import proportions, userdb
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, DigiContextException, ValueIsZeroException
+from sizebot.lib.loglevels import EGG
 from sizebot.lib.units import SV
+from sizebot.lib.utils import tryInt
 
 logger = logging.getLogger("sizebot")
 
@@ -277,9 +275,9 @@ class ScaleWalkCog(commands.Cog):
             return
 
         if userdata.currentscalestep.changetype == "add":
-            userdata.height += (userdata.currentscalestep.amount * (steps + 1))
+            userdata.height += (userdata.currentscalestep.amount * steps)
         elif userdata.currentscalestep.changetype == "multiply":
-            userdata.height *= (userdata.currentscalestep.amount ** (steps + 1))
+            userdata.height *= (userdata.currentscalestep.amount ** steps)
         else:
             raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
 

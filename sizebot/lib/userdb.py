@@ -29,8 +29,8 @@ class User:
     __slots__ = ["guildid", "id", "nickname", "lastactive", "_picture_url", "description", "_gender", "display",
                  "_height", "_baseheight", "_baseweight", "_footlength", "_pawtoggle", "_furtoggle",
                  "_hairlength", "_taillength", "_earheight", "_liftstrength", "_unitsystem", "species", "soft_gender",
-                 "avatar_url", "_walkperhour", "_runperhour", "_currentscalestep", "registration_steps_remaining",
-                 "_macrovision_model", "_macrovision_view"]
+                 "avatar_url", "_walkperhour", "_runperhour", "_currentscalestep", "_currentscaletalk",
+                 "registration_steps_remaining", "_macrovision_model", "_macrovision_view"]
 
     def __init__(self):
         self.guildid = None
@@ -53,6 +53,7 @@ class User:
         self._walkperhour = None
         self._runperhour = None
         self._currentscalestep = None
+        self._currentscaletalk = None
         self._unitsystem = "m"
         self.species = None
         self.soft_gender = None
@@ -74,7 +75,8 @@ class User:
                 f"FOOTLENGTH = {self.footlength!r}, HAIRLENGTH = {self.hairlength!r}, "
                 f"TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r}, LIFTSTRENGTH = {self.liftstrength!r}, "
                 f"PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
-                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, CURRENTSCALESTEP = {self.currentscalestep!r}, "
+                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, "
+                f"CURRENTSCALESTEP = {self.currentscalestep!r}, CURRENTSCALETALK = {self.currentscaletalk!r}, "
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
@@ -286,6 +288,21 @@ class User:
         self._currentscalestep = value
 
     @property
+    def currentscaletalk(self):
+        return self._currentscaletalk
+
+    @currentscaletalk.setter
+    def currentscaletalk(self, value):
+        if value is None:
+            self._currentscaletalk = None
+            return
+
+        if not isinstance(value, Diff):
+            raise ValueError("Input was not a Diff.")
+
+        self._currentscaletalk = value
+
+    @property
     def gender(self):
         return self._gender
 
@@ -471,6 +488,7 @@ class User:
             "walkperhour":      None if self.walkperhour is None else str(self.walkperhour),
             "runperhour":       None if self.runperhour is None else str(self.runperhour),
             "currentscalestep": None if self.currentscalestep is None else self.currentscalestep.toJSON(),
+            "currentscaletalk": None if self.currentscaletalk is None else self.currentscaletalk.toJSON(),
             "unitsystem":       self.unitsystem,
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining,
@@ -509,6 +527,10 @@ class User:
         if currentscalestep is not None:
             currentscalestep = Diff.fromJSON(currentscalestep)
         userdata.currentscalestep = currentscalestep
+        currentscaletalk = jsondata.get("currentscalestep")
+        if currentscaletalk is not None:
+            currentscaletalk = Diff.fromJSON(currentscaletalk)
+        userdata.currentscaletalk = currentscaletalk
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
