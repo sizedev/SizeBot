@@ -479,6 +479,9 @@ class SV(Dimension):
             if s.lower() == "yes":
                 logger.log(EGG, "Yes.")
             return cls._infinity, "m"
+        # . patch
+        if s.startswith("."):
+            s = "0" + s
         match = re.match(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"µ ]+)", s)
         value, unit = None, None
         if match is not None:
@@ -525,6 +528,9 @@ class WV(Dimension):
             if s.lower() == "yes":
                 logger.log(EGG, "Yes.")
             return cls._infinity, "g"
+        # . patch
+        if s.startswith("."):
+            s = "0" + s
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"]+)", s)
         value, unit = None, None
         if match is not None:
@@ -543,6 +549,9 @@ class TV(Dimension):
     @classmethod
     def getQuantityPair(cls, s):
         s = utils.removeBrackets(s)
+        # . patch
+        if s.startswith("."):
+            s = "0" + s
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z]+)", s)
         value, unit = None, None
         if match is not None:
