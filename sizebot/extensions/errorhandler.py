@@ -32,6 +32,9 @@ def setup(bot):
             telem.incrementPermissionError(str(ctx.invoked_with))
             telem.save()
 
+        if isinstance(err, OverflowError):
+            await ctx.send("*SizeBot attempts to comprehend a being of inifinite height, and gives up before it explodes.*")
+
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
             message = await err.formatMessage(ctx)
