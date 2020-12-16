@@ -164,7 +164,7 @@ def main():
         message.content = message.content.replace("“", "\"")
         message.content = message.content.replace("”", "\"")
 
-        if message.content.startswith(f"{conf.prefix}timeit") and bot.is_owner(message.author):
+        if message.content.startswith(f"{conf.prefix}timeit") and await bot.is_owner(message.author):
             await on_message_timed(message)
             return
         await bot.process_commands(message)
