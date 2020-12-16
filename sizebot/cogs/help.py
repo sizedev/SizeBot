@@ -287,7 +287,7 @@ class HelpCog(commands.Cog):
             f"<@{ctx.author.id}>\n"
             "SizeBot is coded (mainly) and hosted by DigiDuncan, and for absolutely free.\n"
             "However, if you wish to contribute to DigiDuncan directly, you can do so here:\n"
-            "http://donate.digiduncan.com\n"
+            "<http://donate.digiduncan.com>\n"
             "SizeBot has been a passion project coded over a period of four years and learning a lot of Python along the way.\n"
             "Thank you so much for being here throughout this journey!")
 
