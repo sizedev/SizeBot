@@ -293,7 +293,8 @@ class HelpCog(commands.Cog):
 
     @commands.command(
         usage = "<message>",
-        category = "misc"
+        category = "misc",
+        multiline = True
     )
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
@@ -306,7 +307,8 @@ class HelpCog(commands.Cog):
 
     @commands.command(
         usage = "<message>",
-        category = "misc"
+        category = "misc",
+        multiline = True
     )
     async def suggest(self, ctx, *, message: str):
         """Suggest a feature for SizeBot!"""
@@ -320,7 +322,8 @@ class HelpCog(commands.Cog):
     @commands.command(
         aliases = ["objsuggest"],
         usage = "<message>",
-        category = "misc"
+        category = "misc",
+        multiline = True
     )
     async def suggestobject(self, ctx, *, message: str):
         """Suggest an object for SizeBot! (See help.)
