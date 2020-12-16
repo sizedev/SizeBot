@@ -1,6 +1,7 @@
 import logging
 import re
 from copy import copy
+from sizebot.lib.utils import tryInt
 
 from discord.ext import commands
 
@@ -42,11 +43,13 @@ class ScaleTypeCog(commands.Cog):
         if match := re.fullmatch(re_char, change):
             diff = Diff.parse(match.group(1))
             if match.group(2):
-                chars = int(match.group(2))
+                chars = tryInt(match.group(2))
             else:
                 chars = 1
+            if not isinstance(chars, int):
+                raise UserMessedUpException(f"`{change}` is not a valid character count.")
         else:
-            raise UserMessedUpException(f"`{change}` is not a valid typing rate.")
+            raise UserMessedUpException(f"`{change}` is not a valid change-per-character.")
 
         if diff.changetype == "add":
             finaldiff = copy(diff)
@@ -61,7 +64,7 @@ class ScaleTypeCog(commands.Cog):
         if finaldiff.amount == 0:
             raise ValueIsZeroException
         userdb.save(userdata)
-        await ctx.send(f"{userdata.nickname}'s scale per step is now set to {finaldiff.original}.")
+        await ctx.send(f"{userdata.nickname}'s scale per character is now set to {finaldiff.original}.")
 
     @commands.command(
         category = "scalestep",
