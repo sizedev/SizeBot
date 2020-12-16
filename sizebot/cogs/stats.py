@@ -200,7 +200,12 @@ class StatsCog(commands.Cog):
             await ctx.send(f"The `{stat}` stat is not an available option.")
             return
 
-        stat = statmap[stat]
+        try:
+            stat = statmap[stat]
+        except KeyError:
+            await ctx.send(f"`{stat}` is not a stat.")
+            return
+
         stattosend = stats.getFormattedStat(stat)
 
         if stattosend is None:
@@ -248,7 +253,12 @@ class StatsCog(commands.Cog):
             await ctx.send(f"The `{stat}` stat is not an available option.")
             return
 
-        stat = statmap[stat]
+        try:
+            stat = statmap[stat]
+        except KeyError:
+            await ctx.send(f"`{stat}` is not a stat.")
+            return
+
         stattosend = stats.getFormattedStat(stat)
 
         if stattosend is None:
@@ -573,11 +583,13 @@ class StatsCog(commands.Cog):
         userdata2 = getUserdata(memberOrHeight2)
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
+
         try:
             embedtosend = comparison.getStatEmbed(statmap[stat])
         except KeyError:
-            await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
+            await ctx.send(f"`{stat}` is not a stat.")
             return
+
         if embedtosend is None:
             await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
             return
