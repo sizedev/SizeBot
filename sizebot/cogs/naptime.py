@@ -20,7 +20,7 @@ class NaptimeCog(commands.Cog):
 
     @commands.command(
         aliases = ["chloroform"],
-        usage="<duration>",
+        usage = "<duration>",
         category = "fun"
     )
     async def naptime(self, ctx, *, duration: TV):
