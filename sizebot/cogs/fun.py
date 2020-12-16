@@ -79,7 +79,7 @@ class FunCog(commands.Cog):
     )
     async def gamemode(self, ctx, *, mode):
         logger.log(EGG, f"{ctx.author.display_name} set their gamemode to {mode}.")
-        await ctx.send(f"Set own gamemode to `{mode}`")
+        await ctx.send(f"Set own gamemode to `{mode.capitalize()} Mode`")
 
     @commands.Cog.listener()
     async def on_message(self, message):
