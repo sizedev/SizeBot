@@ -1,13 +1,17 @@
 import asyncio
 import importlib.resources as pkg_resources
+import logging
 
 from discord import File
 from discord.ext import commands
 
 import sizebot.data
 from sizebot.lib.constants import ids
+from sizebot.lib.loglevels import EGG
 
 tasks = {}
+
+logger = logging.getLogger("sizebot")
 
 
 class FunCog(commands.Cog):
@@ -66,8 +70,16 @@ class FunCog(commands.Cog):
         hidden = True
     )
     async def digipee(self, ctx):
+        logger.log(EGG, f"{ctx.author.display_name} thinks Digi needs to pee.")
         with pkg_resources.open_binary(sizebot.data, "digipee.mp3") as f:
             await ctx.send(f"<@{ids.digiduncan}> also has to pee.", file = File(f))
+
+    @commands.command(
+        hidden = True
+    )
+    async def gamemode(self, ctx, *, mode):
+        logger.log(EGG, f"{ctx.author.display_name} set their gamemode to {mode}.")
+        await ctx.send(f"Set own gamemode to `{mode}`")
 
     @commands.Cog.listener()
     async def on_message(self, message):
