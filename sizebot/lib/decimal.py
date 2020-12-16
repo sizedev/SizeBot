@@ -434,10 +434,10 @@ def formatFraction(value):
         fraction = fractionStrings[int(part * len(fractionStrings))]
     except IndexError as e:
         logger.error("Weird fraction IndexError:\n"
-                     f"fractionStrings = {fractionStrings!r}"
-                     f"len(fractionStrings) = {len(fractionStrings)!r}"
-                     f"value = {value._rawvalue}"
-                     f"part = {part!r}"
+                     f"fractionStrings = {fractionStrings!r}\n"
+                     f"len(fractionStrings) = {len(fractionStrings)!r}\n"
+                     f"value = {value._rawvalue}\n"
+                     f"part = {part!r}\n"
                      f"int(part * len(fractionStrings)) = {int(part * len(fractionStrings))}")
         raise e
     return fraction
