@@ -72,7 +72,7 @@ class FunCog(commands.Cog):
     async def digipee(self, ctx):
         logger.log(EGG, f"{ctx.author.display_name} thinks Digi needs to pee.")
         with pkg_resources.open_binary(sizebot.data, "digipee.mp3") as f:
-            await ctx.send(f"<@{ids.digiduncan}> also has to pee.", file = File(f))
+            await ctx.send(f"<@{ids.digiduncan}> also has to pee.", file = File(f, "digipee.mp3"))
 
     @commands.command(
         hidden = True
