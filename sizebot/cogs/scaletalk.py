@@ -7,7 +7,7 @@ from discord.ext import commands
 
 from sizebot.lib import userdb
 from sizebot.lib.diff import Diff
-from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpException, ValueIsZeroException
+from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpException, UserNotFoundException, ValueIsZeroException
 
 
 logger = logging.getLogger("sizebot")
@@ -89,7 +89,10 @@ async def on_message(message):
     userid = message.author.id
     length = len(message.content)
 
-    userdata = userdb.load(guildid, userid)
+    try:
+        userdata = userdb.load(guildid, userid)
+    except UserNotFoundException:
+        return
 
     if userdata.currentscaletalk is None:
         return
