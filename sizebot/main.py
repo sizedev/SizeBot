@@ -223,6 +223,7 @@ def main():
             return
         await bot.process_commands(after)
         await proportions.nickUpdate(after.author)
+        await active.on_message(after)
 
     @bot.event
     async def on_guild_join(guild):
