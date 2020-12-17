@@ -200,7 +200,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step>"
     )
-    async def setstepscale(self, ctx, change: Diff):
+    async def setstepscale(self, ctx, *, change: Diff):
         """Set the amount you scale per step, for use with `&step`.
 
         Sets the amount that you scale for each `&step` you take.
