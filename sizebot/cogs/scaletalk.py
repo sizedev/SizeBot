@@ -91,7 +91,9 @@ class ScaleTypeCog(commands.Cog):
 async def on_message(message):
     guildid = message.author.guild.id
     userid = message.author.id
-    length = len(message.content)
+    content = message.content
+    content = re.sub(r"<:(.*):\d+>", r"\1", content)  # Make emojis just their name.
+    length = len(content)
 
     try:
         userdata = userdb.load(guildid, userid)
