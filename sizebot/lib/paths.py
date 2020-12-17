@@ -14,7 +14,7 @@ def getDataDir():
 datadir = getDataDir()
 winkpath = datadir / "winkcount.txt"
 guilddbpath = datadir / "guilds"
-telemetrypath = datadir / "telemetry.json"
+telemetrypath = datadir / "telemetry"
 commandfreqpath = datadir / "commandsrun.json"
 thispath = datadir / "thistracker.json"
 changespath = datadir / "changes.json"

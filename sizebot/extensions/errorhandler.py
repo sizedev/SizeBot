@@ -3,8 +3,7 @@ import sys
 
 from discord.ext import commands
 
-from sizebot.lib import errors, utils
-from sizebot.lib.telemetry import Telemetry
+from sizebot.lib import errors, utils, telemetry
 
 logger = logging.getLogger("sizebot")
 
@@ -27,9 +26,8 @@ def setup(bot):
 
         if isinstance(err, errors.AdminPermissionException):
             # Log Admin Permission Exceptions to telemetry
-            telem = Telemetry.load()
-            telem.incrementPermissionError(str(ctx.invoked_with))
-            telem.save()
+            # TODO: Add to telemetry
+            pass
 
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
@@ -49,9 +47,7 @@ def setup(bot):
                 await ctx.send(userMessage)
         elif isinstance(err, commands.errors.CommandNotFound):
             # log unknown commmands to telemetry
-            telem = Telemetry.load()
-            telem.incrementUnknown(str(ctx.invoked_with))
-            telem.save()
+            telemetry.UnknownCommand.append(str(ctx.invoked_with))
         elif isinstance(err, commands.errors.ExpectedClosingQuoteError):
             await ctx.send("Mismatched quotes in command.")
         elif isinstance(err, commands.errors.InvalidEndOfQuotedStringError):

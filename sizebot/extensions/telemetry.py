@@ -1,15 +1,13 @@
 import discord
 
-from sizebot.lib.telemetry import Telemetry
+from sizebot.lib import telemetry
 
 
 def setup(bot):
     @bot.listen
     def on_command(ctx):
         # Log command runs to telemetry
-        telem = Telemetry.load()
-        telem.incrementCommand(str(ctx.invoked_with))
-        telem.save()
+        telemetry.CommandRun.append(str(ctx.invoked_with))
 
         member = ctx.author
         isMember = isinstance(member, discord.Member)

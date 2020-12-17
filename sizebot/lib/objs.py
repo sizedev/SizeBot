@@ -190,6 +190,9 @@ class DigiObject:
             raise errors.InvalidObject(argument)
         return obj
 
+    def __str__(self):
+        return self.name
+
 
 def loadObjFile(filename):
     try:

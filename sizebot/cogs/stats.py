@@ -7,11 +7,10 @@ from discord.ext.commands.converter import MemberConverter
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
-from sizebot.lib import errors, proportions, userdb, macrovision
+from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
-from sizebot.lib.telemetry import Telemetry
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import parseMany, prettyTimeDelta, sentence_join
 
@@ -372,9 +371,7 @@ class StatsCog(commands.Cog):
             compheight = userstats.avgheightcomp
             compdata = getUserdata(compheight)
         else:
-            telem = Telemetry.load()
-            telem.incrementUnknownObject(str(what))
-            telem.save()
+            telemetry.UnknownObject.append(str(what))
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
@@ -402,6 +399,7 @@ class StatsCog(commands.Cog):
             what = what.lower()
 
         if isinstance(what, DigiObject):
+            telemetry.ObjectUsed.append(str(what))
             la = what.relativestatssentence(userdata)
             # Easter egg.
             if what.name == "photograph":
@@ -436,9 +434,7 @@ class StatsCog(commands.Cog):
                 f"use `{ctx.prefix}suggestobject` to suggest it "
                 f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
             )
-            telem = Telemetry.load()
-            telem.incrementUnknownObject(str(what))
-            telem.save()
+            telemetry.UnknownObject.append(str(what))
             return
         stats = proportions.PersonComparison(userdata, compdata)
         embedtosend = await stats.toEmbed(requesterID = ctx.message.author.id)
@@ -456,9 +452,7 @@ class StatsCog(commands.Cog):
         `&objstats book`"""
 
         if isinstance(what, str):
-            telem = Telemetry.load()
-            telem.incrementUnknownObject(str(what))
-            telem.save()
+            telemetry.UnknownObject.append(str(what))
             await ctx.send(f"`{what}` is not a valid object.")
             return
 
