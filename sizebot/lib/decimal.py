@@ -1,4 +1,5 @@
 import decimal
+import logging
 import math
 import random
 import re
@@ -9,6 +10,8 @@ from functools import total_ordering
 from sizebot.lib.utils import minmax
 
 __all__ = ["Decimal", "randRangeLog", "DecimalSpec"]
+
+logger = logging.getLogger("sizebot")
 
 # Configure decimal module
 decimal.getcontext()
@@ -425,9 +428,19 @@ def roundFraction(number, denominator):
 def formatFraction(value):
     if value is None:
         return None
-    part = roundFraction(value % 1, 8)
     fractionStrings = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
-    fraction = fractionStrings[int(part * len(fractionStrings))]
+    part = roundFraction(value % 1, 8)
+    index = int(part * len(fractionStrings)) % len(fractionStrings)
+    try:
+        fraction = fractionStrings[index]
+    except IndexError as e:
+        logger.error("Weird fraction IndexError:\n"
+                     f"fractionStrings = {fractionStrings!r}\n"
+                     f"len(fractionStrings) = {len(fractionStrings)!r}\n"
+                     f"value = {value._rawvalue}\n"
+                     f"part = {part!r}\n"
+                     f"int(part * len(fractionStrings)) = {int(part * len(fractionStrings))}")
+        raise e
     return fraction
 
 

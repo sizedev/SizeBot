@@ -13,7 +13,7 @@ def create_log_levels():
     LOGIN = digilogger.addLogLevel("login", fg="cyan")
     EGG = digilogger.addLogLevel("egg", fg="magenta_2b", bg="light_yellow", attr="bold", prefix="EGG")
     CMD = digilogger.addLogLevel("cmd", fg="grey_50", base="DEBUG", prefix="CMD")
-    ROYALE = digilogger.addLogLevel("royale", fg="cyan", prefix="ROYALE")
+    ROYALE = digilogger.addLogLevel("royale", fg="cyan", base="DEBUG", prefix="ROYALE")
 
 
 create_log_levels()

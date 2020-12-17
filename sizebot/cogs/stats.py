@@ -199,7 +199,12 @@ class StatsCog(commands.Cog):
             await ctx.send(f"The `{stat}` stat is not an available option.")
             return
 
-        stat = statmap[stat]
+        try:
+            stat = statmap[stat]
+        except KeyError:
+            await ctx.send(f"`{stat}` is not a stat.")
+            return
+
         stattosend = stats.getFormattedStat(stat)
 
         if stattosend is None:
@@ -247,7 +252,12 @@ class StatsCog(commands.Cog):
             await ctx.send(f"The `{stat}` stat is not an available option.")
             return
 
-        stat = statmap[stat]
+        try:
+            stat = statmap[stat]
+        except KeyError:
+            await ctx.send(f"`{stat}` is not a stat.")
+            return
+
         stattosend = stats.getFormattedStat(stat)
 
         if stattosend is None:
@@ -409,24 +419,38 @@ class StatsCog(commands.Cog):
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
             compdata = getUserdata(what)
-        elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
+        elif isinstance(what, str) and what.lower() in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userdb.defaultheight
             compdata = getUserdata(compheight, nickname = "an average person")
-        elif isinstance(what, str) and what in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
+        elif isinstance(what, str) and what.lower() in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
             logger.log(EGG, f"{ctx.author.display_name} found Chocolate!")
             compdata = getUserdata(SV.parse("11in"), nickname = "Chocolate [Stuffed Beaver]")
             compdata.baseweight = WV.parse("4.8oz")
             compdata.footlength = SV.parse("2.75in")
             compdata.taillength = SV.parse("12cm")
+        elif isinstance(what, str) and what.lower() in ["me", "myself"]:
+            compdata = userdb.load(ctx.guild.id, ctx.author.id)
         else:
             # Easter eggs.
-            if what in ["all those chickens", "chickens"]:
+            if what.lower() in ["all those chickens", "chickens"]:
                 await ctx.send("https://www.youtube.com/watch?v=NsLKQTh-Bqo")
                 logger.log(EGG, f"{ctx.author.display_name} looked at all those chickens.")
                 return
-            if what == "that horse":
+            if what.lower() == "that horse":
                 await ctx.send("https://www.youtube.com/watch?v=Uz4bW2yOLXA")
                 logger.log(EGG, f"{ctx.author.display_name} looked at that horse (it may in fact be a moth.)")
+                return
+            if what.lower() == "my horse":
+                await ctx.send("https://www.youtube.com/watch?v=o7cCJqya7wc")
+                logger.log(EGG, f"{ctx.author.display_name} looked at my horse (my horse is amazing.)")
+                return
+            if what.lower() == "cake":
+                await ctx.send("The cake is a lie.")
+                logger.log(EGG, f"{ctx.author.display_name} realized the cake was lie.")
+                return
+            if what.lower() == "snout":
+                await ctx.send("https://www.youtube.com/watch?v=k2mFvwDTTt0")
+                logger.log(EGG, f"{ctx.author.display_name} took a closer look at that snout.")
                 return
             await ctx.send(
                 f"Sorry, I don't know what `{what}` is.\n"
@@ -460,7 +484,7 @@ class StatsCog(commands.Cog):
 
     @commands.command(
         aliases = ["dist", "walk", "run"],
-        usage = "<length>",
+        usage = "<length> [user]",
         category = "stats"
     )
     async def distance(self, ctx, length: SV, *, who: typing.Union[discord.Member, SV] = None):
@@ -481,8 +505,8 @@ class StatsCog(commands.Cog):
 
         defaultdata = getUserdata(userdb.defaultheight, "an average person")
         defaultstats = proportions.PersonStats(defaultdata)
-        defaultclimblength = Decimal(0.3048) / userdata.viewscale
-        defaultclimbspeed = Decimal(4828) / userdata.viewscale
+        defaultclimblength = Decimal(0.3048)
+        defaultclimbspeed = Decimal(4828)
         climblength = Decimal(0.3048) / userdata.viewscale
         climbspeed = Decimal(4828) / userdata.viewscale
 
@@ -520,9 +544,9 @@ class StatsCog(commands.Cog):
                 f"or climb that distance in **{climbtime}** *({climbsteps:,.0f} pulls)*"
             )
         )
-        e.set_footer(text = f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), \
-            run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), \
-            or climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls).")
+        e.set_footer(text = f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), "
+                            f"run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), "
+                            f"or climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls).")
 
         await ctx.send(embed = e)
 
@@ -567,7 +591,13 @@ class StatsCog(commands.Cog):
         userdata2 = getUserdata(memberOrHeight2)
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
-        embedtosend = comparison.getStatEmbed(statmap[stat])
+
+        try:
+            embedtosend = comparison.getStatEmbed(statmap[stat])
+        except KeyError:
+            await ctx.send(f"`{stat}` is not a stat.")
+            return
+
         if embedtosend is None:
             await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
             return

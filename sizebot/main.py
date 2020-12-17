@@ -13,7 +13,7 @@ from digiformatter import styles, logger as digilogger
 from sizebot import __version__
 from sizebot import discordplus
 from sizebot.conf import conf
-from sizebot.cogs import edge, limits
+from sizebot.cogs import edge, limits, scaletalk
 from sizebot.lib import language, objs, paths, proportions, status, units, utils
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
@@ -53,6 +53,7 @@ initial_cogs = [
     "roll",
     "royale",
     "run",
+    "scaletalk",
     "scalewalk",
     "set",
     "setbase",
@@ -164,10 +165,11 @@ def main():
         message.content = message.content.replace("“", "\"")
         message.content = message.content.replace("”", "\"")
 
-        if message.content.startswith(f"{conf.prefix}timeit") and bot.is_owner(message.author):
+        if message.content.startswith(f"{conf.prefix}timeit") and await bot.is_owner(message.author):
             await on_message_timed(message)
             return
         await bot.process_commands(message)
+        await scaletalk.on_message(message)
         await edge.on_message(message)
         await limits.on_message(message)
         await proportions.nickUpdate(message.author)
@@ -179,6 +181,8 @@ def main():
         message.content = message.content[len(conf.prefix + "timeit"):].lstrip()
         processtime = arrow.now()
         await bot.process_commands(message)
+        talktime = arrow.now()
+        await scaletalk.on_message(message)
         edgetime = arrow.now()
         await edge.on_message(message)
         limitstime = arrow.now()
@@ -193,7 +197,8 @@ def main():
         starttime = arrow.get(message.created_at.replace(tzinfo=pytz.UTC))
         discordlatency = processtime - starttime
         processlatency = edgetime - processtime
-        edgelatency = limitstime - edgetime
+        talklatency = edgetime - talktime
+        edgelatency = limitstime - talktime
         limitslatency = nickupdatetime - limitstime
         nickupdatelatency = monikatime - nickupdatetime
         monikalatency = activetime - monikatime
@@ -202,6 +207,7 @@ def main():
         latency = (
             f"Discord Latency: {utils.prettyTimeDelta(discordlatency.total_seconds(), True)}\n"
             f"Command Process Latency: {utils.prettyTimeDelta(processlatency.total_seconds(), True)}\n"
+            f"Scale-Talk Latency: {utils.prettyTimeDelta(talklatency.total_seconds(), True)}\n"
             f"Edge Latency: {utils.prettyTimeDelta(edgelatency.total_seconds(), True)}\n"
             f"Limits Latency: {utils.prettyTimeDelta(limitslatency.total_seconds(), True)}\n"
             f"Nick Update Latency: {utils.prettyTimeDelta(nickupdatelatency.total_seconds(), True)}\n"
@@ -217,6 +223,7 @@ def main():
             return
         await bot.process_commands(after)
         await proportions.nickUpdate(after.author)
+        await active.on_message(after)
 
     @bot.event
     async def on_guild_join(guild):

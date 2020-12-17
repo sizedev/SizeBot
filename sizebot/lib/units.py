@@ -50,7 +50,7 @@ class Rate():
     def parse(cls, s):
         match = cls.re_rate.match(s)
         if match is None:
-            raise errors.InvalidSizeValue(s)
+            raise errors.InvalidSizeValue(s, "rate")
         prefix = match.group("prefix")
         multOrSvStr = match.group("multOrSv")
         tvStr = match.group("tv")
@@ -63,13 +63,13 @@ class Rate():
         if valueSV is None:
             valueMult = utils.tryOrNone(Mult.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
         if valueSV is None and valueMult is None:
-            raise errors.InvalidSizeValue(s)
+            raise errors.InvalidSizeValue(s, "size")
         if valueSV and isSub:
             valueSV = -valueSV
 
         valueTV = utils.tryOrNone(TV.parse, tvStr, ignore=errors.InvalidSizeValue)
         if valueTV is None:
-            raise errors.InvalidSizeValue(s)
+            raise errors.InvalidSizeValue(s, "time")
 
         stopSV = None
         stopTV = None
@@ -78,7 +78,7 @@ class Rate():
             if stopSV is None:
                 stopTV = utils.tryOrNone(TV.parse, stopStr, ignore=errors.InvalidSizeValue)
             if stopSV is None and stopTV is None:
-                raise errors.InvalidSizeValue(s)
+                raise errors.InvalidSizeValue(s, "stop")
 
         if valueSV is not None:
             addPerSec = valueSV / valueTV
@@ -105,7 +105,7 @@ class Mult():
     def parse(cls, s):
         match = cls.re_mult.match(s)
         if match is None:
-            raise errors.InvalidSizeValue(s)
+            raise errors.InvalidSizeValue(s, "multiplier")
         prefix = match.group("prefix") or match.group("suffix")
         multValue = Decimal(match.group("multValue"))
 
@@ -377,15 +377,16 @@ class Dimension(Decimal):
     @classmethod
     def parse(cls, s):
         value, unitStr = cls.getQuantityPair(s)
+        kind = "size" if cls == SV else "weight" if cls == WV else "time" if cls == TV else "size"
         if value is None and unitStr is None:
-            raise errors.InvalidSizeValue(s)
+            raise errors.InvalidSizeValue(s, kind)
         if value is None:
             value = Decimal(1)
         else:
             value = Decimal(value)
         unit = cls._units.get(unitStr, None)
         if unit is None:
-            raise errors.InvalidSizeValue(s)
+            raise errors.InvalidSizeValue(s, kind)
         baseUnit = unit.toBaseUnit(value)
         return cls(baseUnit)
 
@@ -472,13 +473,18 @@ class SV(Dimension):
         s = cls.isFeetAndInchesAndIfSoFixIt(s)
         # TODO: These are temporary patches.
         # Zero patch
-        if s.lower() in ["0", "zero"]:
+        if s.lower() in ["0", "zero", "no"]:
+            if s.lower() == "no":
+                logger.log(EGG, "No.")
             return 0, "m"
         # Infinity patch
         if s.lower() in ["infinity", "inf", "∞", "yes"]:
             if s.lower() == "yes":
                 logger.log(EGG, "Yes.")
             return cls._infinity, "m"
+        # . patch
+        if s.startswith("."):
+            s = "0" + s
         match = re.match(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"µ ]+)", s)
         value, unit = None, None
         if match is not None:
@@ -525,6 +531,9 @@ class WV(Dimension):
             if s.lower() == "yes":
                 logger.log(EGG, "Yes.")
             return cls._infinity, "g"
+        # . patch
+        if s.startswith("."):
+            s = "0" + s
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z\'\"]+)", s)
         value, unit = None, None
         if match is not None:
@@ -543,6 +552,9 @@ class TV(Dimension):
     @classmethod
     def getQuantityPair(cls, s):
         s = utils.removeBrackets(s)
+        # . patch
+        if s.startswith("."):
+            s = "0" + s
         match = re.search(r"(?P<value>[\-+]?\d+\.?\d*)? *(?P<unit>[a-zA-Z]+)", s)
         value, unit = None, None
         if match is not None:

@@ -26,6 +26,9 @@ class Game:
 
         self.random.seed(self.seed)
 
+        self.data = None
+        self.rounds = 0
+
         self.royale = None
         self.current_day = 0
         self.current_event_type = None
@@ -81,6 +84,7 @@ class Game:
         )
 
     async def next(self) -> List[EmbedTemplate]:
+        self.rounds += 1
         if await self.game_over():
             logger.log(ROYALE, "This game is already completed. Please start a new game.")
             return [EmbedTemplate(title = "Size Royale",
@@ -208,6 +212,21 @@ class Game:
                     events.remove(event)
 
         return es
+
+    def toJSON(self):
+        return {
+            "data": self.data,
+            "seed": self.seed,
+            "rounds": self.rounds
+        }
+
+    @classmethod
+    async def fromJSON(cls, jsondata):
+        game = cls(seed = jsondata["seed"])
+        await game.load(jsondata["data"])
+        for i in range(jsondata["rounds"]):
+            await game.next()
+        return game
 
     def __str__(self):
         return f"Game(seed={self.seed!r}\n{str(self.royale)}\n)"

@@ -32,33 +32,33 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False, roundeventually =
     s = ""
     if not roundeventually or inputms <= MILLISECONDS_PER_DAY:
         if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:d} years, "
+            s += f"{years:,d} year{'s' if years != 1 else ''}, "
         if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:d} days, "
+            s += f"{days:,d} day{'s' if days != 1 else ''}, "
         if inputms >= MILLISECONDS_PER_HOUR:
-            s += f"{hours:d} hours, "
+            s += f"{hours:,d} hour{'s' if hours != 1 else ''}, "
         if inputms >= MILLISECONDS_PER_MINUTE:
-            s += f"{minutes:d} minutes, "
+            s += f"{minutes:,d} minute{'s' if minutes != 1 else ''}, "
         if millisecondAccuracy:
-            s += f"{seconds:d}.{milliseconds:03d} seconds"
+            s += f"{seconds:,d}.{milliseconds:03d} second{'' if seconds == 1 and milliseconds == 0 else 's'}"
         else:
-            s += f"{seconds:d} seconds"
+            s += f"{seconds:,d} second{'s' if seconds != 1 else ''}"
     elif inputms >= MILLISECONDS_PER_YEAR:
         if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:d} years, "
+            s += f"{years:,d} year{'s' if years != 1 else ''}, "
         if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:d} days, "
+            s += f"{days:,d} day{'s' if days != 1 else ''}, "
         if inputms >= MILLISECONDS_PER_HOUR:
-            s += f"{hours:d} hours"
+            s += f"{hours:,d} hour{'s' if hours != 1 else ''}"
     elif inputms >= MILLISECONDS_PER_DAY:
         if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:d} years, "
+            s += f"{years:,d} year{'s' if years != 1 else ''}, "
         if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:d} days, "
+            s += f"{days:,d} day{'s' if days != 1 else ''}, "
         if inputms >= MILLISECONDS_PER_HOUR:
-            s += f"{hours:d} hours, "
+            s += f"{hours:,d} hour{'s' if hours != 1 else ''}, "
         if inputms >= MILLISECONDS_PER_MINUTE:
-            s += f"{minutes:d} minutes"
+            s += f"{minutes:,d} minute{'s' if minutes != 1 else ''}"
 
     return s
 
