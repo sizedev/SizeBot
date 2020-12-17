@@ -213,7 +213,7 @@ def main():
             f"Nick Update Latency: {utils.prettyTimeDelta(nickupdatelatency.total_seconds(), True)}\n"
             f"Monika Latency: {utils.prettyTimeDelta(monikalatency.total_seconds(), True)}\n"
             f"User Active Check Latency: {utils.prettyTimeDelta(activelatency.total_seconds(), True)}\n"
-            f"**Total Latency: {utils.prettyTimeDelta(totaltime.total_seconds(), True)}\n**"
+            f"**Total Latency: {utils.prettyTimeDelta(totaltime.total_seconds(), True)}**"
         )
         await message.channel.send(latency)
 
