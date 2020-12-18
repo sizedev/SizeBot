@@ -41,6 +41,7 @@ class ScaleTypeCog(commands.Cog):
 
         userdata = userdb.load(guildid, userid)
 
+        chars = None  # fix unbound error
         if match := re.fullmatch(re_char, change):
             diff = Diff.parse(match.group(1))
             if match.group(2):
@@ -51,6 +52,8 @@ class ScaleTypeCog(commands.Cog):
                 raise UserMessedUpException(f"`{change}` is not a valid character count.")
             if not isinstance(chars, int):
                 raise UserMessedUpException(f"`{change}` is not a valid character count.")
+        if chars == 0:
+            raise ValueIsZeroException
         else:
             raise UserMessedUpException(f"`{change}` is not a valid change-per-character.")
 
