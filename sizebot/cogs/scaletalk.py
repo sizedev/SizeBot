@@ -45,8 +45,10 @@ class ScaleTypeCog(commands.Cog):
             diff = Diff.parse(match.group(1))
             if match.group(2):
                 chars = tryInt(match.group(2))
+                if chars == "":
+                    chars = 1
             else:
-                chars = 1
+                raise UserMessedUpException(f"`{change}` is not a valid character count.")
             if not isinstance(chars, int):
                 raise UserMessedUpException(f"`{change}` is not a valid character count.")
         else:
