@@ -1544,6 +1544,19 @@
         ]
     },
     {
+        "name": "stoplight",
+        "dimension": "h",
+        "height": "1.0668",
+        "width": "0.3429",
+        "diameter": "0.3048",
+        "depth": "0.2032",
+        "weight": "18143.7",
+        "aliases": [
+            "traffic light",
+            "traffic signal"
+        ]
+    },
+    {
         "name": "sidewalk width",
         "dimension": "w",
         "width": "1.2192",
@@ -1699,9 +1712,6 @@
         "dimension": "h",
         "height": "2.16",
         "weight": "147000",
-        "tags": [
-            "person"
-        ],
         "aliases": [
             "Shaquille O'Neal"
         ]
@@ -1715,6 +1725,15 @@
         "weight": "48080000",
         "aliases": [
             "tank"
+        ]
+    },
+    {
+        "name": "stop sign",
+        "dimension": "h",
+        "height": "2.5908",
+        "width": "0.6096",
+        "aliases": [
+            "octagon"
         ]
     },
     {
@@ -1749,7 +1768,6 @@
         "dimension": "h",
         "height": "3.05",
         "tags": [
-            "person",
             "warhammer",
             "40k"
         ],
