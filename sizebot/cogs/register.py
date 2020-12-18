@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from sizebot.lib.telemetry import AdvancedRegisterUsed, ProfileCopied, RegisterStarted, RegisterStepCompleted, Unregistered
 
 from discord.utils import get
 from discord.ext import commands
@@ -40,6 +41,7 @@ async def showNextStep(ctx, userdata, completed=False):
         "setsystem": f"Finally, use `{conf.prefix}setsystem` to set what unit system you use: `M` for Metric, `U` for US."
     }
     next_step_message = step_messages[next_step]
+    RegisterStepCompleted.append(ctx.guild.id, ctx.author.id, ctx.command.name, completed = completed)
     await ctx.send(f"You have {len(userdata.registration_steps_remaining)} registration steps remaining.\n{next_step_message}")
 
 
@@ -109,6 +111,7 @@ class RegisterCog(commands.Cog):
             if reaction.emoji != emojis.check:
                 return
 
+        RegisterStarted.append(ctx.guild.id, ctx.author.id)
         userdata = userdb.User()
         userdata.guildid = ctx.guild.id
         userdata.id = ctx.author.id
@@ -224,6 +227,7 @@ class RegisterCog(commands.Cog):
         if unitsystem.lower() == "i":
             unitsystem = "u"
 
+        AdvancedRegisterUsed.append(ctx.guild.id, ctx.user.id)
         userdata = userdb.User()
         userdata.guildid = ctx.guild.id
         userdata.id = ctx.author.id
@@ -306,6 +310,7 @@ class RegisterCog(commands.Cog):
         userdb.delete(guild.id, user.id)
         await removeUserRole(user)
 
+        Unregistered.append(ctx.guild.id, ctx.user.id)
         logger.warn(f"User {user.id} successfully unregistered.")
         await ctx.send(f"Unregistered {user.name}.")
 
@@ -392,6 +397,8 @@ class RegisterCog(commands.Cog):
         userdata = userdb.load(chosenguildid, ctx.author.id)
         userdata.guildid = ctx.guild.id
         userdb.save(userdata)
+
+        ProfileCopied(ctx.guild.id, ctx.user.id)
 
         await outmsg.delete()
         await ctx.send(f"Successfully copied profile from *{self.bot.get_guild(int(chosenguildid)).name}* to here!")

@@ -1,3 +1,4 @@
+from sizebot.lib.telemetry import CommandRun, ErrorThrown
 import arrow
 import os
 import logging
@@ -158,6 +159,14 @@ def main():
     @bot.event
     async def on_command(ctx):
         logger.log(CMD, f"G {ctx.guild.name}, U {ctx.message.author.display_name}: {ctx.message.content}")
+
+    @bot.event
+    async def on_command_completion(ctx):
+        CommandRun.append(ctx.command)
+
+    @bot.event
+    async def on_command_error(ctx, error):
+        ErrorThrown.append(ctx.command, error.original.__class__.__name__)
 
     @bot.event
     async def on_message(message):
