@@ -12,63 +12,34 @@ from sizebot.lib.constants import colors
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import parseMany, prettyTimeDelta, sentence_join
+from sizebot.lib.utils import AliasMap, parseMany, prettyTimeDelta, sentence_join
 
 logger = logging.getLogger("sizebot")
 
-statmap = {
-    "height":           "height",
-    "weight":           "weight",
-    "foot":             "foot",
-    "feet":             "foot",
-    "shoe":             "foot",
-    "shoes":            "foot",
-    "paw":              "foot",
-    "paws":             "foot",
-    "toe":              "toe",
-    "shoeprint":        "shoeprint",
-    "footprint":        "shoeprint",
-    "finger":           "finger",
-    "pointer":          "finger",
-    "thumb":            "thumb",
-    "nail":             "nail",
-    "fingernail":       "fingernail",
-    "fingerprint":      "fingerprint",
-    "thread":           "thread",
-    "eye":              "eye",
-    "eyes":             "eye",
-    "hair":             "hair",
-    "fur":              "hair",
-    "hairlength":       "hair",
-    "furlength":        "hair",
-    "hairwidth":        "hairwidth",
-    "furwidth":         "hairwidth",
-    "tail":             "tail",
-    "ear":              "ear",
-    "speed":            "speed",
-    "walk":             "speed",
-    "run":              "speed",
-    "step":             "speed",
-    "stride":           "speed",
-    "base":             "base",
-    "baseheight":       "base",
-    "baseweight":       "base",
-    "compare":          "compare",
-    "look":             "compare",
-    "scale":            "scale",
-    "multiplier":       "scale",
-    "mult":             "scale",
-    "horizondistance":  "horizondistance",
-    "horizon":          "horizondistance",
-    "terminalvelocity": "terminalvelocity",
-    "velocity":         "terminalvelocity",
-    "fall":             "terminalvelocity",
-    "strength":         "liftstrength",
-    "lift":             "liftstrength",
-    "carry":            "liftstrength",
-    "liftstrength":     "liftstrength",
-    "carrystrength":    "liftstrength"
-}
+statmap = AliasMap({
+    "height":           ("size"),
+    "weight":           (),
+    "foot":             ("feet", "shoe", "shoes", "paw", "paws"),
+    "toe":              ("toes"),
+    "shoeprint":        ("footprint"),
+    "finger":           ("pointer"),
+    "thumb":            (),
+    "nail":             ("fingernail"),
+    "fingerprint":      (),
+    "thread":           (),
+    "eye":              ("eyes"),
+    "hair":             ("fur", "hairlength", "furlength"),
+    "hairwidth":        ("furwidth"),
+    "tail":             (),
+    "ear":              (),
+    "speed":            ("walk", "run", "climb", "step", "stride", "pull"),
+    "base":             ("baseheight", "baseweight"),
+    "compare":          ("look"),
+    "scale":            ("multiplier", "mult", "factor"),
+    "horizondistance":  ("horizon"),
+    "terminalvelocity": ("velocity", "fall"),
+    "liftstrength":     ("strength", "lift", "carry", "carrystrength")
+})
 
 
 class StatsCog(commands.Cog):

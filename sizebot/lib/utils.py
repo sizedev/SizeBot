@@ -2,6 +2,7 @@ import inspect
 import pydoc
 import re
 import traceback
+from typing import Dict, Hashable, Sequence
 from urllib.parse import quote
 
 import validator_collection
@@ -383,3 +384,22 @@ def truncate(s, amount) -> str:
     if len(s) > amount:
         return s[:amount - 3] + "..."
     return s
+
+
+class AliasMap(dict):
+    def __init__(self, data: Dict[Hashable, Sequence]):
+        super().__init__()
+
+        for k, v in data.items():
+            self[k] = v
+
+    def __setitem__(self, k, v):
+        if not isinstance(k, Hashable):
+            raise ValueError("{k!r} is not hashable and can't be used as a key.")
+        if not isinstance(v, Sequence):
+            raise ValueError("{v!r} is not a sequence and can't be used as a value.")
+        if isinstance(v, str):
+            v = [v]
+        for i in v:
+            super().__setitem__(i, k)
+        super().__setitem__(k, k)

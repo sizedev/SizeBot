@@ -1,3 +1,4 @@
+from sizebot.lib.telemetry import CommandRun, ErrorThrown
 import arrow
 import os
 import logging
@@ -160,6 +161,14 @@ def main():
         logger.log(CMD, f"G {ctx.guild.name}, U {ctx.message.author.display_name}: {ctx.message.content}")
 
     @bot.event
+    async def on_command_completion(ctx):
+        CommandRun.append(ctx.command)
+
+    @bot.event
+    async def on_command_error(ctx, error):
+        ErrorThrown.append(ctx.command, error.original.__class__.__name__)
+
+    @bot.event
     async def on_message(message):
         # F*** smart quotes.
         message.content = message.content.replace("“", "\"")
@@ -213,7 +222,7 @@ def main():
             f"Nick Update Latency: {utils.prettyTimeDelta(nickupdatelatency.total_seconds(), True)}\n"
             f"Monika Latency: {utils.prettyTimeDelta(monikalatency.total_seconds(), True)}\n"
             f"User Active Check Latency: {utils.prettyTimeDelta(activelatency.total_seconds(), True)}\n"
-            f"**Total Latency: {utils.prettyTimeDelta(totaltime.total_seconds(), True)}\n**"
+            f"**Total Latency: {utils.prettyTimeDelta(totaltime.total_seconds(), True)}**"
         )
         await message.channel.send(latency)
 
