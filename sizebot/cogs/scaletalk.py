@@ -13,7 +13,7 @@ from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpExcepti
 
 logger = logging.getLogger("sizebot")
 
-re_char = r"(.*)[/:]?|(?:\s*per\s*)?(\d+)?"
+re_char = r"(.*)(?:[/:]|\s*per\s*)(\d+)?"
 
 
 class ScaleTypeCog(commands.Cog):
