@@ -11,6 +11,7 @@ from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
+from sizebot.lib.utils import AliasMap
 
 logger = logging.getLogger("sizebot")
 
@@ -100,22 +101,10 @@ class SetCog(commands.Cog):
     async def setsystem(self, ctx, newsys):
         """Set measurement system."""
         newsys = newsys.lower()
-        systemmap = {
-            "m":         "m",
-            "b":         "m",
-            "e":         "m",
-            "u":         "u",
-            "i":         "u",
-            "c":         "u",
-            "a":         "u",
-            "metric":    "m",
-            "british":   "m",
-            "europe":    "m",
-            "us":        "u",
-            "imperial":  "u",
-            "customary": "u",
-            "american":  "u"
-        }
+        systemmap = AliasMap({
+            "m": ("b", "e", "metric", "british", "europe", "european"),
+            "u": ("i", "c", "a", "us", "imperial", "customary", "american")
+        })
 
         if newsys not in systemmap:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.usage}`.")
@@ -537,20 +526,13 @@ class SetCog(commands.Cog):
         guild = ctx.guild
         user = ctx.author
 
-        gendermap = {
-            "m":      "m",
-            "male":   "m",
-            "man":    "m",
-            "boy":    "m",
-            "f":      "f",
-            "female": "f",
-            "woman":  "f",
-            "girl":   "f",
-            "none":   None,
-            None:     None
-        }
+        gendermap = AliasMap({
+            "m": ("male", "man", "boy"),
+            "f": ("female", "woman", "girl"),
+            None: ("none", "x", "nb")
+        })
         try:
-            gender = gendermap[gender]
+            gender = gendermap[gender.lower()]
         except KeyError:
             raise errors.ArgumentException
 
