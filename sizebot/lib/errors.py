@@ -15,7 +15,7 @@ class DigiException(Exception):
     level = logging.WARNING
 
     def formatMessage(self):
-        return None
+        self.formatUserMessage() or None
 
     def formatUserMessage(self):
         return None
@@ -24,7 +24,7 @@ class DigiException(Exception):
         return utils.getFullname(self)
 
     def __str__(self):
-        return self.formatMessage() or repr(self)
+        return self.formatMessage() or self.formatUserMessage() or repr(self)
 
 
 class DigiContextException(Exception):
@@ -40,7 +40,7 @@ class DigiContextException(Exception):
         return utils.getFullname(self)
 
     def __str__(self):
-        return repr(self)
+        return self.formatMessage() or self.formatUserMessage() or repr(self)
 
 
 class UserNotFoundException(DigiContextException):
@@ -203,11 +203,11 @@ class ArgumentException(DigiContextException):
         return f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.signature}`."
 
 
-class UserMessedUpException(DigiContextException):
+class UserMessedUpException(DigiException):
     def __init__(self, custommessage):
         self.custommessage = custommessage
 
-    async def formatUserMessage(self, ctx):
+    async def formatUserMessage(self):
         return self.custommessage
 
 
@@ -217,7 +217,7 @@ class ThisShouldNeverHappenException(DigiException):
     def __init__(self, custommessage):
         self.custommessage = custommessage
 
-    def formatUserMessage(self, ctx):
+    def formatUserMessage(self):
         return "This should never happen. Something very wrong has occured."
 
     def formatMessage(self):
