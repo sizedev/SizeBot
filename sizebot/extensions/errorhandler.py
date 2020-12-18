@@ -48,7 +48,7 @@ def setup(bot):
                 await ctx.send(f"{emojis.warning} {userMessage}")
         elif isinstance(err, commands.errors.CommandNotFound):
             # log unknown commmands to telemetry
-            telemetry.UnknownCommand.append(str(ctx.invoked_with))
+            telemetry.UnknownCommand.append(ctx.command.name)
         elif isinstance(err, commands.errors.ExpectedClosingQuoteError):
             await ctx.send(f"{emojis.warning} Mismatched quotes in command.")
         elif isinstance(err, commands.errors.InvalidEndOfQuotedStringError):

@@ -1,4 +1,3 @@
-from sizebot.lib.telemetry import CommandRun, ErrorThrown
 import arrow
 import os
 import logging
@@ -15,7 +14,7 @@ from sizebot import __version__
 from sizebot import discordplus
 from sizebot.conf import conf
 from sizebot.cogs import edge, limits, scaletalk
-from sizebot.lib import language, objs, paths, proportions, status, units, utils
+from sizebot.lib import language, objs, paths, proportions, status, telemetry, units, utils
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.plugins import active, monika
@@ -162,11 +161,11 @@ def main():
 
     @bot.event
     async def on_command_completion(ctx):
-        CommandRun.append(ctx.command)
+        telemetry.CommandRun.append(ctx.command.name)
 
     @bot.event
     async def on_command_error(ctx, error):
-        ErrorThrown.append(ctx.command, error.original.__class__.__name__)
+        telemetry.ErrorThrown.append(ctx.command.name, error.original.__class__.__name__)
 
     @bot.event
     async def on_message(message):
