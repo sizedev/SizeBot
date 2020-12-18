@@ -50,7 +50,6 @@ class ObjectUsed(TelemetryMessage):
 
 @dataclass
 class SizeUsed(TelemetryMessage):
-    # TODO: This won't store correctly.
     size: SV
     filename = Path("size_used.ndjson")
 
@@ -64,6 +63,12 @@ class RegisterStarted(TelemetryMessage):
     userid: int
     filename = Path("register_started.ndjson")
 
+    def toJSON(self):
+        return {
+            "guildid": str(self.guildid),
+            "userid": str(self.userid)
+        }
+
 
 @dataclass
 class AdvancedRegisterUsed(TelemetryMessage):
@@ -71,12 +76,24 @@ class AdvancedRegisterUsed(TelemetryMessage):
     userid: int
     filename = Path("advanced_register_used.ndjson")
 
+    def toJSON(self):
+        return {
+            "guildid": str(self.guildid),
+            "userid": str(self.userid)
+        }
+
 
 @dataclass
 class ProfileCopied(TelemetryMessage):
     guildid: int
     userid: int
     filename = Path("profile_copied.ndjson")
+
+    def toJSON(self):
+        return {
+            "guildid": str(self.guildid),
+            "userid": str(self.userid)
+        }
 
 
 @dataclass
@@ -87,12 +104,26 @@ class RegisterStepCompleted(TelemetryMessage):
     completed: bool
     filename = Path("register_step_completed.ndjson")
 
+    def toJSON(self):
+        return {
+            "guildid": str(self.guildid),
+            "userid": str(self.userid),
+            "command": self.command,
+            "completed": self.completed
+        }
+
 
 @dataclass
 class Unregistered(TelemetryMessage):
     guildid: int
     userid: int
     filename = Path("register_completed.ndjson")
+
+    def toJSON(self):
+        return {
+            "guildid": str(self.guildid),
+            "userid": str(self.userid)
+        }
 
 
 @dataclass
