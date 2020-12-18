@@ -18,7 +18,7 @@ class ExistingDateException(Exception):
 
 class TelemetryMessage:
     def writerow(self):
-        data = asdict(self)
+        data = self.toJSON()
         if "date" in data:
             raise ExistingDateException
         data["date"] = arrow.now().timestamp
@@ -27,6 +27,9 @@ class TelemetryMessage:
         filepath = paths.telemetrypath / self.filename
         with filepath.open("a") as f:
             f.write(stringified + "\n")
+
+    def toJSON(self):
+        return asdict(self)
 
     @classmethod
     def append(cls, *args):
@@ -49,6 +52,9 @@ class ObjectUsed(TelemetryMessage):
 class SizeUsed(TelemetryMessage):
     size: SV
     filename = Path("size_used.ndjson")
+
+    def toJSON(self):
+        return {"size": str(self.size)}
 
 
 @dataclass
