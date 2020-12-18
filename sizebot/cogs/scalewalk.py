@@ -196,7 +196,7 @@ class ScaleWalkCog(commands.Cog):
             raise DigiContextException(f"Invalid flag {flag}.")
 
     @commands.command(
-        aliases = ["setscalestep"],
+        aliases = ["setscalestep", "setscalewalk", "setwalkscale"],
         category = "scalestep",
         usage = "<change per step>"
     )
@@ -223,7 +223,9 @@ class ScaleWalkCog(commands.Cog):
 
     @commands.command(
         category = "scalestep",
-        aliases = ["clearstepscale", "unsetstepscale", "resetscalestep", "clearscalestep", "unsetscalestep"]
+        aliases = ["clearstepscale", "unsetstepscale", "resetscalestep", "clearscalestep", "unsetscalestep",
+                   "clearwalkscale", "unsetwalkscale", "resetscalewalk", "clearscalewalk", "unsetscalewalk",
+                   "resetwalkscale"]
     )
     async def resetstepscale(self, ctx):
         """Clear your step-scale amount, for use with `&step`."""

@@ -32,8 +32,8 @@ class ScaleTypeCog(commands.Cog):
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
         Examples:
-        `&settalkscale 2x/100
-        `&settalkscale -1mm
+        `&settalkscale 2x/100`
+        `&settalkscale -1mm`
         """
 
         guildid = ctx.guild.id
