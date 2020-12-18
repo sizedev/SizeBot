@@ -70,7 +70,7 @@ class GuildNotFoundException(DigiException):
     def __init__(self, guildid):
         self.guildid = guildid
 
-    async def formatMessage(self):
+    def formatMessage(self):
         return f"Guild {self.guildid} not found."
 
 
@@ -219,10 +219,10 @@ class UserMessedUpException(DigiException):
     def __init__(self, custommessage):
         self.custommessage = custommessage
 
-    async def formatMessage(self):
+    def formatMessage(self):
         return self.custommessage
 
-    async def formatUserMessage(self):
+    def formatUserMessage(self):
         return self.custommessage
 
 
