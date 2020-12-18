@@ -40,7 +40,7 @@ class DigiContextException(Exception):
         return utils.getFullname(self)
 
     def __str__(self):
-        return self.formatMessage() or self.formatUserMessage() or repr(self)
+        return repr(self)
 
 
 class UserNotFoundException(DigiContextException):
