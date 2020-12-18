@@ -15,7 +15,7 @@ class DigiException(Exception):
     level = logging.WARNING
 
     def formatMessage(self):
-        self.formatUserMessage() or None
+        return None
 
     def formatUserMessage(self):
         return None
@@ -101,6 +101,9 @@ class ChangeMethodInvalidException(DigiContextException):
     def __init__(self, changemethod):
         self.changemethod = changemethod
 
+    async def formatMessage(self, ctx):
+        return f"Invalid change method {self.changemethod}"
+
     async def formatUserMessage(self, ctx):
         usernick = ctx.author.display_name
         return f"Sorry, {usernick}! {self.changemethod} is not a valid change method."
@@ -133,6 +136,9 @@ class InvalidSizeValue(DigiException):
         self.sizevalue = sizevalue
         self.kind = kind
 
+    def formatMessage(self):
+        return f"{self.sizevalue!r} is an unrecognized {self.kind} value."
+
     def formatUserMessage(self):
         return f"{self.sizevalue!r} is an unrecognized {self.kind} value."
 
@@ -140,6 +146,9 @@ class InvalidSizeValue(DigiException):
 class InvalidObject(DigiException):
     def __init__(self, name):
         self.name = name
+
+    def formatMessage(self):
+        return f"{self.name!r} is an unrecognized object."
 
     def formatUserMessage(self):
         return f"{self.name!r} is an unrecognized object."
@@ -175,6 +184,9 @@ class InvalidRollException(DigiException):
     def __init__(self, dString):
         self.dString = dString
 
+    def formatMessage(self):
+        return f"Invalid roll string `{self.dString}`."
+
     def formatUserMessage(self):
         return f"Invalid roll string `{self.dString}`."
 
@@ -206,6 +218,9 @@ class ArgumentException(DigiContextException):
 class UserMessedUpException(DigiException):
     def __init__(self, custommessage):
         self.custommessage = custommessage
+
+    async def formatMessage(self):
+        return self.custommessage
 
     async def formatUserMessage(self):
         return self.custommessage
