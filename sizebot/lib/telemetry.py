@@ -101,7 +101,7 @@ class RegisterStepCompleted(TelemetryMessage):
     guildid: int
     userid: int
     command: str
-    completed: bool
+    completed: bool = False
     filename = Path("register_step_completed.ndjson")
 
     def toJSON(self):
