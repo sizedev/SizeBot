@@ -165,11 +165,6 @@ def main():
         telemetry.CommandRun.append(ctx.command.name)
 
     @bot.event
-    async def on_command_error(ctx, error):
-        error = getattr(error, "original", error)
-        telemetry.ErrorThrown.append(ctx.command.name, error.__class__.__name__)
-
-    @bot.event
     async def on_message(message):
         # F*** smart quotes.
         message.content = message.content.replace("“", "\"")
