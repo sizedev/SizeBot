@@ -49,9 +49,9 @@ class ObjectUsed(TelemetryMessage):
 
 
 @dataclass
-class SizeUsed(TelemetryMessage):
+class SizeViewed(TelemetryMessage):
     size: SV
-    filename = Path("size_used.ndjson")
+    filename = Path("size_viewed.ndjson")
 
     def toJSON(self):
         return {"size": str(self.size)}

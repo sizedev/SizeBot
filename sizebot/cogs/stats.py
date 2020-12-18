@@ -67,6 +67,9 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
+
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = getUserdata(memberOrHeight, customName, allow_unreg=same_user)
 
@@ -127,6 +130,11 @@ class StatsCog(commands.Cog):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
+        if isinstance(memberOrHeight2, SV):
+            telemetry.SizeViewed(memberOrHeight)
+
         userdata = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2, customName)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
@@ -160,6 +168,9 @@ class StatsCog(commands.Cog):
 
         if memberOrHeight is None:
             memberOrHeight = ctx.author
+
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = getUserdata(memberOrHeight, customName, allow_unreg=same_user)
@@ -212,6 +223,11 @@ class StatsCog(commands.Cog):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
+        if isinstance(memberOrHeight2, SV):
+            telemetry.SizeViewed(memberOrHeight)
+
         userdata = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2, customName)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
@@ -243,16 +259,21 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def compare(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def compare(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Compare two users' size."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
-        if memberOrHeight1 is None:
+        if memberOrHeight is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        userdata1 = getUserdata(memberOrHeight1)
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
+
+        userdata1 = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2)
 
         comparison = proportions.PersonComparison(userdata1, userdata2)
@@ -268,6 +289,11 @@ class StatsCog(commands.Cog):
     async def compareas(self, ctx, asHeight: typing.Union[discord.Member, SV] = None,
                         memberOrHeight: typing.Union[discord.Member, SV] = None, *, customName = None):
         """Compare yourself as a different height and another user."""
+
+        if isinstance(asHeight, SV):
+            telemetry.SizeViewed(asHeight)
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
 
         userdata = getUserdata(ctx.message.author)
         asdata = getUserdata(asHeight, customName)
@@ -288,6 +314,9 @@ class StatsCog(commands.Cog):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.author
+
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
 
         userdata = getUserdata(memberOrHeight)
 
@@ -339,6 +368,9 @@ class StatsCog(commands.Cog):
             what = await parseMany(ctx, args, [DigiObject, mc, SV])
             who = ctx.author
 
+        if isinstance(who, SV):
+            telemetry.SizeViewed(who)
+
         userdata = getUserdata(who)
         userstats = proportions.PersonStats(userdata)
 
@@ -373,6 +405,9 @@ class StatsCog(commands.Cog):
         `&lookat man`
         `&look book`
         `&examine building`"""
+
+        if isinstance(what, SV):
+            telemetry.SizeViewed(what)
 
         userdata = getUserdata(ctx.author)
 
@@ -527,16 +562,21 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def distancestats(self, ctx, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def distancestats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Find how long it would take to travel across a person."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
-        if memberOrHeight1 is None:
+        if memberOrHeight is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        userdata1 = getUserdata(memberOrHeight1)
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
+        if isinstance(memberOrHeight2, SV):
+            telemetry.SizeViewed(memberOrHeight2)
+
+        userdata1 = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2)
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
@@ -549,16 +589,21 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def distancestat(self, ctx, stat, memberOrHeight1: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def distancestat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Find how long it would take to travel across a person."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
-        if memberOrHeight1 is None:
+        if memberOrHeight is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        userdata1 = getUserdata(memberOrHeight1)
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight)
+        if isinstance(memberOrHeight2, SV):
+            telemetry.SizeViewed(memberOrHeight2)
+
+        userdata1 = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2)
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
