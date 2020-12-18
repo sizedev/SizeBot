@@ -1,6 +1,7 @@
 import arrow
 import os
 import logging
+from discord.ext.commands.errors import CommandError
 import pytz
 import sys
 from datetime import datetime
@@ -165,7 +166,7 @@ def main():
 
     @bot.event
     async def on_command_error(ctx, error):
-        telemetry.ErrorThrown.append(ctx.command.name, error.original.__class__.__name__)
+        telemetry.ErrorThrown.append(ctx.command.name, error.__class__.__name__)
 
     @bot.event
     async def on_message(message):
