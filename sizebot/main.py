@@ -166,6 +166,7 @@ def main():
 
     @bot.event
     async def on_command_error(ctx, error):
+        error = getattr(error, "original", error)
         telemetry.ErrorThrown.append(ctx.command.name, error.__class__.__name__)
 
     @bot.event
