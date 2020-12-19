@@ -149,13 +149,13 @@ class StatsCog(commands.Cog):
 
         Get a single stat about yourself, a user, or a raw height.
 
-        Available stats are: {0}
+        Available stats are: #STATS#
 
         Examples:
         `&stat height` (not specifying a user returns a stat about yourself.)
         `&stat weight @User`
         `&stat foot 10ft`
-        """.format(statmap)
+        """
 
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -198,13 +198,13 @@ class StatsCog(commands.Cog):
 
         Get a single stat about yourself, a user, or a raw height, as if they were a different height.
 
-        Available stats are: {0}
+        Available stats are: #STATS#
 
         Examples:
         `&statas weight 100ft` (defaults to stats about you, if you were a certain height.)
         `&statas foot 100ft @User` (get stats about @User if they were a certain height.)
         `&statas speed @User @User2` (get stats about @User2 if they were as tall as @User.)
-        """.format(statmap)
+        """
 
         if memberOrHeight is None:
             raise errors.ArgumentException
@@ -588,7 +588,7 @@ class StatsCog(commands.Cog):
     async def distancestat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Find how long it would take to travel across a certain distance on a person.
         
-        Available stats are: {0}""".format(statmap)
+        Available stats are: #STATS#"""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 

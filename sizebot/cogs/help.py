@@ -8,6 +8,7 @@ from discord.errors import Forbidden
 from discord.ext import commands
 
 from sizebot import __version__
+from sizebot.cogs.stats import statmap
 from sizebot.conf import conf
 from sizebot.lib import checks, objs, userdb, utils
 from sizebot.lib.constants import colors, emojis, ids
@@ -204,7 +205,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
         if "guild_only" in repr(cmd.checks):
             description += "*This command can only be run in a server, and not in DMs.*\n"
-        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix)
+        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", statmap)
 
         embed = Embed(
             title=signature,
