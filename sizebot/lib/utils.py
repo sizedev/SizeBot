@@ -415,8 +415,8 @@ class AliasMap(dict):
         for k, v in swapped.items():
             s = k
             for vv in v:
-                if vv != k
-                s += f"/{vv}"
+                if vv != k:
+                    s += f"/{vv}"
             aliasstrings.append(s)
 
         return sentence_join(aliasstrings, oxford = True)
