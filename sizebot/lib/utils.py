@@ -412,7 +412,7 @@ class AliasMap(dict):
             swapped[v].append(k)
 
         aliasstrings = []
-        for k, v in swapped:
+        for k, v in swapped.items():
             s = k
             for vv in v:
                 s += f"/{vv}"
