@@ -33,7 +33,7 @@ class ScaleTypeCog(commands.Cog):
 
         Examples:
         `&settalkscale 2x/100`
-        `&settalkscale -1mm`
+        `&settalkscale -1mm` (defaults to per 1 character)
         """
 
         guildid = ctx.guild.id

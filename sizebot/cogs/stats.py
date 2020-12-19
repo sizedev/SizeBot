@@ -55,9 +55,6 @@ class StatsCog(commands.Cog):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
-        Stats: current height, current weight, base height, base weight,
-        foot length, foot width, toe height, pointer finger length, thumb width,
-        fingerprint depth, hair width, multiplier.
 
         Examples:
         `&stats` (defaults to stats about you.)
@@ -116,9 +113,6 @@ class StatsCog(commands.Cog):
         """User stats command with modified bases.
 
         Get tons of user stats about yourself, a user, or a raw height, as if they were a different height.
-        Stats: current height, current weight, base height, base weight,
-        foot length, foot width, toe height, pointer finger length, thumb width,
-        fingerprint depth, hair width, multiplier.
 
         Examples:
         `&statsas 100ft` (defaults to stats about you, if you were a certain height.)
@@ -155,16 +149,13 @@ class StatsCog(commands.Cog):
 
         Get a single stat about yourself, a user, or a raw height.
 
-        Available stats are: height, weight, foot/feet/shoe/shoes/paw/paws, toe, shoeprint/footprint, \
-        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair/fur, hairwidth/furlength, \
-        tail, ear, speed/walk/run/step/stride, base/baseheight/baseweight, compare/look, scale/multiplier/mult, \
-        horizon/horizondistance, terminalvelocity/velocity/fall, strength/lift/carry/liftstrength/carrystrength.
+        Available stats are: {0}
 
         Examples:
         `&stat height` (not specifying a user returns a stat about yourself.)
         `&stat weight @User`
         `&stat foot 10ft`
-        """
+        """.format(statmap)
 
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -207,16 +198,13 @@ class StatsCog(commands.Cog):
 
         Get a single stat about yourself, a user, or a raw height, as if they were a different height.
 
-        Available stats are: height, weight, foot/feet/shoe/shoes/paw/paws, toe, shoeprint/footprint, \
-        finger/pointer, thumb, nail/fingernail, fingerprint, thread, eye/eyes, hair/fur, tail, \
-        speed/walk/run/step/stride, base/baseheight/baseweight, compare/look, scale/multiplier/mult, \
-        horizon/horizondistance, terminalvelocity/velocity/fall, strength/lift/carry/liftstrength/carrystrength.
+        Available stats are: {0}
 
         Examples:
         `&statas weight 100ft` (defaults to stats about you, if you were a certain height.)
         `&statas foot 100ft @User` (get stats about @User if they were a certain height.)
         `&statas speed @User @User2` (get stats about @User2 if they were as tall as @User.)
-        """
+        """.format(statmap)
 
         if memberOrHeight is None:
             raise errors.ArgumentException
@@ -260,7 +248,9 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def compare(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
-        """Compare two users' size."""
+        """Compare two users' size.
+        
+        If give one user, compares you to that user."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
@@ -347,8 +337,8 @@ class StatsCog(commands.Cog):
 
         Used to see how an object would look at your scale.
         Examples:
-        `&onewaycompare lego`
-        `&owc moon as @Kelly`
+        `&objectcomapre lego`
+        `&objcompare moon as @Kelly`
         """
 
         argslist = args.rsplit(" as ", 1)
@@ -591,12 +581,14 @@ class StatsCog(commands.Cog):
 
     @commands.command(
         aliases = ["diststat"],
-        usage = "<user/height> [user/height]",
+        usage = "<stat> <user/height> [user/height]",
         category = "stats"
     )
     @commands.guild_only()
     async def distancestat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
-        """Find how long it would take to travel across a person."""
+        """Find how long it would take to travel across a certain distance on a person.
+        
+        Available stats are: {0}""".format(statmap)
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 

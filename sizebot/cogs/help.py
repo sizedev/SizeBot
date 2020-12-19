@@ -373,7 +373,8 @@ class HelpCog(commands.Cog):
         await ctx.send(f"View the changelog here!:\nhttps://github.com/sizedev/SizeBot3AndAHalf/blob/develop/changelogs/{__version__}.md")
 
     @commands.command(
-        category = "mod"
+        category = "mod",
+        hidden = True
     )
     @checks.is_mod()
     async def usercount(self, ctx):

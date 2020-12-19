@@ -403,3 +403,19 @@ class AliasMap(dict):
         for i in v:
             super().__setitem__(i, k)
         super().__setitem__(k, k)
+
+    def __str__(self):
+        swapped = {}
+        for v in self.values():
+            swapped[v] = []
+        for k, v in self.items():
+            swapped[v].append(k)
+
+        aliasstrings = []
+        for k, v in swapped:
+            s = k
+            for vv in v:
+                s += f"/{vv}"
+            aliasstrings.append(s)
+
+        return sentence_join(aliasstrings, oxford = True)

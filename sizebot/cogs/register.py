@@ -151,7 +151,7 @@ class RegisterCog(commands.Cog):
     )
     @commands.guild_only()
     async def advancedregister(self, ctx, nick: str, currentheight: SV = proportions.defaultheight, baseheight: SV = proportions.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
-        """Registers a user for SizeBot.
+        """Registers a user for SizeBot, legacy style.
 
         Parameters:
         • `nick`: Your nickname. This will be the first thing displayed in your nickname. For a nickname with spaces, this must be wrapped in quotes.
