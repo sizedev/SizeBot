@@ -1,3 +1,4 @@
+import importlib.resources as pkg_resources
 import logging
 
 import arrow
@@ -6,10 +7,16 @@ import discord
 from discord.ext import commands, tasks
 from discord.utils import sleep_until
 
+import sizebot.data
 from sizebot.conf import conf
 from sizebot.lib.utils import intToRoman, formatTraceback
 
 logger = logging.getLogger("sizebot")
+
+alreadyclaimed = set()
+
+gifts = pkg_resources.read_text(sizebot.data, "gifts.txt").splitlines()
+gifts = [x.strip() for x in gifts]
 
 
 class HolidayCog(commands.Cog):
@@ -75,6 +82,20 @@ class HolidayCog(commands.Cog):
     @holidayTask.before_loop
     async def before_holidayTask(self):
         await self.bot.wait_until_ready()
+
+    @commands.command(
+        hidden = True
+    )
+    async def secretsanta(self, ctx):
+        userid = ctx.message.author.id
+        usergift = gifts[userid + 4979 % len(gifts)]
+        output = f"<@{userid}> opened up their Secret Santa gift...\n"
+        output += f"It was... {usergift}"
+        if userid in alreadyclaimed:
+            output += "\n*Opening the gift again doesn't change what's inside it!*"
+        await ctx.send(output)
+        logger.msg(f"{ctx.message.author.id}/{ctx.message.author.nick} opened their gift!")
+        alreadyclaimed.add(userid)
 
 
 def setup(bot):
