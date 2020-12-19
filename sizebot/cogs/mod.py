@@ -131,7 +131,7 @@ class ModCog(commands.Cog):
         await ctx.message.delete()
         await ctx.send("```\n" + ascii + "```")
         await ctx.send("""<@{0}>
-    ***SizeBot3 by DigiDuncan***
+    ***SizeBot-legacy by DigiDuncan***
     *A big program for big people.*
     **Written for** *the Size Haven server* and **adapted for** *Size Matters*
     **Slogan** *by Twitchy*
@@ -143,7 +143,7 @@ class ModCog(commands.Cog):
     **written with** *Atom*
     **Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server*
     **Special thanks** *to the discord.py Community Discord for helping with code*
-    **Special thanks** *to the {1} users of SizeBot3.*
+    **Special thanks** *to the {1} users of SizeBot-legacy.*
 
     "She (*SizeBot*) is beautiful." -- *GoddessArete*
     ":100::thumbsup:" -- *Anonymous*
