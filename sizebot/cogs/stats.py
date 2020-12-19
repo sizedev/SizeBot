@@ -1,6 +1,5 @@
-from sizebot.lib.decimal import Decimal
-import typing
 import logging
+import typing
 
 import discord
 from discord.ext.commands.converter import MemberConverter
@@ -9,9 +8,10 @@ from discord.ext import commands
 from sizebot.cogs.register import showNextStep
 from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors
+from sizebot.lib.decimal import Decimal
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
-from sizebot.lib.units import SV, WV
+from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.utils import AliasMap, parseMany, prettyTimeDelta, sentence_join
 
 logger = logging.getLogger("sizebot")
@@ -493,11 +493,11 @@ class StatsCog(commands.Cog):
         usage = "<length> [user]",
         category = "stats"
     )
-    async def distance(self, ctx, length: SV, *, who: typing.Union[discord.Member, SV] = None):
+    async def distance(self, ctx, length: typing.Union[SV, TV, str], *, who: typing.Union[discord.Member, SV] = None):
         """How long will it take to walk, run, or climb a distance?
 
         Example:
-        `&distance <length>`"""
+        `&distance <length or time>`"""
 
         if who is None:
             who = ctx.message.author
@@ -515,6 +515,12 @@ class StatsCog(commands.Cog):
         defaultclimbspeed = Decimal(4828)
         climblength = Decimal(0.3048) / userdata.viewscale
         climbspeed = Decimal(4828) / userdata.viewscale
+
+        if isinstance(length, str):
+            raise errors.InvalidSizeValue(length, "size or time")
+        elif isinstance(length, TV):
+            walkpersecond = SV(userstats.walkperhour / 3600)
+            length = SV(walkpersecond * length)
 
         defaultwalktimehours = length / defaultstats.walkperhour
         defaultwalksteps = length / defaultstats.walksteplength
