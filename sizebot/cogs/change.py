@@ -1,13 +1,15 @@
+import importlib.resources as pkg_resources
 import logging
 import random
-from sizebot.lib.errors import ChangeMethodInvalidException
 from typing import Union
 
 from discord.ext import commands, tasks
 
+import sizebot.data
 from sizebot.lib import changes, proportions, userdb
 from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.units import Rate
 
 logger = logging.getLogger("sizebot")
@@ -121,9 +123,11 @@ class ChangeCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
         userdata = userdb.load(guildid, userid)
 
-        # TODO: Randomize the italics message here
+        lines = pkg_resources.read_text(sizebot.data, "eatme.txt").splitlines()
+        line = random.choice(lines)
+
         await ctx.send(
-            f"<@{userid}> ate a :cake:! *I mean it said \"Eat me...\"*\n"
+            f"<@{userid}> ate a :cake:! *{lines}*\n"
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
     @commands.command(
@@ -143,9 +147,11 @@ class ChangeCog(commands.Cog):
         await proportions.nickUpdate(ctx.author)
         userdata = userdb.load(guildid, userid)
 
-        # TODO: Randomize the italics message here
+        lines = pkg_resources.read_text(sizebot.data, "drinkme.txt").splitlines()
+        line = random.choice(lines)
+
         await ctx.send(
-            f"<@{ctx.author.id}> drank a :milk:! *I mean it said \"Drink me...\"*\n"
+            f"<@{ctx.author.id}> drank a :milk:! *{line}*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
     @tasks.loop(seconds=6)
