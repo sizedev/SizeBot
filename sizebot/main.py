@@ -1,7 +1,6 @@
 import arrow
 import os
 import logging
-from discord.ext.commands.errors import CommandError
 import pytz
 import sys
 from datetime import datetime
@@ -93,7 +92,7 @@ def main():
 
     launchtime = datetime.now()
 
-    bot = Bot(command_prefix = conf.prefix, allowed_mentions = discord.AllowedMentions(everyone=False))
+    bot = Bot(command_prefix = conf.prefix, allowed_mentions = discord.AllowedMentions(everyone=False), intents=discord.Intents.all())
 
     bot.remove_command("help")
 
