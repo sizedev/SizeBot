@@ -14,7 +14,7 @@ def main():
 
     # Predefined variables.
     prefix = '&'
-    description = '''SizeBot3 is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.
+    description = '''SizeBot-legacy is a complete rewrite of SizeBot for the Macropolis and, later, Size Matters server.
     Written by DigiDuncan.
     The SizeBot Team: DigiDuncan, Natalie, AWK_, Benyovski, Arceus3521, Surge The Raichu.'''
     initial_extensions = [
