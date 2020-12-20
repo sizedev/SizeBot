@@ -371,7 +371,7 @@ class HelpCog(commands.Cog):
     )
     async def changelog(self, ctx):
         """See what's new in the latest SizeBot!"""
-        await ctx.send(f"View the changelog here!:\nhttps://github.com/sizedev/SizeBot3AndAHalf/blob/develop/changelogs/{__version__}.md")
+        await ctx.send(f"View the changelog here!:\nhttps://github.com/sizedev/SizeBot3/blob/master/changelogs/{__version__}.md")
 
     @commands.command(
         category = "mod",
