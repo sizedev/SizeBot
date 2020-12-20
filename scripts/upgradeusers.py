@@ -67,5 +67,9 @@ def upgradeusers(path):
         userdb.save(userdata)
 
 
-if __name__ == "__main__":
+def main():
     upgradeusers(Path("."))
+
+
+if __name__ == "__main__":
+    main()
