@@ -3,7 +3,7 @@ SizeBot, Cogs Edition, rewritten.
 
 [![Build Status](https://travis-ci.org/sizedev/SizeBot.svg?branch=master)](https://travis-ci.org/sizedev/SizeBot) master
 
-[![Build Status](https://travis-ci.org/sizedev/SizeBotsvg?branch=develop)](https://travis-ci.org/sizedev/SizeBot) develop
+[![Build Status](https://travis-ci.org/sizedev/SizeBot.svg?branch=develop)](https://travis-ci.org/sizedev/SizeBot) develop
 
 **SizeBot** is a size-play based roleplay bot.
 
