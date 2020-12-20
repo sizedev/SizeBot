@@ -229,7 +229,8 @@ def main():
         if before.content == after.content:
             return
         await bot.process_commands(after)
-        await proportions.nickUpdate(after.author)
+        if hasattr(after.author, "guild"):
+            await proportions.nickUpdate(after.author)
         await active.on_message(after)
 
     @bot.event
