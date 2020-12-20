@@ -30,14 +30,14 @@ async def removeUserRole(member):
 
 async def showNextStep(ctx, userdata, completed=False):
     if completed:
-        await ctx.send(f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n* You can use `{conf.prefix}setspecies` to set your species to be shown in your sizetag.\n* You can adjust your current height with `{conf.prefix}setheight`.\n* You can turn off sizetags with `{conf.prefix}setdisplay`.")
+        await ctx.send(f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n* You can use `{conf.prefix}setspecies` to set your species to be shown in your sizetag.\n* You can adjust your current height with `{conf.prefix}setheight`.\n* You can turn off sizetags with `{conf.prefix}setdisplay N`.")
     if userdata.registered:
         return
     next_step = userdata.registration_steps_remaining[0]
     step_messages = {
-        "setheight": f"To start, set your base height with `{conf.prefix}setbaseheight`. This should be roughly a human height in order for comparisons to make better sense.",
-        "setweight": f"Now, use `{conf.prefix}setbaseweight` to set your base weight. This should be whatever weight you'd be at your base height.",
-        "setsystem": f"Finally, use `{conf.prefix}setsystem` to set what unit system you use: `M` for Metric, `U` for US."
+        "setheight": f"To start, set your base height with `{conf.prefix}setbaseheight`. This should be roughly a human height in order for comparisons to make better sense.\n*Examples: `{conf.prefix}setbaseheight 5ft6in` or `{conf.prefix}setbaseheight 170cm`*",
+        "setweight": f"Now, use `{conf.prefix}setbaseweight` to set your base weight. This should be whatever weight you'd be at your base height.\n*Examples: `{conf.prefix}setbaseweight 120lb` or `{conf.prefix}setbaseweight 80kg`*",
+        "setsystem": f"Finally, use `{conf.prefix}setsystem` to set what unit system you use: `M` for Metric, `U` for US.\n*Examples: `{conf.prefix}setbaseheight U` or `{conf.prefix}setbaseheight M`*"
     }
     next_step_message = step_messages[next_step]
     telemetry.RegisterStepCompleted.append(ctx.guild.id, ctx.author.id, ctx.command.name, completed = completed)
