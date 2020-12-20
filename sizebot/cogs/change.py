@@ -127,7 +127,7 @@ class ChangeCog(commands.Cog):
         line = random.choice(lines)
 
         await ctx.send(
-            f"<@{userid}> ate a :cake:! *{lines}*\n"
+            f"<@{userid}> ate a :cake:! *{line}*\n"
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
     @commands.command(
