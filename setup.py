@@ -49,7 +49,7 @@ setuptools.setup(
         "console_scripts": [
             "sizebot=sizebot.main:main",
             "sizebotapi=sizebotapi.main:main",
-            "sizebot-upgrade=scripts.upgradeusers:main"
+            "sizebot-upgrade=sizebot.scripts.upgradeusers:main"
         ]
     }
 )
