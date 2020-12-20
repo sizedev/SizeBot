@@ -7,7 +7,7 @@ SizeBot, Cogs Edition, rewritten.
 
 **SizeBot** is a size-play based roleplay bot.
 
-**SizeBot Legacy:** [SizeBot Legacy on GitHub](https://github.com/sizedev/SizeBot#sizebot-legacy)
+**SizeBot Legacy:** [SizeBot Legacy on GitHub](https://github.com/sizedev/SizeBot/tree/sizebot-legacy)
 
 **Installation**
 To install the latest release of SizeBot, simply run:
