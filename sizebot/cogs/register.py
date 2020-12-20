@@ -15,7 +15,7 @@ logger = logging.getLogger("sizebot")
 async def addUserRole(member):
     role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
-        logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
+        # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
     await member.add_roles(role, reason="Registered as sizebot user")
 
@@ -23,7 +23,7 @@ async def addUserRole(member):
 async def removeUserRole(member):
     role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
-        logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
+        # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
     await member.remove_roles(role, reason="Unregistered as sizebot user")
 
