@@ -56,15 +56,16 @@ def upgradeusers(path):
     print(f"Looking for user files in {path}")
     filepaths = list(path.glob("*.txt"))
     print(f"Found {len(filepaths)} users")
+    imported = 0
     for filepath in filepaths:
-        print(f"Loading legacy user file for {filepath}")
         try:
             userdata = loadLegacy(filepath)
         except BadLegacyUser as e:
             print(e)
             continue
-        print(f"Saving new user file for {filepath}")
         userdb.save(userdata)
+        imported += 1
+    print(f"Successfully imported {len(users)} users")
 
 
 def main():
