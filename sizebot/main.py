@@ -169,14 +169,17 @@ def main():
         message.content = message.content.replace("“", "\"")
         message.content = message.content.replace("”", "\"")
 
-        if message.content.startswith(f"{conf.prefix}timeit") and await bot.is_owner(message.author):
+        if (message.content.startswith(f"{conf.prefix}timeit")
+            and await bot.is_owner(message.author)
+            and hasattr(message.author, "guild")):
             await on_message_timed(message)
             return
         await bot.process_commands(message)
-        await scaletalk.on_message(message)
-        await edge.on_message(message)
-        await limits.on_message(message)
-        await proportions.nickUpdate(message.author)
+        if hasattr(message.author, "guild"):
+            await scaletalk.on_message(message)
+            await edge.on_message(message)
+            await limits.on_message(message)
+            await proportions.nickUpdate(message.author)
         # await meicros.on_message(message)
         await monika.on_message(message)
         await active.on_message(message)
