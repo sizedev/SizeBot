@@ -1,9 +1,10 @@
+import aiohttp
 import logging
 import math
 
 from datetime import datetime
 
-from discord import Embed, Webhook
+from discord import Embed, Webhook, AsyncWebhookAdapter
 from discord.errors import Forbidden
 from discord.ext import commands
 
@@ -11,7 +12,7 @@ from sizebot import __version__
 from sizebot.cogs.stats import statmap
 from sizebot.conf import conf
 from sizebot.lib import checks, objs, userdb, utils
-from sizebot.lib.constants import colors, emojis, ids
+from sizebot.lib.constants import colors, emojis
 from sizebot.lib.menu import Menu
 from sizebot.lib.units import SV, WV
 
@@ -303,11 +304,9 @@ class HelpCog(commands.Cog):
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
-        try:
-            webhook = (await Webhook.from_url(conf.bugwebhookurl))
+        async with aiohttp.ClientSession() as session:
+            webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
             await webhook.send(f"**Bug report** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
-        except Forbidden:
-            logger.error("I can't send webhooks in the bug reports channel!")
 
     @commands.command(
         usage = "<message>",
@@ -318,11 +317,9 @@ class HelpCog(commands.Cog):
     async def suggest(self, ctx, *, message: str):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
-        try:
-            webhook = (await Webhook.from_url(conf.bugwebhookurl))
+        async with aiohttp.ClientSession() as session:
+            webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
             await webhook.send(f"**Feature request** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
-        except Forbidden:
-            logger.error("I can't send webhooks in the bug reports channel!")
 
     @commands.command(
         aliases = ["objsuggest"],
@@ -340,11 +337,10 @@ class HelpCog(commands.Cog):
         to make sure each object is a fun and exciting entry to pull up.
         Also include alternate names for the object, if it has them."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent an object request.")
-        try:
-            webhook = (await Webhook.from_url(conf.bugwebhookurl))
-            await webhook.send(f"**Object request** <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
-        except Forbidden:
-            logger.error("I can't send webhooks in the bug reports channel!")
+
+        async with aiohttp.ClientSession() as session:
+            webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
+            await webhook.send(f"**Object request** <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}") channel!")
 
     @commands.command(
         usage = ["[type]"],
