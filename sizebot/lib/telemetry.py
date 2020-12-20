@@ -140,6 +140,13 @@ class RateLimit(TelemetryMessage):
 
 
 @dataclass
+class AdminCommand(TelemetryMessage):
+    userid: str
+    command: str
+    filename = Path("admin_command.ndjson")
+
+
+@dataclass
 class UnknownCommand(TelemetryMessage):
     name: str
     filename = Path("unknown_command.ndjson")

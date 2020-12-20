@@ -31,8 +31,7 @@ def setup(bot):
 
         if isinstance(err, errors.AdminPermissionException):
             # Log Admin Permission Exceptions to telemetry
-            # TODO: Add to telemetry
-            pass
+            telemetry.AdminCommand().append(ctx.user.id, ctx.command.name)
 
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
@@ -52,9 +51,7 @@ def setup(bot):
                 await ctx.send(f"{emojis.warning} {userMessage}")
         elif isinstance(err, commands.errors.CommandNotFound):
             # log unknown commmands to telemetry
-            # telemetry.UnknownCommand.append(ctx.command.name)
-            # TODO: We can't get command.name if there's no command
-            pass
+            telemetry.UnknownCommand.append(ctx.message.content.split(" ")[0][1:])
         elif isinstance(err, commands.errors.ExpectedClosingQuoteError):
             await ctx.send(f"{emojis.warning} Mismatched quotes in command.")
         elif isinstance(err, commands.errors.InvalidEndOfQuotedStringError):
