@@ -5,7 +5,6 @@ import math
 from datetime import datetime
 
 from discord import Embed, Webhook, AsyncWebhookAdapter
-from discord.errors import Forbidden
 from discord.ext import commands
 
 from sizebot import __version__
@@ -340,7 +339,7 @@ class HelpCog(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
-            await webhook.send(f"**Object request** <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}") channel!")
+            await webhook.send(f"**Object request** <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
 
     @commands.command(
         usage = ["[type]"],
