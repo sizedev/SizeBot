@@ -72,5 +72,6 @@ conf = Config([
     ConfigField("activity", "sizebot.activity", default="Ratchet and Clank: Size Matters"),
     ConfigField("authtoken", "discord.authtoken", initdefault="INSERT_BOT_TOKEN_HERE"),
     ConfigField("logchannelid", "discord.logchannelid", type=int, default=None),
+    ConfigField("bugwebhookurl", "discord.bugwebookurl", default=None),
     ConfigField("cuttly_key", "api.cuttly", default=None)
 ])

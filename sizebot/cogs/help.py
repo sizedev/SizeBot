@@ -3,7 +3,7 @@ import math
 
 from datetime import datetime
 
-from discord import Embed
+from discord import Embed, Webhook
 from discord.errors import Forbidden
 from discord.ext import commands
 
@@ -304,7 +304,7 @@ class HelpCog(commands.Cog):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
         try:
-            webhook = (await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks())[0]
+            webhook = (await Webhook.from_url(conf.bugwebhookurl))
             await webhook.send(f"**Bug report** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
         except Forbidden:
             logger.error("I can't send webhooks in the bug reports channel!")
@@ -319,7 +319,7 @@ class HelpCog(commands.Cog):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         try:
-            webhook = (await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks())[0]
+            webhook = (await Webhook.from_url(conf.bugwebhookurl))
             await webhook.send(f"**Feature request** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
         except Forbidden:
             logger.error("I can't send webhooks in the bug reports channel!")
@@ -341,7 +341,7 @@ class HelpCog(commands.Cog):
         Also include alternate names for the object, if it has them."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent an object request.")
         try:
-            webhook = (await ctx.bot.get_channel(ids.sizebotbugreportschannel).webhooks())[0]
+            webhook = (await Webhook.from_url(conf.bugwebhookurl))
             await webhook.send(f"**Object request** <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
         except Forbidden:
             logger.error("I can't send webhooks in the bug reports channel!")
