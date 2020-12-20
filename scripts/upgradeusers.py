@@ -17,14 +17,18 @@ SPEC = 7
 asyncio.run(units.init())
 
 
+class BadLegacyUser(Exception):
+    pass
+
+
 def loadLegacy(path):
     """Load a user from the old file format"""
     with open(path, "r", encoding = "utf-8") as f:
         # Make array of lines from file.
         lines = f.read().splitlines()
     lines = [line.strip() for line in lines]
-    if lines == []:
-        return
+    if len(lines) < 8:
+        raise BadLegacyUser(f"Bad legacy user file: {path}")
     uid = path.stem
 
     userdata = userdb.User()
@@ -54,9 +58,13 @@ def upgradeusers(path):
     print(f"Found {len(filepaths)} users")
     for filepath in filepaths:
         print(f"Loading legacy user file for {filepath}")
-        userdata = loadLegacy(filepath)
+        try:
+            userdata = loadLegacy(filepath)
+        except BadLegacyUser as e:
+            print(e)
+            continue
         print(f"Saving new user file for {filepath}")
-        if userdata: userdb.save(userdata)
+        userdb.save(userdata)
 
 
 if __name__ == "__main__":
