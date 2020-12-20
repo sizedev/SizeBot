@@ -48,10 +48,10 @@ class ScaleTypeCog(commands.Cog):
                 chars = tryInt(match.group(2))
                 if chars == "":
                     chars = 1
-            else:
-                raise UserMessedUpException(f"`{change}` is not a valid character count.")
-            if not isinstance(chars, int):
-                raise UserMessedUpException(f"`{change}` is not a valid character count.")
+        else:
+            raise UserMessedUpException(f"`{change}` is not a valid character count.")
+        if not isinstance(chars, int):
+            raise UserMessedUpException(f"`{change}` is not a valid character count.")
         if chars == 0:
             raise ValueIsZeroException
         else:
