@@ -119,7 +119,7 @@ class HelpCog(commands.Cog):
         for cat in categories:
             cat_cmds = commands_by_cat.get(cat.cid, [])
             if not cat_cmds:
-                logger.warn(f"Command category {cat.cid!r} is empty.")
+                # logger.warn(f"Command category {cat.cid!r} is empty.")
                 continue
             field_text = f"\n\n**{cat.emoji} {cat.name}**\n" + (", ".join(f"`{c.name}`" for c in cat_cmds))
             embed.add_field(value=field_text, inline=False)
