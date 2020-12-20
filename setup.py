@@ -32,7 +32,7 @@ setuptools.setup(
     version=getVersion(),
     author="DigiDuncan",
     author_email="digiduncan@gmail.com",
-    description="SizeBot3, Cogs Edition, rewritten.",
+    description="SizeBot-legacy, Cogs Edition, rewritten.",
     long_description=getLongDescription(),
     long_description_content_type="text/markdown",
     url="https://github.com/sizedev/SizeBot3",
