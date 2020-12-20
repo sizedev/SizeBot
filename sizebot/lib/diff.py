@@ -150,6 +150,9 @@ class Rate:
         d = None
         t = None
 
+        #speed hack
+        s = s.replace("mph", "mi/hr").replace("kph", "km/hr")
+
         match = r"(.*)\s*" + valid_rate_interfixes + r"\s*(.*)"
         m = re.match(match, s)
         if not m:
