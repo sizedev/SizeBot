@@ -83,7 +83,7 @@ class RegisterCog(commands.Cog):
         guilds = [g for g in guilds if g is not None]
         guilds_names = [g.name for g in guilds]
         if guilds_names:
-            guildsstring = guilds_names.join('\n')
+            guildsstring = "\n".join(guilds_names)
             sentMsg = await ctx.send(f"You are already registered with SizeBot in these servers:\n{guildsstring}"
                                      f"You can copy a profile from one of these guilds to this one using `{ctx.prefix}copy.`\n"
                                      "Proceed with registration anyway?")
@@ -183,7 +183,7 @@ class RegisterCog(commands.Cog):
         guilds = [g for g in guilds if g is not None]
         guilds_names = [g.name for g in guilds]
         if guilds_names != []:
-            guildsstring = guilds_names.join('\n')
+            guildsstring = "\n".join(guilds_names)
             sentMsg = await ctx.send(f"You are already registed with SizeBot in these servers:\n{guildsstring}"
                                      f"You can copy a profile from one of these guilds to this one using `{ctx.prefix}copy.`\n"
                                      "Proceed with registration anyway?")
