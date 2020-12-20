@@ -57,8 +57,8 @@ async def get_url(people, *, shorten = True):
         "world": {
             "height": float(world_height),
             "unit": "meters",
-            "x": "0",
-            "y": "0"
+            "x": 0,
+            "y": 0
         },
         "version": 3
     }
