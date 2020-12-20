@@ -1,5 +1,5 @@
 # SizeBot
-SizeBot, Cogs Edition, rewritten.
+SizeBot Legacy, rewritten.
 
 [![Build Status](https://travis-ci.org/sizedev/SizeBot.svg?branch=master)](https://travis-ci.org/sizedev/SizeBot) master
 
