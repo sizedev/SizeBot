@@ -84,7 +84,7 @@ class RegisterCog(commands.Cog):
         guilds_names = [g.name for g in guilds]
         if guilds_names:
             guildsstring = "\n".join(guilds_names)
-            sentMsg = await ctx.send(f"You are already registered with SizeBot in these servers:\n{guildsstring}"
+            sentMsg = await ctx.send(f"You are already registered with SizeBot in these servers:\n{guildsstring}\n"
                                      f"You can copy a profile from one of these guilds to this one using `{ctx.prefix}copy.`\n"
                                      "Proceed with registration anyway?")
             await sentMsg.add_reaction(emojis.check)
@@ -184,7 +184,7 @@ class RegisterCog(commands.Cog):
         guilds_names = [g.name for g in guilds]
         if guilds_names != []:
             guildsstring = "\n".join(guilds_names)
-            sentMsg = await ctx.send(f"You are already registed with SizeBot in these servers:\n{guildsstring}\n"
+            sentMsg = await ctx.send(f"You are already registered with SizeBot in these servers:\n{guildsstring}\n"
                                      f"You can copy a profile from one of these guilds to this one using `{ctx.prefix}copy.`\n"
                                      "Proceed with registration anyway?")
             await sentMsg.add_reaction(emojis.check)
