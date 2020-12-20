@@ -276,7 +276,8 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(SV.parse(newfoot) * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+        await ctx.send(f"<@{ctx.author.id}>'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength)}), "
+                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale))}")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -298,7 +299,8 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(newfoot * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+        await ctx.send(f"<@{ctx.author.id}>'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength)}), "
+                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale))}")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -357,7 +359,8 @@ class SetCog(commands.Cog):
         userdata.hairlength = newhairsv
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s hair is now {userdata.hairlength:mu} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s base hair length is now {userdata.hairlength:mu} long, "
+                       f"or {SV(userdata.hairlength):mu} currently.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -373,7 +376,8 @@ class SetCog(commands.Cog):
         userdata.taillength = newtailsv
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s tail is now {userdata.taillength:mu} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s base tail length is now {userdata.taillength:mu} long, "
+                       f"or {SV(userdata.taillength):mu} currently.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -404,7 +408,8 @@ class SetCog(commands.Cog):
         userdata.earheight = newearsv
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s ear is now {userdata.earheight:mu} long.")
+        await ctx.send(f"<@{ctx.author.id}>'s base ear height is now {userdata.earheight:mu} long, "
+                       f"or {SV(userdata.earheight):mu} currently.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -434,7 +439,8 @@ class SetCog(commands.Cog):
         userdata.liftstrength = WV(WV.parse(newstrength) * (userdata.viewscale ** 3))
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s strength is now {userdata.liftstrength:mu}.")
+        await ctx.send(f"<@{ctx.author.id}>'s base lift strength is now {userdata.liftstrength:mu} long, "
+                       f"or {SV(userdata.liftstrength):mu} currently.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -466,7 +472,8 @@ class SetCog(commands.Cog):
                                              newwalk.time)
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s walk speed is now {userdata.walkperhour:mu} per hour.")
+        # TODO: Give ParsableRates a __mul__ so I can give the user their current speeds.
+        await ctx.send(f"<@{ctx.author.id}>'s base walk speed is now {userdata.walkperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -498,7 +505,8 @@ class SetCog(commands.Cog):
                                             newrun.time)
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s run speed is now {userdata.runperhour:mu} per hour.")
+        # TODO: Give ParsableRates a __mul__ so I can give the user their current speeds.
+        await ctx.send(f"<@{ctx.author.id}>'s base run speed is now {userdata.runperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
