@@ -306,6 +306,7 @@ class HelpCog(commands.Cog):
         async with aiohttp.ClientSession() as session:
             webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
             await webhook.send(f"**Bug report** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
+        await ctx.send("Bug report sent.")
 
     @commands.command(
         usage = "<message>",
@@ -319,6 +320,7 @@ class HelpCog(commands.Cog):
         async with aiohttp.ClientSession() as session:
             webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
             await webhook.send(f"**Feature request** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
+        await ctx.send("Feature request sent.")
 
     @commands.command(
         aliases = ["objsuggest"],
@@ -340,6 +342,7 @@ class HelpCog(commands.Cog):
         async with aiohttp.ClientSession() as session:
             webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
             await webhook.send(f"**Object request** <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
+        await ctx.send("Object suggestion sent.")
 
     @commands.command(
         usage = ["[type]"],
