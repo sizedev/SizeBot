@@ -65,7 +65,7 @@ def upgradeusers(path):
             continue
         userdb.save(userdata)
         imported += 1
-    print(f"Successfully imported {len(users)} users")
+    print(f"Successfully imported {imported} users")
 
 
 def main():
