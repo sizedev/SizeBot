@@ -1,13 +1,20 @@
-# SizeBot3AndAHalf
-SizeBot3, Cogs Edition, rewritten.
+# SizeBot
+SizeBot, Cogs Edition, rewritten.
 
-[![Build Status](https://travis-ci.org/sizedev/SizeBot3AndAHalf.svg?branch=master)](https://travis-ci.org/sizedev/SizeBot3AndAHalf) master
+[![Build Status](https://travis-ci.org/sizedev/SizeBot.svg?branch=master)](https://travis-ci.org/sizedev/SizeBot) master
 
-[![Build Status](https://travis-ci.org/sizedev/SizeBot3AndAHalf.svg?branch=develop)](https://travis-ci.org/sizedev/SizeBot3AndAHalf) develop
+[![Build Status](https://travis-ci.org/sizedev/SizeBotsvg?branch=develop)](https://travis-ci.org/sizedev/SizeBot) develop
 
+**SizeBot** is a size-play based roleplay bot.
 
-**SizeBot** is a size-play based roleplay bot. It's successor is SizeBot4. SizeBot3AndAHalf is a bridge between SizeBot3 and SizeBot4. SizeBot3 is still currently receiving QoL updates and minor feature additions.
+**SizeBot Legacy:** [SizeBot Legacy on GitHub](https://github.com/sizedev/SizeBot#sizebot-legacy)
 
-**SizeBot3:** [SizeBot3 on GitHub](https://github.com/sizedev/SizeBot3)
+**Installation**
+To install the latest release of SizeBot, simply run:
 
-**SizeBot4:** *Does not yet exist.*
+`pip install git+git://github.com/SizeDev/SizeBot@master`
+
+**Optional Requirements**
+If you want to host SizeBot as a systemd daemon, make sure to install the cysystemd library:
+
+`pip install cysystemd`
