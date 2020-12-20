@@ -32,8 +32,8 @@ class TelemetryMessage:
         return asdict(self)
 
     @classmethod
-    def append(cls, *args):
-        cls(*args).writerow()
+    def append(cls, *args, **kwargs):
+        cls(*args, **kwargs).writerow()
 
 
 @dataclass
