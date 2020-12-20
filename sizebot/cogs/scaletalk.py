@@ -52,10 +52,8 @@ class ScaleTypeCog(commands.Cog):
             raise UserMessedUpException(f"`{change}` is not a valid character count.")
         if not isinstance(chars, int):
             raise UserMessedUpException(f"`{change}` is not a valid character count.")
-        if chars == 0:
+        elif chars == 0:
             raise ValueIsZeroException
-        else:
-            raise UserMessedUpException(f"`{change}` is not a valid change-per-character.")
 
         if diff.changetype == "add":
             finaldiff = copy(diff)
