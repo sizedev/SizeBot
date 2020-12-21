@@ -407,10 +407,13 @@ class StatsCog(commands.Cog):
         if isinstance(what, DigiObject):
             telemetry.ObjectUsed(str(what)).save()
             la = what.relativestatssentence(userdata)
-            # Easter egg.
+            # Easter eggs.
             if what.name == "photograph":
                 la += "\n\n<https://www.youtube.com/watch?v=BB0DU4DoPP4>"
                 logger.log(EGG, f"{ctx.author.display_name} is jamming to Nickleback.")
+            if what.name == "enderman":
+                la += f"\n\n`{ctx.author.display_name} was slain by an Enderman.`"
+                logger.log(EGG, f"{ctx.author.display_name} was slain by an Enderman.")
             await ctx.send(la)
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
