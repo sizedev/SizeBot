@@ -162,7 +162,7 @@ def main():
 
     @bot.event
     async def on_command_completion(ctx):
-        telemetry.CommandRun.append(ctx.command.name)
+        telemetry.CommandRun(ctx.command.name).save()
 
     @bot.event
     async def on_message(message):

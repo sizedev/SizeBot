@@ -65,7 +65,7 @@ class StatsCog(commands.Cog):
             memberOrHeight = ctx.author
 
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = getUserdata(memberOrHeight, customName, allow_unreg=same_user)
@@ -125,9 +125,9 @@ class StatsCog(commands.Cog):
             memberOrHeight2 = ctx.author
 
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
         if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
 
         userdata = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2, customName)
@@ -161,7 +161,7 @@ class StatsCog(commands.Cog):
             memberOrHeight = ctx.author
 
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = getUserdata(memberOrHeight, customName, allow_unreg=same_user)
@@ -212,9 +212,9 @@ class StatsCog(commands.Cog):
             memberOrHeight2 = ctx.author
 
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
         if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
 
         userdata = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2, customName)
@@ -249,7 +249,7 @@ class StatsCog(commands.Cog):
     @commands.guild_only()
     async def compare(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Compare two users' size.
-        
+
         If give one user, compares you to that user."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
@@ -259,9 +259,9 @@ class StatsCog(commands.Cog):
             return
 
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
 
         userdata1 = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2)
@@ -281,9 +281,9 @@ class StatsCog(commands.Cog):
         """Compare yourself as a different height and another user."""
 
         if isinstance(asHeight, SV):
-            telemetry.SizeViewed(asHeight)
+            telemetry.SizeViewed(asHeight).save()
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
 
         userdata = getUserdata(ctx.message.author)
         asdata = getUserdata(asHeight, customName)
@@ -306,7 +306,7 @@ class StatsCog(commands.Cog):
             memberOrHeight = ctx.author
 
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
 
         userdata = getUserdata(memberOrHeight)
 
@@ -359,7 +359,7 @@ class StatsCog(commands.Cog):
             who = ctx.author
 
         if isinstance(who, SV):
-            telemetry.SizeViewed(who)
+            telemetry.SizeViewed(who).save()
 
         userdata = getUserdata(who)
         userstats = proportions.PersonStats(userdata)
@@ -374,7 +374,7 @@ class StatsCog(commands.Cog):
             compheight = userstats.avgheightcomp
             compdata = getUserdata(compheight)
         else:
-            telemetry.UnknownObject.append(str(what))
+            telemetry.UnknownObject(str(what)).save()
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
@@ -397,7 +397,7 @@ class StatsCog(commands.Cog):
         `&examine building`"""
 
         if isinstance(what, SV):
-            telemetry.SizeViewed(what)
+            telemetry.SizeViewed(what).save()
 
         userdata = getUserdata(ctx.author)
 
@@ -405,7 +405,7 @@ class StatsCog(commands.Cog):
             what = what.lower()
 
         if isinstance(what, DigiObject):
-            telemetry.ObjectUsed.append(str(what))
+            telemetry.ObjectUsed(str(what)).save()
             la = what.relativestatssentence(userdata)
             # Easter egg.
             if what.name == "photograph":
@@ -454,7 +454,7 @@ class StatsCog(commands.Cog):
                 f"use `{ctx.prefix}suggestobject` to suggest it "
                 f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
             )
-            telemetry.UnknownObject.append(str(what))
+            telemetry.UnknownObject(str(what)).save()
             return
         stats = proportions.PersonComparison(userdata, compdata)
         embedtosend = await stats.toEmbed(requesterID = ctx.message.author.id)
@@ -472,7 +472,7 @@ class StatsCog(commands.Cog):
         `&objstats book`"""
 
         if isinstance(what, str):
-            telemetry.UnknownObject.append(str(what))
+            telemetry.UnknownObject(str(what)).save()
             await ctx.send(f"`{what}` is not a valid object.")
             return
 
@@ -568,9 +568,9 @@ class StatsCog(commands.Cog):
             return
 
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
         if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight2)
+            telemetry.SizeViewed(memberOrHeight2).save()
 
         userdata1 = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2)
@@ -587,7 +587,7 @@ class StatsCog(commands.Cog):
     @commands.guild_only()
     async def distancestat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """Find how long it would take to travel across a certain distance on a person.
-        
+
         Available stats are: #STATS#"""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
@@ -597,9 +597,9 @@ class StatsCog(commands.Cog):
             return
 
         if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight)
+            telemetry.SizeViewed(memberOrHeight).save()
         if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight2)
+            telemetry.SizeViewed(memberOrHeight2).save()
 
         userdata1 = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2)

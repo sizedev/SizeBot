@@ -17,7 +17,7 @@ def setup(bot):
 
         # TODO: Check if command exists better
         if ctx.command is not None:
-            telemetry.ErrorThrown.append(ctx.command.name, error.__class__.__name__)
+            telemetry.ErrorThrown(ctx.command.name, error.__class__.__name__).save()
 
         # If we got some bad arguments, use a generic argument exception error
         if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument) or isinstance(err, commands.BadArgument):
@@ -31,7 +31,7 @@ def setup(bot):
 
         if isinstance(err, errors.AdminPermissionException):
             # Log Admin Permission Exceptions to telemetry
-            telemetry.AdminCommand().append(ctx.user.id, ctx.command.name)
+            telemetry.AdminCommand(ctx.user.id, ctx.command.name).save()
 
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
@@ -51,7 +51,7 @@ def setup(bot):
                 await ctx.send(f"{emojis.warning} {userMessage}")
         elif isinstance(err, commands.errors.CommandNotFound):
             # log unknown commmands to telemetry
-            telemetry.UnknownCommand.append(ctx.message.content.split(" ")[0][1:])
+            telemetry.UnknownCommand(ctx.message.content.split(" ")[0][1:]).save()
         elif isinstance(err, commands.errors.ExpectedClosingQuoteError):
             await ctx.send(f"{emojis.warning} Mismatched quotes in command.")
         elif isinstance(err, commands.errors.InvalidEndOfQuotedStringError):

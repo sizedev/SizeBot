@@ -7,7 +7,7 @@ def setup(bot):
     @bot.listen
     def on_command(ctx):
         # Log command runs to telemetry
-        telemetry.CommandRun.append(str(ctx.invoked_with))
+        telemetry.CommandRun(str(ctx.invoked_with)).save()
 
         member = ctx.author
         isMember = isinstance(member, discord.Member)

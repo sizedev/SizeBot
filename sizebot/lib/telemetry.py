@@ -17,7 +17,7 @@ class ExistingDateException(Exception):
 
 
 class TelemetryMessage:
-    def writerow(self):
+    def save(self):
         data = self.toJSON()
         if "date" in data:
             raise ExistingDateException
@@ -30,10 +30,6 @@ class TelemetryMessage:
 
     def toJSON(self):
         return asdict(self)
-
-    @classmethod
-    def append(cls, *args, **kwargs):
-        cls(*args, **kwargs).writerow()
 
 
 @dataclass
