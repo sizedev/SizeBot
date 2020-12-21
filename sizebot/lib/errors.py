@@ -49,12 +49,6 @@ class UserNotFoundException(DigiContextException):
         self.userid = userid
         self.unreg = unreg
 
-    async def formatMessage(self, ctx):
-        user = await ctx.guild.fetch_member(self.userid)
-        usernick = user.display_name
-        guild = await ctx.bot.fetch_guild(self.guildid)
-        return f"User {self.userid} ({usernick}) not found in {self.guildid} ({guild.name})."
-
     async def formatUserMessage(self, ctx):
         user = await ctx.guild.fetch_member(self.userid)
         usernick = user.display_name
