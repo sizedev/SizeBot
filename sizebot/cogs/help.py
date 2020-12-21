@@ -321,8 +321,8 @@ class HelpCog(commands.Cog):
             webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
             await webhook.send(f"**Feature request** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
         await ctx.send("Feature request sent.")
-        # if any(nonoword in message for nonoword in ["weiner", "wiener", "penis", "dick", "boob", "vagina", "pussy", "breast"]):
-        #     await ctx.send("._.")
+        if any(nonoword in message for nonoword in ["weiner", "wiener", "penis", "dick", "boob", "vagina", "pussy", "breast"]):
+            await ctx.send("<:LEWD:625464094157439010>")
 
     @commands.command(
         aliases = ["objsuggest"],
