@@ -31,7 +31,7 @@ def setup(bot):
 
         if isinstance(err, errors.AdminPermissionException):
             # Log Admin Permission Exceptions to telemetry
-            telemetry.AdminCommand(ctx.user.id, ctx.command.name).save()
+            telemetry.AdminCommand(ctx.author.id, ctx.command.name).save()
 
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
