@@ -157,7 +157,8 @@ def main():
 
     @bot.event
     async def on_command(ctx):
-        logger.log(CMD, f"G {ctx.guild.name}, U {ctx.message.author.display_name}: {ctx.message.content}")
+        guild = ctx.guild.name if hasattr(ctx, "guild") else "DM"
+        logger.log(CMD, f"G {guild}, U {ctx.message.author.display_name}: {ctx.message.content}")
 
     @bot.event
     async def on_command_completion(ctx):
