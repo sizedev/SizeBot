@@ -237,6 +237,10 @@ def main():
     async def on_guild_join(guild):
         logger.warn(f"SizeBot has been added to {guild.name}! ({guild.id})")
 
+    @bot.event
+    async def on_guild_remove(guild):
+        logger.warn(f"SizeBot has been removed from {guild.name}! ({guild.id})")
+
     def on_disconnect():
         logger.error("SizeBot has been disconnected from Discord!")
 
