@@ -291,7 +291,12 @@
         "dimension": "l",
         "length": "0.015",
         "width": "0.015",
-        "weight": "0.25"
+        "weight": "0.25",
+        "aliases": [
+            "microsd",
+            "micro sd",
+            "micro sd card"
+        ]
     },
     {
         "name": "dime",
@@ -2257,6 +2262,316 @@
         "aliases": [
             "leo",
             "low earth obrit"
+        ]
+    },
+    {
+        "name": "blueberry",
+        "dimension": "d",
+        "diameter": "0.01373",
+        "weight": "0.5",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "Powerade",
+        "dimension": "h",
+        "height": "0.21",
+        "diameter": "0.085",
+        "weight": "793.787",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "powerade bottle",
+            "gatorade",
+            "gatorade bottle",
+            "sports drink"
+        ]
+    },
+    {
+        "name": "pea",
+        "dimension": "d",
+        "diameter": "0.008",
+        "weight": "0.25",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "orange",
+        "dimension": "d",
+        "diameter": "0.0725",
+        "weight": "88",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "postage stamp",
+        "dimension": "l",
+        "length": "0.02286",
+        "width": "0.02286",
+        "weight": "28.3495",
+        "aliases": [
+            "stamp"
+        ]
+    },
+    {
+        "name": "pence coin",
+        "dimension": "d",
+        "diameter": "0.0203",
+        "thickness": "0.00152",
+        "weight": "3.56",
+        "tags": [
+            "coin"
+        ],
+        "aliases": [
+            "pence",
+            "1p",
+            "1 pence coin",
+            "one pence coin"
+        ]
+    },
+    {
+        "name": "two pence coin",
+        "dimension": "d",
+        "diameter": "0.0259",
+        "thickness": "0.00185",
+        "weight": "7.12",
+        "tags": [
+            "coin"
+        ],
+        "aliases": [
+            "two pence",
+            "2p",
+            "2 pence coin"
+        ]
+    },
+    {
+        "name": "five pence coin",
+        "dimension": "d",
+        "diameter": "0.018",
+        "thickness": "0.0017",
+        "weight": "3.25",
+        "tags": [
+            "coin"
+        ],
+        "aliases": [
+            "five pence",
+            "5p",
+            "5 pence coin"
+        ]
+    },
+    {
+        "name": "ten pence coin",
+        "dimension": "d",
+        "diameter": "0.0245",
+        "thickness": "0.00185",
+        "weight": "6.5",
+        "tags": [
+            "coin"
+        ],
+        "aliases": [
+            "ten pence",
+            "10p",
+            "1 pence coin"
+        ]
+    },
+    {
+        "name": "twenty pence coin",
+        "dimension": "d",
+        "diameter": "0.0214",
+        "thickness": "0.0017",
+        "weight": "5",
+        "tags": [
+            "coin"
+        ],
+        "aliases": [
+            "twenty pence",
+            "20p",
+            "20 pence coin"
+        ]
+    },
+    {
+        "name": "fifty pence coin",
+        "dimension": "d",
+        "diameter": "0.027",
+        "thickness": "0.00178",
+        "weight": "8",
+        "tags": [
+            "coin"
+        ],
+        "aliases": [
+            "fifty pence",
+            "50p",
+            "50 pence coin"
+        ]
+    },
+    {
+        "name": "one pound coin",
+        "dimension": "d",
+        "diameter": "0.0223",
+        "thickness": "0.0028",
+        "weight": "8.75",
+        "tags": [
+            "coin"
+        ],
+        "aliases": [
+            "pound coin",
+            "1 pound coin",
+            "£1"
+        ]
+    },
+    {
+        "name": "two pound coin",
+        "dimension": "d",
+        "diameter": "0.0284",
+        "thickness": "0.0025",
+        "weight": "12",
+        "tags": [
+            "coin"
+        ],
+        "aliases": [
+            "2 pound coin",
+            "£2"
+        ]
+    },
+    {
+        "name": "five pound note",
+        "dimension": "l",
+        "length": "0.125",
+        "width": "0.065",
+        "weight": "0.7",
+        "aliases": [
+            "5 pound note",
+            "£5"
+        ]
+    },
+    {
+        "name": "nether portal",
+        "dimension": "h",
+        "height": "5",
+        "width": "4",
+        "depth": "1"
+    },
+    {
+        "name": "portal gun",
+        "dimension": "l",
+        "length": "0.762",
+        "weight": "100.0738"
+    },
+    {
+        "name": "Aperture Science Weighted Storage Cube",
+        "dimension": "h",
+        "height": "0.6181526245",
+        "width": "0.6181526245",
+        "depth": "0.6181526245",
+        "weight": "85000",
+        "aliases": [
+            "storage cube",
+            "companion cube"
+        ]
+    },
+    {
+        "name": "Samsung Galaxy Watch",
+        "dimension": "d",
+        "width": "0.02",
+        "diameter": "0.033",
+        "weight": "49",
+        "aliases": [
+            "galaxy watch",
+            "smartwatch",
+            "smart watch",
+            "watch"
+        ]
+    },
+    {
+        "name": "office chair",
+        "dimension": "h",
+        "height": "1.21",
+        "width": "0.76",
+        "depth": "0.69",
+        "weight": "11000",
+        "aliases": [
+            "chair"
+        ]
+    },
+    {
+        "name": "XBox One controller",
+        "dimension": "h",
+        "height": "0.1019",
+        "width": "0.1529",
+        "depth": "0.061",
+        "weight": "280",
+        "aliases": [
+            "xbox controller",
+            "controller",
+            "game controller"
+        ]
+    },
+    {
+        "name": "Ender 3 Pro 3D Printer (build space)",
+        "dimension": "h",
+        "height": "0.25",
+        "length": "0.22",
+        "width": "0.22",
+        "aliases": [
+            "3D printer",
+            "build space"
+        ]
+    },
+    {
+        "name": "Google Home",
+        "dimension": "h",
+        "height": "0.1428",
+        "diameter": "0.964",
+        "weight": "477",
+        "aliases": [
+            "smart speaker"
+        ]
+    },
+    {
+        "name": "Amazon Echo",
+        "dimension": "h",
+        "height": "0.148",
+        "diameter": "0.099",
+        "weight": "780",
+        "aliases": [
+            "Alexa"
+        ]
+    },
+    {
+        "name": "rose",
+        "dimension": "h",
+        "height": "0.1524",
+        "diameter": "0.0762",
+        "weight": "75",
+        "aliases": [
+            "flower"
+        ]
+    },
+    {
+        "name": "Nintendo Game Boy",
+        "dimension": "l",
+        "length": "0.148",
+        "width": "0.09",
+        "depth": "0.032",
+        "weight": "220",
+        "aliases": [
+            "game boy"
+        ]
+    },
+    {
+        "name": "Apple Magic Keyboard",
+        "dimension": "l",
+        "length": "0.279",
+        "width": "0.1149",
+        "thickness": "0.019",
+        "weight": "231",
+        "aliases": [
+            "magic keyboard",
+            "keyboard"
         ]
     }
 ]
