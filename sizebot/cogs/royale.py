@@ -34,7 +34,7 @@ class NoPlayerFoundError(DigiException):
     def __init__(self, player_name):
         self.player_name = player_name
 
-    def formatMessage(self):
+    def formatUserMessage(self):
         return f"Player {self.player_name} not found in this guild's game."
 
 
@@ -199,7 +199,9 @@ class RoyaleCog(commands.Cog):
             logger.log(ROYALE, f"Stats for {player} sent.")
 
         elif subcommand == "compare":
-            if match := re.match(r"\"(.*)\"\s*\"(.*)\""):
+            arg1 = args
+
+            if match := re.match(r"\"(.*)\"\s*\"(.*)\"", arg1):
                 player1 = match.group(1)
                 player2 = match.group(2)
             else:

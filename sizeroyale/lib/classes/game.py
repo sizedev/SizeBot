@@ -71,16 +71,17 @@ class Game:
                              image = await self.royale.stats_screen())
 
     async def game_over_embed(self):
-        if await self.game_over() == 0:
+        g_o = await self.game_over()
+        if g_o == 0:
             return RunnableEvent(text = "GAME OVER! There are no winners.")
         if self.royale.teamwin:
             return RunnableEvent(
-                text = f"GAME OVER! Winning Team: {await self.game_over()[0]}",
-                image = await self.game_over()[1]
+                text = f"GAME OVER! Winning Team: {g_o[0]}",
+                image = g_o[1]
             )
         return RunnableEvent(
-            text = f"GAME OVER! Winning Player: {await self.game_over()[0].name}",
-            image = await self.game_over()[1]
+            text = f"GAME OVER! Winning Player: {g_o[0].name}",
+            image = g_o[1]
         )
 
     async def next(self) -> List[EmbedTemplate]:
