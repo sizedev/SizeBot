@@ -151,7 +151,7 @@ class Royale:
                 player_by_id(i).remove_attribute(s)
 
         if event.setsizes is not None:
-            for i, d in event.sizes:
+            for i, d in event.setsizes:
                 player_by_id(i).height = SV(d)
 
         if event.sizes is not None:
@@ -159,13 +159,13 @@ class Royale:
                 player_by_id(i).change_height(d)
 
         if event.setsizeranges is not None:
-            for i, d1, d2 in event.sizes:
+            for i, d1, d2 in event.setsizeranges:
                 small, large = minmax(d1, d2)
                 d = randRangeLog(small, large)
                 player_by_id(i).height = SV(d)
 
         if event.sizeranges is not None:
-            for i, d1, d2 in event.sizes:
+            for i, d1, d2 in event.sizeranges:
                 da = randRangeLog(d1.amount, d2.amount)
                 if d1.changetype == "add":
                     ds = "+"
