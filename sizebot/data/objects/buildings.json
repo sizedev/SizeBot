@@ -1,5 +1,16 @@
 [
     {
+        "name": "thickness of spaghetti",
+        "dimension": "t",
+        "thickness": "0.0017",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "spaghetti"
+        ]
+    },
+    {
         "name": "Washington monument",
         "dimension": "h",
         "height": "169.164",
