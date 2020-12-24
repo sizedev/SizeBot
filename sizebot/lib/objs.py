@@ -76,7 +76,7 @@ class DigiObject:
         if self.depth:
             returnstr += f"{emojis.blank}**{SV(self.depth * multiplier):,.3mu}** deep\n"
         if self.thickness:
-            returnstr += f"{emojis.blank}**{SV(self.depth * multiplier):,.3mu}** thick\n"
+            returnstr += f"{emojis.blank}**{SV(self.thickness * multiplier):,.3mu}** thick\n"
         if self.weight:
             returnstr += "and weighs...\n"
             returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
@@ -124,7 +124,7 @@ class DigiObject:
                             value = f"**{SV(self.depth * multiplier):,.3mu}** deep\n")
         if self.thickness:
             embed.add_field(name = "Thickness",
-                            value = f"**{SV(self.depth * multiplier):,.3mu}** thick\n")
+                            value = f"**{SV(self.thickness * multiplier):,.3mu}** thick\n")
         if self.weight:
             embed.add_field(name = "Weight",
                             value = f"**{WV(self.weight * (multiplier ** 3)):,.3mu}**")
