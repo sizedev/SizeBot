@@ -94,7 +94,7 @@ class HolidayCog(commands.Cog):
         if userid in alreadyclaimed:
             output += "\n*Opening the gift again doesn't change what's inside it!*"
         await ctx.send(output)
-        logger.msg(f"{ctx.message.author.id}/{ctx.message.author.nick} opened their gift!")
+        logger.info(f"{ctx.message.author.nick} ({ctx.message.author.id}) opened their gift!")
         alreadyclaimed.add(userid)
 
 
