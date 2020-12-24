@@ -35,6 +35,17 @@ logger = logging.getLogger("sizebot")
 # aliases = []
 
 
+async def post_report(report_type, message):
+    async with aiohttp.ClientSession() as session:
+        webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
+        await webhook.send(
+            f"**{report_type}** from <@{message.author.id}> in {message.channel.guild.name}:\n"
+            f"> {message.content}\n"
+            f"{emojis.link}: {message.jump_url}",
+            files=[a.to_file() for a in message.attachments]
+        )
+
+
 def get_cat_cmds(commands):
     # Get all non-hidden commands, sorted by name
     commands = (c for c in commands if not c.hidden)
@@ -302,9 +313,7 @@ class HelpCog(commands.Cog):
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
-        async with aiohttp.ClientSession() as session:
-            webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
-            await webhook.send(f"**Bug report** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
+        await post_report("Bug report", ctx.message)
         await ctx.send("Bug report sent.")
 
     @commands.command(
