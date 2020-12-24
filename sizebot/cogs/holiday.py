@@ -88,7 +88,7 @@ class HolidayCog(commands.Cog):
     )
     async def secretsanta(self, ctx):
         userid = ctx.message.author.id
-        usergift = gifts[userid + 4979 % len(gifts)]
+        usergift = gifts[(userid + 4979) % len(gifts)]
         output = f"<@{userid}> opened up their Secret Santa gift...\n"
         output += f"It was... {usergift}"
         if userid in alreadyclaimed:
