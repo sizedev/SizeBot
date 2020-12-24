@@ -35,6 +35,17 @@ logger = logging.getLogger("sizebot")
 # aliases = []
 
 
+async def post_report(report_type, message, report_text):
+    async with aiohttp.ClientSession() as session:
+        webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
+        await webhook.send(
+            f"**{report_type}** from <@{message.author.id}> in {message.channel.guild.name}:\n"
+            f"> {report_text}\n"
+            f"{message.jump_url} {emojis.link}",
+            files=[await a.to_file() for a in message.attachments]
+        )
+
+
 def get_cat_cmds(commands):
     # Get all non-hidden commands, sorted by name
     commands = (c for c in commands if not c.hidden)
@@ -302,9 +313,7 @@ class HelpCog(commands.Cog):
     async def bug(self, ctx, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
-        async with aiohttp.ClientSession() as session:
-            webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
-            await webhook.send(f"**Bug report** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
+        await post_report("Bug report", ctx.message, message)
         await ctx.send("Bug report sent.")
 
     @commands.command(
@@ -316,9 +325,7 @@ class HelpCog(commands.Cog):
     async def suggest(self, ctx, *, message: str):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
-        async with aiohttp.ClientSession() as session:
-            webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
-            await webhook.send(f"**Feature request** from <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
+        await post_report("Feature request", ctx.message, message)
         await ctx.send("Feature request sent.")
         if any(nonoword in message for nonoword in ["weiner", "wiener", "penis", "dick", "boob", "vagina", "pussy", "breast", "cock"]):
             await ctx.send("<:LEWD:625464094157439010>")
@@ -339,10 +346,7 @@ class HelpCog(commands.Cog):
         to make sure each object is a fun and exciting entry to pull up.
         Also include alternate names for the object, if it has them."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent an object request.")
-
-        async with aiohttp.ClientSession() as session:
-            webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
-            await webhook.send(f"**Object request** <@{ctx.author.id}> in {ctx.guild.name}:\n> {message}\n{emojis.link}: https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
+        await post_report("Object request", ctx.message, message)
         await ctx.send("Object suggestion sent.")
 
     @commands.command(
