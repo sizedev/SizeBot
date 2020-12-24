@@ -42,7 +42,7 @@ async def post_report(report_type, message, report_text):
             f"**{report_type}** from <@{message.author.id}> in {message.channel.guild.name}:\n"
             f"> {report_text}\n"
             f"{message.jump_url} {emojis.link}",
-            files=[a.to_file() for a in message.attachments]
+            files=[await a.to_file() for a in message.attachments]
         )
 
 
