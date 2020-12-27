@@ -621,7 +621,7 @@ class StatsCog(commands.Cog):
 
         await ctx.send(embed = embedtosend)
 
-        @commands.command(
+    @commands.command(
         aliases = ["reversedistance", "reversedist", "revdist"],
         usage = "<length> [user]",
         category = "stats"
