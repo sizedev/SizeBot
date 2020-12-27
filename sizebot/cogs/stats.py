@@ -643,7 +643,7 @@ class StatsCog(commands.Cog):
             await ctx.send(f"{userdata.tag} doesn't exist...")
             return
 
-        newlength = length / userstats.viewscale
+        newlength = SV(length / userstats.viewscale)
 
         e = discord.Embed(
             title = f"{userstats.nickname}'s {length:,.3mu} to the world",
