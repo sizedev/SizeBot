@@ -650,6 +650,7 @@ class StatsCog(commands.Cog):
             description = (
                 f"To everyone else, {userstats.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
             )
+        )
 
         await ctx.send(embed = e)
 
