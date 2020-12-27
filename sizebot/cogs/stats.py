@@ -482,7 +482,7 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = what.statsembed())
 
     @commands.command(
-        aliases = ["dist", "walk", "run"],
+        aliases = ["dist", "walk", "run", "climb"],
         usage = "<length> [user]",
         category = "stats"
     )
@@ -622,6 +622,39 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = embedtosend)
 
     @commands.command(
+        aliases = ["reversedistance", "reversedist", "revdist"],
+        usage = "<length> [user]",
+        category = "stats"
+    )
+    async def ruler(self, ctx, length: SV, *, who: typing.Union[discord.Member, SV] = None):
+        """A distance to a user looks how long to everyone else?
+
+        Examples:
+        `&ruler 1mi`
+        `&ruler 1ft @DigiDuncan`"""
+
+        if who is None:
+            who = ctx.message.author
+
+        userdata = getUserdata(who)
+        userstats = proportions.PersonStats(userdata)
+
+        if userdata.height == 0:
+            await ctx.send(f"{userdata.tag} doesn't exist...")
+            return
+
+        newlength = SV(length / userstats.viewscale)
+
+        e = discord.Embed(
+            title = f"{userstats.nickname}'s {length:,.3mu} to the world",
+            description = (
+                f"To everyone else, {userstats.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
+            )
+        )
+
+        await ctx.send(embed = e)
+
+    @commands.command(
         aliases = [],
         usage = "<users...>",
         category = "stats"
@@ -667,7 +700,7 @@ def getUserdata(memberOrSV, nickname = None, *, allow_unreg=False):
         userdata = userdb.User()
         userdata.height = memberOrSV
         if nickname is None:
-            nickname = f"{userdata.height:,.3mu}"
+            nickname = f"a {userdata.height:,.3mu} person"
         userdata.nickname = nickname
     return userdata
 
