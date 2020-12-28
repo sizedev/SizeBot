@@ -17,6 +17,7 @@ async def addUserRole(member):
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
+    # PERMISSION: requires discord.Permissions.manage_roles
     await member.add_roles(role, reason="Registered as sizebot user")
 
 
@@ -25,6 +26,7 @@ async def removeUserRole(member):
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
+    # PERMISSION: requires discord.Permissions.manage_roles
     await member.remove_roles(role, reason="Unregistered as sizebot user")
 
 

@@ -38,6 +38,7 @@ class RainbowCog(commands.Cog):
             for guild in self.bot.guilds:
                 for role in guild.roles:
                     if role.name.lower() == "rainbow":
+                        # PERMISSION: requires discord.Permissions.manage_roles
                         await role.edit(color = next(colorgen))
         except Exception as err:
             logger.error(formatTraceback(err))

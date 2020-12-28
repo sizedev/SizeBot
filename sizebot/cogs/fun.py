@@ -28,6 +28,7 @@ class FunCog(commands.Cog):
     async def repeat(self, ctx, delay: float, *, message: str):
         if ctx.author.id != ids.digiduncan:
             return
+        # PERMISSION: requires discord.Permissions.manage_messages
         await ctx.message.delete(delay=0)
 
         async def repeatTask():
@@ -42,6 +43,7 @@ class FunCog(commands.Cog):
     )
     @commands.is_owner()
     async def stoprepeat(self, ctx):
+        # PERMISSION: requires discord.Permissions.manage_messages
         await ctx.message.delete(delay=0)
         tasks[ctx.author.id].cancel()
         del tasks[ctx.author.id]
@@ -52,6 +54,7 @@ class FunCog(commands.Cog):
     )
     @commands.is_owner()
     async def say(self, ctx, *, message: str):
+        # PERMISSION: requires discord.Permissions.manage_messages
         await ctx.message.delete(delay=0)
         await ctx.send(message)
 
@@ -62,6 +65,7 @@ class FunCog(commands.Cog):
     )
     async def sing(self, ctx, *, s: str):
         """Make SizeBot sing a message!"""
+        # PERMISSION: requires discord.Permissions.manage_messages
         await ctx.message.delete(delay=0)
         newstring = f":musical_score: *{s}* :musical_note:"
         await ctx.send(newstring)

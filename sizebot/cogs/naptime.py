@@ -57,6 +57,7 @@ class NaptimeCog(commands.Cog):
     async def nannies(self, ctx):
         """Show me those nannies!
         """
+        # PERMISSION: requires discord.Permissions.manage_messages
         await ctx.message.delete(delay=0)
 
         nannyDump = naps.formatSummary()
