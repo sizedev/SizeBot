@@ -71,7 +71,10 @@ class ScaleTypeCog(commands.Cog):
         userdata.scaletalklock = True
 
         userdb.save(userdata)
-        await ctx.send(f"{userdata.nickname}'s scale per character is now set to {finaldiff.amount}{'x' if finaldiff.changetype == 'multiply' else ''}.")
+        if finaldiff.changetype == "multiply":
+            await ctx.send(f"{userdata.nickname}'s scale per character is now set to {finaldiff.amount:,.5}x.")
+        else:
+            await ctx.send(f"{userdata.nickname}'s scale per character is now set to {finaldiff.amount:,.3mu}.")
 
     @commands.command(
         category = "scalestep",
