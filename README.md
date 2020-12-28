@@ -28,6 +28,7 @@ In order to function, SizeBot requires the following basic permissions:
 * View Channels
 * Send Messages
 * Embed Links
+* Attach Files
 * Add Reactions
 * Use External Emoji
 * Manage Messages
@@ -39,6 +40,5 @@ In order to support some optional features, SizeBot may also need:
 
 * Change Nickname
 * Manage Nicknames (used to set size tags)
-* Attach Files (used by various commands)
 * Move Members (used by &naptime command)
 * Manage Roles (used to add the SizeBot User role to users after registration)
