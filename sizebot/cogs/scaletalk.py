@@ -72,9 +72,9 @@ class ScaleTypeCog(commands.Cog):
 
         userdb.save(userdata)
         if finaldiff.changetype == "multiply":
-            await ctx.send(f"{userdata.nickname}'s scale per character is now set to {finaldiff.amount:,.5}x.")
+            await ctx.send(f"{userdata.nickname}'s scale per character is now set to **~{finaldiff.amount:,.10}x**.")
         else:
-            await ctx.send(f"{userdata.nickname}'s scale per character is now set to {finaldiff.amount:,.3mu}.")
+            await ctx.send(f"{userdata.nickname}'s scale per character is now set to **{finaldiff.amount:,.3mu}**.")
 
     @commands.command(
         category = "scalestep",
