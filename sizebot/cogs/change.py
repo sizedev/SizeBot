@@ -79,7 +79,7 @@ class ChangeCog(commands.Cog):
     )
     @commands.is_owner()
     async def changes(self, ctx):
-        # PERMISSION: requires discord.Permissions.manage_messages
+        # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
 
         changeDump = changes.formatSummary()

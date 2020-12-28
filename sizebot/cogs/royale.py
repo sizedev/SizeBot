@@ -139,12 +139,14 @@ class RoyaleCog(commands.Cog):
                     return
                 for e in round:
                     data = e.to_embed()
+                    # PERMISSION: requires attach_file
                     await ctx.send(embed = data[0], file = data[1])
                     await asyncio.sleep(1)
 
         elif subcommand == "overview":
             stats = await current_games[ctx.guild.id].stats_screen()
             data = stats.to_embed()
+            # PERMISSION: requires attach_file
             await ctx.send(embed = data[0], file = data[1])
 
         elif subcommand == "stop" or subcommand == "delete":

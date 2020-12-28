@@ -67,7 +67,7 @@ class HolidayCog(commands.Cog):
             for guild in self.bot.guilds:
                 if newnick != guild.me.display_name:
                     logger.info(f"Updating bot nick to \"{newnick}\" in {guild.name}.")
-                    # PERMISSION: requires discord.Permissions.change_nickname
+                    # PERMISSION: requires change_nickname
                     await guild.me.edit(nick = newnick)
             if newactivityname != self.bot.guilds[0].get_member(self.bot.user.id).activity:
                 logger.info(f"Updating bot activity to \"{newactivityname}\".")

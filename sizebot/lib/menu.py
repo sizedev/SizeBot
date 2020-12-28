@@ -91,7 +91,7 @@ class Menu:
 
         # Let's wrap things up.
         if self.message:
-            # PERMISSION: requires discord.Permissions.manage_messages
+            # PERMISSION: requires manage_messages
             await self.message.clear_reactions()
         return answer
 

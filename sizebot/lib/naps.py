@@ -22,7 +22,7 @@ class Nanny:
             return True
         guild = await bot.fetch_guild(self.guildid)
         member = await guild.fetch_member(self.userid)
-        # PERMISSION: requires discord.Permission.move_members
+        # PERMISSION: requires move_members
         await member.move_to(None, reason="Naptime!")
         return False
 

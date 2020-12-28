@@ -20,3 +20,25 @@ To install the latest release of SizeBot, simply run:
 If you want to host SizeBot as a systemd daemon, make sure to install the cysystemd library:
 
 `pip install cysystemd`
+
+# Permissions
+
+In order to function, SizeBot requires the following basic permissions:
+
+* View Channels
+* Send Messages
+* Embed Links
+* Add Reactions
+* Use External Emoji
+* Manage Messages
+* Read Message History
+
+Add Reactions, Use External Emoji, Manage Messages, and Read Message History are all required for reaction menus to work properly.
+
+In order to support some optional features, SizeBot may also need:
+
+* Change Nickname
+* Manage Nicknames (used to set size tags)
+* Attach Files (used by various commands)
+* Move Members (used by &naptime command)
+* Manage Roles (used to add the SizeBot User role to users after registration)

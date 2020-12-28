@@ -58,7 +58,7 @@ class EvalCog(commands.Cog):
     @commands.is_owner()
     async def evil(self, ctx, *, evalStr):
         """Evaluate a Python expression, but evilly."""
-        # PERMISSION: requires discord.Permissions.manage_messages
+        # PERMISSION: requires manage_messages
         await ctx.message.delete(delay = 0)
 
         evalStr = utils.removeCodeBlock(evalStr)

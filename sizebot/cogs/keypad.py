@@ -55,14 +55,14 @@ class KeypadCog(commands.Cog):
 
             if str(reaction.emoji) in inputdict.keys():
                 await outputmsg.edit(content = outputmsg.content + inputdict[str(reaction.emoji)])
-                # PERMISSION: requires discord.Permissions.manage_messages
+                # PERMISSION: requires manage_messages
                 await reaction.remove(user)
             if str(reaction.emoji) == emojis.cancel:
                 await outputmsg.edit(content = defaultmessage)
-                # PERMISSION: requires discord.Permissions.manage_messages
+                # PERMISSION: requires manage_messages
                 await reaction.remove(user)
 
-        # PERMISSION: requires discord.Permissions.manage_messages
+        # PERMISSION: requires manage_messages
         await outputmsg.clear_reactions()
 
 
