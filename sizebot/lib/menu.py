@@ -91,6 +91,7 @@ class Menu:
 
         # Let's wrap things up.
         if self.message:
+            # PERMISSION: requires manage_messages
             await self.message.clear_reactions()
         return answer
 

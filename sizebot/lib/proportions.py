@@ -75,6 +75,7 @@ async def nickUpdate(user):
         # Cannot fit the new sizetag
         newnick = nick
     try:
+        # PERMISSION: requires manage_nicknames
         await user.edit(nick = newnick)
     except discord.Forbidden:
         raise errors.NoPermissionsException
@@ -103,6 +104,7 @@ async def nickReset(user):
         return
 
     try:
+        # PERMISSION: requires manage_nicknames
         await user.edit(nick = userdata.nickname)
     except discord.Forbidden:
         raise errors.NoPermissionsException

@@ -22,8 +22,8 @@ class Nanny:
             return True
         guild = await bot.fetch_guild(self.guildid)
         member = await guild.fetch_member(self.userid)
+        # PERMISSION: requires move_members
         await member.move_to(None, reason="Naptime!")
-        # member = bot.get_guild(self.guildid).get_member(self.memberid)
         return False
 
     def toJson(self):

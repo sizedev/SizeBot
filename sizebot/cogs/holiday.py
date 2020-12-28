@@ -65,8 +65,12 @@ class HolidayCog(commands.Cog):
                 logger.info("Just another boring non-holiday...")
 
             for guild in self.bot.guilds:
+                if not guild.me.guild_permissions.change_nickname:
+                    logger.info(f"Skipping changing nick in {guild.name} due to missing permissions.")
+                    continue
                 if newnick != guild.me.display_name:
                     logger.info(f"Updating bot nick to \"{newnick}\" in {guild.name}.")
+                    # PERMISSION: requires change_nickname
                     await guild.me.edit(nick = newnick)
             if newactivityname != self.bot.guilds[0].get_member(self.bot.user.id).activity:
                 logger.info(f"Updating bot activity to \"{newactivityname}\".")
@@ -75,7 +79,6 @@ class HolidayCog(commands.Cog):
 
             next_midnight = arrow.get(now).replace(hour=0, minute=0, second=0).shift(days=1)
             await sleep_until(next_midnight.datetime)
-
         except Exception as err:
             logger.error(formatTraceback(err))
 
