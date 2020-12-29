@@ -22,7 +22,7 @@ compareicon = "https://media.discordapp.net/attachments/650460192009617433/66502
 # Update users nicknames to include sizetags
 async def nickUpdate(user):
     # Don't try updating nicks on servers where Manage Nicknames permission is missing
-    if user.guild.me.permissions.manage_nicknames:
+    if user.guild.me.guild_permissions.manage_nicknames:
         return
 
     # webhooks

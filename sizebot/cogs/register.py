@@ -37,7 +37,7 @@ async def showNextStep(ctx, userdata, completed=False):
             f"* You can use `{conf.prefix}setspecies` to set your species to be shown in your sizetag.\n"
             f"* You can adjust your current height with `{conf.prefix}setheight`."
         )
-        if ctx.me.permissions.manage_nicknames:
+        if ctx.me.guild_permissions.manage_nicknames:
             congrats_message += f"\n* You can turn off sizetags with `{conf.prefix}setdisplay N`."
         await ctx.send(conf)
 
@@ -125,7 +125,7 @@ class RegisterCog(commands.Cog):
         userdata.id = ctx.author.id
         userdata.nickname = ctx.author.display_name
         userdata.display = False
-        if ctx.me.permissions.manage_nicknames:
+        if ctx.me.guild_permissions.manage_nicknames:
             userdata.display = True
             if any(c in ctx.author.display_name for c in "()[]"):
                 await ctx.send(f"If you have already have size tag in your name, you can fix your nick with {conf.prefix}`setnick`.")
