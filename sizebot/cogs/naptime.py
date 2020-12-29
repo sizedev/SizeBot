@@ -28,6 +28,10 @@ class NaptimeCog(commands.Cog):
 
         Kicks you from any voice channel you're in after a set amount of time.
         """
+        if not ctx.me.guild_permissions.move_members:
+            await ctx.send("Sorry, I don't have permission to kick users from voice channels")
+            return
+
         logger.info(f"{ctx.author.display_name} wants to go to sleep in {duration:m}.")
 
         naps.start(ctx.author.id, ctx.guild.id, duration)

@@ -21,6 +21,9 @@ class Nanny:
         if time.time() < self.endtime:
             return True
         guild = await bot.fetch_guild(self.guildid)
+        # If the bot doesn't have permission to kick users from a voice channel, give up on this nap
+        if not guild.me.guild_permissions.move_members:
+            return False
         member = await guild.fetch_member(self.userid)
         # PERMISSION: requires move_members
         await member.move_to(None, reason="Naptime!")
