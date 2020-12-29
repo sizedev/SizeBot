@@ -28,6 +28,9 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setnick(self, ctx, *, newnick):
         """Change nickname."""
+        # TODO: Disable and hide this command on servers where bot does not have MANAGE_NICKNAMES permission
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, and the user is an admin, let them know they may need to fix permissions
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.nickname = newnick
@@ -79,6 +82,9 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setdisplay(self, ctx, newdisp: bool):
         """Set display mode."""
+        # TODO: Disable and hide this command on servers where bot does not have MANAGE_NICKNAMES permission
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, and the user is an admin, let them know they may need to fix permissions
         if newdisp not in [True, False]:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N/true/false/yes/no/enable/disable...]`.")
             return

@@ -28,6 +28,7 @@ class NaptimeCog(commands.Cog):
 
         Kicks you from any voice channel you're in after a set amount of time.
         """
+        # TODO: Disable and hide this command on servers where bot does not have MOVE_MEMBERS permission
         if not ctx.me.guild_permissions.move_members:
             await ctx.send("Sorry, I don't have permission to kick users from voice channels")
             return
