@@ -39,7 +39,7 @@ async def showNextStep(ctx, userdata, completed=False):
         )
         if ctx.me.guild_permissions.manage_nicknames:
             congrats_message += f"\n* You can turn off sizetags with `{conf.prefix}setdisplay N`."
-        await ctx.send(conf)
+        await ctx.send(congrats_message)
 
     if userdata.registered:
         return
