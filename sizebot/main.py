@@ -170,8 +170,8 @@ def main():
         # F*** smart quotes.
         message.content = message.content.replace("“", "\"")
         message.content = message.content.replace("”", "\"")
-        message.content = message.content.replace("", "’")
-        message.content = message.content.replace("", "‘")
+        message.content = message.content.replace("’", "'")
+        message.content = message.content.replace("‘", "'")
 
         if (
             message.content.startswith(f"{conf.prefix}timeit")
