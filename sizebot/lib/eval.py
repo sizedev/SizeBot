@@ -152,7 +152,8 @@ def getEvalGlobals():
         "logger": logger,
         "get_royale": get_royale,
         "royale": royale,
-        "errors": errors
+        "errors": errors,
+        "arrow": arrow
     }
 
     return evalGlobals
