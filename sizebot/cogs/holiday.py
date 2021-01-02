@@ -42,23 +42,27 @@ class HolidayCog(commands.Cog):
             newactivityname = conf.activity
 
             if now.month == 1 and now.day == 1:  # New Year's Day
-                logger.debug("Happy new year!")
+                logger.info("Happy new year!")
                 newnick += f" {intToRoman(int(now.year))}"
                 newactivityname = "Happy New Year!"
+            elif now.month == 2 and now.day == 14:  # Valentine's Day (and AWK's birthday)
+                logger.info("Happy Valentine's Day!")
+                newnick += " 💗"
+                newactivityname = "Happy Valentine's Day!"
             elif now.month == 3 and now.day == 10:  # Digi's birthday
-                logger.debug("Happy birthday Digi!")
+                logger.info("Happy birthday Digi!")
                 newnick += " 🎉"
                 newactivityname = "Happy Birthday, DigiDuncan!"
             elif now.month == 2 and now.day == 8:  # Natalie's birthday
-                logger.debug("Happy birthday Natalie!")
+                logger.info("Happy birthday Natalie!")
                 newnick += " 🎉"
                 newactivityname = "Happy Birthday, Natalie!"
             elif now.month == 10 and now.day == 31:  # Halloween
-                logger.debug("Happy Halloween!")
+                logger.info("Happy Halloween!")
                 newnick = "SpookBot 🎃"
                 newactivityname = "OoOoOoOo"
             elif now.month == 12 and now.day == 25:  # Christmas
-                logger.debug("Merry Christmas!")
+                logger.info("Merry Christmas!")
                 newnick = "SizeSanta 🎄"
                 newactivityname = "Merry Christmas!"
             else:
@@ -90,8 +94,12 @@ class HolidayCog(commands.Cog):
         hidden = True
     )
     async def secretsanta(self, ctx):
+        now = arrow.now()
+        if not (now.month == 12 and (24 <= now.day <= 31)):
+            await ctx.send("The Secret Santa event is over! See you next Christmas season!")
+            return
         userid = ctx.message.author.id
-        usergift = gifts[(userid + 4979) % len(gifts)]
+        usergift = gifts[(userid + now.year) % len(gifts)]
         output = f"<@{userid}> opened up their Secret Santa gift...\n"
         output += f"It was... {usergift}"
         if userid in alreadyclaimed:
