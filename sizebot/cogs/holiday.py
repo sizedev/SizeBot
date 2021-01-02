@@ -57,6 +57,21 @@ class HolidayCog(commands.Cog):
                 logger.info("Happy birthday Natalie!")
                 newnick += " 🎉"
                 newactivityname = "Happy Birthday, Natalie!"
+            elif now.month == 5 and now.day == 5:  # Cinco de Mayo
+                logger.info("Happy Cinco de Mayo!")
+                newnick += " 🇲🇽"
+                newactivityname = "Happy Cinco De Mayo!"
+            elif now.month == 6 and now.day == 6:  # Swedish Independence Day
+                logger.info("Happy Swedish Independence Day!")
+                newactivityname = "🇸🇪 AGGA 🇸🇪"
+            elif now.month == 7 and now.day == 1:  #Canada Day
+                logger.info("Happy Canada Day!")
+                newnick += " 🍁"
+                newactivityname = "Happy Canada Day!"
+            elif now.month == 7 and now.day == 4:  # Fourth of July
+                logger.info("Happy Fourth of July!")
+                newnick += " 🇺🇸"
+                newactivityname = "Happy Fourth of July!"
             elif now.month == 10 and now.day == 31:  # Halloween
                 logger.info("Happy Halloween!")
                 newnick = "SpookBot 🎃"
