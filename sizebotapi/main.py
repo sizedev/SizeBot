@@ -12,7 +12,7 @@ from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff, Rate, LimitedRate
 from sizebot.lib.units import SV, WV, TV
 
-asyncio.run(units.init())
+units.init()
 
 app = flask.Flask(__name__)
 
