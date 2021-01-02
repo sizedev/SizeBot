@@ -14,7 +14,7 @@ DENS = 5
 UNIT = 6
 SPEC = 7
 
-asyncio.run(units.init())
+units.init()
 
 
 class BadLegacyUser(Exception):
