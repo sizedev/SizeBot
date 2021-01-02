@@ -6,7 +6,7 @@ from sizebot.lib import units
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV, TV, Mult, Rate
 
-asyncio.run(units.init())
+units.init()
 
 
 def test_Mult_parse():
