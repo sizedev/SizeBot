@@ -417,7 +417,7 @@ class Dimension(Decimal):
         return unit.format(value, *args, **kwargs)
 
     @classmethod
-    async def loadFromFile(cls, filename):
+    def loadFromFile(cls, filename):
         try:
             fileJson = json.loads(pkg_resources.read_text(sizebot.data, filename))
         except FileNotFoundError:
@@ -575,9 +575,9 @@ def loadJsonFile(filename):
     return unitsJson
 
 
-async def init():
-    await SV.loadFromFile("sv.json")
+def init():
+    SV.loadFromFile("sv.json")
     SV.addUnit(FeetAndInchesUnit())
     SV.addSystemUnit(systemname="u", systemunit=SystemUnit(unit=("'", "\"")))
-    await WV.loadFromFile("wv.json")
-    await TV.loadFromFile("tv.json")
+    WV.loadFromFile("wv.json")
+    TV.loadFromFile("tv.json")

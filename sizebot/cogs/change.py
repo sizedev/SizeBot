@@ -19,6 +19,10 @@ class ChangeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         changes.loadFromFile()
+
+    @commands.Cog.listener()
+    async def on_first_ready(self):
+        # Don't start the change tasks until the bot is properly connected
         self.changeTask.start()
 
     def cog_unload(self):
