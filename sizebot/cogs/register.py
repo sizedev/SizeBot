@@ -31,6 +31,9 @@ async def removeUserRole(member):
 
 
 async def showNextStep(ctx, userdata, completed=False):
+    if completed or not userdata.registered:
+        telemetry.RegisterStepCompleted(ctx.guild.id, ctx.author.id, ctx.command.name, completed = completed).save()
+
     if completed:
         congrats_message = (
             f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n"
@@ -50,7 +53,6 @@ async def showNextStep(ctx, userdata, completed=False):
         "setsystem": f"Finally, use `{conf.prefix}setsystem` to set what unit system you use: `M` for Metric, `U` for US.\n*Examples: `{conf.prefix}setsystem U` or `{conf.prefix}setsystem M`*"
     }
     next_step_message = step_messages[next_step]
-    telemetry.RegisterStepCompleted(ctx.guild.id, ctx.author.id, ctx.command.name, completed = completed).save()
     await ctx.send(f"You have {len(userdata.registration_steps_remaining)} registration steps remaining.\n{next_step_message}")
 
 
