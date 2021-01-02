@@ -78,7 +78,7 @@ class HolidayCog(commands.Cog):
                 newactivityname = "OoOoOoOo"
             elif now.month == 12 and now.day == 25:  # Christmas
                 logger.info("Merry Christmas!")
-                newnick = "SizeSanta 🎄"
+                newnick = newnick[0] + "izeSanta 🎄"
                 newactivityname = "Merry Christmas!"
             else:
                 logger.info("Just another boring non-holiday...")
