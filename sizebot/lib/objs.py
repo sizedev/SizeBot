@@ -207,7 +207,7 @@ def loadObjJson(fileJson):
         objects.append(DigiObject.fromJson(objJson))
 
 
-async def init():
+def init():
     for filename in pkg_resources.contents(sizebot.data.objects):
         if filename.endswith(".json"):
             loadObjFile(filename)

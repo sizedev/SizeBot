@@ -3,7 +3,7 @@ from sizebot.lib import macrovision, units
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV
 
-asyncio.run(units.init())
+units.init()
 
 
 async def test_macrovision():

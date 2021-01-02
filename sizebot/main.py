@@ -97,6 +97,13 @@ def main():
 
     bot.remove_command("help")
 
+    # Start the language engine.
+    language.load()
+
+    # Load the units and objects.
+    units.init()
+    objs.init()
+
     for extension in initial_extensions:
         bot.load_extension("sizebot.extensions." + extension)
     for cog in initial_cogs:
@@ -116,13 +123,6 @@ def main():
             await bot.user.edit(username = conf.name)
         except discord.errors.HTTPException:
             logger.warn("We can't change the username this much!")
-
-        # Start the language engine.
-        language.load()
-
-        # Load the units and objects.
-        await units.init()
-        await objs.init()
 
         # Print the splash screen.
         # Obviously we need the banner printed in the terminal
