@@ -128,7 +128,7 @@ class RegisterCog(commands.Cog):
         if ctx.me.guild_permissions.manage_nicknames:
             userdata.display = True
             if any(c in ctx.author.display_name for c in "()[]"):
-                await ctx.send(f"If you have already have size tag in your name, you can fix your nick with {conf.prefix}`setnick`.")
+                await ctx.send(f"If you have already have a size tag in your name, you can fix your nick with `{conf.prefix}setnick`.")
         userdata.registration_steps_remaining = ["setheight", "setweight", "setsystem"]
 
         # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
