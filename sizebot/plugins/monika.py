@@ -15,8 +15,8 @@ async def on_message(m):
         return
     if "monika" not in m.content.lower():
         return
-    logger.warn("Monika detected.")
+    logger.debug("Monika detected.")
     if random.randrange(6) == 1:
-        logger.warn("Monika triggered.")
+        logger.info("Monika triggered.")
         line = random.choice(monikalines)
         await m.channel.send(line, delete_after = 7)

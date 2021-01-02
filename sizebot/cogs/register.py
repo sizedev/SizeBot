@@ -17,6 +17,7 @@ async def addUserRole(member):
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
+    # PERMISSION: requires manage_roles
     await member.add_roles(role, reason="Registered as sizebot user")
 
 
@@ -25,12 +26,24 @@ async def removeUserRole(member):
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
+    # PERMISSION: requires manage_roles
     await member.remove_roles(role, reason="Unregistered as sizebot user")
 
 
 async def showNextStep(ctx, userdata, completed=False):
+    if completed or not userdata.registered:
+        telemetry.RegisterStepCompleted(ctx.guild.id, ctx.author.id, ctx.command.name, completed = completed).save()
+
     if completed:
-        await ctx.send(f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n* You can use `{conf.prefix}setspecies` to set your species to be shown in your sizetag.\n* You can adjust your current height with `{conf.prefix}setheight`.\n* You can turn off sizetags with `{conf.prefix}setdisplay N`.")
+        congrats_message = (
+            f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n"
+            f"* You can use `{conf.prefix}setspecies` to set your species to be shown in your sizetag.\n"
+            f"* You can adjust your current height with `{conf.prefix}setheight`."
+        )
+        if ctx.me.guild_permissions.manage_nicknames:
+            congrats_message += f"\n* You can turn off sizetags with `{conf.prefix}setdisplay N`."
+        await ctx.send(congrats_message)
+
     if userdata.registered:
         return
     next_step = userdata.registration_steps_remaining[0]
@@ -40,7 +53,6 @@ async def showNextStep(ctx, userdata, completed=False):
         "setsystem": f"Finally, use `{conf.prefix}setsystem` to set what unit system you use: `M` for Metric, `U` for US.\n*Examples: `{conf.prefix}setsystem U` or `{conf.prefix}setsystem M`*"
     }
     next_step_message = step_messages[next_step]
-    telemetry.RegisterStepCompleted(ctx.guild.id, ctx.author.id, ctx.command.name, completed = completed).save()
     await ctx.send(f"You have {len(userdata.registration_steps_remaining)} registration steps remaining.\n{next_step_message}")
 
 
@@ -61,7 +73,6 @@ class RegisterCog(commands.Cog):
         # unitsystem: str = "m"
         # species: str = None
         """Registers a user for SizeBot."""
-        # Already registered
 
         userdata = None
         try:
@@ -115,10 +126,15 @@ class RegisterCog(commands.Cog):
         userdata.guildid = ctx.guild.id
         userdata.id = ctx.author.id
         userdata.nickname = ctx.author.display_name
-        if any(c in ctx.author.display_name for c in "()[]"):
-            await ctx.send(f"If you have already have size tag in your name, you can fix your nick with {conf.prefix}`setnick`.")
-        userdata.display = "y"
+        userdata.display = False
+        if ctx.me.guild_permissions.manage_nicknames:
+            userdata.display = True
+            if any(c in ctx.author.display_name for c in "()[]"):
+                await ctx.send(f"If you have already have a size tag in your name, you can fix your nick with `{conf.prefix}setnick`.")
         userdata.registration_steps_remaining = ["setheight", "setweight", "setsystem"]
+
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, and the user is an admin, let them know they may need to fix permissions
 
         userdb.save(userdata)
 
@@ -231,7 +247,7 @@ class RegisterCog(commands.Cog):
         userdata.guildid = ctx.guild.id
         userdata.id = ctx.author.id
         userdata.nickname = nick
-        userdata.display = "y"
+        userdata.display = True
         userdata.height = currentheight
         userdata.baseheight = baseheight
         userdata.baseweight = baseweight
@@ -304,9 +320,12 @@ class RegisterCog(commands.Cog):
         if reaction.emoji != emojis.check:
             return
 
-        # remove the sizetag, delete the user file, and remove the user role
-        await proportions.nickReset(user)
+        # remove the sizetag
+        if ctx.me.guild_permissions.manage_nicknames:
+            await proportions.nickReset(user)
+        # delete the user file
         userdb.delete(guild.id, user.id)
+        # remove the user role
         await removeUserRole(user)
 
         telemetry.Unregistered(ctx.guild.id, ctx.author.id).save()

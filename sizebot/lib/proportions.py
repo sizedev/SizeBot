@@ -21,6 +21,10 @@ compareicon = "https://media.discordapp.net/attachments/650460192009617433/66502
 # TODO: Deal with not being able to change nicks of roles above the bot.
 # Update users nicknames to include sizetags
 async def nickUpdate(user):
+    # Don't try updating nicks on servers where Manage Nicknames permission is missing
+    if user.guild.me.guild_permissions.manage_nicknames:
+        return
+
     # webhooks
     if user.discriminator == "0000":
         return
@@ -75,6 +79,7 @@ async def nickUpdate(user):
         # Cannot fit the new sizetag
         newnick = nick
     try:
+        # PERMISSION: requires manage_nicknames
         await user.edit(nick = newnick)
     except discord.Forbidden:
         raise errors.NoPermissionsException
@@ -103,6 +108,7 @@ async def nickReset(user):
         return
 
     try:
+        # PERMISSION: requires manage_nicknames
         await user.edit(nick = userdata.nickname)
     except discord.Forbidden:
         raise errors.NoPermissionsException

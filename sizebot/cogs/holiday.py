@@ -42,40 +42,62 @@ class HolidayCog(commands.Cog):
             newactivityname = conf.activity
 
             if now.month == 1 and now.day == 1:  # New Year's Day
-                logger.debug("Happy new year!")
+                logger.info("Happy new year!")
                 newnick += f" {intToRoman(int(now.year))}"
                 newactivityname = "Happy New Year!"
+            elif now.month == 2 and now.day == 14:  # Valentine's Day (and AWK's birthday)
+                logger.info("Happy Valentine's Day!")
+                newnick += " 💗"
+                newactivityname = "Happy Valentine's Day!"
             elif now.month == 3 and now.day == 10:  # Digi's birthday
-                logger.debug("Happy birthday Digi!")
+                logger.info("Happy birthday Digi!")
                 newnick += " 🎉"
                 newactivityname = "Happy Birthday, DigiDuncan!"
             elif now.month == 2 and now.day == 8:  # Natalie's birthday
-                logger.debug("Happy birthday Natalie!")
+                logger.info("Happy birthday Natalie!")
                 newnick += " 🎉"
                 newactivityname = "Happy Birthday, Natalie!"
+            elif now.month == 5 and now.day == 5:  # Cinco de Mayo
+                logger.info("Happy Cinco de Mayo!")
+                newnick += " 🇲🇽"
+                newactivityname = "Happy Cinco De Mayo!"
+            elif now.month == 6 and now.day == 6:  # Swedish Independence Day
+                logger.info("Happy Swedish Independence Day!")
+                newactivityname = "🇸🇪 AGGA 🇸🇪"
+            elif now.month == 7 and now.day == 1:  #Canada Day
+                logger.info("Happy Canada Day!")
+                newnick += " 🍁"
+                newactivityname = "Happy Canada Day!"
+            elif now.month == 7 and now.day == 4:  # Fourth of July
+                logger.info("Happy Fourth of July!")
+                newnick += " 🇺🇸"
+                newactivityname = "Happy Fourth of July!"
             elif now.month == 10 and now.day == 31:  # Halloween
-                logger.debug("Happy Halloween!")
+                logger.info("Happy Halloween!")
                 newnick = "SpookBot 🎃"
                 newactivityname = "OoOoOoOo"
             elif now.month == 12 and now.day == 25:  # Christmas
-                logger.debug("Merry Christmas!")
-                newnick = "SizeSanta 🎄"
+                logger.info("Merry Christmas!")
+                newnick = newnick[0] + "izeSanta 🎄"
                 newactivityname = "Merry Christmas!"
             else:
                 logger.info("Just another boring non-holiday...")
 
             for guild in self.bot.guilds:
+                if not guild.me.guild_permissions.change_nickname:
+                    logger.info(f"Skipping changing nick in {guild.name} due to missing permissions.")
+                    continue
                 if newnick != guild.me.display_name:
                     logger.info(f"Updating bot nick to \"{newnick}\" in {guild.name}.")
+                    # PERMISSION: requires change_nickname
                     await guild.me.edit(nick = newnick)
-            if newactivityname != self.bot.guilds[0].get_member(self.bot.user.id).activity:
+            if self.bot.activity and newactivityname != self.bot.activity.name:
                 logger.info(f"Updating bot activity to \"{newactivityname}\".")
                 newactivity = discord.Game(name = newactivityname)
                 await self.bot.change_presence(activity = newactivity)
 
             next_midnight = arrow.get(now).replace(hour=0, minute=0, second=0).shift(days=1)
             await sleep_until(next_midnight.datetime)
-
         except Exception as err:
             logger.error(formatTraceback(err))
 
@@ -87,8 +109,12 @@ class HolidayCog(commands.Cog):
         hidden = True
     )
     async def secretsanta(self, ctx):
+        now = arrow.now()
+        if not (now.month == 12 and (24 <= now.day <= 31)):
+            await ctx.send("The Secret Santa event is over! See you next Christmas season!")
+            return
         userid = ctx.message.author.id
-        usergift = gifts[(userid + 4979) % len(gifts)]
+        usergift = gifts[(userid + now.year) % len(gifts)]
         output = f"<@{userid}> opened up their Secret Santa gift...\n"
         output += f"It was... {usergift}"
         if userid in alreadyclaimed:

@@ -28,6 +28,9 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setnick(self, ctx, *, newnick):
         """Change nickname."""
+        # TODO: Disable and hide this command on servers where bot does not have MANAGE_NICKNAMES permission
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, and the user is an admin, let them know they may need to fix permissions
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.nickname = newnick
@@ -50,7 +53,7 @@ class SetCog(commands.Cog):
         userdata.species = newtag
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s species is now a {userdata.species}.")
+        await ctx.send(f"{userdata.nickname}'s species is now a {userdata.species}.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
@@ -67,7 +70,7 @@ class SetCog(commands.Cog):
         userdata.species = None
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s species is now cleared.")
+        await ctx.send(f"{userdata.nickname}'s species is now cleared.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
@@ -79,6 +82,9 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setdisplay(self, ctx, newdisp: bool):
         """Set display mode."""
+        # TODO: Disable and hide this command on servers where bot does not have MANAGE_NICKNAMES permission
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
+        # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, and the user is an admin, let them know they may need to fix permissions
         if newdisp not in [True, False]:
             await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} [Y/N/true/false/yes/no/enable/disable...]`.")
             return
@@ -88,7 +94,7 @@ class SetCog(commands.Cog):
         userdata.display = newdisp
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s display is now set to {userdata.display}.")
+        await ctx.send(f"{userdata.nickname}'s display is now set to {userdata.display}.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
@@ -118,7 +124,7 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setsystem")
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s system is now set to {userdata.unitsystem}.")
+        await ctx.send(f"{userdata.nickname}'s system is now set to {userdata.unitsystem}.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
@@ -137,7 +143,7 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
@@ -164,7 +170,7 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
@@ -206,7 +212,7 @@ class SetCog(commands.Cog):
         userdata.height = newheightSV
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}> is now {userdata.height:mu} tall.")
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
@@ -224,7 +230,7 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}> is now infinitely tall.")
+        await ctx.send(f"{userdata.nickname} is now infinitely tall.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
@@ -242,7 +248,7 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}> is now nothing.")
+        await ctx.send(f"{userdata.nickname} is now nothing.")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
@@ -259,7 +265,7 @@ class SetCog(commands.Cog):
         completed_registration = userdata.complete_step("setweight")
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s weight is now {userdata.weight:mu}")
+        await ctx.send(f"{userdata.nickname}'s weight is now {userdata.weight:mu}")
 
         await proportions.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
@@ -276,7 +282,7 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(SV.parse(newfoot) * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength)}), "
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength)}), "
                        f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale))}")
         await showNextStep(ctx, userdata)
 
@@ -299,7 +305,7 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(newfoot * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength)}), "
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength)}), "
                        f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale))}")
         await showNextStep(ctx, userdata)
 
@@ -315,7 +321,7 @@ class SetCog(commands.Cog):
         userdata.footlength = None
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s foot length is now default.")
+        await ctx.send(f"{userdata.nickname}'s foot length is now default.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -329,7 +335,7 @@ class SetCog(commands.Cog):
         userdata.pawtoggle = not userdata.pawtoggle
         userdb.save(userdata)
 
-        await ctx.send(f"The end of <@{ctx.author.id}>'s legs are now called a {userdata.footname.lower()}.")
+        await ctx.send(f"The end of {userdata.nickname}'s legs are now called a {userdata.footname.lower()}.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -343,7 +349,7 @@ class SetCog(commands.Cog):
         userdata.furtoggle = not userdata.furtoggle
         userdb.save(userdata)
 
-        await ctx.send(f"The hair of <@{ctx.author.id}> is now called {userdata.hairname.lower()}.")
+        await ctx.send(f"The hair of {userdata.nickname} is now called {userdata.hairname.lower()}.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -359,7 +365,7 @@ class SetCog(commands.Cog):
         userdata.hairlength = newhairsv
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s base hair length is now {userdata.hairlength:mu} long, "
+        await ctx.send(f"{userdata.nickname}'s base hair length is now {userdata.hairlength:mu} long, "
                        f"or {SV(userdata.hairlength):mu} currently.")
         await showNextStep(ctx, userdata)
 
@@ -376,7 +382,7 @@ class SetCog(commands.Cog):
         userdata.taillength = newtailsv
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s base tail length is now {userdata.taillength:mu} long, "
+        await ctx.send(f"{userdata.nickname}'s base tail length is now {userdata.taillength:mu} long, "
                        f"or {SV(userdata.taillength):mu} currently.")
         await showNextStep(ctx, userdata)
 
@@ -392,7 +398,7 @@ class SetCog(commands.Cog):
         userdata.taillength = None
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s tail length is now cleared.")
+        await ctx.send(f"{userdata.nickname}'s tail length is now cleared.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -408,7 +414,7 @@ class SetCog(commands.Cog):
         userdata.earheight = newearsv
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s base ear height is now {userdata.earheight:mu} long, "
+        await ctx.send(f"{userdata.nickname}'s base ear height is now {userdata.earheight:mu} long, "
                        f"or {SV(userdata.earheight):mu} currently.")
         await showNextStep(ctx, userdata)
 
@@ -424,7 +430,7 @@ class SetCog(commands.Cog):
         userdata.earheight = None
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s ear height is now cleared.")
+        await ctx.send(f"{userdata.nickname}'s ear height is now cleared.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -439,7 +445,7 @@ class SetCog(commands.Cog):
         userdata.liftstrength = WV(WV.parse(newstrength) * (userdata.viewscale ** 3))
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s base lift strength is now {userdata.liftstrength:mu} long, "
+        await ctx.send(f"{userdata.nickname}'s base lift strength is now {userdata.liftstrength:mu} long, "
                        f"or {SV(userdata.liftstrength):mu} currently.")
         await showNextStep(ctx, userdata)
 
@@ -455,7 +461,7 @@ class SetCog(commands.Cog):
         userdata.liftstrength = None
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s lift/carry strength is now cleared.")
+        await ctx.send(f"{userdata.nickname}'s lift/carry strength is now cleared.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -473,7 +479,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         # TODO: Give ParsableRates a __mul__ so I can give the user their current speeds.
-        await ctx.send(f"<@{ctx.author.id}>'s base walk speed is now {userdata.walkperhour:mu} per hour.")
+        await ctx.send(f"{userdata.nickname}'s base walk speed is now {userdata.walkperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -488,7 +494,7 @@ class SetCog(commands.Cog):
         userdata.walkperhour = None
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s walk speed is now cleared.")
+        await ctx.send(f"{userdata.nickname}'s walk speed is now cleared.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -506,7 +512,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         # TODO: Give ParsableRates a __mul__ so I can give the user their current speeds.
-        await ctx.send(f"<@{ctx.author.id}>'s base run speed is now {userdata.runperhour:mu} per hour.")
+        await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -521,7 +527,7 @@ class SetCog(commands.Cog):
         userdata.runperhour = None
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s run speed is now cleared.")
+        await ctx.send(f"{userdata.nickname}'s run speed is now cleared.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -551,7 +557,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await proportions.nickUpdate(user)
 
-        await ctx.send(f"<@{user.id}>'s gender is now set to {userdata.gender}.")
+        await ctx.send(f"{userdata.nickname}'s gender is now set to {userdata.gender}.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -571,7 +577,7 @@ class SetCog(commands.Cog):
         if userdata.display:
             await proportions.nickUpdate(user)
 
-        await ctx.send(f"<@{user.id}>'s gender is now reset.")
+        await ctx.send(f"{userdata.nickname}'s gender is now reset.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -584,7 +590,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_model = model
         userdb.save(userdata)
-        await ctx.send(f"{user.display_name}'s model is now {model}.")
+        await ctx.send(f"{userdata.nickname}'s model is now {model}.")
 
     @commands.command(
         aliases = ["resetmodel", "unsetmodel"],
@@ -597,7 +603,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_model = None
         userdb.save(userdata)
-        await ctx.send(f"Cleared {user.display_name}'s model.")
+        await ctx.send(f"Cleared {userdata.nickname}'s model.")
 
     @commands.command(
         category = "mod",
@@ -609,7 +615,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_view = view
         userdb.save(userdata)
-        await ctx.send(f"{user.display_name}'s view is now {view}.")
+        await ctx.send(f"{userdata.nickname}'s view is now {view}.")
 
     @commands.command(
         aliases = ["resetview", "unsetview"],
@@ -622,7 +628,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_view = None
         userdb.save(userdata)
-        await ctx.send(f"Cleared {user.display_name}'s view.")
+        await ctx.send(f"Cleared {userdata.nickname}'s view.")
 
 
 def setup(bot):

@@ -17,6 +17,7 @@ from sizebot.cogs import edge, limits, scaletalk
 from sizebot.lib import language, objs, paths, proportions, status, telemetry, units, utils
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
+from sizebot.lib.utils import truncate
 from sizebot.plugins import active, monika
 
 logging.basicConfig(level=CMD)
@@ -157,8 +158,8 @@ def main():
 
     @bot.event
     async def on_command(ctx):
-        guild = ctx.guild.name if hasattr(ctx, "guild") else "DM"
-        logger.log(CMD, f"G {guild}, U {ctx.message.author.display_name}: {ctx.message.content}")
+        guild = truncate(ctx.guild.name, 20) if hasattr(ctx, "guild") else "DM"
+        logger.log(CMD, f"G {guild}, U {ctx.message.author.name}: {ctx.message.content}")
 
     @bot.event
     async def on_command_completion(ctx):
@@ -169,6 +170,8 @@ def main():
         # F*** smart quotes.
         message.content = message.content.replace("“", "\"")
         message.content = message.content.replace("”", "\"")
+        message.content = message.content.replace("’", "'")
+        message.content = message.content.replace("‘", "'")
 
         if (
             message.content.startswith(f"{conf.prefix}timeit")
