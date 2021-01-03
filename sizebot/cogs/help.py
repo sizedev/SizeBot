@@ -3,6 +3,7 @@ import logging
 import math
 
 from datetime import datetime
+from packaging import version
 
 from discord import Embed, Webhook, AsyncWebhookAdapter
 from discord.ext import commands
@@ -374,7 +375,9 @@ class HelpCog(commands.Cog):
     )
     async def changelog(self, ctx):
         """See what's new in the latest SizeBot!"""
-        await ctx.send(f"View the changelog here!:\nhttps://github.com/sizedev/SizeBot/blob/master/changelogs/{__version__}.md")
+        current_version = version.parse(__version__)
+
+        await ctx.send(f"View the changelog here!:\nhttps://github.com/sizedev/SizeBot/blob/master/changelogs/{current_version.major}.{current_version.minor}.md")
 
     @commands.command(
         category = "mod",
