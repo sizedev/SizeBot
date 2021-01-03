@@ -1,13 +1,17 @@
 import base64
 import json
 import importlib.resources as pkg_resources
+from json.decoder import JSONDecodeError
+import aiohttp
 from aiohttp_requests import requests
 from operator import itemgetter
+import logging
 
 import sizebot.data
 from sizebot.conf import conf
 from sizebot.lib.decimal import Decimal
 
+logger = logging.getLogger("sizebot")
 
 model_heights = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
@@ -29,6 +33,23 @@ def get_entity_json(name, model, view, height, x):
         "priority": 0,
         "brightness": 1
     }
+
+
+async def shorten_url(url):
+    if not conf.cuttly_key:
+        return url
+    try:
+        r = await requests.get(f"https://cutt.ly/api/api.php?key={conf.cuttly_key}&short={url}", raise_for_status=True)
+    except aiohttp.ClientResponseError as e:
+        logger.error(f"Unable to shorten url: Status {e.status}")
+        return url
+    try:
+        cuttly_response = await r.json()
+    except (aiohttp.ContentTypeError, JSONDecodeError):
+        logger.error("Unable to shorten url: Cannot parse JSON")
+        return url
+    short_url = cuttly_response["url"]["shortLink"]
+    return short_url
 
 
 async def get_url(people, *, shorten = True):
@@ -66,10 +87,7 @@ async def get_url(people, *, shorten = True):
     json_bytes = json_string.encode("utf-8")
     base64_bytes = base64.b64encode(json_bytes)
     base64_string = base64_bytes.decode("ascii")
-    raw_url = f"https://macrovision.crux.sexy/?scene={base64_string}"
-    if conf.cuttly_key and shorten:
-        r = await requests.get(f"https://cutt.ly/api/api.php?key={conf.cuttly_key}&short={raw_url}")
-        cuttly = json.loads(await r.text())
-        return cuttly["url"]["shortLink"]
-    else:
-        return raw_url
+    url = f"https://macrovision.crux.sexy/?scene={base64_string}"
+    if shorten:
+        url = shorten_url(url)
+    return url
