@@ -1,5 +1,6 @@
 import logging
 import sys
+from decimal import InvalidOperation
 
 from discord.ext import commands
 
@@ -64,6 +65,8 @@ def setup(bot):
             await ctx.send(f"{emojis.error} You do not have permission to run this command.")
         elif isinstance(err, commands.CommandOnCooldown):
             await ctx.send(f"{emojis.info} You're using that command too fast! Try again in a moment.")
+        elif isinstance(err, InvalidOperation):
+            await ctx.send(f"{emojis.warning} That's... not math I can do.")
         elif isinstance(err, OverflowError):
             await ctx.send("*SizeBot attempts to comprehend a being of infinite height, and gives up before it explodes.*")
         else:
