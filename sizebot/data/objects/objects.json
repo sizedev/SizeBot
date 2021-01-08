@@ -629,6 +629,13 @@
         ]
     },
     {
+        "name": "paperclip",
+        "dimension": "l",
+        "length": "0.03302",
+        "width": "0.011938",
+        "weight": "0.5"
+    },
+    {
         "name": "needle",
         "dimension": "l",
         "length": "0.034",
@@ -637,13 +644,6 @@
             "pin",
             "sewing needle"
         ]
-    },
-    {
-        "name": "paperclip",
-        "dimension": "l",
-        "length": "0.034925",
-        "width": "0.04",
-        "weight": "0.5"
     },
     {
         "name": "tea light",
@@ -684,6 +684,20 @@
             "lego person",
             "lego people",
             "lego minifigure"
+        ]
+    },
+    {
+        "name": "Reese's Peanut Butter Cup",
+        "dimension": "d",
+        "diameter": "0.04",
+        "weight": "21.8",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "reeses",
+            "reeses cup",
+            "peanut butter cup"
         ]
     },
     {
@@ -1682,6 +1696,12 @@
         ]
     },
     {
+        "name": "sock",
+        "dimension": "l",
+        "length": "0.3",
+        "weight": "45"
+    },
+    {
         "name": "Subway Footlong™",
         "dimension": "l",
         "length": "0.3048",
@@ -1762,12 +1782,6 @@
         "tags": [
             "Pokemon"
         ]
-    },
-    {
-        "name": "sock",
-        "dimension": "l",
-        "length": "0.3",
-        "weight": "45"
     },
     {
         "name": "beach ball",
