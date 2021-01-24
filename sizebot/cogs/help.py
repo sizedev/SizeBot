@@ -90,7 +90,7 @@ class HelpCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(
-        aliases = ["objects"],
+        aliases = ["objects", "objlist", "objectlist"],
         category = "help"
     )
     async def objs(self, ctx):
