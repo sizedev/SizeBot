@@ -734,6 +734,19 @@
         ]
     },
     {
+        "name": "cupcake",
+        "dimension": "h",
+        "height": "0.045",
+        "diameter": "0.2275",
+        "weight": "80",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "muffin"
+        ]
+    },
+    {
         "name": "duct tape width",
         "dimension": "w",
         "width": "0.049",
@@ -911,7 +924,8 @@
         "weight": "0.408233133",
         "aliases": [
             "cotton swab",
-            "swab"
+            "swab",
+            "qtip"
         ]
     },
     {
@@ -1250,6 +1264,17 @@
         "aliases": [
             "5 pound note",
             "£5"
+        ]
+    },
+    {
+        "name": "taco",
+        "dimension": "l",
+        "height": "0.0635",
+        "length": "0.127",
+        "depth": "0.047625",
+        "weight": "99.2233",
+        "tags": [
+            "food"
         ]
     },
     {
