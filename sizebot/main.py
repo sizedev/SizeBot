@@ -158,7 +158,7 @@ def main():
 
     @bot.event
     async def on_command(ctx):
-        guild = truncate(ctx.guild.name, 20) if hasattr(ctx, "guild") else "DM"
+        guild = truncate(ctx.guild.name, 20) if (hasattr(ctx, "guild") and ctx.guild is not None) else "DM"
         logger.log(CMD, f"G {guild}, U {ctx.message.author.name}: {ctx.message.content}")
 
     @bot.event
@@ -176,12 +176,12 @@ def main():
         if (
             message.content.startswith(f"{conf.prefix}timeit")
             and await bot.is_owner(message.author)
-            and hasattr(message.author, "guild")
+            and hasattr(message.author, "guild") and message.author.guild is not None
         ):
             await on_message_timed(message)
             return
         await bot.process_commands(message)
-        if hasattr(message.author, "guild"):
+        if hasattr(message.author, "guild") and message.author.guild is not None:
             await scaletalk.on_message(message)
             await edge.on_message(message)
             await limits.on_message(message)
@@ -235,7 +235,7 @@ def main():
         if before.content == after.content:
             return
         await bot.process_commands(after)
-        if hasattr(after.author, "guild"):
+        if hasattr(after.author, "guild") and after.author.guild is not None:
             await proportions.nickUpdate(after.author)
         await active.on_message(after)
 

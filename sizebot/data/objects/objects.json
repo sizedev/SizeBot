@@ -629,6 +629,13 @@
         ]
     },
     {
+        "name": "paperclip",
+        "dimension": "l",
+        "length": "0.03302",
+        "width": "0.011938",
+        "weight": "0.5"
+    },
+    {
         "name": "needle",
         "dimension": "l",
         "length": "0.034",
@@ -637,13 +644,6 @@
             "pin",
             "sewing needle"
         ]
-    },
-    {
-        "name": "paperclip",
-        "dimension": "l",
-        "length": "0.034925",
-        "width": "0.04",
-        "weight": "0.5"
     },
     {
         "name": "tea light",
@@ -687,6 +687,20 @@
         ]
     },
     {
+        "name": "Reese's Peanut Butter Cup",
+        "dimension": "d",
+        "diameter": "0.04",
+        "weight": "21.8",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "reeses",
+            "reeses cup",
+            "peanut butter cup"
+        ]
+    },
+    {
         "name": "golf ball",
         "dimension": "d",
         "diameter": "0.04267",
@@ -717,6 +731,19 @@
         "aliases": [
             "house key",
             "key"
+        ]
+    },
+    {
+        "name": "cupcake",
+        "dimension": "h",
+        "height": "0.045",
+        "diameter": "0.2275",
+        "weight": "80",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "muffin"
         ]
     },
     {
@@ -897,7 +924,8 @@
         "weight": "0.408233133",
         "aliases": [
             "cotton swab",
-            "swab"
+            "swab",
+            "qtip"
         ]
     },
     {
@@ -1236,6 +1264,17 @@
         "aliases": [
             "5 pound note",
             "£5"
+        ]
+    },
+    {
+        "name": "taco",
+        "dimension": "l",
+        "height": "0.0635",
+        "length": "0.127",
+        "depth": "0.047625",
+        "weight": "99.2233",
+        "tags": [
+            "food"
         ]
     },
     {
@@ -1682,6 +1721,12 @@
         ]
     },
     {
+        "name": "sock",
+        "dimension": "l",
+        "length": "0.3",
+        "weight": "45"
+    },
+    {
         "name": "Subway Footlong™",
         "dimension": "l",
         "length": "0.3048",
@@ -1762,12 +1807,6 @@
         "tags": [
             "Pokemon"
         ]
-    },
-    {
-        "name": "sock",
-        "dimension": "l",
-        "length": "0.4572",
-        "weight": "45"
     },
     {
         "name": "beach ball",

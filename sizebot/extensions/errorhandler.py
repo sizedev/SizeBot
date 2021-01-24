@@ -1,5 +1,6 @@
 import logging
 import sys
+from decimal import InvalidOperation
 
 from discord.ext import commands
 
@@ -52,6 +53,8 @@ def setup(bot):
         elif isinstance(err, commands.errors.CommandNotFound):
             # log unknown commmands to telemetry
             telemetry.UnknownCommand(ctx.message.content.split(" ")[0][1:]).save()
+        elif isinstance(err, commands.errors.MissingRequiredArgument):
+            await ctx.send(f"{emojis.warning} Missing required argument(s) for `{ctx.prefix}{ctx.command}`.")
         elif isinstance(err, commands.errors.ExpectedClosingQuoteError):
             await ctx.send(f"{emojis.warning} Mismatched quotes in command.")
         elif isinstance(err, commands.errors.InvalidEndOfQuotedStringError):
@@ -62,8 +65,10 @@ def setup(bot):
             await ctx.send(f"{emojis.error} You do not have permission to run this command.")
         elif isinstance(err, commands.CommandOnCooldown):
             await ctx.send(f"{emojis.info} You're using that command too fast! Try again in a moment.")
+        elif isinstance(err, InvalidOperation):
+            await ctx.send(f"{emojis.warning} That's... not math I can do.")
         elif isinstance(err, OverflowError):
-            await ctx.send("*SizeBot attempts to comprehend a being of inifinite height, and gives up before it explodes.*")
+            await ctx.send("*SizeBot attempts to comprehend a being of infinite height, and gives up before it explodes.*")
         else:
             # Default command error handling
             await ctx.send(f"{emojis.error} Something went wrong.")

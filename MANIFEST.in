@@ -4,3 +4,4 @@ include sizebot/data/*.ini
 include sizebot/data/*.mp3
 include sizebot/data/fonts/*.otf
 include sizebot/data/objects/*.json
+include changelogs/*.md

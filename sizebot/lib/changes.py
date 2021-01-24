@@ -5,6 +5,7 @@ import time
 from sizebot.lib import proportions, userdb, paths
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, TV
+from sizebot.lib.utils import prettyTimeDelta
 
 logger = logging.getLogger("sizebot")
 
@@ -54,7 +55,13 @@ class Change:
         return self.startTime + self.stopTV
 
     def __str__(self):
-        return f"gid:{self.guildid}/uid:{self.userid} {self.addPerSec:.3} *{self.mulPerSec} , stop at {self.stopSV}, stop after {self.stopTV}s"
+        out = f"G: {self.guildid}| U: {self.userid}\n    "
+        out += f"ADD/S: {self.addPerSec:.10}, MUL/S:{self.mulPerSec}"
+        if self.stopSV is not None:
+            out += f", stop at {self.stopSV}"
+        if self.stopRV is not None:
+            out += f", stop after {prettyTimeDelta(Decimal(self.stopTV))}"
+        return out
 
     def toJson(self):
         return {
