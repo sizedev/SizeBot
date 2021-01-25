@@ -113,9 +113,10 @@ class User:
 
     @height.setter
     def height(self, value):
+        value = SV(value)
         if value < 0:
-            value = 0
-        self._height = SV(value)
+            value = SV(0)
+        self._height = value
 
     @property
     def baseheight(self):
@@ -123,9 +124,10 @@ class User:
 
     @baseheight.setter
     def baseheight(self, value):
+        value = SV(value)
         if value < 0:
-            value = 0
-        self._baseheight = SV(value)
+            value = SV(0)
+        self._baseheight = value
 
     @property
     def footlength(self):
@@ -171,9 +173,10 @@ class User:
         if value is None:
             self._hairlength = None
             return
+        value = SV(value)
         if value < 0:
-            value = 0
-        self._hairlength = SV(value)
+            value = SV(0)
+        self._hairlength = value
 
     @property
     def taillength(self):
@@ -206,9 +209,10 @@ class User:
         if value is None:
             self._liftstrength = None
             return
+        value = SV(value)
         if value < 0:
-            value = 0
-        self._liftstrength = SV(value)
+            value = SV(0)
+        self._liftstrength = value
 
     @property
     def walkperhour(self):
@@ -227,10 +231,12 @@ class User:
                 raise ValueError("Speed can not go backwards!")
             value = value.diff.amount / value.time * Decimal("3600")
 
-        if value < 0:
-            value = 0
+        value = SV(0)
 
-        self._walkperhour = SV(value)
+        if value < 0:
+            value = SV(0)
+
+        self._walkperhour = value
 
     @property
     def runperhour(self):
@@ -249,10 +255,12 @@ class User:
                 raise ValueError("Speed can not go backwards!")
             value = value.diff.amount / value.time * Decimal("3600")
 
-        if value < 0:
-            value = 0
+        value = SV(0)
 
-        self._runperhour = SV(value)
+        if value < 0:
+            value = SV(0)
+
+        self._runperhour = value
 
     @property
     def currentscalestep(self):
@@ -308,9 +316,10 @@ class User:
 
     @baseweight.setter
     def baseweight(self, value):
+        value = WV(0)
         if value < 0:
-            value = 0
-        self._baseweight = WV(value)
+            value = WV(0)
+        self._baseweight = value
 
     @property
     def weight(self):
