@@ -38,9 +38,32 @@ class Change:
         powPerTick = self.powPerSec ** seconds
         userdata = userdb.load(self.guildid, self.userid)
         newheight = ((userdata.height ** powPerTick) * mulPerTick) + addPerTick
-        if self.stopSV is not None and ((newheight < userdata.height and self.stopSV >= newheight) or (newheight > userdata.height and self.stopSV <= newheight)):
+
+        if newheight < userdata.height:
+            direction = "down"
+        elif newheight > userdata.height:
+            direction = "up"
+        else:
+            direction = "none"
+
+        if (
+            self.stopSV is not None
+            and (
+                (direction == "down" and newheight <= self.stopSV)
+                or (direction == "up" and newheight >= self.stopSV)
+            )
+        ):
             newheight = self.stopSV
             running = False
+
+        # if we've moved past 0 or SV.infinity, cancel the change
+        if newheight <= 0 or newheight == SV.infinity:
+            running = False
+
+        # if we're not changing height anymore, cancel the change
+        if direction == "none":
+            running = False
+
         userdata.height = newheight
         userdb.save(userdata)
         guild = bot.get_guild(self.guildid)

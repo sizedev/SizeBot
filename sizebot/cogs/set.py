@@ -202,10 +202,12 @@ class SetCog(commands.Cog):
 
         Sets your height to a height between `minheight` and `maxheight`.
         Weighted on a logarithmic curve."""
-        minheightSV = utils.clamp(0, minheight, SV._infinity)
-        maxheightSV = utils.clamp(0, maxheight, SV._infinity)
+        if minheight < 0:
+            minheight = SV(0)
+        if maxheight < 0:
+            maxheight = SV(0)
 
-        newheightSV = decimal.randRangeLog(minheightSV, maxheightSV)
+        newheightSV = decimal.randRangeLog(minheight, maxheight)
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -226,7 +228,7 @@ class SetCog(commands.Cog):
         """Change height to infinity."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.height = "infinity"
+        userdata.height = SV("infinity")
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 

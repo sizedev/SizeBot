@@ -19,7 +19,7 @@ logger = logging.getLogger("sizebot")
 def getUserSizes(g):
     # Find the largest and smallest current users.
     smallestuser = None
-    smallestsize = SV(SV.infinity)
+    smallestsize = SV.infinity
     largestuser = None
     largestsize = SV(0)
     allusers = {}
@@ -82,7 +82,7 @@ async def on_message(m):
     if lg == m.author.id:
         if m.author.id == largestuser:
             return
-        elif userdata.height == SV(SV.infinity):
+        elif userdata.height == SV.infinity:
             return
         else:
             userdata.height = largestsize * Decimal(1.1)
