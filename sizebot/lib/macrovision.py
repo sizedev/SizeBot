@@ -89,5 +89,5 @@ async def get_url(people, *, shorten = True):
     base64_string = base64_bytes.decode("ascii")
     url = f"https://macrovision.crux.sexy/?scene={base64_string}"
     if shorten:
-        url = shorten_url(url)
+        url = await shorten_url(url)
     return url
