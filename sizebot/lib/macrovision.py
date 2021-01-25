@@ -44,8 +44,11 @@ async def shorten_url(url):
         logger.error(f"Unable to shorten url: Status {e.status}")
         return url
     try:
-        cuttly_response = await r.json()
-    except (aiohttp.ContentTypeError, JSONDecodeError):
+        cuttly_response = await r.json(content_type="text/html")
+    except (aiohttp.ContentTypeError):
+        logger.error(f"Unable to shorten url: Cannot parse JSON, bad content type: {r.content_type}")
+        return url
+    except (JSONDecodeError):
         logger.error("Unable to shorten url: Cannot parse JSON")
         return url
     short_url = cuttly_response["url"]["shortLink"]
