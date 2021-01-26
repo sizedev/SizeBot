@@ -82,7 +82,7 @@ class Change:
         out += f"ADD/S: {self.addPerSec:.10}, MUL/S:{self.mulPerSec}"
         if self.stopSV is not None:
             out += f", stop at {self.stopSV}"
-        if self.stopRV is not None:
+        if self.stopTV is not None:
             out += f", stop after {prettyTimeDelta(Decimal(self.stopTV))}"
         return out
 
