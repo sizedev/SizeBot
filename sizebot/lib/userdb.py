@@ -231,7 +231,7 @@ class User:
                 raise ValueError("Speed can not go backwards!")
             value = value.diff.amount / value.time * Decimal("3600")
 
-        value = SV(0)
+        value = SV(value)
 
         if value < 0:
             value = SV(0)
@@ -255,7 +255,7 @@ class User:
                 raise ValueError("Speed can not go backwards!")
             value = value.diff.amount / value.time * Decimal("3600")
 
-        value = SV(0)
+        value = SV(value)
 
         if value < 0:
             value = SV(0)
@@ -316,7 +316,7 @@ class User:
 
     @baseweight.setter
     def baseweight(self, value):
-        value = WV(0)
+        value = WV(value)
         if value < 0:
             value = WV(0)
         self._baseweight = value
