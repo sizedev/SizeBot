@@ -43,16 +43,20 @@ async def sayMilestone(channel, winkcount):
     prettytimeperwink = utils.prettyTimeDelta(timeperwink.total_seconds())
     winksperday = winkcount / (timesince / timedelta(days = 1))
 
-    await channel.send(f":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball\n:"
-                       f"It took **{prettytimesince}** to hit this milestone!\n"
-                       f"That's an average of **{prettytimeperwink}** per wink!\n"
-                       f"(That's **{winksperday}** winks/day!)\n"
-                       f"Great winking, <@{ids.yukio}>!")
+    await channel.send(
+        f":confetti_ball: Yukio has winked **{winkcount}** times since 15 September, 2019! :wink: :confetti_ball\n:"
+        f"It took **{prettytimesince}** to hit this milestone!\n"
+        f"That's an average of **{prettytimeperwink}** per wink!\n"
+        f"(That's **{winksperday}** winks/day!)\n"
+        f"Great winking, <@{ids.yukio}>!"
+    )
 
-    logger.error(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
-                 f"It took {prettytimesince} to hit this milestone!\n"
-                 f"That's an average of {prettytimeperwink} per wink!\n"
-                 f"(That's {winksperday} winks/day!)")
+    logger.error(
+        f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:\n"
+        f"It took {prettytimesince} to hit this milestone!\n"
+        f"That's an average of {prettytimeperwink} per wink!\n"
+        f"(That's {winksperday} winks/day!)"
+    )
 
 
 class WinksCog(commands.Cog):
