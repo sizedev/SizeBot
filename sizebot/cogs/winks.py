@@ -71,7 +71,8 @@ class WinksCog(commands.Cog):
             return
 
         winkcount = addWinks(winksSeen)
-        logger.info(f"Yukio has winked {winkcount} times!")
+        if winkcount % 10 == 0:
+            logger.info(f"Yukio has winked {winkcount} times!")
         if winkcount in milestones:
             await sayMilestone(message.channel, winkcount)
 

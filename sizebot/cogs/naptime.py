@@ -76,7 +76,10 @@ class NaptimeCog(commands.Cog):
     @tasks.loop(seconds=60)
     async def nannyTask(self):
         """Nanny task"""
-        await naps.check(self.bot)
+        try:
+            await naps.check(self.bot)
+        except Exception as e:
+            logger.error(e)
 
 
 def setup(bot):

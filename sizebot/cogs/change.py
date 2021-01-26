@@ -162,7 +162,10 @@ class ChangeCog(commands.Cog):
     @tasks.loop(seconds=6)
     async def changeTask(self):
         """Slow growth task"""
-        await changes.apply(self.bot)
+        try:
+            await changes.apply(self.bot)
+        except Exception as e:
+            logger.error(e)
 
 
 def setup(bot):

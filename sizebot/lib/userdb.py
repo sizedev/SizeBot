@@ -113,12 +113,10 @@ class User:
 
     @height.setter
     def height(self, value):
-        newvalue = SV(max(0, SV(value)))
-        if newvalue < SV.parse("0.001ym"):
-            newvalue = SV(0)
-        elif newvalue > SV.parse("1000Yuni"):
-            newvalue = SV(SV.infinity)
-        self._height = newvalue
+        value = SV(value)
+        if value < 0:
+            value = SV(0)
+        self._height = value
 
     @property
     def baseheight(self):
@@ -126,12 +124,10 @@ class User:
 
     @baseheight.setter
     def baseheight(self, value):
-        newvalue = SV(max(0, SV(value)))
-        if newvalue < SV.parse("0.001ym"):
-            newvalue = SV(0)
-        elif newvalue > SV.parse("1000Yuni"):
-            newvalue = SV(SV.infinity)
-        self._baseheight = newvalue
+        value = SV(value)
+        if value < 0:
+            value = SV(0)
+        self._baseheight = value
 
     @property
     def footlength(self):
@@ -139,13 +135,10 @@ class User:
 
     @footlength.setter
     def footlength(self, value):
-        if value is None:
+        if value is None or value <= 0:
             self._footlength = None
             return
-        if value == 0:
-            self._footlength = None
-            return
-        self._footlength = SV(max(0, SV(value)))
+        self._footlength = SV(value)
 
     @property
     def pawtoggle(self):
@@ -180,7 +173,10 @@ class User:
         if value is None:
             self._hairlength = None
             return
-        self._hairlength = SV(max(0, SV(value)))
+        value = SV(value)
+        if value < 0:
+            value = SV(0)
+        self._hairlength = value
 
     @property
     def taillength(self):
@@ -188,13 +184,10 @@ class User:
 
     @taillength.setter
     def taillength(self, value):
-        if value is None:
+        if value is None or value <= 0:
             self._taillength = None
             return
-        if value == 0:
-            self._taillength = None
-            return
-        self._taillength = SV(max(0, SV(value)))
+        self._taillength = SV(value)
 
     @property
     def earheight(self):
@@ -202,13 +195,10 @@ class User:
 
     @earheight.setter
     def earheight(self, value):
-        if value is None:
+        if value is None or value <= 0:
             self._earheight = None
             return
-        if value == 0:
-            self._earheight = None
-            return
-        self._earheight = SV(max(0, SV(value)))
+        self._earheight = SV(value)
 
     @property
     def liftstrength(self):
@@ -219,7 +209,10 @@ class User:
         if value is None:
             self._liftstrength = None
             return
-        self._liftstrength = WV(max(0, WV(value)))
+        value = SV(value)
+        if value < 0:
+            value = SV(0)
+        self._liftstrength = value
 
     @property
     def walkperhour(self):
@@ -231,21 +224,19 @@ class User:
             self._walkperhour = None
             return
 
-        if isinstance(value, str):
-            self._walkperhour = SV(max(0, SV(value)))
-            return
+        if isinstance(value, ParseableRate):
+            if value.diff.changetype != "add":
+                raise ValueError("Invalid rate for speed parsing.")
+            if value.diff.amount < 0:
+                raise ValueError("Speed can not go backwards!")
+            value = value.diff.amount / value.time * Decimal("3600")
 
-        if not isinstance(value, ParseableRate):
-            raise ValueError("Input was not a Rate.")
+        value = SV(0)
 
-        if value.diff.changetype != "add":
-            raise ValueError("Invalid rate for speed parsing.")
-        if value.diff.amount < 0:
-            raise ValueError("Speed can not go backwards!")
+        if value < 0:
+            value = SV(0)
 
-        dist = value.diff.amount / value.time * Decimal("3600")
-
-        self._walkperhour = SV(max(0, SV(dist)))
+        self._walkperhour = value
 
     @property
     def runperhour(self):
@@ -257,21 +248,19 @@ class User:
             self._runperhour = None
             return
 
-        if isinstance(value, str):
-            self._runperhour = SV(max(0, SV(value)))
-            return
+        if isinstance(value, ParseableRate):
+            if value.diff.changetype != "add":
+                raise ValueError("Invalid rate for speed parsing.")
+            if value.diff.amount < 0:
+                raise ValueError("Speed can not go backwards!")
+            value = value.diff.amount / value.time * Decimal("3600")
 
-        if not isinstance(value, ParseableRate):
-            raise ValueError("Input was not a Rate.")
+        value = SV(0)
 
-        if value.diff.changetype != "add":
-            raise ValueError("Invalid rate for speed parsing.")
-        if value.diff.amount < 0:
-            raise ValueError("Speed can not go backwards!")
+        if value < 0:
+            value = SV(0)
 
-        dist = value.diff.amount / value.time * Decimal("3600")
-
-        self._runperhour = SV(max(0, SV(dist)))
+        self._runperhour = value
 
     @property
     def currentscalestep(self):
@@ -327,12 +316,10 @@ class User:
 
     @baseweight.setter
     def baseweight(self, value):
-        newvalue = WV(max(0, SV(value)))
-        if newvalue < WV.parse("0.001yg"):
-            newvalue = WV(0)
-        elif newvalue > WV.parse("1000Yuni"):
-            newvalue = WV(WV.infinity)
-        self._baseweight = newvalue
+        value = WV(0)
+        if value < 0:
+            value = WV(0)
+        self._baseweight = value
 
     @property
     def weight(self):
