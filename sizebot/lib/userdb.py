@@ -135,7 +135,7 @@ class User:
 
     @footlength.setter
     def footlength(self, value):
-        if value is None or value <= 0:
+        if value is None or SV(value) <= 0:
             self._footlength = None
             return
         self._footlength = SV(value)
@@ -184,7 +184,7 @@ class User:
 
     @taillength.setter
     def taillength(self, value):
-        if value is None or value <= 0:
+        if value is None or SV(value) <= 0:
             self._taillength = None
             return
         self._taillength = SV(value)
@@ -195,7 +195,7 @@ class User:
 
     @earheight.setter
     def earheight(self, value):
-        if value is None or value <= 0:
+        if value is None or SV(value) <= 0:
             self._earheight = None
             return
         self._earheight = SV(value)
