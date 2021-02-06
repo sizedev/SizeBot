@@ -232,6 +232,8 @@ class FeetAndInchesUnit(Unit):
     def format(self, value, spec="", preferName=False):
         inchval = value / self.inch                  # convert to inches
         feetval, inchval = divmod(inchval, 12)  # divide by 12 to get feet, and the remainder inches
+        if inchval < Decimal("1e-100"):
+            inchval = Decimal("0")
 
         feetSpec = DecimalSpec.parse(spec)
         feetSpec.precision = "0"
