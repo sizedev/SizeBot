@@ -177,7 +177,7 @@ class Decimal():
     @values
     def __truediv__(value, other):
         if isinstance(value, RawDecimal) and value.is_infinite() and isinstance(other, RawDecimal) and other.is_infinite():
-            raise RawDecimal.InvalidOperation
+            raise decimal.InvalidOperation
         elif isinstance(value, RawDecimal) and value.is_infinite():
             return Decimal(value)
         elif isinstance(other, RawDecimal) and other.is_infinite():
@@ -190,7 +190,7 @@ class Decimal():
     @values
     def __floordiv__(value, other):
         if isinstance(value, RawDecimal) and value.is_infinite() and isinstance(other, RawDecimal) and other.is_infinite():
-            raise RawDecimal.InvalidOperation
+            raise decimal.InvalidOperation
         elif isinstance(value, RawDecimal) and value.is_infinite():
             return Decimal(value)
         elif isinstance(other, RawDecimal) and other.is_infinite():
