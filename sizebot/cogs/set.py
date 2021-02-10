@@ -193,6 +193,7 @@ class SetCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
     @commands.command(
+        aliases = ["setrandomsize"],
         usage = "<minheight> <maxheight>",
         category = "set"
     )
