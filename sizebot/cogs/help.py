@@ -235,7 +235,7 @@ class HelpCog(commands.Cog):
         aliases=["helpme", "wtf", "commands", "cmds"],
         category = "help"
     )
-    @commands.cooldown(1, 30, commands.BucketType.user)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def help(self, ctx, cmdName: str = None):
         """[cmd.help[0]]
 
