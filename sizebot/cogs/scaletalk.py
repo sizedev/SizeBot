@@ -9,6 +9,7 @@ from sizebot.lib import userdb
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpException, UserNotFoundException, ValueIsZeroException
+from sizebot.lib.units import SV
 
 
 logger = logging.getLogger("sizebot")
@@ -57,7 +58,7 @@ class ScaleTypeCog(commands.Cog):
 
         if diff.changetype == "add":
             finaldiff = copy(diff)
-            finaldiff.amount = finaldiff.amount / chars
+            finaldiff.amount = SV(finaldiff.amount / chars)
         elif diff.changetype == "multiply":
             finaldiff = copy(diff)
             finaldiff.amount = finaldiff.amount ** Decimal(1 / chars)

@@ -534,8 +534,8 @@ class PersonStats:
 
         self.threadthickness = SV(self.defaultthreadthickness * self.averageheightmult)
 
-        self.hairwidth = SV(self.height * self.hairfactor)
-        self.nailthickness = SV(self.height * self.nailthickfactor)
+        self.hairwidth = SV((self.baseheight * self.hairfactor) / self.viewscale)
+        self.nailthickness = SV((self.baseheight * self.nailthickfactor) / self.viewscale)
         self.eyewidth = SV(self.height * self.eyewidthfactor)
 
         self.avgheightcomp = SV(defaultheight * self.viewscale)

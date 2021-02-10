@@ -6,6 +6,7 @@ from discord.ext import commands
 
 from sizebot.lib import errors, utils, telemetry
 from sizebot.lib.constants import emojis
+from sizebot.lib.utils import prettyTimeDelta
 
 logger = logging.getLogger("sizebot")
 
@@ -64,7 +65,7 @@ def setup(bot):
         elif isinstance(err, commands.errors.CheckFailure):
             await ctx.send(f"{emojis.error} You do not have permission to run this command.")
         elif isinstance(err, commands.CommandOnCooldown):
-            await ctx.send(f"{emojis.info} You're using that command too fast! Try again in a moment.")
+            await ctx.send(f"{emojis.info} You're using that command too fast! Try again in {prettyTimeDelta(err.retry_after)}.")
         elif isinstance(err, InvalidOperation):
             await ctx.send(f"{emojis.warning} That's... not math I can do.")
         elif isinstance(err, OverflowError):
