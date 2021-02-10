@@ -354,7 +354,7 @@ class HelpCog(commands.Cog):
         usage = ["[type]"],
         category = "help"
     )
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def ping(self, ctx, subcommand: str = ""):
         """Pong!
 
