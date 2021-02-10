@@ -157,14 +157,19 @@ class SetCog(commands.Cog):
         """Change height by scale."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        re_scale = r"(\d+\.?\d*)[:/]?(\d+\.?\d*)?"
-        if m := re.match(re_scale, newscale):
-            multiplier = m.group(1)
-            factor = m.group(2) if m.group(2) else 1
+        if newscale == "<:116:793260849007296522>":
+            scale = Decimal("1/16")
+        elif newscale == "<:1144:793260894686806026>" or newscale == "<:1122:793262146917105664>":
+            scale = Decimal("1/144")
         else:
-            raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
+            re_scale = r"(\d+\.?\d*)[:/]?(\d+\.?\d*)?"
+            if m := re.match(re_scale, newscale):
+                multiplier = m.group(1)
+                factor = m.group(2) if m.group(2) else 1
+            else:
+                raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
 
-        scale = Decimal(multiplier) / Decimal(factor)
+            scale = Decimal(multiplier) / Decimal(factor)
 
         userdata.height = userdata.baseheight * scale
         completed_registration = userdata.complete_step("setheight")
