@@ -5,21 +5,29 @@ from sizebot.lib import errors, userdb
 MAX_NICK_LEN = 32
 
 
+def generate_suffix(sizetag, species, dotdotdot=False):
+    if dotdotdot:
+        suffix = "…"
+    suffix += f" [{sizetag}]"
+    if species:
+        suffix += f" [{sizetag}, {species}]"
+
+
 # Generate a valid nickname (if possible)
 def generate_nickname(nick, sizetag, species, cropnick=False):
-    if species:
-        suffix = f" [{sizetag}, {species}]"
-    else:
-        suffix = f"{sizetag}"
-    newnick = f"{nick}{suffix}"
+    suffix = generate_suffix(sizetag, species)
+    newnick = nick + suffix
+
     if cropnick and len(newnick) > MAX_NICK_LEN:
-        suffix = f"…{suffix}"
+        suffix = generate_suffix(sizetag, species, dotdotdot=True)
         short_nick = nick[:MAX_NICK_LEN - len(suffix)]
         if short_nick < 3:
             return None
-        newnick = f"{short_nick}{suffix}"
+        newnick = short_nick + suffix
+
     if len(newnick) > MAX_NICK_LEN:
         return None
+
     return newnick
 
 
