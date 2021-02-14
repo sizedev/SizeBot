@@ -6,12 +6,12 @@ MAX_NICK_LEN = 32
 
 
 def generate_suffix(sizetag, species, dotdotdot=False):
-    suffix = ""
-    if dotdotdot:
-        suffix = "…"
-    suffix += f" [{sizetag}]"
+    suffix = f" [{sizetag}]"
     if species:
-        suffix += f" [{sizetag}, {species}]"
+        suffix = f" [{sizetag}, {species}]"
+    if dotdotdot:
+        suffix = "…" + suffix
+    return suffix
 
 
 # Generate a valid nickname (if possible)
