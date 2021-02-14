@@ -185,7 +185,7 @@ def main():
             await scaletalk.on_message(message)
             await edge.on_message(message)
             await limits.on_message(message)
-            await nickmanager.nickUpdate(message.author)
+            await nickmanager.nick_update(message.author)
         # await meicros.on_message(message)
         await monika.on_message(message)
         await active.on_message(message)
@@ -201,7 +201,7 @@ def main():
         limitstime = arrow.now()
         await limits.on_message(message)
         nickupdatetime = arrow.now()
-        await nickmanager.nickUpdate(message.author)
+        await nickmanager.nick_update(message.author)
         monikatime = arrow.now()
         await monika.on_message(message)
         activetime = arrow.now()
@@ -236,7 +236,7 @@ def main():
             return
         await bot.process_commands(after)
         if hasattr(after.author, "guild") and after.author.guild is not None:
-            await nickmanager.nickUpdate(after.author)
+            await nickmanager.nick_update(after.author)
         await active.on_message(after)
 
     @bot.event

@@ -89,7 +89,7 @@ async def on_message(m):
             userdb.save(userdata)
 
     if userdata.display:
-        await nickmanager.nickUpdate(m.author)
+        await nickmanager.nick_update(m.author)
 
 
 class EdgeCog(commands.Cog):

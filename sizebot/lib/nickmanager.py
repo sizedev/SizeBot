@@ -2,11 +2,30 @@ import discord
 
 from sizebot.lib import errors, userdb
 
+MAX_NICK_LEN = 32
 
-# TODO: Move to somewhere other than here.
+
+# Generate a valid nickname (if possible)
+def generate_nickname(nick, sizetag, species, cropnick=False):
+    if species:
+        suffix = f" [{sizetag}, {species}]"
+    else:
+        suffix = f"{sizetag}"
+    newnick = f"{nick}{suffix}"
+    if cropnick and len(newnick) > MAX_NICK_LEN:
+        suffix = f"…{suffix}"
+        short_nick = nick[:MAX_NICK_LEN - len(suffix)]
+        if short_nick < 3:
+            return None
+        newnick = f"{short_nick}{suffix}"
+    if len(newnick) > MAX_NICK_LEN:
+        return None
+    return newnick
+
+
 # TODO: Deal with not being able to change nicks of roles above the bot.
 # Update users nicknames to include sizetags
-async def nickUpdate(user):
+async def nick_update(user):
     # Don't try updating nicks on servers where Manage Nicknames permission is missing
     if not user.guild.me.guild_permissions.manage_nicknames:
         return
@@ -36,34 +55,20 @@ async def nickUpdate(user):
     height = userdata.height
     if height is None:
         height = userdata.baseheight
-    nick = userdata.nickname
+    nick = userdata.nickname[:MAX_NICK_LEN]
     species = userdata.species
 
+    sizetag = ""
     if userdata.unitsystem in ["m", "u", "o"]:
         sizetag = format(height, f",{userdata.unitsystem}%")
-    else:
-        sizetag = ""
 
-    if species is not None:
-        sizetag = f"{sizetag}, {species}"
+    newnick = (
+        generate_nickname(nick, sizetag, species)
+        or generate_nickname(nick, sizetag)
+        or generate_nickname(nick, sizetag, cropnick=True)
+        or nick
+    )
 
-    max_nick_len = 32
-
-    if len(nick) > max_nick_len:
-        # Truncate nick is too long
-        nick = nick[:max_nick_len]
-
-    if len(nick) + len(sizetag) + 3 <= max_nick_len:
-        # Fit full nick and sizetag
-        newnick = f"{nick} [{sizetag}]"
-    elif len(sizetag) + 7 <= max_nick_len:
-        # Fit short nick and sizetag
-        chars_left = max_nick_len - len(sizetag) - 4
-        short_nick = nick[:chars_left]
-        newnick = f"{short_nick}… [{sizetag}]"
-    else:
-        # Cannot fit the new sizetag
-        newnick = nick
     try:
         # PERMISSION: requires manage_nicknames
         await user.edit(nick = newnick)

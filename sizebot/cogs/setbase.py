@@ -38,7 +38,7 @@ class SetBaseCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s base height is now {userdata.baseheight:mu} tall.")
 
-        await nickmanager.nickUpdate(ctx.author)
+        await nickmanager.nick_update(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
@@ -60,7 +60,7 @@ class SetBaseCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s base weight is now {userdata.baseweight:mu}")
 
-        await nickmanager.nickUpdate(ctx.author)
+        await nickmanager.nick_update(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(

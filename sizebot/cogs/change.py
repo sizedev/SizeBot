@@ -63,7 +63,7 @@ class ChangeCog(commands.Cog):
                 userdata = userdata ** amount
             else:
                 raise ChangeMethodInvalidException
-            await nickmanager.nickUpdate(ctx.author)
+            await nickmanager.nick_update(ctx.author)
 
             userdb.save(userdata)
 
@@ -125,7 +125,7 @@ class ChangeCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
         proportions.changeUser(guildid, userid, "multiply", randmult)
-        await nickmanager.nickUpdate(ctx.author)
+        await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
         lines = pkg_resources.read_text(sizebot.data, "eatme.txt").splitlines()
@@ -149,7 +149,7 @@ class ChangeCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
         proportions.changeUser(guildid, ctx.author.id, "divide", randmult)
-        await nickmanager.nickUpdate(ctx.author)
+        await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
         lines = pkg_resources.read_text(sizebot.data, "drinkme.txt").splitlines()

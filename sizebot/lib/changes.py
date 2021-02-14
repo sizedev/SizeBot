@@ -68,7 +68,7 @@ class Change:
         userdb.save(userdata)
         guild = bot.get_guild(self.guildid)
         member = guild.get_member(self.userid)
-        await nickmanager.nickUpdate(member)
+        await nickmanager.nick_update(member)
         return running
 
     @property
