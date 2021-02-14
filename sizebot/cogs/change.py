@@ -6,7 +6,7 @@ from typing import Union
 from discord.ext import commands, tasks
 
 import sizebot.data
-from sizebot.lib import changes, proportions, userdb
+from sizebot.lib import changes, proportions, userdb, nickmanager
 from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.errors import ChangeMethodInvalidException
@@ -63,7 +63,7 @@ class ChangeCog(commands.Cog):
                 userdata = userdata ** amount
             else:
                 raise ChangeMethodInvalidException
-            await proportions.nickUpdate(ctx.author)
+            await nickmanager.nickUpdate(ctx.author)
 
             userdb.save(userdata)
 
@@ -125,7 +125,7 @@ class ChangeCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
         proportions.changeUser(guildid, userid, "multiply", randmult)
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         userdata = userdb.load(guildid, userid)
 
         lines = pkg_resources.read_text(sizebot.data, "eatme.txt").splitlines()
@@ -149,7 +149,7 @@ class ChangeCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
         proportions.changeUser(guildid, ctx.author.id, "divide", randmult)
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         userdata = userdb.load(guildid, userid)
 
         lines = pkg_resources.read_text(sizebot.data, "drinkme.txt").splitlines()

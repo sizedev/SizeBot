@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
-from sizebot.lib import decimal, errors, proportions, userdb, utils
+from sizebot.lib import decimal, errors, proportions, userdb, nickmanager
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
@@ -38,7 +38,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"<@{ctx.author.id}>'s nick is now {userdata.nickname}")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -55,7 +55,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s species is now a {userdata.species}.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -72,7 +72,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s species is now cleared.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -96,7 +96,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s display is now set to {userdata.display}.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -126,7 +126,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s system is now set to {userdata.unitsystem}.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
@@ -145,7 +145,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
@@ -177,7 +177,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
@@ -194,7 +194,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{ctx.author.display_name} reset their size.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -222,7 +222,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -240,7 +240,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname} is now infinitely tall.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
@@ -258,7 +258,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname} is now nothing.")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
@@ -275,7 +275,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s weight is now {userdata.weight:mu}")
 
-        await proportions.nickUpdate(ctx.author)
+        await nickmanager.nickUpdate(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
@@ -565,7 +565,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         if userdata.display:
-            await proportions.nickUpdate(user)
+            await nickmanager.nickUpdate(user)
 
         await ctx.send(f"{userdata.nickname}'s gender is now set to {userdata.gender}.")
         await showNextStep(ctx, userdata)
@@ -585,7 +585,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         if userdata.display:
-            await proportions.nickUpdate(user)
+            await nickmanager.nickUpdate(user)
 
         await ctx.send(f"{userdata.nickname}'s gender is now reset.")
         await showNextStep(ctx, userdata)

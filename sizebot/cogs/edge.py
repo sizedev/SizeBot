@@ -8,7 +8,7 @@ from sizebot.lib.errors import GuildNotFoundException, UserNotFoundException
 import discord
 from discord.ext import commands
 
-from sizebot.lib import guilddb, proportions, userdb
+from sizebot.lib import guilddb, proportions, userdb, nickmanager
 from sizebot.lib.checks import is_mod
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV
@@ -89,7 +89,7 @@ async def on_message(m):
             userdb.save(userdata)
 
     if userdata.display:
-        await proportions.nickUpdate(m.author)
+        await nickmanager.nickUpdate(m.author)
 
 
 class EdgeCog(commands.Cog):

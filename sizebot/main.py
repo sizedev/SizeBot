@@ -14,7 +14,7 @@ from sizebot import __version__
 from sizebot import discordplus
 from sizebot.conf import conf
 from sizebot.cogs import edge, limits, scaletalk
-from sizebot.lib import language, objs, paths, proportions, status, telemetry, units, utils
+from sizebot.lib import language, objs, paths, proportions, status, telemetry, units, utils, nickmanager
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.lib.utils import truncate
@@ -185,7 +185,7 @@ def main():
             await scaletalk.on_message(message)
             await edge.on_message(message)
             await limits.on_message(message)
-            await proportions.nickUpdate(message.author)
+            await nickmanager.nickUpdate(message.author)
         # await meicros.on_message(message)
         await monika.on_message(message)
         await active.on_message(message)
@@ -201,7 +201,7 @@ def main():
         limitstime = arrow.now()
         await limits.on_message(message)
         nickupdatetime = arrow.now()
-        await proportions.nickUpdate(message.author)
+        await nickmanager.nickUpdate(message.author)
         monikatime = arrow.now()
         await monika.on_message(message)
         activetime = arrow.now()
@@ -236,7 +236,7 @@ def main():
             return
         await bot.process_commands(after)
         if hasattr(after.author, "guild") and after.author.guild is not None:
-            await proportions.nickUpdate(after.author)
+            await nickmanager.nickUpdate(after.author)
         await active.on_message(after)
 
     @bot.event

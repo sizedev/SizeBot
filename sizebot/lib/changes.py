@@ -2,7 +2,7 @@ import json
 import logging
 import time
 
-from sizebot.lib import proportions, userdb, paths
+from sizebot.lib import proportions, userdb, paths, nickmanager
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, TV
 from sizebot.lib.utils import prettyTimeDelta
@@ -68,7 +68,7 @@ class Change:
         userdb.save(userdata)
         guild = bot.get_guild(self.guildid)
         member = guild.get_member(self.userid)
-        await proportions.nickUpdate(member)
+        await nickmanager.nickUpdate(member)
         return running
 
     @property
