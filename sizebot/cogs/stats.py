@@ -337,7 +337,7 @@ class StatsCog(commands.Cog):
 
         Used to see how an object would look at your scale.
         Examples:
-        `&objectcomapre lego`
+        `&objectcompare lego`
         `&objcompare moon as @Kelly`
         """
 
