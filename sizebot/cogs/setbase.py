@@ -4,7 +4,7 @@ import typing
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
-from sizebot.lib import decimal, errors, proportions, userdb, nickmanager
+from sizebot.lib import decimal, errors, userdb, nickmanager
 from sizebot.lib.constants import emojis
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize

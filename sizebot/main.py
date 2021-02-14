@@ -14,7 +14,7 @@ from sizebot import __version__
 from sizebot import discordplus
 from sizebot.conf import conf
 from sizebot.cogs import edge, limits, scaletalk
-from sizebot.lib import language, objs, paths, proportions, status, telemetry, units, utils, nickmanager
+from sizebot.lib import language, objs, paths, status, telemetry, units, utils, nickmanager
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.lib.utils import truncate

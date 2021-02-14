@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
-from sizebot.lib import decimal, errors, proportions, userdb, nickmanager
+from sizebot.lib import decimal, errors, userdb, nickmanager
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
