@@ -476,7 +476,7 @@ class PersonStats:
     defaultthreadthickness = Decimal("0.001016")
 
     defaultwalkspeed = 5630
-    defaultrunspeed = 12100
+    defaultrunspeed = 10729
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
