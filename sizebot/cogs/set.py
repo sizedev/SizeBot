@@ -333,6 +333,7 @@ class SetCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
     @commands.command(
+        aliases = ["pawtoggle"],
         category = "set"
     )
     @commands.guild_only()
@@ -347,6 +348,7 @@ class SetCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
     @commands.command(
+        aliases = ["furtoggle"],
         category = "set"
     )
     @commands.guild_only()
