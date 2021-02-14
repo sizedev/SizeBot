@@ -6,6 +6,7 @@ MAX_NICK_LEN = 32
 
 
 def generate_suffix(sizetag, species, dotdotdot=False):
+    suffix = ""
     if dotdotdot:
         suffix = "…"
     suffix += f" [{sizetag}]"
