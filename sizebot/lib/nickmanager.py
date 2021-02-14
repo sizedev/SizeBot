@@ -5,7 +5,7 @@ from sizebot.lib import errors, userdb
 MAX_NICK_LEN = 32
 
 
-def generate_suffix(sizetag, species, dotdotdot=False):
+def generate_suffix(sizetag, species=None, dotdotdot=False):
     suffix = f" [{sizetag}]"
     if species:
         suffix = f" [{sizetag}, {species}]"
@@ -15,7 +15,7 @@ def generate_suffix(sizetag, species, dotdotdot=False):
 
 
 # Generate a valid nickname (if possible)
-def generate_nickname(nick, sizetag, species, cropnick=False):
+def generate_nickname(nick, sizetag, species=None, cropnick=False):
     suffix = generate_suffix(sizetag, species)
     newnick = nick + suffix
 
