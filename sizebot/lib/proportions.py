@@ -584,7 +584,7 @@ class PersonStats:
             "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
             "scale": f" is **{self.formattedscale}** their base height.",
             "horizondistance": f" can see for **{self.horizondistance:,.3mu}** to the horizon.",
-            "liftstrength": f"can lift and carry **{self.liftstrength:,.3mu}**."
+            "liftstrength": f" can lift and carry **{self.liftstrength:,.3mu}**."
         }
         if self.hairlength:
             returndict["hair"] = f"'s {self.hairname.lower()} is **{self.hairlength:,.3mu}** long."
