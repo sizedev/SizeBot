@@ -12,7 +12,7 @@ from sizebot.lib.decimal import Decimal
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, TV, WV
-from sizebot.lib.utils import AliasMap, parseMany, prettyTimeDelta, sentence_join
+from sizebot.lib.utils import AliasMap, glitch_string, parseMany, prettyTimeDelta, sentence_join
 
 logger = logging.getLogger("sizebot")
 
@@ -405,6 +405,10 @@ class StatsCog(commands.Cog):
 
         userdata = getUserdata(ctx.author)
 
+        if userdata.incomprehensible:
+            await ctx.send(glitch_string("never gonna give you up, never gonna let you down, never gonna run around and hurt"))
+            return
+
         if isinstance(what, str):
             what = what.lower()
 
@@ -544,18 +548,26 @@ class StatsCog(commands.Cog):
         defaultruntime = prettyTimeDelta(defaultruntimehours * 60 * 60, roundeventually = True)
         defaultclimbtime = prettyTimeDelta(defaultclimbtimehours * 60 * 60, roundeventually = True)
 
-        e = discord.Embed(
-            title = f"{length:,.3mu} to {userstats.nickname}",
-            description = (
+        desc = (
                 f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}.** "
                 f"They could walk that distance in **{walktime}** *({walksteps:,.0f} steps)*, "
                 f"run that distance in **{runtime}** *({runsteps:,.0f} strides)*, "
                 f"or climb that distance in **{climbtime}** *({climbsteps:,.0f} pulls)*"
-            )
         )
-        e.set_footer(text = f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), "
-                            f"run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), "
-                            f"or climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls).")
+        footer = (f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), "
+                 f"run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), "
+                 f"or climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls)."
+        )
+
+        if userdata.incomprehensible:
+            desc = glitch_string(desc)
+            footer = glitch_string(footer)
+
+        e = discord.Embed(
+            title = f"{length:,.3mu} to {userstats.nickname}",
+            description = desc
+            )
+        e.set_footer(text = footer)
 
         await ctx.send(embed = e)
 
@@ -584,6 +596,14 @@ class StatsCog(commands.Cog):
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
         embedtosend = await comparison.toEmbed(ctx.author.id)
+
+        if self.incomprehensible:
+            ed = embedtosend.to_dict()
+            for field in ed["fields"]:
+                field["value"] = glitch_string(field["value"])
+            embedtosend = discord.Embed.from_dict(ed)
+            embedtosend.set_footer(text = glitch_string(embedtosend.footer.text))
+
         await ctx.send(embed = embedtosend)
 
     @commands.command(
@@ -649,11 +669,13 @@ class StatsCog(commands.Cog):
 
         newlength = SV(length / userstats.viewscale)
 
+        desc = f"To everyone else, {userstats.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
+        if userdata.incomprehensible:
+            desc = glitch_string(desc)
+
         e = discord.Embed(
             title = f"{userstats.nickname}'s {length:,.3mu} to the world",
-            description = (
-                f"To everyone else, {userstats.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
-            )
+            description = desc
         )
 
         await ctx.send(embed = e)
