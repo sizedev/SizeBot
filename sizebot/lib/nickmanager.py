@@ -1,6 +1,7 @@
 import discord
 
 from sizebot.lib import errors, userdb
+from sizebot.lib.utils import glitch_string
 
 MAX_NICK_LEN = 32
 
@@ -68,6 +69,10 @@ async def nick_update(user):
     sizetag = ""
     if userdata.unitsystem in ["m", "u", "o"]:
         sizetag = format(height, f",{userdata.unitsystem}%")
+
+    if userdata.incomprehensible:
+        species = glitch_string(species)
+        sizetag = glitch_string(sizetag)
 
     newnick = (
         generate_nickname(nick, sizetag, species)
