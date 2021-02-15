@@ -73,9 +73,9 @@ async def nick_update(user):
     if userdata.incomprehensible:
         glitch = "█▓▒░　"
         if species is not None:
-            species = glitch_string(species, glitch)
+            species = glitch_string(species, charset = glitch)
         if sizetag is not None:
-            sizetag = glitch_string(sizetag, glitch)
+            sizetag = glitch_string(sizetag, charset = glitch)
 
     newnick = (
         generate_nickname(nick, sizetag, species)
