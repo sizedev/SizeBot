@@ -229,6 +229,13 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}."))
 
+        if self.small.incomprehensible or self.big.incomprehensible:
+            ed = embed.to_dict()
+            for field in ed["fields"]:
+                field["value"] = glitch_string(in_string = field["value"])
+            embed = Embed.from_dict(ed)
+            embed.set_footer(text = glitch_string(in_string = embed.footer))
+
         return embed
 
     async def url(self):
@@ -249,6 +256,9 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
                 "height": self.big.height
             }
         ])
+        if self.small.incomprehensible or self.big.incomprehensible:
+            return "https://www.kevs3d.co.uk/dev/warpfield/"
+
         return compUrl
 
 
@@ -310,13 +320,18 @@ class PersonSpeedComparison:
 
         newline = "\n"
 
-        return (
+        out_str = (
             f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}\n"
             f"{emojis.eyes + reldist_print + newline if include_relative else ''}"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
             f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}"
         )
+
+        if self.viewer.incomprehensible or self.viewed.incomprehensible:
+            return glitch_string(in_string = out_str)
+
+        return out_str
 
     def getStatEmbed(self, stat):
         descmap = {
@@ -354,9 +369,15 @@ class PersonSpeedComparison:
         statname = statnamemap[stat].replace("Foot", self.viewertovieweddata.footname) \
                                     .replace("Hair", self.viewertovieweddata.hairname) \
                                     .lower()
+
+        desc = descmap[stat]
+
+        if self.viewer.incomprehensible or self.viewed.incomprehensible:
+            desc = glitch_string(in_string = desc)
+
         return Embed(
             title = f"To move the distance of {self.viewedtoviewerdata.nickname}'s {statname}, it would take {self.viewertovieweddata.nickname}...",
-            description = descmap[stat])
+            description = desc)
 
     async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
@@ -388,6 +409,14 @@ class PersonSpeedComparison:
         embed.add_field(name=f"{self.hairlabel} Width", value=(self.speedcalc(self.viewedtoviewer.hairwidth)), inline=True)
         embed.add_field(name="Eye Width", value=(self.speedcalc(self.viewedtoviewer.eyewidth)), inline=True)
         embed.set_footer(text=(f"{self.viewed.nickname} is {self.multiplier:,.3}x taller than {self.viewer.nickname}."))
+        
+        if self.incomprehensible:
+            ed = embed.to_dict()
+            for field in ed["fields"]:
+                field["value"] = glitch_string(in_string = field["value"])
+            embed = Embed.from_dict(ed)
+            embed.set_footer(text = glitch_string(in_string = embed.footer))
+        
         return embed
 
 
@@ -535,6 +564,8 @@ class PersonStats:
         for k, v in returndict.items():
             returndict[k] = self.tag + v
 
+        if self.incomprehensible:
+            return glitch_string(in_string = returndict.get(stat))
         return returndict.get(stat)
 
     def __str__(self):
@@ -592,6 +623,7 @@ class PersonStats:
             for field in ed["fields"]:
                 field["value"] = glitch_string(in_string = field["value"])
             embed = Embed.from_dict(ed)
+            embed.set_footer(text = glitch_string(in_string = embed.footer))
         
         return embed
 
