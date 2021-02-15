@@ -354,10 +354,10 @@ def removesuffix(self: str, suffix: str, /) -> str:
     else:
         return self[:]
 
-def glitch_string(*, size: int, in_string: str) -> str:
-    if not size and not in_string:
+def glitch_string(*, size: int = None, in_string: str = None) -> str:
+    if size is None and in_string is None:
         raise ValueError("No input for length!")
-    if size:
+    if size is not None:
         return ''.join(random.choices(string.ascii_letters + string.digits, k=size))
     else:
         words = []
