@@ -29,7 +29,8 @@ class User:
     __slots__ = ["guildid", "id", "nickname", "lastactive", "_picture_url", "description", "_gender", "display",
                  "_height", "_baseheight", "_baseweight", "_footlength", "_pawtoggle", "_furtoggle",
                  "_hairlength", "_taillength", "_earheight", "_liftstrength", "_unitsystem", "species", "soft_gender",
-                 "avatar_url", "_walkperhour", "_runperhour", "_currentscalestep", "_currentscaletalk", "scaletalklock",
+                 "avatar_url", "_walkperhour", "_runperhour", "incomprehensible",
+                 "_currentscalestep", "_currentscaletalk", "scaletalklock",
                  "registration_steps_remaining", "_macrovision_model", "_macrovision_view"]
 
     def __init__(self):
