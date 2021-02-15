@@ -354,8 +354,11 @@ def removesuffix(self: str, suffix: str, /) -> str:
     else:
         return self[:]
 
-def glitch_string(in_string: str) -> str:
+def glitch_string(in_string: str, *, charset = None) -> str:
     words = []
+    if charset is not None:
+        for word in in_string.split(" "):
+            words.append(''.join(random.choices(charset, k=len(word))))
     for word in in_string.split(" "):
         words.append(''.join(random.choices(string.ascii_letters + string.digits, k=len(word))))
     return " ".join(words)
