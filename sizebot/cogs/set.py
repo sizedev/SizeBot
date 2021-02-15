@@ -11,7 +11,7 @@ from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import AliasMap
+from sizebot.lib.utils import AliasMap, glitch_string
 
 logger = logging.getLogger("sizebot")
 
@@ -360,6 +360,26 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"The hair of {userdata.nickname} is now called {userdata.hairname.lower()}.")
+        await showNextStep(ctx, userdata)
+
+    @commands.command(
+        aliases = ["incomprehensibletoggle", "toggleincomp", "incomptoggle"],
+        category = "set"
+    )
+    @commands.guild_only()
+    async def toggleincomprehensible(self, ctx):
+        """You stare into the void."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        userdata.incomprehensible = not userdata.incomprehensible
+        userdb.save(userdata)
+
+        out_str = f"{userdata.nickname} is now understandable by mortals."
+
+        if userdata.incomprehensible:
+            out_str = f"{userdata.nickname} " + glitch_string(in_string = "we're no strangers to love" + ".")
+
+        await ctx.send()
         await showNextStep(ctx, userdata)
 
     @commands.command(
