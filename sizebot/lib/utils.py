@@ -354,16 +354,11 @@ def removesuffix(self: str, suffix: str, /) -> str:
     else:
         return self[:]
 
-def glitch_string(*, size: int = None, in_string: str = None) -> str:
-    if size is None and in_string is None:
-        raise ValueError("No input for length!")
-    if size is not None:
-        return ''.join(random.choices(string.ascii_letters + string.digits, k=size))
-    else:
-        words = []
-        for word in in_string.split(" "):
-            words.append(''.join(random.choices(string.ascii_letters + string.digits, k=len(word))))
-        return " ".join(words)
+def glitch_string(in_string: str) -> str:
+    words = []
+    for word in in_string.split(" "):
+        words.append(''.join(random.choices(string.ascii_letters + string.digits, k=len(word))))
+    return " ".join(words)
 
 
 def regexbuild(li: list, capture = False) -> str:

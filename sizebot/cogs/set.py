@@ -377,7 +377,7 @@ class SetCog(commands.Cog):
         out_str = f"{userdata.nickname} is now understandable by mortals."
 
         if userdata.incomprehensible:
-            out_str = f"{userdata.nickname} " + glitch_string(in_string = "we're no strangers to love" + ".")
+            out_str = f"{userdata.nickname} " + glitch_string("we're no strangers to love") + "."
 
         await ctx.send()
         await showNextStep(ctx, userdata)

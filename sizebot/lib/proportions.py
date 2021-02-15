@@ -232,9 +232,9 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         if self.small.incomprehensible or self.big.incomprehensible:
             ed = embed.to_dict()
             for field in ed["fields"]:
-                field["value"] = glitch_string(in_string = field["value"])
+                field["value"] = glitch_string(field["value"])
             embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(in_string = embed.footer))
+            embed.set_footer(text = glitch_string(embed.footer))
 
         return embed
 
@@ -329,7 +329,7 @@ class PersonSpeedComparison:
         )
 
         if self.viewer.incomprehensible or self.viewed.incomprehensible:
-            return glitch_string(in_string = out_str)
+            return glitch_string(out_str)
 
         return out_str
 
@@ -373,7 +373,7 @@ class PersonSpeedComparison:
         desc = descmap[stat]
 
         if self.viewer.incomprehensible or self.viewed.incomprehensible:
-            desc = glitch_string(in_string = desc)
+            desc = glitch_string(desc)
 
         return Embed(
             title = f"To move the distance of {self.viewedtoviewerdata.nickname}'s {statname}, it would take {self.viewertovieweddata.nickname}...",
@@ -413,9 +413,9 @@ class PersonSpeedComparison:
         if self.incomprehensible:
             ed = embed.to_dict()
             for field in ed["fields"]:
-                field["value"] = glitch_string(in_string = field["value"])
+                field["value"] = glitch_string(field["value"])
             embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(in_string = embed.footer))
+            embed.set_footer(text = glitch_string(embed.footer))
         
         return embed
 
@@ -565,7 +565,7 @@ class PersonStats:
             returndict[k] = self.tag + v
 
         if self.incomprehensible:
-            return glitch_string(in_string = returndict.get(stat))
+            return glitch_string(returndict.get(stat))
         return returndict.get(stat)
 
     def __str__(self):
@@ -621,9 +621,9 @@ class PersonStats:
         if self.incomprehensible:
             ed = embed.to_dict()
             for field in ed["fields"]:
-                field["value"] = glitch_string(in_string = field["value"])
+                field["value"] = glitch_string(field["value"])
             embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(in_string = embed.footer))
+            embed.set_footer(text = glitch_string(embed.footer))
         
         return embed
 
