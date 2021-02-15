@@ -11,7 +11,7 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import defaultheight, defaultweight, defaultterminalvelocity, defaultliftstrength, falllimit
-from sizebot.lib.utils import minmax, prettyTimeDelta, url_safe
+from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
@@ -228,6 +228,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}."))
+
         return embed
 
     async def url(self):
@@ -427,6 +428,7 @@ class PersonStats:
         self.hairname = userdata.hairname
         self.pawtoggle = userdata.pawtoggle
         self.furtoggle = userdata.furtoggle
+        self.incomprehensible = userdata.incomprehensible
         self.macrovision_model = userdata.macrovision_model
         self.macrovision_view = userdata.macrovision_view
 
@@ -584,6 +586,13 @@ class PersonStats:
         embed.add_field(inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
+        
+        if self.incomprehensible:
+            ed = embed.to_dict()
+            for field in ed["fields"]:
+                field["value"] = glitch_string(in_string = field["value"])
+            embed = Embed.from_dict(ed)
+        
         return embed
 
 

@@ -1,6 +1,8 @@
 import inspect
 import pydoc
+import random
 import re
+import string
 import traceback
 from typing import Dict, Hashable, Sequence
 from urllib.parse import quote
@@ -336,6 +338,7 @@ def sentence_join(items, *, joiner=None, oxford=False) -> str:
     return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
 
 
+#TODO: Deprecated, use Python 3.9's methods
 def removeprefix(self: str, prefix: str, /) -> str:
     if self.startswith(prefix):
         return self[len(prefix):]
@@ -343,12 +346,24 @@ def removeprefix(self: str, prefix: str, /) -> str:
         return self[:]
 
 
+#TODO: Deprecated, use Python 3.9's methods
 def removesuffix(self: str, suffix: str, /) -> str:
     # suffix='' should not call self[:-0].
     if suffix and self.endswith(suffix):
         return self[:-len(suffix)]
     else:
         return self[:]
+
+def glitch_string(*, size: int, in_string: str) -> str:
+    if not size and not in_string:
+        raise ValueError("No input for length!")
+    if size:
+        return ''.join(random.choices(string.ascii_letters + string.digits, k=size))
+    else:
+        words = []
+        for word in in_string.split(" "):
+            words.append(''.join(random.choices(string.ascii_letters + string.digits, k=len(word))))
+        return " ".join(words)
 
 
 def regexbuild(li: list, capture = False) -> str:
