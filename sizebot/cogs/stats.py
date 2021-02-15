@@ -707,7 +707,7 @@ def getUserdata(memberOrSV, nickname = None, *, allow_unreg=False):
         userdata = userdb.User()
         userdata.height = memberOrSV
         if nickname is None:
-            nickname = f"a {userdata.height:,.3mu} person"
+            nickname = f"a {userdata.height:,.3mu} tall person"
         userdata.nickname = nickname
     return userdata
 
