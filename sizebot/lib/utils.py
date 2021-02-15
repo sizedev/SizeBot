@@ -359,8 +359,9 @@ def glitch_string(in_string: str, *, charset = None) -> str:
     if charset is not None:
         for word in in_string.split(" "):
             words.append(''.join(random.choices(charset, k=len(word))))
-    for word in in_string.split(" "):
-        words.append(''.join(random.choices(string.ascii_letters + string.digits, k=len(word))))
+    else:
+        for word in in_string.split(" "):
+            words.append(''.join(random.choices(string.ascii_letters + string.digits, k=len(word))))
     return " ".join(words)
 
 
