@@ -18,7 +18,7 @@ logger = logging.getLogger("sizebot")
 
 statmap = AliasMap({
     "height":           ("size"),
-    "weight":           (),
+    "weight":           ("mass"),
     "foot":             ("feet", "shoe", "shoes", "paw", "paws"),
     "toe":              ("toes"),
     "shoeprint":        ("footprint"),
