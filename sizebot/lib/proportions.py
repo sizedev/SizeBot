@@ -410,7 +410,7 @@ class PersonSpeedComparison:
         embed.add_field(name="Eye Width", value=(self.speedcalc(self.viewedtoviewer.eyewidth)), inline=True)
         embed.set_footer(text=(f"{self.viewed.nickname} is {self.multiplier:,.3}x taller than {self.viewer.nickname}."))
         
-        if self.incomprehensible:
+        if self.viewer.incomprehensible or self.viewed.incomprehensible:
             ed = embed.to_dict()
             for field in ed["fields"]:
                 field["value"] = glitch_string(field["value"])
