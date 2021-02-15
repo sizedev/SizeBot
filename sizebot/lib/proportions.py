@@ -234,7 +234,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             for field in ed["fields"]:
                 field["value"] = glitch_string(field["value"])
             embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(embed.footer))
+            embed.set_footer(text = glitch_string(embed.footer.text))
 
         return embed
 
@@ -415,7 +415,7 @@ class PersonSpeedComparison:
             for field in ed["fields"]:
                 field["value"] = glitch_string(field["value"])
             embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(embed.footer))
+            embed.set_footer(text = glitch_string(embed.footer.text))
         
         return embed
 
@@ -623,7 +623,7 @@ class PersonStats:
             for field in ed["fields"]:
                 field["value"] = glitch_string(field["value"])
             embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(embed.footer))
+            embed.set_footer(text = glitch_string(embed.footer.text))
         
         return embed
 
