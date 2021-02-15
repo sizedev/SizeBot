@@ -71,8 +71,10 @@ async def nick_update(user):
         sizetag = format(height, f",{userdata.unitsystem}%")
 
     if userdata.incomprehensible:
-        species = glitch_string(species)
-        sizetag = glitch_string(sizetag)
+        if species is not None:
+            species = glitch_string(species)
+        if sizetag is not None:
+            sizetag = glitch_string(sizetag)
 
     newnick = (
         generate_nickname(nick, sizetag, species)
