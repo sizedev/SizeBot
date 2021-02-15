@@ -7,7 +7,7 @@ from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
 from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
-from sizebot.lib.constants import colors
+from sizebot.lib.constants import colors, emojis
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
@@ -266,9 +266,11 @@ class StatsCog(commands.Cog):
         userdata1 = getUserdata(memberOrHeight)
         userdata2 = getUserdata(memberOrHeight2)
 
+        msg = await ctx.send(emojis.loading + " *Loading comparison...*")
+
         comparison = proportions.PersonComparison(userdata1, userdata2)
         embedtosend = await comparison.toEmbed(ctx.author.id)
-        await ctx.send(embed = embedtosend)
+        await msg.edit(content = "", embed = embedtosend)
 
     @commands.command(
         aliases = ["compas"],
@@ -291,9 +293,11 @@ class StatsCog(commands.Cog):
         userdata.nickname += " as " + asdata.nickname
         comparedata = getUserdata(memberOrHeight)
 
+        msg = await ctx.send(emojis.loading + " *Loading comparison...*")
+
         comparison = proportions.PersonComparison(userdata, comparedata)
         embedtosend = await comparison.toEmbed(ctx.author.id)
-        await ctx.send(embed = embedtosend)
+        await msg.edit(content = "", embed = embedtosend)
 
     @commands.command(
         aliases = ["natstats"],
@@ -672,6 +676,7 @@ class StatsCog(commands.Cog):
                 failedusers.append(member)
 
         # TODO: Raise exception instead
+        # Later Digi asks: why? This is fine?
         if failedusers:
             nicks = sentence_join((u.display_name for u in failedusers), oxford=True)
             if len(failedusers) == 1:
@@ -680,6 +685,8 @@ class StatsCog(commands.Cog):
                 failmessage = f"{nicks} are not SizeBot users."
             await ctx.send(failmessage)
             return
+
+        msg = await ctx.send(emojis.loading + " *Loading comparison...*")
 
         users = [{"name": u.nickname, "model": u.macrovision_model, "view": u.macrovision_view, "height": u.height} for u in userdatas]
 
@@ -690,7 +697,7 @@ class StatsCog(commands.Cog):
             color=colors.cyan,
             url = await macrovision.get_url(users)
         )
-        await ctx.send(embed = e)
+        await msg.edit(content = "", embed = e)
 
 
 def getUserdata(memberOrSV, nickname = None, *, allow_unreg=False):
