@@ -232,7 +232,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         if self.small.incomprehensible or self.big.incomprehensible:
             ed = embed.to_dict()
             for field in ed["fields"]:
-                field["value"] = glitch_string("you know the rules") + "\n" + glitch_string("and so do I, a full")
+                field["value"] = glitch_string("somebody once told me") + "\n" + glitch_string("the world was gonna roll me")
             embed = Embed.from_dict(ed)
             embed.set_footer(text = glitch_string(embed.footer.text))
 

@@ -406,7 +406,7 @@ class StatsCog(commands.Cog):
         userdata = getUserdata(ctx.author)
 
         if userdata.incomprehensible:
-            await ctx.send(glitch_string("never gonna give you up, never gonna let you down, never gonna run around and hurt"))
+            await ctx.send(glitch_string("hey now, you're an all star, get your game on, go play"))
             return
 
         if isinstance(what, str):
