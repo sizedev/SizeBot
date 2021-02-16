@@ -257,7 +257,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             }
         ])
         if self.small.incomprehensible or self.big.incomprehensible:
-            return "https://www.kevs3d.co.uk/dev/warpfield/"
+            return "https://cutt.ly/ik1uWDk"
 
         return compUrl
 
