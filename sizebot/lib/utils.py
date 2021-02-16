@@ -11,6 +11,15 @@ import validator_collection
 
 re_num = r"\d+\.?\d*"
 
+glitch_template = ("V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUgLyBZb3Uga25vdyB0aGUgcnVsZXMgYW5kIHNvIGRv"
+"IEkgLyBBIGZ1bGwgY29tbWl0bWVudCdzIHdoYXQgSSdtIHRoaW5raW5nIG9mIC9Zb3Ugd291bGRu"
+"J3QgZ2V0IHRoaXMgZnJvbSBhbnkgb3RoZXIgZ3V5IC8gSSBqdXN0IHdhbm5hIHRlbGwgeW91IGhv"
+"dyBJJ20gZmVlbGluZyAvIEdvdHRhIG1ha2UgeW91IHVuZGVyc3RhbmQgLyBOZXZlciBnb25uYSBn"
+"aXZlIHlvdSB1cCAvIE5ldmVyIGdvbm5hIGxldCB5b3UgZG93biAvIE5ldmVyIGdvbm5hIHJ1biBh"
+"cm91bmQgYW5kIGRlc2VydCB5b3UgLyBOZXZlciBnb25uYSBtYWtlIHlvdSBjcnkgLyBOZXZlciBn"
+"b25uYSBzYXkgZ29vZGJ5ZSAvIE5ldmVyIGdvbm5hIHRlbGwgYSBsaWUgYW5kIGh1cnQgeW91")
+
+current_glitch_index = 0
 
 def clamp(minVal, val, maxVal):
     """Clamp a `val` to be no lower than `minVal`, and no higher than `maxVal`."""
@@ -360,8 +369,16 @@ def glitch_string(in_string: str, *, charset = None) -> str:
         for word in in_string.split(" "):
             words.append(''.join(random.choices(charset, k=len(word))))
     else:
+        global current_glitch_index
         for word in in_string.split(" "):
-            words.append(''.join(random.choices(string.ascii_letters + string.digits, k=len(word))))
+            k = len(word)
+            new_word = glitch_template[current_glitch_index:current_glitch_index+k]
+            k -= len(new_word)
+            if k != 0:
+                current_glitch_index = 0
+                new_word = glitch_template[current_glitch_index:current_glitch_index+k]
+            words.append(new_word)
+            current_glitch_index += len(new_word)
     return " ".join(words)
 
 
