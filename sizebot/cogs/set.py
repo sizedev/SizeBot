@@ -181,6 +181,42 @@ class SetCog(commands.Cog):
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
+        aliases = ["copysize"],
+        usage = "<user> [factor]",
+        category = "set"
+    )
+    @commands.guild_only()
+    async def copyheight(self, ctx, user: discord.Member, *, newscale):
+        """Be the size of another user, modified by a factor."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+        otheruser = userdb.load(ctx.guild.id, user.id)
+
+        userdata.height = otheruser.height
+
+        if newscale == "<:116:793260849007296522>":
+            scale = Decimal("1/16")
+        elif newscale == "<:1144:793260894686806026>" or newscale == "<:1122:793262146917105664>":
+            scale = Decimal("1/144")
+        else:
+            re_scale = r"(\d+\.?\d*)[:/]?(\d+\.?\d*)?"
+            if m := re.match(re_scale, newscale):
+                multiplier = m.group(1)
+                factor = m.group(2) if m.group(2) else 1
+            else:
+                raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
+
+            scale = Decimal(multiplier) / Decimal(factor)
+
+        userdata.height = userdata.height * scale
+        completed_registration = userdata.complete_step("setheight")
+        userdb.save(userdata)
+
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
+
+        await nickmanager.nick_update(ctx.author)
+        await showNextStep(ctx, userdata, completed=completed_registration)
+
+    @commands.command(
         aliases = ["resetsize", "reset", "resetscale"],
         category = "set"
     )
