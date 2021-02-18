@@ -298,23 +298,19 @@ class PersonSpeedComparison:
         reldist = SV(dist * self.viewer.viewscale)
         reldist_print = f"{reldist:,.3mu}"
 
-        climblength = Decimal(0.3048) / self.viewer.viewscale
-        climbspeed = Decimal(4828) / self.viewer.viewscale
-        SVclimbspeed = SV(climbspeed)
-
         _walktime = (dist / self.viewer.walkperhour) * 60 * 60
         walksteps = math.ceil(dist / self.viewer.walksteplength)
         _runtime = (dist / self.viewer.runperhour) * 60 * 60
         runsteps = math.ceil(dist / self.viewer.runsteplength)
-        _climbtime = (dist / climbspeed) * 60 * 60
-        climbsteps = math.ceil(dist / climblength)
+        _climbtime = (dist / self.viewer.climbperhour) * 60 * 60
+        climbsteps = math.ceil(dist / self.viewer.climbsteplength)
         walktime = prettyTimeDelta(_walktime, roundeventually = True)
         runtime = prettyTimeDelta(_runtime, roundeventually = True)
         climbtime = prettyTimeDelta(_climbtime, roundeventually = True)
 
         walkspeedstr = f"\n*{emojis.blank}{self.viewer.walkperhour:,.3mu} per hour*"
         runspeedstr = f"\n*{emojis.blank}{self.viewer.runperhour:,.3mu} per hour*"
-        climbspeedstr = f"\n*{emojis.blank}{SVclimbspeed:,.3mu} per hour*"
+        climbspeedstr = f"\n*{emojis.blank}{self.viewer.climbperhour:,.3mu} per hour*"
 
         shoesize = " (" + formatShoeSize(dist) + ")"
 
@@ -522,8 +518,11 @@ class PersonStats:
         else:
             self.runperhour = SV(userdata.runperhour * self.averageheightmult)
 
+        self.climbperhour = userdata.climbperhour
+
         self.walksteplength = SV(self.walkperhour / self.walkstepsperhour)
         self.runsteplength = SV(self.runperhour / self.runstepsperhour)
+        self.climbsteplength = SV(Decimal(0.3048) / self.viewscale)
 
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 

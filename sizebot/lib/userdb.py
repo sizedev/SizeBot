@@ -265,6 +265,10 @@ class User:
         self._runperhour = value
 
     @property
+    def climbperhour(self):  # Essentially temp, since we're fixing this in BetterStats
+        return SV(Decimal(4828) / self.viewscale)
+
+    @property
     def currentscalestep(self):
         return self._currentscalestep
 

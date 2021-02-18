@@ -512,10 +512,6 @@ class StatsCog(commands.Cog):
 
         defaultdata = getUserdata(userdb.defaultheight, "an average person")
         defaultstats = proportions.PersonStats(defaultdata)
-        defaultclimblength = Decimal(0.3048)
-        defaultclimbspeed = Decimal(4828)
-        climblength = Decimal(0.3048) / userdata.viewscale
-        climbspeed = Decimal(4828) / userdata.viewscale
 
         if isinstance(length, str):
             raise errors.InvalidSizeValue(length, "size or time")
@@ -529,16 +525,16 @@ class StatsCog(commands.Cog):
         defaultruntimehours = length / defaultstats.runperhour
         defaultrunsteps = length / defaultstats.runsteplength
 
-        defaultclimbtimehours = length / defaultclimbspeed
-        defaultclimbsteps = length / defaultclimblength
+        defaultclimbtimehours = length / defaultstats.climbperhour
+        defaultclimbsteps = length / defaultstats.climbsteplength
 
         newlength = SV(length / userstats.scale)
         walktimehours = length / userstats.walkperhour
         walksteps = length / userstats.walksteplength
         runtimehours = length / userstats.runperhour
         runsteps = length / userstats.runsteplength
-        climbtimehours = length / climbspeed
-        climbsteps = length / climblength
+        climbtimehours = length / userstats.climbperhour
+        climbsteps = length / userstats.climbsteplength
 
         walktime = prettyTimeDelta(walktimehours * 60 * 60, roundeventually = True)
         runtime = prettyTimeDelta(runtimehours * 60 * 60, roundeventually = True)
