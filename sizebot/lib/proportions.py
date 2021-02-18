@@ -359,6 +359,7 @@ class PersonSpeedComparison:
             "shoeprint":        "Shoeprint Depth",
             "finger":           "Finger Length",
             "thumb":            "Thumb Width",
+            "fingerprint":      "Fingerprint Depth",
             "eye":              "Eye Width",
             "hairwidth":        "Hair Width",
             "hair":             "Hair Length",
