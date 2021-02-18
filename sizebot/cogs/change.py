@@ -32,7 +32,7 @@ class ChangeCog(commands.Cog):
         category = "change",
         usage = "<change> [rate] [stop]"
     )
-    async def change(self, ctx, *, string: Union[LimitedRate, ParseableRate, Diff]):
+    async def change(self, ctx, *, string: Union[LimitedRate, ParseableRate, Diff, str]):
         """Either change or slow-change your height.
 
         Can be used in essentially the three following ways:
@@ -77,6 +77,9 @@ class ChangeCog(commands.Cog):
             changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
 
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{string.original}`.")
+
+        elif isinstance(string, str) and string == "stop":
+            await ctx.invoke(self.bot.get_command("stopchange"), query="")
 
     @commands.command(
         hidden = True
