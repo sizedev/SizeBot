@@ -493,7 +493,7 @@ class PersonStats:
         if userdata.pawtoggle:
             self.footwidth = SV(self.height * Decimal("1/1.5"))  # Temp number?
         self.toeheight = SV(self.height * self.toeheightfactor)
-        self.shoeprintdepth = SV(self.height * self.toeheightfactor)
+        self.shoeprintdepth = SV(self.height * self.shoeprintfactor)
         self.pointerlength = SV(self.height * self.pointerfactor)
         self.thumbwidth = SV(self.height * self.thumbfactor)
         self.fingerprintdepth = SV(self.height * self.fingerprintfactor)
