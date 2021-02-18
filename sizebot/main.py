@@ -241,7 +241,8 @@ def main():
 
     @bot.event
     async def on_guild_join(guild):
-        logger.warn(f"SizeBot has been added to {guild.name}! ({guild.id})")
+        logger.warn(f"SizeBot has been added to {guild.name}! ({guild.id})\n"
+                    f"You should talk to the owner, {guild.owner}! ({guild.ownerid})")
 
     @bot.event
     async def on_guild_remove(guild):
