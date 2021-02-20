@@ -415,7 +415,7 @@ class SetCog(commands.Cog):
         if userdata.incomprehensible:
             out_str = f"{userdata.nickname} " + glitch_string(" i ain't the sharpest tool in the shed") + "."
 
-        await ctx.send()
+        await ctx.send(out_str)
         await showNextStep(ctx, userdata)
 
     @commands.command(
