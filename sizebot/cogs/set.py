@@ -416,6 +416,7 @@ class SetCog(commands.Cog):
             out_str = f"{userdata.nickname} " + glitch_string(" i ain't the sharpest tool in the shed") + "."
 
         await ctx.send(out_str)
+        await nickmanager.nick_update(ctx.author)
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -620,8 +621,7 @@ class SetCog(commands.Cog):
         userdata.gender = gender
         userdb.save(userdata)
 
-        if userdata.display:
-            await nickmanager.nick_update(user)
+        await nickmanager.nick_update(user)
 
         await ctx.send(f"{userdata.nickname}'s gender is now set to {userdata.gender}.")
         await showNextStep(ctx, userdata)
@@ -640,8 +640,7 @@ class SetCog(commands.Cog):
         userdata.gender = None
         userdb.save(userdata)
 
-        if userdata.display:
-            await nickmanager.nick_update(user)
+        await nickmanager.nick_update(user)
 
         await ctx.send(f"{userdata.nickname}'s gender is now reset.")
         await showNextStep(ctx, userdata)
