@@ -9,6 +9,7 @@ from sizebot.cogs.register import showNextStep
 from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.decimal import Decimal
+from sizebot.lib.language import engine
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, TV, WV
@@ -675,6 +676,38 @@ class StatsCog(commands.Cog):
         )
 
         await ctx.send(embed = e)
+
+    @commands.command(
+        usage = "<user or length>",
+        category = "stats"
+    )
+    async def sound(self, ctx, *, who: typing.Union[discord.Member, SV] = None):
+        ONE_SOUNDSECOND = SV(340.27)
+        is_SV = False
+
+        if who is None:
+            who = ctx.message.author
+
+        if isinstance(who, SV):
+            is_SV = True
+
+        userdata = getUserdata(who)
+        userstats = proportions.PersonStats(userdata)
+
+        traveldist = userstats.height
+
+        soundtime = TV(traveldist / ONE_SOUNDSECOND)
+        printtime = prettyTimeDelta(soundtime, True, True)
+
+        if is_SV:
+            desc = f"To travel {traveldist:,.3mu}, it would take sound **{printtime}**."
+        else:
+            desc = f"To travel from **{userstats.nickname}**'s head to their {engine.plural(userstats.footname)}, it would take sound **{printtime}**."
+
+        embedtosend = discord.Embed(title = f"Sound Travel Time in {traveldist:,.3mu}",
+                                    description = desc)
+
+        await ctx.send(embed = embedtosend)
 
     @commands.command(
         aliases = [],
