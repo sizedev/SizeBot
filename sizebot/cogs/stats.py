@@ -682,6 +682,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     async def sound(self, ctx, *, who: typing.Union[discord.Member, SV] = None):
+        """Find how long it would take sound to travel a length or height."""
         ONE_SOUNDSECOND = SV(340.27)
         is_SV = False
 
@@ -702,9 +703,42 @@ class StatsCog(commands.Cog):
         if is_SV:
             desc = f"To travel {traveldist:,.3mu}, it would take sound **{printtime}**."
         else:
-            desc = f"To travel from **{userstats.nickname}**'s head to their {engine.plural(userstats.footname)}, it would take sound **{printtime}**."
+            desc = f"To travel from **{userstats.nickname}**'s head to their {engine.plural(userstats.footname).lower()}, it would take sound **{printtime}**."
 
         embedtosend = discord.Embed(title = f"Sound Travel Time in {traveldist:,.3mu}",
+                                    description = desc)
+
+        await ctx.send(embed = embedtosend)
+
+    @commands.command(
+        usage = "<user or length>",
+        category = "stats"
+    )
+    async def light(self, ctx, *, who: typing.Union[discord.Member, SV] = None):
+        """Find how long it would take light to travel a length or height."""
+        ONE_LIGHTSECOND = SV(299792000)
+        is_SV = False
+
+        if who is None:
+            who = ctx.message.author
+
+        if isinstance(who, SV):
+            is_SV = True
+
+        userdata = getUserdata(who)
+        userstats = proportions.PersonStats(userdata)
+
+        traveldist = userstats.height
+
+        lighttime = TV(traveldist / ONE_LIGHTSECOND)
+        printtime = prettyTimeDelta(lighttime, True, True)
+
+        if is_SV:
+            desc = f"To travel {traveldist:,.3mu}, it would take light **{printtime}**."
+        else:
+            desc = f"To travel from **{userstats.nickname}**'s head to their {engine.plural(userstats.footname).lower()}, it would take light **{printtime}**."
+
+        embedtosend = discord.Embed(title = f"Light Travel Time in {traveldist:,.3mu}",
                                     description = desc)
 
         await ctx.send(embed = embedtosend)
