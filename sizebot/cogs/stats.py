@@ -8,7 +8,6 @@ from discord.ext import commands
 from sizebot.cogs.register import showNextStep
 from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors, emojis
-from sizebot.lib.decimal import Decimal
 from sizebot.lib.language import engine
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
@@ -594,7 +593,7 @@ class StatsCog(commands.Cog):
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
         embedtosend = await comparison.toEmbed(ctx.author.id)
 
-        if self.incomprehensible:
+        if userdata1.incomprehensible or userdata2.incomprehensible:
             ed = embedtosend.to_dict()
             for field in ed["fields"]:
                 field["value"] = glitch_string(field["value"])
