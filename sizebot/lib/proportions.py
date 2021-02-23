@@ -406,14 +406,14 @@ class PersonSpeedComparison:
         embed.add_field(name=f"{self.hairlabel} Width", value=(self.speedcalc(self.viewedtoviewer.hairwidth)), inline=True)
         embed.add_field(name="Eye Width", value=(self.speedcalc(self.viewedtoviewer.eyewidth)), inline=True)
         embed.set_footer(text=(f"{self.viewed.nickname} is {self.multiplier:,.3}x taller than {self.viewer.nickname}."))
-        
+
         if self.viewer.incomprehensible or self.viewed.incomprehensible:
             ed = embed.to_dict()
             for field in ed["fields"]:
                 field["value"] = glitch_string(field["value"])
             embed = Embed.from_dict(ed)
             embed.set_footer(text = glitch_string(embed.footer.text))
-        
+
         return embed
 
 
@@ -522,7 +522,7 @@ class PersonStats:
 
         self.walksteplength = SV(self.walkperhour / self.walkstepsperhour)
         self.runsteplength = SV(self.runperhour / self.runstepsperhour)
-        self.climbsteplength = SV(Decimal(0.3048) / self.viewscale)
+        self.climbsteplength = SV(self.height / Decimal(2.5))
 
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 
@@ -619,14 +619,14 @@ class PersonStats:
         embed.add_field(inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
-        
+
         if self.incomprehensible:
             ed = embed.to_dict()
             for field in ed["fields"]:
                 field["value"] = glitch_string(field["value"])
             embed = Embed.from_dict(ed)
             embed.set_footer(text = glitch_string(embed.footer.text))
-        
+
         return embed
 
 
