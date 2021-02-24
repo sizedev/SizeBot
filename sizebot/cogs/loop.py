@@ -9,6 +9,7 @@ import arrow
 
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
+from sizebot.lib.decimal import Decimal
 from sizebot.lib.language import ed, ing
 from sizebot.lib.proportions import PersonStats
 from sizebot.lib.utils import prettyTimeDelta
@@ -29,7 +30,7 @@ def calc_move_dist(userdata):
         raise ValueError(f"{movetype}perhour is not an attribute on a PersonStats.")
 
     persecond = SV(speed / 60 / 60)
-    distance = SV(elapsed_seconds * persecond)
+    distance = SV(Decimal(elapsed_seconds) * persecond)
 
     return (elapsed_seconds, distance)
 
