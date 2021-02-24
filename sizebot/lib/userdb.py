@@ -29,8 +29,9 @@ class User:
     __slots__ = ["guildid", "id", "nickname", "lastactive", "_picture_url", "description", "_gender", "display",
                  "_height", "_baseheight", "_baseweight", "_footlength", "_pawtoggle", "_furtoggle",
                  "_hairlength", "_taillength", "_earheight", "_liftstrength", "_unitsystem", "species", "soft_gender",
-                 "avatar_url", "_walkperhour", "_runperhour", "incomprehensible",
+                 "avatar_url", "_walkperhour", "_runperhour", "_swimperhour" "incomprehensible",
                  "_currentscalestep", "_currentscaletalk", "scaletalklock",
+                 "currentmovetype", "movestarted",
                  "registration_steps_remaining", "_macrovision_model", "_macrovision_view"]
 
     def __init__(self):
@@ -53,10 +54,13 @@ class User:
         self._liftstrength = None
         self._walkperhour = None
         self._runperhour = None
+        self._swimperhour = None
         self.incomprehensible = False
         self._currentscalestep = None
         self._currentscaletalk = None
         self.scaletalklock = False
+        self.currentmovetype = None
+        self.movestarted = None
         self._unitsystem = "m"
         self.species = None
         self.soft_gender = None
@@ -78,8 +82,9 @@ class User:
                 f"FOOTLENGTH = {self.footlength!r}, HAIRLENGTH = {self.hairlength!r}, "
                 f"TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r}, LIFTSTRENGTH = {self.liftstrength!r}, "
                 f"PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
-                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, INCOMPREHENSIBLE = {self.incomprehensible!r}, "
+                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}, INCOMPREHENSIBLE = {self.incomprehensible!r}, "
                 f"CURRENTSCALESTEP = {self.currentscalestep!r}, CURRENTSCALETALK = {self.currentscaletalk!r}, "
+                f"CURRENTMOVETYPE = {self.currentmovetype!r}, MOVESTARTED = {self.movestarted!r}, "
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
@@ -267,6 +272,34 @@ class User:
     @property
     def climbperhour(self):  # Essentially temp, since we're fixing this in BetterStats
         return SV(Decimal(4828) / self.viewscale)
+
+    @property
+    def crawlperhour(self):  # Essentially temp, since we're fixing this in BetterStats
+        return SV(Decimal(2556) / self.viewscale)
+
+    @property
+    def swimperhour(self):
+        return self._swimperhour
+
+    @swimperhour.setter
+    def swimperhour(self, value):
+        if value is None:
+            self._swimperhour = None
+            return
+
+        if isinstance(value, ParseableRate):
+            if value.diff.changetype != "add":
+                raise ValueError("Invalid rate for speed parsing.")
+            if value.diff.amount < 0:
+                raise ValueError("Speed can not go backwards!")
+            value = value.diff.amount / value.time * Decimal("3600")
+
+        value = SV(value)
+
+        if value < 0:
+            value = SV(0)
+
+        self._swimperhour = value
 
     @property
     def currentscalestep(self):
@@ -481,10 +514,13 @@ class User:
             "liftstrength":     None if self.liftstrength is None else str(self.liftstrength),
             "walkperhour":      None if self.walkperhour is None else str(self.walkperhour),
             "runperhour":       None if self.runperhour is None else str(self.runperhour),
+            "swimperhour":      None if self.swimperhour is None else str(self.swimperhour),
             "incomprehensible": self.incomprehensible,
             "currentscalestep": None if self.currentscalestep is None else self.currentscalestep.toJSON(),
             "currentscaletalk": None if self.currentscaletalk is None else self.currentscaletalk.toJSON(),
             "scaletalklock":    self.scaletalklock,
+            "currentmovetype":  self.currentmovetype,
+            "movestarted":      None if self.movestarted is None else self.movestarted.isoformat(),
             "unitsystem":       self.unitsystem,
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining,
@@ -519,6 +555,7 @@ class User:
         userdata.liftstrength = jsondata.get("liftstrength")
         userdata.walkperhour = jsondata.get("walkperhour")
         userdata.runperhour = jsondata.get("runperhour")
+        userdata.swimperhour = jsondata.get("swimperhour")
         userdata.incomprehensible = jsondata.get("incomprehensible", False)
         currentscalestep = jsondata.get("currentscalestep")
         if currentscalestep is not None:
@@ -529,6 +566,11 @@ class User:
             currentscaletalk = Diff.fromJSON(currentscaletalk)
         userdata.currentscaletalk = currentscaletalk
         userdata.scaletalklock = jsondata.get("scaletalklock")
+        userdata.currentmovetype = jsondata.get("currentmovetype")
+        movestarted = jsondata.get("movestarted")
+        if movestarted is not None:
+            movestarted = arrow.get(movestarted)
+        userdata.movestarted = movestarted
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
