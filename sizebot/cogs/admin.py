@@ -4,6 +4,8 @@ from copy import copy
 import discord
 from discord.ext import commands
 
+from sizebot.lib import userdb
+
 logger = logging.getLogger("sizebot")
 
 
@@ -21,6 +23,17 @@ class AdminCog(commands.Cog):
         logger.critical(f"Help, {ctx.author.display_name} is closing me!")
         await ctx.send("Stopping SizeBot. ☠️")
         await ctx.bot.close()
+
+    @commands.command(
+        hidden = True
+    )
+    @commands.is_owner()
+    async def dump(self, ctx, *, user: discord.Member = None):
+        """RIP SizeBot."""
+        if user is None:
+            user = ctx.author
+        userdata = userdb.load(ctx.guild.id, user.id)
+        await ctx.send(str(userdata))
 
     @commands.command(
         hidden = True
