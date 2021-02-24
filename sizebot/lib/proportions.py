@@ -163,8 +163,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{emojis.comparebig}{self.bigToSmall.weight:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.weight:,.3mu}"), inline=True)
         embed.add_field(name=f"{self.footlabel} Length", value=(
-            f"{emojis.comparebig}{self.bigToSmall.footlength:,.3mu} ({self.bigToSmall.shoesize})\n"
-            f"{emojis.comparesmall}{self.smallToBig.footlength:,.3mu} ({self.smallToBig.shoesize})"), inline=True)
+            f"{emojis.comparebig}{self.bigToSmall.footlength:,.3mu}\n({self.bigToSmall.shoesize})\n"
+            f"{emojis.comparesmall}{self.smallToBig.footlength:,.3mu}\n({self.smallToBig.shoesize})"), inline=True)
         embed.add_field(name=f"{self.footlabel} Width", value=(
             f"{emojis.comparebig}{self.bigToSmall.footwidth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.footwidth:,.3mu}"), inline=True)
