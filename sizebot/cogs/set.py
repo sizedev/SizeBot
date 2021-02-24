@@ -598,6 +598,39 @@ class SetCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
     @commands.command(
+        usage = "<length>",
+        category = "set"
+    )
+    async def setswim(self, ctx, *, newswim: ParseableRate):
+        """Set your current swim speed."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        userdata.swimperhour = ParseableRate(f"{newswim.diff.amount * userdata.viewscale}/{newswim.time}",
+                                            Diff(f"{newswim.diff.amount * userdata.viewscale}", "add", newswim.diff.amount * userdata.viewscale),
+                                            newswim.time)
+        userdb.save(userdata)
+
+        # TODO: Give ParsableRates a __mul__ so I can give the user their current speeds.
+        await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.")
+        await showNextStep(ctx, userdata)
+
+    @commands.command(
+        aliases = ["clearswim", "unsetswim"],
+        category = "set"
+    )
+    @commands.guild_only()
+    async def resetswim(self, ctx):
+        """Remove custom swim speed."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        userdata.swimperhour = None
+        userdb.save(userdata)
+
+        await ctx.send(f"{userdata.nickname}'s swim speed is now cleared.")
+        await showNextStep(ctx, userdata)
+
+    @commands.command(
         usage = "<male/female/none>",
         category = "set"
     )

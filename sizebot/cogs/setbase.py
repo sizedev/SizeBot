@@ -255,6 +255,22 @@ class SetBaseCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s run is now {userdata.runperhour:mu}.")
         await showNextStep(ctx, userdata)
 
+    @commands.command(
+        usage = "<length>",
+        category = "setbase"
+    )
+    @commands.guild_only()
+    async def setbaseswim(self, ctx, *, newswim: ParseableRate):
+        """Set a custom swim speed."""
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        userdata.swimperhour = newswim
+        userdb.save(userdata)
+
+        await ctx.send(f"{userdata.nickname}'s swim is now {userdata.swimperhour:mu}.")
+        await showNextStep(ctx, userdata)
+
 
 def setup(bot):
     bot.add_cog(SetBaseCog(bot))
