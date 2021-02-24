@@ -216,14 +216,14 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name="Eye Width", value=(
             f"{emojis.comparebig}{self.bigToSmall.eyewidth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.eyewidth:,.3mu}"), inline=True)
-        embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.get_speeds(), inline=True)
-        embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.get_speeds(), inline=True)
         embed.add_field(name="Jump Height", value=(
             f"{emojis.comparebig}{self.bigToSmall.jumpheight:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.jumpheight:,.3mu}"), inline=True)
         embed.add_field(name="Lift/Carry Strength", value=(
             f"{emojis.comparebig}{self.bigToSmall.liftstrength:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.liftstrength:,.3mu}"), inline=True)
+        embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.get_speeds(), inline=False)
+        embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.get_speeds(), inline=False)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}."))
@@ -644,7 +644,6 @@ class PersonStats:
             embed.add_field(name="Ear Height", value=format(self.earheight, ",.3mu"), inline=True)
         embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
-        embed.add_field(name="Speeds", value=self.get_speeds(), inline=True)
         embed.add_field(name="Jump Height", value=f"{self.jumpheight:,.3mu}", inline=True)
         embed.add_field(name="View Distance to Horizon", value=f"{self.horizondistance:,.3mu}", inline=True)
         if self.fallproof:
@@ -652,7 +651,7 @@ class PersonStats:
         else:
             embed.add_field(name="Terminal Velocity", value = f"{self.terminalvelocity:,.1M} per second\n({self.terminalvelocity:,.1U} per second)", inline = True)
         embed.add_field(name="Lift/Carry Strength", value=f"{self.liftstrength:,.3mu}", inline=True)
-        embed.add_field(inline=False)
+        embed.add_field(name="Speeds", value=self.get_speeds(), inline=False)
         embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
 
