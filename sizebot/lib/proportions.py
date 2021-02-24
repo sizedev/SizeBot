@@ -515,7 +515,7 @@ class PersonStats:
         self.hairwidth = SV((self.baseheight * self.hairfactor) / self.viewscale)
         self.nailthickness = SV((self.baseheight * self.nailthickfactor) / self.viewscale)
         self.eyewidth = SV(self.height * self.eyewidthfactor)
-        self.jumpheight = SV(self.height * Decimal("3.908"))
+        self.jumpheight = SV(self.height / Decimal("3.908"))
 
         self.avgheightcomp = SV(defaultheight * self.viewscale)
         self.avgweightcomp = WV(defaultweight * self.viewscale ** 3)
