@@ -237,7 +237,7 @@ class SetBaseCog(commands.Cog):
         userdata.walkperhour = newwalk
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s walk is now {userdata.walkperhour:mu}.")
+        await ctx.send(f"{userdata.nickname}'s walk is now {userdata.walkperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -253,7 +253,7 @@ class SetBaseCog(commands.Cog):
         userdata.runperhour = newrun
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s run is now {userdata.runperhour:mu}.")
+        await ctx.send(f"{userdata.nickname}'s run is now {userdata.runperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -269,7 +269,7 @@ class SetBaseCog(commands.Cog):
         userdata.swimperhour = newswim
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s swim is now {userdata.swimperhour:mu}.")
+        await ctx.send(f"{userdata.nickname}'s swim is now {userdata.swimperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
 
