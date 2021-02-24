@@ -7,6 +7,22 @@ import sizebot.data
 
 engine = None
 
+ing = {
+    "walk": "walking",
+    "run": "running",
+    "climb": "climbing",
+    "crawl": "crawling",
+    "swim": "swimming"
+}
+
+ed = {
+    "walk": "walked",
+    "run": "ran",
+    "climb": "climbed",
+    "crawl": "crawled",
+    "swim": "swam"
+}
+
 
 def load():
     global engine
