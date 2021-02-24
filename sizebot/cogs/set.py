@@ -501,6 +501,7 @@ class SetCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
     @commands.command(
+        aliases = ["setlift"],
         usage = "<weight>",
         category = "set"
     )

@@ -208,6 +208,7 @@ class SetBaseCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
     @commands.command(
+        aliases = ["setbaselift"],
         usage = "<weight>",
         category = "setbase"
     )
