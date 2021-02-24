@@ -83,12 +83,12 @@ class LoopCog(commands.Cog):
     @commands.guild_only()
     async def sofar(self, ctx, *, who = None):
         if who is None:
-            who = ctx.user
+            who = ctx.author
         whoid = who.id
         userdata = userdb.load(ctx.guild.id, whoid)
 
         if userdata.currentmovetype is None:
-            if who == ctx.user:
+            if who == ctx.author:
                 await ctx.send("You aren't currently moving!")
             else:
                 await ctx.send(f"{userdata.nickname} isn't moving!")
