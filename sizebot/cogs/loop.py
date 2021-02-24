@@ -78,6 +78,8 @@ class LoopCog(commands.Cog):
         userdata.movestarted = None
         userdb.save(userdata)
 
+        await ctx.send("You stopped moving.")
+
     @commands.command(
         category = "loop"
     )
