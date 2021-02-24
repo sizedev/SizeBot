@@ -12,10 +12,11 @@ class AdminCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
+        aliases = ["hcf"],
         hidden = True
     )
     @commands.is_owner()
-    async def stop(self, ctx):
+    async def halt(self, ctx):
         """RIP SizeBot."""
         logger.critical(f"Help, {ctx.author.display_name} is closing me!")
         await ctx.send("Stopping SizeBot. ☠️")
