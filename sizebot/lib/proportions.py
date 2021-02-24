@@ -451,7 +451,7 @@ class PersonStats:
 
     defaultwalkspeed = 5630
     defaultrunspeed = 10729
-    defaultswimspeed = 3000
+    defaultswimspeed = 3219
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
