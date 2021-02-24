@@ -216,12 +216,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name="Eye Width", value=(
             f"{emojis.comparebig}{self.bigToSmall.eyewidth:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.eyewidth:,.3mu}"), inline=True)
-        embed.add_field(name="Walk Speed", value=(
-            f"{emojis.comparebig}{self.bigToSmall.walkperhour:,.1M} per hour ({self.bigToSmall.walkperhour:,.1U} per hour)\n"
-            f"{emojis.comparesmall}{self.smallToBig.walkperhour:,.1M} per hour ({self.smallToBig.walkperhour:,.1U} per hour)"), inline=True)
-        embed.add_field(name="Run Speed", value=(
-            f"{emojis.comparebig}{self.bigToSmall.runperhour:,.1M} per hour ({self.bigToSmall.runperhour:,.1U} per hour)\n"
-            f"{emojis.comparesmall}{self.smallToBig.runperhour:,.1M} per hour ({self.smallToBig.runperhour:,.1U} per hour)"), inline=True)
+        embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.get_speeds(), inline=True)
+        embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.get_speeds(), inline=True)
         embed.add_field(name="Lift/Carry Strength", value=(
             f"{emojis.comparebig}{self.bigToSmall.liftstrength:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.liftstrength:,.3mu}"), inline=True)
@@ -297,6 +293,7 @@ class PersonSpeedComparison:
     def speedcalc(self, dist: SV, *, speed = False, foot = False, include_relative = False):
         reldist = SV(dist * self.viewer.viewscale)
         reldist_print = f"{reldist:,.3mu}"
+        shoesize = " (" + formatShoeSize(dist) + ")"
 
         _walktime = (dist / self.viewer.walkperhour) * 60 * 60
         walksteps = math.ceil(dist / self.viewer.walksteplength)
@@ -304,15 +301,30 @@ class PersonSpeedComparison:
         runsteps = math.ceil(dist / self.viewer.runsteplength)
         _climbtime = (dist / self.viewer.climbperhour) * 60 * 60
         climbsteps = math.ceil(dist / self.viewer.climbsteplength)
+        _crawltime = (dist / self.viewer.crawlperhour) * 60 * 60
+        crawlsteps = math.ceil(dist / self.viewer.crawlsteplength)
+        _swimtime = (dist / self.viewer.swimperhour) * 60 * 60
+        swimsteps = math.ceil(dist / self.viewer.swimsteplength)
         walktime = prettyTimeDelta(_walktime, roundeventually = True)
         runtime = prettyTimeDelta(_runtime, roundeventually = True)
         climbtime = prettyTimeDelta(_climbtime, roundeventually = True)
+        crawltime = prettyTimeDelta(_crawltime, roundeventually = True)
+        swimtime = prettyTimeDelta(_swimtime, roundeventually = True)
 
         walkspeedstr = f"\n*{emojis.blank}{self.viewer.walkperhour:,.3mu} per hour*"
         runspeedstr = f"\n*{emojis.blank}{self.viewer.runperhour:,.3mu} per hour*"
         climbspeedstr = f"\n*{emojis.blank}{self.viewer.climbperhour:,.3mu} per hour*"
+        crawlspeedstr = f"\n*{emojis.blank}{self.viewer.crawlperhour:,.3mu} per hour*"
+        swimspeedstr = f"\n*{emojis.blank}{self.viewer.swimperhour:,.3mu} per hour*"
 
-        shoesize = " (" + formatShoeSize(dist) + ")"
+        if self.viewer.incomprehensible or self.viewed.incomprehensible:
+            walkspeedstr = glitch_string(walkspeedstr)
+            runspeedstr = glitch_string(runspeedstr)
+            climbspeedstr = glitch_string(climbspeedstr)
+            crawlspeedstr = glitch_string(crawlspeedstr)
+            swimspeedstr = glitch_string(swimspeedstr)
+            reldist_print = glitch_string(reldist_print)
+            shoesize = glitch_string(shoesize)
 
         newline = "\n"
 
@@ -321,11 +333,10 @@ class PersonSpeedComparison:
             f"{emojis.eyes + reldist_print + newline if include_relative else ''}"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
             f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
-            f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}"
+            f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}\n"
+            f"{emojis.crawl} {crawltime} ({crawlsteps:,.3} pulls){crawlspeedstr if speed else ''}\n"
+            f"{emojis.swim} {swimtime} ({swimsteps:,.3} pulls){swimspeedstr if speed else ''}"
         )
-
-        if self.viewer.incomprehensible or self.viewed.incomprehensible:
-            return glitch_string(out_str)
 
         return out_str
 
@@ -437,6 +448,7 @@ class PersonStats:
 
     defaultwalkspeed = 5630
     defaultrunspeed = 10729
+    defaultswimspeed = 3000
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -518,11 +530,19 @@ class PersonStats:
         else:
             self.runperhour = SV(userdata.runperhour * self.averageheightmult)
 
+        if userdata.swimperhour is None:
+            self.swimperhour = SV(self.defaultswimspeed * self.averageheightmult)
+        else:
+            self.swimperhour = SV(userdata.swimperhour * self.averageheightmult)
+
         self.climbperhour = userdata.climbperhour
+        self.crawlperhour = userdata.crawlperhour
 
         self.walksteplength = SV(self.walkperhour / self.walkstepsperhour)
         self.runsteplength = SV(self.runperhour / self.runstepsperhour)
-        self.climbsteplength = SV(self.height / Decimal(2.5))
+        self.climbsteplength = SV(self.height / Decimal("2.5"))
+        self.crawlsteplength = SV(self.height / Decimal("2.577"))
+        self.swimsteplength = SV(self.height / Decimal("7/6"))
 
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 
@@ -544,7 +564,11 @@ class PersonStats:
             "thread": f"'s clothing threads are **{self.threadthickness:,.3mu}** thick.",
             "hairwidth": f"'s {self.hairname.lower()} is **{self.hairwidth:,.3mu}** thick.",
             "eye": f"'s eye is **{self.eyewidth:,.3mu}** wide.",
-            "speed": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), with {self.walksteplength:,.1m}/{self.walksteplength:,.1u} strides, and runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour), with {self.runsteplength:,.1m}/{self.runsteplength:,.1u} strides.",
+            "walk": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), with {self.walksteplength:,.1m}/{self.walksteplength:,.1u} strides.",
+            "run": f" runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour), with {self.runsteplength:,.1m}/{self.runsteplength:,.1u} strides.",
+            "climb": f" climbs at **{self.climbperhour:,.1M} per hour** ({self.climbperhour:,.1U} per hour), with {self.climbsteplength:,.1m}/{self.climbsteplength:,.1u} pulls.",
+            "crawl": f" crawls at **{self.crawlperhour:,.1M} per hour** ({self.crawlperhour:,.1U} per hour), with {self.crawlsteplength:,.1m}/{self.crawlsteplength:,.1u} strides.",
+            "swim": f" swims at **{self.swimperhour:,.1M} per hour** ({self.swimperhour:,.1U} per hour), with {self.swimsteplength:,.1m}/{self.swimsteplength:,.1u} strokes.",
             "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
             "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
             "scale": f" is **{self.formattedscale}** their base height.",
@@ -569,6 +593,13 @@ class PersonStats:
         if self.incomprehensible:
             return glitch_string(returndict.get(stat))
         return returndict.get(stat)
+
+    def get_speeds(self):
+        return (f"{emojis.walk} {self.walkperhour:,.1M} per hour / {self.walkperhour:,.1U} per hour\n"
+                f"{emojis.run} {self.runperhour:,.1M} per hour / {self.runperhour:,.1U} per hour\n"
+                f"{emojis.climb} {self.climbperhour:,.1M} per hour / {self.climbperhour:,.1U} per hour\n"
+                f"{emojis.crawl} {self.crawlperhour:,.1M} per hour / {self.crawlperhour:,.1U} per hour\n"
+                f"{emojis.swim} {self.swimperhour:,.1M} per hour / {self.swimperhour:,.1U} per hour")
 
     def __str__(self):
         return (f"<PersonStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
@@ -608,8 +639,7 @@ class PersonStats:
             embed.add_field(name="Ear Height", value=format(self.earheight, ",.3mu"), inline=True)
         embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
-        embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)\n[{self.walksteplength:,.1mu} strides]", inline=True)
-        embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)\n[{self.runsteplength:,.1mu} strides]", inline=True)
+        embed.add_field(name="Speeds", value=self.get_speeds(), inline=True)
         embed.add_field(name="View Distance to Horizon", value=f"{self.horizondistance:,.3mu}", inline=True)
         if self.fallproof:
             embed.add_field(name="Terminal Velocity", value = f"{self.terminalvelocity:,.1M} per second\n({self.terminalvelocity:,.1U} per second)\n*This user can safely fall from any height.*", inline = True)
