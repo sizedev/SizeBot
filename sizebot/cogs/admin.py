@@ -33,7 +33,7 @@ class AdminCog(commands.Cog):
         if user is None:
             user = ctx.author
         userdata = userdb.load(ctx.guild.id, user.id)
-        await ctx.send(f"```repr(userdata)```")
+        await ctx.send(f"```{repr(userdata)}```")
 
     @commands.command(
         hidden = True
