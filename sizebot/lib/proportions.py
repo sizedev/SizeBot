@@ -218,6 +218,9 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{emojis.comparesmall}{self.smallToBig.eyewidth:,.3mu}"), inline=True)
         embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.get_speeds(), inline=True)
         embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.get_speeds(), inline=True)
+        embed.add_field(name="Jump Height", value=(
+            f"{emojis.comparebig}{self.bigToSmall.jumpheight:,.3mu}\n"
+            f"{emojis.comparesmall}{self.smallToBig.jumpheight:,.3mu}"), inline=True)
         embed.add_field(name="Lift/Carry Strength", value=(
             f"{emojis.comparebig}{self.bigToSmall.liftstrength:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.liftstrength:,.3mu}"), inline=True)
@@ -512,6 +515,7 @@ class PersonStats:
         self.hairwidth = SV((self.baseheight * self.hairfactor) / self.viewscale)
         self.nailthickness = SV((self.baseheight * self.nailthickfactor) / self.viewscale)
         self.eyewidth = SV(self.height * self.eyewidthfactor)
+        self.jumpheight = SV(self.height * Decimal("3.908"))
 
         self.avgheightcomp = SV(defaultheight * self.viewscale)
         self.avgweightcomp = WV(defaultweight * self.viewscale ** 3)
@@ -569,6 +573,7 @@ class PersonStats:
             "climb": f" climbs at **{self.climbperhour:,.1M} per hour** ({self.climbperhour:,.1U} per hour), with {self.climbsteplength:,.1m}/{self.climbsteplength:,.1u} pulls.",
             "crawl": f" crawls at **{self.crawlperhour:,.1M} per hour** ({self.crawlperhour:,.1U} per hour), with {self.crawlsteplength:,.1m}/{self.crawlsteplength:,.1u} strides.",
             "swim": f" swims at **{self.swimperhour:,.1M} per hour** ({self.swimperhour:,.1U} per hour), with {self.swimsteplength:,.1m}/{self.swimsteplength:,.1u} strokes.",
+            "swim": f" can jump **{self.jumpheight:,3mu} high.",
             "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
             "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
             "scale": f" is **{self.formattedscale}** their base height.",
@@ -640,6 +645,7 @@ class PersonStats:
         embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
         embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="Speeds", value=self.get_speeds(), inline=True)
+        embed.add_field(name="Jump Height", value=f"{self.jumpheight:,.3mu}", inline=True)
         embed.add_field(name="View Distance to Horizon", value=f"{self.horizondistance:,.3mu}", inline=True)
         if self.fallproof:
             embed.add_field(name="Terminal Velocity", value = f"{self.terminalvelocity:,.1M} per second\n({self.terminalvelocity:,.1U} per second)\n*This user can safely fall from any height.*", inline = True)

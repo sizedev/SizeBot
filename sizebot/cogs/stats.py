@@ -37,6 +37,7 @@ statmap = AliasMap({
     "climb":            ("pull"),
     "crawl":            (),
     "swim":             ("stroke"),
+    "jump":             ("jumpheight"),
     "base":             ("baseheight", "baseweight", "basesize"),
     "compare":          ("look"),
     "scale":            ("multiplier", "mult", "factor"),
