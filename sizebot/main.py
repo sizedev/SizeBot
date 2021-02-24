@@ -47,6 +47,7 @@ initial_cogs = [
     "holiday",
     "keypad",
     "limits",
+    "loop",
     "naptime",
     "profile",
     # "rainbow",
