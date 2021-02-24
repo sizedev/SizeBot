@@ -513,8 +513,8 @@ class SetCog(commands.Cog):
         userdata.liftstrength = WV(WV.parse(newstrength) * (userdata.viewscale ** 3))
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base lift strength is now {userdata.liftstrength:mu} long, "
-                       f"or {SV(userdata.liftstrength):mu} currently.")
+        await ctx.send(f"{userdata.nickname}'s base lift strength is now {userdata.liftstrength:mu}, "
+                       f"or {WV(userdata.liftstrength):mu} currently.")
         await showNextStep(ctx, userdata)
 
     @commands.command(

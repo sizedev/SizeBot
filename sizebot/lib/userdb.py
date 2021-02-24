@@ -216,9 +216,9 @@ class User:
         if value is None:
             self._liftstrength = None
             return
-        value = SV(value)
+        value = WV(value)
         if value < 0:
-            value = SV(0)
+            value = WV(0)
         self._liftstrength = value
 
     @property
