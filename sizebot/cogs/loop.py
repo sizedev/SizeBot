@@ -51,7 +51,7 @@ class LoopCog(commands.Cog):
             await ctx.send(f"{emojis.warning} {action} is not a recognized movement type.")
             return
         
-        userdata = userdb.load(ctx.guild.id, ctx.user.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         if userdata.currentmovetype:
             await ctx.send((f"{emojis.warning} You're already {ing[userdata.currentmovetype]}.\n"
@@ -68,7 +68,7 @@ class LoopCog(commands.Cog):
     )
     @commands.guild_only()
     async def stop(self, ctx):  # TODO: Temp, this should probably take an argument
-        userdata = userdb.load(ctx.guild.id, ctx.user.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
         if userdata.currentmovetype is None:
             await ctx.send("You aren't currently moving!")
             return
