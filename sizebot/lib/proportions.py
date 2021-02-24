@@ -695,6 +695,7 @@ class PersonBaseStats:
 
         self.walkperhour = userdata.walkperhour
         self.runperhour = userdata.runperhour
+        self.swimperhour = userdata.swimperhour
 
         self.currentscalestep = userdata.currentscalestep
         self.unitsystem = userdata.unitsystem
@@ -706,7 +707,7 @@ class PersonBaseStats:
                 f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}, "
                 f"HAIRLENGTH = {self.hairlength!r}, TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r}, "
                 f"LIFTSTRENGTH = {self.liftstrength!r}, FOOTLENGTH = {self.footlength!r}, "
-                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}>")
+                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}>")
 
     def __repr__(self):
         return str(self)
@@ -732,6 +733,8 @@ class PersonBaseStats:
             embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)", inline=True)
         if self.runperhour:
             embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)", inline=True)
+        if self.swimperhour:
+            embed.add_field(name="Swim Speed", value=f"{self.swimperhour:,.1M} per hour\n({self.swimperhour:,.1U} per hour)", inline=True)
         if self.liftstrength:
             embed.add_field(name="Lift/Carry Strength", value=f"{self.liftstrength:,.3mu}", inline=True)
         if self.macrovision_model and self.macrovision_model != "Human":
