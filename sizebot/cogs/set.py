@@ -9,6 +9,7 @@ from sizebot.lib import decimal, errors, userdb, nickmanager
 from sizebot.lib.decimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.loglevels import EGG
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, glitch_string, undo_powers
@@ -156,6 +157,10 @@ class SetCog(commands.Cog):
     async def setscale(self, ctx, *, newscale):
         """Change height by scale."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        if newscale == "banana":
+            await ctx.send("Bananas are already the default scale for all things.")
+            logger.log(EGG, "Bananas used for scale.")
 
         if newscale == "<:116:793260849007296522>":
             scale = Decimal("1/16")
