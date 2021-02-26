@@ -164,7 +164,7 @@ class SetCog(commands.Cog):
         else:
             re_fix_powers = r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)"
             newscale = re.sub(re_fix_powers, undo_powers, newscale)
-            re_scale = r"(.*)[:/]?(.*)?"
+            re_scale = r"([^:/]+)[:/]?([^:/]*)?"
             if m := re.match(re_scale, newscale):
                 multiplier = m.group(1)
                 factor = m.group(2) if m.group(2) else 1
@@ -205,7 +205,7 @@ class SetCog(commands.Cog):
         else:
             re_fix_powers = r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)"
             newscale = re.sub(re_fix_powers, undo_powers, newscale)
-            re_scale = r"(.*)[:/]?(.*)?"
+            re_scale = r"([^:/]+)[:/]?([^:/]*)?"
             if m := re.match(re_scale, newscale):
                 multiplier = m.group(1)
                 factor = m.group(2) if m.group(2) else 1
