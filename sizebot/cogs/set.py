@@ -11,7 +11,7 @@ from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import AliasMap, glitch_string
+from sizebot.lib.utils import AliasMap, glitch_string, undo_powers
 
 logger = logging.getLogger("sizebot")
 
@@ -162,14 +162,19 @@ class SetCog(commands.Cog):
         elif newscale == "<:1144:793260894686806026>" or newscale == "<:1122:793262146917105664>":
             scale = Decimal("1/144")
         else:
-            re_scale = r"(\d+\.?\d*)[:/]?(\d+\.?\d*)?"
+            re_fix_powers = r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)"
+            re.sub(re_fix_powers, undo_powers, newscale)
+            re_scale = r"(.*)[:/]?(.*)?"
             if m := re.match(re_scale, newscale):
                 multiplier = m.group(1)
                 factor = m.group(2) if m.group(2) else 1
             else:
                 raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
 
-            scale = Decimal(multiplier) / Decimal(factor)
+            try:
+                scale = Decimal(multiplier) / Decimal(factor)
+            except Exception:
+                raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
 
         userdata.height = userdata.baseheight * scale
         completed_registration = userdata.complete_step("setheight")
@@ -608,8 +613,8 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.swimperhour = ParseableRate(f"{newswim.diff.amount * userdata.viewscale}/{newswim.time}",
-                                            Diff(f"{newswim.diff.amount * userdata.viewscale}", "add", newswim.diff.amount * userdata.viewscale),
-                                            newswim.time)
+                                             Diff(f"{newswim.diff.amount * userdata.viewscale}", "add", newswim.diff.amount * userdata.viewscale),
+                                             newswim.time)
         userdb.save(userdata)
 
         # TODO: Give ParsableRates a __mul__ so I can give the user their current speeds.

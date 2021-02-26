@@ -8,6 +8,8 @@ from urllib.parse import quote
 
 import validator_collection
 
+from sizebot.lib.decimal import Decimal
+
 re_num = r"\d+\.?\d*"
 
 glitch_template = ("V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUgLyBZb3Uga25vdyB0aGUgcnVsZXMgYW5kIHNvIGRv"
@@ -452,3 +454,14 @@ class AliasMap(dict):
             aliasstrings.append(s)
 
         return sentence_join(aliasstrings, oxford = True)
+
+
+def undo_powers(matchobj: re.Match):
+    prefix = matchobj.group(0)
+    mid = matchobj.group(1)
+    suffix = matchobj.group(2)
+
+    if ["E", "e"] in mid:
+        return str(Decimal(prefix + mid + suffix))
+    else:
+        return str(Decimal(prefix) ** Decimal(suffix))
