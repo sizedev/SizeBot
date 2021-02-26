@@ -203,7 +203,9 @@ class SetCog(commands.Cog):
         elif newscale == "<:1144:793260894686806026>" or newscale == "<:1122:793262146917105664>":
             scale = Decimal("1/144")
         else:
-            re_scale = r"(\d+\.?\d*)[:/]?(\d+\.?\d*)?"
+            re_fix_powers = r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)"
+            newscale = re.sub(re_fix_powers, undo_powers, newscale)
+            re_scale = r"(.*)[:/]?(.*)?"
             if m := re.match(re_scale, newscale):
                 multiplier = m.group(1)
                 factor = m.group(2) if m.group(2) else 1
