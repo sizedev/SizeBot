@@ -457,9 +457,9 @@ class AliasMap(dict):
 
 
 def undo_powers(matchobj: re.Match):
-    prefix = matchobj.group(0)
-    mid = matchobj.group(1)
-    suffix = matchobj.group(2)
+    prefix = matchobj.group(1)
+    mid = matchobj.group(2)
+    suffix = matchobj.group(3)
 
     if "e" in mid.lower():
         return str(Decimal(prefix + mid + suffix))

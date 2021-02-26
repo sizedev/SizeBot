@@ -163,7 +163,7 @@ class SetCog(commands.Cog):
             scale = Decimal("1/144")
         else:
             re_fix_powers = r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)"
-            re.sub(re_fix_powers, undo_powers, newscale)
+            newscale = re.sub(re_fix_powers, undo_powers, newscale)
             re_scale = r"(.*)[:/]?(.*)?"
             if m := re.match(re_scale, newscale):
                 multiplier = m.group(1)
