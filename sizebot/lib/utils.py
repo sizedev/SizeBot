@@ -461,7 +461,7 @@ def undo_powers(matchobj: re.Match):
     mid = matchobj.group(1)
     suffix = matchobj.group(2)
 
-    if ["E", "e"] in mid:
+    if "e" in mid.lower():
         return str(Decimal(prefix + mid + suffix))
     else:
         return str(Decimal(prefix) ** Decimal(suffix))
