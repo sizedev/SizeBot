@@ -8,7 +8,7 @@ from urllib.parse import quote
 
 import validator_collection
 
-from sizebot.lib.decimal import Decimal
+from decimal import Decimal
 
 re_num = r"\d+\.?\d*"
 
