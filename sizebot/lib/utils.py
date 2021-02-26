@@ -2,7 +2,6 @@ import inspect
 import pydoc
 import random
 import re
-import string
 import traceback
 from typing import Dict, Hashable, Sequence
 from urllib.parse import quote
@@ -12,14 +11,15 @@ import validator_collection
 re_num = r"\d+\.?\d*"
 
 glitch_template = ("V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUgLyBZb3Uga25vdyB0aGUgcnVsZXMgYW5kIHNvIGRv"
-"IEkgLyBBIGZ1bGwgY29tbWl0bWVudCdzIHdoYXQgSSdtIHRoaW5raW5nIG9mIC9Zb3Ugd291bGRu"
-"J3QgZ2V0IHRoaXMgZnJvbSBhbnkgb3RoZXIgZ3V5IC8gSSBqdXN0IHdhbm5hIHRlbGwgeW91IGhv"
-"dyBJJ20gZmVlbGluZyAvIEdvdHRhIG1ha2UgeW91IHVuZGVyc3RhbmQgLyBOZXZlciBnb25uYSBn"
-"aXZlIHlvdSB1cCAvIE5ldmVyIGdvbm5hIGxldCB5b3UgZG93biAvIE5ldmVyIGdvbm5hIHJ1biBh"
-"cm91bmQgYW5kIGRlc2VydCB5b3UgLyBOZXZlciBnb25uYSBtYWtlIHlvdSBjcnkgLyBOZXZlciBn"
-"b25uYSBzYXkgZ29vZGJ5ZSAvIE5ldmVyIGdvbm5hIHRlbGwgYSBsaWUgYW5kIGh1cnQgeW91")
+                   "IEkgLyBBIGZ1bGwgY29tbWl0bWVudCdzIHdoYXQgSSdtIHRoaW5raW5nIG9mIC9Zb3Ugd291bGRu"
+                   "J3QgZ2V0IHRoaXMgZnJvbSBhbnkgb3RoZXIgZ3V5IC8gSSBqdXN0IHdhbm5hIHRlbGwgeW91IGhv"
+                   "dyBJJ20gZmVlbGluZyAvIEdvdHRhIG1ha2UgeW91IHVuZGVyc3RhbmQgLyBOZXZlciBnb25uYSBn"
+                   "aXZlIHlvdSB1cCAvIE5ldmVyIGdvbm5hIGxldCB5b3UgZG93biAvIE5ldmVyIGdvbm5hIHJ1biBh"
+                   "cm91bmQgYW5kIGRlc2VydCB5b3UgLyBOZXZlciBnb25uYSBtYWtlIHlvdSBjcnkgLyBOZXZlciBn"
+                   "b25uYSBzYXkgZ29vZGJ5ZSAvIE5ldmVyIGdvbm5hIHRlbGwgYSBsaWUgYW5kIGh1cnQgeW91")
 
 current_glitch_index = 0
+
 
 def clamp(minVal, val, maxVal):
     """Clamp a `val` to be no lower than `minVal`, and no higher than `maxVal`."""
@@ -347,7 +347,7 @@ def sentence_join(items, *, joiner=None, oxford=False) -> str:
     return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
 
 
-#TODO: Deprecated, use Python 3.9's methods
+# TODO: Deprecated, use Python 3.9's methods
 def removeprefix(self: str, prefix: str, /) -> str:
     if self.startswith(prefix):
         return self[len(prefix):]
@@ -355,13 +355,14 @@ def removeprefix(self: str, prefix: str, /) -> str:
         return self[:]
 
 
-#TODO: Deprecated, use Python 3.9's methods
+# TODO: Deprecated, use Python 3.9's methods
 def removesuffix(self: str, suffix: str, /) -> str:
     # suffix='' should not call self[:-0].
     if suffix and self.endswith(suffix):
         return self[:-len(suffix)]
     else:
         return self[:]
+
 
 def glitch_string(in_string: str, *, charset = None) -> str:
     words = []
@@ -372,11 +373,11 @@ def glitch_string(in_string: str, *, charset = None) -> str:
         global current_glitch_index
         for word in in_string.split(" "):
             k = len(word)
-            new_word = glitch_template[current_glitch_index:current_glitch_index+k]
+            new_word = glitch_template[current_glitch_index:current_glitch_index + k]
             k -= len(new_word)
             if k != 0:
                 current_glitch_index = 0
-                new_word = glitch_template[current_glitch_index:current_glitch_index+k]
+                new_word = glitch_template[current_glitch_index:current_glitch_index + k]
             words.append(new_word)
             current_glitch_index += len(new_word)
     return " ".join(words)
