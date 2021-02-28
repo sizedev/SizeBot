@@ -401,7 +401,9 @@ class PersonSpeedComparison:
         embed.add_field(name=f"**{self.viewer.nickname}** Speeds", value=(
             f"{emojis.walk} **Walk Speed:** {self.viewer.walkperhour:,.3mu} per hour\n"
             f"{emojis.run} **Run Speed:** {self.viewer.runperhour:,.3mu} per hour\n"
-            f"{emojis.climb} **Climb Speed:** {SV(Decimal(4828) / self.viewer.viewscale):,.3mu} per hour"), inline=False)
+            f"{emojis.climb} **Climb Speed:** {self.viewer.climbperhour:,.3mu} per hour\n"
+            f"{emojis.crawl} **Crawl Speed:** {self.viewer.crawlperhour:,.3mu} per hour\n"
+            f"{emojis.swim} **Swim Speed:** {self.viewer.swimperhour:,.3mu} per hour"), inline=False)
         embed.add_field(name="Height", value=(self.speedcalc(self.viewedtoviewer.height)), inline=True)
         embed.add_field(name=f"{self.footlabel} Length", value=(self.speedcalc(self.viewedtoviewer.footlength, foot = True)), inline=True)
         embed.add_field(name=f"{self.footlabel} Width", value=(self.speedcalc(self.viewedtoviewer.footwidth)), inline=True)
