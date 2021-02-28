@@ -500,7 +500,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     async def distance(self, ctx, length: typing.Union[SV, TV, str], *, who: typing.Union[discord.Member, SV] = None):
-        """How long will it take to walk, run, or climb a distance?
+        """How long will it take to walk, run, climb, etc. a distance/time?
 
         Example:
         `&distance <length or time>`"""
@@ -533,6 +533,12 @@ class StatsCog(commands.Cog):
         defaultclimbtimehours = length / defaultstats.climbperhour
         defaultclimbsteps = length / defaultstats.climbsteplength
 
+        defaultcrawltimehours = length / defaultstats.crawlperhour
+        defaultcrawlsteps = length / defaultstats.crawlsteplength
+
+        defaultswimtimehours = length / defaultstats.swimperhour
+        defaultswimsteps = length / defaultstats.swimsteplength
+
         newlength = SV(length / userstats.scale)
         walktimehours = length / userstats.walkperhour
         walksteps = length / userstats.walksteplength
@@ -540,24 +546,37 @@ class StatsCog(commands.Cog):
         runsteps = length / userstats.runsteplength
         climbtimehours = length / userstats.climbperhour
         climbsteps = length / userstats.climbsteplength
+        crawltimehours = length / userstats.crawlperhour
+        crawlsteps = length / userstats.crawlsteplength
+        swimtimehours = length / userstats.swimperhour
+        swimsteps = length / userstats.swimsteplength
 
         walktime = prettyTimeDelta(walktimehours * 60 * 60, roundeventually = True)
         runtime = prettyTimeDelta(runtimehours * 60 * 60, roundeventually = True)
         climbtime = prettyTimeDelta(climbtimehours * 60 * 60, roundeventually = True)
+        crawltime = prettyTimeDelta(crawltimehours * 60 * 60, roundeventually = True)
+        swimtime = prettyTimeDelta(swimtimehours * 60 * 60, roundeventually = True)
 
         defaultwalktime = prettyTimeDelta(defaultwalktimehours * 60 * 60, roundeventually = True)
         defaultruntime = prettyTimeDelta(defaultruntimehours * 60 * 60, roundeventually = True)
         defaultclimbtime = prettyTimeDelta(defaultclimbtimehours * 60 * 60, roundeventually = True)
+        defaultcrawltime = prettyTimeDelta(defaultcrawltimehours * 60 * 60, roundeventually = True)
+        defaultswimtime = prettyTimeDelta(defaultswimtimehours * 60 * 60, roundeventually = True)
 
         desc = (
-                f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}.** "
-                f"They could walk that distance in **{walktime}** *({walksteps:,.0f} steps)*, "
-                f"run that distance in **{runtime}** *({runsteps:,.0f} strides)*, "
-                f"or climb that distance in **{climbtime}** *({climbsteps:,.0f} pulls)*"
+            f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}.** "
+            f"They could walk that distance in **{walktime}** *({walksteps:,.0f} steps)*, "
+            f"run that distance in **{runtime}** *({runsteps:,.0f} strides)*, "
+            f"climb that distance in **{climbtime}** *({climbsteps:,.0f} pulls)*, "
+            f"crawl that distance in **{crawltime}** *({crawlsteps:,.0f} pulls)*, "
+            f"or swim that distance in **{swimtime}** *({swimsteps:,.0f} strokes.)*"
         )
-        footer = (f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), "
-                 f"run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), "
-                 f"or climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls)."
+        footer = (
+            f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), "
+            f"run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), "
+            f"climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls), ."
+            f"crawl that distance in {defaultcrawltime} ({defaultcrawlsteps:,.0f} pulls), ."
+            f"or swim that distance in {defaultswimtime} ({defaultswimsteps:,.0f} strokes.)"
         )
 
         if userdata.incomprehensible:
