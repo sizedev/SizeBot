@@ -586,7 +586,7 @@ class StatsCog(commands.Cog):
         e = discord.Embed(
             title = f"{length:,.3mu} to {userstats.nickname}",
             description = desc
-            )
+        )
         e.set_footer(text = footer)
 
         await ctx.send(embed = e)
@@ -765,6 +765,16 @@ class StatsCog(commands.Cog):
                                     description = desc)
 
         await ctx.send(embed = embedtosend)
+
+    @commands.command(
+        usage = "<distance>"
+    )
+    async def fall(self, ctx, distance: typing.Union[discord.Member, SV]):
+        if isinstance(distance, discord.Member):
+            ud = userdb.load(ctx.guild.id, distance.id)
+            distance = ud.height
+        
+        await ctx.send("he fall")
 
     @commands.command(
         aliases = [],
