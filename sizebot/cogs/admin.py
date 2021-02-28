@@ -29,7 +29,7 @@ class AdminCog(commands.Cog):
     )
     @commands.is_owner()
     async def dump(self, ctx, *, user: discord.Member = None):
-        """RIP SizeBot."""
+        """Dump a user's data."""
         if user is None:
             user = ctx.author
         userdata = userdb.load(ctx.guild.id, user.id)
