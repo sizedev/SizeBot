@@ -144,12 +144,15 @@ class WeirdCog(commands.Cog):
         m = await ctx.send(emojis.loading + " *Loading math...*")
 
         r = await requests.get(full_url)
-        read_data = await r.read()
-        arr = io.BytesIO(read_data)
-        arr.seek(0)
-        f = discord.File(arr, f"{ctx.message.id}.png")
         await m.delete()
-        await ctx.send(content = "", file=f)
+        read_data = await r.read()
+        if 200 <= r.status <= 299:
+            arr = io.BytesIO(read_data)
+            arr.seek(0)
+            f = discord.File(arr, f"{ctx.message.id}.png")
+            await ctx.send(content = "", file=f)
+        else:
+            await ctx.send("Math failed.")
 
 def setup(bot):
     bot.add_cog(WeirdCog(bot))
