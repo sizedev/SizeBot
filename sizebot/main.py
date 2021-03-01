@@ -39,7 +39,6 @@ discordlogger.addHandler(dfhandler)
 initial_cogs = [
     "admin",
     "change",
-    "color",
     "edge",
     "eval",
     "fun",
@@ -62,6 +61,7 @@ initial_cogs = [
     "stats",
     "test",
     "thistracker",
+    "weird",
     "winks"
 ]
 initial_extensions = [

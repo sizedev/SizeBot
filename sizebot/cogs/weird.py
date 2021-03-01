@@ -1,8 +1,11 @@
+import io
 import json
 import re
 from aiohttp_requests import requests
 from json.decoder import JSONDecodeError
+from urllib.parse import quote
 
+import discord
 from discord import Embed
 from discord.ext import commands
 
@@ -17,7 +20,7 @@ re_dividers = re.compile(r"[\s,]+")
 coloricon = "https://cdn.discordapp.com/attachments/650460192009617433/676205298674958366/spinning-beachball-of-death-mac.png"
 
 
-class ColorCog(commands.Cog):
+class WeirdCog(commands.Cog):
     """Commands for non-size stuff."""
 
     def __init__(self, bot):
@@ -130,6 +133,21 @@ class ColorCog(commands.Cog):
 
         await outmessage.edit(content = "", embed = embed)
 
+    @commands.command(
+        aliases = ["latex"],
+        usage = "<latex...>",
+        category = "fun"
+    )
+    async def math(self, ctx, *, equation):
+        equation = R"https://latex.codecogs.com/png.latex?\inline&space;\huge&space;{\color{White}&space;" + quote(equation) + "}"
+        url = "https://latex.codecogs.com/png.latex?"
+        full_url = url + equation
+
+        r = await requests.get(full_url)
+        arr = io.BytesIO(r.content)
+        arr.seek(0)
+        f = discord.File(arr)
+        await ctx.send(file=f)
 
 def setup(bot):
-    bot.add_cog(ColorCog(bot))
+    bot.add_cog(WeirdCog(bot))
