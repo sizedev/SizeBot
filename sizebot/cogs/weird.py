@@ -139,16 +139,17 @@ class WeirdCog(commands.Cog):
         category = "fun"
     )
     async def math(self, ctx, *, equation):
-        equation = R"https://latex.codecogs.com/png.latex?\inline&space;\huge&space;{\color{White}&space;" + quote(equation) + "}"
-        url = "https://latex.codecogs.com/png.latex?"
-        full_url = url + equation
+        full_url = R"https://latex.codecogs.com/png.latex?" + quote(R"\inline&space;\huge&space;{\color{White}&space;") + quote(equation) + "}"
+
+        m = await ctx.send(emojis.loading + " *Loading math...*")
 
         r = await requests.get(full_url)
         read_data = await r.read()
-        arr = io.BytesIO()
+        arr = io.BytesIO(read_data)
         arr.seek(0)
-        f = discord.File(arr)
-        await ctx.send(file=f)
+        f = discord.File(arr, f"{ctx.message.id}.png")
+        await m.delete()
+        await ctx.send(content = "", file=f)
 
 def setup(bot):
     bot.add_cog(WeirdCog(bot))
