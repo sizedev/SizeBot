@@ -144,7 +144,8 @@ class WeirdCog(commands.Cog):
         full_url = url + equation
 
         r = await requests.get(full_url)
-        arr = io.BytesIO(r.content)
+        read_data = await r.read()
+        arr = io.BytesIO()
         arr.seek(0)
         f = discord.File(arr)
         await ctx.send(file=f)
