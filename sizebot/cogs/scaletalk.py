@@ -3,6 +3,7 @@ import re
 from copy import copy
 from sizebot.lib.utils import tryInt
 
+import discord
 from discord.ext import commands
 
 from sizebot.lib import userdb
