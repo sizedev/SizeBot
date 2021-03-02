@@ -1,6 +1,11 @@
+import discord
+
+
 async def on_message(m):
     """Meicros, or how to annoy your developer friend."""
     if m.author.bot:
+        return
+    if not isinstance(m.author, discord.Member):
         return
 
     # !play macros.

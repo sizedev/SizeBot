@@ -96,6 +96,8 @@ class ScaleTypeCog(commands.Cog):
 
 
 async def on_message(message):
+    if not isinstance(message.author, discord.Member):
+        return
     guildid = message.author.guild.id
     userid = message.author.id
     content = message.content

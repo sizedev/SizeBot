@@ -23,6 +23,7 @@ class NaptimeCog(commands.Cog):
         usage = "<duration>",
         category = "fun"
     )
+    @commands.guild_only()
     async def naptime(self, ctx, *, duration: TV):
         """Go to bed in a set amount of time.
 
