@@ -40,6 +40,7 @@ def setup(bot):
             message = await err.formatMessage(ctx)
             if message is not None:
                 logger.log(err.level, message)
+                logger.error(utils.formatTraceback(error))
             userMessage = await err.formatUserMessage(ctx)
             if userMessage is not None:
                 await ctx.send(f"{emojis.warning} {userMessage}")
@@ -48,6 +49,7 @@ def setup(bot):
             message = err.formatMessage()
             if message is not None:
                 logger.log(err.level, message)
+                logger.error(utils.formatTraceback(error))
             userMessage = err.formatUserMessage()
             if userMessage is not None:
                 await ctx.send(f"{emojis.warning} {userMessage}")
@@ -86,10 +88,12 @@ def setup(bot):
             message = err.formatMessage()
             if message is not None:
                 logger.log(err.level, message)
+                logger.error(utils.formatTraceback(error))
         if isinstance(err, errors.DigiContextException):
             message = str(err)
             if message is not None:
                 logger.log(err.level, message)
+                logger.error(utils.formatTraceback(error))
         else:
             logger.error(f"Ignoring exception in {event}")
             logger.error(utils.formatTraceback(error))
