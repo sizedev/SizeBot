@@ -97,14 +97,6 @@ class FunCog(commands.Cog):
         logger.log(EGG, f"{ctx.author.display_name} thought it was that easy, huh.")
         await ctx.send("No.")
 
-    @commands.command(
-        multiline = True
-    )
-    async def squeak(self, ctx, *, message: str):
-        # PERMISSION: requires manage_messages
-        await ctx.message.delete(delay=0)
-        await ctx.send(ctx.author.display_name + " squeaks: " + squeak(message))
-
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.content.startswith("!digipee"):
