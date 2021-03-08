@@ -22,47 +22,6 @@ glitch_template = ("V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUgLyBZb3Uga25vdyB0aGUgcnVs
 
 current_glitch_index = 0
 
-SUPERSCRIPTS = {
-  ' ': ' ',
-  '0': '⁰',
-  '1': '¹',
-  '2': '²',
-  '3': '³',
-  '4': '⁴',
-  '5': '⁵',
-  '6': '⁶',
-  '7': '⁷',
-  '8': '⁸',
-  '9': '⁹',
-  '+': '⁺',
-  '-': '⁻',
-  'a': 'ᵃ',
-  'b': 'ᵇ',
-  'c': 'ᶜ',
-  'd': 'ᵈ',
-  'e': 'ᵉ',
-  'f': 'ᶠ',
-  'g': 'ᵍ',
-  'h': 'ʰ',
-  'i': 'ⁱ',
-  'j': 'ʲ',
-  'k': 'ᵏ',
-  'l': 'ˡ',
-  'm': 'ᵐ',
-  'n': 'ⁿ',
-  'o': 'ᵒ',
-  'p': 'ᵖ',
-  'r': 'ʳ',
-  's': 'ˢ',
-  't': 'ᵗ',
-  'u': 'ᵘ',
-  'v': 'ᵛ',
-  'w': 'ʷ',
-  'x': 'ˣ',
-  'y': 'ʸ',
-  'z': 'ᶻ'
-}
-
 
 def clamp(minVal, val, maxVal):
     """Clamp a `val` to be no lower than `minVal`, and no higher than `maxVal`."""
@@ -506,10 +465,3 @@ def undo_powers(matchobj: re.Match):
         return str(Decimal(prefix + mid + suffix))
     else:
         return str(Decimal(prefix) ** Decimal(suffix))
-
-def squeak(s: str):
-    s = s.lower()
-    for c in s:
-        if c in SUPERSCRIPTS:
-            s = s.replace(c, SUPERSCRIPTS[c])
-    return s
