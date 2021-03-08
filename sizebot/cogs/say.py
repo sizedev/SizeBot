@@ -348,7 +348,7 @@ class SayCog(commands.Cog):
             height = userdb.defaultheight
         ratio = height / userdb.defaultheight
 
-        m, verb = adjust_volume(message)
+        m, verb = adjust_volume(message, ratio)
         await ctx.send(ctx.author.display_name + f" {verb}: \n> " + m)
 
     @commands.command(
@@ -372,7 +372,7 @@ class SayCog(commands.Cog):
             height = userdb.defaultheight
         ratio = height / otherheight
 
-        m, verb = adjust_volume(message)
+        m, verb = adjust_volume(message, ratio)
         await ctx.send(ctx.author.display_name + f" {verb}: \n> " + m)
 
 
