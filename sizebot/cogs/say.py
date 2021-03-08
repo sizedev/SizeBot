@@ -299,7 +299,7 @@ def adjust_volume(speech, ratio):
             else:
                 newspeech += c
         return newspeech, "squeaks"
-    elif ratio <= Decimal("1/10"):
+    elif ratio <= Decimal("1/12"):
         for c in speech:
             if c in smol_letters:
                 newspeech += smol_letters[c]
