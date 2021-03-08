@@ -292,21 +292,21 @@ def adjust_volume(speech, ratio):
             else:
                 newspeech += c
         return newspeech, "whispers"
-    elif ratio > Decimal("1/100"):
+    elif ratio > Decimal("1/200"):
         for c in speech.lower():
             if c in smol_letters:
                 newspeech += smol_letters[c]
             else:
                 newspeech += c
         return newspeech, "squeaks"
-    elif ratio > Decimal("1/6"):
+    elif ratio > Decimal("1/12"):
         for c in speech:
             if c in smol_letters:
                 newspeech += smol_letters[c]
             else:
                 newspeech += c
         return newspeech, "murmurs"
-    elif ratio > Decimal(6):
+    elif ratio > Decimal(10):
         return speech, "says"
     elif ratio > Decimal(100):
         return f"**{speech}**", "shouts"
@@ -343,13 +343,17 @@ class SayCog(commands.Cog):
         await ctx.message.delete(delay=0)
 
         try:
-            height = userdb.load(ctx.guild.id, ctx.author.id).height
+            user = userdb.load(ctx.guild.id, ctx.author.id)
+            height = user.height
+            nick = user.nickname
         except:
             height = userdb.defaultheight
+            nick = ctx.author.display_name
+
         ratio = height / userdb.defaultheight
 
         m, verb = adjust_volume(message, ratio)
-        await ctx.send(ctx.author.display_name + f" {verb}: \n> " + m)
+        await ctx.send(nick + f" {verb}: \n> " + m)
 
     @commands.command(
         aliases = ["talkto"],
@@ -363,17 +367,23 @@ class SayCog(commands.Cog):
 
         if isinstance(memberOrHeight, SV):
             otherheight = memberOrHeight
+            othernick = memberOrHeight.display_name
         else:
-            otherheight = userdb.load(ctx.guild.id, memberOrHeight.id).height
-
+            other = userdb.load(ctx.guild.id, memberOrHeight.id)
+            otherheight = other.height
+            othernick = other.nickname
         try:
-            height = userdb.load(ctx.guild.id, ctx.author.id)
+            user = userdb.load(ctx.guild.id, ctx.author.id)
+            height = user.height
+            nick = user.nickname
         except:
             height = userdb.defaultheight
+            nick = ctx.author.display_name
+
         ratio = height / otherheight
 
         m, verb = adjust_volume(message, ratio)
-        await ctx.send(ctx.author.display_name + f" {verb}: \n> " + m)
+        await ctx.send(f"nick {verb} to {othernick}: \n> " + m)
 
 
 def setup(bot):
