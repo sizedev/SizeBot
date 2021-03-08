@@ -54,7 +54,7 @@ class FunCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def say(self, ctx, *, message: str):
+    async def sbsay(self, ctx, *, message: str):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
         await ctx.send(message)
