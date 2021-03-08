@@ -8,7 +8,6 @@ from discord.ext import commands
 import sizebot.data
 from sizebot.lib.constants import ids
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.utils import squeak
 
 tasks = {}
 
