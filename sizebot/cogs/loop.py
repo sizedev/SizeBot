@@ -55,8 +55,10 @@ class LoopCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         if userdata.currentmovetype:
+            elapsed_seconds, distance = calc_move_dist(userdata)
+            nicetime = prettyTimeDelta(elapsed_seconds)
             await ctx.send((f"{emojis.warning} You're already {ing[userdata.currentmovetype]}.\n"
-                            f"[NO DATA HERE YET]"))
+                            f"You've gone **{distance:,.3mu}** so far!"))
             return
         
         userdata.currentmovetype = action
