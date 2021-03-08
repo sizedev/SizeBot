@@ -508,6 +508,7 @@ def undo_powers(matchobj: re.Match):
         return str(Decimal(prefix) ** Decimal(suffix))
 
 def squeak(s: str):
+    s = s.lower()
     for c in s:
         if c in SUPERSCRIPTS:
             s = s.replace(c, SUPERSCRIPTS[c])
