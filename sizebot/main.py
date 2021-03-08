@@ -54,6 +54,7 @@ initial_cogs = [
     "roll",
     "royale",
     "run",
+    "say",
     "scaletalk",
     "scalewalk",
     "set",
