@@ -383,7 +383,7 @@ class SayCog(commands.Cog):
         ratio = height / otherheight
 
         m, verb = adjust_volume(message, ratio)
-        await ctx.send(f"nick {verb} to {othernick}: \n> " + m)
+        await ctx.send(f"{nick} {verb} to {othernick}: \n> " + m)
 
 
 def setup(bot):
