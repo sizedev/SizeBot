@@ -8,6 +8,7 @@ from discord.ext import commands
 import sizebot.data
 from sizebot.lib.constants import ids
 from sizebot.lib.loglevels import EGG
+from sizebot.lib.utils import squeak
 
 tasks = {}
 
@@ -95,6 +96,14 @@ class FunCog(commands.Cog):
     async def easteregg(self, ctx):
         logger.log(EGG, f"{ctx.author.display_name} thought it was that easy, huh.")
         await ctx.send("No.")
+
+    @commands.command(
+        multiline = True
+    )
+    async def squeak(self, ctx, *, message: str):
+        # PERMISSION: requires manage_messages
+        await ctx.message.delete(delay=0)
+        await ctx.send(ctx.author.display_name + " squeaks: " + squeak(message))
 
     @commands.Cog.listener()
     async def on_message(self, message):
