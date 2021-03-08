@@ -247,7 +247,7 @@ class StatsCog(commands.Cog):
         await ctx.send(stattosend)
 
     @commands.command(
-        aliases = ["comp"],
+        aliases = ["comp", "comparison"],
         usage = "<user/height> [user/height]",
         category = "stats"
     )
