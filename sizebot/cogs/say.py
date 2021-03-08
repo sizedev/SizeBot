@@ -285,32 +285,32 @@ def adjust_volume(speech, ratio):
     * 1000 < ratio: "booms", convert message to regional indicators.
     """
     newspeech = ""
-    if ratio >= Decimal("1/1000"):
+    if ratio <= Decimal("1/1000"):
         for c in speech:
             if c not in [" ", "\n"]:
                 newspeech += "."
             else:
                 newspeech += c
         return newspeech, "whispers"
-    elif ratio >= Decimal("1/200"):
+    elif ratio <= Decimal("1/200"):
         for c in speech.lower():
             if c in smol_letters:
                 newspeech += smol_letters[c]
             else:
                 newspeech += c
         return newspeech, "squeaks"
-    elif ratio >= Decimal("1/10"):
+    elif ratio <= Decimal("1/10"):
         for c in speech:
             if c in smol_letters:
                 newspeech += smol_letters[c]
             else:
                 newspeech += c
         return newspeech, "murmurs"
-    elif ratio >= Decimal(10):
+    elif ratio <= Decimal(10):
         return speech, "says"
-    elif ratio >= Decimal(100):
+    elif ratio <= Decimal(100):
         return f"**{speech}**", "shouts"
-    elif ratio >= Decimal(1000):
+    elif ratio <= Decimal(1000):
         for c in speech:
             if c in small_caps:
                 newspeech += small_caps[c]
