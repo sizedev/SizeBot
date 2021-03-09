@@ -277,10 +277,10 @@ def adjust_volume(speech, ratio):
     """Adjust a string to be quiet or loud, and assign it a verb.
     Ratios:
     * ratio < 1/1000: "whispers", convert all letters to periods.
-    * 1/1000 < ratio < 1/100: "squeaks", convert letters to lowercase superscript.
-    * 1/100 < ratio < 1/6: "murmurs", convert letters to superscript.
-    * 1/6 < ratio < 6: "says", do nothing.
-    * 6 < ratio < 100: "shouts", convert message to bold.
+    * 1/1000 < ratio < 1/200: "squeaks", convert letters to lowercase superscript.
+    * 1/200 < ratio < 1/12: "murmurs", convert letters to superscript.
+    * 1/12 < ratio < 10: "says", do nothing.
+    * 10 < ratio < 100: "shouts", convert message to bold.
     * 100 < ratio < 1000: "roars", convert message to small caps bold.
     * 1000 < ratio: "booms", convert message to regional indicators.
     """
