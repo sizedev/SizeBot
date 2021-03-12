@@ -1,7 +1,7 @@
 import asyncio
 from pathlib import Path
 
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib import units, userdb
 
 # Deprecated user array constants

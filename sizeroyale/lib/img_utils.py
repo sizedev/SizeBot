@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageOps import grayscale
 
 import sizebot.data.fonts
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.utils import chunkList, truncate
 from sizeroyale.lib.errors import DownloadError
 

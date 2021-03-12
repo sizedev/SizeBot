@@ -1,17 +1,24 @@
 import decimal
 import logging
 import math
-import random
 import re
 from decimal import Decimal as RawDecimal
 from decimal import ROUND_DOWN
 from functools import total_ordering
 
-from sizebot.lib.utils import minmax
-
-__all__ = ["Decimal", "randRangeLog", "DecimalSpec"]
+__all__ = ["Decimal"]
 
 logger = logging.getLogger("sizebot")
+
+
+# local copy of utils.minmax to prevent circular import
+def minmax(first, second) -> tuple:
+    """Return a tuple where item 0 is the smaller value, and item 1 is the larger value."""
+    small, big = first, second
+    if small > big:
+        small, big = big, small
+    return small, big
+
 
 # Configure decimal module
 decimal.getcontext()
@@ -457,28 +464,3 @@ def fixZeroes(d):
     Decimal('1e3') -> Decimal('100')
     """
     return d.normalize() + 0
-
-
-def randRangeLog(minval, maxval, precision=26):
-    """Generate a logarithmically scaled random number."""
-    minval = Decimal(minval)
-    maxval = Decimal(maxval)
-    prec = Decimal(10) ** precision
-
-    # Swap values if provided in the wrong order.
-    if minval > maxval:
-        minval, maxval = maxval, minval
-
-    minlog = minval.log10()
-    maxlog = maxval.log10()
-
-    minintlog = (minlog * prec).to_integral_value()
-    maxintlog = (maxlog * prec).to_integral_value()
-
-    newintlog = Decimal(random.randint(minintlog, maxintlog))
-
-    newlog = newintlog / prec
-
-    newval = 10 ** newlog
-
-    return newval

@@ -5,14 +5,14 @@ import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
-from sizebot.lib import decimal, errors, userdb, nickmanager
-from sizebot.lib.decimal import Decimal
+from sizebot.lib import errors, userdb, nickmanager
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import AliasMap, glitch_string, undo_powers
+from sizebot.lib.utils import AliasMap, glitch_string, undo_powers, randRangeLog
 
 logger = logging.getLogger("sizebot")
 
@@ -261,7 +261,7 @@ class SetCog(commands.Cog):
         if maxheight < 0:
             maxheight = SV(0)
 
-        newheightSV = decimal.randRangeLog(minheight, maxheight)
+        newheightSV = randRangeLog(minheight, maxheight)
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 

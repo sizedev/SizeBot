@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")

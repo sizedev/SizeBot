@@ -1,5 +1,5 @@
 from sizebot.lib import decimal
-from sizebot.lib.decimal import Decimal, RawDecimal
+from sizebot.lib.digidecimal import Decimal, RawDecimal
 
 
 def test_makeSureDecimalStillWorks():

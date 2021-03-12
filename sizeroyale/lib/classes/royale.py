@@ -5,8 +5,9 @@ from sizeroyale.lib.runnableevent import RunnableEvent
 from typing import Dict, Optional
 
 from sizebot.lib.attrdict import AttrDict
-from sizebot.lib.decimal import Decimal, randRangeLog
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.loglevels import ROYALE
+from sizebot.lib.utils import randRangeLog
 from sizebot.lib.units import SV
 from sizeroyale.lib.classes.event import Event
 from sizeroyale.lib.classes.parser import Parser

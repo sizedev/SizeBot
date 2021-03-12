@@ -12,7 +12,7 @@ import sizebot.data
 from sizebot.conf import conf
 from sizebot.lib import proportions, userdb
 from sizebot.lib.constants import emojis, ids
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import DigiException
 from sizebot.lib.loglevels import ROYALE
 from sizebot.lib.userdb import defaultheight, defaultweight

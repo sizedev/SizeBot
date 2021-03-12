@@ -18,7 +18,7 @@ from sizebot.cogs.royale import get_royale
 from sizebot.cogs.stats import statmap
 from sizebot.lib import errors, guilddb, proportions, userdb, utils
 from sizebot.lib.constants import emojis, ids
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.loglevels import BANNER, EGG, LOGIN

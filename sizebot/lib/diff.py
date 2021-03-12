@@ -37,7 +37,7 @@
 import re
 from sizebot.lib.errors import InvalidSizeValue, ParseError, ThisShouldNeverHappenException
 from sizebot.lib.utils import regexbuild, tryOrNone
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, TV
 from typing import Literal, Union
 

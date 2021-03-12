@@ -1,6 +1,6 @@
 import asyncio
 from sizebot.lib import macrovision, units
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV
 
 units.init()

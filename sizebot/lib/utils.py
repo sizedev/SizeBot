@@ -8,7 +8,7 @@ from urllib.parse import quote
 
 import validator_collection
 
-from decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 
 re_num = r"\d+\.?\d*"
 
@@ -465,3 +465,28 @@ def undo_powers(matchobj: re.Match):
         return str(Decimal(prefix + mid + suffix))
     else:
         return str(Decimal(prefix) ** Decimal(suffix))
+
+
+def randRangeLog(minval, maxval, precision=26):
+    """Generate a logarithmically scaled random number."""
+    minval = Decimal(minval)
+    maxval = Decimal(maxval)
+    prec = Decimal(10) ** precision
+
+    # Swap values if provided in the wrong order.
+    if minval > maxval:
+        minval, maxval = maxval, minval
+
+    minlog = minval.log10()
+    maxlog = maxval.log10()
+
+    minintlog = (minlog * prec).to_integral_value()
+    maxintlog = (maxlog * prec).to_integral_value()
+
+    newintlog = Decimal(random.randint(minintlog, maxintlog))
+
+    newlog = newintlog / prec
+
+    newval = 10 ** newlog
+
+    return newval
