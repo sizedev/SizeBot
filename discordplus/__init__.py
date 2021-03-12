@@ -1,4 +1,4 @@
-from sizebot.discordplus import bot, command, embed, member, client, messageable, snowflake
+from discordplus import bot, command, embed, member, client, messageable, snowflake, tasks
 
 
 def patch():
@@ -9,3 +9,4 @@ def patch():
     client.patch()
     messageable.patch()
     snowflake.patch()
+    tasks.patch()
