@@ -1,4 +1,4 @@
-from sizebot.lib import decimal
+from sizebot.lib.utils import roundFraction, fixZeroes
 from sizebot.lib.digidecimal import Decimal, RawDecimal
 
 
@@ -18,7 +18,7 @@ def test_roundDecimal_specifiedAccuracy():
 
 
 def test_roundDecimalFraction():
-    result = decimal.roundFraction(Decimal("2.127"), 8)
+    result = roundFraction(Decimal("2.127"), 8)
     assert result == Decimal("2.125")
 
 
@@ -38,12 +38,12 @@ def test_toQuarters_noFraction():
 
 
 def test_trimZeros():
-    result = decimal.fixZeroes(RawDecimal("100.00"))
+    result = fixZeroes(RawDecimal("100.00"))
     result = str(result)
     assert result == "100"
 
 
 def test_trimZeros_E():
-    result = decimal.fixZeroes(RawDecimal("1E2"))
+    result = fixZeroes(RawDecimal("1E2"))
     result = str(result)
     assert result == "100"

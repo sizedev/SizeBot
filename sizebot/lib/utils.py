@@ -490,3 +490,23 @@ def randRangeLog(minval, maxval, precision=26):
     newval = 10 ** newlog
 
     return newval
+
+
+def roundFraction(number, denominator):
+    rounded = round(number * denominator) / denominator
+    return rounded
+
+
+def fixZeroes(d):
+    """Reset the precision of a Decimal to avoid values that use exponents like '1e3' and values with trailing zeroes like '100.000'
+
+    fixZeroes(Decimal('1e3')) -> Decimal('100')
+    fixZeroes(Decimal('100.000')) -> Decimal('100')
+
+    Decimal.normalize() removes ALL trailing zeroes, including ones before the decimal place
+    Decimal('100.000').normalize() -> Decimal('1e3')
+
+    Added 0 adds enough precision to represent a zero, which means it re-adds the zeroes left of the decimal place, if necessary
+    Decimal('1e3') -> Decimal('100')
+    """
+    return d.normalize() + 0
