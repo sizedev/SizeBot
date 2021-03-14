@@ -43,7 +43,8 @@ statmap = AliasMap({
     "scale":            ("multiplier", "mult", "factor"),
     "horizondistance":  ("horizon"),
     "terminalvelocity": ("velocity", "fall"),
-    "liftstrength":     ("strength", "lift", "carry", "carrystrength")
+    "liftstrength":     ("strength", "lift", "carry", "carrystrength"),
+    "gender":           ()
 })
 
 
@@ -145,6 +146,7 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = embedtosend)
 
     @commands.command(
+        aliases = ["get"],
         usage = "<stat> [user/height]",
         category = "stats"
     )
@@ -193,6 +195,7 @@ class StatsCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
     @commands.command(
+        aliases = ["getas"],
         usage = "<stat> [user/height]",
         category = "stats"
     )
