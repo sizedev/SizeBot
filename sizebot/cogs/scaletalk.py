@@ -7,7 +7,7 @@ import discord
 from discord.ext import commands
 
 from sizebot.lib import userdb
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpException, UserNotFoundException, ValueIsZeroException
 from sizebot.lib.units import SV

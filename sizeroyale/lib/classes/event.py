@@ -2,7 +2,7 @@ import re
 from sizebot.lib import errors
 from typing import Dict
 
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV
 from sizebot.lib.diff import Diff
 from sizeroyale.lib.errors import OutOfPlayersError, ParseError

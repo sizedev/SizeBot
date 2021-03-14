@@ -4,7 +4,7 @@ from time import time
 from discord.ext import commands, tasks
 
 from sizebot.lib import utils
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import TV
 
 

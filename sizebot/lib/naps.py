@@ -3,7 +3,7 @@ import logging
 import time
 
 from sizebot.lib import paths
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 
 logger = logging.getLogger("sizebot")
 

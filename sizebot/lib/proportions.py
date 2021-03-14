@@ -8,7 +8,7 @@ from discord import Embed
 from sizebot import __version__
 from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import defaultheight, defaultweight, defaultterminalvelocity, defaultliftstrength, falllimit
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe

@@ -1,6 +1,6 @@
 import random
 
-from sizebot.lib.decimal import roundFraction
+from sizebot.lib.digidecimal import roundFraction
 
 
 def isGood(n):

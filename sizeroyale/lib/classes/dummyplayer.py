@@ -1,5 +1,5 @@
 from sizeroyale.lib.classes.player import Player
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV
 
 

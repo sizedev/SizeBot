@@ -9,7 +9,7 @@ import arrow
 
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import ed, ing
 from sizebot.lib.proportions import PersonStats
 from sizebot.lib.utils import prettyTimeDelta

@@ -1,5 +1,3 @@
-import asyncio
-
 from decimal import Decimal
 
 from sizebot.lib import units

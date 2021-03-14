@@ -9,7 +9,7 @@ from typing import Tuple
 
 import sizebot.data
 from sizebot.lib import errors, utils
-from sizebot.lib.decimal import Decimal, DecimalSpec
+from sizebot.lib.digidecimal import Decimal, DecimalSpec
 from sizebot.lib.picker import getRandomCloseUnit
 
 

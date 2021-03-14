@@ -42,7 +42,7 @@ from sizebot import conf
 from sizebot.cogs import thistracker
 from sizebot.lib import userdb, utils
 from sizebot.lib.constants import emojis, ids
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.objs import objects
 from sizebot.lib.units import Rate, Mult, SV, WV, TV
 ```

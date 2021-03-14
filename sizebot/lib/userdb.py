@@ -8,7 +8,7 @@ import arrow
 
 import sizebot.data
 from sizebot.lib import errors, paths
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, Rate as ParseableRate
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import isURL, truncate

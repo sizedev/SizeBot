@@ -9,7 +9,7 @@ import logging
 
 import sizebot.data
 from sizebot.conf import conf
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 
 logger = logging.getLogger("sizebot")
 

@@ -4,9 +4,10 @@ import typing
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
-from sizebot.lib import decimal, errors, userdb, nickmanager
+from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import emojis
 from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
 
@@ -107,7 +108,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasefoot(self, ctx, *, newfoot: typing.Union[decimal.Decimal, SV]):
+    async def setbasefoot(self, ctx, *, newfoot: typing.Union[Decimal, SV]):
         """Set a custom foot length."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)

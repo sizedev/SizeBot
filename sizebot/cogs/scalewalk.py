@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from sizebot.conf import conf
 from sizebot.lib import proportions, userdb
-from sizebot.lib.decimal import Decimal
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, DigiContextException, ValueIsZeroException
 from sizebot.lib.loglevels import EGG
