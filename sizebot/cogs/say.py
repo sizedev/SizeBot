@@ -8,6 +8,8 @@ from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV
+from sizebot.lib.errors import UserNotFoundException
+
 
 logger = logging.getLogger("sizebot")
 
@@ -346,7 +348,7 @@ class SayCog(commands.Cog):
             user = userdb.load(ctx.guild.id, ctx.author.id)
             height = user.height
             nick = user.nickname
-        except:
+        except UserNotFoundException:
             height = userdb.defaultheight
             nick = ctx.author.display_name
 
