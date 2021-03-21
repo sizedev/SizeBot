@@ -14,7 +14,7 @@ arrow==0.15.6
 validator-collection==1.4.1
 flask==1.1.2
 pytz==2020.4
-pillow==8.0.1
+pillow==8.1.1
 petname==2.6
 tqdm==4.51.0
 aiohttp_requests==0.1.3
