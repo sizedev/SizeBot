@@ -118,7 +118,10 @@
     {
         "name": "dust mite",
         "dimension": "l",
-        "length": "0.00042"
+        "length": "0.00042",
+        "aliases": [
+            "mite"
+        ]
     },
     {
         "name": "grain of sand",
