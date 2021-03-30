@@ -154,5 +154,6 @@ class WeirdCog(commands.Cog):
         else:
             await ctx.send("Math failed.")
 
+
 def setup(bot):
     bot.add_cog(WeirdCog(bot))
