@@ -1,25 +1,53 @@
 {
-    "Wide Skyscraper": {
+    "Bridges": {
+        "akashi-kaikyō-bridge": 283,
+        "chaotianmen-bridge": 160,
+        "forth-bridge": 100,
+        "golden-gate-bridge": 230,
+        "millau-viaduct": 421,
+        "rialto-bridge": 17,
+        "russky-bridge": 306,
+        "sydney-harbour-bridge": 129,
+        "tower-bridge": 65,
+        "trajan's-bridge": 40
+    },
+    "Bus Stop": {
+        "building": 2.4384
+    },
+    "Doorways": {
+        "residential": 2.1082,
+        "garage-door": 2.286,
+        "double-garage-door": 2.286,
+        "small-private-hangar": 3.2004
+    },
+    "Gas Station": {
+        "building": 6.78
+    },
+    "Mailbox": {
+        "building": 1.5544799999999999
+    },
+    "Mobile Home": {
+        "building": 3.048
+    },
+    "Narrow Skyscraper": {
         "building": 1
+    },
+    "Road Markings": {
+        "compact-parking-space": 4.9784,
+        "crosswalk": 8.001000000000001,
+        "line": 8.001000000000001,
+        "broken-line": 15.24,
+        "dotted-line": 11.8872
+    },
+    "Roads": {
+        "four-lane-highway": 27.432,
+        "sidewalk": 7.315200000000001
     },
     "Skyscraper": {
         "building": 1
     },
     "Slender Skyscraper": {
         "building": 1
-    },
-    "Narrow Skyscraper": {
-        "building": 1
-    },
-    "Wind Turbines": {
-        "small": 51.8,
-        "medium": 108.1,
-        "large": 141.7,
-        "extra-large": 190.2
-    },
-    "Roads": {
-        "four-lane-highway": 27.432,
-        "sidewalk": 7.315200000000001
     },
     "Sports Fields": {
         "badminton-court": 13.4,
@@ -36,24 +64,29 @@
         "tennis-court": 23.8,
         "volleyball-court": 21.6
     },
-    "Two-Story Home": {
-        "building": 7.62
-    },
-    "Gas Station": {
-        "building": 6.78
+    "Staircase": {
+        "building": 3.9489888
     },
     "Street Lamps": {
         "residential": 3.6576000000000004,
         "freeway": 15.24
     },
-    "Mobile Home": {
-        "building": 3.048
+    "Tunnels": {
+        "channel-tunnel": 6.23,
+        "crossrail": 5.08,
+        "victoria-line": 3.24
     },
-    "Bus Stop": {
-        "building": 2.4384
+    "Two-Story Home": {
+        "building": 7.62
     },
-    "Mailbox": {
-        "building": 1.5544799999999999
+    "Wide Skyscraper": {
+        "building": 1
+    },
+    "Wind Turbines": {
+        "small": 51.8,
+        "medium": 108.1,
+        "large": 141.7,
+        "extra-large": 190.2
     },
     "2th": {
         "front": 457.20000000000005,
@@ -69,12 +102,18 @@
     "Abysgar": {
         "front": 1.8288000000000002
     },
+    "Acadiel": {
+        "front": 2.5400000000000005
+    },
     "AcidRenamon": {
         "front": 2,
         "back": 2,
         "head": 0.585216,
         "rump": 0.524256,
         "tail": 1.2801600000000002
+    },
+    "Ackart": {
+        "side": 3.048
     },
     "Adake": {
         "front": 2.1336,
@@ -85,6 +124,11 @@
     "Adam Silver-Mane": {
         "anthro": 2.4384,
         "taur": 4.8768
+    },
+    "Adelonda": {
+        "front": 4,
+        "back": 4,
+        "bust": 1.8
     },
     "Adinia": {
         "front": 1.8288000000000002,
@@ -120,8 +164,20 @@
         "rump": 0.62484,
         "dick": 0.28956
     },
+    "Akitu": {
+        "side": 4.572,
+        "front": 4.572
+    },
     "Alana": {
         "front": 2.286
+    },
+    "Alek Dryagan": {
+        "frontHuman": 1.7018,
+        "backHuman": 1.7018,
+        "frontDemi": 19.812,
+        "backDemi": 19.812,
+        "mawHuman": 0.09144000000000001,
+        "mawDemi": 1.15824
     },
     "Alessandra": {
         "front": 320.04
@@ -152,6 +208,9 @@
         "paw": 0.402336,
         "feral": 1.69
     },
+    "Alistair": {
+        "front": 11
+    },
     "Allatia": {
         "front": 1.6510000000000002
     },
@@ -165,6 +224,9 @@
     },
     "Almor": {
         "front": 32
+    },
+    "Alsnapz": {
+        "front": 1.6510000000000002
     },
     "Alydar": {
         "side": 9.144,
@@ -199,6 +261,9 @@
         "front": 1.6764000000000001,
         "back": 1.6764000000000001
     },
+    "Amethyst Jones": {
+        "front": 1.2700000000000002
+    },
     "Anahita": {
         "front": 260
     },
@@ -218,8 +283,9 @@
         "front": 1.8288000000000002,
         "side": 1.8288000000000002
     },
-    "Andy": {
-        "front": 1.8288000000000002
+    "Andy Renard": {
+        "front": 2.5400000000000005,
+        "back": 2.5400000000000005
     },
     "Angel": {
         "front": 2.1844
@@ -247,6 +313,11 @@
     },
     "Arc": {
         "side": 0.0508
+    },
+    "Archinger": {
+        "front": 1.72,
+        "back": 1.72,
+        "cock": 0.179832
     },
     "Archy": {
         "front": 2.1336
@@ -278,6 +349,9 @@
     "Arimphae": {
         "dragon": 7.9248,
         "drake": 2.7432000000000003
+    },
+    "Ariz": {
+        "front": 1.8288000000000002
     },
     "Arlist": {
         "front": 3.048
@@ -341,6 +415,10 @@
     "Ashe": {
         "front": 1.8034000000000001
     },
+    "Asonja Rossa": {
+        "front": 190.5,
+        "back": 190.5
+    },
     "Aspen": {
         "side": 0.8128
     },
@@ -383,6 +461,9 @@
         "wolfFront": 1.8288000000000002,
         "wolfBack": 1.8288000000000002
     },
+    "Azalie Croixland": {
+        "front": 3.2512
+    },
     "Azteck": {
         "front": 1.8,
         "back": 1.8,
@@ -410,6 +491,9 @@
     },
     "Bailey": {
         "front": 1.8288000000000002
+    },
+    "Bailey Belfry": {
+        "front": 1.8542
     },
     "Balbarian": {
         "kneeling": 1.9304000000000001
@@ -451,6 +535,12 @@
         "front": 1.8288000000000002,
         "maw": 0.36941760000000007
     },
+    "Bek'kah Bolger": {
+        "front": 2.5400000000000005
+    },
+    "Benni Desparque": {
+        "front": 1.8796000000000002
+    },
     "Bernard & Wilder": {
         "bernard": 0.7874000000000001,
         "wilder": 1.7272
@@ -472,6 +562,11 @@
         "back": 1.7272,
         "werejackal": 1.905
     },
+    "Blacky": {
+        "side": 4,
+        "maw": 1,
+        "paw": 1
+    },
     "Blair": {
         "side": 3.048
     },
@@ -491,6 +586,9 @@
     },
     "Bolt": {
         "side": 2.7432000000000003
+    },
+    "Bora": {
+        "front": 0.8382000000000001
     },
     "Brawler": {
         "front": 1.8796000000000002
@@ -527,8 +625,22 @@
         "side": 4,
         "back": 4
     },
+    "Candy": {
+        "m&m": 0.013365479999999999,
+        "skittle": 0.0127,
+        "gummy-bear": 0.0508,
+        "lifesaver": 0.023495
+    },
     "Cappu": {
         "front": 1.3462
+    },
+    "Carbon": {
+        "front": 2.2606,
+        "back": 2.2606,
+        "frontGigantamax": 45.72,
+        "backGigantamax": 45.72,
+        "maw": 0.146304,
+        "mawGigantamax": 2.286
     },
     "Carley": {
         "front": 1.8288000000000002
@@ -551,6 +663,9 @@
     "Cassidy": {
         "front": 1.8288000000000002
     },
+    "Cassie Kingston": {
+        "front": 1.5748000000000002
+    },
     "Cat": {
         "front": 1.6764000000000001,
         "back": 1.6764000000000001,
@@ -562,8 +677,8 @@
         "lopunnyBack": 1.524
     },
     "Cat (Gigachu)": {
-        "front": 18.288,
-        "back": 18.288
+        "front": 22.86,
+        "back": 22.86
     },
     "Caylex": {
         "front": 2.032,
@@ -592,6 +707,9 @@
     "Chauncey (Chantz)": {
         "front": 4.2164
     },
+    "Chee": {
+        "front": 1.75
+    },
     "Chez": {
         "front": 2.3622,
         "side": 2.3622
@@ -607,6 +725,10 @@
         "front": 1.8288000000000002,
         "side": 1.8288000000000002
     },
+    "Chyr": {
+        "front": 1.7526000000000002,
+        "back": 1.7526000000000002
+    },
     "Cibus": {
         "side": 1.8288000000000002
     },
@@ -616,6 +738,11 @@
         "frontNsfw": 1.8288000000000002,
         "backNsfw": 1.8288000000000002,
         "dick": 0.5224272
+    },
+    "Cindy": {
+        "front": 1.524,
+        "frontDressed": 1.524,
+        "back": 1.524
     },
     "Citrine": {
         "front": 0.9144000000000001
@@ -647,6 +774,18 @@
     "Colin T.": {
         "front": 1.8796
     },
+    "Colton": {
+        "front": 2.7432000000000003
+    },
+    "Comet": {
+        "front": 1.905
+    },
+    "Cookie": {
+        "front": 160934.4
+    },
+    "Cookiecat": {
+        "front": 2.1082
+    },
     "Cordite": {
         "anthro": 1.9558000000000002,
         "feral": 0.6096
@@ -676,6 +815,11 @@
         "back": 2.2974554,
         "frontBusiness": 2.2974554,
         "frontCasual": 2.2974554
+    },
+    "Daiki": {
+        "anthro": 1.778,
+        "feral": 60.96,
+        "feralHead": 52.1208
     },
     "Daimos": {
         "front": 1.8288000000000002
@@ -716,6 +860,9 @@
         "front": 1.7526000000000002,
         "back": 1.7526000000000002
     },
+    "Dawnheart": {
+        "front": 4.2672
+    },
     "Dayza": {
         "front": 2.3114,
         "side": 2.3114,
@@ -730,10 +877,19 @@
         "frontDressed": 2.8956,
         "backDressed": 2.8956
     },
+    "Deam Nitrel": {
+        "front": 2.4892
+    },
     "Deathy": {
         "front": 1.8288000000000002,
         "side": 1.8288000000000002,
         "back": 1.8288000000000002
+    },
+    "Dee": {
+        "front": 30.48,
+        "back": 30.48,
+        "foot": 5.922264,
+        "hoof": 6.278880000000001
     },
     "Deerpuff": {
         "standing": 1.7526000000000002,
@@ -792,9 +948,15 @@
         "front": 1.8288000000000002,
         "back": 1.8288000000000002
     },
+    "Doodle": {
+        "front": 182.88
+    },
     "Dr. Clay": {
         "front": 1.92,
         "frontClothed": 1.92
+    },
+    "Dr. Kaizo Inazuma": {
+        "front": 2.2
     },
     "Draekon Sylviar": {
         "front": 4.53,
@@ -857,6 +1019,9 @@
     "Edrax": {
         "front": 2.1336
     },
+    "Ehanu Rehu": {
+        "front": 6
+    },
     "Eikthynir": {
         "front": 2.4384,
         "back": 2.4384,
@@ -868,6 +1033,11 @@
         "back": 2,
         "frontDressed": 2,
         "genitals": 0.594000594000594
+    },
+    "Eleanor": {
+        "front": 2.5400000000000005,
+        "back": 2.5400000000000005,
+        "head": 0.7985760000000001
     },
     "Elijah": {
         "front": 1.65,
@@ -927,6 +1097,9 @@
         "front": 2.4384,
         "sideStepping": 2.4384
     },
+    "Erdno": {
+        "front": 1.7018
+    },
     "Erestrebah": {
         "front": 2,
         "back": 2
@@ -941,6 +1114,9 @@
         "tongue": 2.4384,
         "dick": 3.2004,
         "dickVertical": 5.15112
+    },
+    "Essynkardi": {
+        "front": 2.5908
     },
     "Evander": {
         "side": 1.8288000000000002
@@ -967,6 +1143,14 @@
     },
     "Fang": {
         "side": 2.7432000000000003
+    },
+    "Farzian": {
+        "front": 1.8288000000000002
+    },
+    "Fawn": {
+        "front": 1.6510000000000002,
+        "back": 1.6510000000000002,
+        "hoof": 0.44196
     },
     "Fei": {
         "front": 1.75
@@ -1003,7 +1187,8 @@
         "side": 30
     },
     "Flamm": {
-        "front": 2.1336
+        "front": 2.8956,
+        "buff": 2.8956
     },
     "Fleta": {
         "front": 0.05,
@@ -1032,9 +1217,20 @@
         "back": 1.524,
         "foot": 0.6522720000000001
     },
+    "Fox": {
+        "front": 2.1336,
+        "back": 2.1336,
+        "head": 0.59436,
+        "dick": 0.405384,
+        "foot": 0.3048,
+        "paw": 0.280416
+    },
     "Frifna": {
         "anthro": 2.8956,
         "feral": 4.927600000000001
+    },
+    "Froimar": {
+        "side": 15.24
     },
     "Fruity": {
         "front": 1.666,
@@ -1057,6 +1253,12 @@
         "frontAlt1": 2,
         "frontAlt2": 2
     },
+    "Galeboomer": {
+        "front": 2.4384,
+        "back": 2.4384,
+        "frontAlt": 2.4384,
+        "maw": 0.36576000000000003
+    },
     "Gault": {
         "front": 1.778
     },
@@ -1068,6 +1270,12 @@
         "front": 1.8288000000000002,
         "back": 1.8288000000000002,
         "kneeling": 1.2192
+    },
+    "Gen": {
+        "frontHuman": 1.5748000000000002,
+        "backHuman": 1.5748000000000002,
+        "frontDemi": 1.5748000000000002,
+        "backDemi": 1.5748000000000002
     },
     "Gene Zeta": {
         "front": 1.8288000000000002
@@ -1083,12 +1291,19 @@
         "side": 2
     },
     "Gin": {
-        "front": 1.8288000000000002,
-        "foot": 0.4303058823529412,
-        "sole": 0.41563636363636364
+        "front": 4.0132,
+        "mouth": 1.3112496000000002,
+        "hand": 1.04799384,
+        "foot": 0.9423698823529413,
+        "sole": 0.9102436363636363
     },
     "Glade": {
         "front": 1.778
+    },
+    "Gladi": {
+        "front": 1.7,
+        "back": 1.7,
+        "feral": 2.05
     },
     "Glint": {
         "anthroFront": 2.7432000000000003,
@@ -1125,6 +1340,9 @@
         "back": 4.8768,
         "hunched": 2.9718
     },
+    "Grockle": {
+        "front": 4.572
+    },
     "Grottos": {
         "anthro": 3.2766,
         "feral": 6.2738
@@ -1155,8 +1373,21 @@
         "front": 1.8288000000000002,
         "frontNsfw": 1.8288000000000002
     },
+    "Haloren": {
+        "side": 2.2606,
+        "frontPaw": 0.719328,
+        "hindPaw": 0.9692640000000001,
+        "maw": 1.53924,
+        "dick": 0.88392
+    },
     "Hanzo": {
         "front": 1.8288000000000002
+    },
+    "Harthos": {
+        "front": 349.91040000000004
+    },
+    "Haruka": {
+        "front": 1.7272
     },
     "Hasani": {
         "front": 1.8542,
@@ -1174,6 +1405,10 @@
     },
     "Hector": {
         "front": 1.8288000000000002
+    },
+    "Helen Arri": {
+        "front": 2.3368,
+        "back": 2.3368
     },
     "Hildegard": {
         "front": 1.7018,
@@ -1205,6 +1440,12 @@
         "front": 4.572,
         "dick": 1.40208
     },
+    "Huckle": {
+        "front": 4.8768,
+        "back": 4.8768,
+        "laughing": 1.143,
+        "angry": 1.2649200000000003
+    },
     "Hugo Sigil": {
         "front": 1.8288000000000002,
         "back": 1.8288000000000002,
@@ -1227,6 +1468,9 @@
         "normal": 1.3716000000000002,
         "smol": 0.017907
     },
+    "Hypatia": {
+        "front": 4.572
+    },
     "Ian Corvid": {
         "front": 2.1336,
         "back": 2.1336,
@@ -1236,6 +1480,10 @@
     "Icey": {
         "front": 1.4986000000000002,
         "back": 1.4986000000000002
+    },
+    "Icky": {
+        "front": 1.9812,
+        "back": 1.9812
     },
     "Icowom Lee": {
         "front": 2.3,
@@ -1325,8 +1573,18 @@
     "Jack": {
         "front": 1.8288000000000002
     },
+    "Jade": {
+        "front": 1.7,
+        "back": 1.7,
+        "hand": 0.24,
+        "foot": 0.263,
+        "dick": 0.47
+    },
     "Jagaz Soulbreaker": {
         "front": 2
+    },
+    "Jai": {
+        "front": 1.9812
     },
     "Jaipur": {
         "front": 1.8288000000000002,
@@ -1337,6 +1595,9 @@
     },
     "Jamesy": {
         "front": 1.8796000000000002
+    },
+    "Jamie": {
+        "front": 1.778
     },
     "Jamie Larsen": {
         "front": 1.8288000000000002,
@@ -1352,13 +1613,6 @@
     },
     "Jax": {
         "back": 1.778
-    },
-    "Jay": {
-        "front": 1.8796000000000002,
-        "back": 1.8796000000000002,
-        "clothed": 1.8796000000000002,
-        "head": 0.5401056000000001,
-        "sizeRay": 0.4056888
     },
     "Jay Direwolf": {
         "front": 4.572
@@ -1407,6 +1661,13 @@
     },
     "Joey": {
         "front": 2.159
+    },
+    "Joey (Raccoon)": {
+        "front": 1.3462
+    },
+    "Joey McDonald": {
+        "front": 1.2192,
+        "back": 1.2192
     },
     "Joraxian": {
         "female": 26.15,
@@ -1477,6 +1738,9 @@
         "genitals": 1.29,
         "maw": 1.73
     },
+    "Kaizer": {
+        "front": 4.572
+    },
     "Kalista": {
         "front": 2,
         "back": 2
@@ -1499,6 +1763,14 @@
         "side": 2,
         "front": 2
     },
+    "Kass Lockheed": {
+        "front": 3.81,
+        "back": 3.81,
+        "dick": 0.950976,
+        "head": 0.7924800000000001,
+        "bleh": 0.8686800000000001,
+        "smug": 0.8686800000000001
+    },
     "Kassy": {
         "side": 1.7018,
         "front": 1.7018,
@@ -1516,6 +1788,9 @@
     "Kaunan": {
         "front": 1.8288000000000002
     },
+    "Kavus Kazian": {
+        "side": 2.159
+    },
     "Kayda": {
         "front": 8.5344,
         "back": 8.5344,
@@ -1525,12 +1800,23 @@
         "front": 1.8288000000000002,
         "frontWingless": 1.8288000000000002
     },
+    "Kayne Ein": {
+        "front": 1.8796000000000002
+    },
     "Kayroo": {
         "front": 1.8288000000000002,
         "foot": 1.8288000000000002
     },
     "Kee": {
+        "anthro": 1.7272,
         "taur": 3.3528000000000002
+    },
+    "Keegan": {
+        "front": 1.9558000000000002,
+        "side": 1.9558000000000002,
+        "back": 1.9558000000000002,
+        "frontSfw": 1.9558000000000002,
+        "beans": 0.56388
     },
     "Keireer": {
         "front": 1.6256
@@ -1572,14 +1858,25 @@
     "Kiki": {
         "front": 1.6
     },
+    "Kimberly Tilson": {
+        "front": 1.0668,
+        "back": 1.0668
+    },
     "Kimiko": {
         "side": 1.8288000000000002
+    },
+    "Kimmy": {
+        "front": 1.71
     },
     "King": {
         "back": 1.8288000000000002
     },
     "KingDead": {
         "front": 1.9558000000000002
+    },
+    "Kingsley": {
+        "front": 3.5814000000000004,
+        "frontNude": 3.5814000000000004
     },
     "Kira": {
         "front": 1.6002,
@@ -1652,6 +1949,9 @@
     "Kosho": {
         "front": 1.8288000000000002
     },
+    "Kotetsu Redwood": {
+        "front": 1.5748000000000002
+    },
     "Kremm": {
         "side": 3.048,
         "gut": 1.76784,
@@ -1691,6 +1991,9 @@
     "Ky'owin": {
         "front": 1.8288000000000002
     },
+    "Kyera": {
+        "front": 1.524
+    },
     "Kyle": {
         "front": 1.8288000000000002
     },
@@ -1722,7 +2025,9 @@
         "back": 0.762,
         "cumming": 0.762,
         "dickFlaccid": 0.7909560000000001,
-        "dickErect": 0.7190232000000001
+        "dickErect": 0.7190232000000001,
+        "dragon": 12.192,
+        "taur": 9.144
     },
     "Lee": {
         "front": 2.3876,
@@ -1758,9 +2063,18 @@
         "front": 1.9558000000000002,
         "back": 1.9558000000000002
     },
+    "Lexor": {
+        "front": 3.5052000000000003,
+        "back": 3.5052000000000003,
+        "maw": 0.9144000000000001,
+        "dick": 0.789432
+    },
     "Liam Einarr": {
         "front": 1.5,
         "back": 1.5
+    },
+    "Lilith": {
+        "front": 2.4
     },
     "Lilith Zott": {
         "front": 1.6764000000000001,
@@ -1780,11 +2094,35 @@
         "pawDigi": 0.48768000000000006,
         "pawPlanti": 0.42672
     },
+    "Lisa": {
+        "front": 1.8288000000000002,
+        "back": 1.8288000000000002,
+        "maw": 0.24688800000000002,
+        "paw": 0.27432,
+        "caribousune": 2.1844,
+        "frontCaribousune": 2.1844,
+        "sideCaribousune": 2.1844,
+        "backCaribousune": 2.1844,
+        "caribou": 2.1844,
+        "frontCaribou": 2.1844,
+        "sideCaribou": 2.1844,
+        "backCaribou": 2.1844,
+        "mawCaribou": 0.44196,
+        "mawCaribousune": 0.44196,
+        "pawCaribousune": 0.49072800000000005
+    },
     "Logan Grey": {
-        "front": 1.7272,
-        "frontAlt": 1.7272,
-        "back": 1.7272,
-        "dick": 0.43799760000000004
+        "front": 1.7018,
+        "back": 1.7018,
+        "frontSfw": 1.7018,
+        "backSfw": 1.7018,
+        "hands": 0.256032,
+        "paws": 0.219456,
+        "cock": 0.44196,
+        "cockAlt": 0.43799760000000004
+    },
+    "Lotherakon": {
+        "side": 3.048
     },
     "Louise": {
         "side": 1.524
@@ -1856,8 +2194,19 @@
     "Maelstrom": {
         "front": 1.8288000000000002
     },
+    "Mag": {
+        "side": 40819200,
+        "wing": 24746640,
+        "dick": 22960800,
+        "ass": 16965480,
+        "head": 14031600.000000002,
+        "maw": 20664720
+    },
     "Magdalene": {
         "front": 1.5493999999999999
+    },
+    "Magnum": {
+        "front": 1.7272
     },
     "Maia": {
         "front": 1.016,
@@ -1875,6 +2224,10 @@
     },
     "Mal": {
         "front": 1.2192
+    },
+    "Mal (Dragon)": {
+        "front": 3.048,
+        "back": 3.048
     },
     "Malfaren": {
         "side": 4.173793548387097,
@@ -1895,6 +2248,9 @@
         "front": 1.8288000000000002,
         "side": 1.8288000000000002,
         "back": 1.8288000000000002
+    },
+    "Malithee": {
+        "front": 2.4384
     },
     "Mallow": {
         "front": 0.08889999999999999,
@@ -1917,6 +2273,9 @@
         "front": 2.1336,
         "back": 2.1336
     },
+    "Marble": {
+        "front": 4.572
+    },
     "March": {
         "front": 2.1336,
         "foot": 0.27432
@@ -1936,6 +2295,9 @@
     "Martin": {
         "front": 1.69
     },
+    "Maru": {
+        "front": 2.1336
+    },
     "Matvei": {
         "front": 1.85
     },
@@ -1944,15 +2306,35 @@
         "side": 1.0414,
         "back": 1.0414
     },
+    "Maverick": {
+        "front": 1.8288000000000002,
+        "back": 1.8288000000000002
+    },
     "Max Calore": {
         "front": 1.905,
         "back": 1.905
+    },
+    "Max Kobold": {
+        "frontImp": 0.5841999999999999,
+        "backImp": 0.5841999999999999,
+        "frontDemi": 1.7526000000000002,
+        "backDemi": 1.7526000000000002,
+        "handImp": 0.13716,
+        "pawImp": 0.140208,
+        "handDemi": 0.24384000000000003,
+        "pawDemi": 0.33528,
+        "headImp": 0.405384,
+        "mawImp": 0.22860000000000003,
+        "mawDemi": 0.128016
     },
     "Maxene Sita": {
         "fox": 1.6764000000000001,
         "foxLaying": 0.5181600000000001,
         "kitsune": 3.048,
         "hellhound": 3.048
+    },
+    "Maxine": {
+        "front": 1.524
     },
     "Maxwell": {
         "front": 1.8
@@ -1987,9 +2369,15 @@
     "Mel": {
         "front": 1.8288000000000002
     },
+    "Mellvi": {
+        "front": 0.9144000000000001
+    },
     "Melody": {
         "side": 4.773168,
         "sideOutfit": 4.773168
+    },
+    "Melwa": {
+        "front": 1.8288000000000002
     },
     "Memory": {
         "front": 1.6256,
@@ -2006,6 +2394,9 @@
     "Mesmyriza": {
         "front": 1.8288000000000002,
         "foot": 0.256032
+    },
+    "Mevolas Rubenido": {
+        "front": 1.6764000000000001
     },
     "Michelle": {
         "side": 0.5334
@@ -2026,6 +2417,14 @@
     },
     "Mika": {
         "front": 1.7018
+    },
+    "Mika Valentine": {
+        "side": 2.4892
+    },
+    "Miles Thestia": {
+        "front": 3.048,
+        "back": 3.048,
+        "frontNsfw": 3.048
     },
     "Milo": {
         "side": 2.7432000000000003
@@ -2049,9 +2448,15 @@
     "Mirova": {
         "front": 1.8288000000000002
     },
+    "Mitsy": {
+        "front": 1.6510000000000002
+    },
     "Mocha Aura": {
         "front": 2.2606,
         "back": 2.2606
+    },
+    "Monty": {
+        "front": 1.4986000000000002
     },
     "Moody": {
         "front": 1.7
@@ -2063,6 +2468,10 @@
         "paws": 0.298704,
         "mouth": 0.146304,
         "dick": 0.445008
+    },
+    "Moonlight Rose": {
+        "normal": 1.8034000000000001,
+        "demon": 5000
     },
     "Morrigan": {
         "front": 2.8448
@@ -2076,10 +2485,22 @@
         "front": 1.8288000000000002,
         "back": 1.8288000000000002
     },
+    "Moxie Nova": {
+        "front": 2.286
+    },
+    "Mukiro": {
+        "front": 1.8288000000000002
+    },
+    "Mutsuju Koizaemon": {
+        "front": 4.8768
+    },
     "Myra Rue Delore": {
         "front": 1.8288000000000002,
         "back": 1.8288000000000002,
         "frontDressed": 1.8288000000000002
+    },
+    "Myu-myu": {
+        "front": 2.4384
     },
     "Nakata": {
         "front": 2.1336
@@ -2087,6 +2508,9 @@
     "Naldara": {
         "front": 1.2700000000000002,
         "naga": 7.010400000000001
+    },
+    "Namori Kurogawa": {
+        "front": 2.5400000000000005
     },
     "Napalm": {
         "front": 2,
@@ -2126,6 +2550,9 @@
         "front": 2.1336,
         "back": 2.1336,
         "wing": 0.813816
+    },
+    "Neesha": {
+        "front": 2.6
     },
     "Neil": {
         "front": 1.8542
@@ -2211,7 +2638,13 @@
     "North": {
         "body": 2.2428
     },
+    "Noryu": {
+        "front": 1.905
+    },
     "Nova": {
+        "front": 1.8288000000000002
+    },
+    "Numin": {
         "front": 1.8288000000000002
     },
     "Nyanuxk": {
@@ -2219,6 +2652,10 @@
         "side": 2.4,
         "back": 2.4,
         "foot": 0.52
+    },
+    "October": {
+        "front": 1.6510000000000002,
+        "frontNsfw": 1.6510000000000002
     },
     "Odi Lunar": {
         "front": 1.8288000000000002
@@ -2250,6 +2687,13 @@
         "front": 1.4986000000000002,
         "frontAlt": 1.4986000000000002
     },
+    "Orion": {
+        "front": 0.7366,
+        "paw": 0.15849600000000003
+    },
+    "Orvan Rabbit": {
+        "front": 1.2192
+    },
     "Osiris": {
         "side": 640.08
     },
@@ -2272,6 +2716,7 @@
         "front": 1.8288000000000002,
         "back": 1.8288000000000002,
         "beans": 0.22860000000000003,
+        "collar": 0.094488,
         "skirt": 1.8288000000000002,
         "hoodie": 1.8288000000000002,
         "casual": 1.8288000000000002
@@ -2281,6 +2726,9 @@
     },
     "Pazuzu": {
         "front": 300
+    },
+    "Penny": {
+        "front": 0.9906
     },
     "Pepper": {
         "front": 2.7432000000000003,
@@ -2300,6 +2748,9 @@
     },
     "Person": {
         "front": 1.524
+    },
+    "Phirae": {
+        "front": 1.6510000000000002
     },
     "Pi": {
         "solgooleo": 4
@@ -2331,6 +2782,9 @@
         "front": 2.1336,
         "back": 2.1336
     },
+    "Pixel": {
+        "front": 2.032
+    },
     "Pixie": {
         "front": 1.3716000000000002
     },
@@ -2353,6 +2807,9 @@
     "Porter": {
         "front": 1.8288000000000002,
         "frontRobes": 1.8288000000000002
+    },
+    "Powder": {
+        "front": 0.07619999999999999
     },
     "Pretzel": {
         "upright": 2.1336,
@@ -2393,6 +2850,9 @@
     "Puru": {
         "front": 0.7112
     },
+    "Pyotr": {
+        "front": 57.302400000000006
+    },
     "Pyxaron": {
         "side": 3.3528000000000002
     },
@@ -2405,6 +2865,10 @@
     },
     "Quatzi": {
         "front": 1.6764000000000001
+    },
+    "Quicksilver Ayukoti": {
+        "side": 1.8542,
+        "sitting": 1.8796000000000002
     },
     "Quilly": {
         "front": 1.8288000000000002
@@ -2420,6 +2884,7 @@
     },
     "Rai": {
         "front": 3.3528000000000002,
+        "frontDressed": 3.3528000000000002,
         "side": 3.3528000000000002,
         "back": 3.3528000000000002,
         "feral": 3.3528000000000002,
@@ -2445,6 +2910,9 @@
     "Rakka": {
         "front": 23
     },
+    "Ramey": {
+        "front": 1.8288000000000002
+    },
     "Ramona": {
         "side": 1.8288000000000002
     },
@@ -2466,6 +2934,10 @@
         "frontWerewolf": 2.19456,
         "backWerewolf": 2.19456
     },
+    "Raxinath": {
+        "front": 2.4384,
+        "back": 2.4384
+    },
     "Raylldo": {
         "side": 13,
         "leaping": 12.3,
@@ -2486,6 +2958,10 @@
         "front": 2.1844,
         "dick": 0.42672
     },
+    "Rebecca Pawlson": {
+        "front": 2.032,
+        "back": 2.032
+    },
     "Reece Silvermane": {
         "front": 2.1336
     },
@@ -2502,7 +2978,6 @@
     "Remmyzilla": {
         "front": 1.9304000000000001,
         "back": 1.9304000000000001,
-        "frontFancy": 1.9304000000000001,
         "paw": 0.527304,
         "maw": 0.527304
     },
@@ -2518,6 +2993,9 @@
         "frontPosing": 1.8288000000000002,
         "back": 1.8288000000000002
     },
+    "Renholder": {
+        "front": 2.2098
+    },
     "Renée": {
         "front": 0.15239999999999998
     },
@@ -2525,6 +3003,12 @@
         "front": 1.2192,
         "back": 1.2192,
         "drake": 9.144
+    },
+    "Rezukii": {
+        "side": 1.8288000000000002
+    },
+    "Rhett": {
+        "front": 1.4986000000000002
     },
     "Rhys": {
         "front": 5.486400000000001
@@ -2587,8 +3071,16 @@
     "Rodger": {
         "side": 1.3462
     },
+    "Rodney": {
+        "front": 1.1176,
+        "frontDressed": 0.88392
+    },
     "Rogue": {
         "front": 1.8288000000000002
+    },
+    "Rojas": {
+        "front": 4.572,
+        "back": 4.572
     },
     "Roku": {
         "front": 2.1336
@@ -2608,14 +3100,22 @@
     },
     "Rose": {
         "front": 2,
+        "frontSporty": 2,
         "frontAlt": 1.6,
         "plush": 2
     },
     "Rosewen": {
         "kneeling": 1.016
     },
+    "Rover": {
+        "front": 3.9624,
+        "back": 3.9624
+    },
     "Rovoska": {
         "side": 3.4
+    },
+    "Roxanne Voltaire": {
+        "front": 1.524
     },
     "Roxi": {
         "sideFront": 1.5748000000000002,
@@ -2626,6 +3126,9 @@
     },
     "Roy": {
         "front": 1.6764000000000001
+    },
+    "Rubus": {
+        "front": 1.74
     },
     "Rufran": {
         "front": 0.762,
@@ -2642,11 +3145,16 @@
     "Rupert": {
         "front": 1.5493999999999999
     },
+    "Rymel": {
+        "side": 2.7432000000000003,
+        "maw": 2.4
+    },
     "Ryoko": {
         "front": 50
     },
     "Ryth": {
-        "front": 1.2192
+        "front": 1.2192,
+        "goia": 3.6576000000000004
     },
     "Sabah": {
         "front": 1.778
@@ -2668,6 +3176,9 @@
         "wingDorsal": 4.85,
         "wingVentral": 4.85
     },
+    "Saelria": {
+        "front": 0.2286
+    },
     "Saian": {
         "side": 0.9144000000000001,
         "maw": 0.8686800000000001
@@ -2677,6 +3188,9 @@
     },
     "Sally": {
         "front": 2.7432000000000003
+    },
+    "Sam": {
+        "front": 1.8288000000000002
     },
     "Sam Evans": {
         "front": 1.6500000000000001,
@@ -2703,6 +3217,9 @@
     },
     "Samuel": {
         "front": 1.8288000000000002
+    },
+    "Sandy": {
+        "front": 0.6096
     },
     "Sanya": {
         "side": 2
@@ -2733,10 +3250,19 @@
     "Sax": {
         "front": 1.8288000000000002
     },
+    "Sayko": {
+        "side": 10.668000000000001,
+        "head": 4.8768,
+        "forepaw": 2.39268,
+        "hindpaw": 2.68224
+    },
     "Scales": {
         "taurFront": 1.8288000000000002,
         "taurBack": 1.8288000000000002,
         "anthro": 1.0668
+    },
+    "Scaly": {
+        "front": 3.5306
     },
     "Scoop": {
         "front": 1.3462,
@@ -2806,6 +3332,9 @@
         "side": 16.764,
         "flying": 44.196000000000005
     },
+    "Shadow (Rat)": {
+        "front": 10.972800000000001
+    },
     "Shadow Blade": {
         "side": 1.8034000000000001
     },
@@ -2829,7 +3358,8 @@
         "side": 2.5400000000000005,
         "back": 2.5400000000000005,
         "angled": 2.447882666666667,
-        "genitals": 0.67056
+        "genitals": 0.67056,
+        "taur": 3.2004
     },
     "Sheila": {
         "laying": 1.3208
@@ -2859,8 +3389,18 @@
     "Shiriko": {
         "front": 1.2192
     },
+    "Shiron": {
+        "front": 2,
+        "back": 2,
+        "hand": 0.292608,
+        "foot": 0.4462272
+    },
     "Shiroryu": {
         "front": 1.8288000000000002
+    },
+    "Shirou": {
+        "front": 1.8034000000000001,
+        "back": 1.8034000000000001
     },
     "Shock Diamond": {
         "front": 22,
@@ -2868,6 +3408,9 @@
     },
     "Shui": {
         "front": 1609.344
+    },
+    "Sigrun": {
+        "front": 1.8288000000000002
     },
     "Sigvald": {
         "femSfw": 2.4384,
@@ -2881,6 +3424,9 @@
     },
     "Silver": {
         "front": 2.1336
+    },
+    "Silvy": {
+        "front": 1.905
     },
     "Sini": {
         "front": 2.1336,
@@ -2900,6 +3446,10 @@
     },
     "Skoll": {
         "front": 2.3368
+    },
+    "Skyress": {
+        "front": 1.85928,
+        "maw": 0.3048
     },
     "Sleekit": {
         "front": 1.8288000000000002
@@ -2936,6 +3486,13 @@
     "Sol": {
         "front": 1.8796000000000002
     },
+    "Solarus": {
+        "front": 2.1336,
+        "back": 2.1336
+    },
+    "Solas Sharpsman": {
+        "front": 5.588
+    },
     "Solex Draconov": {
         "front": 2.2606
     },
@@ -2962,11 +3519,29 @@
         "frontNsfw": 1.7526000000000002,
         "back": 1.7526000000000002
     },
+    "Squeaks": {
+        "front": 1.8796000000000002
+    },
+    "Squeaks (Mouse)": {
+        "front": 0.0254
+    },
+    "Stagglas": {
+        "front": 1.8288000000000002
+    },
+    "Star": {
+        "front": 1.2446
+    },
+    "Starra": {
+        "front": 1.6256
+    },
     "Starry Aqua": {
         "front": 2.7432000000000003,
         "back": 2.7432000000000003,
         "hand": 0.32040576,
         "foot": 0.493776
+    },
+    "Sterling": {
+        "front": 2.5400000000000005
     },
     "Sthara": {
         "female": 21.6,
@@ -2984,7 +3559,8 @@
         "front": 2
     },
     "Sven the Kaiju": {
-        "front": 6.096
+        "front": 6.096,
+        "mouth": 0.56388
     },
     "Sweet Bit": {
         "front": 0.9144000000000001
@@ -3092,6 +3668,9 @@
     "Sylen": {
         "back": 1.8288000000000002
     },
+    "Tabitha": {
+        "front": 2.7432000000000003
+    },
     "Tahajin": {
         "were": 7.7724,
         "aquatic": 1.9304000000000001,
@@ -3145,6 +3724,9 @@
     "Tanio": {
         "front": 1.8288000000000002
     },
+    "Tanya": {
+        "front": 2.5400000000000005
+    },
     "Tarn": {
         "front": 2.0066,
         "back": 2.0066,
@@ -3152,8 +3734,25 @@
         "paw": 0.54864,
         "tongue": 0.29565600000000003
     },
+    "Tatyana Milewska": {
+        "front": 2.1844
+    },
+    "Tawendeh": {
+        "front": 2.4384,
+        "frontClothed": 2.4384,
+        "back": 2.4384
+    },
+    "Taylor": {
+        "front": 1.8796000000000002
+    },
     "Tayra White": {
         "front": 1.4000000000000001
+    },
+    "Tea Spot": {
+        "fullyEquippedFront": 0.9398000000000001,
+        "fullyEquippedBack": 0.9398000000000001,
+        "dailyWear": 0.9398000000000001,
+        "maidWork": 0.9398000000000001
     },
     "Teal": {
         "front": 2.75,
@@ -3170,8 +3769,15 @@
     "Teeku Love-Shack": {
         "front": 1.55
     },
+    "Tef": {
+        "front": 80,
+        "back": 80
+    },
     "Tegon": {
         "front": 1.8288000000000002
+    },
+    "Teh": {
+        "front": 1.6764000000000001
     },
     "Tempest": {
         "front": 2.3368
@@ -3193,6 +3799,12 @@
         "side": 1.8288000000000002,
         "back": 1.8288000000000002,
         "dick": 0.3803904
+    },
+    "Teshy": {
+        "normal": 1.8288000000000002,
+        "monsterFront": 3.6576000000000004,
+        "monsterSide": 3.6576000000000004,
+        "monsterBack": 3.6576000000000004
     },
     "Tezwa": {
         "front": 2.794,
@@ -3219,12 +3831,26 @@
     "Theresa": {
         "front": 4.2672
     },
+    "Thux-Ei": {
+        "front": 1.7
+    },
     "Tiberius": {
         "front": 2.7432000000000003,
         "back": 2.7432000000000003
     },
+    "Tiffany": {
+        "front": 1.524
+    },
     "Timber": {
         "front": 1.5748000000000002
+    },
+    "Timothy": {
+        "front": 337962.24,
+        "frontSkirt": 337962.24,
+        "frontCoat": 337962.24
+    },
+    "TITAN.S.WULF": {
+        "front": 7.62
     },
     "Tobias": {
         "side": 8
@@ -3236,11 +3862,29 @@
     "Topaz": {
         "front": 1.8288000000000002
     },
+    "Torallia": {
+        "side": 2.4384
+    },
     "Torvid": {
         "side": 2.3
     },
     "Toto": {
         "front": 1.8288000000000002
+    },
+    "Tow": {
+        "front": 1.6
+    },
+    "Trey": {
+        "front": 0.9906
+    },
+    "Tululi": {
+        "front": 0.15239999999999998
+    },
+    "Tux Kusanagi": {
+        "front": 3.1242,
+        "back": 3.1242,
+        "rump": 1.6002,
+        "beak": 0.46939200000000003
     },
     "Ty": {
         "front": 4.5,
@@ -3284,6 +3928,17 @@
     "Umok": {
         "female": 19.3,
         "male": 19.5
+    },
+    "Unmru": {
+        "front": 2.7432000000000003,
+        "side": 2.7432000000000003,
+        "back": 2.7432000000000003,
+        "dick": 0.9144000000000001
+    },
+    "Uzarmazari": {
+        "front": 17.6784,
+        "back": 17.6784,
+        "head": 7.9248
     },
     "Vaelophys Nyx": {
         "front": 1.2700000000000002,
@@ -3342,6 +3997,15 @@
         "backArmored": 5.7912,
         "sword": 3.048
     },
+    "Vera": {
+        "front": 1.778,
+        "back": 1.778,
+        "arcanine": 2.032,
+        "maw": 0.249936,
+        "mawArcanine": 0.29565600000000003,
+        "paw": 0.22860000000000003,
+        "pawprint": 0.15849600000000003
+    },
     "Verin": {
         "front": 2.5146,
         "frontArmored": 2.5146,
@@ -3362,12 +4026,18 @@
     "Vesper": {
         "side": 5
     },
+    "Vex": {
+        "front": 4.7
+    },
     "Vexx": {
         "front": 5.6134,
         "maw": 1.8288000000000002
     },
     "Vial": {
         "front": 1.524
+    },
+    "Vick": {
+        "front": 2.5400000000000005
     },
     "Victoria": {
         "side": 3.2,
@@ -3399,11 +4069,21 @@
         "stomping": 1.8288000000000002,
         "sitting": 1.0450285714285714
     },
+    "Vivian (Ocra Dragon)": {
+        "front": 2.4130000000000003
+    },
     "Vivian Bijoux": {
         "front": 1.6764000000000001
     },
-    "Vix Archaser": {
-        "front": 1.8288000000000002
+    "Vivian Sylveon": {
+        "back": 2.7432000000000003
+    },
+    "Vorrel Harroc": {
+        "front": 156.0576
+    },
+    "Vortex": {
+        "front": 289.56,
+        "maw": 86.86800000000001
     },
     "Voski": {
         "front": 1.72,
@@ -3427,6 +4107,10 @@
     "Weremeep": {
         "front": 2.4384
     },
+    "Wilbur Owen": {
+        "front": 2.0574,
+        "back": 2.0574
+    },
     "Wild": {
         "regular": 2.2098,
         "biggums": 2.5908,
@@ -3442,6 +4126,10 @@
     "Withers": {
         "side": 1.8288000000000002,
         "front": 1.8288000000000002
+    },
+    "Wulver": {
+        "front": 1.8288000000000002,
+        "frontNsfw": 1.8288000000000002
     },
     "Wyvrn Ripsnarl": {
         "front": 2
@@ -3469,6 +4157,13 @@
     "Xeauvok": {
         "side": 2.19456
     },
+    "Xenon": {
+        "front": 1.8288000000000002,
+        "back": 1.8288000000000002,
+        "maw": 0.15849600000000003,
+        "hand": 0.249936,
+        "foot": 0.344424
+    },
     "Xera": {
         "front": 1.8288000000000002,
         "side": 1.8288000000000002,
@@ -3484,6 +4179,11 @@
         "front": 1.8288000000000002,
         "back": 1.8288000000000002,
         "foot": 0.420624
+    },
+    "Xoltol": {
+        "front": 2.1844,
+        "side": 2.1844,
+        "hand": 0.762
     },
     "Xuna": {
         "front": 3.6576000000000004,
@@ -3507,6 +4207,10 @@
         "frontAlt": 1.8288000000000002,
         "side": 1.8288000000000002
     },
+    "Yuko": {
+        "front": 2.286,
+        "frontClothed": 2.286
+    },
     "Yumi Akiyama": {
         "front": 1.4986000000000002,
         "back": 1.4986000000000002
@@ -3515,9 +4219,22 @@
         "standing": 1.8288000000000002,
         "laying": 0.9144000000000001
     },
+    "Zakail Sudekai": {
+        "front": 1.7526000000000002,
+        "maw": 0.41148000000000007
+    },
     "Zander Rose": {
         "front": 0.381,
         "back": 0.381
+    },
+    "Zane": {
+        "front": 2.2606,
+        "back": 1.53924,
+        "werewolf": 3.3528000000000002,
+        "foot": 0.445008,
+        "footFront": 0.23896320000000001,
+        "dick": 0.59436,
+        "dickWerewolf": 1.1490960000000001
     },
     "Zara": {
         "side": 3.048
@@ -3534,6 +4251,9 @@
     "Zenari": {
         "female": 29.9,
         "male": 27.7
+    },
+    "Zeph the Tiger God": {
+        "front": 3.7592000000000003
     },
     "Zephiro": {
         "front": 1.6002,
@@ -3565,6 +4285,23 @@
     "Zlmos": {
         "front": 99
     },
+    "Zorkaiju": {
+        "front": 99.06,
+        "frontExtended": 99.06,
+        "side": 99.06,
+        "sideExtended": 99.06,
+        "back": 99.06,
+        "backExtended": 99.06,
+        "hand": 17.80032,
+        "handExtended": 18.71472,
+        "foot": 28.956000000000003,
+        "leftArm": 17.9832,
+        "rightArm": 17.9832,
+        "tail": 31.6992,
+        "tailExtended": 31.6992,
+        "tailBottom": 31.6992,
+        "crystal": 8.394192
+    },
     "Zost": {
         "side": 3.048,
         "mawFront": 1.08,
@@ -3572,6 +4309,20 @@
     },
     "Zyas": {
         "front": 1.8288000000000002
+    },
+    "Dinosaurs": {
+        "brachiosaurus": 13,
+        "pterodactyl": 2.3,
+        "stegosaurus": 4.5,
+        "tyrannosaurus": 5.2,
+        "velociraptor": 1.6
+    },
+    "Animals": {
+        "blue-whale": 4.5,
+        "sperm-whale": 3,
+        "dairy-cow": 1.7,
+        "horse": 2.08,
+        "african-elephant": 3.2
     },
     "Chance": {
         "Side": 0.4445,
@@ -3590,28 +4341,13 @@
         "edge": 318000,
         "angled": 8819100
     },
+    "Traveler": {
+        "orb": 14000
+    },
     "Trees": {
         "sycamore-tree": 35,
         "pine-tree": 43,
         "palm-tree": 25
-    },
-    "Dinosaurs": {
-        "brachiosaurus": 13,
-        "pterodactyl": 2.3,
-        "stegosaurus": 4.5,
-        "tyrannosaurus": 5.2,
-        "velociraptor": 1.6
-    },
-    "Animals": {
-        "blue-whale": 4.5,
-        "sperm-whale": 3,
-        "dairy-cow": 1.7,
-        "horse": 2.08,
-        "african-elephant": 3.2
-    },
-    "Human": {
-        "woman1": 1.7018,
-        "man1": 1.8034000000000001
     },
     "Snacks": {
         "pringles-can": 0.23266399999999998
@@ -3642,11 +4378,24 @@
         "quail-egg": 0.02667,
         "ostritch-egg": 0.14986
     },
-    "Candy": {
-        "m&m": 0.013365479999999999,
-        "skittle": 0.0127,
-        "gummy-bear": 0.0508,
-        "lifesaver": 0.023495
+    "Human": {
+        "female": 1.7018,
+        "male": 1.8034000000000001,
+        "hand": 0.18288,
+        "foot": 0.2667
+    },
+    "Mattresses": {
+        "twin": 1.905,
+        "twin-xl": 2.032,
+        "full": 1.905,
+        "queen": 2.032,
+        "king": 2.032,
+        "california-king": 2.1336
+    },
+    "Sofas": {
+        "Two Seat (Front)": 0.762,
+        "Two Seat (Side)": 0.762,
+        "Two Seat (Top)": 0.7746999999999999
     },
     "Burj Khalifa": {
         "building": 829.8
@@ -3715,6 +4464,12 @@
         "Betelgeuse": 1234686260000,
         "VY Canis Majoris": 1976611600000
     },
+    "Land": {
+        "0,-90": 12756000,
+        "0,0": 12756000,
+        "0,180": 12756000,
+        "0,90": 12756000
+    },
     "Planets": {
         "Mercury": 4879000,
         "Venus": 12104000,
@@ -3750,6 +4505,9 @@
         "Miranda": 471600,
         "Triton": 2706800,
         "Charon": 606000
+    },
+    "Famous Places": {
+        "Bermuda Triangle": 1701656.8370467045
     },
     "Countries": {
         "Afghanistan": 1010493.9286560246,
@@ -3994,6 +4752,66 @@
         "Zambia": 1086883.0186403147,
         "Zimbabwe": 750673.8733651662
     },
+    "US Interstates": {
+        "I-10": 662879.3942106421,
+        "I-12": 19601.661536140884,
+        "I-15": 1816556.2052351916,
+        "I-16": 88682.21453954442,
+        "I-17": 196173.201019035,
+        "I-19": 96426.05795676696,
+        "I-20": 347517.6947013905,
+        "I-24": 422558.98468291573,
+        "I-27": 617402.3082503016,
+        "I-29": 1111036.612182809,
+        "I-30": 231405.98002341753,
+        "I-35": 2158534.7689142646,
+        "I-37": 184231.0220610815,
+        "I-39": 489892.86533484043,
+        "I-4": 133860.30238806643,
+        "I-40": 284554.8659969368,
+        "I-43": 228844.0768209733,
+        "I-44": 529117.6640772996,
+        "I-45": 394580.1764593749,
+        "I-49": 251521.75720683142,
+        "I-5": 1841743.6685230015,
+        "I-55": 1320388.2525614214,
+        "I-57": 544229.4386494028,
+        "I-59": 524278.150028191,
+        "I-64": 211843.6849640966,
+        "I-65": 1231049.0138181376,
+        "I-66": 24025.370784500737,
+        "I-68": 15236.945179002872,
+        "I-69": 919351.2585854017,
+        "I-70": 277234.499188129,
+        "I-71": 361487.36346668913,
+        "I-72": 51460.97992201334,
+        "I-73": 97266.49617697322,
+        "I-74": 787056.102051467,
+        "I-75": 2278563.590324183,
+        "I-76": 118573.83898121146,
+        "I-77": 850346.766475037,
+        "I-78": 34308.43505956534,
+        "I-79": 419586.7946081714,
+        "I-8": 34419.884328052016,
+        "I-80": 335341.92972237605,
+        "I-81": 928130.9026841171,
+        "I-82": 132340.54932080585,
+        "I-83": 114410.28676654567,
+        "I-84": 709596.756786839,
+        "I-85": 546086.7051157606,
+        "I-86": 136716.7078032001,
+        "I-87": 472844.76602409093,
+        "I-88": 140816.2124300237,
+        "I-89": 207356.9330399862,
+        "I-90": 930313.3415125563,
+        "I-91": 416438.4476691138,
+        "I-93": 250192.56712266232,
+        "I-94": 632131.6607593653,
+        "I-95": 2284530.2371507674,
+        "I-96": 96262.96337466157,
+        "I-97": 27501.47734637078,
+        "I-99": 96624.23888346303
+    },
     "States": {
         "Alabama": 532965.3777696239,
         "Alaska": 1868373.8543388732,
@@ -4047,6 +4865,43 @@
         "Wisconsin": 534233.1040137928,
         "Wyoming": 450348.1722393462
     },
+    "Straits": {
+        "Bass Strait": 477687.07599560975,
+        "Bering Strait": 211274.1384794921,
+        "Cook Strait": 133569.43807438243,
+        "Dardanelles Strait": 100178.63730052409,
+        "Hudson Strait": 353978.9165560771,
+        "Palk Strait": 166948.86982564948,
+        "Strait of Dover": 222577.01735751258,
+        "Strait of Gibraltar": 55658.19643643095,
+        "Strait of Hormuz": 122431.35146918982,
+        "Strait of Juan de Fuca": 178049.49203886717,
+        "Strait of Messina": 11131.941670965367,
+        "Strait of Otranto": 189202.32829987607,
+        "Sunda Strait": 44527.260899000394,
+        "Taiwan Strait": 411498.3631607854
+    },
+    "Rivers": {
+        "Alabama": 402093.77536960616,
+        "Amazon": 321654.3749335119,
+        "Brazos": 527028.5171901184,
+        "Danube": 598931.4337621646,
+        "Ganges": 997881.3863786167,
+        "Indus": 1324928.6616848952,
+        "Mississippi": 2077320.423469436,
+        "Missouri": 1061247.347409356,
+        "Niger": 1407309.825626704,
+        "Nile": 1625123.3465649856,
+        "Ohio": 417303.9821675314,
+        "Rhine": 593713.8890593982,
+        "Rio Grande": 1343726.718946372,
+        "Seine": 225832.28095087496,
+        "Thames": 51519.0292274607,
+        "Tiber": 227457.74069036526,
+        "Volga": 1388250.6642362578,
+        "Yangtze": 407730.1167946202,
+        "Yellow": 833504.3887224646
+    },
     "Global Cities": {
         "Beijing": 178940.11723688344,
         "Berlin": 37503.65910136853,
@@ -4058,6 +4913,9 @@
         "Paris": 9638.711635935364,
         "Seoul": 30365.92222630693,
         "Sydney": 89922.41773568685
+    },
+    "Canals": {
+        "Suez Canal": 142645.14813263412
     },
     "Lakes": {
         "Amadjuak Lake": 96442.45913303625,
@@ -4718,8 +5576,22 @@
         "rook": 0.06765012285012285,
         "pawn": 0.049177395577395575
     },
+    "Tin Cans": {
+        "No. 1 (11 Oz.)": 0.1016,
+        "No. 2 (20 Oz.)": 0.11588749999999999,
+        "No. 3 (52 Oz.)": 0.17779999999999999,
+        "No. 5 (60 Oz.)": 0.142875,
+        "No. 10 (110 Oz.)": 0.17779999999999999
+    },
     "Nail Polish": {
         "bottle": 0.08255
+    },
+    "Ammunition": {
+        ".308 Winchester": 0.07137399999999999,
+        ".22 LR": 0.0254,
+        "9mm Luger": 0.02969,
+        ".223 Remington": 0.05740399999999999,
+        ".30-06 Springfield": 0.084836
     },
     "Shoes": {
         "flip-flops": 0.06529451,
@@ -9626,20 +10498,22 @@
         "Stephansdom-North (Top)": 91.236572265625,
         "Stephansdom-West (Top)": 109.72125244140625
     },
-    "Synx": {
-        "goochick": 0.1524,
-        "oozeeel": 0.45720000000000005,
-        "synx": 1.0363200000000001,
-        "weeper": 1.18872
+    "Fennec Fox": {
+        "front": 1.6764000000000001,
+        "back": 1.6764000000000001,
+        "mouth": 0.2
     },
-    "Viper": {
-        "front": 2.6
+    "Gecko": {
+        "female": 1.6764000000000001,
+        "male": 1.6764000000000001
     },
-    "Synths": {
-        "front": 1.8288000000000002,
-        "back": 1.8288000000000002,
-        "bulky": 1.8288000000000002,
-        "femme": 1.8288000000000002
+    "Lynx": {
+        "female": 1.7526000000000002,
+        "male": 1.7526000000000002
+    },
+    "Possum": {
+        "female": 1.7018,
+        "male": 1.7018
     },
     "Sel'Var": {
         "female": 2.159,
@@ -9649,6 +10523,32 @@
         "slitinternals": 0.32613600000000004,
         "maw": 0.359664,
         "dewclaw": 0.204216
+    },
+    "Squirrel": {
+        "female": 1.8034000000000001,
+        "male": 1.8034000000000001
+    },
+    "Synths": {
+        "front": 1.8288000000000002,
+        "back": 1.8288000000000002,
+        "bulky": 1.8288000000000002,
+        "femme": 1.8288000000000002
+    },
+    "Synx": {
+        "goochick": 0.1524,
+        "oozeeel": 0.45720000000000005,
+        "synx": 1.0363200000000001,
+        "weeper": 1.18872
+    },
+    "Viper": {
+        "front": 2.6
+    },
+    "Werewolf": {
+        "front": 1.8288000000000002
+    },
+    "Wolf": {
+        "female": 1.8542,
+        "male": 1.8542
     },
     "Titanic": {
         "side": 70.54592414117647,
@@ -9900,5 +10800,11 @@
         "Mil Mi-26 (Side)": 12.2,
         "Mil Mi-26 (Front)": 12.2,
         "Mil Mi-26 (Bottom)": 40.025
+    },
+    "Ships": {
+        "Oil Tanker": 75.8,
+        "Container Ship": 78.8,
+        "Bulk Carrier": 70.04,
+        "Passenger Ship": 80.9
     }
 }

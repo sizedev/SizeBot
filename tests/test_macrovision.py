@@ -23,8 +23,8 @@ def json_to_base64(j):
 async def test_macrovision():
     expected_base64 = json_to_base64({
         "entities": [
-            {"name": "Human", "customName": "Natalie", "scale": 0.08955223880597014, "view": "woman1", "x": "0", "y": "0", "priority": 0, "brightness": 1},
-            {"name": "Human", "customName": "Duncan", "scale": 0.00704225352112676, "view": "man1", "x": "0.0381", "y": "0", "priority": 0, "brightness": 1}
+            {"name": "Human", "customName": "Natalie", "scale": 0.08955223880597014, "view": "female", "x": "0", "y": "0", "priority": 0, "brightness": 1},
+            {"name": "Human", "customName": "Duncan", "scale": 0.00704225352112676, "view": "male", "x": "0.0381", "y": "0", "priority": 0, "brightness": 1}
         ],
         "world": {"height": 0.1524, "unit": "meters", "x": 0, "y": 0},
         "version": 3
@@ -32,8 +32,8 @@ async def test_macrovision():
     expected_url = f"https://macrovision.crux.sexy/?scene={expected_base64}"
     macrovision_url = await macrovision.get_url(
         [
-            {"name": "Duncan", "model": "man1", "height": Decimal("0.0127")},
-            {"name": "Natalie", "model": "woman1", "height": Decimal("0.1524")}
+            {"name": "Duncan", "model": "male", "height": Decimal("0.0127")},
+            {"name": "Natalie", "model": "female", "height": Decimal("0.1524")}
         ],
         shorten = False
     )
@@ -44,8 +44,8 @@ async def test_macrovision():
 async def test_macrovision_SV():
     expected_base64 = json_to_base64({
         "entities": [
-            {"name": "Human", "customName": "Natalie", "scale": 0.08955223880597014, "view": "woman1", "x": "0", "y": "0", "priority": 0, "brightness": 1},
-            {"name": "Human", "customName": "Duncan", "scale": 0.00704225352112676, "view": "man1", "x": "0.0381", "y": "0", "priority": 0, "brightness": 1}
+            {"name": "Human", "customName": "Natalie", "scale": 0.08955223880597014, "view": "female", "x": "0", "y": "0", "priority": 0, "brightness": 1},
+            {"name": "Human", "customName": "Duncan", "scale": 0.00704225352112676, "view": "male", "x": "0.0381", "y": "0", "priority": 0, "brightness": 1}
         ],
         "world": {"height": 0.1524, "unit": "meters", "x": 0, "y": 0},
         "version": 3
@@ -53,8 +53,8 @@ async def test_macrovision_SV():
     expected_url = f"https://macrovision.crux.sexy/?scene={expected_base64}"
     macrovision_url = await macrovision.get_url(
         [
-            {"name": "Duncan", "model": "man1", "height": SV.parse("0.5in")},
-            {"name": "Natalie", "model": "woman1", "height": SV.parse("6in")}
+            {"name": "Duncan", "model": "male", "height": SV.parse("0.5in")},
+            {"name": "Natalie", "model": "female", "height": SV.parse("6in")}
         ],
         shorten = False
     )
@@ -65,8 +65,8 @@ async def test_macrovision_SV():
 async def test_weird_names():
     expected_base64 = json_to_base64({
         "entities": [
-            {"name": "Human", "customName": r"r'(?<!\.)[.?!](?!\.)', z [1.22m]", "scale": 0.675945436397915, "view": "man1", "x": "0", "y": "0", "priority": 0, "brightness": 1},
-            {"name": "Human", "customName": "Natalie", "scale": 0.08955223880597014, "view": "woman1", "x": "0.30475", "y": "0", "priority": 0, "brightness": 1}
+            {"name": "Human", "customName": r"r'(?<!\.)[.?!](?!\.)', z [1.22m]", "scale": 0.675945436397915, "view": "male", "x": "0", "y": "0", "priority": 0, "brightness": 1},
+            {"name": "Human", "customName": "Natalie", "scale": 0.08955223880597014, "view": "female", "x": "0.30475", "y": "0", "priority": 0, "brightness": 1}
         ],
         "world": {"height": 1.219, "unit": "meters", "x": 0, "y": 0},
         "version": 3
@@ -74,8 +74,8 @@ async def test_weird_names():
     expected_url = f"https://macrovision.crux.sexy/?scene={expected_base64}"
     macrovision_url = await macrovision.get_url(
         [
-            {"name": r"r'(?<!\.)[.?!](?!\.)', z [1.22m]", "model": "man1", "height": Decimal("1.219")},
-            {"name": "Natalie", "model": "woman1", "height": Decimal("0.1524")}
+            {"name": r"r'(?<!\.)[.?!](?!\.)', z [1.22m]", "model": "male", "height": Decimal("1.219")},
+            {"name": "Natalie", "model": "female", "height": Decimal("0.1524")}
         ],
         shorten = False
     )
