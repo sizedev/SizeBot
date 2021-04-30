@@ -409,9 +409,9 @@ class User:
         if self._macrovision_view is not None:
             return self._macrovision_view
         human_views = {
-            "m": "man1",
-            "f": "woman1",
-            None: "man1"
+            "m": "male",
+            "f": "female",
+            None: "male"
         }
         return human_views[self.gender]
 
