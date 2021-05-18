@@ -599,7 +599,7 @@ class PersonStats:
             "horizondistance": f" can see for **{self.horizondistance:,.3mu}** to the horizon.",
             "liftstrength": f" can lift and carry **{self.liftstrength:,.3mu}**.",
             "gender": f"'s current gender is set to **{self.gender}**.",
-            "visibiliy": f" would need {self.visibility} to be seen."
+            "visibility": f" would need {self.visibility} to be seen."
         }
         if self.hairlength:
             returndict["hair"] = f"'s {self.hairname.lower()} is **{self.hairlength:,.3mu}** long."
