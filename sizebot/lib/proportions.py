@@ -158,7 +158,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big.nickname}**."), inline=False)
         embed.add_field(name="Height", value=(
             f"{emojis.comparebig}{self.bigToSmall.height:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.height:,.3mu}"), inline=True)
+            f"{emojis.comparesmall}{self.smallToBig.height:,.3mu}\n"
+            f"{self.smallToBig.visibility_emoji} *{emojis.comparebig} would need {self.smallToBig.visibility} to see {emojis.comparesmall}.*"), inline=True)
         embed.add_field(name="Weight", value=(
             f"{emojis.comparebig}{self.bigToSmall.weight:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.weight:,.3mu}"), inline=True)
@@ -505,7 +506,7 @@ class PersonStats:
         self.shoesize = formatShoeSize(self.footlength, self.gender == "f")
         self.footwidth = SV(self.height * self.footwidthfactor)
         if userdata.pawtoggle:
-            self.footwidth = SV(self.height * Decimal("1/1.5"))  # Temp number?
+            self.footwidth = SV(self.height * Decimal("1/1.5"))  # TODO: Temp number?
         self.toeheight = SV(self.height * self.toeheightfactor)
         self.shoeprintdepth = SV(self.height * self.shoeprintfactor)
         self.pointerlength = SV(self.height * self.pointerfactor)
@@ -556,6 +557,22 @@ class PersonStats:
         self.fallproof = self.terminalvelocity < falllimit
         self.fallproofcheck = emojis.voteyes if self.fallproof else emojis.voteno
 
+        self.visibility_emoji = ":eye:"
+        if self.height < SV(0.00025):
+            self.visibility_emoji = ":mag:"
+        if self.height < SV(0.00005):
+            self.visibility_emoji = ":microscope:"
+        if self.height < SV(0.000001):
+            self.visibility_emoji = ":atom:"
+
+        self.visibility = "only the naked eye"
+        if self.height < SV(0.00025):
+            self.visibility = "a magnifying glass"
+        if self.height < SV(0.00005):
+            self.visibility = "a microscope"
+        if self.height < SV(0.000001):
+            self.visibility = "magic"
+
     def getFormattedStat(self, stat):
         returndict = {
             "height": f"'s current height is **{self.height:,.3mu}**, or {self.formattedscale} scale.",
@@ -581,7 +598,8 @@ class PersonStats:
             "scale": f" is **{self.formattedscale}** their base height.",
             "horizondistance": f" can see for **{self.horizondistance:,.3mu}** to the horizon.",
             "liftstrength": f" can lift and carry **{self.liftstrength:,.3mu}**.",
-            "gender": f"'s current gender is set to **{self.gender}**."
+            "gender": f"'s current gender is set to **{self.gender}**.",
+            "visibiliy": f" would need {self.visibility} to be seen."
         }
         if self.hairlength:
             returndict["hair"] = f"'s {self.hairname.lower()} is **{self.hairlength:,.3mu}** long."
@@ -628,7 +646,10 @@ class PersonStats:
                       description=f"*Requested by {requestertag}*",
                       color=colors.cyan)
         embed.set_author(name=f"SizeBot {__version__}")
-        embed.add_field(name="Current Height", value=f"{self.height:,.3mu}\n*{self.formattedscale} scale*", inline=True)
+        heightstring = f"{self.height:,.3mu}\n*{self.formattedscale} scale*"
+        if self.height < SV(1):
+            heightstring += f"\n*{self.visibility_emoji} {self.nickname} would need {self.visibility} to be seen.*"
+        embed.add_field(name="Current Height", value=heightstring, inline=True)
         embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n*{self.formattedweightscale} scale*", inline=True)
         embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         embed.add_field(name=f"{self.footname} Width", value=format(self.footwidth, ",.3mu"), inline=True)

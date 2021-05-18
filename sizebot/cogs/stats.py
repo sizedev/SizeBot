@@ -44,7 +44,8 @@ statmap = AliasMap({
     "horizondistance":  ("horizon"),
     "terminalvelocity": ("velocity", "fall"),
     "liftstrength":     ("strength", "lift", "carry", "carrystrength"),
-    "gender":           ()
+    "gender":           (),
+    "visibilty":        ("visible", "see")
 })
 
 
@@ -776,7 +777,7 @@ class StatsCog(commands.Cog):
         if isinstance(distance, discord.Member):
             ud = userdb.load(ctx.guild.id, distance.id)
             distance = ud.height
-        
+
         await ctx.send("he fall")
 
     @commands.command(
