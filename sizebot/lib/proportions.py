@@ -158,8 +158,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big.nickname}**."), inline=False)
         embed.add_field(name="Height", value=(
             f"{emojis.comparebig}{self.bigToSmall.height:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.height:,.3mu}\n"
-            f"{self.smallToBig.visibility_emoji} *{emojis.comparebig} would need {self.smallToBig.visibility} to see {emojis.comparesmall}.*"), inline=True)
+            f"{emojis.comparesmall}{self.smallToBig.height:,.3mu}"), inline=True)
         embed.add_field(name="Weight", value=(
             f"{emojis.comparebig}{self.bigToSmall.weight:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.weight:,.3mu}"), inline=True)
@@ -227,7 +226,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.get_speeds(), inline=False)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
-            f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}."))
+            f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
+            f"{self.big.nickname} would need {self.smallToBig.visibility} to see {self.small.nickname}."))
 
         if self.small.incomprehensible or self.big.incomprehensible:
             ed = embed.to_dict()
@@ -557,14 +557,6 @@ class PersonStats:
         self.fallproof = self.terminalvelocity < falllimit
         self.fallproofcheck = emojis.voteyes if self.fallproof else emojis.voteno
 
-        self.visibility_emoji = ":eye:"
-        if self.height < SV(0.00025):
-            self.visibility_emoji = ":mag:"
-        if self.height < SV(0.00005):
-            self.visibility_emoji = ":microscope:"
-        if self.height < SV(0.000001):
-            self.visibility_emoji = ":atom:"
-
         self.visibility = "only the naked eye"
         if self.height < SV(0.00025):
             self.visibility = "a magnifying glass"
@@ -648,7 +640,7 @@ class PersonStats:
         embed.set_author(name=f"SizeBot {__version__}")
         heightstring = f"{self.height:,.3mu}\n*{self.formattedscale} scale*"
         if self.height < SV(1):
-            heightstring += f"\n*{self.visibility_emoji} {self.nickname} would need {self.visibility} to be seen.*"
+            heightstring += f"\n*{self.nickname} would need {self.visibility} to be seen.*"
         embed.add_field(name="Current Height", value=heightstring, inline=True)
         embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n*{self.formattedweightscale} scale*", inline=True)
         embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
