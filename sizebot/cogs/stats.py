@@ -662,6 +662,9 @@ class StatsCog(commands.Cog):
     @commands.guild_only()
     async def lineup(self, ctx):
         """Lineup a bunch of people for comparison."""
+        if not ctx.message.mentions:
+            await ctx.send("At least one person is required")
+            return
 
         failedusers = []
         userdatas = []
