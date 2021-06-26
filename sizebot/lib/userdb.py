@@ -578,6 +578,8 @@ class User:
         triggers = jsondata.get("triggers")
         if triggers is not None:
             triggers = {k: Diff.fromJSON(v) for k, v in triggers}
+        else:
+            triggers = {}
         userdata.triggers = triggers
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
