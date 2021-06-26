@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 
 from sizebot.lib import userdb, nickmanager
-from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.diff import Diff
 
 logger = logging.getLogger("sizebot")
 
@@ -49,7 +49,7 @@ class TriggerCog(commands.Cog):
         usage = "<trigger> <diff>",
         category = "trigger"
     )
-    async def settrigger(self, ctx, trigger, *, diff: ParseableRate):
+    async def settrigger(self, ctx, trigger, *, diff: Diff):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.triggers[trigger] = diff
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
