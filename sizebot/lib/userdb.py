@@ -2,7 +2,7 @@ import json
 from copy import copy
 from functools import total_ordering
 import importlib.resources as pkg_resources
-from typing import Literal
+from typing import Dict, Literal
 
 import arrow
 
@@ -61,6 +61,7 @@ class User:
         self.scaletalklock = False
         self.currentmovetype = None
         self.movestarted = None
+        self.triggers: Dict[str, Diff] = {}
         self._unitsystem = "m"
         self.species = None
         self.soft_gender = None
@@ -71,7 +72,7 @@ class User:
         self._macrovision_view = None
 
     def __str__(self):
-        return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r}>")
+        return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r} ...>")
 
     def __repr__(self):
         desc = None if self.description is None else truncate(self.description, 50)
@@ -85,6 +86,7 @@ class User:
                 f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}, INCOMPREHENSIBLE = {self.incomprehensible!r}, "
                 f"CURRENTSCALESTEP = {self.currentscalestep!r}, CURRENTSCALETALK = {self.currentscaletalk!r}, "
                 f"CURRENTMOVETYPE = {self.currentmovetype!r}, MOVESTARTED = {self.movestarted!r}, "
+                f"TRIGGERS = {self.triggers!r}, "
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
@@ -521,6 +523,7 @@ class User:
             "scaletalklock":    self.scaletalklock,
             "currentmovetype":  self.currentmovetype,
             "movestarted":      None if self.movestarted is None else self.movestarted.isoformat(),
+            "triggers":         {k: v.toJSON() for k, v in self.triggers.items()},
             "unitsystem":       self.unitsystem,
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining,
@@ -571,6 +574,7 @@ class User:
         if movestarted is not None:
             movestarted = arrow.get(movestarted)
         userdata.movestarted = movestarted
+        userdata.triggers = {k: Diff.fromJSON(v) for k, v in jsondata.get("triggers")}
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
