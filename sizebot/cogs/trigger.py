@@ -3,6 +3,7 @@ import logging
 import discord
 from discord.ext import commands
 
+from sizebot.conf import conf
 from sizebot.lib import userdb, nickmanager
 from sizebot.lib.diff import Diff
 
@@ -17,6 +18,12 @@ async def on_message(m):
     for _, userid in userdb.listUsers(guildid = m.guild.id):
         userdata = userdb.load(m.guild.id, userid)
 
+        if m.author.bot:
+            return
+
+        if m.content.startswith(conf.prefix):
+            return
+
         for trigger, diff in userdata.triggers.items():
             if trigger in m.content:
                 if diff.changetype == "multiply":
@@ -25,6 +32,8 @@ async def on_message(m):
                     userdata.height += diff.amount
                 elif diff.changetype == "power":
                     userdata = userdata ** diff.amount
+
+                userdb.save(userdata)
 
         if userdata.display:
             await nickmanager.nick_update(m.author)
