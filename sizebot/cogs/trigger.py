@@ -40,7 +40,7 @@ class TriggerCog(commands.Cog):
         category = "trigger"
     )
     async def triggers(self, ctx):
-        userdata = userdb.load(ctx.guild.id, ctx.user.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
         triggers = [f"{trigger}: {diff}" for trigger, diff in userdata.triggers.items()]
         out = "**Triggers**:\n" + "\n".join(triggers)
         await ctx.send(out)
@@ -50,7 +50,7 @@ class TriggerCog(commands.Cog):
         category = "trigger"
     )
     async def settrigger(self, ctx, trigger, *, diff: ParseableRate):
-        userdata = userdb.load(ctx.guild.id, ctx.user.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.triggers[trigger] = diff
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
 
@@ -60,7 +60,7 @@ class TriggerCog(commands.Cog):
         aliases = ["resettrigger", "unsettrigger", "removetrigger"]
     )
     async def cleartrigger(self, ctx, *, trigger):
-        userdata = userdb.load(ctx.guild.id, ctx.user.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
         del userdata.triggers[trigger]
         await ctx.send(f"Removed trigger word {trigger!r}.")
 
