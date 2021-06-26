@@ -575,7 +575,10 @@ class User:
         if movestarted is not None:
             movestarted = arrow.get(movestarted)
         userdata.movestarted = movestarted
-        userdata.triggers = {k: Diff.fromJSON(v) for k, v in jsondata.get("triggers")}
+        triggers = jsondata.get("triggers")
+        if triggers is not None:
+            triggers = {k: Diff.fromJSON(v) for k, v in triggers}
+        userdata.triggers = triggers
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
