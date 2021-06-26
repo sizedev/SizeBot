@@ -222,5 +222,9 @@ class ThisShouldNeverHappenException(DigiException):
 
 
 class ParseError(DigiException):
-    def formatMessage(self, s, t):
-        return f"Could not parse {s} into a {t}."
+    def __init__(self, s, t):
+        self.s = s
+        self.t = t
+
+    def formatMessage(self):
+        return f"Could not parse {self.s} into a {self.t}."

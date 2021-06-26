@@ -330,6 +330,12 @@ def sentence_join(items, *, joiner=None, oxford=False) -> str:
     >>> sentence_join(['micro', 'tiny', 'normal', 'amazon', 'giantess'], joiner='or')
     'micro, tiny, normal, amazon or giantess'
     """
+    # Do this in case we received something like a generator, that needs to be wrapped in a list
+    items = list(items)
+
+    if len(items) == 1:
+        return items[0]
+
     if not items:
         return ""
 
@@ -339,12 +345,6 @@ def sentence_join(items, *, joiner=None, oxford=False) -> str:
     ox = ""
     if oxford:
         ox = ","
-
-    # Do this in case we received something like a generator, that needs to be wrapped in a list
-    items = list(items)
-
-    if len(items) == 1:
-        return items[0]
 
     return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
 
