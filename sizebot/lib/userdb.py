@@ -2,9 +2,10 @@ import json
 from copy import copy
 from functools import total_ordering
 import importlib.resources as pkg_resources
-from typing import Dict, Literal
+from typing import Dict, List, Literal, Optional
 
 import arrow
+from arrow.arrow import Arrow
 
 import sizebot.data
 from sizebot.lib import errors, paths
@@ -35,41 +36,41 @@ class User:
                  "registration_steps_remaining", "_macrovision_model", "_macrovision_view"]
 
     def __init__(self):
-        self.guildid = None
-        self.id = None
-        self.nickname = None
-        self._picture_url = None
-        self.description = None
-        self._gender = None
-        self.display = True
-        self._height = defaultheight
-        self._baseheight = defaultheight
-        self._baseweight = defaultweight
-        self._footlength = None
-        self._pawtoggle = False
-        self._furtoggle = False
-        self._hairlength = None
-        self._taillength = None
-        self._earheight = None
-        self._liftstrength = None
-        self._walkperhour = None
-        self._runperhour = None
-        self._swimperhour = None
-        self.incomprehensible = False
-        self._currentscalestep = None
-        self._currentscaletalk = None
-        self.scaletalklock = False
-        self.currentmovetype = None
-        self.movestarted = None
+        self.guildid: int = None
+        self.id: int = None
+        self.nickname: str = None
+        self._picture_url: Optional[str] = None
+        self.description: Optional[str] = None
+        self._gender: Optional[str] = None
+        self.display: bool = True
+        self._height: SV = defaultheight
+        self._baseheight: SV = defaultheight
+        self._baseweight: SV = defaultweight
+        self._footlength: Optional[SV] = None
+        self._pawtoggle: bool = False
+        self._furtoggle: bool = False
+        self._hairlength: Optional[SV] = None
+        self._taillength: Optional[SV] = None
+        self._earheight: Optional[SV] = None
+        self._liftstrength: Optional[WV] = None
+        self._walkperhour: Optional[ParseableRate] = None
+        self._runperhour: Optional[ParseableRate] = None
+        self._swimperhour: Optional[ParseableRate] = None
+        self.incomprehensible: bool = False
+        self._currentscalestep: Optional[Diff] = None
+        self._currentscaletalk: Optional[Diff] = None
+        self.scaletalklock: bool = False
+        self.currentmovetype: Optional[str] = None
+        self.movestarted: Optional[Arrow] = None
         self.triggers: Dict[str, Diff] = {}
-        self._unitsystem = "m"
-        self.species = None
+        self._unitsystem: str = "m"
+        self.species: Optional[str] = None
         self.soft_gender = None
-        self.avatar_url = None
-        self.lastactive = None
-        self.registration_steps_remaining = []
-        self._macrovision_model = None
-        self._macrovision_view = None
+        self.avatar_url: Optional[str] = None
+        self.lastactive: Arrow = None
+        self.registration_steps_remaining: List[str] = []
+        self._macrovision_model: Optional[str] = None
+        self._macrovision_view: Optional[str] = None
 
     def __str__(self):
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r} ...>")
