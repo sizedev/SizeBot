@@ -577,7 +577,7 @@ class User:
         userdata.movestarted = movestarted
         triggers = jsondata.get("triggers")
         if triggers is not None:
-            triggers = {k: Diff.fromJSON(v) for k, v in triggers}
+            triggers = {k: Diff.fromJSON(v) for k, v in triggers.items()}
         else:
             triggers = {}
         userdata.triggers = triggers
