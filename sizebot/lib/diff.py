@@ -123,6 +123,18 @@ class Diff:
             "original":   self.original
         }
 
+    def __str__(self):
+        operator = ""
+        amount = ""
+        if self.changetype == "add":
+            operator = "-" if self.amount < 0 else "+"
+        elif self.changetype == "multiply":
+            operator = "/" if self.amount < 0 else "x"
+        elif self.changetype == "power":
+            operator = "^"
+        amount = format(self.amount, ",m%") if self.changetype == "add" else self.amount
+        return f"{operator}{amount}"
+
     @classmethod
     def fromJSON(cls, jsondata):
         changetype = jsondata["changetype"]
@@ -150,7 +162,7 @@ class Rate:
         d = None
         t = None
 
-        #speed hack
+        # speed hack
         s = s.replace("mph", "mi/hr").replace("kph", "km/hr")
 
         match = r"(.*)\s*" + valid_rate_interfixes + r"\s*(.*)"
@@ -168,6 +180,9 @@ class Rate:
             "time":     str(self.time),
             "original": self.original
         }
+
+    def __str__(self):
+        return f"{self.diff} per {format(self.time)}"
 
     @classmethod
     def fromJSON(cls, jsondata):
@@ -214,6 +229,10 @@ class LimitedRate:
             "original": self.original,
             "stoptype": stoptype
         }
+
+    def __str__(self):
+        joiner = "for" if isinstance(self.stop, TV) else "until"
+        return f"{self.rate} {joiner} {format(self.stop)}"
 
     @classmethod
     def fromJSON(cls, jsondata):
