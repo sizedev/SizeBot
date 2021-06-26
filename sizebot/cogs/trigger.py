@@ -52,6 +52,7 @@ class TriggerCog(commands.Cog):
     async def settrigger(self, ctx, trigger, *, diff: Diff):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.triggers[trigger] = diff
+        userdb.save(userdata)
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
 
     @commands.command(
@@ -62,6 +63,7 @@ class TriggerCog(commands.Cog):
     async def cleartrigger(self, ctx, *, trigger):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         del userdata.triggers[trigger]
+        userdb.save(userdata)
         await ctx.send(f"Removed trigger word {trigger!r}.")
 
 
