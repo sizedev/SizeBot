@@ -1,0 +1,42 @@
+name: Append build number to version
+
+inputs:
+  package:
+    description: Package name
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup env
+      env:
+        VERSION_FILE: ${{ inputs.package }}/__init__.py
+      run: echo -e "version-file=$VERSION_FILE" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Get old version number
+      env:
+        VERSION_REGEX: ^__version__ = \"\(.*\)\" *$
+      run: |
+        OLD_VERSION=$(sed -n "s/${VERSION_REGEX}/\1/p" "${{ env.version-file }}")
+        echo -e "old-version=$OLD_VERSION" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set new version number
+      run: |
+        NEW_VERSION=${{ env.old-version }}.post${{ github.run_number }}
+        echo -e "new-version=$NEW_VERSION" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Print version numbers
+      run: |
+        echo -e "Old Version: ${{ env.old-version }}"
+        echo -e "New Version: ${{ env.new-version }}"
+      shell: bash
+
+    - name: Append build number to version
+      env:
+        OLD_VERSION_LINE: ^__version__ *= *\"${{ env.old-version }}\" *$
+        NEW_VERSION_LINE: __version__ = \"${{ env.new-version }}\"
+      run: sed -i "s/${OLD_VERSION_LINE}/${NEW_VERSION_LINE}/" "${{ env.version-file }}"
+      shell: bash
