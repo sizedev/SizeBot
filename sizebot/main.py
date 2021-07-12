@@ -53,7 +53,6 @@ initial_cogs = [
     # "rainbow",
     "register",
     "roll",
-    "royale",
     "run",
     "say",
     "scaletalk",
@@ -112,6 +111,7 @@ def main():
         bot.load_extension("sizebot.extensions." + extension)
     for cog in initial_cogs:
         bot.load_extension("sizebot.cogs." + cog)
+    bot.load_extension("sizeroyale.cogs.royale")
 
     @bot.event
     async def on_first_ready():
