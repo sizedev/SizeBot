@@ -55,7 +55,7 @@ async def shorten_url(url):
     return short_url
 
 
-async def get_url(people, *, shorten = True):
+async def get_url(people, *, shorten = False):
     """Accepts an array of dictionary objects with 'model', 'name', and 'height' properties"""
     if len(people) <= 0:
         raise ValueError("At least one person is required")

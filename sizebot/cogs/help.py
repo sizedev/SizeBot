@@ -222,7 +222,7 @@ class HelpCog(commands.Cog):
         embed = Embed(
             title=signature,
             description=description
-        ).set_author(name=f"Help [SizeBot {__version__}]").set_footer(text=f"See `{conf.prefix}help <command> for more details about a command and how to use it.")
+        ).set_author(name=f"Help [SizeBot {__version__}]").set_footer(text=f"See `{conf.prefix}help <command>` for more details about a command and how to use it.")
 
         if cmd.aliases:
             embed.add_field(name="**Aliases:**", value=", ".join(cmd.aliases), inline=False)
@@ -269,7 +269,8 @@ class HelpCog(commands.Cog):
                                  "**Originally Tested** *by AWK, Kelly, worstgender, and Arceus3251*\n"),
                         inline = False)
         embed.add_field(name = "Servers",
-                        value = ("**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*"),
+                        value = ("**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*\n"
+                                 "**[SW Dollhouse](https://discord.gg/5mMBRnjJ3J)**: a shrinking women server run by Natalie"),
                         inline = False)
         embed.add_field(name = "Technical Details",
                         value = "Written in Python 3.6, and slowly upgraded to 3.9. Originally written using Atom, and now Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
@@ -406,6 +407,7 @@ categories = [
     HelpCategory("change", "Change Commands", "Commands for changing your stats.", "📈"),
     HelpCategory("stats", "Stats Commands", "Commands for outputting yours and others stats.", "📊"),
     HelpCategory("scalestep", "Scale on Action Commands", "Commands related to scaling every action you take.", "🚶"),
+    HelpCategory("trigger", "Trigger Commands", "Commands related to trigger words.", "🔫"),
     HelpCategory("loop", "Looping Commands", "Commands related to doing looping tasks.", "🔁"),
     HelpCategory("profile", "Profile Commands", "Commands for updating and displaying profiles.", "🆔"),
     HelpCategory("fun", "Fun Commands", "Commands that aren't size-based, but are still fun!", "🎉"),

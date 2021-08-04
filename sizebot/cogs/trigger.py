@@ -101,7 +101,7 @@ class TriggerCog(commands.Cog):
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
 
     @commands.command(
-        usage = "<trigger> <diff>",
+        usage = "<trigger>",
         category = "trigger",
         aliases = ["resettrigger", "unsettrigger", "removetrigger"]
     )
