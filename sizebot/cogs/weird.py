@@ -1,6 +1,7 @@
 import io
 import json
 import re
+from sizebot.lib.versioning import release_on
 from aiohttp_requests import requests
 from json.decoder import JSONDecodeError
 from urllib.parse import quote
@@ -133,6 +134,7 @@ class WeirdCog(commands.Cog):
 
         await outmessage.edit(content = "", embed = embed)
 
+    @release_on("3.6")
     @commands.command(
         aliases = ["latex"],
         usage = "<latex...>",

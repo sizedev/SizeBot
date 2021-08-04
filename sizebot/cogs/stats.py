@@ -1,4 +1,5 @@
 import logging
+from sizebot.lib.versioning import release_on
 import typing
 
 import discord
@@ -704,6 +705,7 @@ class StatsCog(commands.Cog):
 
         await ctx.send(embed = e)
 
+    @release_on("3.6")
     @commands.command(
         usage = "<user or length>",
         category = "stats"
@@ -737,6 +739,7 @@ class StatsCog(commands.Cog):
 
         await ctx.send(embed = embedtosend)
 
+    @release_on("3.6")
     @commands.command(
         usage = "<user or length>",
         category = "stats"
@@ -770,6 +773,7 @@ class StatsCog(commands.Cog):
 
         await ctx.send(embed = embedtosend)
 
+    @release_on("3.6")
     @commands.command(
         usage = "<distance>"
     )

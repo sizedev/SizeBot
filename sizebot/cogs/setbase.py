@@ -1,4 +1,5 @@
 import logging
+from sizebot.lib.versioning import release_on
 import typing
 
 from discord.ext import commands
@@ -257,6 +258,7 @@ class SetBaseCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s run is now {userdata.runperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
+    @release_on("3.6")
     @commands.command(
         usage = "<length>",
         category = "setbase"

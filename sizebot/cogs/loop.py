@@ -1,4 +1,5 @@
 import logging
+from sizebot.lib.versioning import release_on
 from sizebot.lib.units import SV, TV
 
 from discord.ext import commands
@@ -42,6 +43,7 @@ class LoopCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @release_on("3.6")
     @commands.command(
         usage = "<type> [stop]",
         category = "loop"
@@ -76,6 +78,7 @@ class LoopCog(commands.Cog):
         userdb.save(userdata)
         await ctx.send(f"{userdata.nickname} is now {ing[userdata.currentmovetype]}.")
 
+    @release_on("3.6")
     @commands.command(
         category = "loop"
     )
@@ -95,6 +98,7 @@ class LoopCog(commands.Cog):
         userdata.movestop = None
         userdb.save(userdata)
 
+    @release_on("3.6")
     @commands.command(
         category = "loop"
     )

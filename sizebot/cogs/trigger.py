@@ -7,6 +7,7 @@ from discord.ext import commands
 from sizebot.conf import conf
 from sizebot.lib import userdb, nickmanager
 from sizebot.lib.diff import Diff
+from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 
@@ -83,6 +84,7 @@ class TriggerCog(commands.Cog):
             if userdata.display:
                 await nickmanager.nick_update(m.author)
 
+    @release_on("3.6")
     @commands.command(
         category = "trigger"
     )
@@ -92,6 +94,7 @@ class TriggerCog(commands.Cog):
         out = "**Triggers**:\n" + "\n".join(triggers)
         await ctx.send(out)
 
+    @release_on("3.6")
     @commands.command(
         usage = "<trigger> <diff>",
         category = "trigger"
@@ -100,6 +103,7 @@ class TriggerCog(commands.Cog):
         set_trigger(ctx.guild.id, ctx.author.id, trigger, diff)
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
 
+    @release_on("3.6")
     @commands.command(
         usage = "<trigger>",
         category = "trigger",
