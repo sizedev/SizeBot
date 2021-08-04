@@ -8,7 +8,7 @@ import arrow
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.language import ing
+from sizebot.lib.language import ed, ing
 from sizebot.lib.proportions import PersonStats
 from sizebot.lib.utils import prettyTimeDelta
 
@@ -75,18 +75,19 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def stop(self, ctx):  # TODO: Temp, this should probably take an argument
+    async def stop(self, ctx):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         if userdata.currentmovetype is None:
             await ctx.send("You aren't currently moving!")
             return
 
+        _, distance = calc_move_dist(userdata)
+        await ctx.send(f"You stopped {ing[userdata.currentmovetype]}. You {ed[userdata.currentmovetype]} **{distance:,.3mu}**!")
+
         userdata.currentmovetype = None
         userdata.movestarted = None
         userdata.movestop = None
         userdb.save(userdata)
-
-        await ctx.send("You stopped moving.")
 
     @commands.command(
         category = "loop"
