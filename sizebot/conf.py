@@ -69,6 +69,7 @@ class Config(AttrDict):
 conf = Config([
     ConfigField("prefix", "sizebot.prefix", default="&"),
     ConfigField("name", "sizebot.name", default="SizeBot"),
+    ConfigField("environment", "sizebot.environment", default="production"),
     ConfigField("activity", "sizebot.activity", default="Ratchet and Clank: Size Matters"),
     ConfigField("authtoken", "discord.authtoken", initdefault="INSERT_BOT_TOKEN_HERE"),
     ConfigField("logchannelid", "discord.logchannelid", type=int, default=None),
