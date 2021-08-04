@@ -12,7 +12,7 @@ from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import AliasMap, glitch_string, undo_powers, randRangeLog
+from sizebot.lib.utils import AliasMap, glitch_string, replace_all_sciexp, randRangeLog
 
 logger = logging.getLogger("sizebot")
 
@@ -167,8 +167,7 @@ class SetCog(commands.Cog):
         elif newscale == "<:1144:793260894686806026>" or newscale == "<:1122:793262146917105664>":
             scale = Decimal("1/144")
         else:
-            re_fix_powers = r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)"
-            newscale = re.sub(re_fix_powers, undo_powers, newscale)
+            newscale = replace_all_sciexp(newscale)
             re_scale = r"([^:/]+)[:/]?([^:/]*)?"
             if m := re.match(re_scale, newscale):
                 multiplier = m.group(1)
@@ -208,8 +207,7 @@ class SetCog(commands.Cog):
         elif newscale == "<:1144:793260894686806026>" or newscale == "<:1122:793262146917105664>":
             scale = Decimal("1/144")
         else:
-            re_fix_powers = r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)"
-            newscale = re.sub(re_fix_powers, undo_powers, newscale)
+            newscale = replace_all_sciexp(newscale)
             re_scale = r"([^:/]+)[:/]?([^:/]*)?"
             if m := re.match(re_scale, newscale):
                 multiplier = m.group(1)

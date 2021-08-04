@@ -456,15 +456,21 @@ class AliasMap(dict):
         return sentence_join(aliasstrings, oxford = True)
 
 
-def undo_powers(matchobj: re.Match):
-    prefix = matchobj.group(1)
-    mid = matchobj.group(2)
-    suffix = matchobj.group(3)
+RE_SCI_EXP = re.compile(r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)")
 
+
+def replace_sciexp(m: re.Match):
+    prefix = m.group(1)
+    mid = m.group(2)
+    suffix = m.group(3)
     if "e" in mid.lower():
         return str(Decimal(prefix + mid + suffix))
     else:
         return str(Decimal(prefix) ** Decimal(suffix))
+
+
+def replace_all_sciexp(newscale: str):
+    return RE_SCI_EXP.sub(replace_sciexp, newscale)
 
 
 def randRangeLog(minval, maxval, precision=26):
