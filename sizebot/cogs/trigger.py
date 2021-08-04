@@ -40,39 +40,6 @@ def unset_trigger(guildid, authorid, trigger):
         userdb.save(userdata)
 
 
-async def on_message(m):
-    # non-guild messages
-    if not isinstance(m.author, discord.Member):
-        return
-
-    if m.author.bot:
-        return
-
-    if m.content.startswith(conf.prefix):
-        return
-
-    # Collect list of triggered users
-    users_to_update = defaultdict(list)
-    for keyword, users in user_triggers.items():
-        if keyword in m.content:
-            for (guildid, userid), diff in users.items():
-                users_to_update[guildid, userid].append(diff)
-
-    # Update triggered users
-    for (guildid, userid), diffs in users_to_update.items():
-        userdata = userdb.load(guildid, userid)
-        for diff in diffs:
-            if diff.changetype == "multiply":
-                userdata.height *= diff.amount
-            elif diff.changetype == "add":
-                userdata.height += diff.amount
-            elif diff.changetype == "power":
-                userdata = userdata ** diff.amount
-        userdb.save(userdata)
-        if userdata.display:
-            await nickmanager.nick_update(m.author)
-
-
 class TriggerCog(commands.Cog):
     """Commands to create or clear triggers."""
 
@@ -82,6 +49,39 @@ class TriggerCog(commands.Cog):
             userdata = userdb.load(guildid, userid)
             for trigger, diff in userdata.triggers.items():
                 user_triggers[trigger][guildid, userid] = diff
+
+    @commands.Cog.listener()
+    async def on_message(m):
+        # non-guild messages
+        if not isinstance(m.author, discord.Member):
+            return
+
+        if m.author.bot:
+            return
+
+        if m.content.startswith(conf.prefix):
+            return
+
+        # Collect list of triggered users
+        users_to_update = defaultdict(list)
+        for keyword, users in user_triggers.items():
+            if keyword in m.content:
+                for (guildid, userid), diff in users.items():
+                    users_to_update[guildid, userid].append(diff)
+
+        # Update triggered users
+        for (guildid, userid), diffs in users_to_update.items():
+            userdata = userdb.load(guildid, userid)
+            for diff in diffs:
+                if diff.changetype == "multiply":
+                    userdata.height *= diff.amount
+                elif diff.changetype == "add":
+                    userdata.height += diff.amount
+                elif diff.changetype == "power":
+                    userdata = userdata ** diff.amount
+            userdb.save(userdata)
+            if userdata.display:
+                await nickmanager.nick_update(m.author)
 
     @commands.command(
         category = "trigger"

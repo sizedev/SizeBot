@@ -185,11 +185,11 @@ def main():
             await on_message_timed(message)
             return
         await bot.process_commands(message)
+
         if hasattr(message.author, "guild") and message.author.guild is not None:
             await scaletalk.on_message(message)
             await edge.on_message(message)
             await limits.on_message(message)
-            await trigger.on_message(message)
             await nickmanager.nick_update(message.author)
         # await meicros.on_message(message)
         await monika.on_message(message)
@@ -205,8 +205,6 @@ def main():
         await edge.on_message(message)
         limitstime = arrow.now()
         await limits.on_message(message)
-        triggertime = arrow.now()
-        await trigger.on_message(message)
         nickupdatetime = arrow.now()
         await nickmanager.nick_update(message.author)
         monikatime = arrow.now()
@@ -219,8 +217,7 @@ def main():
         processlatency = edgetime - processtime
         talklatency = edgetime - talktime
         edgelatency = limitstime - talktime
-        limitslatency = triggertime - limitstime
-        triggerlatency = nickupdatetime - triggertime
+        limitslatency = nickupdatetime - limitstime
         nickupdatelatency = monikatime - nickupdatetime
         monikalatency = activetime - monikatime
         activelatency = endtime - activetime
@@ -231,7 +228,6 @@ def main():
             f"Scale-Talk Latency: {utils.prettyTimeDelta(talklatency.total_seconds(), True)}\n"
             f"Edge Latency: {utils.prettyTimeDelta(edgelatency.total_seconds(), True)}\n"
             f"Limits Latency: {utils.prettyTimeDelta(limitslatency.total_seconds(), True)}\n"
-            f"Trigger Latency: {utils.prettyTimeDelta(triggerlatency.total_seconds(), True)}\n"
             f"Nick Update Latency: {utils.prettyTimeDelta(nickupdatelatency.total_seconds(), True)}\n"
             f"Monika Latency: {utils.prettyTimeDelta(monikalatency.total_seconds(), True)}\n"
             f"User Active Check Latency: {utils.prettyTimeDelta(activelatency.total_seconds(), True)}\n"
