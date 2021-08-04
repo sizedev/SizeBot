@@ -44,10 +44,9 @@ class AdminCog(commands.Cog):
         logger.warn(f"{ctx.author.display_name} made {victim.display_name} run {command}.")
         new_message = copy(ctx.message)
         new_message.author = victim
-        if new_message.content.startswith(ctx.prefix):
-            new_message.content = command
-        else:
-            new_message.content = ctx.prefix + command
+        if not command.startswith(ctx.prefix):
+            command = ctx.prefix + command
+        new_message.content = command
         await self.bot.process_commands(new_message)
 
 
