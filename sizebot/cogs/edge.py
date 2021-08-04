@@ -44,54 +44,6 @@ def getUserSizes(g):
             "users": allusers}
 
 
-async def on_message(m):
-    # non-guild messages
-    if not isinstance(m.author, discord.Member):
-        return
-
-    try:
-        guilddata = guilddb.load(m.guild.id)
-    except GuildNotFoundException:
-        return  # Guild does not have edges set
-
-    sm = guilddata.small_edge
-    lg = guilddata.large_edge
-    if not (m.author.id == sm or m.author.id == lg):
-        return  # The user is not set to be the smallest or the largest user.
-
-    try:
-        userdata = userdb.load(m.guild.id, m.author.id)
-    except UserNotFoundException:
-        return
-
-    usersizes = getUserSizes(m.guild)
-    smallestuser = usersizes["smallest"]["id"]
-    smallestsize = usersizes["smallest"]["size"]
-    largestuser = usersizes["largest"]["id"]
-    largestsize = usersizes["largest"]["size"]
-
-    if sm == m.author.id:
-        if m.author.id == smallestuser:
-            return
-        elif userdata.height == SV(0):
-            return
-        else:
-            userdata.height = smallestsize * Decimal(0.9)
-            userdb.save(userdata)
-
-    if lg == m.author.id:
-        if m.author.id == largestuser:
-            return
-        elif userdata.height == SV.infinity:
-            return
-        else:
-            userdata.height = largestsize * Decimal(1.1)
-            userdb.save(userdata)
-
-    if userdata.display:
-        await nickmanager.nick_update(m.author)
-
-
 class EdgeCog(commands.Cog):
     """Commands to create or clear edge users."""
 
@@ -186,6 +138,54 @@ class EdgeCog(commands.Cog):
             outstring += f"`{pair[0]}`: {pair[1]}\n"
 
         await ctx.send(outstring)
+
+    @commands.Cog.listener()
+    async def on_message(m):
+        # non-guild messages
+        if not isinstance(m.author, discord.Member):
+            return
+
+        try:
+            guilddata = guilddb.load(m.guild.id)
+        except GuildNotFoundException:
+            return  # Guild does not have edges set
+
+        sm = guilddata.small_edge
+        lg = guilddata.large_edge
+        if not (m.author.id == sm or m.author.id == lg):
+            return  # The user is not set to be the smallest or the largest user.
+
+        try:
+            userdata = userdb.load(m.guild.id, m.author.id)
+        except UserNotFoundException:
+            return
+
+        usersizes = getUserSizes(m.guild)
+        smallestuser = usersizes["smallest"]["id"]
+        smallestsize = usersizes["smallest"]["size"]
+        largestuser = usersizes["largest"]["id"]
+        largestsize = usersizes["largest"]["size"]
+
+        if sm == m.author.id:
+            if m.author.id == smallestuser:
+                return
+            elif userdata.height == SV(0):
+                return
+            else:
+                userdata.height = smallestsize * Decimal(0.9)
+                userdb.save(userdata)
+
+        if lg == m.author.id:
+            if m.author.id == largestuser:
+                return
+            elif userdata.height == SV.infinity:
+                return
+            else:
+                userdata.height = largestsize * Decimal(1.1)
+                userdb.save(userdata)
+
+        if userdata.display:
+            await nickmanager.nick_update(m.author)
 
 
 def setup(bot):

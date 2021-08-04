@@ -1,3 +1,4 @@
+from time import time
 import arrow
 import os
 import logging
@@ -14,7 +15,6 @@ import discordplus
 
 from sizebot import __version__
 from sizebot.conf import conf
-from sizebot.cogs import edge, limits, scaletalk
 from sizebot.lib import language, objs, paths, status, telemetry, units, utils, nickmanager
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
@@ -187,47 +187,38 @@ def main():
         await bot.process_commands(message)
 
         if hasattr(message.author, "guild") and message.author.guild is not None:
-            await scaletalk.on_message(message)
-            await edge.on_message(message)
-            await limits.on_message(message)
             await nickmanager.nick_update(message.author)
         # await meicros.on_message(message)
         await monika.on_message(message)
         await active.on_message(message)
 
     async def on_message_timed(message):
+        def timeywimey():
+            now = arrow.now()
+            if timeywimey.prev is None:
+                timeywimey.prev = now
+            diff = now - timeywimey.prev
+            timeywimey.prev = now
+            return diff
+
         message.content = message.content[len(conf.prefix + "timeit"):].lstrip()
-        processtime = arrow.now()
+        start = arrow.get(message.created_at.replace(tzinfo=pytz.UTC))
+        discordlatency = arrow.now() - start
+        timeywimey()
         await bot.process_commands(message)
-        talktime = arrow.now()
-        await scaletalk.on_message(message)
-        edgetime = arrow.now()
-        await edge.on_message(message)
-        limitstime = arrow.now()
-        await limits.on_message(message)
-        nickupdatetime = arrow.now()
+        processlatency = timeywimey()
         await nickmanager.nick_update(message.author)
-        monikatime = arrow.now()
+        nickupdatelatency = timeywimey()
         await monika.on_message(message)
-        activetime = arrow.now()
+        monikalatency = timeywimey()
         await active.on_message(message)
-        endtime = arrow.now()
-        starttime = arrow.get(message.created_at.replace(tzinfo=pytz.UTC))
-        discordlatency = processtime - starttime
-        processlatency = edgetime - processtime
-        talklatency = edgetime - talktime
-        edgelatency = limitstime - talktime
-        limitslatency = nickupdatetime - limitstime
-        nickupdatelatency = monikatime - nickupdatetime
-        monikalatency = activetime - monikatime
-        activelatency = endtime - activetime
-        totaltime = endtime - starttime
+        activelatency = timeywimey()
+        end = arrow.now()
+        totaltime = end - start
+
         latency = (
             f"Discord Latency: {utils.prettyTimeDelta(discordlatency.total_seconds(), True)}\n"
             f"Command Process Latency: {utils.prettyTimeDelta(processlatency.total_seconds(), True)}\n"
-            f"Scale-Talk Latency: {utils.prettyTimeDelta(talklatency.total_seconds(), True)}\n"
-            f"Edge Latency: {utils.prettyTimeDelta(edgelatency.total_seconds(), True)}\n"
-            f"Limits Latency: {utils.prettyTimeDelta(limitslatency.total_seconds(), True)}\n"
             f"Nick Update Latency: {utils.prettyTimeDelta(nickupdatelatency.total_seconds(), True)}\n"
             f"Monika Latency: {utils.prettyTimeDelta(monikalatency.total_seconds(), True)}\n"
             f"User Active Check Latency: {utils.prettyTimeDelta(activelatency.total_seconds(), True)}\n"

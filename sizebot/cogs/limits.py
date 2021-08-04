@@ -11,34 +11,6 @@ from sizebot.lib.units import SV
 logger = logging.getLogger("sizebot")
 
 
-async def on_message(m):
-    # non-guild messages
-    if not isinstance(m.author, discord.Member):
-        return
-
-    try:
-        userdata = userdb.load(m.guild.id, m.author.id)
-    except UserNotFoundException:
-        return
-    try:
-        guilddata = guilddb.load(m.guild.id)
-    except GuildNotFoundException:
-        return
-
-    if guilddata.low_limit:
-        if userdata.height < guilddata.low_limit:
-            userdata.height = guilddata.low_limit
-            userdb.save(userdata)
-
-    if guilddata.high_limit:
-        if userdata.height > guilddata.high_limit:
-            userdata.height = guilddata.high_limit
-            userdb.save(userdata)
-
-    if userdata.display:
-        await nickmanager.nick_update(m.author)
-
-
 class EdgeCog(commands.Cog):
     """Commands to create or clear edge users."""
 
@@ -112,6 +84,34 @@ class EdgeCog(commands.Cog):
         guilddb.save(guilddata)
         await ctx.send("There is now no highest allowed size in this guild.")
         logger.info(f"Cleared high size cap in guild {ctx.guild.id}.")
+
+    @commands.Cog.listener()
+    async def on_message(m):
+        # non-guild messages
+        if not isinstance(m.author, discord.Member):
+            return
+
+        try:
+            userdata = userdb.load(m.guild.id, m.author.id)
+        except UserNotFoundException:
+            return
+        try:
+            guilddata = guilddb.load(m.guild.id)
+        except GuildNotFoundException:
+            return
+
+        if guilddata.low_limit:
+            if userdata.height < guilddata.low_limit:
+                userdata.height = guilddata.low_limit
+                userdb.save(userdata)
+
+        if guilddata.high_limit:
+            if userdata.height > guilddata.high_limit:
+                userdata.height = guilddata.high_limit
+                userdb.save(userdata)
+
+        if userdata.display:
+            await nickmanager.nick_update(m.author)
 
 
 def setup(bot):

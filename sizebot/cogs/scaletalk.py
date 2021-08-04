@@ -95,35 +95,35 @@ class ScaleTypeCog(commands.Cog):
         userdb.save(userdata)
         await ctx.send(f"{userdata.nickname}'s scale per character is now cleared.")
 
+    @commands.Cog.listener()
+    async def on_message(message):
+        if not isinstance(message.author, discord.Member):
+            return
+        guildid = message.author.guild.id
+        userid = message.author.id
+        content = message.content
+        content = re.sub(r"<:(.*):\d+>", r"\1", content)  # Make emojis just their name.
+        length = len(content)
 
-async def on_message(message):
-    if not isinstance(message.author, discord.Member):
-        return
-    guildid = message.author.guild.id
-    userid = message.author.id
-    content = message.content
-    content = re.sub(r"<:(.*):\d+>", r"\1", content)  # Make emojis just their name.
-    length = len(content)
+        try:
+            userdata = userdb.load(guildid, userid)
+        except UserNotFoundException:
+            return
 
-    try:
-        userdata = userdb.load(guildid, userid)
-    except UserNotFoundException:
-        return
+        if userdata.scaletalklock is True:
+            userdata.scaletalklock = False
+            userdb.save(userdata)
+            return
 
-    if userdata.scaletalklock is True:
-        userdata.scaletalklock = False
+        if userdata.currentscaletalk is None:
+            return
+
+        if userdata.currentscaletalk.changetype == "add":
+            userdata.height += (userdata.currentscaletalk.amount * length)
+        elif userdata.currentscaletalk.changetype == "multiply":
+            userdata.height *= (userdata.currentscaletalk.amount ** length)
+
         userdb.save(userdata)
-        return
-
-    if userdata.currentscaletalk is None:
-        return
-
-    if userdata.currentscaletalk.changetype == "add":
-        userdata.height += (userdata.currentscaletalk.amount * length)
-    elif userdata.currentscaletalk.changetype == "multiply":
-        userdata.height *= (userdata.currentscaletalk.amount ** length)
-
-    userdb.save(userdata)
 
 
 def setup(bot):
