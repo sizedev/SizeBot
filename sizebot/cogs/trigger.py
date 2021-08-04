@@ -1,3 +1,4 @@
+from collections import defaultdict
 import logging
 
 import discord
@@ -9,32 +10,65 @@ from sizebot.lib.diff import Diff
 
 logger = logging.getLogger("sizebot")
 
+user_triggers = defaultdict(dict)
+
+
+def set_cached_trigger(guildid, authorid, trigger, diff):
+    user_triggers[trigger][guildid, authorid] = diff
+
+
+def unset_cached_trigger(guildid, authorid, trigger):
+    if (guildid, authorid) not in user_triggers[trigger]:
+        return
+    del user_triggers[trigger][guildid, authorid]
+    if not user_triggers[trigger]:
+        del user_triggers[trigger]
+
+
+def set_trigger(guildid, authorid, trigger, diff):
+    set_cached_trigger(guildid, authorid, trigger, diff)
+    userdata = userdb.load(guildid, authorid)
+    userdata.triggers[trigger] = diff
+    userdb.save(userdata)
+
+
+def unset_trigger(guildid, authorid, trigger):
+    unset_cached_trigger(guildid, authorid, trigger)
+    userdata = userdb.load(guildid, authorid)
+    if trigger in userdata.triggers[trigger]:
+        del userdata.triggers[trigger]
+        userdb.save(userdata)
+
 
 async def on_message(m):
     # non-guild messages
     if not isinstance(m.author, discord.Member):
         return
 
-    for _, userid in userdb.listUsers(guildid = m.guild.id):
-        userdata = userdb.load(m.guild.id, userid)
+    if m.author.bot:
+        return
 
-        if m.author.bot:
-            return
+    if m.content.startswith(conf.prefix):
+        return
 
-        if m.content.startswith(conf.prefix):
-            return
+    # Collect list of triggered users
+    users_to_update = defaultdict(list)
+    for keyword, users in user_triggers.items():
+        if keyword in m.content:
+            for (guildid, userid), diff in users.items():
+                users_to_update[guildid, userid].append(diff)
 
-        for trigger, diff in userdata.triggers.items():
-            if trigger in m.content:
-                if diff.changetype == "multiply":
-                    userdata.height *= diff.amount
-                elif diff.changetype == "add":
-                    userdata.height += diff.amount
-                elif diff.changetype == "power":
-                    userdata = userdata ** diff.amount
-
-                userdb.save(userdata)
-
+    # Update triggered users
+    for (guildid, userid), diffs in users_to_update.items():
+        userdata = userdb.load(guildid, userid)
+        for diff in diffs:
+            if diff.changetype == "multiply":
+                userdata.height *= diff.amount
+            elif diff.changetype == "add":
+                userdata.height += diff.amount
+            elif diff.changetype == "power":
+                userdata = userdata ** diff.amount
+        userdb.save(userdata)
         if userdata.display:
             await nickmanager.nick_update(m.author)
 
@@ -44,6 +78,10 @@ class TriggerCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        for guildid, userid in userdb.listUsers():
+            userdata = userdb.load(guildid, userid)
+            for trigger, diff in userdata.triggers.items():
+                user_triggers[trigger][guildid, userid] = diff
 
     @commands.command(
         category = "trigger"
@@ -59,9 +97,7 @@ class TriggerCog(commands.Cog):
         category = "trigger"
     )
     async def settrigger(self, ctx, trigger, *, diff: Diff):
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
-        userdata.triggers[trigger] = diff
-        userdb.save(userdata)
+        set_trigger(ctx.guild.id, ctx.author.id, trigger, diff)
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
 
     @commands.command(
@@ -70,9 +106,7 @@ class TriggerCog(commands.Cog):
         aliases = ["resettrigger", "unsettrigger", "removetrigger"]
     )
     async def cleartrigger(self, ctx, *, trigger):
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
-        del userdata.triggers[trigger]
-        userdb.save(userdata)
+        unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send(f"Removed trigger word {trigger!r}.")
 
 
