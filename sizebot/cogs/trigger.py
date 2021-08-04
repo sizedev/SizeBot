@@ -51,7 +51,7 @@ class TriggerCog(commands.Cog):
                 user_triggers[trigger][guildid, userid] = diff
 
     @commands.Cog.listener()
-    async def on_message(m):
+    async def on_message(self, m):
         # non-guild messages
         if not isinstance(m.author, discord.Member):
             return
