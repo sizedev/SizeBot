@@ -43,12 +43,16 @@ class LoopCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
-        usage = "<type> stop",
+        usage = "<type> [stop]",
         category = "loop"
     )
     @commands.guild_only()
     async def start(self, ctx, action, stop: TV = None):
-        """Keep moving forward -- Walt Disney"""
+        """Keep moving forward -- Walt Disney
+
+        `<type>` can be one of the following: walk, run, climb, crawl, swim
+        `[stop]` is an optional time limit for moving.
+        """
         movetypes = ["walk", "run", "climb", "crawl", "swim"]
         if action not in movetypes:
             # TODO: Raise a real DigiException here.
