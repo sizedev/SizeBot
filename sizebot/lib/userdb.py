@@ -11,7 +11,7 @@ import sizebot.data
 from sizebot.lib import errors, paths
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, Rate as ParseableRate
-from sizebot.lib.units import SV, WV
+from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.utils import isURL, truncate
 
 # Defaults
@@ -32,7 +32,7 @@ class User:
                  "_hairlength", "_taillength", "_earheight", "_liftstrength", "triggers", "_unitsystem", "species", "soft_gender",
                  "avatar_url", "_walkperhour", "_runperhour", "_swimperhour", "incomprehensible",
                  "_currentscalestep", "_currentscaletalk", "scaletalklock",
-                 "currentmovetype", "movestarted",
+                 "currentmovetype", "movestarted", "movestop",
                  "registration_steps_remaining", "_macrovision_model", "_macrovision_view"]
 
     def __init__(self):
@@ -62,6 +62,7 @@ class User:
         self.scaletalklock: bool = False
         self.currentmovetype: Optional[str] = None
         self.movestarted: Optional[Arrow] = None
+        self.movestop: Optional[TV] = None
         self.triggers: Dict[str, Diff] = {}
         self._unitsystem: str = "m"
         self.species: Optional[str] = None
@@ -86,7 +87,7 @@ class User:
                 f"PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
                 f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}, INCOMPREHENSIBLE = {self.incomprehensible!r}, "
                 f"CURRENTSCALESTEP = {self.currentscalestep!r}, CURRENTSCALETALK = {self.currentscaletalk!r}, "
-                f"CURRENTMOVETYPE = {self.currentmovetype!r}, MOVESTARTED = {self.movestarted!r}, "
+                f"CURRENTMOVETYPE = {self.currentmovetype!r}, MOVESTARTED = {self.movestarted!r}, MOVESTOP = {self.movestop!r}, "
                 f"TRIGGERS = {self.triggers!r}, "
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
@@ -524,6 +525,7 @@ class User:
             "scaletalklock":    self.scaletalklock,
             "currentmovetype":  self.currentmovetype,
             "movestarted":      None if self.movestarted is None else self.movestarted.isoformat(),
+            "movestop":         None if self.movestop is None else str(self.movestop),
             "triggers":         {k: v.toJSON() for k, v in self.triggers.items()},
             "unitsystem":       self.unitsystem,
             "species":          self.species,
@@ -571,10 +573,17 @@ class User:
         userdata.currentscaletalk = currentscaletalk
         userdata.scaletalklock = jsondata.get("scaletalklock")
         userdata.currentmovetype = jsondata.get("currentmovetype")
+
         movestarted = jsondata.get("movestarted")
         if movestarted is not None:
             movestarted = arrow.get(movestarted)
         userdata.movestarted = movestarted
+
+        movestop = jsondata.get("movestop")
+        if movestop is not None:
+            movestop = TV(movestop)
+        userdata.movestop = movestop
+
         triggers = jsondata.get("triggers")
         if triggers is not None:
             triggers = {k: Diff.fromJSON(v) for k, v in triggers.items()}
