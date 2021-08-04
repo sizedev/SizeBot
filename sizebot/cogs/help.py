@@ -409,6 +409,7 @@ categories = [
     HelpCategory("scalestep", "Scale on Action Commands", "Commands related to scaling every action you take.", "🚶"),
     HelpCategory("trigger", "Trigger Commands", "Commands related to trigger words.", "🔫"),
     HelpCategory("loop", "Looping Commands", "Commands related to doing looping tasks.", "🔁"),
+    HelpCategory("multiplayer", "Multiplayer Commands", "Commands for playing with others.", "👥"),
     HelpCategory("profile", "Profile Commands", "Commands for updating and displaying profiles.", "🆔"),
     HelpCategory("fun", "Fun Commands", "Commands that aren't size-based, but are still fun!", "🎉"),
     HelpCategory("mod", "Mod Commands", "Commands for server mods.", "⚙️"),
