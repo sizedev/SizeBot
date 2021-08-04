@@ -269,7 +269,8 @@ class HelpCog(commands.Cog):
                                  "**Originally Tested** *by AWK, Kelly, worstgender, and Arceus3251*\n"),
                         inline = False)
         embed.add_field(name = "Servers",
-                        value = ("**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*"),
+                        value = ("**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*\n"
+                                 "**[SW Dollhouse](https://discord.gg/5mMBRnjJ3J)**: a shrinking women server run by Natalie"),
                         inline = False)
         embed.add_field(name = "Technical Details",
                         value = "Written in Python 3.6, and slowly upgraded to 3.9. Originally written using Atom, and now Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
