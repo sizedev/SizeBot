@@ -22,6 +22,16 @@ class MPCog(commands.Cog):
     )
     async def pushbutton(self, ctx, user: discord.Member):
         userdata = userdb.load(ctx.guild.id, user.id)
+        if userdata.button is None:
+            await ctx.send(f"{userdata.nickname} has no button to push!")
+            return
+        diff = userdata.button
+        if diff.changetype == "multiply":
+            userdata.height *= diff.amount
+        elif diff.changetype == "add":
+            userdata.height += diff.amount
+        elif diff.changetype == "power":
+            userdata = userdata ** diff.amount
         await nickmanager.nick_update(user)
         await ctx.send(f"You pushed {userdata.nickname}'s button! They are now **{userdata.height:,.3mu}** tall.")
 
