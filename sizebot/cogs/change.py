@@ -78,7 +78,7 @@ class ChangeCog(commands.Cog):
 
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{string.original}`.")
 
-        elif isinstance(string, str) and string == "stop":
+        elif string == "stop":
             await ctx.invoke(self.bot.get_command("stopchange"), query="")
 
     @commands.command(
