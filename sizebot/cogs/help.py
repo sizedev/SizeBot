@@ -407,6 +407,7 @@ categories = [
     HelpCategory("change", "Change Commands", "Commands for changing your stats.", "📈"),
     HelpCategory("stats", "Stats Commands", "Commands for outputting yours and others stats.", "📊"),
     HelpCategory("scalestep", "Scale on Action Commands", "Commands related to scaling every action you take.", "🚶"),
+    HelpCategory("trigger", "Trigger Commands", "Commands related to trigger words.", "🔫"),
     HelpCategory("loop", "Looping Commands", "Commands related to doing looping tasks.", "🔁"),
     HelpCategory("profile", "Profile Commands", "Commands for updating and displaying profiles.", "🆔"),
     HelpCategory("fun", "Fun Commands", "Commands that aren't size-based, but are still fun!", "🎉"),
