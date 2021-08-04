@@ -222,7 +222,7 @@ class HelpCog(commands.Cog):
         embed = Embed(
             title=signature,
             description=description
-        ).set_author(name=f"Help [SizeBot {__version__}]").set_footer(text=f"See `{conf.prefix}help <command> for more details about a command and how to use it.")
+        ).set_author(name=f"Help [SizeBot {__version__}]").set_footer(text=f"See `{conf.prefix}help <command>` for more details about a command and how to use it.")
 
         if cmd.aliases:
             embed.add_field(name="**Aliases:**", value=", ".join(cmd.aliases), inline=False)
