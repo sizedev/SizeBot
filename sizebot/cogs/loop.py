@@ -58,10 +58,11 @@ class LoopCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         if userdata.currentmovetype:
-            _, distance = calc_move_dist(userdata)
+            t, distance = calc_move_dist(userdata)
+            nicetime = prettyTimeDelta(t)
             await ctx.send(
                 f"{emojis.warning} You're already {ing[userdata.currentmovetype]}.\n"
-                f"You've gone **{distance:,.3mu}** so far!"
+                f"You've gone **{distance:,.3mu}** so far in **{nicetime}**!"
             )
             return
 
@@ -81,8 +82,9 @@ class LoopCog(commands.Cog):
             await ctx.send("You aren't currently moving!")
             return
 
-        _, distance = calc_move_dist(userdata)
-        await ctx.send(f"You stopped {ing[userdata.currentmovetype]}. You {ed[userdata.currentmovetype]} **{distance:,.3mu}**!")
+        t, distance = calc_move_dist(userdata)
+        nicetime = prettyTimeDelta(t)
+        await ctx.send(f"You stopped {ing[userdata.currentmovetype]}. You {ed[userdata.currentmovetype]} **{distance:,.3mu}** in **{nicetime}!")
 
         userdata.currentmovetype = None
         userdata.movestarted = None
