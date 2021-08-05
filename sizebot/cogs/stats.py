@@ -785,10 +785,11 @@ class StatsCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         basemass = userdata.baseweight
         scale = userdata.scale
-        time, _, _ = freefall(basemass, distance, scale)
+        time, vm, vt = freefall(basemass, distance, scale)
         ftime = prettyTimeDelta(time, millisecondAccuracy = True, roundeventually = True)
 
-        await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!")
+        await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!\n"
+                       f"𝑉𝑚𝑎𝑥: {vm:.3m}/s, 𝑉𝑡: {vt:.3m}")
 
     @release_on("3.6")
     @commands.command(
@@ -803,10 +804,11 @@ class StatsCog(commands.Cog):
         basemass = userdata.baseweight
         scale = 1
         fakedistance = SV(distance / userdata.scale)
-        time, _, _ = freefall(basemass, fakedistance, scale)
+        time, vm, vt = freefall(basemass, fakedistance, scale)
         ftime = prettyTimeDelta(time, millisecondAccuracy = True, roundeventually = True)
 
-        await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!")
+        await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!\n"
+                       f"𝑉𝑚𝑎𝑥: {vm:.3m}/s, 𝑉𝑡: {vt:.3m}")
 
     @commands.command(
         aliases = [],
