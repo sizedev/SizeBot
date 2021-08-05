@@ -5,7 +5,7 @@ from discord.utils import get
 from discord.ext import commands
 
 from sizebot.conf import conf
-from sizebot.lib import errors, proportions, telemetry, userdb
+from sizebot.lib import errors, proportions, telemetry, userdb, nickmanager
 from sizebot.lib.constants import ids, emojis
 from sizebot.lib.units import SV, WV
 
@@ -322,7 +322,7 @@ class RegisterCog(commands.Cog):
 
         # remove the sizetag
         if ctx.me.guild_permissions.manage_nicknames:
-            await proportions.nickReset(user)
+            await nickmanager.nickReset(user)
         # delete the user file
         userdb.delete(guild.id, user.id)
         # remove the user role

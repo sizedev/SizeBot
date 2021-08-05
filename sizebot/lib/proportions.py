@@ -2,7 +2,6 @@ from copy import copy
 import math
 import re
 
-import discord
 from discord import Embed
 
 from sizebot import __version__
@@ -15,35 +14,6 @@ from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
-
-
-# TODO: Move to somewhere other than here.
-async def nickReset(user):
-    """Remove sizetag from user's nickname"""
-    # webhooks
-    if user.discriminator == "0000":
-        return
-    # non-guild messages
-    if not isinstance(user, discord.Member):
-        return
-    # bots
-    if user.bot:
-        return
-    # guild owner
-    if user.id == user.guild.owner_id:
-        return
-
-    userdata = userdb.load(user.guild.id, user.id, allow_unreg=True)
-
-    # User's display setting is N. No sizetag.
-    if not userdata.display:
-        return
-
-    try:
-        # PERMISSION: requires manage_nicknames
-        await user.edit(nick = userdata.nickname)
-    except discord.Forbidden:
-        raise errors.NoPermissionsException
 
 
 def changeUser(guildid, userid, changestyle, amount):

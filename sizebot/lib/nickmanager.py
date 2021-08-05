@@ -91,7 +91,6 @@ async def nick_update(user):
         raise errors.NoPermissionsException
 
 
-# TODO: Move to somewhere other than here.
 async def nickReset(user):
     """Remove sizetag from user's nickname"""
     # webhooks
