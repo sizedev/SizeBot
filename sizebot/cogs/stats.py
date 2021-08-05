@@ -788,7 +788,25 @@ class StatsCog(commands.Cog):
         time, _, _ = freefall(basemass, distance, scale)
         ftime = prettyTimeDelta(time, millisecondAccuracy = True, roundeventually = True)
 
-        await ctx.send(f"You fell **{distance:,.3mu}** in {ftime}!")
+        await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!")
+
+    @release_on("3.6")
+    @commands.command(
+        usage = "<distance>",
+        hidden = True
+    )
+    async def rpfall(self, ctx, distance: typing.Union[discord.Member, SV]):
+        if isinstance(distance, discord.Member):
+            ud = userdb.load(ctx.guild.id, distance.id)
+            distance = ud.height
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        basemass = userdata.baseweight
+        scale = 1
+        distance *= userdata.scale
+        time, _, _ = freefall(basemass, distance, scale)
+        ftime = prettyTimeDelta(time, millisecondAccuracy = True, roundeventually = True)
+
+        await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!")
 
     @commands.command(
         aliases = [],
