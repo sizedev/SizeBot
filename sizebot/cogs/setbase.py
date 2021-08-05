@@ -223,7 +223,7 @@ class SetBaseCog(commands.Cog):
         userdata.liftstrength = newstrength
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s strength is now {userdata.liftstrength:mu}.")
+        await ctx.send(f"{userdata.nickname}'s strength is now {WV(userdata.liftstrength):mu}.")
         await showNextStep(ctx, userdata)
 
     @commands.command(
