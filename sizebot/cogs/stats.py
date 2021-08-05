@@ -802,7 +802,7 @@ class StatsCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         basemass = userdata.baseweight
         scale = 1
-        distance *= userdata.scale
+        distance = SV(distance / userdata.scale)
         time, _, _ = freefall(basemass, distance, scale)
         ftime = prettyTimeDelta(time, millisecondAccuracy = True, roundeventually = True)
 
