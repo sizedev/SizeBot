@@ -23,7 +23,7 @@ class SetCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
-        aliases = ["changenick", "nick"],
+        aliases = ["changenick", "nick", "name", "changename", "setname"],
         usage = "<nick>",
         category = "set"
     )
