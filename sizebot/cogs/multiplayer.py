@@ -41,7 +41,7 @@ class MPCog(commands.Cog):
         category = "multiplayer"
     )
     async def setbutton(self, ctx, *, diff: Diff):
-        userdata = userdb.load(ctx.guild.id, ctx.user.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.button = diff
         userdb.save(userdata)
         await ctx.send(f"Set button to {diff}.")
@@ -52,7 +52,7 @@ class MPCog(commands.Cog):
         aliases = ["resetbutton", "unsetbutton", "removebutton"]
     )
     async def clearbutton(self, ctx,):
-        userdata = userdb.load(ctx.guild.id, ctx.user.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.button = None
         userdb.save(userdata)
         await ctx.send("Your button is now disabled.")

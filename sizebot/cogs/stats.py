@@ -782,7 +782,7 @@ class StatsCog(commands.Cog):
         if isinstance(distance, discord.Member):
             ud = userdb.load(ctx.guild.id, distance.id)
             distance = ud.height
-        userdata = userdb.load(ctx.guild.id, ctx.user.id)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
         basemass = userdata.baseweight
         scale = userdata.scale
         time, _, _ = freefall(basemass, distance, scale)
