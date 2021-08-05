@@ -140,7 +140,7 @@ class EdgeCog(commands.Cog):
         await ctx.send(outstring)
 
     @commands.Cog.listener()
-    async def on_message(m):
+    async def on_message(self, m):
         # non-guild messages
         if not isinstance(m.author, discord.Member):
             return
