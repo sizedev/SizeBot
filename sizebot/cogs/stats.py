@@ -802,8 +802,8 @@ class StatsCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         basemass = userdata.baseweight
         scale = 1
-        distance = SV(distance / userdata.scale)
-        time, _, _ = freefall(basemass, distance, scale)
+        fakedistance = SV(distance / userdata.scale)
+        time, _, _ = freefall(basemass, fakedistance, scale)
         ftime = prettyTimeDelta(time, millisecondAccuracy = True, roundeventually = True)
 
         await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!")
