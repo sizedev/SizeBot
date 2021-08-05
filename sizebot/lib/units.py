@@ -474,6 +474,8 @@ class SV(Dimension):
         s = utils.removeBrackets(s)
         s = cls.isFeetAndInchesAndIfSoFixIt(s)
         # TODO: These are temporary patches.
+        # Comma patch
+        s = s.replace(",", "")
         # Zero patch
         if s.lower() in ["0", "zero", "no"]:
             if s.lower() == "no":
@@ -525,6 +527,8 @@ class WV(Dimension):
     def getQuantityPair(cls, s):
         s = utils.removeBrackets(s)
         # TODO: These are temporary patches.
+        # Comma patch
+        s = s.replace(",", "")
         # Zero patch
         if s.lower() in ["0", "zero"]:
             return 0, "g"
