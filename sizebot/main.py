@@ -96,7 +96,7 @@ def main():
 
     launchtime = datetime.now()
 
-    bot = Bot(command_prefix = conf.prefix, allowed_mentions = discord.AllowedMentions(everyone=False), intents=discord.Intents.all())
+    bot = Bot(command_prefix = conf.prefix, allowed_mentions = discord.AllowedMentions(everyone=False), intents=discord.Intents.all(), case_insensitive=True)
 
     bot.remove_command("help")
 
