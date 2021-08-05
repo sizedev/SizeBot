@@ -2,7 +2,7 @@ import math
 from typing import Tuple
 
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.units import WV, SV
+from sizebot.lib.units import TV, WV, SV
 
 
 def freefall(basemass: WV, altitude: SV, scale: Decimal) -> Tuple[Decimal, Decimal, Decimal]:
@@ -28,7 +28,7 @@ def freefall(basemass: WV, altitude: SV, scale: Decimal) -> Tuple[Decimal, Decim
     vel = math.sqrt(g * m / k) * math.tanh(t * math.sqrt(g * k / m))
     vmax = math.sqrt(g * m / k)
 
-    return t, vel, vmax
+    return TV(t), SV(vel), SV(vmax)
 
 # https://www.omnicalculator.com/physics/free-fall-air-resistance#how-to-calculate-air-resistance
 # If dropped, how long does it take for person to hit ground

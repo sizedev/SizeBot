@@ -1,4 +1,5 @@
 import logging
+from sizebot.lib.freefall import freefall
 from sizebot.lib.versioning import release_on
 import typing
 
@@ -781,8 +782,13 @@ class StatsCog(commands.Cog):
         if isinstance(distance, discord.Member):
             ud = userdb.load(ctx.guild.id, distance.id)
             distance = ud.height
+        userdata = userdb.load(ctx.guild.id, ctx.user.id)
+        basemass = userdata.baseweight
+        scale = userdata.scale
+        time, _, _ = freefall(basemass, distance, scale)
+        ftime = prettyTimeDelta(time, millisecondAccuracy = True, roundeventually = True)
 
-        await ctx.send("he fall")
+        await ctx.send(f"You fell **{distance:,.3mu}** in {ftime}!")
 
     @commands.command(
         aliases = [],
