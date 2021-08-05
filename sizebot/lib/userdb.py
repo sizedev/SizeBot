@@ -64,6 +64,7 @@ class User:
         self.movestarted: Optional[Arrow] = None
         self.movestop: Optional[TV] = None
         self.triggers: Dict[str, Diff] = {}
+        self.button: Optional[Diff] = None
         self._unitsystem: str = "m"
         self.species: Optional[str] = None
         self.soft_gender = None
@@ -88,7 +89,7 @@ class User:
                 f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}, INCOMPREHENSIBLE = {self.incomprehensible!r}, "
                 f"CURRENTSCALESTEP = {self.currentscalestep!r}, CURRENTSCALETALK = {self.currentscaletalk!r}, "
                 f"CURRENTMOVETYPE = {self.currentmovetype!r}, MOVESTARTED = {self.movestarted!r}, MOVESTOP = {self.movestop!r}, "
-                f"TRIGGERS = {self.triggers!r}, "
+                f"TRIGGERS = {self.triggers!r}, BUTTON = {self.button!r}, "
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
@@ -527,6 +528,7 @@ class User:
             "movestarted":      None if self.movestarted is None else self.movestarted.isoformat(),
             "movestop":         None if self.movestop is None else str(self.movestop),
             "triggers":         {k: v.toJSON() for k, v in self.triggers.items()},
+            "button":           None if self.button is None else self.button.toJSON(),
             "unitsystem":       self.unitsystem,
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining,
@@ -590,6 +592,10 @@ class User:
         else:
             triggers = {}
         userdata.triggers = triggers
+
+        button = jsondata.get("button")
+        if button is not None:
+            button = Diff.fromJSON(button)
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])

@@ -47,6 +47,7 @@ initial_cogs = [
     "keypad",
     "limits",
     "loop",
+    "multiplayer",
     "naptime",
     "profile",
     # "rainbow",
