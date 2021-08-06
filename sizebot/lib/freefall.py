@@ -23,14 +23,21 @@ def freefall(basemass: WV, altitude: SV, scale: Decimal) -> Tuple[Decimal, Decim
         Terminal velocity (m/s)
     """
     basemass = basemass / Decimal(1000)
-    m = basemass * (scale ** 3)
+    m = basemass * (scale ** Decimal(3))
     h = altitude
     g = Decimal("9.807")
-    k = Decimal("0.24") * (scale ** 2)
+    k = Decimal("0.24") * (scale ** Decimal(2))
 
-    t = math.sqrt(m / (g * k)) * math.acosh(math.exp(h * k / m))
-    vel = math.sqrt(g * m / k) * math.tanh(t * math.sqrt(g * k / m))
-    feelslike = m * math.log(-(-math.cosh(math.sqrt(1 / basemass) * math.sqrt(basemass) * math.atanh((0.156436 * vel) / math.sqrt(basemass)))) ** (25 / 6))
+    t = Decimal(math.sqrt(m / (g * k))) * Decimal(math.acosh(Decimal(math.exp(h * k / m))))
+    vel = Decimal(math.sqrt(g * m / k)) * Decimal(math.tanh(t * Decimal(math.sqrt(g * k / m))))
+
+    # calculate feelslike
+    step1 = Decimal(25) / Decimal(6)
+    step2 = Decimal(math.sqrt(Decimal(1) / basemass))
+    step3 = Decimal(math.sqrt(basemass))
+    step4 = Decimal(math.atanh((Decimal("0.156436") * vel) / Decimal(math.sqrt(basemass))))
+    step5 = -Decimal(math.cosh(step2 * step3 * step4))
+    feelslike = m * Decimal(math.log(Decimal(math.pow(-step5, step1))))
 
     return TV(t), SV(vel), SV(feelslike)
 

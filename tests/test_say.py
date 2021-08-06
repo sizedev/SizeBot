@@ -1,8 +1,12 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
-from sizebot.cogs import say
+
 from sizebot.lib.units import SV
 from sizebot.lib.errors import UserNotFoundException
+from sizebot.conf import conf
+conf.load()     # Need to run this before importing anything from sizebot.cog
+
+from sizebot.cogs import say   # noqa: E402
 
 
 @pytest.fixture
