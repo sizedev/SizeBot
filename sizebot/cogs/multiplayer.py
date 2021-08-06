@@ -37,7 +37,7 @@ class MPCog(commands.Cog):
 
     @release_on("3.6")
     @commands.command(
-        usage = "<trigger> <diff>",
+        usage = "<diff>",
         category = "multiplayer"
     )
     async def setbutton(self, ctx, *, diff: Diff):

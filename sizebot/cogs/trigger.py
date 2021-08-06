@@ -90,10 +90,15 @@ class TriggerCog(commands.Cog):
 
     @release_on("3.6")
     @commands.command(
-        category = "trigger"
+        category = "trigger",
+        usage = "[user]"
     )
-    async def triggers(self, ctx):
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+    async def triggers(self, ctx, user: discord.Member):
+        if user is None:
+            userid = ctx.author.id
+        else:
+            userid = user.id
+        userdata = userdb.load(ctx.guild.id, userid)
         triggers = [f"{trigger}: {diff}" for trigger, diff in userdata.triggers.items()]
         out = "**Triggers**:\n" + "\n".join(triggers)
         await ctx.send(out)
