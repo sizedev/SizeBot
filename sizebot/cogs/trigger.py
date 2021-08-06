@@ -95,7 +95,7 @@ class TriggerCog(commands.Cog):
         category = "trigger",
         usage = "[user]"
     )
-    async def triggers(self, ctx, user: discord.Member):
+    async def triggers(self, ctx, *, user: discord.Member = None):
         if user is None:
             userid = ctx.author.id
         else:
