@@ -462,7 +462,7 @@ class User:
             "f": "female",
             None: "male"
         }
-        return human_views[self.gender]
+        return human_views[self.autogender]
 
     @macrovision_view.setter
     def macrovision_view(self, value):
