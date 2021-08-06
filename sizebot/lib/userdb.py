@@ -21,6 +21,8 @@ defaultterminalvelocity = SV("63.63")  # meters/second
 falllimit = SV("7.73")                 # meters/second
 defaultliftstrength = WV("18143.7")    # grams
 
+BASICALLY_ZERO = Decimal("1E-27")
+
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 
@@ -129,7 +131,7 @@ class User:
     @height.setter
     def height(self, value):
         value = SV(value)
-        if value < 0:
+        if value < BASICALLY_ZERO:
             value = SV(0)
         self._height = value
 
@@ -140,7 +142,7 @@ class User:
     @baseheight.setter
     def baseheight(self, value):
         value = SV(value)
-        if value < 0:
+        if value < BASICALLY_ZERO:
             value = SV(0)
         self._baseheight = value
 
@@ -150,7 +152,7 @@ class User:
 
     @footlength.setter
     def footlength(self, value):
-        if value is None or SV(value) <= 0:
+        if value is None or SV(value) < BASICALLY_ZERO:
             self._footlength = None
             return
         self._footlength = SV(value)
@@ -189,7 +191,7 @@ class User:
             self._hairlength = None
             return
         value = SV(value)
-        if value < 0:
+        if value < BASICALLY_ZERO:
             value = SV(0)
         self._hairlength = value
 
@@ -199,7 +201,7 @@ class User:
 
     @taillength.setter
     def taillength(self, value):
-        if value is None or SV(value) <= 0:
+        if value is None or SV(value) <= BASICALLY_ZERO:
             self._taillength = None
             return
         self._taillength = SV(value)
@@ -210,7 +212,7 @@ class User:
 
     @earheight.setter
     def earheight(self, value):
-        if value is None or SV(value) <= 0:
+        if value is None or SV(value) <= BASICALLY_ZERO:
             self._earheight = None
             return
         self._earheight = SV(value)
