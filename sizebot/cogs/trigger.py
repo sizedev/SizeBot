@@ -101,7 +101,7 @@ class TriggerCog(commands.Cog):
         else:
             userid = user.id
         userdata = userdb.load(ctx.guild.id, userid)
-        triggers = [f"{trigger}: {diff}" for trigger, diff in userdata.triggers.items()]
+        triggers = [f"`{trigger}`: {diff}" for trigger, diff in userdata.triggers.items()]
         out = "**Triggers**:\n" + "\n".join(triggers)
         await ctx.send(out)
 
@@ -123,6 +123,18 @@ class TriggerCog(commands.Cog):
     async def cleartrigger(self, ctx, *, trigger):
         unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send(f"Removed trigger word {trigger!r}.")
+
+    @release_on("3.6")
+    @commands.command(
+        usage = "<trigger>",
+        category = "trigger",
+        aliases = ["resetalltriggers", "unsetalltriggers", "removealltriggers"]
+    )
+    async def clearalltriggers(self, ctx, *, trigger):
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        for trigger in userdata.triggers.keys():
+            unset_trigger(ctx.guild.id, ctx.author.id, trigger)
+        await ctx.send("Removed all trigger words.")
 
 
 def setup(bot):
