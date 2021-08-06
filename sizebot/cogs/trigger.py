@@ -72,13 +72,12 @@ class TriggerCog(commands.Cog):
         for keyword, users in user_triggers.items():
             if keyword in m.content:
                 for (guildid, userid), diff in users.items():
-                    users_to_update[guildid, userid].append(diff)
+                    # Guild-safe check
+                    if guildid == m.guild.id:
+                        users_to_update[guildid, userid].append(diff)
 
         # Update triggered users
         for (guildid, userid), diffs in users_to_update.items():
-            # Guild-safe check
-            if guildid != m.guild.id:
-                continue
             userdata = userdb.load(guildid, userid)
             for diff in diffs:
                 if diff.changetype == "multiply":
