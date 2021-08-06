@@ -57,7 +57,8 @@ def freefall(basemass: WV, altitude: SV, scale: Decimal) -> Tuple[Decimal, Decim
 # vel     Maximum velocity            ? m/s
 # vmax    Terminal Velocity           ? m/s
 #
-#    g = 9.807
-#    t = sqrt(m/(g*k))*acosh(exp(h*k/m))
-#  vel = sqrt(g*m/k)*tanh(t*sqrt(g*k/m))
-# vmax = sqrt(g*m/k)
+#         g = 9.807
+#         t = sqrt(m/(g*k))*acosh(exp(h*k/m))
+#       vel = sqrt(g*m/k)*tanh(t*sqrt(g*k/m))
+#      vmax = sqrt(g*m/k)
+# feelslike = m * log(-(-cosh(sqrt(1/m) * sqrt(m) * atanh((0.156436 * v)/sqrt(m))))**(25/6))
