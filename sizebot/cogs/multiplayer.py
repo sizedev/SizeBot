@@ -32,6 +32,7 @@ class MPCog(commands.Cog):
             userdata.height += diff.amount
         elif diff.changetype == "power":
             userdata = userdata ** diff.amount
+        userdb.save(userdata)
         await nickmanager.nick_update(user)
         await ctx.send(f"You pushed {userdata.nickname}'s button! They are now **{userdata.height:,.3mu}** tall.")
 
