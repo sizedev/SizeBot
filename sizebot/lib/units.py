@@ -511,7 +511,7 @@ class SV(Dimension):
         feetval = Decimal(feetval)
         inchval = Decimal(inchval)
         totalinches = (feetval * 12) + inchval
-        return f"{totalinches}in"
+        return f"{str(totalinches)}in"
 
     def __repr__(self):
         return f"SV('{self}')"
