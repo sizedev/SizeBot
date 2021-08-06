@@ -37,7 +37,7 @@ def set_trigger(guildid, authorid, trigger, diff):
 def unset_trigger(guildid, authorid, trigger):
     unset_cached_trigger(guildid, authorid, trigger)
     userdata = userdb.load(guildid, authorid)
-    if trigger in userdata.triggers[trigger]:
+    if trigger in userdata.triggers:
         del userdata.triggers[trigger]
         userdb.save(userdata)
 
