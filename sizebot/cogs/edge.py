@@ -51,8 +51,10 @@ class EdgeCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
-        category = "misc"
+        category = "mod",
+        hidden = True
     )
+    @is_mod()
     async def edges(self, ctx):
         """See who is set to be the smallest and largest users."""
         guilddata = guilddb.loadOrCreate(ctx.guild.id)
