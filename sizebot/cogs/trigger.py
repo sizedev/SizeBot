@@ -130,7 +130,7 @@ class TriggerCog(commands.Cog):
         category = "trigger",
         aliases = ["resetalltriggers", "unsetalltriggers", "removealltriggers"]
     )
-    async def clearalltriggers(self, ctx, *, trigger):
+    async def clearalltriggers(self, ctx):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         for trigger in userdata.triggers.keys():
             unset_trigger(ctx.guild.id, ctx.author.id, trigger)
