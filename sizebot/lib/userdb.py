@@ -601,6 +601,7 @@ class User:
         button = jsondata.get("button")
         if button is not None:
             button = Diff.fromJSON(button)
+        userdata.button = button
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
