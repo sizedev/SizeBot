@@ -76,6 +76,9 @@ class TriggerCog(commands.Cog):
 
         # Update triggered users
         for (guildid, userid), diffs in users_to_update.items():
+            # Guild-safe check
+            if guildid != m.guild.id:
+                continue
             userdata = userdb.load(guildid, userid)
             for diff in diffs:
                 if diff.changetype == "multiply":
@@ -86,7 +89,7 @@ class TriggerCog(commands.Cog):
                     userdata = userdata ** diff.amount
             userdb.save(userdata)
             if userdata.display:
-                await nickmanager.nick_update(m.author)
+                await nickmanager.nick_update(m.guild.get_member(userid))
 
     @release_on("3.6")
     @commands.command(
