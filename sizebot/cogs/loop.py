@@ -91,7 +91,7 @@ class LoopCog(commands.Cog):
 
         t, distance = calc_move_dist(userdata)
         nicetime = prettyTimeDelta(t)
-        await ctx.send(f"You stopped {ing[userdata.currentmovetype]}. You {ed[userdata.currentmovetype]} **{distance:,.3mu}** in **{nicetime}!")
+        await ctx.send(f"You stopped {ing[userdata.currentmovetype]}. You {ed[userdata.currentmovetype]} **{distance:,.3mu}** in **{nicetime}**!")
 
         userdata.currentmovetype = None
         userdata.movestarted = None
