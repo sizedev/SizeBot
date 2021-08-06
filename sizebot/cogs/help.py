@@ -39,8 +39,9 @@ logger = logging.getLogger("sizebot")
 async def post_report(report_type, message, report_text):
     async with aiohttp.ClientSession() as session:
         webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
+        guild_name = "DM" if not message.channel.guild else message.channel.guild.name
         await webhook.send(
-            f"**{report_type}** from <@{message.author.id}> in {message.channel.guild.name}:\n"
+            f"**{report_type}** from <@{message.author.id}> in {guild_name}:\n"
             f"> {report_text}\n"
             f"{message.jump_url} {emojis.link}",
             files=[await a.to_file() for a in message.attachments]
