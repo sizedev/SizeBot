@@ -3,6 +3,7 @@ import logging
 
 import discord
 from discord.ext import commands
+from sizebot.lib.errors import UserNotFoundException
 
 from sizebot.conf import conf
 from sizebot.lib import userdb, nickmanager
@@ -47,7 +48,10 @@ class TriggerCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         for guildid, userid in userdb.listUsers():
-            userdata = userdb.load(guildid, userid)
+            try:
+                userdata = userdb.load(guildid, userid)
+            except UserNotFoundException:
+                continue
             for trigger, diff in userdata.triggers.items():
                 user_triggers[trigger][guildid, userid] = diff
 
