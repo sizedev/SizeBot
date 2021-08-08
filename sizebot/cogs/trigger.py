@@ -1,5 +1,8 @@
-from collections import defaultdict
 import logging
+from collections import defaultdict
+from dataclasses import dataclass
+from sizebot.lib.units import SV
+from typing import Literal, Union
 
 import discord
 from discord.ext import commands
@@ -13,6 +16,15 @@ from sizebot.lib.versioning import release_on
 logger = logging.getLogger("sizebot")
 
 user_triggers = defaultdict(dict)
+
+@dataclass
+class Trigger:
+    word: str
+    changetype: Literal["Diff", "SV"]
+    amount: Union[Diff, SV]
+    private: bool
+    samecase: bool
+    partial: bool
 
 
 def set_cached_trigger(guildid, authorid, trigger, diff):
