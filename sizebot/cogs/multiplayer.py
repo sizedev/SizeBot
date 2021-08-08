@@ -5,7 +5,6 @@ from discord.ext import commands
 
 from sizebot.lib import userdb, nickmanager
 from sizebot.lib.diff import Diff
-from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 
@@ -16,7 +15,6 @@ class MPCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @release_on("3.6")
     @commands.command(
         category = "multiplayer"
     )
@@ -36,7 +34,6 @@ class MPCog(commands.Cog):
         await nickmanager.nick_update(user)
         await ctx.send(f"You pushed {userdata.nickname}'s button! They are now **{userdata.height:,.3mu}** tall.")
 
-    @release_on("3.6")
     @commands.command(
         usage = "<diff>",
         category = "multiplayer"
@@ -47,7 +44,6 @@ class MPCog(commands.Cog):
         userdb.save(userdata)
         await ctx.send(f"Set button to {diff}.")
 
-    @release_on("3.6")
     @commands.command(
         category = "multiplayer",
         aliases = ["resetbutton", "unsetbutton", "removebutton"]

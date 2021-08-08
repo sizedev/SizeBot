@@ -1,6 +1,5 @@
 import logging
 import re
-from sizebot.lib.versioning import release_on
 
 import discord
 from discord.ext import commands
@@ -190,7 +189,6 @@ class SetCog(commands.Cog):
         await nickmanager.nick_update(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
-    @release_on("3.6")
     @commands.command(
         aliases = ["copysize"],
         usage = "<user> [factor]",
@@ -410,7 +408,6 @@ class SetCog(commands.Cog):
         await ctx.send(f"The hair of {userdata.nickname} is now called {userdata.hairname.lower()}.")
         await showNextStep(ctx, userdata)
 
-    @release_on("3.6")
     @commands.command(
         aliases = ["incomprehensibletoggle", "toggleincomp", "incomptoggle"],
         category = "set"
@@ -611,7 +608,6 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s run speed is now cleared.")
         await showNextStep(ctx, userdata)
 
-    @release_on("3.6")
     @commands.command(
         usage = "<length>",
         category = "set"
@@ -630,7 +626,6 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.")
         await showNextStep(ctx, userdata)
 
-    @release_on("3.6")
     @commands.command(
         aliases = ["clearswim", "unsetswim"],
         category = "set"

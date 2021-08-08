@@ -1,6 +1,5 @@
 import logging
 from sizebot.lib.freefall import freefall
-from sizebot.lib.versioning import release_on
 import typing
 
 import discord
@@ -706,7 +705,6 @@ class StatsCog(commands.Cog):
 
         await ctx.send(embed = e)
 
-    @release_on("3.6")
     @commands.command(
         usage = "<user or length>",
         category = "stats"
@@ -740,7 +738,6 @@ class StatsCog(commands.Cog):
 
         await ctx.send(embed = embedtosend)
 
-    @release_on("3.6")
     @commands.command(
         usage = "<user or length>",
         category = "stats"
@@ -774,7 +771,6 @@ class StatsCog(commands.Cog):
 
         await ctx.send(embed = embedtosend)
 
-    @release_on("3.6")
     @commands.command(
         usage = "<distance>"
     )
@@ -791,7 +787,6 @@ class StatsCog(commands.Cog):
         await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!\n"
                        f"𝑉𝑚𝑎𝑥: {vm:.3m}/s [That feels like falling **{fl:,.3mu}**!]")
 
-    @release_on("3.6")
     @commands.command(
         usage = "<distance>",
         hidden = True

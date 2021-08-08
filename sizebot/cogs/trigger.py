@@ -11,11 +11,11 @@ from sizebot.lib.errors import UserNotFoundException
 from sizebot.conf import conf
 from sizebot.lib import userdb, nickmanager
 from sizebot.lib.diff import Diff
-from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 
 user_triggers = defaultdict(dict)
+
 
 @dataclass
 class Trigger:
@@ -102,7 +102,6 @@ class TriggerCog(commands.Cog):
             if userdata.display:
                 await nickmanager.nick_update(m.guild.get_member(userid))
 
-    @release_on("3.6")
     @commands.command(
         category = "trigger",
         usage = "[user]"
@@ -117,7 +116,6 @@ class TriggerCog(commands.Cog):
         out = "**Triggers**:\n" + "\n".join(triggers)
         await ctx.send(out)
 
-    @release_on("3.6")
     @commands.command(
         usage = "<trigger> <diff>",
         category = "trigger"
@@ -126,7 +124,6 @@ class TriggerCog(commands.Cog):
         set_trigger(ctx.guild.id, ctx.author.id, trigger, diff)
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
 
-    @release_on("3.6")
     @commands.command(
         usage = "<trigger>",
         category = "trigger",
@@ -136,7 +133,6 @@ class TriggerCog(commands.Cog):
         unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send(f"Removed trigger word {trigger!r}.")
 
-    @release_on("3.6")
     @commands.command(
         usage = "<trigger>",
         category = "trigger",

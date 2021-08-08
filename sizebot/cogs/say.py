@@ -1,6 +1,5 @@
 import re
 import logging
-from sizebot.lib.versioning import release_on
 import typing
 
 import discord
@@ -263,7 +262,6 @@ class SayCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @release_on("3.6")
     @commands.command(
         aliases = ["talk"],
         category = "fun",
@@ -289,7 +287,6 @@ class SayCog(commands.Cog):
         verb = verbs[diff]
         await ctx.send(f"{nick} {verb}: \n> {m}")
 
-    @release_on("3.6")
     @commands.command(
         aliases = ["talkto"],
         category = "fun",
