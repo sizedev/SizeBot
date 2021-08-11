@@ -33,7 +33,7 @@ class HolidayCog(commands.Cog):
     async def holidayTask(self):
         """Holiday checker"""
         try:
-            logger.info("Checking for holidays")
+            # logger.info("Checking for holidays")
 
             now = arrow.now()
 
@@ -81,7 +81,8 @@ class HolidayCog(commands.Cog):
                 newnick = newnick[0] + "izeSanta 🎄"
                 newactivityname = "Merry Christmas!"
             else:
-                logger.info("Just another boring non-holiday...")
+                # logger.info("Just another boring non-holiday...")
+                pass
 
             for guild in self.bot.guilds:
                 if not guild.me.guild_permissions.change_nickname:
