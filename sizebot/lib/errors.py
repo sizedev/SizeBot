@@ -228,3 +228,6 @@ class ParseError(DigiException):
 
     def formatMessage(self):
         return f"Could not parse {self.s} into a {self.t}."
+
+    def formatUserMessage(self):
+        return f"Could not parse {self.s} into a {self.t}."

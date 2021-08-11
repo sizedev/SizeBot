@@ -135,6 +135,9 @@ class Diff:
         amount = format(self.amount, ",m%") if self.changetype == "add" else self.amount
         return f"{operator}{amount}"
 
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__} {self}>"
+
     @classmethod
     def fromJSON(cls, jsondata):
         changetype = jsondata["changetype"]
