@@ -64,7 +64,7 @@ class HolidayCog(commands.Cog):
             elif now.month == 6 and now.day == 6:  # Swedish Independence Day
                 logger.info("Happy Swedish Independence Day!")
                 newactivityname = "🇸🇪 AGGA 🇸🇪"
-            elif now.month == 7 and now.day == 1:  #Canada Day
+            elif now.month == 7 and now.day == 1:  # Canada Day
                 logger.info("Happy Canada Day!")
                 newnick += " 🍁"
                 newactivityname = "Happy Canada Day!"

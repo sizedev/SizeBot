@@ -48,8 +48,9 @@ async def showNextStep(ctx, userdata, completed=False):
         return
     next_step = userdata.registration_steps_remaining[0]
     step_messages = {
-        "setheight": f"To start, set your base height with `{conf.prefix}setbaseheight`. This should be roughly a human height in order for comparisons to make better sense.\n*Examples: `{conf.prefix}setbaseheight 5ft6in` or `{conf.prefix}setbaseheight 170cm`*",
-        "setweight": f"Now, use `{conf.prefix}setbaseweight` to set your base weight. This should be whatever weight you'd be at your base height.\n*Examples: `{conf.prefix}setbaseweight 120lb` or `{conf.prefix}setbaseweight 80kg`*",
+        "setheight": f"To start, set your current height with {conf.prefix}setheight. You can always change this later.\n*Examples: `{conf.prefix}setheight 200ft` or `{conf.prefix}setheight 0.5in`*",
+        "setbaseheight": f"Next, set your base height with `{conf.prefix}setbaseheight`. This should be roughly a human height in order for comparisons to make better sense.\n*Examples: `{conf.prefix}setbaseheight 5ft6in` or `{conf.prefix}setbaseheight 170cm`*",
+        "setbaseweight": f"Now, use `{conf.prefix}setbaseweight` to set your base weight. This should be whatever weight you'd be at your base height.\n*Examples: `{conf.prefix}setbaseweight 120lb` or `{conf.prefix}setbaseweight 80kg`*",
         "setsystem": f"Finally, use `{conf.prefix}setsystem` to set what unit system you use: `M` for Metric, `U` for US.\n*Examples: `{conf.prefix}setsystem U` or `{conf.prefix}setsystem M`*"
     }
     next_step_message = step_messages[next_step]
@@ -130,8 +131,8 @@ class RegisterCog(commands.Cog):
         if ctx.me.guild_permissions.manage_nicknames:
             userdata.display = True
             if any(c in ctx.author.display_name for c in "()[]"):
-                await ctx.send(f"If you have already have a size tag in your name, you can fix your nick with `{conf.prefix}setnick`.")
-        userdata.registration_steps_remaining = ["setheight", "setweight", "setsystem"]
+                await ctx.send(f"**If you have already have a size tag in your name, you can fix your nick with `{conf.prefix}setnick`.**")
+        userdata.registration_steps_remaining = ["setheight", "setbaseheight", "setbaseweight", "setsystem"]
 
         # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
         # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, and the user is an admin, let them know they may need to fix permissions
@@ -140,7 +141,7 @@ class RegisterCog(commands.Cog):
 
         await addUserRole(ctx.author)
 
-        logger.warn(f"Started registration for a new user: {ctx.author}!")
+        logger.warn(f"Started registration for a new user: {ctx.author} in guild {ctx.guild.name}!")
         logger.info(userdata)
 
         # user has display == "y" and is server owner
@@ -260,7 +261,7 @@ class RegisterCog(commands.Cog):
 
         logger.warn(f"Made a new user: {ctx.author}!")
         logger.info(userdata)
-        await ctx.send(f"Registered <@{ctx.author.id}>. {userdata}.")
+        await ctx.send(f"Registered <@{ctx.author.id}> in guild {ctx.guild.name}. {userdata}.")
 
         # user has display == "y" and is server owner
         if userdata.display and userdata.id == ctx.author.guild.owner.id:

@@ -163,13 +163,12 @@ class SetCog(commands.Cog):
         scale = parse_scale(newscale)
 
         userdata.height = userdata.baseheight * scale
-        completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await showNextStep(ctx, userdata)
 
     @commands.command(
         aliases = ["copysize"],
@@ -233,12 +232,13 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.height = newheightSV
+        completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata)
+        await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         aliases = ["inf"],

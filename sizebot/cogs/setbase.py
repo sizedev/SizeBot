@@ -28,13 +28,13 @@ class SetBaseCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         # Convenience for initial registration
-        if "setheight" in userdata.registration_steps_remaining:
+        if "setbaseheight" in userdata.registration_steps_remaining:
             userdata.height = newbaseheight
             if not (SV.parse("4ft") < newbaseheight < SV.parse("8ft")):
                 await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
 
         userdata.baseheight = newbaseheight
-        completed_registration = userdata.complete_step("setheight")
+        completed_registration = userdata.complete_step("setbaseheight")
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base height is now {userdata.baseheight:mu} tall.")
@@ -51,12 +51,12 @@ class SetBaseCog(commands.Cog):
         """Change base weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        if "setweight" in userdata.registration_steps_remaining:
+        if "setbaseweight" in userdata.registration_steps_remaining:
             if not (WV.parse("10lb") < newbaseweight < WV.parse("1000lb")):
                 await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
 
         userdata.baseweight = newbaseweight
-        completed_registration = userdata.complete_step("setweight")
+        completed_registration = userdata.complete_step("setbaseweight")
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base weight is now {userdata.baseweight:mu}")
@@ -86,21 +86,21 @@ class SetBaseCog(commands.Cog):
                 newbaseweight = arg
         completed_registration = False
         if newbaseheight is not None:
-            if "setheight" in userdata.registration_steps_remaining:
+            if "setbaseheight" in userdata.registration_steps_remaining:
                 userdata.height = newbaseheight
                 if not (SV.parse("4ft") < newbaseheight < SV.parse("8ft")):
                     await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
             userdata.baseheight = newbaseheight
-            completed_registration = userdata.complete_step("setheight") or completed_registration
+            completed_registration = userdata.complete_step("setbaseheight") or completed_registration
         if newbaseweight is not None:
-            if "setweight" in userdata.registration_steps_remaining:
+            if "setbaseweight" in userdata.registration_steps_remaining:
                 if not (WV.parse("10lb") < newbaseheight < SV.parse("1000lb")):
                     await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
             userdata.baseweight = newbaseweight
-            completed_registration = userdata.complete_step("setweight") or completed_registration
+            completed_registration = userdata.complete_step("setbaseweight") or completed_registration
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}")
+        await ctx.send(f"{userdata.nickname} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
         await showNextStep(ctx, userdata, completed=completed_registration)
 
     @commands.command(
