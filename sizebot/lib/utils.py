@@ -2,6 +2,7 @@ import inspect
 import pydoc
 import random
 import re
+from sizebot.lib import errors
 import traceback
 from typing import Dict, Hashable, Sequence
 from urllib.parse import quote
@@ -471,6 +472,31 @@ def replace_sciexp(m: re.Match):
 
 def replace_all_sciexp(newscale: str):
     return RE_SCI_EXP.sub(replace_sciexp, newscale)
+
+
+def parse_scale(scalestr: str):
+    re_scale_emoji = r"<:sb(\d+)-?(\d+)?:\d+>"
+    if match := re.match(re_scale_emoji, scalestr):
+        if match.group(2):
+            num, denom = match.group(1, 2)
+            scale = Decimal(f"{num}/{denom}")
+        else:
+            scale = Decimal(match.group(1))
+    else:
+        newscale = replace_all_sciexp(scalestr)
+        re_scale = r"([^:/]+)[:/]?([^:/]*)?"
+        if m := re.match(re_scale, newscale):
+            multiplier = m.group(1)
+            factor = m.group(2) if m.group(2) else 1
+        else:
+            raise errors.UserMessedUpException(f"{scalestr} is not a valid scale factor.")
+
+        try:
+            scale = Decimal(multiplier) / Decimal(factor)
+        except Exception:
+            raise errors.UserMessedUpException(f"{scalestr} is not a valid scale factor.")
+
+    return scale
 
 
 def randRangeLog(minval, maxval, precision=26):

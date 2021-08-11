@@ -1,18 +1,16 @@
 import logging
-import re
 
 import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import showNextStep
 from sizebot.lib import errors, userdb, nickmanager
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import AliasMap, glitch_string, replace_all_sciexp, randRangeLog
+from sizebot.lib.utils import AliasMap, glitch_string, parse_scale, randRangeLog
 
 logger = logging.getLogger("sizebot")
 
@@ -162,23 +160,7 @@ class SetCog(commands.Cog):
             await ctx.send("Bananas are already the default scale for all things.")
             logger.log(EGG, "Bananas used for scale.")
 
-        if newscale == "<:116:793260849007296522>":
-            scale = Decimal("1/16")
-        elif newscale == "<:1144:793260894686806026>" or newscale == "<:1122:793262146917105664>":
-            scale = Decimal("1/144")
-        else:
-            newscale = replace_all_sciexp(newscale)
-            re_scale = r"([^:/]+)[:/]?([^:/]*)?"
-            if m := re.match(re_scale, newscale):
-                multiplier = m.group(1)
-                factor = m.group(2) if m.group(2) else 1
-            else:
-                raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
-
-            try:
-                scale = Decimal(multiplier) / Decimal(factor)
-            except Exception:
-                raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
+        scale = parse_scale(newscale)
 
         userdata.height = userdata.baseheight * scale
         completed_registration = userdata.complete_step("setheight")
@@ -202,20 +184,7 @@ class SetCog(commands.Cog):
 
         userdata.height = otheruser.height
 
-        if newscale == "<:116:793260849007296522>":
-            scale = Decimal("1/16")
-        elif newscale == "<:1144:793260894686806026>" or newscale == "<:1122:793262146917105664>":
-            scale = Decimal("1/144")
-        else:
-            newscale = replace_all_sciexp(newscale)
-            re_scale = r"([^:/]+)[:/]?([^:/]*)?"
-            if m := re.match(re_scale, newscale):
-                multiplier = m.group(1)
-                factor = m.group(2) if m.group(2) else 1
-            else:
-                raise errors.UserMessedUpException(f"{newscale} is not a valid scale factor.")
-
-            scale = Decimal(multiplier) / Decimal(factor)
+        scale = parse_scale(newscale)
 
         userdata.height = userdata.height * scale
         completed_registration = userdata.complete_step("setheight")
