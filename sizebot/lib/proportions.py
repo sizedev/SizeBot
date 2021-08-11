@@ -1,6 +1,7 @@
 from copy import copy
 import math
 import re
+from sizebot.lib.freefall import terminal_velocity_from_player
 
 from discord import Embed
 
@@ -9,7 +10,7 @@ from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, WV
-from sizebot.lib.userdb import defaultheight, defaultweight, defaultterminalvelocity, defaultliftstrength, falllimit
+from sizebot.lib.userdb import defaultheight, defaultweight, defaultliftstrength, falllimit
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
 
@@ -523,7 +524,7 @@ class PersonStats:
 
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 
-        self.terminalvelocity = SV(defaultterminalvelocity * Decimal(math.sqrt(self.scale)))
+        self.terminalvelocity = terminal_velocity_from_player(self.baseweight, self.scale)
         self.fallproof = self.terminalvelocity < falllimit
         self.fallproofcheck = emojis.voteyes if self.fallproof else emojis.voteno
 

@@ -5,8 +5,14 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import TV, WV, SV
 
 
-def terminal_velocity(g, m, k):
-    return math.sqrt(g * m / k)
+def terminal_velocity(m, k, g = Decimal("9.807")):
+    return Decimal(math.sqrt(g * m / k))
+
+
+def terminal_velocity_from_player(basemass: WV, scale: Decimal):
+    m = basemass * (scale ** Decimal(3))
+    k = Decimal("0.24") * (scale ** Decimal(2))
+    return SV(terminal_velocity(m, k))
 
 
 def freefall(basemass: WV, altitude: SV, scale: Decimal) -> Tuple[Decimal, Decimal, Decimal]:
@@ -32,12 +38,12 @@ def freefall(basemass: WV, altitude: SV, scale: Decimal) -> Tuple[Decimal, Decim
     vel = Decimal(math.sqrt(g * m / k)) * Decimal(math.tanh(t * Decimal(math.sqrt(g * k / m))))
 
     # calculate feelslike
-    step1 = Decimal(25) / Decimal(6)
+    TWENTY_FIVE_SIXTHS = Decimal(25) / Decimal(6)
     step2 = Decimal(math.sqrt(Decimal(1) / basemass))
     step3 = Decimal(math.sqrt(basemass))
     step4 = Decimal(math.atanh((Decimal("0.156436") * vel) / Decimal(math.sqrt(basemass))))
     step5 = -Decimal(math.cosh(step2 * step3 * step4))
-    feelslike = m * Decimal(math.log(Decimal(math.pow(-step5, step1))))
+    feelslike = m * Decimal(math.log(Decimal(math.pow(-step5, TWENTY_FIVE_SIXTHS))))
 
     return TV(t), SV(vel), SV(feelslike)
 

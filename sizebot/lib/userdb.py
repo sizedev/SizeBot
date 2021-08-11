@@ -17,7 +17,6 @@ from sizebot.lib.utils import isURL, truncate
 # Defaults
 defaultheight = SV("1.754")            # meters
 defaultweight = WV("66760")            # grams
-defaultterminalvelocity = SV("63.63")  # meters/second
 falllimit = SV("7.73")                 # meters/second
 defaultliftstrength = WV("18143.7")    # grams
 
