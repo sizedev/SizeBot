@@ -1,9 +1,12 @@
 import discord
+import logging
 
 from sizebot.lib import errors, userdb
 from sizebot.lib.utils import glitch_string
 
 MAX_NICK_LEN = 32
+
+logger = logging.getLogger("sizebot")
 
 
 def generate_suffix(sizetag, species=None):
@@ -34,6 +37,10 @@ def generate_nickname(nick, sizetag, species=None, cropnick=False):
 # TODO: Deal with not being able to change nicks of roles above the bot.
 # Update users nicknames to include sizetags
 async def nick_update(user):
+    # None
+    if user is None:
+        logger.warn("User was None when trying to update nickname!")
+        return
     # webhooks
     if user.discriminator == "0000":
         return
