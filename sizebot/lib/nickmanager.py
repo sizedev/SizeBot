@@ -39,7 +39,7 @@ def generate_nickname(nick, sizetag, species=None, cropnick=False):
 async def nick_update(user):
     # None
     if user is None:
-        logger.warn("User was None when trying to update nickname!")
+        # logger.warn("User was None when trying to update nickname!")
         return
     # webhooks
     if user.discriminator == "0000":
