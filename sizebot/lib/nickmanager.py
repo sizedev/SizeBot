@@ -34,10 +34,6 @@ def generate_nickname(nick, sizetag, species=None, cropnick=False):
 # TODO: Deal with not being able to change nicks of roles above the bot.
 # Update users nicknames to include sizetags
 async def nick_update(user):
-    # Don't try updating nicks on servers where Manage Nicknames permission is missing
-    if not user.guild.me.guild_permissions.manage_nicknames:
-        return
-
     # webhooks
     if user.discriminator == "0000":
         return
@@ -49,6 +45,9 @@ async def nick_update(user):
         return
     # guild owner
     if user.id == user.guild.owner_id:
+        return
+    # Don't try updating nicks on servers where Manage Nicknames permission is missing
+    if not user.guild.me.guild_permissions.manage_nicknames:
         return
 
     try:
