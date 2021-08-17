@@ -115,9 +115,9 @@ autoelim:True, minsize:1mm, maxsize:8mi, deathrate:10, arenafreq:10, unitsystem:
 
 [players]
 "DigiDuncan"
-team:1, gender:M, height:5ft7.5in, url:https://pbs.twimg.com/profile_images/1191182660099547143/oF-LRZHl_400x400.jpg
-"Kelly"
-team:2, gender:F, height:5ft11in, url:https://pbs.twimg.com/profile_images/1270704649646100480/7zQ8hckD_400x400.jpg
+team:1, gender:M, height:5ft7.5in, url:https://avatars.githubusercontent.com/u/3279495?v=4
+"Triston"
+team:2, gender:F, height:6ft10in, url:https://cdn.discordapp.com/emojis/788867954757337138.png?v=1
 "Cool Dude"
 team:3, gender:M, height:5ft9in, url:https://randomuser.me/api/portraits/men/90.jpg
 "Interesting Chick"
