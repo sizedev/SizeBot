@@ -1,4 +1,3 @@
-import asyncio
 import importlib.resources as pkg_resources
 import logging
 
@@ -19,34 +18,6 @@ class FunCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.command(
-        hidden = True,
-        multiline = True
-    )
-    @commands.is_owner()
-    async def repeat(self, ctx, delay: float, *, message: str):
-        if ctx.author.id != ids.digiduncan:
-            return
-        # PERMISSION: requires manage_messages
-        await ctx.message.delete(delay=0)
-
-        async def repeatTask():
-            while True:
-                await ctx.send(message)
-                await asyncio.sleep(delay * 60)
-        task = self.bot.loop.create_task(repeatTask())
-        tasks[ctx.author.id] = task
-
-    @commands.command(
-        hidden = True
-    )
-    @commands.is_owner()
-    async def stoprepeat(self, ctx):
-        # PERMISSION: requires manage_messages
-        await ctx.message.delete(delay=0)
-        tasks[ctx.author.id].cancel()
-        del tasks[ctx.author.id]
 
     @commands.command(
         hidden = True,
