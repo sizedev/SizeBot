@@ -18,6 +18,9 @@ logger = logging.getLogger("sizebot")
 
 def getUserSizes(g):
     # Find the largest and smallest current users.
+    # TODO: Can this be faster?
+    # Like, if you sorted the users by size, would that make this faster?
+    # It's 1:30AM and I don't want to check.
     smallestuser = None
     smallestsize = SV.infinity
     largestuser = None
