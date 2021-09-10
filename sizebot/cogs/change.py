@@ -1,6 +1,7 @@
 import importlib.resources as pkg_resources
 import logging
 import random
+from sizebot.lib.versioning import release_on
 from typing import Union
 
 from discord.ext import commands, tasks
@@ -161,6 +162,21 @@ class ChangeCog(commands.Cog):
         await ctx.send(
             f"<@{ctx.author.id}> drank a :milk:! *{line}*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
+
+    @release_on("3.7")
+    @commands.command(
+        category = "change"
+    )
+    @commands.guild_only()
+    async def pushme(self, ctx):
+        """Push me!
+
+        Increases or decreases your height by a random amount between 2x and 20x."""
+        c = random.randint(1, 2)
+        if c == 1:
+            await ctx.invoke(self.bot.get_command("eatme"), query="")
+        else:
+            await ctx.invoke(self.bot.get_command("drinkme"), query="")
 
     @tasks.loop(seconds=6)
     async def changeTask(self):
