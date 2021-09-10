@@ -399,7 +399,7 @@ class HelpCategory:
         self.emoji = emoji
 
 
-# Do not add more than 20 of these!
+# Do not add more than 19 of these!
 categories = [
     HelpCategory("help", "Help Commands", "Commands that help you.", "❓"),
     HelpCategory("setup", "Setup Commands", "Commands for setting up your SizeBot account.", "🧱"),
