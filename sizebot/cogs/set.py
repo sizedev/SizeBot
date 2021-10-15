@@ -37,7 +37,7 @@ class SetCog(commands.Cog):
         userdata.nickname = newnick
         userdb.save(userdata)
 
-        await ctx.send(f"<@{ctx.author.id}>'s nick is now {userdata.nickname}")
+        await ctx.send(f"<@{ctx.author.id}>'s nick is now {userdata.nickname}.")
 
         await nickmanager.nick_update(ctx.author)
         await showNextStep(ctx, userdata)
