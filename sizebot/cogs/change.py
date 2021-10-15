@@ -30,6 +30,7 @@ class ChangeCog(commands.Cog):
         self.changeTask.cancel()
 
     @commands.command(
+        aliases = ["c"],
         category = "change",
         usage = "<change> [rate] [stop]"
     )
@@ -116,6 +117,7 @@ class ChangeCog(commands.Cog):
             await ctx.send(f"{ctx.author.display_name} has stopped slow-changing.")
 
     @commands.command(
+        aliases = ["eat"],
         category = "change"
     )
     @commands.guild_only()
@@ -140,6 +142,7 @@ class ChangeCog(commands.Cog):
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
     @commands.command(
+        aliases = ["drink"],
         category = "change"
     )
     @commands.guild_only()
