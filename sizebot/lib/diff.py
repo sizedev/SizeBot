@@ -132,7 +132,7 @@ class Diff:
             operator = "/" if self.amount < 0 else "x"
         elif self.changetype == "power":
             operator = "^"
-        amount = format(self.amount, ",.9mu") if self.changetype == "add" else self.amount
+        amount = format(self.amount, ",.3mu") if self.changetype == "add" else format(self.amount, ".10")
         return f"{operator}{amount}"
 
     def __repr__(self) -> str:
