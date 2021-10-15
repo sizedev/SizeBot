@@ -268,11 +268,11 @@ class SetCog(commands.Cog):
             raise
 
         if minscale < 0:
-            minscale = SV(0)
+            minscale = 0
         if maxscale < 0:
-            maxscale = SV(0)
+            maxscale = 0
 
-        newscale = Decimal(random.uniform(minscale, maxscale))
+        newscale = Decimal(random.uniform(float(minscale), float(maxscale)))
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
