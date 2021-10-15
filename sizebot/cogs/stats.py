@@ -879,7 +879,7 @@ class StatsCog(commands.Cog):
         msg = await ctx.send(emojis.loading + " *Loading comparison...*")
 
         comparison = proportions.PersonComparison(userdata1, userdata2)
-        e = comparison.toSimpleEmbed(ctx.author.id)
+        e = await comparison.toSimpleEmbed(ctx.author.id)
         await msg.edit(content = "", embed = e)
 
 
