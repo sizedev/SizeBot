@@ -1,4 +1,5 @@
 import logging
+from random import randrange
 
 import discord
 from discord.ext import commands
@@ -222,6 +223,7 @@ class SetCog(commands.Cog):
 
         Sets your height to a height between `minheight` and `maxheight`.
         Weighted on a logarithmic curve."""
+
         if minheight < 0:
             minheight = SV(0)
         if maxheight < 0:
@@ -232,6 +234,35 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         userdata.height = newheightSV
+        completed_registration = userdata.complete_step("setheight")
+        userdb.save(userdata)
+
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
+
+        await nickmanager.nick_update(ctx.author)
+        await showNextStep(ctx, userdata, completed=completed_registration)
+
+    @commands.command(
+        usage = "<minscale> <maxscale>",
+        category = "set"
+    )
+    @commands.guild_only()
+    async def setrandomscale(self, ctx, minscale: str, maxscale: str):
+        """Change scale to a random value."""
+
+        minscale = parse_scale(minscale)
+        maxscale = parse_scale(maxscale)
+
+        if minscale < 0:
+            minscale = SV(0)
+        if maxscale < 0:
+            maxscale = SV(0)
+
+        newscale = randrange(minscale, maxscale)
+
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        userdata.scale = newscale
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 

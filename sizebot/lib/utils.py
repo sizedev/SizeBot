@@ -475,7 +475,7 @@ def replace_all_sciexp(newscale: str):
 
 
 def parse_scale(scalestr: str):
-    re_scale_emoji = r"<:sb(\d+)-?(\d+)?:\d+>"
+    re_scale_emoji = r"<:sb(\d+)_?(\d+)?:\d+>"
     if match := re.match(re_scale_emoji, scalestr):
         if match.group(2):
             num, denom = match.group(1, 2)
