@@ -8,6 +8,7 @@ from sizebot.cogs.register import showNextStep
 from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
@@ -271,7 +272,7 @@ class SetCog(commands.Cog):
         if maxscale < 0:
             maxscale = SV(0)
 
-        newscale = random.uniform(minscale, maxscale)
+        newscale = Decimal(random.uniform(minscale, maxscale))
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
