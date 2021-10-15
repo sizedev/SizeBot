@@ -14,6 +14,7 @@ from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.utils import AliasMap, glitch_string, parseMany, prettyTimeDelta, sentence_join
+from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 
@@ -478,7 +479,7 @@ class StatsCog(commands.Cog):
             telemetry.UnknownObject(str(what)).save()
             return
         stats = proportions.PersonComparison(userdata, compdata)
-        embedtosend = await stats.toEmbed(requesterID = ctx.message.author.id)
+        embedtosend = await stats.toSimpleEmbed(requesterID = ctx.message.author.id)
         await ctx.send(embed = embedtosend)
 
     @commands.command(
@@ -847,6 +848,38 @@ class StatsCog(commands.Cog):
             color=colors.cyan,
             url = await macrovision.get_url(users)
         )
+        await msg.edit(content = "", embed = e)
+
+    @release_on("3.6.2")
+    @commands.command(
+        aliases = ["simplecomp", "simplecomparison"],
+        usage = "<user/height> [user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def simplecompare(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+        """Compare two users' size.
+
+        If give one user, compares you to that user."""
+        if memberOrHeight2 is None:
+            memberOrHeight2 = ctx.author
+
+        if memberOrHeight is None:
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
+            return
+
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight).save()
+        if isinstance(memberOrHeight2, SV):
+            telemetry.SizeViewed(memberOrHeight).save()
+
+        userdata1 = getUserdata(memberOrHeight)
+        userdata2 = getUserdata(memberOrHeight2)
+
+        msg = await ctx.send(emojis.loading + " *Loading comparison...*")
+
+        comparison = proportions.PersonComparison(userdata1, userdata2)
+        e = comparison.toSimpleEmbed(ctx.author.id)
         await msg.edit(content = "", embed = e)
 
 

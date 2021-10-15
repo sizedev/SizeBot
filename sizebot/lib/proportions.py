@@ -209,6 +209,48 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
         return embed
 
+    async def toSimpleEmbed(self, requesterID = None):
+        requestertag = f"<@!{requesterID}>"
+        embed = Embed(
+            title=f"Comparison of {self.big.nickname} and {self.small.nickname} {emojis.link}",
+            description=f"*Requested by {requestertag}*",
+            color=colors.purple,
+            url = await self.url()
+        )
+        if requestertag == self.big.tag:
+            embed.color = colors.blue
+        if requestertag == self.small.tag:
+            embed.color = colors.red
+        embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
+        embed.add_field(name=f"{emojis.comparebigcenter} **{self.big.nickname}**", value=(
+            f"{emojis.blank}{emojis.blank} **Height:** {self.big.height:,.3mu}\n"
+            f"{emojis.blank}{emojis.blank} **Weight:** {self.big.weight:,.3mu}\n"), inline=True)
+        embed.add_field(name=f"{emojis.comparesmallcenter} **{self.small.nickname}**", value=(
+            f"{emojis.blank}{emojis.blank} **Height:** {self.small.height:,.3mu}\n"
+            f"{emojis.blank}{emojis.blank} **Weight:** {self.small.weight:,.3mu}\n"), inline=True)
+        embed.add_field(value=(
+            f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big.nickname}** looks to {emojis.comparesmallcenter} **{self.small.nickname}**.\n"
+            f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big.nickname}**."), inline=False)
+        embed.add_field(name="Height", value=(
+            f"{emojis.comparebig}{self.bigToSmall.height:,.3mu}\n"
+            f"{emojis.comparesmall}{self.smallToBig.height:,.3mu}"), inline=True)
+        embed.add_field(name="Weight", value=(
+            f"{emojis.comparebig}{self.bigToSmall.weight:,.3mu}\n"
+            f"{emojis.comparesmall}{self.smallToBig.weight:,.3mu}"), inline=True)
+        embed.set_footer(text=(
+            f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
+            f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
+            f"{self.big.nickname} would need {self.smallToBig.visibility} to see {self.small.nickname}."))
+
+        if self.small.incomprehensible or self.big.incomprehensible:
+            ed = embed.to_dict()
+            for field in ed["fields"]:
+                field["value"] = glitch_string("somebody once told me") + "\n" + glitch_string("the world was gonna roll me")
+            embed = Embed.from_dict(ed)
+            embed.set_footer(text = glitch_string(embed.footer.text))
+
+        return embed
+
     async def url(self):
         safeSmallNick = url_safe(self.small.nickname)
         safeBigNick = url_safe(self.big.nickname)
