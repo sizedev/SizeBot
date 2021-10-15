@@ -177,9 +177,9 @@ class ChangeCog(commands.Cog):
         Increases or decreases your height by a random amount between 2x and 20x."""
         c = random.randint(1, 2)
         if c == 1:
-            await ctx.invoke(self.bot.get_command("eatme"), query="")
+            await ctx.invoke(self.bot.get_command("eatme"))
         else:
-            await ctx.invoke(self.bot.get_command("drinkme"), query="")
+            await ctx.invoke(self.bot.get_command("drinkme"))
 
     @tasks.loop(seconds=6)
     async def changeTask(self):
