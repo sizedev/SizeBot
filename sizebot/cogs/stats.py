@@ -270,7 +270,7 @@ class StatsCog(commands.Cog):
 
         if isinstance(memberOrHeight, SV):
             telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight, SV):
+        if isinstance(memberOrHeight2, SV):
             telemetry.SizeViewed(memberOrHeight).save()
 
         userdata1 = getUserdata(memberOrHeight)

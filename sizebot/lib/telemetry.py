@@ -9,6 +9,7 @@ import json
 
 import arrow
 
+from sizebot import __version__
 from sizebot.lib import paths
 
 
@@ -22,6 +23,7 @@ class TelemetryMessage:
         if "date" in data:
             raise ExistingDateException
         data["date"] = arrow.now().timestamp
+        data["version"] = __version__
         stringified = json.dumps(data)
         paths.telemetrypath.mkdir(exist_ok = True)
         filepath = paths.telemetrypath / self.filename
