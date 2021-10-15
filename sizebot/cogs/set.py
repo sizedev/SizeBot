@@ -1,5 +1,5 @@
 import logging
-from random import randrange
+import random
 
 import discord
 from discord.ext import commands
@@ -271,7 +271,7 @@ class SetCog(commands.Cog):
         if maxscale < 0:
             maxscale = SV(0)
 
-        newscale = randrange(minscale, maxscale)
+        newscale = random.uniform(minscale, maxscale)
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
