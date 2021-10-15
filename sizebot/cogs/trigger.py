@@ -103,17 +103,25 @@ class TriggerCog(commands.Cog):
                 await nickmanager.nick_update(m.guild.get_member(userid))
 
     @commands.command(
-        category = "trigger",
-        usage = "[user]"
+        category = "trigger"
     )
-    async def triggers(self, ctx, *, user: discord.Member = None):
-        if user is None:
-            userid = ctx.author.id
-        else:
-            userid = user.id
+    async def triggers(self, ctx):
+        """List your trigger words."""
+        userid = ctx.author.id
         userdata = userdb.load(ctx.guild.id, userid)
         triggers = [f"`{trigger}`: {diff}" for trigger, diff in userdata.triggers.items()]
         out = "**Triggers**:\n" + "\n".join(triggers)
+        await ctx.send(out)
+
+    @commands.command(
+        category = "trigger"
+    )
+    async def exporttriggers(self, ctx):
+        """Export your trigger words."""
+        userid = ctx.author.id
+        userdata = userdb.load(ctx.guild.id, userid)
+        triggers = [f"&settrigger {trigger} {diff}" for trigger, diff in userdata.triggers.items()]
+        out = "```\n" + "\n".join(triggers) + "\n```"
         await ctx.send(out)
 
     @commands.command(
@@ -121,6 +129,7 @@ class TriggerCog(commands.Cog):
         category = "trigger"
     )
     async def settrigger(self, ctx, trigger, *, diff: Diff):
+        """Set a trigger word."""
         set_trigger(ctx.guild.id, ctx.author.id, trigger, diff)
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
 
@@ -130,6 +139,7 @@ class TriggerCog(commands.Cog):
         aliases = ["resettrigger", "unsettrigger", "removetrigger"]
     )
     async def cleartrigger(self, ctx, *, trigger):
+        """Remove a trigger word."""
         unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send(f"Removed trigger word {trigger!r}.")
 
@@ -139,6 +149,7 @@ class TriggerCog(commands.Cog):
         aliases = ["resetalltriggers", "unsetalltriggers", "removealltriggers"]
     )
     async def clearalltriggers(self, ctx):
+        """Remove all your trigger words."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         for trigger in userdata.triggers.keys():
             unset_trigger(ctx.guild.id, ctx.author.id, trigger)
