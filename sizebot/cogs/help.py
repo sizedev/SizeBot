@@ -35,7 +35,7 @@ logger = logging.getLogger("sizebot")
 #     If True, the default help command does not show this in the help output.
 # aliases = []
 
-alpha_warning = "This command is in ALPHA. It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
+alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
 
 
 async def post_report(report_type, message, report_text):

@@ -129,7 +129,10 @@ class TriggerCog(commands.Cog):
         category = "trigger"
     )
     async def settrigger(self, ctx, trigger, *, diff: Diff):
-        """Set a trigger word."""
+        """Set a trigger word.
+        
+        #ALPHA#
+        """
         set_trigger(ctx.guild.id, ctx.author.id, trigger, diff)
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
 
