@@ -88,13 +88,14 @@ class SetBaseCog(commands.Cog):
         if newbaseheight is not None:
             if "setbaseheight" in userdata.registration_steps_remaining:
                 userdata.height = newbaseheight
-                if not (SV.parse("4ft") < newbaseheight < SV.parse("8ft")):
+                # TODO: Actually have a confirm message here.
+                if not (SV.parse("4ft") <= newbaseheight < SV.parse("8ft")):
                     await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
             userdata.baseheight = newbaseheight
             completed_registration = userdata.complete_step("setbaseheight") or completed_registration
         if newbaseweight is not None:
             if "setbaseweight" in userdata.registration_steps_remaining:
-                if not (WV.parse("10lb") < newbaseheight < SV.parse("1000lb")):
+                if not (WV.parse("10lb") <= newbaseheight < SV.parse("1000lb")):
                     await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
             userdata.baseweight = newbaseweight
             completed_registration = userdata.complete_step("setbaseweight") or completed_registration
@@ -130,7 +131,13 @@ class SetBaseCog(commands.Cog):
 
         Accepts a US Shoe Size.
         If a W is in the shoe size anywhere, it is parsed as a Women's size.
-        If a C is in the show size anywhere, it is parsed as a Children's size."""
+        If a C is in the show size anywhere, it is parsed as a Children's size.
+
+        Examples:
+        `&setbaseshoe 9`
+        `&setbaseshoe 10W`
+        `&setbaseshoe 12C`
+        """
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 

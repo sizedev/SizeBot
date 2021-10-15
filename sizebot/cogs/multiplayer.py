@@ -19,6 +19,10 @@ class MPCog(commands.Cog):
         category = "multiplayer"
     )
     async def pushbutton(self, ctx, user: discord.Member):
+        """Push someone's button!
+
+        If a user has a button set (with `&setbutton`,) changes that user by their set amount.
+        """
         userdata = userdb.load(ctx.guild.id, user.id)
         if userdata.button is None:
             await ctx.send(f"{userdata.nickname} has no button to push!")
@@ -39,6 +43,10 @@ class MPCog(commands.Cog):
         category = "multiplayer"
     )
     async def setbutton(self, ctx, *, diff: Diff):
+        """Set up a button for others to push!
+
+        Set a change amount, and when others run `&pushbutton` on you, you'll change by that amount.
+        """
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.button = diff
         userdb.save(userdata)
@@ -48,7 +56,8 @@ class MPCog(commands.Cog):
         category = "multiplayer",
         aliases = ["resetbutton", "unsetbutton", "removebutton"]
     )
-    async def clearbutton(self, ctx,):
+    async def clearbutton(self, ctx):
+        """Remove your push button."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.button = None
         userdb.save(userdata)

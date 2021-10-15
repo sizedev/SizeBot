@@ -100,8 +100,8 @@ class ScaleWalkCog(commands.Cog):
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
         Examples:
-        `&scalewalk 2x 50m
-        `&scalewalk -1mm 20ft"""
+        `&scalewalk 2x 50m`
+        `&scalewalk -1mm 20ft`"""
 
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -152,8 +152,8 @@ class ScaleWalkCog(commands.Cog):
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
         Examples:
-        `&scalewalk 2x 50m
-        `&scalewalk -1mm 20ft"""
+        `&scalewalk 2x 50m`
+        `&scalewalk -1mm 20ft`"""
 
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -207,8 +207,8 @@ class ScaleWalkCog(commands.Cog):
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
         Examples:
-        `&setstepscale 2x
-        `&setstepscale -1mm
+        `&setstepscale 2x`
+        `&setstepscale -1mm`
         """
 
         guildid = ctx.guild.id

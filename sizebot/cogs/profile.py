@@ -71,7 +71,10 @@ class ProfileCog(commands.Cog):
     )
     @commands.guild_only()
     async def profile(self, ctx, member: discord.Member = None):
-        """See the profile of you or another SizeBot user."""
+        """See the profile of you or another SizeBot user.
+
+        #ALPHA#
+        """
         if member is None:
             member = ctx.author
         same_user = ctx.author.id == member.id

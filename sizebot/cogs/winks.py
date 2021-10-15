@@ -11,7 +11,7 @@ logger = logging.getLogger("sizebot")
 
 winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
 starttime = datetime(2019, 9, 15)
-milestones = [1000, 2500, 4200, 5000, 6000, 6900, 7500, 9001, 10000, 25000, 42000, 50000, 69000, 75000, 100000]
+milestones = [1000, 2500, 4200, 5000, 6000, 6666, 6969, 7500, 9001, 10000, 25000, 42000, 50000, 69000, 75000, 100000]
 
 
 def getWinks():

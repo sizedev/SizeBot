@@ -81,6 +81,7 @@ class LoopCog(commands.Cog):
     )
     @commands.guild_only()
     async def stop(self, ctx):
+        """Stop a current movement."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         if userdata.currentmovetype is None:
             await ctx.send("You aren't currently moving!")
@@ -100,6 +101,10 @@ class LoopCog(commands.Cog):
     )
     @commands.guild_only()
     async def sofar(self, ctx, *, who = None):
+        """How far have you moved so far? [See help.]
+
+        #ALPHA#
+        """
         if who is None:
             who = ctx.author
         whoid = who.id

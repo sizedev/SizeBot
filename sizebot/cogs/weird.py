@@ -139,6 +139,7 @@ class WeirdCog(commands.Cog):
         category = "fun"
     )
     async def math(self, ctx, *, equation):
+        """Render a LaTeX string as an image."""
         full_url = R"https://latex.codecogs.com/png.latex?" + quote(R"\inline&space;\huge&space;{\color{White}&space;") + quote(equation) + "}"
 
         m = await ctx.send(emojis.loading + " *Loading math...*")

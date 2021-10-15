@@ -35,6 +35,8 @@ logger = logging.getLogger("sizebot")
 #     If True, the default help command does not show this in the help output.
 # aliases = []
 
+alpha_warning = "This command is in ALPHA. It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
+
 
 async def post_report(report_type, message, report_text):
     async with aiohttp.ClientSession() as session:
@@ -218,7 +220,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
         if "guild_only" in repr(cmd.checks):
             description += "*This command can only be run in a server, and not in DMs.*\n"
-        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", str(statmap))
+        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", str(statmap)).replace("#ALPHA#", alpha_warning)
 
         embed = Embed(
             title=signature,

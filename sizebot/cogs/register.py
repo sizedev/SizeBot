@@ -162,7 +162,7 @@ class RegisterCog(commands.Cog):
         raise error
 
     @commands.command(
-        aliases = ["advancedsignup", "advregister", "advsignup"],
+        aliases = ["advancedsignup", "advregister", "advsignup", "oldregister"],
         usage = "<nick> <currentheight> <baseheight> <baseweight> <system: M/U> [species]",
         category = "setup"
     )
@@ -180,13 +180,16 @@ class RegisterCog(commands.Cog):
 
         Measurement parameters can accept a wide variety of units, as listed in `&units`.
 
+        This command is deprecated. It may not be up to date, might break, and is definitely clunky to use. Just don't.
+
         Examples:
-        `&register DigiDuncan 0.5in 5'7.5 120lb U`
-        `&register Surge 11ft 5'8 140lb U Raichu`
-        `&register "Speck Boi" 0.1mm 190cm 120kg M`
+        `&advancedregister DigiDuncan 0.5in 5'7 120lb U`
+        `&advancedregister Surge 11ft 5'8 140lb U Raichu`
+        `&advancedregister "Speck Boi" 0.1mm 190cm 120kg M`
         """
         readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
         logger.warn(f"New user attempt! Nickname: {nick}")
+        logger.warn("OH GOD THEY'RE USING THE OLD REGISTER COMMAND")
         logger.info(readable)
 
         # Already registered

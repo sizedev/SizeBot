@@ -61,8 +61,7 @@ class NaptimeCog(commands.Cog):
     )
     @commands.is_owner()
     async def nannies(self, ctx):
-        """Show me those nannies!
-        """
+        """Show me those nannies!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
 

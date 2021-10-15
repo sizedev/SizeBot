@@ -106,7 +106,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def setsystem(self, ctx, newsys):
-        """Set measurement system."""
+        """Set measurement system. (M or U.)"""
         newsys = newsys.lower()
         systemmap = AliasMap({
             "m": ("b", "e", "metric", "british", "europe", "european"),
@@ -159,7 +159,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         if newscale == "banana":
-            await ctx.send("Bananas are already the default scale for all things.")
+            await ctx.send("Bananas are already the default scale for all things. 🍌")
             logger.log(EGG, "Bananas used for scale.")
 
         try:
@@ -182,7 +182,12 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     async def copyheight(self, ctx, user: discord.Member, *, newscale):
-        """Be the size of another user, modified by a factor."""
+        """Be the size of another user, modified by a factor.
+
+        Examples:
+        `&copyheight @User`
+        `&copyheight @User 10`
+        """
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         otheruser = userdb.load(ctx.guild.id, user.id)
 
@@ -358,7 +363,13 @@ class SetCog(commands.Cog):
 
         Accepts a US Shoe Size.
         If a W is in the shoe size anywhere, it is parsed as a Women's size.
-        If a C is in the show size anywhere, it is parsed as a Children's size."""
+        If a C is in the show size anywhere, it is parsed as a Children's size.
+
+        Examples:
+        `&setshoe 9`
+        `&setshoe 10W`
+        `&setshoe 12C`
+        """
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -564,8 +575,7 @@ class SetCog(commands.Cog):
                                              newwalk.time)
         userdb.save(userdata)
 
-        # TODO: Give ParsableRates a __mul__ so I can give the user their current speeds.
-        await ctx.send(f"{userdata.nickname}'s base walk speed is now {userdata.walkperhour:mu} per hour.")
+        await ctx.send(f"{userdata.nickname}'s base walk speed is now {userdata.walkperhour:mu} per hour. (Current speed is {newwalk:mu})")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -597,8 +607,7 @@ class SetCog(commands.Cog):
                                             newrun.time)
         userdb.save(userdata)
 
-        # TODO: Give ParsableRates a __mul__ so I can give the user their current speeds.
-        await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour.")
+        await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour.  (Current speed is {newrun:mu})")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -630,8 +639,7 @@ class SetCog(commands.Cog):
                                              newswim.time)
         userdb.save(userdata)
 
-        # TODO: Give ParsableRates a __mul__ so I can give the user their current speeds.
-        await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.")
+        await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.  (Current speed is {newswim:mu})")
         await showNextStep(ctx, userdata)
 
     @commands.command(
