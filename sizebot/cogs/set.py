@@ -161,7 +161,10 @@ class SetCog(commands.Cog):
             await ctx.send("Bananas are already the default scale for all things.")
             logger.log(EGG, "Bananas used for scale.")
 
-        scale = parse_scale(newscale)
+        try:
+            scale = parse_scale(newscale)
+        except errors.UserMessedUpException:
+            raise
 
         userdata.height = userdata.baseheight * scale
         userdb.save(userdata)
@@ -250,8 +253,11 @@ class SetCog(commands.Cog):
     async def setrandomscale(self, ctx, minscale: str, maxscale: str):
         """Change scale to a random value."""
 
-        minscale = parse_scale(minscale)
-        maxscale = parse_scale(maxscale)
+        try:
+            minscale = parse_scale(minscale)
+            maxscale = parse_scale(maxscale)
+        except errors.UserMessedUpException:
+            raise
 
         if minscale < 0:
             minscale = SV(0)
