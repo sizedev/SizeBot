@@ -163,7 +163,7 @@ class ChangeCog(commands.Cog):
             f"<@{ctx.author.id}> drank a :milk:! *{line}*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
-    @release_on("3.7")
+    @release_on("3.6.2")
     @commands.command(
         category = "change"
     )
