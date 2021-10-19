@@ -238,8 +238,18 @@ def main():
     @bot.event
     async def on_guild_join(guild):
         # TODO: Add whitelist.
+        with open(paths.whitelistpath) as f:
+            whitelist = [int(l) for l in f.readlines()]
+
+        if guild.id not in whitelist:
+            ...  # TODO: Send a message? Where?
+            logger.error(f"SizeBot tried to be added to {guild.name}! ({guild.id}), but it wasn't in the whitelist!")
+            await guild.leave()
+            return
+
         logger.warn(f"SizeBot has been added to {guild.name}! ({guild.id})\n"
                     f"You should talk to the owner, {guild.owner}! ({guild.owner.id})")
+
 
     @bot.event
     async def on_guild_remove(guild):

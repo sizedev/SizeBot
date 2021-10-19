@@ -15,6 +15,7 @@ from sizebot.lib import checks, objs, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.menu import Menu
 from sizebot.lib.units import SV, WV
+from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 
@@ -391,6 +392,15 @@ class HelpCog(commands.Cog):
     async def usercount(self, ctx):
         """How many users are registered?"""
         await ctx.send(f"There are **{userdb.countusers()}** users of SizeBot3½, with **{userdb.countprofiles()}** profiles created, <@!{ctx.message.author.id}>.")
+
+    @release_on("3.7")
+    @commands.command(
+        category = "help"
+    )
+    @checks.is_mod()
+    async def invite(self, ctx):
+        """Request an invite for SizeBot!"""
+        await ctx.send("Thanks for the interest in SizeBot!\nSizeBot is currently in closed beta, but you can request to be added to that here!\nhttps://forms.gle/qEdkCpsB891AhAoz5\nRollout is slow, so it may take a while to be approved and you may bot get approved at all right now. Be patient and good luck!")
 
 
 class HelpCategory:
