@@ -3,7 +3,8 @@
         "name": "proton",
         "dimension": "d",
         "diameter": "1.7e-15",
-        "weight": "1.67262192e-24"
+        "weight": "1.67262192e-24",
+        "note": "The smallest object in the bot."
     },
     {
         "name": "DNA",
@@ -106,7 +107,8 @@
         "dimension": "h",
         "height": "0.00025367",
         "width": "0.00025367",
-        "symbol": "px"
+        "symbol": "px",
+        "note": "Based on a ~100dpi monitor, or 1080p and 22\" diagonal."
     },
     {
         "name": "font point",
@@ -195,6 +197,16 @@
         ]
     },
     {
+        "name": "microUSB port",
+        "dimension": "w",
+        "length": "0.0018",
+        "width": "0.00685",
+        "aliases": [
+            "microUSB",
+            "micro USB"
+        ]
+    },
+    {
         "name": "sunflower seed",
         "dimension": "l",
         "length": "0.0071",
@@ -214,6 +226,20 @@
         "weight": "0.25",
         "tags": [
             "food"
+        ]
+    },
+    {
+        "name": "USB Type C port",
+        "dimension": "w",
+        "length": "0.0024",
+        "width": "0.00825",
+        "aliases": [
+            "USBC",
+            "USB-C",
+            "USB Type C",
+            "USB Type-C",
+            "USBC port",
+            "USB-C port"
         ]
     },
     {
@@ -238,7 +264,8 @@
         ],
         "aliases": [
             "lego"
-        ]
+        ],
+        "note": "a 2x4 brick."
     },
     {
         "name": "1/4 20 nut",
@@ -288,6 +315,15 @@
         "diameter": "0.0121",
         "aliases": [
             "eye"
+        ]
+    },
+    {
+        "name": "USB port",
+        "dimension": "w",
+        "length": "0.0045",
+        "width": "0.0125",
+        "aliases": [
+            "USB"
         ]
     },
     {
@@ -831,6 +867,14 @@
         ]
     },
     {
+        "name": "matchbox",
+        "dimension": "l",
+        "height": "0.0127",
+        "length": "0.053975",
+        "width": "0.0365125",
+        "weight": "10"
+    },
+    {
         "name": "golf tee",
         "dimension": "h",
         "height": "0.054",
@@ -972,6 +1016,17 @@
             "sticky note",
             "post-it",
             "note"
+        ]
+    },
+    {
+        "name": "Polaroid picture",
+        "dimension": "l",
+        "length": "0.079375",
+        "width": "0.0777875",
+        "aliases": [
+            "Polaroid",
+            "picture",
+            "film"
         ]
     },
     {
@@ -1243,6 +1298,14 @@
         "weight": "82.2136"
     },
     {
+        "name": "Nokia 3310",
+        "dimension": "l",
+        "length": "0.1156",
+        "width": "0.051",
+        "depth": "0.0128",
+        "weight": "88.2"
+    },
+    {
         "name": "CD",
         "dimension": "d",
         "diameter": "0.12",
@@ -1460,6 +1523,12 @@
             "remote control",
             "TV remote"
         ]
+    },
+    {
+        "name": "napkin",
+        "dimension": "l",
+        "length": "0.2032",
+        "width": "0.2032"
     },
     {
         "name": "Powerade",
@@ -1784,6 +1853,14 @@
         ]
     },
     {
+        "name": "shoe box",
+        "dimension": "l",
+        "height": "0.127",
+        "length": "0.3556",
+        "width": "0.254",
+        "weight": "250"
+    },
+    {
         "name": "bowling pin",
         "dimension": "h",
         "height": "0.381",
@@ -2009,7 +2086,8 @@
         "dimension": "h",
         "height": "1.49",
         "tags": [
-            "doki"
+            "doki",
+            "character"
         ]
     },
     {
@@ -2031,7 +2109,8 @@
         "dimension": "h",
         "height": "1.57",
         "tags": [
-            "doki"
+            "doki",
+            "character"
         ]
     },
     {
@@ -2039,7 +2118,8 @@
         "dimension": "h",
         "height": "1.6",
         "tags": [
-            "doki"
+            "doki",
+            "character"
         ]
     },
     {
@@ -2047,7 +2127,8 @@
         "dimension": "h",
         "height": "1.65",
         "tags": [
-            "doki"
+            "doki",
+            "character"
         ]
     },
     {
@@ -2252,6 +2333,12 @@
         ]
     },
     {
+        "name": "trampoline",
+        "dimension": "d",
+        "diameter": "3.23",
+        "weight": "90718.5"
+    },
+    {
         "name": "wither",
         "dimension": "h",
         "height": "3.5",
@@ -2265,6 +2352,15 @@
         "dimension": "h",
         "height": "3.5052",
         "weight": "326587"
+    },
+    {
+        "name": "house",
+        "dimension": "h",
+        "height": "3.6576",
+        "length": "11.8",
+        "width": "11.8",
+        "weight": "185972872",
+        "note": "single story average house, ~1500sqft"
     },
     {
         "name": "ghast",
@@ -2360,6 +2456,21 @@
         ]
     },
     {
+        "name": "Class A RV",
+        "dimension": "l",
+        "height": "3.048",
+        "length": "10.0584",
+        "width": "2.7432",
+        "weight": "9752236",
+        "tags": [
+            "vehicle"
+        ],
+        "aliases": [
+            "camper",
+            "RV"
+        ]
+    },
+    {
         "name": "phone pole",
         "dimension": "h",
         "height": "12",
@@ -2439,7 +2550,8 @@
         "aliases": [
             "office building",
             "office"
-        ]
+        ],
+        "note": "Assuming 27500 feet^2 per floor and 50 pounds/square foot."
     },
     {
         "name": "swimming pool",
