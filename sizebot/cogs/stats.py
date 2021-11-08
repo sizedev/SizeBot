@@ -14,7 +14,6 @@ from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.utils import AliasMap, glitch_string, parseMany, prettyTimeDelta, sentence_join
-from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 
@@ -580,8 +579,8 @@ class StatsCog(commands.Cog):
         footer = (
             f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), "
             f"run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), "
-            f"climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls), ."
-            f"crawl that distance in {defaultcrawltime} ({defaultcrawlsteps:,.0f} pulls), ."
+            f"climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls), "
+            f"crawl that distance in {defaultcrawltime} ({defaultcrawlsteps:,.0f} pulls), "
             f"or swim that distance in {defaultswimtime} ({defaultswimsteps:,.0f} strokes.)"
         )
 
@@ -850,7 +849,6 @@ class StatsCog(commands.Cog):
         )
         await msg.edit(content = "", embed = e)
 
-    @release_on("3.6.2")
     @commands.command(
         aliases = ["simplecomp", "simplecomparison"],
         usage = "<user/height> [user/height]",
