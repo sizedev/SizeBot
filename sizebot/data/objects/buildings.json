@@ -11,6 +11,44 @@
         ]
     },
     {
+        "name": "Leaning Tower of Pisa",
+        "dimension": "h",
+        "height": "56.6928",
+        "weight": "13154200000",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "tower of Pisa",
+            "leaning tower"
+        ]
+    },
+    {
+        "name": "Statue of Liberty",
+        "dimension": "h",
+        "height": "93",
+        "weight": "204116566",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "lady liberty",
+            "lady liberties",
+            "statue of liberties"
+        ]
+    },
+    {
+        "name": "Big Ben",
+        "dimension": "h",
+        "height": "96.012",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "Elizabeth Tower"
+        ]
+    },
+    {
         "name": "Washington monument",
         "dimension": "h",
         "height": "169.164",
@@ -32,6 +70,15 @@
         ],
         "aliases": [
             "eiffel"
+        ]
+    },
+    {
+        "name": "Empire State Building",
+        "dimension": "h",
+        "height": "443.1792",
+        "weight": "331122400000",
+        "tags": [
+            "building"
         ]
     },
     {

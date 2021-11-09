@@ -1260,7 +1260,7 @@
         "depth": "0.014",
         "weight": "50.603899",
         "tags": [
-            "console"
+            "controller"
         ],
         "aliases": [
             "joycon",
@@ -1284,6 +1284,9 @@
         "width": "0.1529",
         "depth": "0.061",
         "weight": "280",
+        "tags": [
+            "controller"
+        ],
         "aliases": [
             "xbox controller",
             "controller",
@@ -1535,6 +1538,9 @@
         "width": "0.09",
         "depth": "0.032",
         "weight": "220",
+        "tags": [
+            "console"
+        ],
         "aliases": [
             "game boy"
         ]
@@ -1634,7 +1640,8 @@
             "yeti rambler",
             "tumbler",
             "thermos"
-        ]
+        ],
+        "note": "Yes, it's funny this name is so specific."
     },
     {
         "name": "remote",
@@ -1666,7 +1673,8 @@
             "gatorade",
             "gatorade bottle",
             "sports drink"
-        ]
+        ],
+        "note": ":digidu1Powerade:"
     },
     {
         "name": "bowling ball",
@@ -2366,8 +2374,7 @@
         "height": "2",
         "weight": "350000",
         "tags": [
-            "warhammer",
-            "40k"
+            "character"
         ],
         "aliases": [
             "Adeptus Astartes",
@@ -2517,6 +2524,7 @@
         "name": "story",
         "dimension": "h",
         "height": "4.3",
+        "symbol": "f",
         "aliases": [
             "floor"
         ]
@@ -2579,7 +2587,10 @@
         "dimension": "h",
         "height": "5",
         "width": "4",
-        "depth": "1"
+        "depth": "1",
+        "tags": [
+            "minecraft"
+        ]
     },
     {
         "name": "2-lane road width",
@@ -2719,19 +2730,6 @@
         ]
     },
     {
-        "name": "Leaning Tower of Pisa",
-        "dimension": "h",
-        "height": "56.6928",
-        "weight": "13154200000",
-        "tags": [
-            "building"
-        ],
-        "aliases": [
-            "tower of Pisa",
-            "leaning tower"
-        ]
-    },
-    {
         "name": "redwood tree",
         "dimension": "h",
         "height": "60.96",
@@ -2778,38 +2776,19 @@
     {
         "name": "cell tower",
         "dimension": "h",
-        "height": "91.44"
-    },
-    {
-        "name": "Statue of Liberty",
-        "dimension": "h",
-        "height": "93",
-        "weight": "204116566",
+        "height": "91.44",
         "tags": [
             "building"
-        ],
-        "aliases": [
-            "lady liberty",
-            "lady liberties",
-            "statue of liberties"
-        ]
-    },
-    {
-        "name": "Big Ben",
-        "dimension": "h",
-        "height": "96.012",
-        "tags": [
-            "building"
-        ],
-        "aliases": [
-            "Elizabeth Tower"
         ]
     },
     {
         "name": "ferris wheel",
         "dimension": "h",
         "height": "100",
-        "weight": "7257480"
+        "weight": "7257480",
+        "tags": [
+            "building"
+        ]
     },
     {
         "name": "football field",
@@ -2821,7 +2800,10 @@
         "name": "Space Needle",
         "dimension": "h",
         "height": "184",
-        "weight": "3356600000"
+        "weight": "3356600000",
+        "tags": [
+            "building"
+        ]
     },
     {
         "name": "Battleship Iowa",
@@ -2856,15 +2838,6 @@
         "weight": "90718500000",
         "tags": [
             "vehicle"
-        ]
-    },
-    {
-        "name": "Empire State Building",
-        "dimension": "h",
-        "height": "443.1792",
-        "weight": "331122400000",
-        "tags": [
-            "building"
         ]
     },
     {
