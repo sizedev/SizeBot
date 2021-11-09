@@ -21,6 +21,11 @@
         "length": "7e-9"
     },
     {
+        "name": "smoke particle",
+        "dimension": "d",
+        "diameter": "3e-8"
+    },
+    {
         "name": "green light wavelength",
         "dimension": "l",
         "length": "5.4e-7",
@@ -83,6 +88,16 @@
         "aliases": [
             "hair",
             "human hair"
+        ]
+    },
+    {
+        "name": "fingerprint groove",
+        "dimension": "p",
+        "width": "0.0002",
+        "depth": "0.00005",
+        "aliases": [
+            "fingerprint",
+            "fingerprint ridge"
         ]
     },
     {
@@ -164,6 +179,22 @@
         "weight": "2.3"
     },
     {
+        "name": "3.5mm jack",
+        "dimension": "d",
+        "diameter": "0.0035",
+        "tags": [
+            "port"
+        ],
+        "aliases": [
+            "headphone jack",
+            "headphone port",
+            "aux jack",
+            "aux port",
+            "aux",
+            "3.5mm port"
+        ]
+    },
+    {
         "name": "grain of rice",
         "dimension": "l",
         "length": "0.006",
@@ -201,6 +232,9 @@
         "dimension": "w",
         "length": "0.0018",
         "width": "0.00685",
+        "tags": [
+            "port"
+        ],
         "aliases": [
             "microUSB",
             "micro USB"
@@ -233,6 +267,9 @@
         "dimension": "w",
         "length": "0.0024",
         "width": "0.00825",
+        "tags": [
+            "port"
+        ],
         "aliases": [
             "USBC",
             "USB-C",
@@ -294,6 +331,12 @@
         "weight": "0.0323995"
     },
     {
+        "name": "coffee bean",
+        "dimension": "l",
+        "length": "0.01",
+        "weight": "0.1325"
+    },
+    {
         "name": "shirt button",
         "dimension": "d",
         "diameter": "0.01016",
@@ -301,6 +344,16 @@
         "weight": "1",
         "aliases": [
             "button"
+        ]
+    },
+    {
+        "name": "Tic-Tac",
+        "dimension": "l",
+        "length": "0.0118",
+        "width": "0.0061",
+        "weight": "0.5",
+        "tags": [
+            "food"
         ]
     },
     {
@@ -322,6 +375,9 @@
         "dimension": "w",
         "length": "0.0045",
         "width": "0.0125",
+        "tags": [
+            "port"
+        ],
         "aliases": [
             "USB"
         ]
@@ -772,6 +828,19 @@
         ]
     },
     {
+        "name": "Oreo",
+        "dimension": "d",
+        "height": "0.009",
+        "diameter": "0.04445",
+        "weight": "11.3",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "cookie"
+        ]
+    },
+    {
         "name": "cupcake",
         "dimension": "h",
         "height": "0.045",
@@ -792,6 +861,16 @@
         "aliases": [
             "house key",
             "key"
+        ]
+    },
+    {
+        "name": "pawn",
+        "dimension": "h",
+        "height": "0.0460375",
+        "diameter": "0.03175",
+        "weight": "34.0194",
+        "aliases": [
+            "chess piece"
         ]
     },
     {
@@ -827,6 +906,12 @@
             "mcnugget",
             "nugget"
         ]
+    },
+    {
+        "name": "hummingbird",
+        "dimension": "h",
+        "height": "0.05",
+        "weight": "3"
     },
     {
         "name": "hairpin",
@@ -1141,6 +1226,21 @@
         ]
     },
     {
+        "name": "Big Mac",
+        "dimension": "d",
+        "height": "0.06985",
+        "diameter": "0.09525",
+        "weight": "215.456",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "cheeseburger",
+            "burger",
+            "hamburger"
+        ]
+    },
+    {
         "name": "audio cassette",
         "dimension": "l",
         "height": "0.064",
@@ -1316,6 +1416,16 @@
         ]
     },
     {
+        "name": "Whopper",
+        "dimension": "d",
+        "height": "0.0635",
+        "diameter": "0.12065",
+        "weight": "300.5049",
+        "tags": [
+            "food"
+        ]
+    },
+    {
         "name": "soda can",
         "dimension": "h",
         "height": "0.122",
@@ -1328,6 +1438,18 @@
             "pop can",
             "can",
             "can of soda"
+        ]
+    },
+    {
+        "name": "Apple iPod™ 5G",
+        "dimension": "l",
+        "length": "0.122",
+        "width": "0.058",
+        "depth": "0.005",
+        "weight": "87.9",
+        "aliases": [
+            "iPod",
+            "mp3 player"
         ]
     },
     {
@@ -1764,6 +1886,18 @@
         "weight": "816.466"
     },
     {
+        "name": "Blue Yeti microphone",
+        "dimension": "h",
+        "height": "0.295",
+        "width": "0.12",
+        "depth": "0.125",
+        "weight": "1000",
+        "aliases": [
+            "yeti",
+            "microphone"
+        ]
+    },
+    {
         "name": "medium Dominos™ pizza",
         "dimension": "d",
         "diameter": "0.3",
@@ -1898,6 +2032,14 @@
         "tags": [
             "Pokemon"
         ]
+    },
+    {
+        "name": "backpack",
+        "dimension": "h",
+        "height": "0.43",
+        "width": "0.34",
+        "depth": "0.1",
+        "weight": "280.9438"
     },
     {
         "name": "beach ball",
@@ -2418,6 +2560,18 @@
             "T rexes",
             "Trex",
             "Trexes"
+        ]
+    },
+    {
+        "name": "great white shark",
+        "dimension": "l",
+        "length": "4.75",
+        "weight": "907184.7",
+        "tags": [
+            "animal"
+        ],
+        "aliases": [
+            "shark"
         ]
     },
     {
