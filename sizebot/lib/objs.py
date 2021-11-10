@@ -18,7 +18,7 @@ objects = []
 
 class DigiObject:
     def __init__(self, name, dimension, aliases=[], tags=[], symbol = None, height = None, length = None,
-                 width = None, diameter = None, depth = None, thickness = None, weight = None):
+                 width = None, diameter = None, depth = None, thickness = None, weight = None, note = None):
 
         self.name = name
         self.namePlural = getPlural(name)
@@ -28,6 +28,7 @@ class DigiObject:
         self.tags = tags + [getPlural(t) for t in tags]
         self.article = getIndefiniteArticle(self.name).split(" ")[0]
         self.symbol = symbol or None
+        self.note = note or None
 
         self.height = height and SV(height)
         self.length = length and SV(length)
