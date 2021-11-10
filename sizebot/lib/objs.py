@@ -9,16 +9,20 @@ import sizebot.data.objects
 from sizebot import __version__
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import getPlural, getIndefiniteArticle
 from sizebot.lib.units import SV, WV, Unit, SystemUnit
 from sizebot.lib.utils import removeprefix, sentence_join
 
-objects = []
+objects: list["DigiObject"] = []
+food: list["DigiObject"] = []
+tags: dict[str, int] = {}
 
 
 class DigiObject:
     def __init__(self, name, dimension, aliases=[], tags=[], symbol = None, height = None, length = None,
-                 width = None, diameter = None, depth = None, thickness = None, weight = None, note = None):
+                 width = None, diameter = None, depth = None, thickness = None, calories = None,
+                 weight = None, note = None):
 
         self.name = name
         self.namePlural = getPlural(name)
@@ -36,6 +40,7 @@ class DigiObject:
         self.diameter = diameter and SV(diameter)
         self.depth = depth and SV(depth)
         self.thickness = thickness and SV(thickness)
+        self.calories = SV(calories) if calories is not None else None
         self.weight = weight and WV(weight)
 
         dimensionmap = {
@@ -44,7 +49,8 @@ class DigiObject:
             "w": "width",
             "d": "diameter",
             "p": "depth",
-            "t": "thickness"
+            "t": "thickness",
+            "c": "calories",
         }
 
         self.unitlength = getattr(self, dimensionmap[dimension])
@@ -79,6 +85,8 @@ class DigiObject:
             returnstr += f"{emojis.blank}**{SV(self.depth * multiplier):,.3mu}** deep\n"
         if self.thickness:
             returnstr += f"{emojis.blank}**{SV(self.thickness * multiplier):,.3mu}** thick\n"
+        if self.calories is not None:
+            returnstr += f"{emojis.blank}has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n"
         if self.weight:
             returnstr += "and weighs...\n"
             returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
@@ -98,6 +106,8 @@ class DigiObject:
             statsstrings.append(f"**{SV(self.depth * multiplier):,.3{system}}** deep")
         if self.thickness:
             statsstrings.append(f"**{SV(self.thickness * multiplier):,.3{system}}** thick")
+        if self.calories is not None:
+            statsstrings.append(f"has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n")
         if self.weight:
             statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
 
@@ -127,6 +137,9 @@ class DigiObject:
         if self.thickness:
             embed.add_field(name = "Thickness",
                             value = f"**{SV(self.thickness * multiplier):,.3mu}** thick\n")
+        if self.calories is not None:
+            embed.add_field(name = "Calories",
+                            value = f"has **{Decimal(self.calories * (multiplier **3)):,.3}** calories\n")
         if self.weight:
             embed.add_field(name = "Weight",
                             value = f"**{WV(self.weight * (multiplier ** 3)):,.3mu}**")
@@ -216,3 +229,13 @@ def init():
             loadObjFile(filename)
     for o in objects:
         o.addToUnits()
+
+    # cached values
+    global food, tags
+    food = [o for o in objects if "food" in o.tags]
+    for o in objects:
+        for tag in o.tags:
+            if tag not in tags:
+                tags[tag] = 1
+            else:
+                tags[tag] += 1
