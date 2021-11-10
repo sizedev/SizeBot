@@ -142,6 +142,7 @@ class DigiObject:
     def statsembed(self):
         embed = self.getStatsEmbed()
         embed.title = self.name
+        embed.description = f"*{self.note}*" if self.note else None
         return embed
 
     def relativestats(self, userdata):
