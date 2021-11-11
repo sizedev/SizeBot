@@ -1,3 +1,4 @@
+from functools import total_ordering
 import importlib.resources as pkg_resources
 import json
 import random
@@ -19,6 +20,7 @@ food: list["DigiObject"] = []
 tags: dict[str, int] = {}
 
 
+@total_ordering
 class DigiObject:
     def __init__(self, name, dimension, aliases=[], tags=[], symbol = None, height = None, length = None,
                  width = None, diameter = None, depth = None, thickness = None, calories = None,
@@ -183,6 +185,11 @@ class DigiObject:
                 or lowerName == self.namePlural \
                 or lowerName in (n.lower() for n in self.aliases)
         return super().__eq__(other)
+
+    def __lt__(self, other):
+        if isinstance(other, DigiObject):
+            return self.unitlength < other.unitlength
+        return self.unitlength < other
 
     @classmethod
     def findByName(cls, name):
