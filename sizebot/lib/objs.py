@@ -29,6 +29,7 @@ class DigiObject:
         self.singularNames = aliases + [self.name]
         self.aliases = aliases + [getPlural(a) for a in aliases]
         self.aliases = self.aliases + [a.replace("™", "").replace("®", "") for a in self.aliases + [self.name]]  # Remove ®, ™
+        self.aliases = list(set(self.aliases))  # Remove duplicates
         self.tags = tags + [getPlural(t) for t in tags]
         self.article = getIndefiniteArticle(self.name).split(" ")[0]
         self.symbol = symbol or None
