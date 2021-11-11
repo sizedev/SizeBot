@@ -284,7 +284,7 @@ class ObjectsCog(commands.Cog):
         food_per_day = CAL_PER_DAY / scale_calories
         days_per_food = 1 / food_per_day
 
-        if food_per_day >= 1:
+        if food_per_day <= 1:
             foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1f} {random_food.namePlural}** per day."
         else:
             foodout = f"A {random_food.name} would last {userdata.nickname} **{days_per_food} days.**"
