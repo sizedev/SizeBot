@@ -10,7 +10,7 @@ from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.language import engine
 from sizebot.lib.units import SV, TV
-from sizebot.lib.userdb import getUserdata
+from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import AliasMap, glitch_string, prettyTimeDelta, sentence_join
 
 logger = logging.getLogger("sizebot")
@@ -74,7 +74,7 @@ class StatsCog(commands.Cog):
             telemetry.SizeViewed(memberOrHeight).save()
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = getUserdata(memberOrHeight, customName, allow_unreg=same_user)
+        userdata = load_or_fake(memberOrHeight, customName, allow_unreg=same_user)
 
         stats = proportions.PersonStats(userdata)
 
@@ -135,8 +135,8 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeight2, SV):
             telemetry.SizeViewed(memberOrHeight).save()
 
-        userdata = getUserdata(memberOrHeight)
-        userdata2 = getUserdata(memberOrHeight2, customName)
+        userdata = load_or_fake(memberOrHeight)
+        userdata2 = load_or_fake(memberOrHeight2, customName)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
         userdata2.height = userdata.height
 
@@ -171,7 +171,7 @@ class StatsCog(commands.Cog):
             telemetry.SizeViewed(memberOrHeight).save()
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = getUserdata(memberOrHeight, customName, allow_unreg=same_user)
+        userdata = load_or_fake(memberOrHeight, customName, allow_unreg=same_user)
 
         stats = proportions.PersonStats(userdata)
 
@@ -224,8 +224,8 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeight2, SV):
             telemetry.SizeViewed(memberOrHeight).save()
 
-        userdata = getUserdata(memberOrHeight)
-        userdata2 = getUserdata(memberOrHeight2, customName)
+        userdata = load_or_fake(memberOrHeight)
+        userdata2 = load_or_fake(memberOrHeight2, customName)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
         userdata2.height = userdata.height
 
@@ -271,8 +271,8 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeight2, SV):
             telemetry.SizeViewed(memberOrHeight).save()
 
-        userdata1 = getUserdata(memberOrHeight)
-        userdata2 = getUserdata(memberOrHeight2)
+        userdata1 = load_or_fake(memberOrHeight)
+        userdata2 = load_or_fake(memberOrHeight2)
 
         msg = await ctx.send(emojis.loading + " *Loading comparison...*")
 
@@ -295,48 +295,17 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeight, SV):
             telemetry.SizeViewed(memberOrHeight).save()
 
-        userdata = getUserdata(ctx.message.author)
-        asdata = getUserdata(asHeight, customName)
+        userdata = load_or_fake(ctx.message.author)
+        asdata = load_or_fake(asHeight, customName)
         userdata.height = asdata.height
         userdata.nickname += " as " + asdata.nickname
-        comparedata = getUserdata(memberOrHeight)
+        comparedata = load_or_fake(memberOrHeight)
 
         msg = await ctx.send(emojis.loading + " *Loading comparison...*")
 
         comparison = proportions.PersonComparison(userdata, comparedata)
         embedtosend = await comparison.toEmbed(ctx.author.id)
         await msg.edit(content = "", embed = embedtosend)
-
-    @commands.command(
-        aliases = ["natstats"],
-        category = "stats"
-    )
-    @commands.guild_only()
-    async def lookslike(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
-        """See how tall you are in comparison to an object."""
-        if memberOrHeight is None:
-            memberOrHeight = ctx.author
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
-        userdata = getUserdata(memberOrHeight)
-
-        if userdata.height == 0:
-            await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about... huh. I can't find them.")
-            return
-
-        goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2%4&2")
-        tmp = goodheight.split()
-        tmpout = [tmp[0]] + tmp[3:] + tmp[1:3]  # Move the paranthesis bit of the height string to the end.
-        goodheightout = " ".join(tmpout)
-
-        goodweight = userdata.weight.toGoodUnit('o', preferName=True, spec=".2%4&2")
-        tmp2 = goodweight.split()
-        tmp2out = [tmp2[0]] + tmp2[3:] + tmp2[1:3]  # Move the paranthesis bit of the height string to the end.
-        goodweightout = " ".join(tmp2out)
-
-        await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
 
     @commands.command(
         aliases = ["dist", "walk", "run", "climb"],
@@ -352,14 +321,14 @@ class StatsCog(commands.Cog):
         if who is None:
             who = ctx.message.author
 
-        userdata = getUserdata(who)
+        userdata = load_or_fake(who)
         userstats = proportions.PersonStats(userdata)
 
         if userdata.height == 0:
             await ctx.send(f"{userdata.tag} doesn't exist...")
             return
 
-        defaultdata = getUserdata(userdb.defaultheight, "an average person")
+        defaultdata = load_or_fake(userdb.defaultheight, "an average person")
         defaultstats = proportions.PersonStats(defaultdata)
 
         if isinstance(length, str):
@@ -407,6 +376,7 @@ class StatsCog(commands.Cog):
         defaultcrawltime = prettyTimeDelta(defaultcrawltimehours * 60 * 60, roundeventually = True)
         defaultswimtime = prettyTimeDelta(defaultswimtimehours * 60 * 60, roundeventually = True)
 
+        # TODO: Switch to using the new embeds
         desc = (
             f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}.** "
             f"They could walk that distance in **{walktime}** *({walksteps:,.0f} steps)*, "
@@ -455,8 +425,8 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeight2, SV):
             telemetry.SizeViewed(memberOrHeight2).save()
 
-        userdata1 = getUserdata(memberOrHeight)
-        userdata2 = getUserdata(memberOrHeight2)
+        userdata1 = load_or_fake(memberOrHeight)
+        userdata2 = load_or_fake(memberOrHeight2)
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
         embedtosend = await comparison.toEmbed(ctx.author.id)
@@ -492,8 +462,8 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeight2, SV):
             telemetry.SizeViewed(memberOrHeight2).save()
 
-        userdata1 = getUserdata(memberOrHeight)
-        userdata2 = getUserdata(memberOrHeight2)
+        userdata1 = load_or_fake(memberOrHeight)
+        userdata2 = load_or_fake(memberOrHeight2)
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
 
@@ -524,7 +494,7 @@ class StatsCog(commands.Cog):
         if who is None:
             who = ctx.message.author
 
-        userdata = getUserdata(who)
+        userdata = load_or_fake(who)
         userstats = proportions.PersonStats(userdata)
 
         if userdata.height == 0:
@@ -559,7 +529,7 @@ class StatsCog(commands.Cog):
         if isinstance(who, SV):
             is_SV = True
 
-        userdata = getUserdata(who)
+        userdata = load_or_fake(who)
         userstats = proportions.PersonStats(userdata)
 
         traveldist = userstats.height
@@ -592,7 +562,7 @@ class StatsCog(commands.Cog):
         if isinstance(who, SV):
             is_SV = True
 
-        userdata = getUserdata(who)
+        userdata = load_or_fake(who)
         userstats = proportions.PersonStats(userdata)
 
         traveldist = userstats.height
@@ -710,8 +680,8 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeight2, SV):
             telemetry.SizeViewed(memberOrHeight).save()
 
-        userdata1 = getUserdata(memberOrHeight)
-        userdata2 = getUserdata(memberOrHeight2)
+        userdata1 = load_or_fake(memberOrHeight)
+        userdata2 = load_or_fake(memberOrHeight2)
 
         msg = await ctx.send(emojis.loading + " *Loading comparison...*")
 

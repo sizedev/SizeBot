@@ -1,15 +1,18 @@
 import logging
+import math
 import typing
 
 import discord
+from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.converter import MemberConverter
 
-from sizebot.lib import proportions, telemetry, userdb
+from sizebot import __version__
+from sizebot.lib import objs, proportions, telemetry, userdb, utils
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject
 from sizebot.lib.units import SV, WV
-from sizebot.lib.userdb import getUserdata
+from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import glitch_string, parseMany
 
 
@@ -21,9 +24,61 @@ class ObjectsCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
+        aliases = ["objects", "objlist", "objectlist"],
+        category = "objects"
+    )
+    async def objs(self, ctx):
+        """Get a list of the various objects SizeBot accepts."""
+        objectunits = []
+        for obj in objs.objects:
+            objectunits.append(obj.name)
+
+        objectunits.sort()
+
+        # TODO: Make this a paged message
+
+        embed = Embed(title=f"Objects [SizeBot {__version__}]", description = f"*NOTE: All of these objects have multiple aliases. If there is an alias that you think should work for a listed object but doesn't, report it with `{ctx.prefix}suggestobject` and note that it's an alias.*")
+
+        for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 6))):
+            embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
+
+        await ctx.send(embed=embed)
+
+    @commands.command(
+        aliases = ["natstats"],
+        category = "objects"
+    )
+    @commands.guild_only()
+    async def lookslike(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
+        """See how tall you are in comparison to an object."""
+        if memberOrHeight is None:
+            memberOrHeight = ctx.author
+
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight).save()
+
+        userdata = load_or_fake(memberOrHeight)
+
+        if userdata.height == 0:
+            await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about... huh. I can't find them.")
+            return
+
+        goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2%4&2")
+        tmp = goodheight.split()
+        tmpout = [tmp[0]] + tmp[3:] + tmp[1:3]  # Move the paranthesis bit of the height string to the end.
+        goodheightout = " ".join(tmpout)
+
+        goodweight = userdata.weight.toGoodUnit('o', preferName=True, spec=".2%4&2")
+        tmp2 = goodweight.split()
+        tmp2out = [tmp2[0]] + tmp2[3:] + tmp2[1:3]  # Move the paranthesis bit of the height string to the end.
+        goodweightout = " ".join(tmp2out)
+
+        await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
+
+    @commands.command(
         aliases = ["objcompare", "objcomp"],
         usage = "<object/user> [as user/height]",
-        category = "stats"
+        category = "objects"
     )
     @commands.guild_only()
     async def objectcompare(self, ctx, *, args: str):
@@ -55,7 +110,7 @@ class ObjectsCog(commands.Cog):
         if isinstance(who, SV):
             telemetry.SizeViewed(who).save()
 
-        userdata = getUserdata(who)
+        userdata = load_or_fake(who)
         userstats = proportions.PersonStats(userdata)
 
         if isinstance(what, DigiObject):
@@ -63,10 +118,10 @@ class ObjectsCog(commands.Cog):
             await ctx.send(embed = oc)
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make one sided)
-            compdata = getUserdata(what)
+            compdata = load_or_fake(what)
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userstats.avgheightcomp
-            compdata = getUserdata(compheight)
+            compdata = load_or_fake(compheight)
         else:
             telemetry.UnknownObject(str(what)).save()
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
@@ -78,7 +133,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         aliases = ["look", "examine"],
         usage = "<object>",
-        category = "stats"
+        category = "objects"
     )
     @commands.guild_only()
     async def lookat(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):
@@ -93,7 +148,7 @@ class ObjectsCog(commands.Cog):
         if isinstance(what, SV):
             telemetry.SizeViewed(what).save()
 
-        userdata = getUserdata(ctx.author)
+        userdata = load_or_fake(ctx.author)
 
         if userdata.incomprehensible:
             await ctx.send(glitch_string("hey now, you're an all star, get your game on, go play"))
@@ -115,13 +170,13 @@ class ObjectsCog(commands.Cog):
             await ctx.send(la)
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
-            compdata = getUserdata(what)
+            compdata = load_or_fake(what)
         elif isinstance(what, str) and what.lower() in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userdb.defaultheight
-            compdata = getUserdata(compheight, nickname = "an average person")
+            compdata = load_or_fake(compheight, nickname = "an average person")
         elif isinstance(what, str) and what.lower() in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
             logger.log(EGG, f"{ctx.author.display_name} found Chocolate!")
-            compdata = getUserdata(SV.parse("11in"), nickname = "Chocolate [Stuffed Beaver]")
+            compdata = load_or_fake(SV.parse("11in"), nickname = "Chocolate [Stuffed Beaver]")
             compdata.baseweight = WV.parse("4.8oz")
             compdata.footlength = SV.parse("2.75in")
             compdata.taillength = SV.parse("12cm")
@@ -164,7 +219,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         aliases = ["objectstats"],
         usage = "<object>",
-        category = "stats"
+        category = "objects"
     )
     async def objstats(self, ctx, *, what: typing.Union[DigiObject, str]):
         """Get stats about an object.
@@ -178,6 +233,15 @@ class ObjectsCog(commands.Cog):
             return
 
         await ctx.send(embed = what.statsembed())
+
+    @commands.command(
+        category = "objects"
+    )
+    # TODO: Bad name.
+    async def stackup(self, ctx):
+        """How do you stack up against objects?"""
+
+        userdata = userdb.load(ctx.author)
 
 
 def setup(bot):

@@ -657,7 +657,7 @@ def save(userdata):
         json.dump(jsondata, f, indent = 4)
 
 
-def load(guildid, userid, *, member=None, allow_unreg=False):
+def load(guildid, userid, *, member=None, allow_unreg=False) -> User:
     path = getUserPath(guildid, userid)
     try:
         with open(path, "r") as f:
@@ -710,7 +710,7 @@ def listUsers(*, guildid = None, userid = None):
     return users
 
 
-def getUserdata(memberOrSV, nickname = None, *, allow_unreg=False):
+def load_or_fake(memberOrSV, nickname = None, *, allow_unreg=False) -> User:
     if isinstance(memberOrSV, discord.Member):
         userdata = load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
     else:
