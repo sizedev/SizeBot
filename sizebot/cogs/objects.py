@@ -282,14 +282,11 @@ class ObjectsCog(commands.Cog):
         scale3 = scale ** 3
         cals_needed = CAL_PER_DAY * scale3
 
-        food = objs.food
-        good_food = [f for f in food if f.calories >= cals_needed]
-        if good_food == []:
-            if userdata.scale > 1:
-                good_food = food[-5:]
-            else:
-                good_food = food
-        random_food = random.choice(food)
+        foods = objs.food
+        if scale >= 1:
+            # TODO: Not a good way to do this.
+            foods = foods[-6:]
+        random_food = random.choice(foods)
 
         days_per_food = random_food.calories / cals_needed
         food_per_day = 1 / days_per_food
