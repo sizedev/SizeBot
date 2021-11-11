@@ -10,6 +10,7 @@ from discord.ext.commands.converter import MemberConverter
 
 from sizebot import __version__
 from sizebot.lib import objs, proportions, telemetry, userdb, utils
+from sizebot.lib.constants import emojis
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects
 from sizebot.lib.units import SV, WV
@@ -264,40 +265,59 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def food(self, ctx, *, who: discord.Member = None):
+    async def food(self, ctx, arg1: typing.Union[discord.Member, DigiObject] = None,
+                   *, arg2: DigiObject = None):
         """How much food does a person need to eat?
 
+        Takes optional argument of a user to get the food for, and/or a food.
+
         Example:
-        `&food`"""
+        `&food`
+        `&food pizza`
+        `&food @User`
+        `&food @User pizza`"""
 
         CAL_PER_DAY = 2000
         # CAL_PER_MEAL = CAL_PER_DAY / 3
+        foods = objs.food
 
-        if who is None:
-            who = ctx.author
-        whoid = who.id
+        # Input validation.
+        if isinstance(arg1, DigiObject) and isinstance(arg2, DigiObject):
+            # Both arguments are objects.
+            await ctx.send(f"{emojis.error} `{arg1.name}` and `{arg2.name}` are both objects.")
+            return
+        for arg in [arg1, arg2]:
+            # Make sure the object is a food.
+            if isinstance(arg, DigiObject):
+                if "food" not in arg.tags:
+                    await ctx.send(f"{emojis.error} `{arg.name}` is not a food.")
+                    return
+
+        if arg1 is not None and isinstance(arg1, discord.Member):
+            whoid = arg1.id
+        else:
+            whoid = ctx.author.id
 
         userdata = userdb.load(ctx.guild.id, whoid)
         scale = userdata.scale
         scale3 = scale ** 3
         cals_needed = CAL_PER_DAY * scale3
 
-        foods = objs.food
         if scale >= 1:
             # TODO: Not a good way to do this.
             foods = foods[-6:]
-        random_food = random.choice(foods)
+        food = random.choice(foods)
 
-        days_per_food = random_food.calories / cals_needed
+        days_per_food = food.calories / cals_needed
         food_per_day = 1 / days_per_food
 
         if food_per_day >= 1:
-            foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1} {random_food.namePlural}** per day."
+            foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1} {food.namePlural}** per day."
         else:
-            foodout = f"A {random_food.name} would last {userdata.nickname} **{days_per_food} days.**"
+            foodout = f"A {food.name} would last {userdata.nickname} **{days_per_food} days.**"
 
         embed = discord.Embed(
-            title = f"{userdata.nickname} eating {random_food.name}",
+            title = f"{userdata.nickname} eating {food.name}",
             description = foodout)
         embed.set_footer(text = f"{userdata.nickname} needs {CAL_PER_DAY * scale3:,.3} calories per day.")
 
