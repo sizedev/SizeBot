@@ -690,19 +690,19 @@ def exists(guildid, userid, *, allow_unreg=False):
     return exists
 
 
-def countprofiles():
-    users = listUsers()
+def count_profiles():
+    users = list_users()
     usercount = len(list(users))
     return usercount
 
 
-def countusers():
-    users = listUsers()
+def count_users():
+    users = list_users()
     usercount = len(set(u for g, u in users))
     return usercount
 
 
-def listUsers(*, guildid = None, userid = None):
+def list_users(*, guildid = None, userid = None):
     guildid = int(guildid) if guildid else "*"
     userid = int(userid) if userid else "*"
     userfiles = paths.guilddbpath.glob(f"{guildid}/users/{userid}.json")

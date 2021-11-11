@@ -59,7 +59,7 @@ class TriggerCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        for guildid, userid in userdb.listUsers():
+        for guildid, userid in userdb.list_users():
             try:
                 userdata = userdb.load(guildid, userid)
             except UserNotFoundException:
@@ -130,7 +130,7 @@ class TriggerCog(commands.Cog):
     )
     async def settrigger(self, ctx, trigger, *, diff: Diff):
         """Set a trigger word.
-        
+
         #ALPHA#
         """
         set_trigger(ctx.guild.id, ctx.author.id, trigger, diff)
