@@ -234,7 +234,7 @@ class ObjectsCog(commands.Cog):
     async def stackup(self, ctx):
         """How do you stack up against objects?"""
 
-        userdata = userdb.load(ctx.author)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
         height = userdata.height
         objs_smaller = [o for o in objects if o.unitlength <= height][-2:]
         objs_larger = [o for o in objects if o.unitlength > height][:2]
