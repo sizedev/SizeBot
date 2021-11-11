@@ -294,6 +294,8 @@ class ObjectsCog(commands.Cog):
             description = foodout)
         embed.set_footer(text = f"{userdata.nickname} needs {CAL_PER_DAY * scale3} calories per day.")
 
+        await ctx.send(embed = embed)
+
 
 def setup(bot):
     bot.add_cog(ObjectsCog(bot))
