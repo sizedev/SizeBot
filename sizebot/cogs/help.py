@@ -11,7 +11,7 @@ from discord.ext import commands
 from sizebot import __version__
 from sizebot.cogs.stats import statmap
 from sizebot.conf import conf
-from sizebot.lib import checks, objs, userdb, utils
+from sizebot.lib import checks, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.menu import Menu
 from sizebot.lib.units import SV, WV
@@ -90,25 +90,6 @@ class HelpCog(commands.Cog):
 
         for n, units in enumerate(utils.chunkList(weightunits, math.ceil(len(weightunits) / 3))):
             embed.add_field(name="Weight" if n == 0 else "\u200b", value="\n".join(units))
-
-        await ctx.send(embed=embed)
-
-    @commands.command(
-        aliases = ["objects", "objlist", "objectlist"],
-        category = "help"
-    )
-    async def objs(self, ctx):
-        """Get a list of the various objects SizeBot accepts."""
-        objectunits = []
-        for obj in objs.objects:
-            objectunits.append(obj.name)
-
-        objectunits.sort()
-
-        embed = Embed(title=f"Objects [SizeBot {__version__}]", description = f"*NOTE: All of these objects have multiple aliases. If there is an alias that you think should work for a listed object but doesn't, report it with `{ctx.prefix}suggestobject` and note that it's an alias.*")
-
-        for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 6))):
-            embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
 
         await ctx.send(embed=embed)
 
@@ -419,6 +400,7 @@ categories = [
     HelpCategory("setbase", "Set Base Commands", "Commands for setting various base stats.", "🖋️"),
     HelpCategory("change", "Change Commands", "Commands for changing your stats.", "📈"),
     HelpCategory("stats", "Stats Commands", "Commands for outputting yours and others stats.", "📊"),
+    HelpCategory("objects", "Objects Commands", "Commands about objects and comparing to them.", "💎"),
     HelpCategory("scalestep", "Scale on Action Commands", "Commands related to scaling every action you take.", "🚶"),
     HelpCategory("trigger", "Trigger Commands", "Commands related to trigger words.", "🔫"),
     HelpCategory("loop", "Looping Commands", "Commands related to doing looping tasks.", "🔁"),
