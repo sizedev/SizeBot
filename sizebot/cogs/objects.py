@@ -298,15 +298,22 @@ class ObjectsCog(commands.Cog):
         else:
             whoid = ctx.author.id
 
+        for arg in [arg1, arg2]:
+            if isinstance(arg, DigiObject):
+                food = arg
+            else:
+                food = None
+
         userdata = userdb.load(ctx.guild.id, whoid)
         scale = userdata.scale
         scale3 = scale ** 3
         cals_needed = CAL_PER_DAY * scale3
 
-        if scale >= 1:
-            # TODO: Not a good way to do this.
-            foods = foods[-6:]
-        food = random.choice(foods)
+        if food is None:
+            if scale >= 1:
+                # TODO: Not a good way to do this.
+                foods = foods[-6:]
+            food = random.choice(foods)
 
         days_per_food = food.calories / cals_needed
         food_per_day = 1 / days_per_food
