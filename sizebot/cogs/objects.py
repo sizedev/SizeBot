@@ -236,8 +236,8 @@ class ObjectsCog(commands.Cog):
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         height = userdata.height
-        objs_smaller = sorted([o for o in objects if o.unitlength <= height][-2:])
-        objs_larger = sorted([o for o in objects if o.unitlength > height][:2])
+        objs_smaller = [o for o in objects if o.unitlength <= height][-2:]
+        objs_larger = [o for o in objects if o.unitlength > height][:2]
         names = [o.name for o in objs_smaller] + [userdata.nickname] + [o.name for o in objs_larger]
         heights = [o.unitlength for o in objs_smaller] + [height] + [o.unitlength for o in objs_larger]
         max_name_length = max(len(n) for n in names)
