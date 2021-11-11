@@ -281,7 +281,7 @@ class ObjectsCog(commands.Cog):
         food = objs.food
         random_food = random.choice(food)
         cals_needed = CAL_PER_DAY * scale3
-        days_per_food = CAL_PER_DAY / cals_needed
+        days_per_food = random_food.calories / cals_needed
         food_per_day = 1 / days_per_food
 
         if food_per_day >= 1:
