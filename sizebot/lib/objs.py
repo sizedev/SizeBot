@@ -218,6 +218,9 @@ class DigiObject:
     def __str__(self):
         return self.name
 
+    def __repr__(self) -> str:
+        return str(self)
+
 
 def loadObjFile(filename):
     try:

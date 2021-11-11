@@ -21,7 +21,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.loglevels import BANNER, EGG, LOGIN
-from sizebot.lib.objs import objects
+from sizebot.lib.objs import objects, tags
 from sizebot.lib.roller import evalmath, roll
 from sizebot.lib.units import Rate, Mult, SV, TV, WV
 
@@ -128,6 +128,7 @@ def getEvalGlobals():
         "Rate": Rate, "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
         "Diff": Diff, "ParseableRate": ParseableRate, "LimitedRate": LimitedRate,
         "objects": objects,
+        "tags": tags,
         "utils": utils,
         "pdir": utils.pdir,
         "userdb": userdb,
