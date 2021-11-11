@@ -1,5 +1,6 @@
 import logging
 import math
+import random
 import typing
 
 import discord
@@ -259,6 +260,39 @@ class ObjectsCog(commands.Cog):
             title = f"Object Stackup against {userdata.nickname}",
             description = "\n".join(outstrings))
         await ctx.send(embed = embed)
+
+    @commands.command()
+    async def food(self, ctx, *, who: discord.Member = None):
+        """How much food does a person need to eat?
+
+        Example:
+        `&food`"""
+
+        CAL_PER_DAY = 2000
+        # CAL_PER_MEAL = CAL_PER_DAY / 3
+
+        if who is None:
+            who = ctx.author
+        whoid = who.id
+
+        userdata = userdb.load(ctx.guild.id, whoid)
+        scale = userdata.scale
+        scale3 = scale ** 3
+        food = objs.food
+        random_food = random.choice(food)
+        scale_calories = random_food.calories * scale3
+        food_per_day = CAL_PER_DAY / scale_calories
+        days_per_food = 1 / food_per_day
+
+        if food_per_day >= 1:
+            foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1f} {random_food.namePlural}** per day."
+        else:
+            foodout = f"A {random_food.name} would last {userdata.nickname} **{days_per_food} days.**"
+
+        embed = discord.Embed(
+            title = f"{userdata.nickname} eating {random_food.name}",
+            description = foodout)
+        embed.set_footer(text = f"{userdata.nickname} needs {CAL_PER_DAY * scale3} calories per day.")
 
 
 def setup(bot):
