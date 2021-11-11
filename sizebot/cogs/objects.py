@@ -292,7 +292,7 @@ class ObjectsCog(commands.Cog):
         embed = discord.Embed(
             title = f"{userdata.nickname} eating {random_food.name}",
             description = foodout)
-        embed.set_footer(text = f"{userdata.nickname} needs {CAL_PER_DAY * scale3:,.3f} calories per day.")
+        embed.set_footer(text = f"{userdata.nickname} needs {CAL_PER_DAY * scale3:,.3} calories per day.")
 
         await ctx.send(embed = embed)
 
