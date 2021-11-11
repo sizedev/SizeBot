@@ -63,15 +63,8 @@ class ObjectsCog(commands.Cog):
             await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about... huh. I can't find them.")
             return
 
-        goodheight = userdata.height.toGoodUnit('o', preferName=True, spec=".2%4&2")
-        tmp = goodheight.split()
-        tmpout = [tmp[0]] + tmp[3:] + tmp[1:3]  # Move the paranthesis bit of the height string to the end.
-        goodheightout = " ".join(tmpout)
-
-        goodweight = userdata.weight.toGoodUnit('o', preferName=True, spec=".2%4&2")
-        tmp2 = goodweight.split()
-        tmp2out = [tmp2[0]] + tmp2[3:] + tmp2[1:3]  # Move the paranthesis bit of the height string to the end.
-        goodweightout = " ".join(tmp2out)
+        goodheightout = userdata.height.toGoodUnit('o', preferName=True, spec=".2%4")
+        goodweightout = userdata.weight.toGoodUnit('o', preferName=True, spec=".2%4")
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
 
