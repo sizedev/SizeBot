@@ -7,6 +7,8 @@ from typing import Dict, List, Literal, Optional
 import arrow
 from arrow.arrow import Arrow
 
+import discord
+
 import sizebot.data
 from sizebot.lib import errors, paths
 from sizebot.lib.digidecimal import Decimal
@@ -706,3 +708,15 @@ def listUsers(*, guildid = None, userid = None):
     userfiles = paths.guilddbpath.glob(f"{guildid}/users/{userid}.json")
     users = [(int(u.parent.parent.name), int(u.stem)) for u in userfiles]
     return users
+
+
+def getUserdata(memberOrSV, nickname = None, *, allow_unreg=False):
+    if isinstance(memberOrSV, discord.Member):
+        userdata = load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
+    else:
+        userdata = User()
+        userdata.height = memberOrSV
+        if nickname is None:
+            nickname = f"a {userdata.height:,.3mu} tall person"
+        userdata.nickname = nickname
+    return userdata
