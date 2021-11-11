@@ -27,6 +27,7 @@ class DigiObject:
                  weight = None, note = None):
 
         self.name = name
+        self.dimension = dimension
         self.namePlural = getPlural(name)
         self.singularNames = aliases + [self.name]
         self.aliases = aliases + [getPlural(a) for a in aliases]
