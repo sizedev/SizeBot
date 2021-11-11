@@ -49,6 +49,7 @@ initial_cogs = [
     "loop",
     "multiplayer",
     "naptime",
+    "objects",
     "profile",
     # "rainbow",
     "register",
@@ -239,7 +240,7 @@ def main():
     async def on_guild_join(guild):
         # TODO: Add whitelist.
         with open(paths.whitelistpath) as f:
-            whitelist = [int(l) for l in f.readlines()]
+            whitelist = [int(line) for line in f.readlines()]
 
         if guild.id not in whitelist:
             ...  # TODO: Send a message? Where?
@@ -249,7 +250,6 @@ def main():
 
         logger.warn(f"SizeBot has been added to {guild.name}! ({guild.id})\n"
                     f"You should talk to the owner, {guild.owner}! ({guild.owner.id})")
-
 
     @bot.event
     async def on_guild_remove(guild):
