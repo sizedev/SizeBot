@@ -281,8 +281,8 @@ class ObjectsCog(commands.Cog):
         food = objs.food
         random_food = random.choice(food)
         scale_calories = random_food.calories * scale3
-        food_per_day = CAL_PER_DAY / scale_calories
-        days_per_food = 1 / food_per_day
+        days_per_food = CAL_PER_DAY / scale_calories
+        food_per_day = 1 / days_per_food
 
         if food_per_day <= 1:
             foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1f} {random_food.namePlural}** per day."
