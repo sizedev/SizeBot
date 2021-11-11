@@ -185,6 +185,8 @@ class DigiObject:
             return lowerName == self.name.lower() \
                 or lowerName == self.namePlural \
                 or lowerName in (n.lower() for n in self.aliases)
+        elif isinstance(other, DigiObject):
+            return (self.name, self.unitlength) == (other.name, other.unitlength)
         return super().__eq__(other)
 
     def __lt__(self, other):
