@@ -519,7 +519,7 @@ class PersonStats:
         self.shoesize = formatShoeSize(self.footlength, self.gender == "f")
         self.footwidth = SV(self.height * self.footwidthfactor)
         if userdata.pawtoggle:
-            self.footwidth = SV(self.height * Decimal("1/1.5"))  # TODO: Temp number?
+            self.footwidth = SV(self.footlength * Decimal("1/1.5"))  # TODO: Temp number?
         self.toeheight = SV(self.height * self.toeheightfactor)
         self.shoeprintdepth = SV(self.height * self.shoeprintfactor)
         self.pointerlength = SV(self.height * self.pointerfactor)
