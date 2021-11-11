@@ -261,7 +261,9 @@ class ObjectsCog(commands.Cog):
             description = "\n".join(outstrings))
         await ctx.send(embed = embed)
 
-    @commands.command()
+    @commands.command(
+        category = "objects"
+    )
     async def food(self, ctx, *, who: discord.Member = None):
         """How much food does a person need to eat?
 
@@ -278,9 +280,17 @@ class ObjectsCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, whoid)
         scale = userdata.scale
         scale3 = scale ** 3
-        food = objs.food
-        random_food = random.choice(food)
         cals_needed = CAL_PER_DAY * scale3
+
+        food = objs.food
+        good_food = [f for f in food if f.calories >= cals_needed]
+        if good_food == []:
+            if userdata.scale > 1:
+                good_food = food[-5:]
+            else:
+                good_food = food
+        random_food = random.choice(food)
+
         days_per_food = random_food.calories / cals_needed
         food_per_day = 1 / days_per_food
 
