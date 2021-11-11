@@ -280,19 +280,19 @@ class ObjectsCog(commands.Cog):
         scale3 = scale ** 3
         food = objs.food
         random_food = random.choice(food)
-        scale_calories = random_food.calories * scale3
-        days_per_food = CAL_PER_DAY / scale_calories
+        cals_needed = CAL_PER_DAY * scale3
+        days_per_food = CAL_PER_DAY / cals_needed
         food_per_day = 1 / days_per_food
 
         if food_per_day >= 1:
-            foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1f} {random_food.namePlural}** per day."
+            foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1} {random_food.namePlural}** per day."
         else:
             foodout = f"A {random_food.name} would last {userdata.nickname} **{days_per_food} days.**"
 
         embed = discord.Embed(
             title = f"{userdata.nickname} eating {random_food.name}",
             description = foodout)
-        embed.set_footer(text = f"{userdata.nickname} needs {CAL_PER_DAY * scale3:,.3} calories per day.")
+        embed.set_footer(text = f"{userdata.nickname} needs {CAL_PER_DAY * scale3:,.3f} calories per day.")
 
         await ctx.send(embed = embed)
 
