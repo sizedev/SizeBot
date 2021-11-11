@@ -10,7 +10,7 @@ from discord.ext.commands.converter import MemberConverter
 from sizebot import __version__
 from sizebot.lib import objs, proportions, telemetry, userdb, utils
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.objs import DigiObject
+from sizebot.lib.objs import DigiObject, objects
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import glitch_string, parseMany
@@ -235,6 +235,20 @@ class ObjectsCog(commands.Cog):
         """How do you stack up against objects?"""
 
         userdata = userdb.load(ctx.author)
+        height = userdata.height
+        objs_smaller = [o for o in objects if o.unitlength <= height][-2:]
+        objs_larger = [o for o in objects if o.unitlength > height][:2]
+        names = [o.name for o in objs_smaller] + userdata.nickname + [o.name for o in objs_larger]
+        heights = [o.unitlength for o in objs_smaller] + [height] + [o.unitlength for o in objs_larger]
+        max_name_length = max(len(n) for n in names)
+        outstrings = ["```\n"]
+        for name, height in zip(names, heights):
+            outstrings.append(f"{name:<{max_name_length}} | {height:,.3mu}")
+        outstrings.append("```")
+        embed = discord.Embed(
+            title = f"Object Stackup against {userdata.nickname}",
+            description = "\n".join(outstrings))
+        await ctx.send(embed = embed)
 
 
 def setup(bot):
