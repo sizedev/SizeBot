@@ -229,23 +229,25 @@ class ObjectsCog(commands.Cog):
 
     @commands.command(
         category = "objects",
-        usage = "[obj count]"
+        usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx, objs_around: int = 2):
+    async def stackup(self, ctx, *, who: discord.Member = None):
         """How do you stack up against objects?
-
-        Optionally supports how many objects to stack up above and below you.
 
         Example:
         `&stackup`
-        `&stackup 3`
+        `&stackup @User`
         """
 
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        if who is None:
+            who = ctx.author
+        whoid = who.id
+
+        userdata = userdb.load(ctx.guild.id, whoid)
         height = userdata.height
-        objs_smaller = [o for o in objects if o.unitlength <= height][-objs_around:]
-        objs_larger = [o for o in objects if o.unitlength > height][:objs_around]
+        objs_smaller = [o for o in objects if o.unitlength <= height][-3:]
+        objs_larger = [o for o in objects if o.unitlength > height][:3]
         names = [o.name for o in objs_smaller] + [userdata.nickname] + [o.name for o in objs_larger]
         heights = [o.unitlength for o in objs_smaller] + [height] + [o.unitlength for o in objs_larger]
         max_name_length = max(len(n) for n in names)
