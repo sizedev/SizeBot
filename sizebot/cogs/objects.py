@@ -228,16 +228,24 @@ class ObjectsCog(commands.Cog):
         await ctx.send(embed = what.statsembed())
 
     @commands.command(
-        category = "objects"
+        category = "objects",
+        usage = "[obj count]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx):
-        """How do you stack up against objects?"""
+    async def stackup(self, ctx, objs_around: int = 2):
+        """How do you stack up against objects?
+
+        Optionally supports how many objects to stack up above and below you.
+
+        Example:
+        `&stackup`
+        `&stackup 3`
+        """
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         height = userdata.height
-        objs_smaller = [o for o in objects if o.unitlength <= height][-2:]
-        objs_larger = [o for o in objects if o.unitlength > height][:2]
+        objs_smaller = [o for o in objects if o.unitlength <= height][-objs_around:]
+        objs_larger = [o for o in objects if o.unitlength > height][:objs_around]
         names = [o.name for o in objs_smaller] + [userdata.nickname] + [o.name for o in objs_larger]
         heights = [o.unitlength for o in objs_smaller] + [height] + [o.unitlength for o in objs_larger]
         max_name_length = max(len(n) for n in names)
