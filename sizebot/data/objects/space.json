@@ -85,5 +85,45 @@
         "tags": [
             "planet"
         ]
+    },
+    {
+        "name": "Jupiter",
+        "dimension": "d",
+        "diameter": "139820000",
+        "weight": "1.898e+30",
+        "tags": [
+            "planet"
+        ]
+    },
+    {
+        "name": "Sun",
+        "dimension": "d",
+        "diameter": "1391000000",
+        "weight": "1.989e+33",
+        "tags": [
+            "star"
+        ],
+        "aliases": [
+            "Sol"
+        ]
+    },
+    {
+        "name": "M87 Black Hole",
+        "dimension": "d",
+        "diameter": "38000000000000",
+        "weight": "1.3e+43",
+        "aliases": [
+            "black hole"
+        ]
+    },
+    {
+        "name": "Milky Way",
+        "dimension": "d",
+        "diameter": "1e+24",
+        "weight": "2.983e+45",
+        "tags": [
+            "galaxy"
+        ],
+        "note": "The largest object in the bot."
     }
 ]

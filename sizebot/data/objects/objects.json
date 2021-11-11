@@ -36,6 +36,19 @@
         ]
     },
     {
+        "name": "red blood cell",
+        "dimension": "d",
+        "diameter": "0.000007",
+        "weight": "1e-12",
+        "tags": [
+            "cell"
+        ],
+        "aliases": [
+            "blood",
+            "blood cell"
+        ]
+    },
+    {
         "name": "E. coli",
         "dimension": "l",
         "length": "0.000007",
@@ -48,16 +61,12 @@
         ]
     },
     {
-        "name": "red blood cell",
+        "name": "fog particle",
         "dimension": "d",
-        "diameter": "0.000007",
-        "weight": "1e-12",
-        "tags": [
-            "cell"
-        ],
+        "diameter": "0.00001",
         "aliases": [
-            "blood",
-            "blood cell"
+            "fog",
+            "mist"
         ]
     },
     {
@@ -72,12 +81,13 @@
         ]
     },
     {
-        "name": "fog particle",
-        "dimension": "d",
-        "diameter": "0.00001",
+        "name": "fingerprint groove",
+        "dimension": "p",
+        "width": "0.0002",
+        "depth": "0.00005",
         "aliases": [
-            "fog",
-            "mist"
+            "fingerprint",
+            "fingerprint ridge"
         ]
     },
     {
@@ -88,16 +98,6 @@
         "aliases": [
             "hair",
             "human hair"
-        ]
-    },
-    {
-        "name": "fingerprint groove",
-        "dimension": "p",
-        "width": "0.0002",
-        "depth": "0.00005",
-        "aliases": [
-            "fingerprint",
-            "fingerprint ridge"
         ]
     },
     {
@@ -171,14 +171,6 @@
         "diameter": "0.002"
     },
     {
-        "name": "sugar cube",
-        "dimension": "l",
-        "length": "0.002",
-        "width": "0.002",
-        "depth": "0.002",
-        "weight": "2.3"
-    },
-    {
         "name": "3.5mm jack",
         "dimension": "d",
         "diameter": "0.0035",
@@ -192,21 +184,6 @@
             "aux port",
             "aux",
             "3.5mm port"
-        ]
-    },
-    {
-        "name": "grain of rice",
-        "dimension": "l",
-        "length": "0.006",
-        "width": "0.002",
-        "weight": "0.029",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "rice grain",
-            "grain",
-            "rice"
         ]
     },
     {
@@ -238,28 +215,6 @@
         "aliases": [
             "microUSB",
             "micro USB"
-        ]
-    },
-    {
-        "name": "sunflower seed",
-        "dimension": "l",
-        "length": "0.0071",
-        "width": "0.0025",
-        "weight": "0.0909",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "seed"
-        ]
-    },
-    {
-        "name": "pea",
-        "dimension": "d",
-        "diameter": "0.008",
-        "weight": "0.25",
-        "tags": [
-            "food"
         ]
     },
     {
@@ -347,16 +302,6 @@
         ]
     },
     {
-        "name": "Tic-Tac",
-        "dimension": "l",
-        "length": "0.0118",
-        "width": "0.0061",
-        "weight": "0.5",
-        "tags": [
-            "food"
-        ]
-    },
-    {
         "name": "bee",
         "dimension": "l",
         "length": "0.012",
@@ -383,15 +328,6 @@
         ]
     },
     {
-        "name": "blueberry",
-        "dimension": "d",
-        "diameter": "0.01373",
-        "weight": "0.5",
-        "tags": [
-            "food"
-        ]
-    },
-    {
         "name": "aspirin",
         "dimension": "d",
         "diameter": "0.01397",
@@ -415,19 +351,6 @@
         ]
     },
     {
-        "name": "fruit loop",
-        "dimension": "d",
-        "diameter": "0.015",
-        "thickness": "0.0051",
-        "weight": "0.24",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "cheerio"
-        ]
-    },
-    {
         "name": "keyboard key",
         "dimension": "l",
         "length": "0.015",
@@ -444,6 +367,17 @@
             "microsd",
             "micro sd",
             "micro sd card"
+        ]
+    },
+    {
+        "name": "Monopoly hotel",
+        "dimension": "h",
+        "height": "0.015875",
+        "width": "0.01905",
+        "depth": "0.0127",
+        "weight": "0.0218",
+        "tags": [
+            "toy"
         ]
     },
     {
@@ -626,18 +560,6 @@
         ]
     },
     {
-        "name": "piece of popcorn",
-        "dimension": "h",
-        "height": "0.025",
-        "weight": "0.19",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "popcorn"
-        ]
-    },
-    {
         "name": "two pence coin",
         "dimension": "d",
         "diameter": "0.0259",
@@ -764,16 +686,6 @@
         "weight": "10"
     },
     {
-        "name": "AirPod™",
-        "dimension": "l",
-        "length": "0.04",
-        "weight": "4",
-        "aliases": [
-            "earbud",
-            "airpod"
-        ]
-    },
-    {
         "name": "lego minifig",
         "dimension": "h",
         "height": "0.04",
@@ -791,17 +703,13 @@
         ]
     },
     {
-        "name": "Reese's Peanut Butter Cup",
-        "dimension": "d",
-        "diameter": "0.04",
-        "weight": "21.8",
-        "tags": [
-            "food"
-        ],
+        "name": "AirPod™",
+        "dimension": "l",
+        "length": "0.04",
+        "weight": "4",
         "aliases": [
-            "reeses",
-            "reeses cup",
-            "peanut butter cup"
+            "earbud",
+            "airpod"
         ]
     },
     {
@@ -811,46 +719,6 @@
         "weight": "45.93",
         "tags": [
             "ball"
-        ]
-    },
-    {
-        "name": "Oreo cookie",
-        "dimension": "d",
-        "diameter": "0.04445",
-        "thickness": "0.009",
-        "weight": "11.3",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "Oreo",
-            "cookie"
-        ]
-    },
-    {
-        "name": "Oreo",
-        "dimension": "d",
-        "height": "0.009",
-        "diameter": "0.04445",
-        "weight": "11.3",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "cookie"
-        ]
-    },
-    {
-        "name": "cupcake",
-        "dimension": "h",
-        "height": "0.045",
-        "diameter": "0.2275",
-        "weight": "80",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "muffin"
         ]
     },
     {
@@ -892,22 +760,6 @@
         ]
     },
     {
-        "name": "chicken nugget",
-        "dimension": "l",
-        "length": "0.05",
-        "width": "0.03",
-        "depth": "0.01",
-        "weight": "16",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "chicken McNugget",
-            "mcnugget",
-            "nugget"
-        ]
-    },
-    {
         "name": "hummingbird",
         "dimension": "h",
         "height": "0.05",
@@ -928,28 +780,6 @@
         "diameter": "0.0525",
         "thickness": "0.031",
         "weight": "53"
-    },
-    {
-        "name": "pepperoni",
-        "dimension": "d",
-        "diameter": "0.053",
-        "thickness": "0.003175",
-        "weight": "12",
-        "tags": [
-            "food"
-        ]
-    },
-    {
-        "name": "egg",
-        "dimension": "h",
-        "height": "0.05312",
-        "weight": "48.1942",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "eggu"
-        ]
     },
     {
         "name": "matchbox",
@@ -1000,6 +830,16 @@
         "weight": "77"
     },
     {
+        "name": "match",
+        "dimension": "l",
+        "length": "0.0572",
+        "diameter": "0.0025",
+        "weight": "0.1",
+        "aliases": [
+            "matchstick"
+        ]
+    },
+    {
         "name": "Zippo lighter",
         "dimension": "h",
         "height": "0.060325",
@@ -1032,41 +872,12 @@
         ]
     },
     {
-        "name": "orange",
-        "dimension": "d",
-        "diameter": "0.0725",
-        "weight": "88",
-        "tags": [
-            "food"
-        ]
-    },
-    {
         "name": "baseball",
         "dimension": "d",
         "diameter": "0.0745",
         "weight": "149",
         "tags": [
             "ball"
-        ]
-    },
-    {
-        "name": "apple",
-        "dimension": "h",
-        "height": "0.075",
-        "weight": "85",
-        "tags": [
-            "food"
-        ]
-    },
-    {
-        "name": "Q-tip",
-        "dimension": "l",
-        "length": "0.076",
-        "weight": "0.408233133",
-        "aliases": [
-            "cotton swab",
-            "swab",
-            "qtip"
         ]
     },
     {
@@ -1078,6 +889,17 @@
         "weight": "6",
         "aliases": [
             "yeast"
+        ]
+    },
+    {
+        "name": "Q-tip",
+        "dimension": "l",
+        "length": "0.076",
+        "weight": "0.408233133",
+        "aliases": [
+            "cotton swab",
+            "swab",
+            "qtip"
         ]
     },
     {
@@ -1179,17 +1001,6 @@
         ]
     },
     {
-        "name": "piece of cheese",
-        "dimension": "l",
-        "length": "0.0899",
-        "width": "0.0899",
-        "thickness": "0.003",
-        "weight": "17",
-        "aliases": [
-            "cheese"
-        ]
-    },
-    {
         "name": "crayon",
         "dimension": "h",
         "height": "0.092075",
@@ -1226,21 +1037,6 @@
         ]
     },
     {
-        "name": "Big Mac",
-        "dimension": "d",
-        "height": "0.06985",
-        "diameter": "0.09525",
-        "weight": "215.456",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "cheeseburger",
-            "burger",
-            "hamburger"
-        ]
-    },
-    {
         "name": "audio cassette",
         "dimension": "l",
         "height": "0.064",
@@ -1250,6 +1046,16 @@
         "aliases": [
             "cassette",
             "cassette tape"
+        ]
+    },
+    {
+        "name": "photograph",
+        "dimension": "h",
+        "height": "0.1016",
+        "width": "0.1524",
+        "aliases": [
+            "photo",
+            "this photograph"
         ]
     },
     {
@@ -1268,16 +1074,6 @@
         ]
     },
     {
-        "name": "photograph",
-        "dimension": "h",
-        "height": "0.1016",
-        "width": "0.1524",
-        "aliases": [
-            "photo",
-            "this photograph"
-        ]
-    },
-    {
         "name": "XBox One™ controller",
         "dimension": "h",
         "height": "0.1019",
@@ -1291,33 +1087,6 @@
             "xbox controller",
             "controller",
             "game controller"
-        ]
-    },
-    {
-        "name": "Kit-Kat",
-        "dimension": "l",
-        "length": "0.10541",
-        "weight": "42.5",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "kitkat"
-        ]
-    },
-    {
-        "name": "juice box",
-        "dimension": "h",
-        "height": "0.1056386",
-        "width": "0.06",
-        "depth": "0.04",
-        "weight": "170.097",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "Hi-C",
-            "juice"
         ]
     },
     {
@@ -1355,19 +1124,6 @@
         ]
     },
     {
-        "name": "potato",
-        "dimension": "h",
-        "height": "0.11",
-        "diameter": "0.0953",
-        "weight": "320",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "spud"
-        ]
-    },
-    {
         "name": "computer mouse",
         "dimension": "l",
         "height": "0.04",
@@ -1376,20 +1132,6 @@
         "weight": "127.573",
         "aliases": [
             "mouse"
-        ]
-    },
-    {
-        "name": "Pop-Tart",
-        "dimension": "l",
-        "length": "0.1143",
-        "width": "0.0762",
-        "weight": "47.9815679",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "poptart",
-            "nyan cat"
         ]
     },
     {
@@ -1419,31 +1161,6 @@
         ]
     },
     {
-        "name": "Whopper",
-        "dimension": "d",
-        "height": "0.0635",
-        "diameter": "0.12065",
-        "weight": "300.5049",
-        "tags": [
-            "food"
-        ]
-    },
-    {
-        "name": "soda can",
-        "dimension": "h",
-        "height": "0.122",
-        "diameter": "0.058",
-        "weight": "355",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "pop can",
-            "can",
-            "can of soda"
-        ]
-    },
-    {
         "name": "Apple iPod™ 5G",
         "dimension": "l",
         "length": "0.122",
@@ -1464,17 +1181,6 @@
         "aliases": [
             "5 pound note",
             "£5"
-        ]
-    },
-    {
-        "name": "taco",
-        "dimension": "l",
-        "height": "0.0635",
-        "length": "0.127",
-        "depth": "0.047625",
-        "weight": "99.2233",
-        "tags": [
-            "food"
         ]
     },
     {
@@ -1581,15 +1287,11 @@
         ]
     },
     {
-        "name": "banana",
-        "dimension": "l",
-        "length": "0.1905",
-        "weight": "120",
-        "tags": [
-            "food"
-        ],
+        "name": "stair height",
+        "dimension": "h",
+        "height": "0.1905",
         "aliases": [
-            "rotat e"
+            "stair"
         ]
     },
     {
@@ -1603,14 +1305,6 @@
         ]
     },
     {
-        "name": "stair height",
-        "dimension": "h",
-        "height": "0.1905",
-        "aliases": [
-            "stair"
-        ]
-    },
-    {
         "name": "average hand",
         "dimension": "l",
         "length": "0.19304",
@@ -1618,15 +1312,6 @@
         "aliases": [
             "hand",
             "glove"
-        ]
-    },
-    {
-        "name": "avocado",
-        "dimension": "l",
-        "length": "0.2",
-        "weight": "500",
-        "tags": [
-            "food"
         ]
     },
     {
@@ -1658,23 +1343,6 @@
         "dimension": "l",
         "length": "0.2032",
         "width": "0.2032"
-    },
-    {
-        "name": "Powerade",
-        "dimension": "h",
-        "height": "0.21",
-        "diameter": "0.085",
-        "weight": "793.787",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "powerade bottle",
-            "gatorade",
-            "gatorade bottle",
-            "sports drink"
-        ],
-        "note": ":digidu1Powerade:"
     },
     {
         "name": "bowling ball",
@@ -1875,6 +1543,12 @@
         ]
     },
     {
+        "name": "plate",
+        "dimension": "d",
+        "diameter": "0.2921",
+        "weight": "816.466"
+    },
+    {
         "name": "Barbie™",
         "dimension": "h",
         "height": "0.2921",
@@ -1886,12 +1560,6 @@
             "doll",
             "Barbie"
         ]
-    },
-    {
-        "name": "plate",
-        "dimension": "d",
-        "diameter": "0.2921",
-        "weight": "816.466"
     },
     {
         "name": "Blue Yeti microphone",
@@ -1906,43 +1574,6 @@
         ]
     },
     {
-        "name": "medium Dominos™ pizza",
-        "dimension": "d",
-        "diameter": "0.3",
-        "weight": "726",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "pizza",
-            "medium pizza",
-            "Dominos pizza",
-            "medium Dominos pizza"
-        ]
-    },
-    {
-        "name": "Pringles™ can",
-        "dimension": "h",
-        "height": "0.3",
-        "diameter": "0.08",
-        "weight": "149",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "chip can",
-            "chip tube",
-            "Pringles tube",
-            "Pringles can"
-        ]
-    },
-    {
-        "name": "sock",
-        "dimension": "l",
-        "length": "0.3",
-        "weight": "45"
-    },
-    {
         "name": "vinyl record",
         "dimension": "d",
         "diameter": "0.3",
@@ -1952,18 +1583,10 @@
         ]
     },
     {
-        "name": "Subway Footlong™",
+        "name": "sock",
         "dimension": "l",
-        "length": "0.3048",
-        "weight": "907.185",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "footlong",
-            "subway footlong",
-            "sub"
-        ]
+        "length": "0.3",
+        "weight": "45"
     },
     {
         "name": "XBox Series X™",
