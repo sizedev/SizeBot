@@ -87,20 +87,6 @@
         ]
     },
     {
-        "name": "mozzarella stick",
-        "dimension": "l",
-        "length": "0.15",
-        "diameter": "0.0254",
-        "calories": "102",
-        "weight": "28.35",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "mozz stick"
-        ]
-    },
-    {
         "name": "piece of popcorn",
         "dimension": "h",
         "height": "0.025",
@@ -384,6 +370,20 @@
         ],
         "aliases": [
             "rotat e"
+        ]
+    },
+    {
+        "name": "mozzarella stick",
+        "dimension": "l",
+        "length": "0.15",
+        "diameter": "0.0254",
+        "calories": "102",
+        "weight": "28.35",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "mozz stick"
         ]
     },
     {
