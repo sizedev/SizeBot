@@ -619,7 +619,7 @@ class PersonStats:
             returndict["terminalvelocity"] = f"'s terminal velocity is {self.terminalvelocity:,.1M} per second ({self.terminalvelocity:,.1U} per second)."
 
         for k, v in returndict.items():
-            returndict[k] = self.tag + v
+            returndict[k] = self.nickname + v
 
         if self.incomprehensible:
             return glitch_string(returndict.get(stat))
