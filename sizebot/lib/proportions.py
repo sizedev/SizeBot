@@ -511,7 +511,7 @@ class PersonStats:
             base_footwidth = SV(base_footlength * Decimal("2/3"))   # TODO: Temp number?
         else:
             base_footwidth = SV(base_footlength * Decimal("2/5"))
-        self.footwidth = base_footwidth * self.scale
+        self.footwidth = SV(base_footwidth * self.scale)
 
         self.toeheight = SV(self.baseheight * self.toeheightfactor * self.scale)
         self.shoeprintdepth = SV(self.baseheight * self.shoeprintfactor * self.scale)
