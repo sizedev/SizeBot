@@ -10,7 +10,7 @@ from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, WV
-from sizebot.lib.userdb import defaultheight, defaultweight, defaultliftstrength, falllimit
+from sizebot.lib.userdb import defaultheight as average_height, defaultweight, defaultliftstrength, falllimit
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
 
@@ -460,14 +460,7 @@ class PersonStats:
     shoeprintfactor = 1 / Decimal("135")
     eyewidthfactor = 1 / Decimal("73.083")
 
-    walkstepsperhour = 6900
-    runstepsperhour = 10200
-
     defaultthreadthickness = Decimal("0.001016")
-
-    defaultwalkspeed = 5630
-    defaultrunspeed = 10729
-    defaultswimspeed = 3219
 
     def __init__(self, userdata):
         self.nickname = userdata.nickname
@@ -489,9 +482,6 @@ class PersonStats:
         self.macrovision_model = userdata.macrovision_model
         self.macrovision_view = userdata.macrovision_view
 
-        self.averageheightmult = self.height / defaultheight
-        self.averageweightmult = self.weight / defaultweight
-
         if userdata.hairlength is None:
             self.hairlength = None
         else:
@@ -512,57 +502,68 @@ class PersonStats:
         else:
             self.liftstrength = WV(userdata.liftstrength / (self.viewscale ** 3))
 
-        if userdata.footlength is None:
-            self.footlength = SV(self.height * self.footfactor)
-        else:
-            self.footlength = SV(userdata.footlength / self.viewscale)
+        base_footlength = userdata.footlength if userdata.footlength is not None else SV(self.baseheight * self.footfactor)
+        self.footlength = SV(base_footlength * self.scale)
+
         self.shoesize = formatShoeSize(self.footlength, self.gender == "f")
-        self.footwidth = SV(self.height * self.footwidthfactor)
+
         if userdata.pawtoggle:
-            self.footwidth = SV(self.footlength * Decimal("1/1.5"))  # TODO: Temp number?
-        self.toeheight = SV(self.height * self.toeheightfactor)
-        self.shoeprintdepth = SV(self.height * self.shoeprintfactor)
-        self.pointerlength = SV(self.height * self.pointerfactor)
-        self.thumbwidth = SV(self.height * self.thumbfactor)
-        self.fingerprintdepth = SV(self.height * self.fingerprintfactor)
+            base_footwidth = SV(base_footlength * Decimal("2/3"))   # TODO: Temp number?
+        else:
+            base_footwidth = SV(base_footlength * Decimal("2/5"))
+        self.footwidth = base_footwidth * self.scale
 
-        self.threadthickness = SV(self.defaultthreadthickness * self.averageheightmult)
+        self.toeheight = SV(self.baseheight * self.toeheightfactor * self.scale)
+        self.shoeprintdepth = SV(self.baseheight * self.shoeprintfactor * self.scale)
+        self.pointerlength = SV(self.baseheight * self.pointerfactor * self.scale)
+        self.thumbwidth = SV(self.baseheight * self.thumbfactor * self.scale)
+        self.fingerprintdepth = SV(self.baseheight * self.fingerprintfactor * self.scale)
 
-        self.hairwidth = SV((self.baseheight * self.hairfactor) / self.viewscale)
-        self.nailthickness = SV((self.baseheight * self.nailthickfactor) / self.viewscale)
-        self.eyewidth = SV(self.height * self.eyewidthfactor)
-        self.jumpheight = SV(self.height / Decimal("3.908"))
+        self.threadthickness = SV(self.defaultthreadthickness * self.scale)
 
-        self.avgheightcomp = SV(defaultheight * self.viewscale)
+        self.hairwidth = SV((self.baseheight * self.hairfactor) * self.scale)
+        self.nailthickness = SV((self.baseheight * self.nailthickfactor) * self.scale)
+        self.eyewidth = SV(self.baseheight * self.eyewidthfactor * self.scale)
+        self.jumpheight = SV(self.baseheight * Decimal("1/3.908") * self.scale)
+
+        self.avgheightcomp = SV(average_height * self.viewscale)
         self.avgweightcomp = WV(defaultweight * self.viewscale ** 3)
 
-        viewangle = calcViewAngle(self.height, defaultheight)
+        viewangle = calcViewAngle(self.height, average_height)
         self.avglookangle = abs(viewangle)
         self.avglookdirection = "up" if viewangle >= 0 else "down"
 
-        if userdata.walkperhour is None:
-            self.walkperhour = SV(self.defaultwalkspeed * self.averageheightmult)
-        else:
-            self.walkperhour = SV(userdata.walkperhour * self.averageheightmult)
+        base_average_ratio = self.baseheight / average_height # TODO: Make this a property on userdata
+        
+        average_walkperhour = 5630
+        average_runperhour = 10729
+        average_swimperhour = 3219
+        average_climbperhour = 4828
+        average_crawlperhour = 2556
+        
+        walkstepsperhour = 6900
+        runstepsperhour = 10200
 
-        if userdata.runperhour is None:
-            self.runperhour = SV(self.defaultrunspeed * self.averageheightmult)
-        else:
-            self.runperhour = SV(userdata.runperhour * self.averageheightmult)
+        base_walkperhour = userdata.walkperhour if userdata.walkperhour is not None else average_walkperhour * base_average_ratio
+        self.walkperhour = base_walkperhour * self.scale
 
-        if userdata.swimperhour is None:
-            self.swimperhour = SV(self.defaultswimspeed * self.averageheightmult)
-        else:
-            self.swimperhour = SV(userdata.swimperhour * self.averageheightmult)
+        base_runperhour = userdata.runperhour if userdata.runperhour is not None else average_runperhour * base_average_ratio
+        self.runperhour = base_runperhour * self.scale
 
-        self.climbperhour = userdata.climbperhour
-        self.crawlperhour = userdata.crawlperhour
+        base_swimperhour = userdata.swimperhour if userdata.swimperhour is not None else average_swimperhour * base_average_ratio
+        self.swimperhour = base_swimperhour * self.scale
 
-        self.walksteplength = SV(self.walkperhour / self.walkstepsperhour)
-        self.runsteplength = SV(self.runperhour / self.runstepsperhour)
-        self.climbsteplength = SV(self.height / Decimal("2.5"))
-        self.crawlsteplength = SV(self.height / Decimal("2.577"))
-        self.swimsteplength = SV(self.height / Decimal("7/6"))
+        base_climbperhour = average_climbperhour * base_average_ratio
+        self.climbperhour = base_climbperhour * self.scale
+
+        base_crawlperhour = average_crawlperhour * base_average_ratio
+        self.crawlperhour = base_crawlperhour * self.scale
+
+        self.walksteplength = SV(base_walkperhour / walkstepsperhour * self.scale)
+        self.runsteplength = SV(base_runperhour / runstepsperhour * self.scale)
+        self.climbsteplength = SV(self.baseheight * Decimal("1/2.5") * self.scale)
+        self.crawlsteplength = SV(self.baseheight * Decimal("1/2.577") * self.scale)
+        self.swimsteplength = SV(self.baseheight * Decimal("6/7") * self.scale)
 
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 
@@ -719,9 +720,6 @@ class PersonBaseStats:
         else:
             self.shoesize = None
 
-        self.averageheightmult = self.baseheight / defaultheight
-        self.averageweightmult = self.baseweight / defaultweight
-
         self.walkperhour = userdata.walkperhour
         self.runperhour = userdata.runperhour
         self.swimperhour = userdata.swimperhour
@@ -747,8 +745,8 @@ class PersonBaseStats:
                       description=f"*Requested by {requestertag}*",
                       color=colors.cyan)
         embed.set_author(name=f"SizeBot {__version__}")
-        embed.add_field(name="Base Height", value=f"{self.baseheight:,.3mu}\n*{self.averageheightmult:,.3} average*", inline=True)
-        embed.add_field(name="Base Weight", value=f"{self.baseweight:,.3mu}\n*{self.averageweightmult:,.3} average*", inline=True)
+        embed.add_field(name="Base Height", value=f"{self.baseheight:,.3mu}\n*{self.height / average_height:,.3} average*", inline=True)
+        embed.add_field(name="Base Weight", value=f"{self.baseweight:,.3mu}\n*{self.height / average_height:,.3} average*", inline=True)
         embed.add_field(name="Unit System", value=f"{self.unitsystem.capitalize()}", inline=True)
         if self.footlength:
             embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)

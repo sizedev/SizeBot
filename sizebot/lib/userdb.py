@@ -282,11 +282,11 @@ class User:
 
     @property
     def climbperhour(self):  # Essentially temp, since we're fixing this in BetterStats
-        return SV(Decimal(4828) / self.viewscale)
+        return SV(Decimal(4828) * self.scale)
 
     @property
     def crawlperhour(self):  # Essentially temp, since we're fixing this in BetterStats
-        return SV(Decimal(2556) / self.viewscale)
+        return SV(Decimal(2556) * self.scale)
 
     @property
     def swimperhour(self):
