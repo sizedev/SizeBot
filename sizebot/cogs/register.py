@@ -5,7 +5,7 @@ from discord.utils import get
 from discord.ext import commands
 
 from sizebot.conf import conf
-from sizebot.lib import errors, proportions, telemetry, userdb, nickmanager
+from sizebot.lib import errors, telemetry, userdb, nickmanager
 from sizebot.lib.constants import ids, emojis
 from sizebot.lib.units import SV, WV
 
@@ -167,7 +167,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def advancedregister(self, ctx, nick: str, currentheight: SV = proportions.defaultheight, baseheight: SV = proportions.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
+    async def advancedregister(self, ctx, nick: str, currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot, legacy style.
 
         Parameters:
