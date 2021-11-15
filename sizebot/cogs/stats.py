@@ -1,4 +1,5 @@
 import logging
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.freefall import freefall
 import typing
 
@@ -337,6 +338,7 @@ class StatsCog(commands.Cog):
             walkpersecond = SV(userstats.walkperhour / 3600)
             length = SV(walkpersecond * length)
 
+        # TODO: Wow, calculations in command. Bad.
         defaultwalktimehours = length / defaultstats.walkperhour
         defaultwalksteps = length / defaultstats.walksteplength
 
@@ -688,6 +690,31 @@ class StatsCog(commands.Cog):
         comparison = proportions.PersonComparison(userdata1, userdata2)
         e = await comparison.toSimpleEmbed(ctx.author.id)
         await msg.edit(content = "", embed = e)
+
+    @commands.command(
+        aliases = ["minecraft"],
+        usage = "[user]",
+        category = "stats"
+    )
+    async def pehkui(self, ctx, *, who: typing.Union[discord.Member, SV] = None):
+        """Get your (or a user's) Pehkui scale.
+
+        For use in the Pehkui Minecraft mod. Essentially a height represented in a unit of Steves."""
+
+        if who is None:
+            who = ctx.message.author
+
+        userdata = load_or_fake(who)
+        userstats = proportions.PersonStats(userdata)
+
+        if userdata.height == 0:
+            await ctx.send(f"{userdata.nickname} doesn't exist...")
+            return
+
+        STEVE = SV(1.8)
+        user_pehkui = Decimal(userstats.height / STEVE)
+
+        await ctx.send(f"{userdata.nickname}'s Pehkui scale is **{user_pehkui:.6}**.")
 
 
 def setup(bot):
