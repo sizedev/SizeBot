@@ -533,31 +533,31 @@ class PersonStats:
         self.avglookangle = abs(viewangle)
         self.avglookdirection = "up" if viewangle >= 0 else "down"
 
-        base_average_ratio = self.baseheight / average_height # TODO: Make this a property on userdata
-        
+        base_average_ratio = self.baseheight / average_height  # TODO: Make this a property on userdata
+
         average_walkperhour = 5630
         average_runperhour = 10729
         average_swimperhour = 3219
         average_climbperhour = 4828
         average_crawlperhour = 2556
-        
+
         walkstepsperhour = 6900
         runstepsperhour = 10200
 
         base_walkperhour = userdata.walkperhour if userdata.walkperhour is not None else average_walkperhour * base_average_ratio
-        self.walkperhour = base_walkperhour * self.scale
+        self.walkperhour = SV(base_walkperhour * self.scale)
 
         base_runperhour = userdata.runperhour if userdata.runperhour is not None else average_runperhour * base_average_ratio
-        self.runperhour = base_runperhour * self.scale
+        self.runperhour = SV(base_runperhour * self.scale)
 
         base_swimperhour = userdata.swimperhour if userdata.swimperhour is not None else average_swimperhour * base_average_ratio
-        self.swimperhour = base_swimperhour * self.scale
+        self.swimperhour = SV(base_swimperhour * self.scale)
 
         base_climbperhour = average_climbperhour * base_average_ratio
-        self.climbperhour = base_climbperhour * self.scale
+        self.climbperhour = SV(base_climbperhour * self.scale)
 
         base_crawlperhour = average_crawlperhour * base_average_ratio
-        self.crawlperhour = base_crawlperhour * self.scale
+        self.crawlperhour = SV(base_crawlperhour * self.scale)
 
         self.walksteplength = SV(base_walkperhour / walkstepsperhour * self.scale)
         self.runsteplength = SV(base_runperhour / runstepsperhour * self.scale)
