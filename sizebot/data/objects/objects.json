@@ -156,6 +156,14 @@
         "weight": "0.00075"
     },
     {
+        "name": "thickness of spaghetti",
+        "dimension": "t",
+        "thickness": "0.0017",
+        "aliases": [
+            "spaghetti"
+        ]
+    },
+    {
         "name": "drop of water",
         "dimension": "d",
         "diameter": "0.002",
@@ -847,6 +855,18 @@
         "aliases": [
             "lighter"
         ]
+    },
+    {
+        "name": "Minecraft pixel",
+        "dimension": "l",
+        "length": "0.0625",
+        "width": "0.0625",
+        "depth": "0.0625",
+        "symbol": "mcpx",
+        "tags": [
+            "minecraft"
+        ],
+        "note": "Assuming a 16x texture pack, which is defautl."
     },
     {
         "name": "toothpick",
@@ -2287,6 +2307,20 @@
         ],
         "aliases": [
             "whale"
+        ]
+    },
+    {
+        "name": "Minecraft chunk",
+        "dimension": "l",
+        "length": "16",
+        "width": "16",
+        "depth": "16",
+        "symbol": "mcc",
+        "tags": [
+            "minecraft"
+        ],
+        "aliases": [
+            "chunk"
         ]
     },
     {

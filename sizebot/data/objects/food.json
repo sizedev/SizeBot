@@ -360,19 +360,6 @@
         ]
     },
     {
-        "name": "banana",
-        "dimension": "l",
-        "length": "0.1905",
-        "calories": "105",
-        "weight": "120",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "rotat e"
-        ]
-    },
-    {
         "name": "mozzarella stick",
         "dimension": "l",
         "length": "0.15",
@@ -384,6 +371,19 @@
         ],
         "aliases": [
             "mozz stick"
+        ]
+    },
+    {
+        "name": "banana",
+        "dimension": "l",
+        "length": "0.1905",
+        "calories": "105",
+        "weight": "120",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "rotat e"
         ]
     },
     {
