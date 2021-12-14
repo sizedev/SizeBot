@@ -133,8 +133,8 @@ class MPCog(commands.Cog):
         e = discord.Embed(
             title = f"If {thiefdata.nickname} stole {amount:,.3mu} from {victimdata.nickname}...",
             description = (
-                f"**{victimdata.nickname}** would now be **{victimdata.height}** tall and weigh **{victimdata.weight}**\n."
-                f"**{thiefdata.nickname}** would now be **{thiefdata.height}** tall and weigh **{thiefdata.weight}**\n."
+                f"**{victimdata.nickname}** would now be **{victimdata.height:,.3mu}** tall and weigh **{victimdata.weight:,.3mu}**.\n"
+                f"**{thiefdata.nickname}** would now be **{thiefdata.height:,.3mu}** tall and weigh **{thiefdata.weight:,.3mu}**.\n"
             ),
             color = colors.cyan
         )
