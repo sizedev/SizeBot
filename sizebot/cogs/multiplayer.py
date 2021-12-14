@@ -106,7 +106,7 @@ class MPCog(commands.Cog):
             mass_stolen = original_victim_weight - victimdata.weight
 
             # Give the mass to the thief
-            original_thief_weight = copy(victimdata.weight)
+            original_thief_weight = copy(thiefdata.weight)
             new_thief_weight = original_thief_weight + mass_stolen
             ratio = Decimal(new_thief_weight / original_thief_weight)
             ratio = ratio ** Decimal("1/3")  # cube root
@@ -124,7 +124,7 @@ class MPCog(commands.Cog):
             mass_stolen = original_victim_weight - victimdata.weight
 
             # Give the mass to the thief
-            original_thief_weight = copy(victimdata.weight)
+            original_thief_weight = copy(thiefdata.weight)
             new_thief_weight = original_thief_weight + mass_stolen
             ratio = Decimal(new_thief_weight / original_thief_weight)
             ratio = ratio ** Decimal("1/3")  # cube root
