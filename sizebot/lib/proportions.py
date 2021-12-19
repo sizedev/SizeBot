@@ -540,6 +540,7 @@ class PersonStats:
         average_swimperhour = 3219
         average_climbperhour = 4828
         average_crawlperhour = 2556
+        average_driveperhour = 96560.6
 
         walkstepsperhour = 6900
         runstepsperhour = 10200
@@ -558,6 +559,8 @@ class PersonStats:
 
         base_crawlperhour = average_crawlperhour * base_average_ratio
         self.crawlperhour = SV(base_crawlperhour * self.scale)
+
+        self.driveperhour = SV(average_driveperhour * self.scale)
 
         self.walksteplength = SV(base_walkperhour / walkstepsperhour * self.scale)
         self.runsteplength = SV(base_runperhour / runstepsperhour * self.scale)
@@ -631,7 +634,8 @@ class PersonStats:
                 f"{emojis.run} {self.runperhour:,.1M} per hour / {self.runperhour:,.1U} per hour\n"
                 f"{emojis.climb} {self.climbperhour:,.1M} per hour / {self.climbperhour:,.1U} per hour\n"
                 f"{emojis.crawl} {self.crawlperhour:,.1M} per hour / {self.crawlperhour:,.1U} per hour\n"
-                f"{emojis.swim} {self.swimperhour:,.1M} per hour / {self.swimperhour:,.1U} per hour")
+                f"{emojis.swim} {self.swimperhour:,.1M} per hour / {self.swimperhour:,.1U} per hour",
+                f"{emojis.drive} {self.driveperhour:,.1M} per hour / {self.driveperhour:,.1U} per hour")
 
     def __str__(self):
         return (f"<PersonStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
