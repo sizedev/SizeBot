@@ -10,14 +10,14 @@ from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, WV
-from sizebot.lib.userdb import defaultheight as average_height, defaultweight, defaultliftstrength, falllimit
+from sizebot.lib.userdb import User, defaultheight as average_height, defaultweight, defaultliftstrength, falllimit
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
 
-def changeUser(guildid, userid, changestyle, amount):
+def changeUser(guildid: int, userid: int, changestyle: str, amount: SV):
     changestyle = changestyle.lower()
     if changestyle in ["add", "+", "a", "plus"]:
         changestyle = "add"
@@ -74,7 +74,7 @@ def changeUser(guildid, userid, changestyle, amount):
 
 
 class PersonComparison:  # TODO: Make a one-sided comparison option.
-    def __init__(self, userdata1, userdata2):
+    def __init__(self, userdata1: User, userdata2: User):
         smallUserdata, bigUserdata = utils.minmax(userdata1, userdata2)
         self.big = PersonStats(bigUserdata)
         self.small = PersonStats(smallUserdata)
@@ -276,7 +276,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
 
 class PersonSpeedComparison:
-    def __init__(self, userdata1, userdata2):
+    def __init__(self, userdata1: User, userdata2: User):
         self._viewer, self._viewed = minmax(userdata1, userdata2)
 
         self.viewer = PersonStats(self._viewer)
@@ -467,7 +467,7 @@ class PersonStats:
 
     defaultthreadthickness = Decimal("0.001016")
 
-    def __init__(self, userdata):
+    def __init__(self, userdata: User):
         self.nickname = userdata.nickname
         self.tag = userdata.tag
         self.gender = userdata.autogender
@@ -587,7 +587,7 @@ class PersonStats:
         if self.height < SV(0.000001):
             self.visibility = "magic"
 
-    def getFormattedStat(self, stat):
+    def getFormattedStat(self, stat: str):
         returndict = {
             "height": f"'s current height is **{self.height:,.3mu}**, or {self.formattedscale} scale.",
             "weight": f"'s current weight is **{self.weight:,.3mu}**.",
@@ -705,7 +705,7 @@ class PersonStats:
 
 
 class PersonBaseStats:
-    def __init__(self, userdata):
+    def __init__(self, userdata: User):
         self.nickname = userdata.nickname
         self.tag = userdata.tag
         self.gender = userdata.autogender
@@ -778,7 +778,7 @@ class PersonBaseStats:
         return embed
 
 
-def formatShoeSize(footlength, women = False):
+def formatShoeSize(footlength: SV, women = False):
     # Inch in meters
     inch = Decimal("0.0254")
     footlengthinches = footlength / inch
@@ -799,7 +799,7 @@ def formatShoeSize(footlength, women = False):
     return f"Size US {prefix}{shoesize}"
 
 
-def fromShoeSize(shoesize):
+def fromShoeSize(shoesize: str):
     shoesizenum = unmodifiedshoesizenum = Decimal(re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)[0])
     if "w" in shoesize.lower():
         shoesizenum = unmodifiedshoesizenum - 1
@@ -809,7 +809,7 @@ def fromShoeSize(shoesize):
     return SV.parse(f"{footlengthinches}in")
 
 
-def calcViewAngle(viewer, viewee):
+def calcViewAngle(viewer: Decimal, viewee: Decimal):
     viewer = abs(Decimal(viewer))
     viewee = abs(Decimal(viewee))
     if viewer.is_infinite() and viewee.is_infinite():
