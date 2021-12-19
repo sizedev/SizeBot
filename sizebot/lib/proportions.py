@@ -540,7 +540,7 @@ class PersonStats:
         average_swimperhour = 3219
         average_climbperhour = 4828
         average_crawlperhour = 2556
-        average_driveperhour = 96560.6
+        average_driveperhour = 96561
 
         walkstepsperhour = 6900
         runstepsperhour = 10200
