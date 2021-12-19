@@ -383,15 +383,15 @@ class PersonSpeedComparison:
 
         statnamemap = {
             "height":           "Height",
-            "foot":             "Foot Length",
+            "foot":             f"{self.viewed.footname} Length",
             "toe":              "Toe Height",
             "shoeprint":        "Shoeprint Depth",
             "finger":           "Finger Length",
             "thumb":            "Thumb Width",
             "fingerprint":      "Fingerprint Depth",
             "eye":              "Eye Width",
-            "hairwidth":        "Hair Width",
-            "hair":             "Hair Length",
+            "hairwidth":        f"{self.viewed.hairname} Width",
+            "hair":             f"{self.viewed.hairname} Length",
             "tail":             "Tail Length",
             "ear":              "Ear Height",
         }
