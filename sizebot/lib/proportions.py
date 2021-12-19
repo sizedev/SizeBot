@@ -356,7 +356,7 @@ class PersonSpeedComparison:
             f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}\n"
             f"{emojis.crawl} {crawltime} ({crawlsteps:,.3} steps){crawlspeedstr if speed else ''}\n"
-            f"{emojis.swim} {swimtime} ({swimsteps:,.3} strokes){swimspeedstr if speed else ''}"
+            f"{emojis.swim} {swimtime} ({swimsteps:,.3} strokes){swimspeedstr if speed else ''}\n"
             f"{emojis.drive} {drivetime} {drivespeedstr if speed else ''}"
         )
 
