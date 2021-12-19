@@ -316,6 +316,8 @@ class StatsCog(commands.Cog):
     async def distance(self, ctx, memberOrHeightorTime: typing.Union[discord.Member, SV, TV, str] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """How long will it take to walk, run, climb, etc. a distance/time?
 
+        If a time is supplied, it is calculated by how much distance you could walk in that time at your base walk speed.
+
         Example:
         `&distance <length or time> [user]`"""
 
