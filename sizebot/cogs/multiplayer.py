@@ -22,6 +22,7 @@ class MPCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
+        aliases = ["pb"],
         category = "multiplayer"
     )
     async def pushbutton(self, ctx, user: discord.Member):
