@@ -309,103 +309,44 @@ class StatsCog(commands.Cog):
         await msg.edit(content = "", embed = embedtosend)
 
     @commands.command(
-        aliases = ["dist", "walk", "run", "climb"],
+        aliases = ["dist", "walk", "run", "climb", "swim", "crawl", "drive"],
         usage = "<length> [user]",
         category = "stats"
     )
-    async def distance(self, ctx, length: typing.Union[SV, TV, str], *, who: typing.Union[discord.Member, SV] = None):
+    async def distance(self, ctx, memberOrHeightorTime: typing.Union[discord.Member, SV, TV, str] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
         """How long will it take to walk, run, climb, etc. a distance/time?
 
         Example:
-        `&distance <length or time>`"""
+        `&distance <length or time> [user]`"""
 
-        if who is None:
-            who = ctx.message.author
+        if memberOrHeight2 is None:
+            memberOrHeight2 = ctx.author
 
-        userdata = load_or_fake(who)
-        userstats = proportions.PersonStats(userdata)
-
-        if userdata.height == 0:
-            await ctx.send(f"{userdata.tag} doesn't exist...")
+        if memberOrHeightorTime is None:
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        defaultdata = load_or_fake(userdb.defaultheight, "an average person")
-        defaultstats = proportions.PersonStats(defaultdata)
+        userdata2 = load_or_fake(memberOrHeight2)
 
-        if isinstance(length, str):
-            raise errors.InvalidSizeValue(length, "size or time")
-        elif isinstance(length, TV):
-            walkpersecond = SV(userstats.walkperhour / 3600)
-            length = SV(walkpersecond * length)
+        if isinstance(memberOrHeightorTime, str):
+            raise errors.InvalidSizeValue(memberOrHeightorTime, "size or time")
+        elif isinstance(memberOrHeightorTime, TV):
+            walkpersecond = SV(userdata2.walkperhour / 3600)
+            memberOrHeightorTime = SV(walkpersecond * memberOrHeightorTime)
 
-        # TODO: Wow, calculations in command. Bad.
-        defaultwalktimehours = length / defaultstats.walkperhour
-        defaultwalksteps = length / defaultstats.walksteplength
+        if isinstance(memberOrHeightorTime, SV):
+            telemetry.SizeViewed(memberOrHeightorTime).save()
+        if isinstance(memberOrHeight2, SV):
+            telemetry.SizeViewed(memberOrHeight2).save()
 
-        defaultruntimehours = length / defaultstats.runperhour
-        defaultrunsteps = length / defaultstats.runsteplength
+        userdata1 = load_or_fake(memberOrHeightorTime)
 
-        defaultclimbtimehours = length / defaultstats.climbperhour
-        defaultclimbsteps = length / defaultstats.climbsteplength
+        comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
 
-        defaultcrawltimehours = length / defaultstats.crawlperhour
-        defaultcrawlsteps = length / defaultstats.crawlsteplength
+        embedtosend = comparison.getStatEmbed(statmap["height"])
+        embedtosend.title = f"{userdata1.height:,.3mu} to {userdata2.nickname}"
 
-        defaultswimtimehours = length / defaultstats.swimperhour
-        defaultswimsteps = length / defaultstats.swimsteplength
-
-        newlength = SV(length / userstats.scale)
-        walktimehours = length / userstats.walkperhour
-        walksteps = length / userstats.walksteplength
-        runtimehours = length / userstats.runperhour
-        runsteps = length / userstats.runsteplength
-        climbtimehours = length / userstats.climbperhour
-        climbsteps = length / userstats.climbsteplength
-        crawltimehours = length / userstats.crawlperhour
-        crawlsteps = length / userstats.crawlsteplength
-        swimtimehours = length / userstats.swimperhour
-        swimsteps = length / userstats.swimsteplength
-
-        walktime = prettyTimeDelta(walktimehours * 60 * 60, roundeventually = True)
-        runtime = prettyTimeDelta(runtimehours * 60 * 60, roundeventually = True)
-        climbtime = prettyTimeDelta(climbtimehours * 60 * 60, roundeventually = True)
-        crawltime = prettyTimeDelta(crawltimehours * 60 * 60, roundeventually = True)
-        swimtime = prettyTimeDelta(swimtimehours * 60 * 60, roundeventually = True)
-
-        defaultwalktime = prettyTimeDelta(defaultwalktimehours * 60 * 60, roundeventually = True)
-        defaultruntime = prettyTimeDelta(defaultruntimehours * 60 * 60, roundeventually = True)
-        defaultclimbtime = prettyTimeDelta(defaultclimbtimehours * 60 * 60, roundeventually = True)
-        defaultcrawltime = prettyTimeDelta(defaultcrawltimehours * 60 * 60, roundeventually = True)
-        defaultswimtime = prettyTimeDelta(defaultswimtimehours * 60 * 60, roundeventually = True)
-
-        # TODO: Switch to using the new embeds
-        desc = (
-            f"To {userstats.nickname}, {length:,.3mu} would look to be **{newlength:,.3mu}.** "
-            f"They could walk that distance in **{walktime}** *({walksteps:,.0f} steps)*, "
-            f"run that distance in **{runtime}** *({runsteps:,.0f} strides)*, "
-            f"climb that distance in **{climbtime}** *({climbsteps:,.0f} pulls)*, "
-            f"crawl that distance in **{crawltime}** *({crawlsteps:,.0f} pulls)*, "
-            f"or swim that distance in **{swimtime}** *({swimsteps:,.0f} strokes.)*"
-        )
-        footer = (
-            f"An average person could walk {length:,.3mu} in {defaultwalktime} ({defaultwalksteps:,.0f} steps), "
-            f"run that distance in {defaultruntime} ({defaultrunsteps:,.0f} strides), "
-            f"climb that distance in {defaultclimbtime} ({defaultclimbsteps:,.0f} pulls), "
-            f"crawl that distance in {defaultcrawltime} ({defaultcrawlsteps:,.0f} pulls), "
-            f"or swim that distance in {defaultswimtime} ({defaultswimsteps:,.0f} strokes.)"
-        )
-
-        if userdata.incomprehensible:
-            desc = glitch_string(desc)
-            footer = glitch_string(footer)
-
-        e = discord.Embed(
-            title = f"{length:,.3mu} to {userstats.nickname}",
-            description = desc
-        )
-        e.set_footer(text = footer)
-
-        await ctx.send(embed = e)
+        await ctx.send(embed = embedtosend)
 
     @commands.command(
         aliases = ["diststats"],
