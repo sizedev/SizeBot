@@ -322,17 +322,20 @@ class PersonSpeedComparison:
         crawlsteps = math.ceil(dist / self.viewer.crawlsteplength)
         _swimtime = (dist / self.viewer.swimperhour) * 60 * 60
         swimsteps = math.ceil(dist / self.viewer.swimsteplength)
+        _drivetime = (dist / self.viewer.driveperhour) * 60 * 60
         walktime = prettyTimeDelta(_walktime, roundeventually = True)
         runtime = prettyTimeDelta(_runtime, roundeventually = True)
         climbtime = prettyTimeDelta(_climbtime, roundeventually = True)
         crawltime = prettyTimeDelta(_crawltime, roundeventually = True)
         swimtime = prettyTimeDelta(_swimtime, roundeventually = True)
+        drivetime = prettyTimeDelta(_drivetime, roundeventually = True)
 
         walkspeedstr = f"\n*{emojis.blank}{self.viewer.walkperhour:,.3mu} per hour*"
         runspeedstr = f"\n*{emojis.blank}{self.viewer.runperhour:,.3mu} per hour*"
         climbspeedstr = f"\n*{emojis.blank}{self.viewer.climbperhour:,.3mu} per hour*"
         crawlspeedstr = f"\n*{emojis.blank}{self.viewer.crawlperhour:,.3mu} per hour*"
         swimspeedstr = f"\n*{emojis.blank}{self.viewer.swimperhour:,.3mu} per hour*"
+        drivespeedstr = f"\n*{emojis.blank}{self.viewer.driveperhour:,.3mu} per hour*"
 
         if self.viewer.incomprehensible or self.viewed.incomprehensible:
             walkspeedstr = glitch_string(walkspeedstr)
@@ -340,6 +343,7 @@ class PersonSpeedComparison:
             climbspeedstr = glitch_string(climbspeedstr)
             crawlspeedstr = glitch_string(crawlspeedstr)
             swimspeedstr = glitch_string(swimspeedstr)
+            drivespeedstr = glitch_string(drivespeedstr)
             reldist_print = glitch_string(reldist_print)
             shoesize = glitch_string(shoesize)
 
@@ -353,6 +357,7 @@ class PersonSpeedComparison:
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}\n"
             f"{emojis.crawl} {crawltime} ({crawlsteps:,.3} steps){crawlspeedstr if speed else ''}\n"
             f"{emojis.swim} {swimtime} ({swimsteps:,.3} strokes){swimspeedstr if speed else ''}"
+            f"{emojis.drive} {drivetime} {drivespeedstr if speed else ''}"
         )
 
         return out_str
