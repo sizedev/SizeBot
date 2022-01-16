@@ -9,6 +9,7 @@ import sizebot.data
 from sizebot.lib import userdb
 from sizebot.lib.constants import ids
 from sizebot.lib.loglevels import EGG
+from sizebot.lib.versioning import release_on
 
 tasks = {}
 
@@ -31,6 +32,7 @@ class FunCog(commands.Cog):
         await ctx.message.delete(delay=0)
         await ctx.send(message)
 
+    @release_on("3.7")
     @commands.command(
         aliases = ["tra"],
         category = "fun"
