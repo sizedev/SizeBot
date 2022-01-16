@@ -546,7 +546,7 @@ class User:
 
     # Create a new object from a python dictionary imported using json
     @classmethod
-    def fromJSON(cls, jsondata):
+    def fromJSON(cls, jsondata: dict):
         userdata = User()
         userdata.guildid = jsondata.get("guildid", 350429009730994199)  # Default to Size Matters.
         userdata.id = int(jsondata["id"])
@@ -606,6 +606,8 @@ class User:
             button = Diff.fromJSON(button)
         userdata.button = button
         userdata.tra_reports = jsondata.get("tra_reports", 0)
+        if userdata.tra_reports is None:
+            userdata.tra_reports = 0
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
