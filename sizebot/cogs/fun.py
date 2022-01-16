@@ -1,10 +1,12 @@
 import importlib.resources as pkg_resources
 import logging
 
+import discord
 from discord import File
 from discord.ext import commands
 
 import sizebot.data
+from sizebot.lib import userdb
 from sizebot.lib.constants import ids
 from sizebot.lib.loglevels import EGG
 
@@ -28,6 +30,17 @@ class FunCog(commands.Cog):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
         await ctx.send(message)
+
+    @commands.command(
+        aliases = ["tra"],
+        category = "fun"
+    )
+    async def report(self, ctx, *, user: discord.User):
+        """Report a user to the Tiny Rights Alliance."""
+        ud = userdb.load(ctx.guild.id, user.id)
+        ud.tra_reports += 1
+        userdb.save(ud)
+        await ctx.send(f"{ud.nickname} has been reported to the Tiny Rights Alliance. This is report **#{ud.tra_reports}**.")
 
     @commands.command(
         usage = "<message>",

@@ -406,7 +406,7 @@ categories = [
     HelpCategory("loop", "Looping Commands", "Commands related to doing looping tasks.", "🔁"),
     HelpCategory("multiplayer", "Multiplayer Commands", "Commands for playing with others.", "👥"),
     HelpCategory("profile", "Profile Commands", "Commands for updating and displaying profiles.", "🆔"),
-    HelpCategory("fun", "Fun Commands", "Commands that aren't size-based, but are still fun!", "🎉"),
+    HelpCategory("fun", "Fun Commands", "Commands that are fun!", "🎉"),
     HelpCategory("mod", "Mod Commands", "Commands for server mods.", "⚙️"),
     HelpCategory("misc", "Miscellaneous Commands", "Commands that defy category!", "🌐")
 ]

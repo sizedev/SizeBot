@@ -38,7 +38,7 @@ class User:
         "_currentscalestep", "_currentscaletalk", "scaletalklock",
         "currentmovetype", "movestarted", "movestop",
         "registration_steps_remaining", "_macrovision_model", "_macrovision_view",
-        "button"
+        "button", "tra_reports"
     ]
 
     def __init__(self):
@@ -71,6 +71,7 @@ class User:
         self.movestop: Optional[TV] = None
         self.triggers: Dict[str, Diff] = {}
         self.button: Optional[Diff] = None
+        self.tra_reports = 0
         self._unitsystem: str = "m"
         self.species: Optional[str] = None
         self.soft_gender = None
@@ -95,7 +96,7 @@ class User:
                 f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}, INCOMPREHENSIBLE = {self.incomprehensible!r}, "
                 f"CURRENTSCALESTEP = {self.currentscalestep!r}, CURRENTSCALETALK = {self.currentscaletalk!r}, "
                 f"CURRENTMOVETYPE = {self.currentmovetype!r}, MOVESTARTED = {self.movestarted!r}, MOVESTOP = {self.movestop!r}, "
-                f"TRIGGERS = {self.triggers!r}, BUTTON = {self.button!r}, "
+                f"TRIGGERS = {self.triggers!r}, BUTTON = {self.button!r}, TRA_REPORTS = {self.tra_reports!r}, "
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
@@ -535,6 +536,7 @@ class User:
             "movestop":         None if self.movestop is None else str(self.movestop),
             "triggers":         {k: v.toJSON() for k, v in self.triggers.items()},
             "button":           None if self.button is None else self.button.toJSON(),
+            "tra_reports":      self.tra_reports,
             "unitsystem":       self.unitsystem,
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining,
@@ -603,6 +605,7 @@ class User:
         if button is not None:
             button = Diff.fromJSON(button)
         userdata.button = button
+        userdata.tra_reports = jsondata["tra_reports"]
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
