@@ -156,14 +156,6 @@
         "weight": "0.00075"
     },
     {
-        "name": "thickness of spaghetti",
-        "dimension": "t",
-        "thickness": "0.0017",
-        "aliases": [
-            "spaghetti"
-        ]
-    },
-    {
         "name": "drop of water",
         "dimension": "d",
         "diameter": "0.002",
