@@ -1,12 +1,11 @@
 import re
 
 from sizebot.lib.diff import Rate as ParseableRate
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import InvalidSizeValue, InvalidStat
 from sizebot.lib.proportions import fromShoeSize
 from sizebot.lib.userdb import User
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import AliasMap, truthy
+from sizebot.lib.utils import AliasMap, parse_scale, truthy
 
 re_full_string = r"\$(\w+=[^;$]+;)?(\w+=[^;$]+)"
 re_component = r"(\w)+=([^;$]+);?"
@@ -51,7 +50,7 @@ class FakePlayer(User):
         "runperhour": ParseableRate,
         "swimperhour": ParseableRate,
         "gender": str,
-        "scale": Decimal
+        "scale": str
     }
 
     @classmethod
@@ -73,7 +72,7 @@ class FakePlayer(User):
             unit = cls.UNITMAP[collapsed_key]
 
             if collapsed_key == "scale":
-                player.scale = Decimal(val)
+                player.scale = parse_scale(val)
             elif collapsed_key == "shoesize":
                 player.footlength = fromShoeSize(val)
             elif unit == bool:

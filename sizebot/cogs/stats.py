@@ -1,5 +1,6 @@
 import logging
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.freefall import freefall
 import typing
 
@@ -58,7 +59,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, customName = None):
+    async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
