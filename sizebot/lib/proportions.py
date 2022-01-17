@@ -711,6 +711,7 @@ class PersonBaseStats:
         self.gender = userdata.autogender
         self.baseheight = userdata.baseheight
         self.baseweight = userdata.baseweight
+        self.height = userdata.height
         self.footname = userdata.footname
         self.hairname = userdata.hairname
         self.pawtoggle = userdata.pawtoggle
@@ -736,6 +737,10 @@ class PersonBaseStats:
         self.currentscalestep = userdata.currentscalestep
         self.unitsystem = userdata.unitsystem
 
+        self.furcheck = emojis.voteyes if userdata.furtoggle else emojis.voteno
+        self.pawcheck = emojis.voteyes if userdata.pawtoggle else emojis.voteno
+        self.tailcheck = emojis.voteyes if userdata.taillength else emojis.voteno
+
     def __str__(self):
         return (f"<PersonBaseStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
                 f"BASEHEIGHT = {self.baseheight!r}, BASEWEIGHT = {self.baseweight!r}, FOOTNAME = {self.footname!r}, "
@@ -757,6 +762,7 @@ class PersonBaseStats:
         embed.add_field(name="Base Height", value=f"{self.baseheight:,.3mu}\n*{self.height / average_height:,.3} average*", inline=True)
         embed.add_field(name="Base Weight", value=f"{self.baseweight:,.3mu}\n*{self.height / average_height:,.3} average*", inline=True)
         embed.add_field(name="Unit System", value=f"{self.unitsystem.capitalize()}", inline=True)
+        embed.add_field(name="Furry", value=f"**Fur: **{self.furcheck}\n**Paws: **{self.pawcheck}\n**Tail: **{self.tailcheck}\n")
         if self.footlength:
             embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         if self.hairlength:
