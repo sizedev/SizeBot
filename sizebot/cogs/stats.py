@@ -116,8 +116,8 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statsas(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None,
-                      memberOrHeight2: typing.Union[discord.Member, SV] = None, *, customName = None):
+    async def statsas(self, ctx, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
+                      memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
         """User stats command with modified bases.
 
         Get tons of user stats about yourself, a user, or a raw height, as if they were a different height.
@@ -153,7 +153,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, SV] = None, *, customName = None):
+    async def stat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
         """User stat command.
 
         Get a single stat about yourself, a user, or a raw height.
@@ -202,8 +202,8 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statas(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, SV] = None,
-                     memberOrHeight2: typing.Union[discord.Member, SV] = None, *, customName = None):
+    async def statas(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
+                     memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
         """User stat command with custom bases.
 
         Get a single stat about yourself, a user, or a raw height, as if they were a different height.
@@ -257,7 +257,8 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def compare(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def compare(self, ctx, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
+                      *, memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Compare two users' size.
 
         If give one user, compares you to that user."""
@@ -288,8 +289,8 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def compareas(self, ctx, asHeight: typing.Union[discord.Member, SV] = None,
-                        memberOrHeight: typing.Union[discord.Member, SV] = None, *, customName = None):
+    async def compareas(self, ctx, asHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
+                        memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
         """Compare yourself as a different height and another user."""
 
         if isinstance(asHeight, SV):
@@ -314,7 +315,8 @@ class StatsCog(commands.Cog):
         usage = "<length> [user]",
         category = "stats"
     )
-    async def distance(self, ctx, memberOrHeightorTime: typing.Union[discord.Member, SV, TV, str] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def distance(self, ctx, memberOrHeightorTime: typing.Union[discord.Member, FakePlayer, SV, TV, str] = None,
+                       *, memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None):
         """How long will it take to walk, run, climb, etc. a distance/time?
 
         If a time is supplied, it is calculated by how much distance you could walk in that time at your base walk speed.
@@ -357,7 +359,8 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def distancestats(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def distancestats(self, ctx, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
+                            *, memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Find how long it would take to travel across a person."""
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
@@ -392,7 +395,8 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def distancestat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def distancestat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
+                           *, memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Find how long it would take to travel across a certain distance on a person.
 
         Available stats are: #STATS#"""
@@ -430,7 +434,7 @@ class StatsCog(commands.Cog):
         usage = "<length> [user]",
         category = "stats"
     )
-    async def ruler(self, ctx, length: SV, *, who: typing.Union[discord.Member, SV] = None):
+    async def ruler(self, ctx, length: SV, *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
         """A distance to a user looks how long to everyone else?
 
         Examples:
@@ -464,7 +468,7 @@ class StatsCog(commands.Cog):
         usage = "<user or length>",
         category = "stats"
     )
-    async def sound(self, ctx, *, who: typing.Union[discord.Member, SV] = None):
+    async def sound(self, ctx, *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Find how long it would take sound to travel a length or height."""
         ONE_SOUNDSECOND = SV(340.27)
         is_SV = False
@@ -497,7 +501,7 @@ class StatsCog(commands.Cog):
         usage = "<user or length>",
         category = "stats"
     )
-    async def light(self, ctx, *, who: typing.Union[discord.Member, SV] = None):
+    async def light(self, ctx, *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Find how long it would take light to travel a length or height."""
         ONE_LIGHTSECOND = SV(299792000)
         is_SV = False
@@ -529,7 +533,7 @@ class StatsCog(commands.Cog):
     @commands.command(
         usage = "<distance>"
     )
-    async def fall(self, ctx, distance: typing.Union[discord.Member, SV]):
+    async def fall(self, ctx, distance: typing.Union[discord.Member, FakePlayer, SV]):
         if isinstance(distance, discord.Member):
             ud = userdb.load(ctx.guild.id, distance.id)
             distance = ud.height
@@ -546,7 +550,7 @@ class StatsCog(commands.Cog):
         usage = "<distance>",
         hidden = True
     )
-    async def rpfall(self, ctx, distance: typing.Union[discord.Member, SV]):
+    async def rpfall(self, ctx, distance: typing.Union[discord.Member, FakePlayer, SV]):
         if isinstance(distance, discord.Member):
             ud = userdb.load(ctx.guild.id, distance.id)
             distance = ud.height
@@ -610,7 +614,8 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def simplecompare(self, ctx, memberOrHeight: typing.Union[discord.Member, SV] = None, *, memberOrHeight2: typing.Union[discord.Member, SV] = None):
+    async def simplecompare(self, ctx, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
+                            *, memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Compare two users' size.
 
         If give one user, compares you to that user."""
@@ -640,7 +645,7 @@ class StatsCog(commands.Cog):
         usage = "[user]",
         category = "stats"
     )
-    async def pehkui(self, ctx, *, who: typing.Union[discord.Member, SV] = None):
+    async def pehkui(self, ctx, *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Get your (or a user's) Pehkui scale.
 
         For use in the Pehkui Minecraft mod. Essentially a height represented in a unit of Steves."""
