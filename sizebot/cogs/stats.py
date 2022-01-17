@@ -75,8 +75,11 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeight, SV):
             telemetry.SizeViewed(memberOrHeight).save()
 
-        same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = load_or_fake(memberOrHeight, customName, allow_unreg=same_user)
+        if isinstance(memberOrHeight, FakePlayer):
+            userdata = memberOrHeight
+        else:
+            same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
+            userdata = load_or_fake(memberOrHeight, customName, allow_unreg=same_user)
 
         stats = proportions.PersonStats(userdata)
 
