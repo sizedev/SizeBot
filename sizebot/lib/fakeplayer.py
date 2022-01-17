@@ -8,7 +8,7 @@ from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, parse_scale, truthy
 
 re_full_string = r"\$(\w+=[^;$]+;)?(\w+=[^;$]+)"
-re_component = r"(\w)+=([^;$]+);?"
+re_component = r"(\w+)=([^;$]+);?"
 
 
 class FakePlayer(User):
