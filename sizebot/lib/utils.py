@@ -542,3 +542,12 @@ def fixZeroes(d):
     Decimal('1e3') -> Decimal('100')
     """
     return d.normalize() + 0
+
+
+def truthy(s: str):
+    """https://discordpy.readthedocs.io/en/stable/ext/commands/commands.html#bool"""
+    lowered = s.lower()
+    if lowered in ('yes', 'y', 'true', 't', '1', 'enable', 'on'):
+        return True
+    elif lowered in ('no', 'n', 'false', 'f', '0', 'disable', 'off'):
+        return False
