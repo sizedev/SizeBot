@@ -717,7 +717,7 @@ def list_users(*, guildid = None, userid = None):
 
 def load_or_fake(memberOrSV, nickname = None, *, allow_unreg=False) -> User:
     if isinstance(memberOrSV, discord.Member):
-        userdata = load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
+        return load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
     if type(memberOrSV).__name__ == "FakePlayer":  # can't use isinstance, circular import
         return memberOrSV
     else:
@@ -726,4 +726,4 @@ def load_or_fake(memberOrSV, nickname = None, *, allow_unreg=False) -> User:
         if nickname is None:
             nickname = f"a {userdata.height:,.3mu} tall person"
         userdata.nickname = nickname
-    return userdata
+        return userdata
