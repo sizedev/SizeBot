@@ -639,7 +639,7 @@ class PersonStats:
                 f"{emojis.run} {self.runperhour:,.1M} per hour / {self.runperhour:,.1U} per hour\n"
                 f"{emojis.climb} {self.climbperhour:,.1M} per hour / {self.climbperhour:,.1U} per hour\n"
                 f"{emojis.crawl} {self.crawlperhour:,.1M} per hour / {self.crawlperhour:,.1U} per hour\n"
-                f"{emojis.swim} {self.swimperhour:,.1M} per hour / {self.swimperhour:,.1U} per hour"
+                f"{emojis.swim} {self.swimperhour:,.1M} per hour / {self.swimperhour:,.1U} per hour\n"
                 f"{emojis.drive} {self.driveperhour:,.1M} per hour / {self.driveperhour:,.1U} per hour")
 
     def __str__(self):
