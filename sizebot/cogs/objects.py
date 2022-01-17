@@ -11,6 +11,7 @@ from discord.ext.commands.converter import MemberConverter
 from sizebot import __version__
 from sizebot.lib import objs, proportions, telemetry, userdb, utils
 from sizebot.lib.constants import emojis
+from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects
 from sizebot.lib.units import SV, WV
@@ -51,7 +52,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookslike(self, ctx, *, memberOrHeight: typing.Union[discord.Member, SV] = None):
+    async def lookslike(self, ctx, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -131,7 +132,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookat(self, ctx, *, what: typing.Union[DigiObject, discord.Member, SV, str]):
+    async def lookat(self, ctx, *, what: typing.Union[DigiObject, discord.Member, FakePlayer, SV, str]):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -234,7 +235,7 @@ class ObjectsCog(commands.Cog):
         usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx, *, who: discord.Member = None):
+    async def stackup(self, ctx, *, who: typing.Union[discord.Member, FakePlayer] = None):
         """How do you stack up against objects?
 
         Example:
@@ -244,9 +245,7 @@ class ObjectsCog(commands.Cog):
 
         if who is None:
             who = ctx.author
-        whoid = who.id
-
-        userdata = userdb.load(ctx.guild.id, whoid)
+        userdata = userdb.load_or_fake(who)
         height = userdata.height
         objs_smaller = [o for o in objects if o.unitlength <= height][-3:]
         objs_larger = [o for o in objects if o.unitlength > height][:3]
@@ -265,16 +264,15 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def food(self, ctx, arg1: typing.Union[discord.Member, DigiObject] = None,
-                   *, arg2: DigiObject = None):
+    async def food(self, ctx, food: typing.Union[DigiObject, str], *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
         """How much food does a person need to eat?
 
-        Takes optional argument of a user to get the food for, and/or a food.
+        Takes optional argument of a user to get the food for.
 
         Example:
-        `&food`
+        `&food all`
         `&food pizza`
-        `&food @User`
+        `&food @User all`
         `&food @User pizza`"""
 
         CAL_PER_DAY = 2000
@@ -282,34 +280,19 @@ class ObjectsCog(commands.Cog):
         foods = objs.food
 
         # Input validation.
-        if isinstance(arg1, DigiObject) and isinstance(arg2, DigiObject):
-            # Both arguments are objects.
-            await ctx.send(f"{emojis.error} `{arg1.name}` and `{arg2.name}` are both objects.")
+        if isinstance(food, DigiObject) and "food" not in food.tags:
+            await ctx.send(f"{emojis.error} `{food.name}` is not a food.")
             return
-        for arg in [arg1, arg2]:
-            # Make sure the object is a food.
-            if isinstance(arg, DigiObject):
-                if "food" not in arg.tags:
-                    await ctx.send(f"{emojis.error} `{arg.name}` is not a food.")
-                    return
 
-        if arg1 is not None and isinstance(arg1, discord.Member):
-            whoid = arg1.id
-        else:
-            whoid = ctx.author.id
+        if who is None:
+            who = ctx.author
 
-        for arg in [arg1, arg2]:
-            if isinstance(arg, DigiObject):
-                food = arg
-            else:
-                food = None
-
-        userdata = userdb.load(ctx.guild.id, whoid)
+        userdata = userdb.load_or_fake(who)
         scale = userdata.scale
         scale3 = scale ** 3
         cals_needed = CAL_PER_DAY * scale3
 
-        if food is None:
+        if food == "all":
             if scale >= 1:
                 # TODO: Not a good way to do this.
                 foods = foods[-6:]
