@@ -7,7 +7,7 @@ from sizebot.lib.userdb import User
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, parse_scale, truthy
 
-re_full_string = r"\$(\w+=[^;$]+;)?(\w+=[^;$]+)"
+re_full_string = r"\$(\w+=[^;$]+;)*(\w+=[^;$]+)"
 re_component = r"(\w+)=([^;$]+);?"
 
 
