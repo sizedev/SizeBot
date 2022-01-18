@@ -11,6 +11,7 @@ from discord.ext.commands.converter import MemberConverter
 from sizebot import __version__
 from sizebot.lib import objs, proportions, telemetry, userdb, utils
 from sizebot.lib.constants import emojis
+from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects
@@ -341,6 +342,9 @@ class ObjectsCog(commands.Cog):
 
         if land == "random":
             land = random.choice(lands)
+
+        if not isinstance(land, DigiObject):
+            raise InvalidSizeValue(land, "object")
 
         land_width = SV(land.width / scale)
         land_length = SV(land.length / scale)
