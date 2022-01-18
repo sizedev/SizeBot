@@ -61,6 +61,7 @@ class FakePlayer(User):
 
         player = FakePlayer()
 
+        s = s.removeprefix("$")
         for group in s.split(";"):
             componentmatch = re.match(re_component, group)
             key = componentmatch.group(1)
