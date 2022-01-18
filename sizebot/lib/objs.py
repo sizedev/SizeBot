@@ -17,6 +17,7 @@ from sizebot.lib.utils import removeprefix, sentence_join
 
 objects: list["DigiObject"] = []
 food: list["DigiObject"] = []
+land: list["DigiObject"] = []
 tags: dict[str, int] = {}
 
 
@@ -245,8 +246,9 @@ def init():
         o.addToUnits()
 
     # cached values
-    global food, tags
+    global food, land, tags
     food = [o for o in objects if "food" in o.tags]
+    land = [o for o in objects if "land" in o.tags]
     for o in objects:
         for tag in o.tags:
             if tag not in tags:

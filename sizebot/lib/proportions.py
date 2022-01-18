@@ -464,6 +464,8 @@ class PersonStats:
     nailthickfactor = 1 / Decimal("2920")
     shoeprintfactor = 1 / Decimal("135")
     eyewidthfactor = 1 / Decimal("73.083")
+    widthfactor = 4 / Decimal("17")
+    fingertipfactor = 1 / Decimal("95.95")
 
     defaultthreadthickness = Decimal("0.001016")
 
@@ -486,6 +488,8 @@ class PersonStats:
         self.incomprehensible = userdata.incomprehensible
         self.macrovision_model = userdata.macrovision_model
         self.macrovision_view = userdata.macrovision_view
+
+        self.width = SV(self.height * self.widthfactor)
 
         if userdata.hairlength is None:
             self.hairlength = None
@@ -522,6 +526,7 @@ class PersonStats:
         self.shoeprintdepth = SV(self.baseheight * self.shoeprintfactor * self.scale)
         self.pointerlength = SV(self.baseheight * self.pointerfactor * self.scale)
         self.thumbwidth = SV(self.baseheight * self.thumbfactor * self.scale)
+        self.fingertiplength = SV(self.height * self.fingertipfactor)
         self.fingerprintdepth = SV(self.baseheight * self.fingerprintfactor * self.scale)
 
         self.threadthickness = SV(self.defaultthreadthickness * self.scale)

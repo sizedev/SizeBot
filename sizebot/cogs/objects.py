@@ -270,9 +270,9 @@ class ObjectsCog(commands.Cog):
         Takes optional argument of a user to get the food for.
 
         Example:
-        `&food all`
+        `&food random`
         `&food pizza`
-        `&food @User all`
+        `&food @User random`
         `&food @User pizza`"""
 
         CAL_PER_DAY = 2000
@@ -292,7 +292,7 @@ class ObjectsCog(commands.Cog):
         scale3 = scale ** 3
         cals_needed = CAL_PER_DAY * scale3
 
-        if food == "all":
+        if food == "random":
             if scale >= 1:
                 # TODO: Not a good way to do this.
                 foods = foods[-6:]
@@ -310,6 +310,57 @@ class ObjectsCog(commands.Cog):
             title = f"{userdata.nickname} eating {food.name}",
             description = foodout)
         embed.set_footer(text = f"{userdata.nickname} needs {CAL_PER_DAY * scale3:,.3} calories per day.")
+
+        await ctx.send(embed = embed)
+
+    @commands.command(
+        category = "objects"
+    )
+    async def land(self, ctx, land: typing.Union[DigiObject, str], *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
+        """Get stats about how you cover land.
+
+        Example:
+        `&land random`
+        `&land Australia`
+        `&land @User random`
+        `&land @User Australia`"""
+
+        lands = objs.land
+
+        # Input validation.
+        if isinstance(land, DigiObject) and "land" not in land.tags:
+            await ctx.send(f"{emojis.error} `{land.name}` is not land.")
+            return
+
+        if who is None:
+            who = ctx.author
+
+        stats = proportions.PersonStats(who)
+
+        userdata = userdb.load_or_fake(who)
+        scale = userdata.scale
+
+        if land == "random":
+            land = random.choice(lands)
+
+        land_width = SV(land.width / scale)
+        land_length = SV(land.length / scale)
+        land_height = SV(land.height / scale)
+        fingertip_name = "paw bean" if userdata.pawtoggle else "fingertip"
+
+        land_area = land.width * land.height
+        lay_percentage = (stats.height * stats.width) / land_area
+        foot_percentage = (stats.footlength * stats.footwidth) / land_area
+        finger_percentage = (stats.fingertiplength * stats.fingertiplength) / land_area
+
+        landout = (f"To {userdata.nickname}, {land.name} looks **{land_width:,.3mu}** wide and **{land_length:,.3mu}** long. The highest peak looks **{land_height:,.3mu}** tall. ({land.note})\n"
+                   f"Laying down, {userdata.nickname} would cover **{lay_percentage:,.2}%** of the land. ({stats.height:,.3mu} tall and {stats.width:,.3mu} wide)\n"
+                   f"{userdata.nickname}'s {userdata.footname} would cover **{foot_percentage:,.2}** of the land. ({stats.footlength:,.3mu} long and {stats.footwidth:,.3mu} wide)\n"
+                   f"{userdata.nickname}'s {fingertip_name} would cover **{finger_percentage:,.2}%** of the land. ({stats.fingertiplength:,.3mu} long and wide)")
+
+        embed = discord.Embed(
+            title = f"{userdata.nickname} on {land.name}",
+            description = landout)
 
         await ctx.send(embed = embed)
 
