@@ -363,7 +363,7 @@ class ObjectsCog(commands.Cog):
         embed = discord.Embed(
             title = f"{userdata.nickname} on {land.name}",
             description = landout)
-        embed.set_footer("*Note: some percentages may not be achievable in real life due to overhang or strangely shaped landmasses. Consider these calculations to be of optimal maximums.*")
+        embed.set_footer(text = "*Note: some percentages may not be achievable in real life due to overhang or strangely shaped landmasses. Consider these calculations to be of optimal maximums.*")
 
         await ctx.send(embed = embed)
 
