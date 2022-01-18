@@ -18,6 +18,7 @@ from sizebot.lib.objs import DigiObject, objects
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import glitch_string, parseMany
+from sizebot.lib.versioning import release_on
 
 
 logger = logging.getLogger("sizebot")
@@ -231,6 +232,7 @@ class ObjectsCog(commands.Cog):
 
         await ctx.send(embed = what.statsembed())
 
+    @release_on("3.7")
     @commands.command(
         category = "objects",
         usage = "[@User]"
@@ -262,6 +264,7 @@ class ObjectsCog(commands.Cog):
             description = "\n".join(outstrings))
         await ctx.send(embed = embed)
 
+    @release_on("3.7")
     @commands.command(
         category = "objects"
     )
@@ -314,6 +317,7 @@ class ObjectsCog(commands.Cog):
 
         await ctx.send(embed = embed)
 
+    @release_on("3.7")
     @commands.command(
         category = "objects"
     )
