@@ -335,9 +335,8 @@ class ObjectsCog(commands.Cog):
         if who is None:
             who = ctx.author
 
-        stats = proportions.PersonStats(who)
-
         userdata = userdb.load_or_fake(who)
+        stats = proportions.PersonStats(userdata)
         scale = userdata.scale
 
         if land == "random":
