@@ -7,7 +7,7 @@ from sizebot.lib.userdb import User
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, parse_scale, truthy
 
-re_full_string = r"\$(\w+=[^;$]+;)*(\w+=[^;$]+)"
+re_full_string = r"\$(\w+=[^;$]+;?)+"
 re_component = r"(\w+)=([^;$]+);?"
 
 
@@ -61,7 +61,7 @@ class FakePlayer(User):
 
         player = FakePlayer()
 
-        for group in match.groups():
+        for group in s.split(";"):
             componentmatch = re.match(re_component, group)
             key = componentmatch.group(1)
             val = componentmatch.group(2)
