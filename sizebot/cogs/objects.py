@@ -352,10 +352,10 @@ class ObjectsCog(commands.Cog):
         foot_percentage = (stats.footlength * stats.footwidth) / land_area
         finger_percentage = (stats.fingertiplength * stats.fingertiplength) / land_area
 
-        landout = (f"To {userdata.nickname}, {land.name} looks **{land_width:,.3mu}** wide and **{land_length:,.3mu}** long. The highest peak looks **{land_height:,.3mu}** tall. ({land.note})\n"
-                   f"Laying down, {userdata.nickname} would cover **{lay_percentage:,.2}%** of the land. ({stats.height:,.3mu} tall and {stats.width:,.3mu} wide)\n"
-                   f"{userdata.nickname}'s {userdata.footname} would cover **{foot_percentage:,.2}%** of the land. ({stats.footlength:,.3mu} long and {stats.footwidth:,.3mu} wide)\n"
-                   f"{userdata.nickname}'s {fingertip_name} would cover **{finger_percentage:,.2}%** of the land. ({stats.fingertiplength:,.3mu} long and wide)")
+        landout = (f"To {userdata.nickname}, {land.name} looks **{land_width:,.3mu}** wide and **{land_length:,.3mu}** long. The highest peak looks **{land_height:,.3mu}** tall. ({land.note})\n\n"
+                   f"Laying down, {userdata.nickname} would cover **{lay_percentage:,.2}%** of the land.\t\n({stats.height:,.3mu} tall and {stats.width:,.3mu} wide)\n"
+                   f"{userdata.nickname}'s {userdata.footname} would cover **{foot_percentage:,.2}%** of the land.\t\n({stats.footlength:,.3mu} long and {stats.footwidth:,.3mu} wide)\n"
+                   f"{userdata.nickname}'s {fingertip_name} would cover **{finger_percentage:,.2}%** of the land.\t\n({stats.fingertiplength:,.3mu} long and wide)")
 
         embed = discord.Embed(
             title = f"{userdata.nickname} on {land.name}",
