@@ -14,7 +14,7 @@ from sizebot.lib.constants import emojis
 from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.objs import DigiObject, objects
+from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import glitch_string, parseMany
@@ -374,6 +374,19 @@ class ObjectsCog(commands.Cog):
         embed.set_footer(text = "Note: some percentages may not be achievable in real life due to overhang or strangely shaped landmasses. Consider these calculations to be of optimal maximums.")
 
         await ctx.send(embed = embed)
+
+    @commands.command(
+        category = "objects"
+    )
+    async def tags(self, ctx):
+        """Get the list of object tags."""
+
+        out = "__**Object Tags**__"
+
+        for tag, val in sorted(tags, key=tags.get, reverse=True):
+            out += f"\n**{tag}**: {val}"
+
+        await ctx.send(out)
 
 
 def setup(bot):
