@@ -34,7 +34,8 @@ class DigiObject:
         self.aliases = aliases + [getPlural(a) for a in aliases]
         self.aliases = self.aliases + [a.replace("™", "").replace("®", "") for a in self.aliases + [self.name]]  # Remove ®, ™
         self.aliases = list(set(self.aliases))  # Remove duplicates
-        self.tags = tags + [getPlural(t) for t in tags]
+        self._tags = tags
+        self.tags = tags + [getPlural(t) for t in self._tags]
         self.article = getIndefiniteArticle(self.name).split(" ")[0]
         self.symbol = symbol or None
         self.note = note or None
@@ -250,7 +251,7 @@ def init():
     food = [o for o in objects if "food" in o.tags]
     land = [o for o in objects if "land" in o.tags]
     for o in objects:
-        for tag in o.tags:
+        for tag in o._tags:
             if tag not in tags:
                 tags[tag] = 1
             else:

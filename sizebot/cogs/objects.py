@@ -383,8 +383,10 @@ class ObjectsCog(commands.Cog):
 
         out = "__**Object Tags**__"
 
-        for tag, val in sorted(tags, key=tags.get, reverse=True):
-            out += f"\n**{tag}**: {val}"
+        for tag in sorted(tags, key=tags.get, reverse=True):
+            if tags[tag] <= 1:
+                break
+            out += f"\n**{tag}**: {tags[tag]}"
 
         await ctx.send(out)
 
