@@ -23,7 +23,7 @@ class EdgeCog(commands.Cog):
     async def limits(self, ctx):
         """See the guild's current caps."""
         guilddata = guilddb.loadOrCreate(ctx.guild.id)
-        await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {'*Unset*' if guilddata.low_limit is None else guilddata.low_limit}\nHigh Limit: {'*Unset*' if guilddata.high_limit is None else guilddata.high_limit}")
+        await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {'*Unset*' if guilddata.low_limit is None else guilddata.low_limit:,.3mu}\nHigh Limit: {'*Unset*' if guilddata.high_limit is None else guilddata.high_limit:,.3mu}")
 
     @commands.command(
         aliases = ["lowlimit", "lowcap", "setlowcap", "setfloor"],
