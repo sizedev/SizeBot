@@ -19,7 +19,7 @@ class PokemonCog(commands.Cog):
     async def pokemon(self, ctx):
         """Pokemaaaaaaaaans"""
         p = random.choice(pokemon)
-        e = p.stats_embed
+        e = p.stats_embed()
         await ctx.send(embed = e)
 
 
