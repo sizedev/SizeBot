@@ -17,7 +17,7 @@ class PokemonCog(commands.Cog):
         aliases = ["pkmn"],
         category = "objects"
     )
-    async def pokemon(self, ctx, pkmn: typing.Union[str, int] = None):
+    async def pokemon(self, ctx, pkmn: typing.Union[int, str] = None):
         """Pokemaaaaaaaaans"""
         if isinstance(pkmn, str):
             p = next((m for m in pokemon if m.name.lower() == pkmn.lower()), None)
