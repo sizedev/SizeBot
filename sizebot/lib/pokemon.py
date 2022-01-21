@@ -37,7 +37,7 @@ class Pokemon:
         e.add_field(name = "Types", value = f"{', '.join(self.types)}")
         e.color = self.color
         e.set_image(url = self.sprite)
-        e.set_footer("Data from https://pokeapi.co/.")
+        e.set_footer(text = "Data from https://pokeapi.co/.")
 
         return e
 
