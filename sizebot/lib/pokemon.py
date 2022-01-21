@@ -47,11 +47,10 @@ class Pokemon:
         w = WV(self.weight * (user.viewscale ** 3))
         e = Embed()
         e.title = f"#{self.natdex} {self.name} as seen by {user.nickname}"
-        e.description = f"*from Generation {self.roman_generation} ({self.region})*\n\n"
-        e.description += (f"To {user.nickname}, {self.name} looks **{h:,.3mu}** tall and weighs **{w:,.3mu}**.")
+        e.description = (f"To {user.nickname}, {self.name} looks **{h:,.3mu}** tall and weighs **{w:,.3mu}**.")
         e.color = self.color
         e.set_image(url = self.sprite)
-        e.set_footer(text = "Data from https://pokeapi.co/.")
+        e.set_footer(text = f"from Generation {self.roman_generation} ({self.region}):\n{self.flavor_text}")
 
         return e
 
