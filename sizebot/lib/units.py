@@ -8,6 +8,7 @@ from sizebot.lib.loglevels import EGG
 from typing import Tuple
 
 import sizebot.data
+import sizebot.data.units
 from sizebot.lib import errors, utils
 from sizebot.lib.digidecimal import Decimal, DecimalSpec
 from sizebot.lib.picker import getRandomCloseUnit
@@ -426,7 +427,7 @@ class Dimension(Decimal):
     @classmethod
     def loadFromFile(cls, filename):
         try:
-            fileJson = json.loads(pkg_resources.read_text(sizebot.data, filename))
+            fileJson = json.loads(pkg_resources.read_text(sizebot.data.units, filename))
         except FileNotFoundError:
             logger.error(f"Error loading {filename}")
             return
@@ -587,8 +588,8 @@ def loadJsonFile(filename):
 
 
 def init():
-    SV.loadFromFile("units/sv.json")
+    SV.loadFromFile("sv.json")
     SV.addUnit(FeetAndInchesUnit())
     SV.addSystemUnit(systemname="u", systemunit=SystemUnit(unit=("'", "\"")))
-    WV.loadFromFile("units/wv.json")
-    TV.loadFromFile("units/tv.json")
+    WV.loadFromFile("wv.json")
+    TV.loadFromFile("tv.json")
