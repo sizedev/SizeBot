@@ -23,6 +23,8 @@ class PokemonCog(commands.Cog):
             p = next([m for m in pokemon if m.name.lower() == pkmn.lower()], None)
         elif isinstance(pkmn, int):
             p = next([m for m in pokemon if m.natdex == pkmn], None)
+        else:
+            p = None
 
         if p is None:
             p = random.choice(pokemon)
