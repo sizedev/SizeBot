@@ -57,8 +57,7 @@ class PokemonCog(commands.Cog):
         if p is None:
             p = random.choice(pokemon)
 
-        e = p.stats_embed(multiplier = userdata.viewscale)
-        e.title += f" to {userdata.nickname}"
+        e = p.comp_embed(user = userdata)
         await ctx.send(embed = e)
 
 
