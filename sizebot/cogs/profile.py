@@ -65,7 +65,7 @@ class ProfileCog(commands.Cog):
         await ctx.send("Profile description reset.")
 
     @commands.command(
-        aliases = ["pokedex"],
+        aliases = ["card"],
         usage = "[user]",
         category = "profile"
     )
