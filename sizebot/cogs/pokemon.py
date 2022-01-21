@@ -20,9 +20,9 @@ class PokemonCog(commands.Cog):
     async def pokemon(self, ctx, pkmn: typing.Union[str, int] = None):
         """Pokemaaaaaaaaans"""
         if isinstance(pkmn, str):
-            p = next([m for m in pokemon if m.name.lower() == pkmn.lower()], None)
+            p = next((m for m in pokemon if m.name.lower() == pkmn.lower()), None)
         elif isinstance(pkmn, int):
-            p = next([m for m in pokemon if m.natdex == pkmn], None)
+            p = next((m for m in pokemon if m.natdex == pkmn), None)
         else:
             p = None
 
