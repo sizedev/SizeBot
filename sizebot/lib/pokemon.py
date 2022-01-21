@@ -71,4 +71,4 @@ def init():
 
     pokefile = pkg_resources.read_text(sizebot.data, "pokemon.json")
     p = json.loads(pokefile)
-    pokemon = [Pokemon.fromJson(json.load(j)) for j in p]
+    pokemon = [Pokemon.fromJson(j) for j in p]
