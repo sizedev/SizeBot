@@ -587,8 +587,8 @@ def loadJsonFile(filename):
 
 
 def init():
-    SV.loadFromFile("sv.json")
+    SV.loadFromFile("units/sv.json")
     SV.addUnit(FeetAndInchesUnit())
     SV.addSystemUnit(systemname="u", systemunit=SystemUnit(unit=("'", "\"")))
-    WV.loadFromFile("wv.json")
-    TV.loadFromFile("tv.json")
+    WV.loadFromFile("units/wv.json")
+    TV.loadFromFile("units/tv.json")
