@@ -1,5 +1,6 @@
 import logging
 import random
+import typing
 
 from discord.ext import commands
 
@@ -16,9 +17,16 @@ class PokemonCog(commands.Cog):
         aliases = ["pkmn"],
         category = "objects"
     )
-    async def pokemon(self, ctx):
+    async def pokemon(self, ctx, pkmn: typing.Union[str, int] = None):
         """Pokemaaaaaaaaans"""
-        p = random.choice(pokemon)
+        if isinstance(pkmn, str):
+            p = next([m for m in pokemon if m.name.lower() == pkmn.lower()], None)
+        elif isinstance(pkmn, int):
+            p = next([m for m in pokemon if m.natdex == pkmn], None)
+
+        if p is None:
+            p = random.choice(pokemon)
+
         e = p.stats_embed()
         await ctx.send(embed = e)
 
