@@ -31,7 +31,7 @@ class Pokemon:
         w = WV(self.weight * (multiplier ** 3))
         e = Embed()
         e.title = f"#{self.natdex} {self.name}"
-        e.add_field(name = None, value = f"*from Generation {self.roman_generation} ({self.region})**\n\n{self.flavor_text}")
+        e.description = f"*from Generation {self.roman_generation} ({self.region})*\n\n{self.flavor_text}"
         e.add_field(name = "Height", value = f"{h:,.3mu}")
         e.add_field(name = "Weight", value = f"{w:,.3mu}")
         e.add_field(name = "Types", value = f"{', '.join(self.types)}")
