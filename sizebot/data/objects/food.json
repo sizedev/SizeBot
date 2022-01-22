@@ -1,5 +1,19 @@
 [
     {
+        "name": "grain of sugar",
+        "dimension": "d",
+        "diameter": "0.001",
+        "calories": "0.004",
+        "weight": "0.000625",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "sugar"
+        ],
+        "note": "The food with the least calories in the bot."
+    },
+    {
         "name": "sugar cube",
         "dimension": "l",
         "length": "0.002",
@@ -415,23 +429,6 @@
         "note": ":digidu1Powerade:"
     },
     {
-        "name": "medium Dominos™ pizza",
-        "dimension": "d",
-        "diameter": "0.3",
-        "calories": "1680",
-        "weight": "726",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "pizza",
-            "medium pizza",
-            "Dominos pizza",
-            "medium Dominos pizza"
-        ],
-        "note": "eight slices per pizza"
-    },
-    {
         "name": "Pringles™ can",
         "dimension": "h",
         "height": "0.3",
@@ -447,6 +444,23 @@
             "Pringles tube",
             "Pringles can"
         ]
+    },
+    {
+        "name": "medium Dominos™ pizza",
+        "dimension": "d",
+        "diameter": "0.3",
+        "calories": "1680",
+        "weight": "726",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "pizza",
+            "medium pizza",
+            "Dominos pizza",
+            "medium Dominos pizza"
+        ],
+        "note": "eight slices per pizza; the food with the most calories in the bot."
     },
     {
         "name": "Subway Footlong™",
