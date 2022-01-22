@@ -20,8 +20,9 @@ from sizebot.lib.constants import emojis, ids
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import BANNER, EGG, LOGIN
-from sizebot.lib.objs import objects, tags
+from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.roller import evalmath, roll
 from sizebot.lib.units import Rate, Mult, SV, TV, WV
 
@@ -127,6 +128,7 @@ def getEvalGlobals():
         "logger": logger,
         "Rate": Rate, "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
         "Diff": Diff, "ParseableRate": ParseableRate, "LimitedRate": LimitedRate,
+        "DigiObject": DigiObject, "FakePlayer": FakePlayer,
         "objects": objects,
         "tags": tags,
         "utils": utils,

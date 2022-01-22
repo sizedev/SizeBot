@@ -202,8 +202,8 @@ class DigiObject:
         for o in objects:
             if o == lowerName:
                 return o
-        name = removeprefix(name, "random").strip()
-        tagged = [o for o in objects if name in o.tags]
+        lowerName = removeprefix(lowerName, "random").strip()
+        tagged = [o for o in objects if lowerName in o.tags]
         if tagged:
             return random.choice(tagged)
         return None
