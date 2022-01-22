@@ -6,7 +6,8 @@
         "weight": "1.25e+25",
         "tags": [
             "planet"
-        ]
+        ],
+        "note": "Pluto has the planet tag in SIzeBot. It's my bot, and I say it deserves it."
     },
     {
         "name": "moon",
@@ -15,8 +16,7 @@
         "weight": "7.35e+25",
         "aliases": [
             "Luna"
-        ],
-        "note": "Pluto has the planet tag in SIzeBot. It's my bot, and I say it deserves it."
+        ]
     },
     {
         "name": "Mercury",
@@ -75,7 +75,8 @@
             "planet"
         ],
         "aliases": [
-            "your anus"
+            "your anus",
+            "anus"
         ]
     },
     {
@@ -123,6 +124,9 @@
         "diameter": "1e+24",
         "weight": "2.983e+45",
         "tags": [
+            "galaxy"
+        ],
+        "aliases": [
             "galaxy"
         ],
         "note": "The largest object in the bot."

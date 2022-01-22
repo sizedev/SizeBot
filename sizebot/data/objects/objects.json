@@ -1106,7 +1106,7 @@
         "dimension": "h",
         "height": "0.10795",
         "diameter": "0.0889",
-        "weight": "255.146",
+        "weight": "15",
         "aliases": [
             "cup"
         ]
@@ -1160,7 +1160,10 @@
         "length": "0.1156",
         "width": "0.051",
         "depth": "0.0128",
-        "weight": "88.2"
+        "weight": "88.2",
+        "tags": [
+            "phone"
+        ]
     },
     {
         "name": "CD",
@@ -1228,6 +1231,9 @@
         "width": "0.0709",
         "depth": "0.0077",
         "weight": "177",
+        "tags": [
+            "phone"
+        ],
         "aliases": [
             "iPhone",
             "phone",
@@ -1509,6 +1515,16 @@
         ],
         "aliases": [
             "microwave oven"
+        ]
+    },
+    {
+        "name": "frying pan",
+        "dimension": "d",
+        "height": "0.0445",
+        "diameter": "0.267",
+        "weight": "1020",
+        "aliases": [
+            "pan"
         ]
     },
     {
@@ -1811,6 +1827,35 @@
         ]
     },
     {
+        "name": "Steinway Upright Piano - Model 40",
+        "dimension": "h",
+        "height": "1.016",
+        "length": "0.62",
+        "width": "1.5",
+        "weight": "218000",
+        "aliases": [
+            "upright piano",
+            "piano"
+        ]
+    },
+    {
+        "name": "bicycle",
+        "dimension": "h",
+        "height": "1.016",
+        "length": "1.6891",
+        "weight": "11800",
+        "aliases": [
+            "bike"
+        ]
+    },
+    {
+        "name": "Boyfriend",
+        "dimension": "h",
+        "height": "1.0414",
+        "weight": "13973",
+        "note": "from Friday Night Funkin."
+    },
+    {
         "name": "stoplight",
         "dimension": "h",
         "height": "1.0668",
@@ -1821,6 +1866,23 @@
         "aliases": [
             "traffic light",
             "traffic signal"
+        ]
+    },
+    {
+        "name": "Guitar Hero controller",
+        "dimension": "l",
+        "length": "1.143",
+        "width": "0.27305",
+        "depth": "0.06985",
+        "weight": "1642.004",
+        "tags": [
+            "controller"
+        ],
+        "aliases": [
+            "gh controller",
+            "guitar",
+            "guitar hero guitar",
+            "gh guitar"
         ]
     },
     {
@@ -1876,6 +1938,18 @@
         ]
     },
     {
+        "name": "Ariana Grande",
+        "dimension": "h",
+        "height": "1.52",
+        "weight": "47000",
+        "tags": [
+            "people"
+        ],
+        "aliases": [
+            "ariana"
+        ]
+    },
+    {
         "name": "D&D square",
         "dimension": "l",
         "length": "1.524",
@@ -1887,6 +1961,16 @@
             "space",
             "D&D tile",
             "D&D space"
+        ]
+    },
+    {
+        "name": "IKEA Årstid Floor Lamp",
+        "dimension": "h",
+        "height": "1.55",
+        "diameter": "0.36",
+        "weight": "4564.273223",
+        "aliases": [
+            "lamp"
         ]
     },
     {
@@ -1923,6 +2007,15 @@
         "width": "0.6",
         "tags": [
             "minecraft"
+        ]
+    },
+    {
+        "name": "Katy Perry",
+        "dimension": "h",
+        "height": "1.7",
+        "weight": "86182.6",
+        "tags": [
+            "people"
         ]
     },
     {
@@ -2026,6 +2119,17 @@
         "height": "2.03"
     },
     {
+        "name": "sofa",
+        "dimension": "l",
+        "height": "0.89",
+        "length": "2.03",
+        "depth": "0.91",
+        "weight": "127006",
+        "aliases": [
+            "couch"
+        ]
+    },
+    {
         "name": "doorway",
         "dimension": "h",
         "height": "2.032",
@@ -2054,6 +2158,9 @@
         "dimension": "h",
         "height": "2.16",
         "weight": "147000",
+        "tags": [
+            "people"
+        ],
         "aliases": [
             "Shaquille O'Neal"
         ]
@@ -2083,6 +2190,7 @@
         "dimension": "h",
         "height": "2.7",
         "width": "1.4",
+        "weight": "29200000",
         "tags": [
             "minecraft"
         ]
