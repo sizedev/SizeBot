@@ -17,7 +17,7 @@ from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import load_or_fake
-from sizebot.lib.utils import glitch_string, parseMany
+from sizebot.lib.utils import glitch_string, parseMany, prettyTimeDelta
 from sizebot.lib.versioning import release_on
 
 
@@ -308,7 +308,7 @@ class ObjectsCog(commands.Cog):
         if food_per_day >= 1:
             foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1} {food.namePlural}** per day."
         else:
-            foodout = f"A {food.name} would last {userdata.nickname} **{days_per_food:,.1} days.**"
+            foodout = f"A {food.name} would last {userdata.nickname} **{prettyTimeDelta(86400 * days_per_food, roundeventually=True)}**"
 
         cal_per_day_string = f"{cals_needed:,.0} calories" if cals_needed > 1 else f"less than 1 calorie"
 
