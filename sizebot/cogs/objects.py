@@ -306,11 +306,11 @@ class ObjectsCog(commands.Cog):
         food_per_day = 1 / days_per_food
 
         if food_per_day >= 1:
-            foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1} {food.namePlural}** per day."
+            foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1} {food.namePlural}** per day.\n(1 {food.name} is {food.calories} calories.)"
         else:
-            foodout = f"A {food.name} would last {userdata.nickname} **{prettyTimeDelta(86400 * days_per_food, roundeventually=True)}**"
+            foodout = f"A {food.name} ({food.calories} calories) would last {userdata.nickname} **{prettyTimeDelta(86400 * days_per_food, roundeventually=True)}.**"
 
-        cal_per_day_string = f"{cals_needed:,.0} calories" if cals_needed > 1 else f"less than 1 calorie"
+        cal_per_day_string = f"{cals_needed:,.0} calories" if cals_needed > 1 else "less than 1 calorie"
 
         embed = discord.Embed(
             title = f"{userdata.nickname} eating {food.name}",
