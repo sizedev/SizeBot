@@ -252,7 +252,7 @@ class ObjectsCog(commands.Cog):
         height = userdata.height
         objs_smaller = [o for o in objects if o.unitlength <= height][-3:]
         objs_larger = [o for o in objects if o.unitlength > height][:3]
-        names = [o.name for o in objs_smaller] + [userdata.nickname] + [o.name for o in objs_larger]
+        names = [o.name for o in objs_smaller] + ["[" + userdata.nickname + "]"] + [o.name for o in objs_larger]
         heights = [o.unitlength for o in objs_smaller] + [height] + [o.unitlength for o in objs_larger]
         max_name_length = max(len(n) for n in names)
         outstrings = ["```\n"]
