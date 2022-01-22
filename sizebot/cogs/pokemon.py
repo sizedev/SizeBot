@@ -9,6 +9,7 @@ from sizebot.lib import userdb
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.pokemon import pokemon
 from sizebot.lib.units import SV
+from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 
@@ -17,6 +18,7 @@ class PokemonCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @release_on("3.7")
     @commands.command(
         aliases = ["dex"],
         category = "objects"
@@ -36,6 +38,7 @@ class PokemonCog(commands.Cog):
         e = p.stats_embed()
         await ctx.send(embed = e)
 
+    @release_on("3.7")
     @commands.command(
         aliases = ["pokecompare", "pokecomp", "lookatpoke"],
         category = "objects"
