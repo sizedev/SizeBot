@@ -247,7 +247,8 @@ def init():
         o.addToUnits()
 
     # cached values
-    global food, land, tags
+    global objects, food, land, tags
+    objects.sort()
     food = [o for o in objects if "food" in o.tags]
     land = [o for o in objects if "land" in o.tags]
     for o in objects:
