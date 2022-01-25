@@ -104,11 +104,13 @@ class EdgeCog(commands.Cog):
             if userdata.height < guilddata.low_limit:
                 userdata.height = guilddata.low_limit
                 userdb.save(userdata)
+                await m.channel.send(f"{userdata.nickname} hit the lower limit of this guild and has been set to {guilddata.low_limit:,.3mu}.")
 
         if guilddata.high_limit:
             if userdata.height > guilddata.high_limit:
                 userdata.height = guilddata.high_limit
                 userdb.save(userdata)
+                await m.channel.send(f"{userdata.nickname} hit the upper limit of this guild and has been set to {guilddata.high_limit:,.3mu}.")
 
         if userdata.display:
             await nickmanager.nick_update(m.author)
