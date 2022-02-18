@@ -1,6 +1,7 @@
 import importlib.resources as pkg_resources
 import logging
 import random
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.versioning import release_on
 from typing import Union
 
@@ -12,7 +13,7 @@ from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.objs import objects
-from sizebot.lib.units import Rate
+from sizebot.lib.units import SV, Rate
 
 logger = logging.getLogger("sizebot")
 
@@ -197,7 +198,7 @@ class ChangeCog(commands.Cog):
             await ctx.send("You have nothing left to outgrow!")
             return
         obj = objs_larger[0]
-        userdata.height = obj.unitlength * 1.1
+        userdata.height = SV(obj.unitlength * Decimal(1.1))
         userdb.save(userdata)
 
         await ctx.send(f"You outgrew **{obj.name}** and are now **{userdata.height:,.3mu}** tall!")
@@ -213,12 +214,13 @@ class ChangeCog(commands.Cog):
         userid = ctx.author.id
 
         userdata = userdb.load(guildid, userid)
-        objs_smaller = [o for o in objects if o.unitlength < userdata.height].reverse()
+        objs_smaller = [o for o in objects if o.unitlength < userdata.height]
+        objs_smaller.reverse()
         if not objs_smaller:
             await ctx.send("You have nothing left to outshrink!")
             return
         obj = objs_smaller[0]
-        userdata.height = obj.unitlength / 1.1
+        userdata.height = SV(obj.unitlength / Decimal(1.1))
         userdb.save(userdata)
 
         await ctx.send(f"You outshrunk **{obj.name}** and are now **{userdata.height:,.3mu}** tall!")
