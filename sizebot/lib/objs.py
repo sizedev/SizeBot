@@ -245,11 +245,12 @@ def init():
     for filename in pkg_resources.contents(sizebot.data.objects):
         if filename.endswith(".json"):
             loadObjFile(filename)
+
+    objects.sort()
     for o in objects:
         o.addToUnits()
 
     # cached values
-    objects.sort()
     food = [o for o in objects if "food" in o.tags]
     land = [o for o in objects if "land" in o.tags]
     for o in objects:
