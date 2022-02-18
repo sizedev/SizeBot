@@ -314,7 +314,7 @@ class HelpCog(commands.Cog):
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         await post_report("Feature request", ctx.message, message)
         await ctx.send("Feature request sent.")
-        if any(nonoword in message for nonoword in ["weiner", "wiener", "penis", "dick", "boob", "vagina", "pussy", "breast", "cock"]):
+        if any(nonoword in message for nonoword in ["weiner", "wiener", "penis", "dick", "boob", "vagina", "pussy", "breast", "cock", "nsfw"]):
             await ctx.send("<:LEWD:625464094157439010>")
 
     @commands.command(
