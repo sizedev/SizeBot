@@ -182,6 +182,9 @@ class ChangeCog(commands.Cog):
             await ctx.invoke(self.bot.get_command("drinkme"))
 
     @release_on("3.7")
+    @commands.command(
+        category = "change"
+    )
     @commands.guild_only()
     async def outgrow(self, ctx):
         """Outgrows the next object in the object database."""
@@ -200,6 +203,9 @@ class ChangeCog(commands.Cog):
         await ctx.send(f"You outgrew **{obj.name}** and are now **{userdata.height:,.3mu}** tall!")
 
     @release_on("3.7")
+    @commands.command(
+        category = "change"
+    )
     @commands.guild_only()
     async def outshrink(self, ctx):
         """Outshrinks the next object in the object database."""
