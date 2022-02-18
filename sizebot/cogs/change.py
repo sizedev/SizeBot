@@ -11,6 +11,7 @@ from sizebot.lib import changes, proportions, userdb, nickmanager
 from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.errors import ChangeMethodInvalidException
+from sizebot.lib.objs import objects
 from sizebot.lib.units import Rate
 
 logger = logging.getLogger("sizebot")
@@ -166,7 +167,6 @@ class ChangeCog(commands.Cog):
             f"<@{ctx.author.id}> drank a :milk:! *{line}*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
-    @release_on("3.6.2")
     @commands.command(
         category = "change"
     )
@@ -180,6 +180,42 @@ class ChangeCog(commands.Cog):
             await ctx.invoke(self.bot.get_command("eatme"))
         else:
             await ctx.invoke(self.bot.get_command("drinkme"))
+
+    @release_on("3.7")
+    @commands.guild_only()
+    async def outgrow(self, ctx):
+        """Outgrows the next object in the object database."""
+        guildid = ctx.guild.id
+        userid = ctx.author.id
+
+        userdata = userdb.load(guildid, userid)
+        objs_larger = [o for o in objects if o.unitlength > userdata.height]
+        if not objs_larger:
+            await ctx.send("You have nothing left to outgrow!")
+            return
+        obj = objs_larger[0]
+        userdata.height = obj.unitlength * 1.1
+        userdb.save(userdata)
+
+        await ctx.send(f"You outgrew **{obj.name}** and are now **{userdata.height:,.3mu}** tall!")
+
+    @release_on("3.7")
+    @commands.guild_only()
+    async def outshrink(self, ctx):
+        """Outshrinks the next object in the object database."""
+        guildid = ctx.guild.id
+        userid = ctx.author.id
+
+        userdata = userdb.load(guildid, userid)
+        objs_smaller = [o for o in objects if o.unitlength < userdata.height].reverse()
+        if not objs_smaller:
+            await ctx.send("You have nothing left to outshrink!")
+            return
+        obj = objs_smaller[0]
+        userdata.height = obj.unitlength / 1.1
+        userdb.save(userdata)
+
+        await ctx.send(f"You outshrunk **{obj.name}** and are now **{userdata.height:,.3mu}** tall!")
 
     @tasks.loop(seconds=6)
     async def changeTask(self):
