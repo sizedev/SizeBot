@@ -693,8 +693,8 @@ class StatsCog(commands.Cog):
         larger_person, smaller_person = (userdata1, userdata2) if userdata1.height > userdata2.height else (userdata2, userdata1)
         r = SV(larger_person.height / 2)
         G = Decimal(6.673 * (10**-11))
-        f = (G * (larger_person.weight) * (smaller_person.weight)) / (r**2)
-        gs = (Decimal(9.81) * f) / smaller_person.weight
+        f = (G * (larger_person.weight / 1000) * (smaller_person.weight / 1000)) / (r**2)
+        gs = (Decimal(9.81) * f) / (smaller_person.weight / 1000)
 
         await ctx.send(f"Standing on {larger_person.nickname}, {smaller_person.nickname} would experience **{gs:.3}**Gs of gravitational force.")
 
