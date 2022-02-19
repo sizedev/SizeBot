@@ -1,5 +1,4 @@
 import logging
-from unicodedata import category
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.freefall import freefall
