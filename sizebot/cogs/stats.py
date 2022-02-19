@@ -696,7 +696,7 @@ class StatsCog(commands.Cog):
         larger_person.scale = larger_person.scale / smaller_person.scale
         smaller_person.scale = 1
 
-        r = SV(larger_person.height / 2)
+        r = SV(larger_person.height * 4)
         G = Decimal(6.673 * (10**-11))
         f = (G * (larger_person.weight / 1000) * (smaller_person.weight / 1000)) / (r**2)
         gs = (Decimal(9.81) * f) / (smaller_person.weight / 1000)
