@@ -1,4 +1,5 @@
 import logging
+from unicodedata import category
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.freefall import freefall
@@ -664,6 +665,38 @@ class StatsCog(commands.Cog):
         user_pehkui = Decimal(userstats.height / STEVE)
 
         await ctx.send(f"{userdata.nickname}'s Pehkui scale is **{user_pehkui:.6}**.")
+
+    @commands.command(
+        aliases = ["g", "gravity"],
+        usage = "<user> [user]",
+        category = "stats"
+    )
+    async def gravitycompare(self, ctx, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
+                             *, memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None):
+        """
+        Compare two users' gravitation pull.
+        """
+        if memberOrHeight2 is None:
+            memberOrHeight2 = ctx.author
+
+        if memberOrHeight is None:
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
+            return
+
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight).save()
+        if isinstance(memberOrHeight2, SV):
+            telemetry.SizeViewed(memberOrHeight).save()
+
+        userdata1 = load_or_fake(memberOrHeight)
+        userdata2 = load_or_fake(memberOrHeight2)
+        larger_person, smaller_person = userdata1, userdata2 if userdata1.height > userdata2.height else userdata2, userdata1
+        r = SV(larger_person.height / 2)
+        G = 6.673*(10**-11)
+        f = (G * (larger_person.weight / 1000) * (smaller_person.weight / 1000)) / (r**2)
+        gs = (9.81 * f) / smaller_person.weight
+
+        await ctx.send(f"Standing on {larger_person.nickname}, {smaller_person.nickname} would experience {gs}Gs of gravitational force.")
 
 
 def setup(bot):
