@@ -690,7 +690,7 @@ class StatsCog(commands.Cog):
 
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
-        larger_person, smaller_person = userdata1, userdata2 if userdata1.height > userdata2.height else userdata2, userdata1
+        larger_person, smaller_person = (userdata1, userdata2) if userdata1.height > userdata2.height else (userdata2, userdata1)
         r = SV(larger_person.height / 2)
         G = 6.673*(10**-11)
         f = (G * (larger_person.weight / 1000) * (smaller_person.weight / 1000)) / (r**2)
