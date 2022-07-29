@@ -1,5 +1,16 @@
 [
     {
+        "name": "Sphinx",
+        "dimension": "h",
+        "height": "20.1168",
+        "length": "73.152",
+        "width": "18.8976",
+        "weight": "20000000000",
+        "tags": [
+            "building"
+        ]
+    },
+    {
         "name": "Leaning Tower of Pisa",
         "dimension": "h",
         "height": "56.6928",

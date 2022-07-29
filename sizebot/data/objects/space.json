@@ -110,6 +110,24 @@
         ]
     },
     {
+        "name": "Betelguese",
+        "dimension": "d",
+        "diameter": "617022489600",
+        "weight": "2.188e+34",
+        "tags": [
+            "star"
+        ]
+    },
+    {
+        "name": "UY Scuti",
+        "dimension": "d",
+        "diameter": "1188259142000",
+        "weight": "1.989e+34",
+        "tags": [
+            "star"
+        ]
+    },
+    {
         "name": "M87 Black Hole",
         "dimension": "d",
         "diameter": "38000000000000",

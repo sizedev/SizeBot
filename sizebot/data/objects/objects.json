@@ -81,6 +81,20 @@
         ]
     },
     {
+        "name": "dust",
+        "dimension": "l",
+        "length": "0.00001",
+        "weight": "1.1e-10",
+        "aliases": [
+            "dust particle"
+        ]
+    },
+    {
+        "name": "taste bud",
+        "dimension": "d",
+        "diameter": "0.000045"
+    },
+    {
         "name": "fingerprint groove",
         "dimension": "p",
         "width": "0.0002",
@@ -98,15 +112,6 @@
         "aliases": [
             "hair",
             "human hair"
-        ]
-    },
-    {
-        "name": "dust",
-        "dimension": "l",
-        "length": "0.0001",
-        "weight": "1.1e-10",
-        "aliases": [
-            "dust particle"
         ]
     },
     {
@@ -171,6 +176,15 @@
         "diameter": "0.002"
     },
     {
+        "name": "fruit fly",
+        "dimension": "l",
+        "length": "0.003",
+        "weight": "0.001",
+        "tags": [
+            "animal"
+        ]
+    },
+    {
         "name": "3.5mm jack",
         "dimension": "d",
         "diameter": "0.0035",
@@ -187,6 +201,12 @@
         ]
     },
     {
+        "name": "power outlet hole",
+        "dimension": "d",
+        "diameter": "0.004763",
+        "note": "US-style ground pin hole."
+    },
+    {
         "name": "carpet fiber",
         "dimension": "h",
         "height": "0.00635",
@@ -194,6 +214,12 @@
         "aliases": [
             "carpet"
         ]
+    },
+    {
+        "name": "ball bearing",
+        "dimension": "d",
+        "diameter": "0.00635",
+        "weight": "0.8845051"
     },
     {
         "name": "fly",
@@ -655,6 +681,14 @@
         ]
     },
     {
+        "name": "doorstop",
+        "dimension": "h",
+        "height": "0.03175",
+        "length": "0.12065",
+        "width": "0.05715",
+        "weight": "28"
+    },
+    {
         "name": "SD card",
         "dimension": "l",
         "length": "0.032",
@@ -680,7 +714,10 @@
         "dimension": "l",
         "length": "0.03302",
         "width": "0.011938",
-        "weight": "0.5"
+        "weight": "0.5",
+        "aliases": [
+            "paper clip"
+        ]
     },
     {
         "name": "needle",
@@ -811,12 +848,6 @@
         ]
     },
     {
-        "name": "hummingbird",
-        "dimension": "h",
-        "height": "0.05",
-        "weight": "3"
-    },
-    {
         "name": "C battery",
         "dimension": "l",
         "length": "0.05",
@@ -825,6 +856,12 @@
         "tags": [
             "battery"
         ]
+    },
+    {
+        "name": "hummingbird",
+        "dimension": "h",
+        "height": "0.05",
+        "weight": "3"
     },
     {
         "name": "hairpin",
@@ -993,6 +1030,16 @@
         ]
     },
     {
+        "name": "toilet paper roll",
+        "dimension": "l",
+        "length": "0.076",
+        "diameter": "0.05",
+        "aliases": [
+            "toilet paper",
+            "tp"
+        ]
+    },
+    {
         "name": "band-aid",
         "dimension": "l",
         "length": "0.0762",
@@ -1063,6 +1110,13 @@
             "debit card",
             "license"
         ]
+    },
+    {
+        "name": "light bulb",
+        "dimension": "h",
+        "height": "0.086106",
+        "width": "0.048",
+        "weight": "34"
     },
     {
         "name": "playing card",
@@ -1139,16 +1193,6 @@
         ]
     },
     {
-        "name": "photograph",
-        "dimension": "h",
-        "height": "0.1016",
-        "width": "0.1524",
-        "aliases": [
-            "photo",
-            "this photograph"
-        ]
-    },
-    {
         "name": "Joy-Con™",
         "dimension": "l",
         "length": "0.1016",
@@ -1164,6 +1208,16 @@
         ]
     },
     {
+        "name": "photograph",
+        "dimension": "h",
+        "height": "0.1016",
+        "width": "0.1524",
+        "aliases": [
+            "photo",
+            "this photograph"
+        ]
+    },
+    {
         "name": "soap bar",
         "dimension": "l",
         "length": "0.1016",
@@ -1173,6 +1227,13 @@
         "aliases": [
             "soap"
         ]
+    },
+    {
+        "name": "coaster",
+        "dimension": "d",
+        "height": "0.0016",
+        "diameter": "0.1016",
+        "weight": "113"
     },
     {
         "name": "XBox One™ controller",
@@ -1201,15 +1262,6 @@
         ]
     },
     {
-        "name": "lightbulb",
-        "dimension": "h",
-        "height": "0.11",
-        "weight": "34",
-        "aliases": [
-            "bulb"
-        ]
-    },
-    {
         "name": "Nintendo Gamecube™",
         "dimension": "h",
         "height": "0.11",
@@ -1225,6 +1277,15 @@
         ]
     },
     {
+        "name": "lightbulb",
+        "dimension": "h",
+        "height": "0.11",
+        "weight": "34",
+        "aliases": [
+            "bulb"
+        ]
+    },
+    {
         "name": "computer mouse",
         "dimension": "l",
         "height": "0.04",
@@ -1234,6 +1295,20 @@
         "aliases": [
             "mouse"
         ]
+    },
+    {
+        "name": "light switch",
+        "dimension": "h",
+        "height": "0.1143",
+        "width": "0.06985",
+        "depth": "0.0127",
+        "weight": "102"
+    },
+    {
+        "name": "power outlet",
+        "dimension": "h",
+        "height": "0.1143",
+        "width": "0.06985"
     },
     {
         "name": "wallet",
@@ -1333,6 +1408,20 @@
         ]
     },
     {
+        "name": "Nintendo Game Boy™",
+        "dimension": "l",
+        "length": "0.148",
+        "width": "0.09",
+        "depth": "0.032",
+        "weight": "220",
+        "tags": [
+            "console"
+        ],
+        "aliases": [
+            "game boy"
+        ]
+    },
+    {
         "name": "Amazon Echo™",
         "dimension": "h",
         "height": "0.148",
@@ -1345,17 +1434,13 @@
         ]
     },
     {
-        "name": "Nintendo Game Boy™",
+        "name": "ballpoint pen",
         "dimension": "l",
-        "length": "0.148",
-        "width": "0.09",
-        "depth": "0.032",
-        "weight": "220",
-        "tags": [
-            "console"
-        ],
+        "length": "0.149",
+        "diameter": "0.007",
+        "weight": "5.8",
         "aliases": [
-            "game boy"
+            "pen"
         ]
     },
     {
@@ -1412,10 +1497,7 @@
         "dimension": "l",
         "length": "0.1905",
         "width": "0.006",
-        "weight": "42.5243",
-        "aliases": [
-            "pen"
-        ]
+        "weight": "42.5243"
     },
     {
         "name": "average hand",
@@ -1511,14 +1593,6 @@
         ]
     },
     {
-        "name": "book",
-        "dimension": "l",
-        "length": "0.2286",
-        "width": "0.1524",
-        "depth": "0.0381",
-        "weight": "442.2526"
-    },
-    {
         "name": "fork",
         "dimension": "l",
         "length": "0.2286",
@@ -1527,6 +1601,14 @@
         "tags": [
             "utensil"
         ]
+    },
+    {
+        "name": "book",
+        "dimension": "l",
+        "length": "0.2286",
+        "width": "0.1524",
+        "depth": "0.0381",
+        "weight": "442.2526"
     },
     {
         "name": "chopstick",
@@ -1673,12 +1755,6 @@
         ]
     },
     {
-        "name": "plate",
-        "dimension": "d",
-        "diameter": "0.2921",
-        "weight": "816.466"
-    },
-    {
         "name": "Barbie™",
         "dimension": "h",
         "height": "0.2921",
@@ -1690,6 +1766,12 @@
             "doll",
             "Barbie"
         ]
+    },
+    {
+        "name": "plate",
+        "dimension": "d",
+        "diameter": "0.2921",
+        "weight": "816.466"
     },
     {
         "name": "Blue Yeti microphone",
@@ -1967,7 +2049,11 @@
         ],
         "aliases": [
             "sonic",
-            "sanik"
+            "sanik",
+            "soinc",
+            "snoc",
+            "snok",
+            "sanic"
         ]
     },
     {
@@ -2274,15 +2360,6 @@
         ]
     },
     {
-        "name": "doorway",
-        "dimension": "h",
-        "height": "2.032",
-        "width": "0.8128",
-        "aliases": [
-            "door arch"
-        ]
-    },
-    {
         "name": "queen-size bed",
         "dimension": "l",
         "length": "2.032",
@@ -2295,6 +2372,15 @@
             "queen size bed",
             "queen-size mattress",
             "queen size mattress"
+        ]
+    },
+    {
+        "name": "doorway",
+        "dimension": "h",
+        "height": "2.032",
+        "width": "0.8128",
+        "aliases": [
+            "door arch"
         ]
     },
     {
@@ -2619,6 +2705,15 @@
             "office"
         ],
         "note": "Assuming 27500 feet^2 per floor and 50 pounds/square foot."
+    },
+    {
+        "name": "blue whale",
+        "dimension": "l",
+        "length": "24.0792",
+        "weight": "190000000",
+        "tags": [
+            "animal"
+        ]
     },
     {
         "name": "swimming pool",
