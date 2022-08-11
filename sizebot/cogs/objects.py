@@ -238,7 +238,7 @@ class ObjectsCog(commands.Cog):
         usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx, *, who: typing.Union[discord.Member, FakePlayer] = None):
+    async def stackup(self, ctx, *, amount: typing.Optional[int] = None, who: typing.Union[discord.Member, FakePlayer] = None):
         """How do you stack up against objects?
 
         Example:
@@ -248,17 +248,20 @@ class ObjectsCog(commands.Cog):
 
         if who is None:
             who = ctx.author
+        if amount is None:
+            amount = 3
         userdata = userdb.load_or_fake(who)
         height = userdata.height
-        objs_smaller = [o for o in objects if o.unitlength <= height][-3:]
-        objs_larger = [o for o in objects if o.unitlength > height][:3]
+        objs_smaller = [o for o in objects if o.unitlength <= height][-amount:]
+        objs_larger = [o for o in objects if o.unitlength > height][:amount]
         names = [o.name for o in objs_smaller] + ["[" + userdata.nickname + "]"] + [o.name for o in objs_larger]
         heights = [o.unitlength for o in objs_smaller] + [height] + [o.unitlength for o in objs_larger]
         max_name_length = max(len(n) for n in names)
-        outstrings = ["```\n"]
+        outstrings = ["```"]
         for name, height in zip(names, heights):
             outstrings.append(f"{name:<{max_name_length}} | {height:,.3mu}")
-        outstrings.append("```")
+        outstrings.append("```\n")
+        outstrings.reverse()
         embed = discord.Embed(
             title = f"Object Stackup against {userdata.nickname}",
             description = "\n".join(outstrings))
