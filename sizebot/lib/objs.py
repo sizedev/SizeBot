@@ -113,7 +113,7 @@ class DigiObject:
         if self.thickness:
             statsstrings.append(f"**{SV(self.thickness * multiplier):,.3{system}}** thick")
         if self.calories is not None:
-            statsstrings.append(f"has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n")
+            statsstrings.append(f"has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories")
         if self.weight:
             statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
 
