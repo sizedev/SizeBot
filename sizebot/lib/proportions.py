@@ -612,7 +612,7 @@ class PersonStats:
             "climb": f" climbs at **{self.climbperhour:,.1M} per hour** ({self.climbperhour:,.1U} per hour), with {self.climbsteplength:,.1m}/{self.climbsteplength:,.1u} pulls.",
             "crawl": f" crawls at **{self.crawlperhour:,.1M} per hour** ({self.crawlperhour:,.1U} per hour), with {self.crawlsteplength:,.1m}/{self.crawlsteplength:,.1u} strides.",
             "swim": f" swims at **{self.swimperhour:,.1M} per hour** ({self.swimperhour:,.1U} per hour), with {self.swimsteplength:,.1m}/{self.swimsteplength:,.1u} strokes.",
-            "jump": f" can jump **{self.jumpheight:,.3mu} high.",
+            "jump": f" can jump **{self.jumpheight:,.3mu}** high.",
             "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
             "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
             "scale": f" is **{self.formattedscale}** their base height.",
