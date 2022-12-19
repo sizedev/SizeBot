@@ -641,7 +641,7 @@ class StatsCog(commands.Cog):
         await msg.edit(content = "", embed = e)
 
     @commands.command(
-        aliases = ["minecraft"],
+        aliases = ["minecraft", "scopic"],
         usage = "[user]",
         category = "stats"
     )
