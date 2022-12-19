@@ -90,6 +90,15 @@
         ]
     },
     {
+        "name": "aluminum foil thickness",
+        "dimension": "t",
+        "thickness": "0.000016",
+        "aliases": [
+            "aluminum foil",
+            "aluminium foil"
+        ]
+    },
+    {
         "name": "taste bud",
         "dimension": "d",
         "diameter": "0.000045"
@@ -174,6 +183,12 @@
         "name": "pinhead",
         "dimension": "d",
         "diameter": "0.002"
+    },
+    {
+        "name": "goosebump",
+        "dimension": "d",
+        "diameter": "0.002",
+        "depth": "0.0005"
     },
     {
         "name": "fruit fly",
@@ -279,6 +294,12 @@
         "aliases": [
             "light emitting diode"
         ]
+    },
+    {
+        "name": "controller button",
+        "dimension": "d",
+        "diameter": "0.009",
+        "note": "XBox 360 controller face button."
     },
     {
         "name": "lego brick",
