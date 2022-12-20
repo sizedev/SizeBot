@@ -350,7 +350,7 @@ class StatsCog(commands.Cog):
 
         embedtosend = comparison.getStatEmbed(statmap["height"])
         embedtosend.title = f"{userdata1.height:,.3mu} to {userdata2.nickname}"
-        embedtosend.set_footer(f"{userdata1.height:,.3mu} is {comparison.multiplier:,.3}x larger than {userdata2.nickname}.")
+        embedtosend.set_footer(text = f"{userdata1.height:,.3mu} is {comparison.multiplier:,.3}x larger than {userdata2.nickname}.")
 
         await ctx.send(embed = embedtosend)
 
