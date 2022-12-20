@@ -3,7 +3,8 @@
         "name": "proton",
         "dimension": "d",
         "diameter": "1.7e-15",
-        "weight": "1.67262192e-24"
+        "weight": "1.67262192e-24",
+        "note": "The smallest object in the bot."
     },
     {
         "name": "DNA",
@@ -20,6 +21,11 @@
         "length": "7e-9"
     },
     {
+        "name": "smoke particle",
+        "dimension": "d",
+        "diameter": "3e-8"
+    },
+    {
         "name": "green light wavelength",
         "dimension": "l",
         "length": "5.4e-7",
@@ -27,18 +33,6 @@
             "light",
             "light wavelength",
             "green light"
-        ]
-    },
-    {
-        "name": "E. coli",
-        "dimension": "l",
-        "length": "0.000007",
-        "weight": "1e-12",
-        "tags": [
-            "cell"
-        ],
-        "aliases": [
-            "bacteria"
         ]
     },
     {
@@ -55,14 +49,15 @@
         ]
     },
     {
-        "name": "cotton fiber width",
-        "dimension": "w",
-        "width": "0.00001",
+        "name": "E. coli",
+        "dimension": "l",
+        "length": "0.000007",
+        "weight": "1e-12",
+        "tags": [
+            "cell"
+        ],
         "aliases": [
-            "cotton",
-            "cotton fiber",
-            "cotton fibre",
-            "cotton fibre width"
+            "bacteria"
         ]
     },
     {
@@ -75,6 +70,50 @@
         ]
     },
     {
+        "name": "cotton fiber width",
+        "dimension": "w",
+        "width": "0.00001",
+        "aliases": [
+            "cotton",
+            "cotton fiber",
+            "cotton fibre",
+            "cotton fibre width"
+        ]
+    },
+    {
+        "name": "dust",
+        "dimension": "l",
+        "length": "0.00001",
+        "weight": "1.1e-10",
+        "aliases": [
+            "dust particle"
+        ]
+    },
+    {
+        "name": "aluminum foil thickness",
+        "dimension": "t",
+        "thickness": "0.000016",
+        "aliases": [
+            "aluminum foil",
+            "aluminium foil"
+        ]
+    },
+    {
+        "name": "taste bud",
+        "dimension": "d",
+        "diameter": "0.000045"
+    },
+    {
+        "name": "fingerprint groove",
+        "dimension": "p",
+        "width": "0.0002",
+        "depth": "0.00005",
+        "aliases": [
+            "fingerprint",
+            "fingerprint ridge"
+        ]
+    },
+    {
         "name": "hair",
         "dimension": "w",
         "width": "0.00005",
@@ -82,15 +121,6 @@
         "aliases": [
             "hair",
             "human hair"
-        ]
-    },
-    {
-        "name": "dust",
-        "dimension": "l",
-        "length": "0.0001",
-        "weight": "1.1e-10",
-        "aliases": [
-            "dust particle"
         ]
     },
     {
@@ -106,7 +136,8 @@
         "dimension": "h",
         "height": "0.00025367",
         "width": "0.00025367",
-        "symbol": "px"
+        "symbol": "px",
+        "note": "Based on a ~100dpi monitor, or 1080p and 22\" diagonal."
     },
     {
         "name": "font point",
@@ -154,27 +185,41 @@
         "diameter": "0.002"
     },
     {
-        "name": "sugar cube",
-        "dimension": "l",
-        "length": "0.002",
-        "width": "0.002",
-        "depth": "0.002",
-        "weight": "2.3"
+        "name": "goosebump",
+        "dimension": "d",
+        "diameter": "0.002",
+        "depth": "0.0005"
     },
     {
-        "name": "grain of rice",
+        "name": "fruit fly",
         "dimension": "l",
-        "length": "0.006",
-        "width": "0.002",
-        "weight": "0.029",
+        "length": "0.003",
+        "weight": "0.001",
         "tags": [
-            "food"
+            "animal"
+        ]
+    },
+    {
+        "name": "3.5mm jack",
+        "dimension": "d",
+        "diameter": "0.0035",
+        "tags": [
+            "port"
         ],
         "aliases": [
-            "rice grain",
-            "grain",
-            "rice"
+            "headphone jack",
+            "headphone port",
+            "aux jack",
+            "aux port",
+            "aux",
+            "3.5mm port"
         ]
+    },
+    {
+        "name": "power outlet hole",
+        "dimension": "d",
+        "diameter": "0.004763",
+        "note": "US-style ground pin hole."
     },
     {
         "name": "carpet fiber",
@@ -186,6 +231,12 @@
         ]
     },
     {
+        "name": "ball bearing",
+        "dimension": "d",
+        "diameter": "0.00635",
+        "weight": "0.8845051"
+    },
+    {
         "name": "fly",
         "dimension": "l",
         "length": "0.0065",
@@ -195,25 +246,43 @@
         ]
     },
     {
-        "name": "sunflower seed",
-        "dimension": "l",
-        "length": "0.0071",
-        "width": "0.0025",
-        "weight": "0.0909",
+        "name": "1 caret diamond",
+        "dimension": "d",
+        "diameter": "0.0065",
+        "weight": "0.2",
+        "aliases": [
+            "diamond"
+        ],
+        "note": "In general, a 1 carat diamond costs between $1,800 and $12,000 USD."
+    },
+    {
+        "name": "microUSB port",
+        "dimension": "w",
+        "length": "0.0018",
+        "width": "0.00685",
         "tags": [
-            "food"
+            "port"
         ],
         "aliases": [
-            "seed"
+            "microUSB",
+            "micro USB"
         ]
     },
     {
-        "name": "pea",
-        "dimension": "d",
-        "diameter": "0.008",
-        "weight": "0.25",
+        "name": "USB Type C port",
+        "dimension": "w",
+        "length": "0.0024",
+        "width": "0.00825",
         "tags": [
-            "food"
+            "port"
+        ],
+        "aliases": [
+            "USBC",
+            "USB-C",
+            "USB Type C",
+            "USB Type-C",
+            "USBC port",
+            "USB-C port"
         ]
     },
     {
@@ -227,6 +296,12 @@
         ]
     },
     {
+        "name": "controller button",
+        "dimension": "d",
+        "diameter": "0.009",
+        "note": "XBox 360 controller face button."
+    },
+    {
         "name": "lego brick",
         "dimension": "h",
         "height": "0.0096",
@@ -238,7 +313,8 @@
         ],
         "aliases": [
             "lego"
-        ]
+        ],
+        "note": "a 2x4 brick."
     },
     {
         "name": "1/4 20 nut",
@@ -267,6 +343,12 @@
         "weight": "0.0323995"
     },
     {
+        "name": "coffee bean",
+        "dimension": "l",
+        "length": "0.01",
+        "weight": "0.1325"
+    },
+    {
         "name": "shirt button",
         "dimension": "d",
         "diameter": "0.01016",
@@ -291,12 +373,15 @@
         ]
     },
     {
-        "name": "blueberry",
-        "dimension": "d",
-        "diameter": "0.01373",
-        "weight": "0.5",
+        "name": "USB port",
+        "dimension": "w",
+        "length": "0.0045",
+        "width": "0.0125",
         "tags": [
-            "food"
+            "port"
+        ],
+        "aliases": [
+            "USB"
         ]
     },
     {
@@ -323,19 +408,6 @@
         ]
     },
     {
-        "name": "fruit loop",
-        "dimension": "d",
-        "diameter": "0.015",
-        "thickness": "0.0051",
-        "weight": "0.24",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "cheerio"
-        ]
-    },
-    {
         "name": "keyboard key",
         "dimension": "l",
         "length": "0.015",
@@ -352,6 +424,17 @@
             "microsd",
             "micro sd",
             "micro sd card"
+        ]
+    },
+    {
+        "name": "Monopoly hotel",
+        "dimension": "h",
+        "height": "0.015875",
+        "width": "0.01905",
+        "depth": "0.0127",
+        "weight": "0.0218",
+        "tags": [
+            "toy"
         ]
     },
     {
@@ -534,15 +617,14 @@
         ]
     },
     {
-        "name": "piece of popcorn",
-        "dimension": "h",
-        "height": "0.025",
-        "weight": "0.19",
-        "tags": [
-            "food"
-        ],
+        "name": "postage stamp",
+        "dimension": "l",
+        "length": "0.025",
+        "width": "0.022",
+        "thickness": "0.0000762",
+        "weight": "1",
         "aliases": [
-            "popcorn"
+            "stamp"
         ]
     },
     {
@@ -620,6 +702,14 @@
         ]
     },
     {
+        "name": "doorstop",
+        "dimension": "h",
+        "height": "0.03175",
+        "length": "0.12065",
+        "width": "0.05715",
+        "weight": "28"
+    },
+    {
         "name": "SD card",
         "dimension": "l",
         "length": "0.032",
@@ -645,7 +735,10 @@
         "dimension": "l",
         "length": "0.03302",
         "width": "0.011938",
-        "weight": "0.5"
+        "weight": "0.5",
+        "aliases": [
+            "paper clip"
+        ]
     },
     {
         "name": "needle",
@@ -672,16 +765,6 @@
         "weight": "10"
     },
     {
-        "name": "AirPod™",
-        "dimension": "l",
-        "length": "0.04",
-        "weight": "4",
-        "aliases": [
-            "earbud",
-            "airpod"
-        ]
-    },
-    {
         "name": "lego minifig",
         "dimension": "h",
         "height": "0.04",
@@ -699,17 +782,13 @@
         ]
     },
     {
-        "name": "Reese's Peanut Butter Cup",
-        "dimension": "d",
-        "diameter": "0.04",
-        "weight": "21.8",
-        "tags": [
-            "food"
-        ],
+        "name": "AirPod™",
+        "dimension": "l",
+        "length": "0.04",
+        "weight": "4",
         "aliases": [
-            "reeses",
-            "reeses cup",
-            "peanut butter cup"
+            "earbud",
+            "airpod"
         ]
     },
     {
@@ -722,30 +801,16 @@
         ]
     },
     {
-        "name": "Oreo cookie",
-        "dimension": "d",
-        "diameter": "0.04445",
-        "thickness": "0.009",
-        "weight": "11.3",
+        "name": "AAA battery",
+        "dimension": "l",
+        "length": "0.0445",
+        "diameter": "0.0105",
+        "weight": "12",
         "tags": [
-            "food"
+            "battery"
         ],
         "aliases": [
-            "Oreo",
-            "cookie"
-        ]
-    },
-    {
-        "name": "cupcake",
-        "dimension": "h",
-        "height": "0.045",
-        "diameter": "0.2275",
-        "weight": "80",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "muffin"
+            "AAA"
         ]
     },
     {
@@ -756,6 +821,30 @@
         "aliases": [
             "house key",
             "key"
+        ]
+    },
+    {
+        "name": "pawn",
+        "dimension": "h",
+        "height": "0.0460375",
+        "diameter": "0.03175",
+        "weight": "34.0194",
+        "aliases": [
+            "chess piece"
+        ]
+    },
+    {
+        "name": "9V battery",
+        "dimension": "l",
+        "length": "0.0485",
+        "width": "0.0265",
+        "depth": "0.0175",
+        "weight": "33.9",
+        "tags": [
+            "battery"
+        ],
+        "aliases": [
+            "9V"
         ]
     },
     {
@@ -770,27 +859,30 @@
         "name": "AA battery",
         "dimension": "h",
         "height": "0.049784",
+        "diameter": "0.0145",
         "weight": "31",
+        "tags": [
+            "battery"
+        ],
         "aliases": [
-            "battery",
             "AA"
         ]
     },
     {
-        "name": "chicken nugget",
+        "name": "C battery",
         "dimension": "l",
         "length": "0.05",
-        "width": "0.03",
-        "depth": "0.01",
-        "weight": "16",
+        "diameter": "0.0262",
+        "weight": "65",
         "tags": [
-            "food"
-        ],
-        "aliases": [
-            "chicken McNugget",
-            "mcnugget",
-            "nugget"
+            "battery"
         ]
+    },
+    {
+        "name": "hummingbird",
+        "dimension": "h",
+        "height": "0.05",
+        "weight": "3"
     },
     {
         "name": "hairpin",
@@ -809,26 +901,12 @@
         "weight": "53"
     },
     {
-        "name": "pepperoni",
-        "dimension": "d",
-        "diameter": "0.053",
-        "thickness": "0.003175",
-        "weight": "12",
-        "tags": [
-            "food"
-        ]
-    },
-    {
-        "name": "egg",
-        "dimension": "h",
-        "height": "0.05312",
-        "weight": "48.1942",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "eggu"
-        ]
+        "name": "matchbox",
+        "dimension": "l",
+        "height": "0.0127",
+        "length": "0.053975",
+        "width": "0.0365125",
+        "weight": "10"
     },
     {
         "name": "golf tee",
@@ -871,6 +949,16 @@
         "weight": "77"
     },
     {
+        "name": "match",
+        "dimension": "l",
+        "length": "0.0572",
+        "diameter": "0.0025",
+        "weight": "0.1",
+        "aliases": [
+            "matchstick"
+        ]
+    },
+    {
         "name": "Zippo lighter",
         "dimension": "h",
         "height": "0.060325",
@@ -878,6 +966,35 @@
         "aliases": [
             "lighter"
         ]
+    },
+    {
+        "name": "pill bottle",
+        "dimension": "h",
+        "height": "0.06096",
+        "diameter": "0.0254",
+        "weight": "56.699"
+    },
+    {
+        "name": "D battery",
+        "dimension": "l",
+        "length": "0.0615",
+        "diameter": "0.0342",
+        "weight": "135",
+        "tags": [
+            "battery"
+        ]
+    },
+    {
+        "name": "Minecraft pixel",
+        "dimension": "l",
+        "length": "0.0625",
+        "width": "0.0625",
+        "depth": "0.0625",
+        "symbol": "mcpx",
+        "tags": [
+            "minecraft"
+        ],
+        "note": "Assuming a 16x texture pack, which is defautl."
     },
     {
         "name": "toothpick",
@@ -903,15 +1020,6 @@
         ]
     },
     {
-        "name": "orange",
-        "dimension": "d",
-        "diameter": "0.0725",
-        "weight": "88",
-        "tags": [
-            "food"
-        ]
-    },
-    {
         "name": "baseball",
         "dimension": "d",
         "diameter": "0.0745",
@@ -921,12 +1029,14 @@
         ]
     },
     {
-        "name": "apple",
+        "name": "yeast packet",
         "dimension": "h",
-        "height": "0.075",
-        "weight": "85",
-        "tags": [
-            "food"
+        "height": "0.076",
+        "length": "0.0047",
+        "width": "0.063",
+        "weight": "6",
+        "aliases": [
+            "yeast"
         ]
     },
     {
@@ -941,14 +1051,13 @@
         ]
     },
     {
-        "name": "yeast packet",
-        "dimension": "h",
-        "height": "0.076",
-        "length": "0.0047",
-        "width": "0.063",
-        "weight": "6",
+        "name": "toilet paper roll",
+        "dimension": "l",
+        "length": "0.076",
+        "diameter": "0.05",
         "aliases": [
-            "yeast"
+            "toilet paper",
+            "tp"
         ]
     },
     {
@@ -972,6 +1081,17 @@
             "sticky note",
             "post-it",
             "note"
+        ]
+    },
+    {
+        "name": "Polaroid picture",
+        "dimension": "l",
+        "length": "0.079375",
+        "width": "0.0777875",
+        "aliases": [
+            "Polaroid",
+            "picture",
+            "film"
         ]
     },
     {
@@ -1013,6 +1133,13 @@
         ]
     },
     {
+        "name": "light bulb",
+        "dimension": "h",
+        "height": "0.086106",
+        "width": "0.048",
+        "weight": "34"
+    },
+    {
         "name": "playing card",
         "dimension": "l",
         "length": "0.088",
@@ -1036,17 +1163,6 @@
         "aliases": [
             "NES",
             "nintendo entertainment system"
-        ]
-    },
-    {
-        "name": "piece of cheese",
-        "dimension": "l",
-        "length": "0.0899",
-        "width": "0.0899",
-        "thickness": "0.003",
-        "weight": "17",
-        "aliases": [
-            "cheese"
         ]
     },
     {
@@ -1105,7 +1221,7 @@
         "depth": "0.014",
         "weight": "50.603899",
         "tags": [
-            "console"
+            "controller"
         ],
         "aliases": [
             "joycon",
@@ -1123,12 +1239,33 @@
         ]
     },
     {
+        "name": "soap bar",
+        "dimension": "l",
+        "length": "0.1016",
+        "width": "0.06985",
+        "depth": "0.034925",
+        "weight": "250",
+        "aliases": [
+            "soap"
+        ]
+    },
+    {
+        "name": "coaster",
+        "dimension": "d",
+        "height": "0.0016",
+        "diameter": "0.1016",
+        "weight": "113"
+    },
+    {
         "name": "XBox One™ controller",
         "dimension": "h",
         "height": "0.1019",
         "width": "0.1529",
         "depth": "0.061",
         "weight": "280",
+        "tags": [
+            "controller"
+        ],
         "aliases": [
             "xbox controller",
             "controller",
@@ -1136,49 +1273,13 @@
         ]
     },
     {
-        "name": "Kit-Kat",
-        "dimension": "l",
-        "length": "0.10541",
-        "weight": "42.5",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "kitkat"
-        ]
-    },
-    {
-        "name": "juice box",
-        "dimension": "h",
-        "height": "0.1056386",
-        "width": "0.06",
-        "depth": "0.04",
-        "weight": "170.097",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "Hi-C",
-            "juice"
-        ]
-    },
-    {
         "name": "Solo cup",
         "dimension": "h",
         "height": "0.10795",
         "diameter": "0.0889",
-        "weight": "255.146",
+        "weight": "15",
         "aliases": [
             "cup"
-        ]
-    },
-    {
-        "name": "lightbulb",
-        "dimension": "h",
-        "height": "0.11",
-        "weight": "34",
-        "aliases": [
-            "bulb"
         ]
     },
     {
@@ -1197,16 +1298,12 @@
         ]
     },
     {
-        "name": "potato",
+        "name": "lightbulb",
         "dimension": "h",
         "height": "0.11",
-        "diameter": "0.0953",
-        "weight": "320",
-        "tags": [
-            "food"
-        ],
+        "weight": "34",
         "aliases": [
-            "spud"
+            "bulb"
         ]
     },
     {
@@ -1221,18 +1318,18 @@
         ]
     },
     {
-        "name": "Pop-Tart",
-        "dimension": "l",
-        "length": "0.1143",
-        "width": "0.0762",
-        "weight": "47.9815679",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "poptart",
-            "nyan cat"
-        ]
+        "name": "light switch",
+        "dimension": "h",
+        "height": "0.1143",
+        "width": "0.06985",
+        "depth": "0.0127",
+        "weight": "102"
+    },
+    {
+        "name": "power outlet",
+        "dimension": "h",
+        "height": "0.1143",
+        "width": "0.06985"
     },
     {
         "name": "wallet",
@@ -1241,6 +1338,17 @@
         "width": "0.092",
         "thickness": "0.03",
         "weight": "82.2136"
+    },
+    {
+        "name": "Nokia 3310",
+        "dimension": "l",
+        "length": "0.1156",
+        "width": "0.051",
+        "depth": "0.0128",
+        "weight": "88.2",
+        "tags": [
+            "phone"
+        ]
     },
     {
         "name": "CD",
@@ -1253,18 +1361,15 @@
         ]
     },
     {
-        "name": "soda can",
-        "dimension": "h",
-        "height": "0.122",
-        "diameter": "0.058",
-        "weight": "355",
-        "tags": [
-            "food"
-        ],
+        "name": "Apple iPod™ 5G",
+        "dimension": "l",
+        "length": "0.122",
+        "width": "0.058",
+        "depth": "0.005",
+        "weight": "87.9",
         "aliases": [
-            "pop can",
-            "can",
-            "can of soda"
+            "iPod",
+            "mp3 player"
         ]
     },
     {
@@ -1276,17 +1381,6 @@
         "aliases": [
             "5 pound note",
             "£5"
-        ]
-    },
-    {
-        "name": "taco",
-        "dimension": "l",
-        "height": "0.0635",
-        "length": "0.127",
-        "depth": "0.047625",
-        "weight": "99.2233",
-        "tags": [
-            "food"
         ]
     },
     {
@@ -1322,6 +1416,9 @@
         "width": "0.0709",
         "depth": "0.0077",
         "weight": "177",
+        "tags": [
+            "phone"
+        ],
         "aliases": [
             "iPhone",
             "phone",
@@ -1329,6 +1426,20 @@
             "iPhone XS",
             "Apple iPhone",
             "Apple iPhone XS"
+        ]
+    },
+    {
+        "name": "Nintendo Game Boy™",
+        "dimension": "l",
+        "length": "0.148",
+        "width": "0.09",
+        "depth": "0.032",
+        "weight": "220",
+        "tags": [
+            "console"
+        ],
+        "aliases": [
+            "game boy"
         ]
     },
     {
@@ -1344,14 +1455,13 @@
         ]
     },
     {
-        "name": "Nintendo Game Boy™",
+        "name": "ballpoint pen",
         "dimension": "l",
-        "length": "0.148",
-        "width": "0.09",
-        "depth": "0.032",
-        "weight": "220",
+        "length": "0.149",
+        "diameter": "0.007",
+        "weight": "5.8",
         "aliases": [
-            "game boy"
+            "pen"
         ]
     },
     {
@@ -1363,6 +1473,12 @@
         "aliases": [
             "flower"
         ]
+    },
+    {
+        "name": "dart",
+        "dimension": "l",
+        "length": "0.1524",
+        "weight": "18"
     },
     {
         "name": "toothbrush",
@@ -1390,15 +1506,11 @@
         ]
     },
     {
-        "name": "banana",
-        "dimension": "l",
-        "length": "0.1905",
-        "weight": "120",
-        "tags": [
-            "food"
-        ],
+        "name": "stair height",
+        "dimension": "h",
+        "height": "0.1905",
         "aliases": [
-            "rotat e"
+            "stair"
         ]
     },
     {
@@ -1406,18 +1518,7 @@
         "dimension": "l",
         "length": "0.1905",
         "width": "0.006",
-        "weight": "42.5243",
-        "aliases": [
-            "pen"
-        ]
-    },
-    {
-        "name": "stair height",
-        "dimension": "h",
-        "height": "0.1905",
-        "aliases": [
-            "stair"
-        ]
+        "weight": "42.5243"
     },
     {
         "name": "average hand",
@@ -1427,15 +1528,6 @@
         "aliases": [
             "hand",
             "glove"
-        ]
-    },
-    {
-        "name": "avocado",
-        "dimension": "l",
-        "length": "0.2",
-        "weight": "500",
-        "tags": [
-            "food"
         ]
     },
     {
@@ -1449,7 +1541,8 @@
             "yeti rambler",
             "tumbler",
             "thermos"
-        ]
+        ],
+        "note": "Yes, it's funny this name is so specific."
     },
     {
         "name": "remote",
@@ -1462,20 +1555,17 @@
         ]
     },
     {
-        "name": "Powerade",
+        "name": "napkin",
+        "dimension": "l",
+        "length": "0.2032",
+        "width": "0.2032"
+    },
+    {
+        "name": "stepstool",
         "dimension": "h",
-        "height": "0.21",
-        "diameter": "0.085",
-        "weight": "793.787",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "powerade bottle",
-            "gatorade",
-            "gatorade bottle",
-            "sports drink"
-        ]
+        "height": "0.20955",
+        "length": "0.4064",
+        "width": "0.23495"
     },
     {
         "name": "bowling ball",
@@ -1524,14 +1614,6 @@
         ]
     },
     {
-        "name": "book",
-        "dimension": "l",
-        "length": "0.2286",
-        "width": "0.1524",
-        "depth": "0.0381",
-        "weight": "442.2526"
-    },
-    {
         "name": "fork",
         "dimension": "l",
         "length": "0.2286",
@@ -1540,6 +1622,14 @@
         "tags": [
             "utensil"
         ]
+    },
+    {
+        "name": "book",
+        "dimension": "l",
+        "length": "0.2286",
+        "width": "0.1524",
+        "depth": "0.0381",
+        "weight": "442.2526"
     },
     {
         "name": "chopstick",
@@ -1633,6 +1723,16 @@
         ]
     },
     {
+        "name": "frying pan",
+        "dimension": "d",
+        "height": "0.0445",
+        "diameter": "0.267",
+        "weight": "1020",
+        "aliases": [
+            "pan"
+        ]
+    },
+    {
         "name": "desert eagle",
         "dimension": "l",
         "height": "0.15875",
@@ -1695,41 +1795,16 @@
         "weight": "816.466"
     },
     {
-        "name": "medium Dominos™ pizza",
-        "dimension": "d",
-        "diameter": "0.3",
-        "weight": "726",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "pizza",
-            "medium pizza",
-            "Dominos pizza",
-            "medium Dominos pizza"
-        ]
-    },
-    {
-        "name": "Pringles™ can",
+        "name": "Blue Yeti microphone",
         "dimension": "h",
-        "height": "0.3",
-        "diameter": "0.08",
-        "weight": "149",
-        "tags": [
-            "food"
-        ],
+        "height": "0.295",
+        "width": "0.12",
+        "depth": "0.125",
+        "weight": "1000",
         "aliases": [
-            "chip can",
-            "chip tube",
-            "Pringles tube",
-            "Pringles can"
+            "yeti",
+            "microphone"
         ]
-    },
-    {
-        "name": "sock",
-        "dimension": "l",
-        "length": "0.3",
-        "weight": "45"
     },
     {
         "name": "vinyl record",
@@ -1741,18 +1816,10 @@
         ]
     },
     {
-        "name": "Subway Footlong™",
+        "name": "sock",
         "dimension": "l",
-        "length": "0.3048",
-        "weight": "907.185",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "footlong",
-            "subway footlong",
-            "sub"
-        ]
+        "length": "0.3",
+        "weight": "45"
     },
     {
         "name": "XBox Series X™",
@@ -1770,6 +1837,13 @@
         ]
     },
     {
+        "name": "dollhouse",
+        "dimension": "h",
+        "height": "0.3048",
+        "length": "0.983",
+        "width": "0.983"
+    },
+    {
         "name": "wine bottle",
         "dimension": "h",
         "height": "0.306909",
@@ -1782,6 +1856,24 @@
         "aliases": [
             "wine"
         ]
+    },
+    {
+        "name": "Roomba",
+        "dimension": "d",
+        "height": "0.09",
+        "diameter": "0.345",
+        "weight": "3946.25",
+        "aliases": [
+            "robot vaccum"
+        ]
+    },
+    {
+        "name": "shoe box",
+        "dimension": "l",
+        "height": "0.127",
+        "length": "0.3556",
+        "width": "0.254",
+        "weight": "250"
     },
     {
         "name": "bowling pin",
@@ -1823,6 +1915,28 @@
         ]
     },
     {
+        "name": "backpack",
+        "dimension": "h",
+        "height": "0.43",
+        "width": "0.34",
+        "depth": "0.1",
+        "weight": "280.9438"
+    },
+    {
+        "name": "IKEA Lack Coffee Table",
+        "dimension": "h",
+        "height": "0.45",
+        "length": "0.78",
+        "width": "1.18",
+        "weight": "17463.31",
+        "tags": [
+            "table"
+        ],
+        "aliases": [
+            "coffee table"
+        ]
+    },
+    {
         "name": "beach ball",
         "dimension": "d",
         "diameter": "0.508",
@@ -1841,6 +1955,17 @@
         "aliases": [
             "storage cube",
             "companion cube"
+        ]
+    },
+    {
+        "name": "IKEA Ingatorp dining room table",
+        "dimension": "h",
+        "height": "0.63",
+        "length": "0.87",
+        "width": "1.55",
+        "weight": "49101.374",
+        "tags": [
+            "table"
         ]
     },
     {
@@ -1945,8 +2070,41 @@
         ],
         "aliases": [
             "sonic",
-            "sanik"
+            "sanik",
+            "soinc",
+            "snoc",
+            "snok",
+            "sanic"
         ]
+    },
+    {
+        "name": "Steinway Upright Piano - Model 40",
+        "dimension": "h",
+        "height": "1.016",
+        "length": "0.62",
+        "width": "1.5",
+        "weight": "218000",
+        "aliases": [
+            "upright piano",
+            "piano"
+        ]
+    },
+    {
+        "name": "bicycle",
+        "dimension": "h",
+        "height": "1.016",
+        "length": "1.6891",
+        "weight": "11800",
+        "aliases": [
+            "bike"
+        ]
+    },
+    {
+        "name": "Boyfriend",
+        "dimension": "h",
+        "height": "1.0414",
+        "weight": "13973",
+        "note": "from Friday Night Funkin."
     },
     {
         "name": "stoplight",
@@ -1959,6 +2117,23 @@
         "aliases": [
             "traffic light",
             "traffic signal"
+        ]
+    },
+    {
+        "name": "Guitar Hero controller",
+        "dimension": "l",
+        "length": "1.143",
+        "width": "0.27305",
+        "depth": "0.06985",
+        "weight": "1642.004",
+        "tags": [
+            "controller"
+        ],
+        "aliases": [
+            "gh controller",
+            "guitar",
+            "guitar hero guitar",
+            "gh guitar"
         ]
     },
     {
@@ -2009,7 +2184,20 @@
         "dimension": "h",
         "height": "1.49",
         "tags": [
-            "doki"
+            "doki",
+            "character"
+        ]
+    },
+    {
+        "name": "Ariana Grande",
+        "dimension": "h",
+        "height": "1.52",
+        "weight": "47000",
+        "tags": [
+            "people"
+        ],
+        "aliases": [
+            "ariana"
         ]
     },
     {
@@ -2027,11 +2215,22 @@
         ]
     },
     {
+        "name": "IKEA Årstid Floor Lamp",
+        "dimension": "h",
+        "height": "1.55",
+        "diameter": "0.36",
+        "weight": "4564.273223",
+        "aliases": [
+            "lamp"
+        ]
+    },
+    {
         "name": "Sayori",
         "dimension": "h",
         "height": "1.57",
         "tags": [
-            "doki"
+            "doki",
+            "character"
         ]
     },
     {
@@ -2039,7 +2238,8 @@
         "dimension": "h",
         "height": "1.6",
         "tags": [
-            "doki"
+            "doki",
+            "character"
         ]
     },
     {
@@ -2047,7 +2247,8 @@
         "dimension": "h",
         "height": "1.65",
         "tags": [
-            "doki"
+            "doki",
+            "character"
         ]
     },
     {
@@ -2057,6 +2258,15 @@
         "width": "0.6",
         "tags": [
             "minecraft"
+        ]
+    },
+    {
+        "name": "Katy Perry",
+        "dimension": "h",
+        "height": "1.7",
+        "weight": "86182.6",
+        "tags": [
+            "people"
         ]
     },
     {
@@ -2076,6 +2286,7 @@
         "dimension": "h",
         "height": "1.8",
         "weight": "72151",
+        "symbol": "mc",
         "tags": [
             "character",
             "minecraft"
@@ -2143,8 +2354,7 @@
         "height": "2",
         "weight": "350000",
         "tags": [
-            "warhammer",
-            "40k"
+            "character"
         ],
         "aliases": [
             "Adeptus Astartes",
@@ -2160,12 +2370,14 @@
         "height": "2.03"
     },
     {
-        "name": "doorway",
-        "dimension": "h",
-        "height": "2.032",
-        "width": "0.8128",
+        "name": "sofa",
+        "dimension": "l",
+        "height": "0.89",
+        "length": "2.03",
+        "depth": "0.91",
+        "weight": "127006",
         "aliases": [
-            "door arch"
+            "couch"
         ]
     },
     {
@@ -2184,10 +2396,22 @@
         ]
     },
     {
+        "name": "doorway",
+        "dimension": "h",
+        "height": "2.032",
+        "width": "0.8128",
+        "aliases": [
+            "door arch"
+        ]
+    },
+    {
         "name": "Shaq",
         "dimension": "h",
         "height": "2.16",
         "weight": "147000",
+        "tags": [
+            "people"
+        ],
         "aliases": [
             "Shaquille O'Neal"
         ]
@@ -2217,6 +2441,7 @@
         "dimension": "h",
         "height": "2.7",
         "width": "1.4",
+        "weight": "29200000",
         "tags": [
             "minecraft"
         ]
@@ -2252,6 +2477,12 @@
         ]
     },
     {
+        "name": "trampoline",
+        "dimension": "d",
+        "diameter": "3.23",
+        "weight": "90718.5"
+    },
+    {
         "name": "wither",
         "dimension": "h",
         "height": "3.5",
@@ -2267,6 +2498,15 @@
         "weight": "326587"
     },
     {
+        "name": "house",
+        "dimension": "h",
+        "height": "3.6576",
+        "length": "11.8",
+        "width": "11.8",
+        "weight": "185972872",
+        "note": "single story average house, ~1500sqft"
+    },
+    {
         "name": "ghast",
         "dimension": "h",
         "height": "4",
@@ -2279,6 +2519,7 @@
         "name": "story",
         "dimension": "h",
         "height": "4.3",
+        "symbol": "f",
         "aliases": [
             "floor"
         ]
@@ -2325,11 +2566,26 @@
         ]
     },
     {
+        "name": "great white shark",
+        "dimension": "l",
+        "length": "4.75",
+        "weight": "907184.7",
+        "tags": [
+            "animal"
+        ],
+        "aliases": [
+            "shark"
+        ]
+    },
+    {
         "name": "nether portal",
         "dimension": "h",
         "height": "5",
         "width": "4",
-        "depth": "1"
+        "depth": "1",
+        "tags": [
+            "minecraft"
+        ]
     },
     {
         "name": "2-lane road width",
@@ -2360,6 +2616,21 @@
         ]
     },
     {
+        "name": "Class A RV",
+        "dimension": "l",
+        "height": "3.048",
+        "length": "10.0584",
+        "width": "2.7432",
+        "weight": "9752236",
+        "tags": [
+            "vehicle"
+        ],
+        "aliases": [
+            "camper",
+            "RV"
+        ]
+    },
+    {
         "name": "phone pole",
         "dimension": "h",
         "height": "12",
@@ -2387,6 +2658,20 @@
         ],
         "aliases": [
             "whale"
+        ]
+    },
+    {
+        "name": "Minecraft chunk",
+        "dimension": "l",
+        "length": "16",
+        "width": "16",
+        "depth": "16",
+        "symbol": "mcc",
+        "tags": [
+            "minecraft"
+        ],
+        "aliases": [
+            "chunk"
         ]
     },
     {
@@ -2439,6 +2724,16 @@
         "aliases": [
             "office building",
             "office"
+        ],
+        "note": "Assuming 27500 feet^2 per floor and 50 pounds/square foot."
+    },
+    {
+        "name": "blue whale",
+        "dimension": "l",
+        "length": "24.0792",
+        "weight": "190000000",
+        "tags": [
+            "animal"
         ]
     },
     {
@@ -2450,19 +2745,6 @@
         "weight": "2499999748",
         "aliases": [
             "pool"
-        ]
-    },
-    {
-        "name": "Leaning Tower of Pisa",
-        "dimension": "h",
-        "height": "56.6928",
-        "weight": "13154200000",
-        "tags": [
-            "building"
-        ],
-        "aliases": [
-            "tower of Pisa",
-            "leaning tower"
         ]
     },
     {
@@ -2512,38 +2794,19 @@
     {
         "name": "cell tower",
         "dimension": "h",
-        "height": "91.44"
-    },
-    {
-        "name": "Statue of Liberty",
-        "dimension": "h",
-        "height": "93",
-        "weight": "204116566",
+        "height": "91.44",
         "tags": [
             "building"
-        ],
-        "aliases": [
-            "lady liberty",
-            "lady liberties",
-            "statue of liberties"
-        ]
-    },
-    {
-        "name": "Big Ben",
-        "dimension": "h",
-        "height": "96.012",
-        "tags": [
-            "building"
-        ],
-        "aliases": [
-            "Elizabeth Tower"
         ]
     },
     {
         "name": "ferris wheel",
         "dimension": "h",
         "height": "100",
-        "weight": "7257480"
+        "weight": "7257480",
+        "tags": [
+            "building"
+        ]
     },
     {
         "name": "football field",
@@ -2555,7 +2818,10 @@
         "name": "Space Needle",
         "dimension": "h",
         "height": "184",
-        "weight": "3356600000"
+        "weight": "3356600000",
+        "tags": [
+            "building"
+        ]
     },
     {
         "name": "Battleship Iowa",
@@ -2567,7 +2833,8 @@
         ],
         "aliases": [
             "battleship"
-        ]
+        ],
+        "note": "The largest US battleship."
     },
     {
         "name": "USS Abraham Lincoln",
@@ -2590,15 +2857,6 @@
         "weight": "90718500000",
         "tags": [
             "vehicle"
-        ]
-    },
-    {
-        "name": "Empire State Building",
-        "dimension": "h",
-        "height": "443.1792",
-        "weight": "331122400000",
-        "tags": [
-            "building"
         ]
     },
     {

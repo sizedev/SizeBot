@@ -1,3 +1,4 @@
+from functools import total_ordering
 import importlib.resources as pkg_resources
 import json
 import random
@@ -9,25 +10,35 @@ import sizebot.data.objects
 from sizebot import __version__
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import getPlural, getIndefiniteArticle
 from sizebot.lib.units import SV, WV, Unit, SystemUnit
 from sizebot.lib.utils import removeprefix, sentence_join
 
-objects = []
+objects: list["DigiObject"] = []
+food: list["DigiObject"] = []
+land: list["DigiObject"] = []
+tags: dict[str, int] = {}
 
 
+@total_ordering
 class DigiObject:
     def __init__(self, name, dimension, aliases=[], tags=[], symbol = None, height = None, length = None,
-                 width = None, diameter = None, depth = None, thickness = None, weight = None):
+                 width = None, diameter = None, depth = None, thickness = None, calories = None,
+                 weight = None, note = None):
 
         self.name = name
+        self.dimension = dimension
         self.namePlural = getPlural(name)
         self.singularNames = aliases + [self.name]
         self.aliases = aliases + [getPlural(a) for a in aliases]
         self.aliases = self.aliases + [a.replace("™", "").replace("®", "") for a in self.aliases + [self.name]]  # Remove ®, ™
-        self.tags = tags + [getPlural(t) for t in tags]
+        self.aliases = list(set(self.aliases))  # Remove duplicates
+        self._tags = tags
+        self.tags = tags + [getPlural(t) for t in self._tags]
         self.article = getIndefiniteArticle(self.name).split(" ")[0]
         self.symbol = symbol or None
+        self.note = note or None
 
         self.height = height and SV(height)
         self.length = length and SV(length)
@@ -35,6 +46,7 @@ class DigiObject:
         self.diameter = diameter and SV(diameter)
         self.depth = depth and SV(depth)
         self.thickness = thickness and SV(thickness)
+        self.calories = SV(calories) if calories is not None else None
         self.weight = weight and WV(weight)
 
         dimensionmap = {
@@ -43,7 +55,8 @@ class DigiObject:
             "w": "width",
             "d": "diameter",
             "p": "depth",
-            "t": "thickness"
+            "t": "thickness",
+            "c": "calories",
         }
 
         self.unitlength = getattr(self, dimensionmap[dimension])
@@ -78,6 +91,8 @@ class DigiObject:
             returnstr += f"{emojis.blank}**{SV(self.depth * multiplier):,.3mu}** deep\n"
         if self.thickness:
             returnstr += f"{emojis.blank}**{SV(self.thickness * multiplier):,.3mu}** thick\n"
+        if self.calories is not None:
+            returnstr += f"{emojis.blank}has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n"
         if self.weight:
             returnstr += "and weighs...\n"
             returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
@@ -97,6 +112,8 @@ class DigiObject:
             statsstrings.append(f"**{SV(self.depth * multiplier):,.3{system}}** deep")
         if self.thickness:
             statsstrings.append(f"**{SV(self.thickness * multiplier):,.3{system}}** thick")
+        if self.calories is not None:
+            statsstrings.append(f"has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories")
         if self.weight:
             statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
 
@@ -126,6 +143,9 @@ class DigiObject:
         if self.thickness:
             embed.add_field(name = "Thickness",
                             value = f"**{SV(self.thickness * multiplier):,.3mu}** thick\n")
+        if self.calories is not None:
+            embed.add_field(name = "Calories",
+                            value = f"has **{Decimal(self.calories * (multiplier **3)):,.3}** calories\n")
         if self.weight:
             embed.add_field(name = "Weight",
                             value = f"**{WV(self.weight * (multiplier ** 3)):,.3mu}**")
@@ -141,6 +161,7 @@ class DigiObject:
     def statsembed(self):
         embed = self.getStatsEmbed()
         embed.title = self.name
+        embed.description = f"*{self.note}*" if self.note else None
         return embed
 
     def relativestats(self, userdata):
@@ -166,7 +187,14 @@ class DigiObject:
             return lowerName == self.name.lower() \
                 or lowerName == self.namePlural \
                 or lowerName in (n.lower() for n in self.aliases)
+        elif isinstance(other, DigiObject):
+            return (self.name, self.unitlength) == (other.name, other.unitlength)
         return super().__eq__(other)
+
+    def __lt__(self, other):
+        if isinstance(other, DigiObject):
+            return self.unitlength < other.unitlength
+        return self.unitlength < other
 
     @classmethod
     def findByName(cls, name):
@@ -174,8 +202,8 @@ class DigiObject:
         for o in objects:
             if o == lowerName:
                 return o
-        name = removeprefix(name, "random").strip()
-        tagged = [o for o in objects if name in o.tags]
+        lowerName = removeprefix(lowerName, "random").strip()
+        tagged = [o for o in objects if lowerName in o.tags]
         if tagged:
             return random.choice(tagged)
         return None
@@ -194,6 +222,9 @@ class DigiObject:
     def __str__(self):
         return self.name
 
+    def __repr__(self) -> str:
+        return str(self)
+
 
 def loadObjFile(filename):
     try:
@@ -209,8 +240,22 @@ def loadObjJson(fileJson):
 
 
 def init():
+    global objects, food, land, tags
+
     for filename in pkg_resources.contents(sizebot.data.objects):
         if filename.endswith(".json"):
             loadObjFile(filename)
+
+    objects.sort()
     for o in objects:
         o.addToUnits()
+
+    # cached values
+    food = [o for o in objects if "food" in o.tags]
+    land = [o for o in objects if "land" in o.tags]
+    for o in objects:
+        for tag in o._tags:
+            if tag not in tags:
+                tags[tag] = 1
+            else:
+                tags[tag] += 1

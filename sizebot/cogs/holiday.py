@@ -45,10 +45,16 @@ class HolidayCog(commands.Cog):
                 logger.info("Happy new year!")
                 newnick += f" {intToRoman(int(now.year))}"
                 newactivityname = "Happy New Year!"
+            elif now.month == 1 and now.day == 31:
+                newnick += " 🎉"
+                newactivityname = "Happy Birthday, Nicole!"
             elif now.month == 2 and now.day == 14:  # Valentine's Day (and AWK's birthday)
                 logger.info("Happy Valentine's Day!")
                 newnick += " 💗"
                 newactivityname = "Happy Valentine's Day!"
+            elif now.month == 2 and now.day == 25:
+                newnick += " 🍊"
+                newactivityname = "Happy Birthday, Slim!"
             elif now.month == 3 and now.day == 10:  # Digi's birthday
                 logger.info("Happy birthday Digi!")
                 newnick += " 🎉"
@@ -71,7 +77,10 @@ class HolidayCog(commands.Cog):
             elif now.month == 7 and now.day == 4:  # Fourth of July
                 logger.info("Happy Fourth of July!")
                 newnick += " 🇺🇸"
-                newactivityname = "Happy Fourth of July!"
+            elif now.month == 7 and now.day == 4:  # Fourth of July
+                logger.info("Happy birthday, Tris!")
+                newnick += " 🌹🌌"
+                newactivityname = "Happy birthday, Tris!"
             elif now.month == 10 and now.day == 31:  # Halloween
                 logger.info("Happy Halloween!")
                 newnick = "SpookBot 🎃"

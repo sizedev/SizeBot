@@ -1,6 +1,7 @@
 import importlib.resources as pkg_resources
 import logging
 import random
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.versioning import release_on
 from typing import Union
 
@@ -11,7 +12,8 @@ from sizebot.lib import changes, proportions, userdb, nickmanager
 from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.errors import ChangeMethodInvalidException
-from sizebot.lib.units import Rate
+from sizebot.lib.objs import DigiObject, objects
+from sizebot.lib.units import SV, Rate
 
 logger = logging.getLogger("sizebot")
 
@@ -166,7 +168,6 @@ class ChangeCog(commands.Cog):
             f"<@{ctx.author.id}> drank a :milk:! *{line}*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
-    @release_on("3.6.2")
     @commands.command(
         category = "change"
     )
@@ -180,6 +181,63 @@ class ChangeCog(commands.Cog):
             await ctx.invoke(self.bot.get_command("eatme"))
         else:
             await ctx.invoke(self.bot.get_command("drinkme"))
+
+    @release_on("3.7")
+    @commands.command(
+        category = "change"
+    )
+    @commands.guild_only()
+    async def outgrow(self, ctx, *, obj: DigiObject = None):
+        """Outgrows the next object in the object database, or an object you specify."""
+        guildid = ctx.guild.id
+        userid = ctx.author.id
+
+        userdata = userdb.load(guildid, userid)
+        if obj is None:
+            objs_larger = [o for o in objects if o.unitlength > userdata.height]
+            if not objs_larger:
+                await ctx.send("You have nothing left to outgrow!")
+                return
+            obj = objs_larger[0]
+
+        if obj.unitlength < userdata.height:
+            await ctx.send(f"You're already larger than {obj.article} {obj.name}!")
+            return
+
+        random_factor = Decimal(random.randint(11, 20) / 10)
+        userdata.height = SV(obj.unitlength * random_factor)
+        userdb.save(userdata)
+
+        await ctx.send(f"You outgrew {obj.article} **{obj.name}** *({obj.unitlength:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
+
+    @release_on("3.7")
+    @commands.command(
+        category = "change"
+    )
+    @commands.guild_only()
+    async def outshrink(self, ctx, *, obj: DigiObject = None):
+        """Outshrinks the next object in the object database or an object you specify."""
+        guildid = ctx.guild.id
+        userid = ctx.author.id
+
+        userdata = userdb.load(guildid, userid)
+        if obj is None:
+            objs_smaller = [o for o in objects if o.unitlength < userdata.height]
+            objs_smaller.reverse()
+            if not objs_smaller:
+                await ctx.send("You have nothing left to outshrink!")
+                return
+            obj = objs_smaller[0]
+
+        if obj.unitlength > userdata.height:
+            await ctx.send(f"You're already smaller than {obj.article} {obj.name}!")
+            return
+
+        random_factor = Decimal(random.randint(11, 20) / 10)
+        userdata.height = SV(obj.unitlength / random_factor)
+        userdb.save(userdata)
+
+        await ctx.send(f"You outshrunk {obj.article} **{obj.name}** *({obj.unitlength:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
 
     @tasks.loop(seconds=6)
     async def changeTask(self):

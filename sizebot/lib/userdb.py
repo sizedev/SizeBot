@@ -7,6 +7,8 @@ from typing import Dict, List, Literal, Optional
 import arrow
 from arrow.arrow import Arrow
 
+import discord
+
 import sizebot.data
 from sizebot.lib import errors, paths
 from sizebot.lib.digidecimal import Decimal
@@ -36,7 +38,7 @@ class User:
         "_currentscalestep", "_currentscaletalk", "scaletalklock",
         "currentmovetype", "movestarted", "movestop",
         "registration_steps_remaining", "_macrovision_model", "_macrovision_view",
-        "button"
+        "button", "tra_reports"
     ]
 
     def __init__(self):
@@ -69,6 +71,7 @@ class User:
         self.movestop: Optional[TV] = None
         self.triggers: Dict[str, Diff] = {}
         self.button: Optional[Diff] = None
+        self.tra_reports = 0
         self._unitsystem: str = "m"
         self.species: Optional[str] = None
         self.soft_gender = None
@@ -93,7 +96,7 @@ class User:
                 f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}, INCOMPREHENSIBLE = {self.incomprehensible!r}, "
                 f"CURRENTSCALESTEP = {self.currentscalestep!r}, CURRENTSCALETALK = {self.currentscaletalk!r}, "
                 f"CURRENTMOVETYPE = {self.currentmovetype!r}, MOVESTARTED = {self.movestarted!r}, MOVESTOP = {self.movestop!r}, "
-                f"TRIGGERS = {self.triggers!r}, BUTTON = {self.button!r}, "
+                f"TRIGGERS = {self.triggers!r}, BUTTON = {self.button!r}, TRA_REPORTS = {self.tra_reports!r}, "
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
@@ -280,11 +283,11 @@ class User:
 
     @property
     def climbperhour(self):  # Essentially temp, since we're fixing this in BetterStats
-        return SV(Decimal(4828) / self.viewscale)
+        return SV(Decimal(4828) * self.scale)
 
     @property
     def crawlperhour(self):  # Essentially temp, since we're fixing this in BetterStats
-        return SV(Decimal(2556) / self.viewscale)
+        return SV(Decimal(2556) * self.scale)
 
     @property
     def swimperhour(self):
@@ -533,6 +536,7 @@ class User:
             "movestop":         None if self.movestop is None else str(self.movestop),
             "triggers":         {k: v.toJSON() for k, v in self.triggers.items()},
             "button":           None if self.button is None else self.button.toJSON(),
+            "tra_reports":      self.tra_reports,
             "unitsystem":       self.unitsystem,
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining,
@@ -542,7 +546,7 @@ class User:
 
     # Create a new object from a python dictionary imported using json
     @classmethod
-    def fromJSON(cls, jsondata):
+    def fromJSON(cls, jsondata: dict):
         userdata = User()
         userdata.guildid = jsondata.get("guildid", 350429009730994199)  # Default to Size Matters.
         userdata.id = int(jsondata["id"])
@@ -601,6 +605,9 @@ class User:
         if button is not None:
             button = Diff.fromJSON(button)
         userdata.button = button
+        userdata.tra_reports = jsondata.get("tra_reports", 0)
+        if userdata.tra_reports is None:
+            userdata.tra_reports = 0
         userdata.unitsystem = jsondata["unitsystem"]
         userdata.species = jsondata["species"]
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
@@ -655,7 +662,7 @@ def save(userdata):
         json.dump(jsondata, f, indent = 4)
 
 
-def load(guildid, userid, *, member=None, allow_unreg=False):
+def load(guildid, userid, *, member=None, allow_unreg=False) -> User:
     path = getUserPath(guildid, userid)
     try:
         with open(path, "r") as f:
@@ -688,21 +695,35 @@ def exists(guildid, userid, *, allow_unreg=False):
     return exists
 
 
-def countprofiles():
-    users = listUsers()
+def count_profiles():
+    users = list_users()
     usercount = len(list(users))
     return usercount
 
 
-def countusers():
-    users = listUsers()
+def count_users():
+    users = list_users()
     usercount = len(set(u for g, u in users))
     return usercount
 
 
-def listUsers(*, guildid = None, userid = None):
+def list_users(*, guildid = None, userid = None):
     guildid = int(guildid) if guildid else "*"
     userid = int(userid) if userid else "*"
     userfiles = paths.guilddbpath.glob(f"{guildid}/users/{userid}.json")
     users = [(int(u.parent.parent.name), int(u.stem)) for u in userfiles]
     return users
+
+
+def load_or_fake(memberOrSV, nickname = None, *, allow_unreg=False) -> User:
+    if isinstance(memberOrSV, discord.Member):
+        return load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
+    if type(memberOrSV).__name__ == "FakePlayer":  # can't use isinstance, circular import
+        return memberOrSV
+    else:
+        userdata = User()
+        userdata.height = memberOrSV
+        if nickname is None:
+            nickname = f"a {userdata.height:,.3mu} tall person"
+        userdata.nickname = nickname
+        return userdata

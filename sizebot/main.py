@@ -14,7 +14,7 @@ import discordplus
 
 from sizebot import __version__
 from sizebot.conf import conf
-from sizebot.lib import language, objs, paths, status, telemetry, units, utils, nickmanager
+from sizebot.lib import language, objs, paths, pokemon, status, telemetry, units, utils, nickmanager
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.lib.utils import truncate
@@ -49,6 +49,8 @@ initial_cogs = [
     "loop",
     "multiplayer",
     "naptime",
+    "objects",
+    "pokemon",
     "profile",
     # "rainbow",
     "register",
@@ -106,6 +108,7 @@ def main():
     # Load the units and objects.
     units.init()
     objs.init()
+    pokemon.init()
 
     for extension in initial_extensions:
         bot.load_extension("sizebot.extensions." + extension)
@@ -238,6 +241,15 @@ def main():
     @bot.event
     async def on_guild_join(guild):
         # TODO: Add whitelist.
+        with open(paths.whitelistpath) as f:
+            whitelist = [int(line) for line in f.readlines()]
+
+        if guild.id not in whitelist:
+            ...  # TODO: Send a message? Where?
+            logger.error(f"SizeBot tried to be added to {guild.name}! ({guild.id}), but it wasn't in the whitelist!")
+            await guild.leave()
+            return
+
         logger.warn(f"SizeBot has been added to {guild.name}! ({guild.id})\n"
                     f"You should talk to the owner, {guild.owner}! ({guild.owner.id})")
 

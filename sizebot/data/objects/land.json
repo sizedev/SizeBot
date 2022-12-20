@@ -1,0 +1,129 @@
+[
+    {
+        "name": "Central Park",
+        "dimension": "l",
+        "height": "6.096",
+        "length": "800",
+        "width": "4000",
+        "tags": [
+            "land"
+        ],
+        "note": "The tallest point is a maple tree."
+    },
+    {
+        "name": "Vatican City",
+        "dimension": "w",
+        "height": "138",
+        "length": "850",
+        "width": "1050",
+        "tags": [
+            "country",
+            "land"
+        ],
+        "note": "The tallest point is St. Peter's Basilica."
+    },
+    {
+        "name": "South America",
+        "dimension": "l",
+        "height": "6706",
+        "length": "7563.917",
+        "width": "5310.835",
+        "tags": [
+            "land"
+        ],
+        "note": "The tallest point is Aconcagua."
+    },
+    {
+        "name": "Manhattan",
+        "dimension": "l",
+        "height": "541.3",
+        "length": "21565.21",
+        "width": "3701.49",
+        "tags": [
+            "land"
+        ],
+        "note": "The tallest point is the One World Trade Center."
+    },
+    {
+        "name": "Afghanistan",
+        "dimension": "l",
+        "height": "7492",
+        "length": "1240000",
+        "width": "560000",
+        "tags": [
+            "country",
+            "land"
+        ],
+        "note": "The tallest point is Noshakh."
+    },
+    {
+        "name": "Japan",
+        "dimension": "l",
+        "height": "3776",
+        "length": "3008000",
+        "width": "1645",
+        "tags": [
+            "country",
+            "land"
+        ],
+        "note": "The tallest point is Mount Fuji."
+    },
+    {
+        "name": "Australia",
+        "dimension": "w",
+        "height": "2228",
+        "length": "3860000",
+        "width": "4000000",
+        "tags": [
+            "country",
+            "land"
+        ],
+        "aliases": [
+            "down under"
+        ],
+        "note": "The tallest point is Mount Kosciuszko."
+    },
+    {
+        "name": "United States of America",
+        "dimension": "w",
+        "height": "5486.4",
+        "length": "2545982",
+        "width": "4313042",
+        "tags": [
+            "country",
+            "land"
+        ],
+        "aliases": [
+            "us",
+            "america",
+            "united states",
+            "usa",
+            "the united states of america"
+        ],
+        "note": "The tallest point is Mount McKinley"
+    },
+    {
+        "name": "Brazil",
+        "dimension": "w",
+        "height": "3014",
+        "length": "4350000",
+        "width": "4319000",
+        "tags": [
+            "country",
+            "land"
+        ],
+        "note": "The tallest point is Neblina Peak"
+    },
+    {
+        "name": "Russia",
+        "dimension": "w",
+        "height": "5642",
+        "length": "3218688",
+        "width": "9000000",
+        "tags": [
+            "country",
+            "land"
+        ],
+        "note": "The tallest point is Mount El'brus."
+    }
+]

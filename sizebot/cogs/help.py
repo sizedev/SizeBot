@@ -11,10 +11,11 @@ from discord.ext import commands
 from sizebot import __version__
 from sizebot.cogs.stats import statmap
 from sizebot.conf import conf
-from sizebot.lib import checks, objs, userdb, utils
+from sizebot.lib import checks, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.menu import Menu
 from sizebot.lib.units import SV, WV
+from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 
@@ -89,25 +90,6 @@ class HelpCog(commands.Cog):
 
         for n, units in enumerate(utils.chunkList(weightunits, math.ceil(len(weightunits) / 3))):
             embed.add_field(name="Weight" if n == 0 else "\u200b", value="\n".join(units))
-
-        await ctx.send(embed=embed)
-
-    @commands.command(
-        aliases = ["objects", "objlist", "objectlist"],
-        category = "help"
-    )
-    async def objs(self, ctx):
-        """Get a list of the various objects SizeBot accepts."""
-        objectunits = []
-        for obj in objs.objects:
-            objectunits.append(obj.name)
-
-        objectunits.sort()
-
-        embed = Embed(title=f"Objects [SizeBot {__version__}]", description = f"*NOTE: All of these objects have multiple aliases. If there is an alias that you think should work for a listed object but doesn't, report it with `{ctx.prefix}suggestobject` and note that it's an alias.*")
-
-        for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 6))):
-            embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
 
         await ctx.send(embed=embed)
 
@@ -282,7 +264,7 @@ class HelpCog(commands.Cog):
                         value = ("**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
                                  "**Special thanks** *to Chocola, the creator of [Mei](https://chocola.codes/) and Arachne, for inspiration and moral support.*\n"
                                  "**Special thanks** *to the discord.py Community Discord for helping with code.*\n"
-                                 f"**Special thanks** *to the {userdb.countusers()} users of SizeBot.*"),
+                                 f"**Special thanks** *to the {userdb.count_users()} users of SizeBot.*"),
                         inline = False)
         embed.add_field(name = "Testimonials",
                         value = ("\"I want to put SizeBot in charge of the world government.\" *-- AWK*\n"
@@ -332,7 +314,7 @@ class HelpCog(commands.Cog):
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         await post_report("Feature request", ctx.message, message)
         await ctx.send("Feature request sent.")
-        if any(nonoword in message for nonoword in ["weiner", "wiener", "penis", "dick", "boob", "vagina", "pussy", "breast", "cock"]):
+        if any(nonoword in message for nonoword in ["weiner", "wiener", "penis", "dick", "boob", "vagina", "pussy", "breast", "cock", "nsfw"]):
             await ctx.send("<:LEWD:625464094157439010>")
 
     @commands.command(
@@ -390,7 +372,16 @@ class HelpCog(commands.Cog):
     @checks.is_mod()
     async def usercount(self, ctx):
         """How many users are registered?"""
-        await ctx.send(f"There are **{userdb.countusers()}** users of SizeBot3½, with **{userdb.countprofiles()}** profiles created, <@!{ctx.message.author.id}>.")
+        await ctx.send(f"There are **{userdb.count_users()}** users of SizeBot3½, with **{userdb.count_profiles()}** profiles created, <@!{ctx.message.author.id}>.")
+
+    @release_on("3.7")
+    @commands.command(
+        category = "help"
+    )
+    @checks.is_mod()
+    async def invite(self, ctx):
+        """Request an invite for SizeBot!"""
+        await ctx.send("Thanks for the interest in SizeBot!\nSizeBot is currently in closed beta, but you can request to be added to that here!\nhttps://forms.gle/qEdkCpsB891AhAoz5\nRollout is slow, so it may take a while to be approved and you may bot get approved at all right now. Be patient and good luck!")
 
 
 class HelpCategory:
@@ -409,12 +400,13 @@ categories = [
     HelpCategory("setbase", "Set Base Commands", "Commands for setting various base stats.", "🖋️"),
     HelpCategory("change", "Change Commands", "Commands for changing your stats.", "📈"),
     HelpCategory("stats", "Stats Commands", "Commands for outputting yours and others stats.", "📊"),
+    HelpCategory("objects", "Objects Commands", "Commands about objects and comparing to them.", "💎"),
     HelpCategory("scalestep", "Scale on Action Commands", "Commands related to scaling every action you take.", "🚶"),
     HelpCategory("trigger", "Trigger Commands", "Commands related to trigger words.", "🔫"),
     HelpCategory("loop", "Looping Commands", "Commands related to doing looping tasks.", "🔁"),
     HelpCategory("multiplayer", "Multiplayer Commands", "Commands for playing with others.", "👥"),
     HelpCategory("profile", "Profile Commands", "Commands for updating and displaying profiles.", "🆔"),
-    HelpCategory("fun", "Fun Commands", "Commands that aren't size-based, but are still fun!", "🎉"),
+    HelpCategory("fun", "Fun Commands", "Commands that are fun!", "🎉"),
     HelpCategory("mod", "Mod Commands", "Commands for server mods.", "⚙️"),
     HelpCategory("misc", "Miscellaneous Commands", "Commands that defy category!", "🌐")
 ]

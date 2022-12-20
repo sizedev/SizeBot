@@ -484,7 +484,7 @@ def parse_scale(scalestr: str):
             scale = Decimal(match.group(1))
     else:
         newscale = replace_all_sciexp(scalestr)
-        re_scale = r"([^:/]+)[:/]?([^:/]*)?"
+        re_scale = r"x?([^:/]+)[:/]?([^:/]*)?x?"
         if m := re.match(re_scale, newscale):
             multiplier = m.group(1)
             factor = m.group(2) if m.group(2) else 1
@@ -542,3 +542,12 @@ def fixZeroes(d):
     Decimal('1e3') -> Decimal('100')
     """
     return d.normalize() + 0
+
+
+def truthy(s: str):
+    """https://discordpy.readthedocs.io/en/stable/ext/commands/commands.html#bool"""
+    lowered = s.lower()
+    if lowered in ('yes', 'y', 'true', 't', '1', 'enable', 'on'):
+        return True
+    elif lowered in ('no', 'n', 'false', 'f', '0', 'disable', 'off'):
+        return False

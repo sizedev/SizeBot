@@ -1,13 +1,51 @@
 [
     {
-        "name": "thickness of spaghetti",
-        "dimension": "t",
-        "thickness": "0.0017",
+        "name": "Sphinx",
+        "dimension": "h",
+        "height": "20.1168",
+        "length": "73.152",
+        "width": "18.8976",
+        "weight": "20000000000",
+        "tags": [
+            "building"
+        ]
+    },
+    {
+        "name": "Leaning Tower of Pisa",
+        "dimension": "h",
+        "height": "56.6928",
+        "weight": "13154200000",
         "tags": [
             "building"
         ],
         "aliases": [
-            "spaghetti"
+            "tower of Pisa",
+            "leaning tower"
+        ]
+    },
+    {
+        "name": "Statue of Liberty",
+        "dimension": "h",
+        "height": "93",
+        "weight": "204116566",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "lady liberty",
+            "lady liberties",
+            "statue of liberties"
+        ]
+    },
+    {
+        "name": "Big Ben",
+        "dimension": "h",
+        "height": "96.012",
+        "tags": [
+            "building"
+        ],
+        "aliases": [
+            "Elizabeth Tower"
         ]
     },
     {
@@ -32,6 +70,15 @@
         ],
         "aliases": [
             "eiffel"
+        ]
+    },
+    {
+        "name": "Empire State Building",
+        "dimension": "h",
+        "height": "443.1792",
+        "weight": "331122400000",
+        "tags": [
+            "building"
         ]
     },
     {

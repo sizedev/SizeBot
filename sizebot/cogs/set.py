@@ -1,5 +1,4 @@
 import logging
-import random
 
 import discord
 from discord.ext import commands
@@ -272,7 +271,7 @@ class SetCog(commands.Cog):
         if maxscale < 0:
             maxscale = 0
 
-        newscale = Decimal(random.uniform(float(minscale), float(maxscale)))
+        newscale = Decimal(randRangeLog(float(minscale), float(maxscale)))
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 

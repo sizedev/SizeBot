@@ -26,7 +26,7 @@ def getUserSizes(g):
     largestuser = None
     largestsize = SV(0)
     allusers = {}
-    for _, userid in userdb.listUsers(guildid=g.id):
+    for _, userid in userdb.list_users(guildid=g.id):
         member = g.get_member(userid)
         if not (member and str(member.status) != "offline"):
             continue

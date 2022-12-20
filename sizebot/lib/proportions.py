@@ -10,14 +10,14 @@ from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, WV
-from sizebot.lib.userdb import defaultheight, defaultweight, defaultliftstrength, falllimit
+from sizebot.lib.userdb import User, defaultheight as average_height, defaultweight, defaultliftstrength, falllimit
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
 
-def changeUser(guildid, userid, changestyle, amount):
+def changeUser(guildid: int, userid: int, changestyle: str, amount: SV):
     changestyle = changestyle.lower()
     if changestyle in ["add", "+", "a", "plus"]:
         changestyle = "add"
@@ -74,7 +74,7 @@ def changeUser(guildid, userid, changestyle, amount):
 
 
 class PersonComparison:  # TODO: Make a one-sided comparison option.
-    def __init__(self, userdata1, userdata2):
+    def __init__(self, userdata1: User, userdata2: User):
         smallUserdata, bigUserdata = utils.minmax(userdata1, userdata2)
         self.big = PersonStats(bigUserdata)
         self.small = PersonStats(smallUserdata)
@@ -276,7 +276,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
 
 class PersonSpeedComparison:
-    def __init__(self, userdata1, userdata2):
+    def __init__(self, userdata1: User, userdata2: User):
         self._viewer, self._viewed = minmax(userdata1, userdata2)
 
         self.viewer = PersonStats(self._viewer)
@@ -311,6 +311,7 @@ class PersonSpeedComparison:
         reldist = SV(dist * self.viewer.viewscale)
         reldist_print = f"{reldist:,.3mu}"
         shoesize = " (" + formatShoeSize(dist) + ")"
+        rel_shoesize = " (" + formatShoeSize(reldist) + ")"
 
         _walktime = (dist / self.viewer.walkperhour) * 60 * 60
         walksteps = math.ceil(dist / self.viewer.walksteplength)
@@ -322,17 +323,20 @@ class PersonSpeedComparison:
         crawlsteps = math.ceil(dist / self.viewer.crawlsteplength)
         _swimtime = (dist / self.viewer.swimperhour) * 60 * 60
         swimsteps = math.ceil(dist / self.viewer.swimsteplength)
+        _drivetime = (dist / self.viewer.driveperhour) * 60 * 60
         walktime = prettyTimeDelta(_walktime, roundeventually = True)
         runtime = prettyTimeDelta(_runtime, roundeventually = True)
         climbtime = prettyTimeDelta(_climbtime, roundeventually = True)
         crawltime = prettyTimeDelta(_crawltime, roundeventually = True)
         swimtime = prettyTimeDelta(_swimtime, roundeventually = True)
+        drivetime = prettyTimeDelta(_drivetime, roundeventually = True)
 
         walkspeedstr = f"\n*{emojis.blank}{self.viewer.walkperhour:,.3mu} per hour*"
         runspeedstr = f"\n*{emojis.blank}{self.viewer.runperhour:,.3mu} per hour*"
         climbspeedstr = f"\n*{emojis.blank}{self.viewer.climbperhour:,.3mu} per hour*"
         crawlspeedstr = f"\n*{emojis.blank}{self.viewer.crawlperhour:,.3mu} per hour*"
         swimspeedstr = f"\n*{emojis.blank}{self.viewer.swimperhour:,.3mu} per hour*"
+        drivespeedstr = f"\n*{emojis.blank}{self.viewer.driveperhour:,.3mu} per hour*"
 
         if self.viewer.incomprehensible or self.viewed.incomprehensible:
             walkspeedstr = glitch_string(walkspeedstr)
@@ -340,19 +344,21 @@ class PersonSpeedComparison:
             climbspeedstr = glitch_string(climbspeedstr)
             crawlspeedstr = glitch_string(crawlspeedstr)
             swimspeedstr = glitch_string(swimspeedstr)
+            drivespeedstr = glitch_string(drivespeedstr)
             reldist_print = glitch_string(reldist_print)
             shoesize = glitch_string(shoesize)
 
-        newline = "\n"
+        nl = "\n"
 
         out_str = (
             f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}\n"
-            f"{emojis.eyes + reldist_print + newline if include_relative else ''}"
+            f"{emojis.eyes + ' ' + reldist_print + nl if include_relative else ''}{emojis.blank + rel_shoesize + nl if foot and include_relative else ''}"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
             f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}\n"
             f"{emojis.crawl} {crawltime} ({crawlsteps:,.3} steps){crawlspeedstr if speed else ''}\n"
-            f"{emojis.swim} {swimtime} ({swimsteps:,.3} strokes){swimspeedstr if speed else ''}"
+            f"{emojis.swim} {swimtime} ({swimsteps:,.3} strokes){swimspeedstr if speed else ''}\n"
+            f"{emojis.drive} {drivetime} {drivespeedstr if speed else ''}"
         )
 
         return out_str
@@ -378,15 +384,15 @@ class PersonSpeedComparison:
 
         statnamemap = {
             "height":           "Height",
-            "foot":             "Foot Length",
+            "foot":             f"{self.viewed.footname} Length",
             "toe":              "Toe Height",
             "shoeprint":        "Shoeprint Depth",
             "finger":           "Finger Length",
             "thumb":            "Thumb Width",
             "fingerprint":      "Fingerprint Depth",
             "eye":              "Eye Width",
-            "hairwidth":        "Hair Width",
-            "hair":             "Hair Length",
+            "hairwidth":        f"{self.viewed.hairname} Width",
+            "hair":             f"{self.viewed.hairname} Length",
             "tail":             "Tail Length",
             "ear":              "Ear Height",
         }
@@ -459,17 +465,12 @@ class PersonStats:
     nailthickfactor = 1 / Decimal("2920")
     shoeprintfactor = 1 / Decimal("135")
     eyewidthfactor = 1 / Decimal("73.083")
-
-    walkstepsperhour = 6900
-    runstepsperhour = 10200
+    widthfactor = 4 / Decimal("17")
+    fingertipfactor = 1 / Decimal("95.95")
 
     defaultthreadthickness = Decimal("0.001016")
 
-    defaultwalkspeed = 5630
-    defaultrunspeed = 10729
-    defaultswimspeed = 3219
-
-    def __init__(self, userdata):
+    def __init__(self, userdata: User):
         self.nickname = userdata.nickname
         self.tag = userdata.tag
         self.gender = userdata.autogender
@@ -489,8 +490,7 @@ class PersonStats:
         self.macrovision_model = userdata.macrovision_model
         self.macrovision_view = userdata.macrovision_view
 
-        self.averageheightmult = self.height / defaultheight
-        self.averageweightmult = self.weight / defaultweight
+        self.width = SV(self.height * self.widthfactor)
 
         if userdata.hairlength is None:
             self.hairlength = None
@@ -512,57 +512,72 @@ class PersonStats:
         else:
             self.liftstrength = WV(userdata.liftstrength / (self.viewscale ** 3))
 
-        if userdata.footlength is None:
-            self.footlength = SV(self.height * self.footfactor)
-        else:
-            self.footlength = SV(userdata.footlength / self.viewscale)
+        base_footlength = userdata.footlength if userdata.footlength is not None else SV(self.baseheight * self.footfactor)
+        self.footlength = SV(base_footlength * self.scale)
+
         self.shoesize = formatShoeSize(self.footlength, self.gender == "f")
-        self.footwidth = SV(self.height * self.footwidthfactor)
+
         if userdata.pawtoggle:
-            self.footwidth = SV(self.height * Decimal("1/1.5"))  # TODO: Temp number?
-        self.toeheight = SV(self.height * self.toeheightfactor)
-        self.shoeprintdepth = SV(self.height * self.shoeprintfactor)
-        self.pointerlength = SV(self.height * self.pointerfactor)
-        self.thumbwidth = SV(self.height * self.thumbfactor)
-        self.fingerprintdepth = SV(self.height * self.fingerprintfactor)
+            base_footwidth = SV(base_footlength * Decimal("2/3"))   # TODO: Temp number?
+        else:
+            base_footwidth = SV(base_footlength * Decimal("2/5"))
+        self.footwidth = SV(base_footwidth * self.scale)
 
-        self.threadthickness = SV(self.defaultthreadthickness * self.averageheightmult)
+        self.toeheight = SV(self.baseheight * self.toeheightfactor * self.scale)
+        self.shoeprintdepth = SV(self.baseheight * self.shoeprintfactor * self.scale)
+        self.pointerlength = SV(self.baseheight * self.pointerfactor * self.scale)
+        self.thumbwidth = SV(self.baseheight * self.thumbfactor * self.scale)
+        self.fingertiplength = SV(self.height * self.fingertipfactor)
+        self.fingerprintdepth = SV(self.baseheight * self.fingerprintfactor * self.scale)
 
-        self.hairwidth = SV((self.baseheight * self.hairfactor) / self.viewscale)
-        self.nailthickness = SV((self.baseheight * self.nailthickfactor) / self.viewscale)
-        self.eyewidth = SV(self.height * self.eyewidthfactor)
-        self.jumpheight = SV(self.height / Decimal("3.908"))
+        self.threadthickness = SV(self.defaultthreadthickness * self.scale)
 
-        self.avgheightcomp = SV(defaultheight * self.viewscale)
+        self.hairwidth = SV((self.baseheight * self.hairfactor) * self.scale)
+        self.nailthickness = SV((self.baseheight * self.nailthickfactor) * self.scale)
+        self.eyewidth = SV(self.baseheight * self.eyewidthfactor * self.scale)
+        self.jumpheight = SV(self.baseheight * Decimal("1/3.908") * self.scale)
+
+        self.avgheightcomp = SV(average_height * self.viewscale)
         self.avgweightcomp = WV(defaultweight * self.viewscale ** 3)
 
-        viewangle = calcViewAngle(self.height, defaultheight)
+        viewangle = calcViewAngle(self.height, average_height)
         self.avglookangle = abs(viewangle)
         self.avglookdirection = "up" if viewangle >= 0 else "down"
 
-        if userdata.walkperhour is None:
-            self.walkperhour = SV(self.defaultwalkspeed * self.averageheightmult)
-        else:
-            self.walkperhour = SV(userdata.walkperhour * self.averageheightmult)
+        base_average_ratio = self.baseheight / average_height  # TODO: Make this a property on userdata
 
-        if userdata.runperhour is None:
-            self.runperhour = SV(self.defaultrunspeed * self.averageheightmult)
-        else:
-            self.runperhour = SV(userdata.runperhour * self.averageheightmult)
+        average_walkperhour = 5630
+        average_runperhour = 10729
+        average_swimperhour = 3219
+        average_climbperhour = 4828
+        average_crawlperhour = 2556
+        average_driveperhour = 96561
 
-        if userdata.swimperhour is None:
-            self.swimperhour = SV(self.defaultswimspeed * self.averageheightmult)
-        else:
-            self.swimperhour = SV(userdata.swimperhour * self.averageheightmult)
+        walkstepsperhour = 6900
+        runstepsperhour = 10200
 
-        self.climbperhour = userdata.climbperhour
-        self.crawlperhour = userdata.crawlperhour
+        base_walkperhour = userdata.walkperhour if userdata.walkperhour is not None else average_walkperhour * base_average_ratio
+        self.walkperhour = SV(base_walkperhour * self.scale)
 
-        self.walksteplength = SV(self.walkperhour / self.walkstepsperhour)
-        self.runsteplength = SV(self.runperhour / self.runstepsperhour)
-        self.climbsteplength = SV(self.height / Decimal("2.5"))
-        self.crawlsteplength = SV(self.height / Decimal("2.577"))
-        self.swimsteplength = SV(self.height / Decimal("7/6"))
+        base_runperhour = userdata.runperhour if userdata.runperhour is not None else average_runperhour * base_average_ratio
+        self.runperhour = SV(base_runperhour * self.scale)
+
+        base_swimperhour = userdata.swimperhour if userdata.swimperhour is not None else average_swimperhour * base_average_ratio
+        self.swimperhour = SV(base_swimperhour * self.scale)
+
+        base_climbperhour = average_climbperhour * base_average_ratio
+        self.climbperhour = SV(base_climbperhour * self.scale)
+
+        base_crawlperhour = average_crawlperhour * base_average_ratio
+        self.crawlperhour = SV(base_crawlperhour * self.scale)
+
+        self.driveperhour = SV(average_driveperhour * self.scale)
+
+        self.walksteplength = SV(base_walkperhour / walkstepsperhour * self.scale)
+        self.runsteplength = SV(base_runperhour / runstepsperhour * self.scale)
+        self.climbsteplength = SV(self.baseheight * Decimal("1/2.5") * self.scale)
+        self.crawlsteplength = SV(self.baseheight * Decimal("1/2.577") * self.scale)
+        self.swimsteplength = SV(self.baseheight * Decimal("6/7") * self.scale)
 
         self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
 
@@ -578,7 +593,7 @@ class PersonStats:
         if self.height < SV(0.000001):
             self.visibility = "magic"
 
-    def getFormattedStat(self, stat):
+    def getFormattedStat(self, stat: str):
         returndict = {
             "height": f"'s current height is **{self.height:,.3mu}**, or {self.formattedscale} scale.",
             "weight": f"'s current weight is **{self.weight:,.3mu}**.",
@@ -597,7 +612,7 @@ class PersonStats:
             "climb": f" climbs at **{self.climbperhour:,.1M} per hour** ({self.climbperhour:,.1U} per hour), with {self.climbsteplength:,.1m}/{self.climbsteplength:,.1u} pulls.",
             "crawl": f" crawls at **{self.crawlperhour:,.1M} per hour** ({self.crawlperhour:,.1U} per hour), with {self.crawlsteplength:,.1m}/{self.crawlsteplength:,.1u} strides.",
             "swim": f" swims at **{self.swimperhour:,.1M} per hour** ({self.swimperhour:,.1U} per hour), with {self.swimsteplength:,.1m}/{self.swimsteplength:,.1u} strokes.",
-            "jump": f" can jump **{self.jumpheight:,.3mu} high.",
+            "jump": f" can jump **{self.jumpheight:,.3mu}** high.",
             "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
             "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
             "scale": f" is **{self.formattedscale}** their base height.",
@@ -619,7 +634,7 @@ class PersonStats:
             returndict["terminalvelocity"] = f"'s terminal velocity is {self.terminalvelocity:,.1M} per second ({self.terminalvelocity:,.1U} per second)."
 
         for k, v in returndict.items():
-            returndict[k] = self.tag + v
+            returndict[k] = self.nickname + v
 
         if self.incomprehensible:
             return glitch_string(returndict.get(stat))
@@ -630,7 +645,8 @@ class PersonStats:
                 f"{emojis.run} {self.runperhour:,.1M} per hour / {self.runperhour:,.1U} per hour\n"
                 f"{emojis.climb} {self.climbperhour:,.1M} per hour / {self.climbperhour:,.1U} per hour\n"
                 f"{emojis.crawl} {self.crawlperhour:,.1M} per hour / {self.crawlperhour:,.1U} per hour\n"
-                f"{emojis.swim} {self.swimperhour:,.1M} per hour / {self.swimperhour:,.1U} per hour")
+                f"{emojis.swim} {self.swimperhour:,.1M} per hour / {self.swimperhour:,.1U} per hour\n"
+                f"{emojis.drive} {self.driveperhour:,.1M} per hour / {self.driveperhour:,.1U} per hour")
 
     def __str__(self):
         return (f"<PersonStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
@@ -695,12 +711,13 @@ class PersonStats:
 
 
 class PersonBaseStats:
-    def __init__(self, userdata):
+    def __init__(self, userdata: User):
         self.nickname = userdata.nickname
         self.tag = userdata.tag
         self.gender = userdata.autogender
         self.baseheight = userdata.baseheight
         self.baseweight = userdata.baseweight
+        self.height = userdata.height
         self.footname = userdata.footname
         self.hairname = userdata.hairname
         self.pawtoggle = userdata.pawtoggle
@@ -719,15 +736,16 @@ class PersonBaseStats:
         else:
             self.shoesize = None
 
-        self.averageheightmult = self.baseheight / defaultheight
-        self.averageweightmult = self.baseweight / defaultweight
-
         self.walkperhour = userdata.walkperhour
         self.runperhour = userdata.runperhour
         self.swimperhour = userdata.swimperhour
 
         self.currentscalestep = userdata.currentscalestep
         self.unitsystem = userdata.unitsystem
+
+        self.furcheck = emojis.voteyes if userdata.furtoggle else emojis.voteno
+        self.pawcheck = emojis.voteyes if userdata.pawtoggle else emojis.voteno
+        self.tailcheck = emojis.voteyes if userdata.taillength else emojis.voteno
 
     def __str__(self):
         return (f"<PersonBaseStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
@@ -747,9 +765,10 @@ class PersonBaseStats:
                       description=f"*Requested by {requestertag}*",
                       color=colors.cyan)
         embed.set_author(name=f"SizeBot {__version__}")
-        embed.add_field(name="Base Height", value=f"{self.baseheight:,.3mu}\n*{self.averageheightmult:,.3} average*", inline=True)
-        embed.add_field(name="Base Weight", value=f"{self.baseweight:,.3mu}\n*{self.averageweightmult:,.3} average*", inline=True)
+        embed.add_field(name="Base Height", value=f"{self.baseheight:,.3mu}\n*{self.height / average_height:,.3} average*", inline=True)
+        embed.add_field(name="Base Weight", value=f"{self.baseweight:,.3mu}\n*{self.height / average_height:,.3} average*", inline=True)
         embed.add_field(name="Unit System", value=f"{self.unitsystem.capitalize()}", inline=True)
+        embed.add_field(name="Furry", value=f"**Fur: **{self.furcheck}\n**Paws: **{self.pawcheck}\n**Tail: **{self.tailcheck}\n")
         if self.footlength:
             embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         if self.hairlength:
@@ -771,7 +790,7 @@ class PersonBaseStats:
         return embed
 
 
-def formatShoeSize(footlength, women = False):
+def formatShoeSize(footlength: SV, women = False):
     # Inch in meters
     inch = Decimal("0.0254")
     footlengthinches = footlength / inch
@@ -792,7 +811,7 @@ def formatShoeSize(footlength, women = False):
     return f"Size US {prefix}{shoesize}"
 
 
-def fromShoeSize(shoesize):
+def fromShoeSize(shoesize: str):
     shoesizenum = unmodifiedshoesizenum = Decimal(re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)[0])
     if "w" in shoesize.lower():
         shoesizenum = unmodifiedshoesizenum - 1
@@ -802,7 +821,7 @@ def fromShoeSize(shoesize):
     return SV.parse(f"{footlengthinches}in")
 
 
-def calcViewAngle(viewer, viewee):
+def calcViewAngle(viewer: Decimal, viewee: Decimal):
     viewer = abs(Decimal(viewer))
     viewee = abs(Decimal(viewee))
     if viewer.is_infinite() and viewee.is_infinite():

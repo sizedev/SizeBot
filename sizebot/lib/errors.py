@@ -131,6 +131,14 @@ class InvalidSizeValue(DigiException):
         return f"{self.sizevalue!r} is an unrecognized {self.kind} value."
 
 
+class InvalidStat(DigiException):
+    def __init__(self, value):
+        self.value = value
+
+    def formatUserMessage(self):
+        return f"{self.value!r} is an unrecognized stat."
+
+
 class InvalidObject(DigiException):
     def __init__(self, name):
         self.name = name
@@ -197,14 +205,15 @@ class ArgumentException(DigiContextException):
         return f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.signature}`."
 
 
-class UserMessedUpException(DigiException):
+class UserMessedUpException(DigiContextException):
     def __init__(self, custommessage):
         self.custommessage = custommessage
 
-    def formatMessage(self):
-        return self.custommessage
+    async def formatMessage(self, ctx):
+        usernick = ctx.author.display_name
+        return usernick + ": " + self.custommessage
 
-    def formatUserMessage(self):
+    async def formatUserMessage(self, ctx):
         return self.custommessage
 
 

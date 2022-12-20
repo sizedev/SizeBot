@@ -1,0 +1,521 @@
+[
+    {
+        "name": "grain of sugar",
+        "dimension": "d",
+        "diameter": "0.001",
+        "calories": "0.004",
+        "weight": "0.000625",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "sugar"
+        ],
+        "note": "The food with the least calories in the bot."
+    },
+    {
+        "name": "sugar cube",
+        "dimension": "l",
+        "length": "0.002",
+        "width": "0.002",
+        "depth": "0.002",
+        "calories": "16",
+        "weight": "2.3",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "grain of rice",
+        "dimension": "l",
+        "length": "0.006",
+        "width": "0.002",
+        "calories": "0.037700000000000004",
+        "weight": "0.029",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "rice grain",
+            "grain",
+            "rice"
+        ]
+    },
+    {
+        "name": "sunflower seed",
+        "dimension": "l",
+        "length": "0.0071",
+        "width": "0.0025",
+        "calories": "0.530856",
+        "weight": "0.0909",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "seed"
+        ]
+    },
+    {
+        "name": "pea",
+        "dimension": "d",
+        "diameter": "0.008",
+        "calories": "0.2025",
+        "weight": "0.25",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "Tic-Tac",
+        "dimension": "l",
+        "length": "0.0118",
+        "width": "0.0061",
+        "calories": "2",
+        "weight": "0.5",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "blueberry",
+        "dimension": "d",
+        "diameter": "0.01373",
+        "calories": "0.78",
+        "weight": "0.5",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "fruit loop",
+        "dimension": "d",
+        "diameter": "0.015",
+        "thickness": "0.0051",
+        "calories": "0.848",
+        "weight": "0.24",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "cheerio"
+        ]
+    },
+    {
+        "name": "piece of popcorn",
+        "dimension": "h",
+        "height": "0.025",
+        "calories": "0.7125",
+        "weight": "0.19",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "popcorn"
+        ]
+    },
+    {
+        "name": "candy corn",
+        "dimension": "l",
+        "length": "0.0254",
+        "width": "0.0127",
+        "thickness": "0.0127",
+        "calories": "3.7",
+        "weight": "0.55",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "Jolly Rancher",
+        "dimension": "l",
+        "length": "0.0254",
+        "diameter": "0.0127",
+        "calories": "23",
+        "weight": "6",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "Pringle",
+        "dimension": "l",
+        "length": "0.0298",
+        "width": "0.018",
+        "depth": "0.0075",
+        "calories": "10.7",
+        "weight": "1.75",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "potato chip",
+            "chip"
+        ]
+    },
+    {
+        "name": "Reese's Peanut Butter Cup",
+        "dimension": "d",
+        "diameter": "0.04",
+        "calories": "87",
+        "weight": "21.8",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "reeses",
+            "reeses cup",
+            "peanut butter cup"
+        ]
+    },
+    {
+        "name": "Oreo",
+        "dimension": "d",
+        "height": "0.009",
+        "diameter": "0.04445",
+        "calories": "160",
+        "weight": "11.3",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "cookie"
+        ]
+    },
+    {
+        "name": "cupcake",
+        "dimension": "h",
+        "height": "0.045",
+        "diameter": "0.2275",
+        "calories": "131",
+        "weight": "80",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "muffin"
+        ]
+    },
+    {
+        "name": "chicken nugget",
+        "dimension": "l",
+        "length": "0.05",
+        "width": "0.03",
+        "depth": "0.01",
+        "calories": "59",
+        "weight": "16",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "chicken McNugget",
+            "mcnugget",
+            "nugget"
+        ]
+    },
+    {
+        "name": "pepperoni",
+        "dimension": "d",
+        "diameter": "0.053",
+        "thickness": "0.003175",
+        "calories": "10",
+        "weight": "12",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "egg",
+        "dimension": "h",
+        "height": "0.05312",
+        "calories": "78",
+        "weight": "48.1942",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "eggu"
+        ]
+    },
+    {
+        "name": "orange",
+        "dimension": "d",
+        "diameter": "0.0725",
+        "calories": "45",
+        "weight": "88",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "stick of gum",
+        "dimension": "l",
+        "length": "0.073025",
+        "width": "0.022225",
+        "thickness": "0.00238125",
+        "calories": "11",
+        "weight": "2.9",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "gum",
+            "gumstick"
+        ]
+    },
+    {
+        "name": "apple",
+        "dimension": "h",
+        "height": "0.075",
+        "calories": "95",
+        "weight": "85",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "piece of cheese",
+        "dimension": "l",
+        "length": "0.0899",
+        "width": "0.0899",
+        "thickness": "0.003",
+        "calories": "113",
+        "weight": "17",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "cheese"
+        ]
+    },
+    {
+        "name": "Big Mac",
+        "dimension": "d",
+        "height": "0.06985",
+        "diameter": "0.09525",
+        "calories": "563",
+        "weight": "215.456",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "cheeseburger",
+            "burger",
+            "hamburger"
+        ],
+        "note": "c. 2014"
+    },
+    {
+        "name": "Kit-Kat",
+        "dimension": "l",
+        "length": "0.10541",
+        "calories": "218",
+        "weight": "42.5",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "kitkat"
+        ]
+    },
+    {
+        "name": "juice box",
+        "dimension": "h",
+        "height": "0.1056386",
+        "width": "0.06",
+        "depth": "0.04",
+        "calories": "85",
+        "weight": "170.097",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "Hi-C",
+            "juice"
+        ]
+    },
+    {
+        "name": "potato",
+        "dimension": "h",
+        "height": "0.11",
+        "diameter": "0.0953",
+        "calories": "163",
+        "weight": "320",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "spud"
+        ]
+    },
+    {
+        "name": "Pop-Tart",
+        "dimension": "l",
+        "length": "0.1143",
+        "width": "0.0762",
+        "calories": "200",
+        "weight": "47.9815679",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "poptart",
+            "nyan cat"
+        ]
+    },
+    {
+        "name": "Whopper",
+        "dimension": "d",
+        "height": "0.0635",
+        "diameter": "0.12065",
+        "calories": "677",
+        "weight": "300.5049",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "soda can",
+        "dimension": "h",
+        "height": "0.122",
+        "diameter": "0.058",
+        "calories": "140",
+        "weight": "355",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "pop can",
+            "can",
+            "can of soda"
+        ]
+    },
+    {
+        "name": "taco",
+        "dimension": "l",
+        "height": "0.0635",
+        "length": "0.127",
+        "depth": "0.047625",
+        "calories": "156",
+        "weight": "99.2233",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "Hot Pocket",
+        "dimension": "l",
+        "length": "0.1397",
+        "width": "0.09525",
+        "depth": "0.01905",
+        "calories": "310",
+        "weight": "127",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "mozzarella stick",
+        "dimension": "l",
+        "length": "0.15",
+        "diameter": "0.0254",
+        "calories": "102",
+        "weight": "28.35",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "mozz stick"
+        ]
+    },
+    {
+        "name": "banana",
+        "dimension": "l",
+        "length": "0.1905",
+        "calories": "105",
+        "weight": "120",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "rotat e"
+        ],
+        "note": "for scale."
+    },
+    {
+        "name": "avocado",
+        "dimension": "l",
+        "length": "0.2",
+        "calories": "234",
+        "weight": "500",
+        "tags": [
+            "food"
+        ]
+    },
+    {
+        "name": "Powerade",
+        "dimension": "h",
+        "height": "0.21",
+        "diameter": "0.085",
+        "calories": "0",
+        "weight": "793.787",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "powerade bottle",
+            "gatorade",
+            "gatorade bottle",
+            "sports drink"
+        ],
+        "note": ":digidu1Powerade:"
+    },
+    {
+        "name": "Pringles™ can",
+        "dimension": "h",
+        "height": "0.3",
+        "diameter": "0.08",
+        "calories": "980",
+        "weight": "149",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "chip can",
+            "chip tube",
+            "Pringles tube",
+            "Pringles can"
+        ]
+    },
+    {
+        "name": "medium Dominos™ pizza",
+        "dimension": "d",
+        "diameter": "0.3",
+        "calories": "1680",
+        "weight": "726",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "pizza",
+            "medium pizza",
+            "Dominos pizza",
+            "medium Dominos pizza"
+        ],
+        "note": "eight slices per pizza; the food with the most calories in the bot."
+    },
+    {
+        "name": "Subway Footlong™",
+        "dimension": "l",
+        "length": "0.3048",
+        "calories": "620",
+        "weight": "907.185",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "footlong",
+            "subway footlong",
+            "sub"
+        ]
+    }
+]

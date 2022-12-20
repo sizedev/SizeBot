@@ -23,7 +23,7 @@ class EdgeCog(commands.Cog):
     async def limits(self, ctx):
         """See the guild's current caps."""
         guilddata = guilddb.loadOrCreate(ctx.guild.id)
-        await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {'*Unset*' if guilddata.low_limit is None else guilddata.low_limit}\nHigh Limit: {'*Unset*' if guilddata.high_limit is None else guilddata.high_limit}")
+        await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {'*Unset*' if guilddata.low_limit is None else guilddata.low_limit:,.3mu}\nHigh Limit: {'*Unset*' if guilddata.high_limit is None else guilddata.high_limit:,.3mu}")
 
     @commands.command(
         aliases = ["lowlimit", "lowcap", "setlowcap", "setfloor"],
@@ -104,11 +104,13 @@ class EdgeCog(commands.Cog):
             if userdata.height < guilddata.low_limit:
                 userdata.height = guilddata.low_limit
                 userdb.save(userdata)
+                await m.channel.send(f"{userdata.nickname} hit the lower limit of this guild and has been set to {guilddata.low_limit:,.3mu}.")
 
         if guilddata.high_limit:
             if userdata.height > guilddata.high_limit:
                 userdata.height = guilddata.high_limit
                 userdb.save(userdata)
+                await m.channel.send(f"{userdata.nickname} hit the upper limit of this guild and has been set to {guilddata.high_limit:,.3mu}.")
 
         if userdata.display:
             await nickmanager.nick_update(m.author)

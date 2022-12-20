@@ -5,7 +5,8 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import TV, WV, SV
 
 
-def terminal_velocity(m, k, g = Decimal("9.807")):
+def terminal_velocity(m, k):
+    g = Decimal("9.807")
     return Decimal(math.sqrt(g * m / k))
 
 
