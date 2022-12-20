@@ -291,7 +291,7 @@ class ObjectsCog(commands.Cog):
             await ctx.send(f"{emojis.error} `{food.name}` is not a food.")
             return
 
-        if isinstance(food, str):
+        if isinstance(food, str) and food != "random":
             await ctx.send(f"{emojis.error} `{food}` is not a known object.")
             return
 
