@@ -5,7 +5,7 @@ import math
 from datetime import datetime
 from packaging import version
 
-from discord import Embed, Webhook, AsyncWebhookAdapter
+from discord import Embed, Webhook
 from discord.ext import commands
 
 from sizebot import __version__
@@ -41,7 +41,7 @@ alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, b
 
 async def post_report(report_type, message, report_text):
     async with aiohttp.ClientSession() as session:
-        webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
+        webhook = Webhook.from_url(conf.bugwebhookurl, session = session)
         guild_name = "DM" if not message.channel.guild else message.channel.guild.name
         await webhook.send(
             f"**{report_type}** from <@{message.author.id}> in {guild_name}:\n"
