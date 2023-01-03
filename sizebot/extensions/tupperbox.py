@@ -4,4 +4,4 @@ def ignoreTupperbox(ctx):
 
 
 async def setup(bot):
-    await bot.add_check(ignoreTupperbox)
+    bot.add_check(ignoreTupperbox)

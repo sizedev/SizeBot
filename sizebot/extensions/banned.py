@@ -11,4 +11,4 @@ def denyGuildBan(ctx):
 
 
 async def setup(bot):
-    await bot.add_check(denyGuildBan)
+    bot.add_check(denyGuildBan)
