@@ -704,5 +704,5 @@ class StatsCog(commands.Cog):
         await ctx.send(f"Standing on {larger_person.nickname}, {smaller_person.nickname} would experience **{gs:.3}**g of gravitational force.")
 
 
-def setup(bot):
-    bot.add_cog(StatsCog(bot))
+async def setup(bot):
+    await bot.add_cog(StatsCog(bot))

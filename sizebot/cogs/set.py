@@ -756,5 +756,5 @@ class SetCog(commands.Cog):
         await ctx.send(f"Cleared {userdata.nickname}'s view.")
 
 
-def setup(bot):
-    bot.add_cog(SetCog(bot))
+async def setup(bot):
+    await bot.add_cog(SetCog(bot))

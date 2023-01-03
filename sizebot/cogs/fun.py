@@ -89,5 +89,5 @@ class FunCog(commands.Cog):
             await cont.invoke(self.bot.get_command("digipee"))
 
 
-def setup(bot):
-    bot.add_cog(FunCog(bot))
+async def setup(bot):
+    await bot.add_cog(FunCog(bot))

@@ -134,5 +134,5 @@ class HolidayCog(commands.Cog):
         alreadyclaimed.add(userid)
 
 
-def setup(bot):
-    bot.add_cog(HolidayCog(bot))
+async def setup(bot):
+    await bot.add_cog(HolidayCog(bot))

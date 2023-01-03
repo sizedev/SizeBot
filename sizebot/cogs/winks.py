@@ -90,5 +90,5 @@ class WinksCog(commands.Cog):
         logger.info(f"Wink count requested by {ctx.author.nickname}! Current count: {winkcount} times!")
 
 
-def setup(bot):
-    bot.add_cog(WinksCog(bot))
+async def setup(bot):
+    await bot.add_cog(WinksCog(bot))

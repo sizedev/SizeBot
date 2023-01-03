@@ -34,5 +34,5 @@ class TestCog(commands.Cog):
             await reactionmenu.message.edit(content = reactionmenu.message.content + f"\nYou pressed {answer}. Good job!")
 
 
-def setup(bot):
-    bot.add_cog(TestCog(bot))
+async def setup(bot):
+    await bot.add_cog(TestCog(bot))

@@ -64,5 +64,5 @@ class RollCog(commands.Cog):
         await ctx.send(f"{ctx.author.display_name} rolled `{dString}` = **{result.total}**")
 
 
-def setup(bot):
-    bot.add_cog(RollCog(bot))
+async def setup(bot):
+    await bot.add_cog(RollCog(bot))

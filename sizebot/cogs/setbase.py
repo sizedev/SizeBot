@@ -281,5 +281,5 @@ class SetBaseCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
 
-def setup(bot):
-    bot.add_cog(SetBaseCog(bot))
+async def setup(bot):
+    await bot.add_cog(SetBaseCog(bot))
