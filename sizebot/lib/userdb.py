@@ -673,7 +673,7 @@ def load(guildid, userid, *, member=None, allow_unreg=False) -> User:
     if member:
         if not user.gender:
             user.soft_gender = member.gender
-        user.avatar_url = member.avatar_url
+        user.avatar_url = member.avatar
 
     if (not allow_unreg) and (not user.registered):
         raise errors.UserNotFoundException(guildid, userid, unreg=True)

@@ -110,7 +110,7 @@ class HelpCog(commands.Cog):
 
         embed = Embed(title=f"Help [SizeBot {__version__}]")
         embed.set_footer(text = "Select an emoji to see details about a category.")
-        embed.set_author(name = f"requested by {ctx.author.name}", icon_url = ctx.author.avatar_url)
+        embed.set_author(name = f"requested by {ctx.author.name}", icon_url = ctx.author.avatar)
 
         # Add each category to a field
         for cat in categories:
@@ -145,7 +145,7 @@ class HelpCog(commands.Cog):
     async def send_category_help(self, ctx, category, cmds):
         # Prepare the embed for the category
         embed = Embed(title=f"{category.name} Help [SizeBot {__version__}]")
-        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar)
 
         command_texts = [f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cmds]
         embed.add_field(value=f"**{category.emoji}{category.name}**", inline=False)
