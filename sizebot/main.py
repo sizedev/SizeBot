@@ -117,7 +117,7 @@ def main():
             await bot.load_extension("sizebot.extensions." + extension)
         for cog in initial_cogs:
             await bot.load_extension("sizebot.cogs." + cog)
-        await bot.load_extension("sizeroyale.cogs.royale")
+        # await bot.load_extension("sizeroyale.cogs.royale")
 
     @bot.event
     async def on_first_ready():
