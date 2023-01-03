@@ -109,7 +109,7 @@ class ThisCog(commands.Cog):
             return
         if isAgreementMessage(m.content):
             channel = m.channel
-            messages = await channel.history(limit=100).flatten()
+            messages = [m async for m in channel.history(limit=100)]
             if findLatestNonThis(messages).author.id == m.author.id:
                 return
             tracker = ThisTracker.load()
