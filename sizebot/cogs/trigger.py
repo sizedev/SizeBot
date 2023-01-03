@@ -159,5 +159,5 @@ class TriggerCog(commands.Cog):
         await ctx.send("Removed all trigger words.")
 
 
-def setup(bot):
-    bot.add_cog(TriggerCog(bot))
+async def setup(bot):
+    await bot.add_cog(TriggerCog(bot))

@@ -50,5 +50,5 @@ class AdminCog(commands.Cog):
         await self.bot.process_commands(new_message)
 
 
-def setup(bot):
-    bot.add_cog(AdminCog(bot))
+async def setup(bot):
+    await bot.add_cog(AdminCog(bot))

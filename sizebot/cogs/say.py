@@ -320,5 +320,5 @@ class SayCog(commands.Cog):
         await ctx.send(f"{nick} {verb} to {othernick}: \n> {m}")
 
 
-def setup(bot):
-    bot.add_cog(SayCog(bot))
+async def setup(bot):
+    await bot.add_cog(SayCog(bot))

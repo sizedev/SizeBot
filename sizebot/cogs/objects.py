@@ -400,5 +400,5 @@ class ObjectsCog(commands.Cog):
         await ctx.send(out)
 
 
-def setup(bot):
-    bot.add_cog(ObjectsCog(bot))
+async def setup(bot):
+    await bot.add_cog(ObjectsCog(bot))

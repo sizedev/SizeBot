@@ -10,5 +10,5 @@ def denyGuildBan(ctx):
     return not isGuildBanned
 
 
-def setup(bot):
+async def setup(bot):
     bot.add_check(denyGuildBan)

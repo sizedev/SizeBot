@@ -3,7 +3,7 @@ import discord
 from sizebot.lib import telemetry
 
 
-def setup(bot):
+async def setup(bot):
     @bot.listen
     def on_command(ctx):
         # Log command runs to telemetry

@@ -87,5 +87,5 @@ class ProfileCog(commands.Cog):
         await ctx.send(embed = profileembed)
 
 
-def setup(bot):
-    bot.add_cog(ProfileCog(bot))
+async def setup(bot):
+    await bot.add_cog(ProfileCog(bot))

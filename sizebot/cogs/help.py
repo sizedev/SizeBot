@@ -5,7 +5,7 @@ import math
 from datetime import datetime
 from packaging import version
 
-from discord import Embed, Webhook, AsyncWebhookAdapter
+from discord import Embed, Webhook
 from discord.ext import commands
 
 from sizebot import __version__
@@ -41,7 +41,7 @@ alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, b
 
 async def post_report(report_type, message, report_text):
     async with aiohttp.ClientSession() as session:
-        webhook = Webhook.from_url(conf.bugwebhookurl, adapter=AsyncWebhookAdapter(session))
+        webhook = Webhook.from_url(conf.bugwebhookurl, session = session)
         guild_name = "DM" if not message.channel.guild else message.channel.guild.name
         await webhook.send(
             f"**{report_type}** from <@{message.author.id}> in {guild_name}:\n"
@@ -110,7 +110,7 @@ class HelpCog(commands.Cog):
 
         embed = Embed(title=f"Help [SizeBot {__version__}]")
         embed.set_footer(text = "Select an emoji to see details about a category.")
-        embed.set_author(name = f"requested by {ctx.author.name}", icon_url = ctx.author.avatar_url)
+        embed.set_author(name = f"requested by {ctx.author.name}", icon_url = ctx.author.avatar)
 
         # Add each category to a field
         for cat in categories:
@@ -145,7 +145,7 @@ class HelpCog(commands.Cog):
     async def send_category_help(self, ctx, category, cmds):
         # Prepare the embed for the category
         embed = Embed(title=f"{category.name} Help [SizeBot {__version__}]")
-        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar)
 
         command_texts = [f"`{c.name}` {c.alias_string}\n{c.short_doc}" for c in cmds]
         embed.add_field(value=f"**{category.emoji}{category.name}**", inline=False)
@@ -412,5 +412,5 @@ categories = [
 ]
 
 
-def setup(bot):
-    bot.add_cog(HelpCog(bot))
+async def setup(bot):
+    await bot.add_cog(HelpCog(bot))

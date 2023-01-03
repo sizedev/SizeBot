@@ -73,5 +73,5 @@ class EvalCog(commands.Cog):
                 await ctx.author.send(emojis.warning + f" ` {utils.formatError(err)} `")
 
 
-def setup(bot):
-    bot.add_cog(EvalCog(bot))
+async def setup(bot):
+    await bot.add_cog(EvalCog(bot))

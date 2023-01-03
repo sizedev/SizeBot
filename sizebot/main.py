@@ -110,11 +110,14 @@ def main():
     objs.init()
     pokemon.init()
 
-    for extension in initial_extensions:
-        bot.load_extension("sizebot.extensions." + extension)
-    for cog in initial_cogs:
-        bot.load_extension("sizebot.cogs." + cog)
-    bot.load_extension("sizeroyale.cogs.royale")
+    @bot.event
+    async def setup_hook():
+        logger.info("Setup hook called!")
+        for extension in initial_extensions:
+            await bot.load_extension("sizebot.extensions." + extension)
+        for cog in initial_cogs:
+            await bot.load_extension("sizebot.cogs." + cog)
+        # await bot.load_extension("sizeroyale.cogs.royale")
 
     @bot.event
     async def on_first_ready():

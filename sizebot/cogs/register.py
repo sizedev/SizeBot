@@ -426,5 +426,5 @@ class RegisterCog(commands.Cog):
         await ctx.send(f"Successfully copied profile from *{self.bot.get_guild(int(chosenguildid)).name}* to here!")
 
 
-def setup(bot):
-    bot.add_cog(RegisterCog(bot))
+async def setup(bot):
+    await bot.add_cog(RegisterCog(bot))

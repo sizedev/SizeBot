@@ -66,5 +66,5 @@ class KeypadCog(commands.Cog):
         await outputmsg.clear_reactions()
 
 
-def setup(bot):
-    bot.add_cog(KeypadCog(bot))
+async def setup(bot):
+    await bot.add_cog(KeypadCog(bot))

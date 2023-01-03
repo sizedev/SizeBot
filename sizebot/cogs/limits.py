@@ -11,7 +11,7 @@ from sizebot.lib.units import SV
 logger = logging.getLogger("sizebot")
 
 
-class EdgeCog(commands.Cog):
+class LimitCog(commands.Cog):
     """Commands to create or clear edge users."""
 
     def __init__(self, bot):
@@ -116,5 +116,5 @@ class EdgeCog(commands.Cog):
             await nickmanager.nick_update(m.author)
 
 
-def setup(bot):
-    bot.add_cog(EdgeCog(bot))
+async def setup(bot):
+    await bot.add_cog(LimitCog(bot))
