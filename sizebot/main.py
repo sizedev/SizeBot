@@ -52,6 +52,7 @@ initial_cogs = [
     "objects",
     "pokemon",
     "profile",
+    "quake",
     # "rainbow",
     "register",
     "roll",
