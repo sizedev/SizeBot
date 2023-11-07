@@ -47,7 +47,7 @@ class HolidayCog(commands.Cog):
                 newactivityname = "Happy New Year!"
             elif now.month == 1 and now.day == 31:
                 newnick += " 🎉"
-                newactivityname = "Happy Birthday, Nicole!"
+                newactivityname = "Happy Birthday, Nichole!"
             elif now.month == 2 and now.day == 14:  # Valentine's Day (and AWK's birthday)
                 logger.info("Happy Valentine's Day!")
                 newnick += " 💗"
