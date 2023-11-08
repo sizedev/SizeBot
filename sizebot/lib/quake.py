@@ -37,6 +37,8 @@ def mag_to_name(mag: float) -> str:
         return "great"
     elif mag < 10:
         return "extreme"
+    elif mag < 13:
+        return "unprecedented"
     elif mag < 21:
         return "apocalyptic"
     elif mag < 22:
