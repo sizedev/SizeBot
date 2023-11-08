@@ -37,10 +37,12 @@ def mag_to_name(mag: float) -> str:
         return "great"
     elif mag < 10:
         return "extreme"
-    elif mag < 22:
+    elif mag < 21:
         return "apocalyptic"
+    elif mag < 22:
+        return "earth-cracking"
     else:
-        return "earth-ending"
+        return "earth-crumbling"
 
 def scale_to_joules(user: User, g: float, factor: float) -> int:
     return math.floor((user.weight * Decimal(0.4536)) / 2 * Decimal(g) * (Decimal(factor) * user.scale))
