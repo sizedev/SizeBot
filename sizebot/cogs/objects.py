@@ -1,3 +1,4 @@
+from decimal import Decimal
 import logging
 import math
 import random
@@ -323,6 +324,28 @@ class ObjectsCog(commands.Cog):
             title = f"{userdata.nickname} eating {food.name}",
             description = foodout)
         embed.set_footer(text = f"{userdata.nickname} needs {cal_per_day_string} per day.")
+
+        await ctx.send(embed = embed)
+
+    @commands.command(
+        category = "objects"
+    )
+    async def water(self, ctx, *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
+        if who is None:
+            who = ctx.author
+
+        userdata = userdb.load_or_fake(who)
+        scale = userdata.scale
+
+        BASE_WATER = WV(3200)
+
+        water_weight = WV(BASE_WATER * (scale ** 3))
+        water_liters = water_weight / 1000
+        water_gallons = water_liters / Decimal("3.78541")
+
+        embed = discord.Embed(
+            title = f"{userdata.nickname} drinking water",
+            description = f"{userdata.nickname} would need to drink **{water_weight:,.3mu}** per day. That's **{water_liters:,.1} liters**, or **{water_gallons:,.1} gallons**.")
 
         await ctx.send(embed = embed)
 
