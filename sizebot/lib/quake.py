@@ -9,7 +9,7 @@ STOMP_G = 11.5
 
 STEP_FACTOR = 0.035
 STOMP_FACTOR = 0.5
-JUMP_FACTOR = 0.43
+JUMP_FACTOR = 1
 
 def joules_to_mag(joules: float) -> Decimal:
     # This might not be super accurate.
