@@ -9,7 +9,6 @@ import sizebot.data
 from sizebot.lib import userdb
 from sizebot.lib.constants import ids
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.versioning import release_on
 
 tasks = {}
 

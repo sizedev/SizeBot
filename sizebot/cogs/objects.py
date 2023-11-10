@@ -19,7 +19,6 @@ from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import glitch_string, parseMany, prettyTimeDelta
-from sizebot.lib.versioning import release_on
 
 
 logger = logging.getLogger("sizebot")

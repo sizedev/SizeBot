@@ -2,7 +2,6 @@ import importlib.resources as pkg_resources
 import logging
 import random
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.versioning import release_on
 from typing import Union
 
 from discord.ext import commands, tasks

@@ -9,7 +9,6 @@ from sizebot.lib import userdb
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.pokemon import pokemon
 from sizebot.lib.units import SV
-from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 

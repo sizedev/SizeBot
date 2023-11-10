@@ -15,7 +15,6 @@ from sizebot.lib import checks, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.menu import Menu
 from sizebot.lib.units import SV, WV
-from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 

@@ -12,7 +12,6 @@ from sizebot.lib.loglevels import EGG
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, glitch_string, parse_scale, randRangeLog
-from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 

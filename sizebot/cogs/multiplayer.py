@@ -10,7 +10,6 @@ from sizebot.lib.constants import colors
 from sizebot.lib.diff import Diff
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, WV
-from sizebot.lib.versioning import release_on
 
 logger = logging.getLogger("sizebot")
 
