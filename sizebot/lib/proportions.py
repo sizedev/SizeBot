@@ -13,6 +13,8 @@ from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import User, defaultheight as average_height, defaultweight, defaultliftstrength, falllimit
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
+IS_LARGE = 1.0
+
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
@@ -674,21 +676,23 @@ class PersonStats:
         embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n*{self.formattedweightscale} scale*", inline=True)
         embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
         embed.add_field(name=f"{self.footname} Width", value=format(self.footwidth, ",.3mu"), inline=True)
-        embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
         embed.add_field(name="Shoeprint Depth", value=format(self.shoeprintdepth, ",.3mu"), inline=True)
         embed.add_field(name="Pointer Finger Length", value=format(self.pointerlength, ",.3mu"), inline=True)
-        embed.add_field(name="Thumb Width", value=format(self.thumbwidth, ",.3mu"), inline=True)
-        embed.add_field(name="Nail Thickness", value=format(self.nailthickness, ",.3mu"), inline=True)
-        embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
-        embed.add_field(name="Clothing Thread Thickness", value=format(self.threadthickness, ",.3mu"), inline=True)
+        if self.scale > IS_LARGE:
+            embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
+            embed.add_field(name="Thumb Width", value=format(self.thumbwidth, ",.3mu"), inline=True)
+            embed.add_field(name="Nail Thickness", value=format(self.nailthickness, ",.3mu"), inline=True)
+            embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
+            embed.add_field(name="Clothing Thread Thickness", value=format(self.threadthickness, ",.3mu"), inline=True)
         if self.hairlength:
             embed.add_field(name=f"{self.hairname} Length", value=format(self.hairlength, ",.3mu"), inline=True)
         if self.taillength:
             embed.add_field(name="Tail Length", value=format(self.taillength, ",.3mu"), inline=True)
         if self.earheight:
             embed.add_field(name="Ear Height", value=format(self.earheight, ",.3mu"), inline=True)
-        embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
-        embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
+        if self.scale > IS_LARGE:
+            embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
+            embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
         embed.add_field(name="Jump Height", value=f"{self.jumpheight:,.3mu}", inline=True)
         embed.add_field(name="View Distance to Horizon", value=f"{self.horizondistance:,.3mu}", inline=True)
         if self.fallproof:
