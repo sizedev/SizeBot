@@ -374,7 +374,6 @@ class HelpCog(commands.Cog):
         """How many users are registered?"""
         await ctx.send(f"There are **{userdb.count_users()}** users of SizeBot3½, with **{userdb.count_profiles()}** profiles created, <@!{ctx.message.author.id}>.")
 
-    @release_on("3.7")
     @commands.command(
         category = "help"
     )

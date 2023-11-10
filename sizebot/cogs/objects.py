@@ -233,7 +233,6 @@ class ObjectsCog(commands.Cog):
 
         await ctx.send(embed = what.statsembed())
 
-    @release_on("3.7")
     @commands.command(
         category = "objects",
         usage = "[@User]"
@@ -268,7 +267,6 @@ class ObjectsCog(commands.Cog):
             description = "\n".join(outstrings))
         await ctx.send(embed = embed)
 
-    @release_on("3.7")
     @commands.command(
         category = "objects"
     )
@@ -349,7 +347,6 @@ class ObjectsCog(commands.Cog):
 
         await ctx.send(embed = embed)
 
-    @release_on("3.7")
     @commands.command(
         category = "objects"
     )

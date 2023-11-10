@@ -18,7 +18,6 @@ class PokemonCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @release_on("3.7")
     @commands.command(
         aliases = ["dex"],
         category = "objects"
@@ -38,7 +37,6 @@ class PokemonCog(commands.Cog):
         e = p.stats_embed()
         await ctx.send(embed = e)
 
-    @release_on("3.7")
     @commands.command(
         aliases = ["pokecompare", "pokecomp", "lookatpoke"],
         category = "objects"

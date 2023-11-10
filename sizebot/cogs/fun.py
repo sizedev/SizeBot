@@ -32,7 +32,6 @@ class FunCog(commands.Cog):
         await ctx.message.delete(delay=0)
         await ctx.send(message)
 
-    @release_on("3.7")
     @commands.command(
         aliases = ["tra"],
         category = "fun"

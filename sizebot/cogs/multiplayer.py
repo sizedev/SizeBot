@@ -70,7 +70,6 @@ class MPCog(commands.Cog):
         userdb.save(userdata)
         await ctx.send("Your button is now disabled.")
 
-    @release_on("3.7")
     @commands.command(
         usage = "<amount> <victim> [thief]",
         category = "multiplayer"

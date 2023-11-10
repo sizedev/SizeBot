@@ -182,7 +182,6 @@ class ChangeCog(commands.Cog):
         else:
             await ctx.invoke(self.bot.get_command("drinkme"))
 
-    @release_on("3.7")
     @commands.command(
         category = "change"
     )
@@ -210,7 +209,6 @@ class ChangeCog(commands.Cog):
 
         await ctx.send(f"You outgrew {obj.article} **{obj.name}** *({obj.unitlength:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
 
-    @release_on("3.7")
     @commands.command(
         category = "change"
     )

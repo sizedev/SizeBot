@@ -251,7 +251,6 @@ class SetCog(commands.Cog):
         await nickmanager.nick_update(ctx.author)
         await showNextStep(ctx, userdata, completed=completed_registration)
 
-    @release_on("3.6.2")
     @commands.command(
         usage = "<minscale> <maxscale>",
         category = "set"
