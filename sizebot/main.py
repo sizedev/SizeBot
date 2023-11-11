@@ -202,7 +202,10 @@ def main():
     async def on_message_timed(message):
         def timeywimey():
             now = arrow.now()
-            if timeywimey.prev is None:
+            try:
+                if timeywimey.prev is None:
+                    timeywimey.prev = now
+            except AttributeError:
                 timeywimey.prev = now
             diff = now - timeywimey.prev
             timeywimey.prev = now
