@@ -29,7 +29,6 @@ class SetBaseCog(commands.Cog):
 
         # Convenience for initial registration
         if "setbaseheight" in userdata.registration_steps_remaining:
-            userdata.height = newbaseheight
             if not (SV.parse("4ft") < newbaseheight < SV.parse("8ft")):
                 await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
 
@@ -87,7 +86,6 @@ class SetBaseCog(commands.Cog):
         completed_registration = False
         if newbaseheight is not None:
             if "setbaseheight" in userdata.registration_steps_remaining:
-                userdata.height = newbaseheight
                 # TODO: Actually have a confirm message here.
                 if not (SV.parse("4ft") <= newbaseheight < SV.parse("8ft")):
                     await ctx.send(f"{emojis.warning} **WARNING:** Your base height should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base height similar to the size of a normal human being.")
