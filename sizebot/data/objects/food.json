@@ -470,23 +470,6 @@
         "note": ":digidu1Powerade:"
     },
     {
-        "name": "Pringles™ can",
-        "dimension": "h",
-        "height": "0.3",
-        "diameter": "0.08",
-        "calories": "980",
-        "weight": "149",
-        "tags": [
-            "food"
-        ],
-        "aliases": [
-            "chip can",
-            "chip tube",
-            "Pringles tube",
-            "Pringles can"
-        ]
-    },
-    {
         "name": "medium Dominos™ pizza",
         "dimension": "d",
         "diameter": "0.3",
@@ -502,6 +485,23 @@
             "medium Dominos pizza"
         ],
         "note": "eight slices per pizza; the food with the most calories in the bot."
+    },
+    {
+        "name": "Pringles™ can",
+        "dimension": "h",
+        "height": "0.3",
+        "diameter": "0.08",
+        "calories": "980",
+        "weight": "149",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "chip can",
+            "chip tube",
+            "Pringles tube",
+            "Pringles can"
+        ]
     },
     {
         "name": "Subway Footlong™",

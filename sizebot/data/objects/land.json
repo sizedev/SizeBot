@@ -125,5 +125,16 @@
             "land"
         ],
         "note": "The tallest point is Mount El'brus."
+    },
+    {
+        "name": "Germany",
+        "dimension": "w",
+        "height": "2962",
+        "length": "1005840",
+        "width": "724205",
+        "tags": [
+            "country",
+            "land"
+        ]
     }
 ]

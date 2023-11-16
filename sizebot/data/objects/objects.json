@@ -36,19 +36,6 @@
         ]
     },
     {
-        "name": "red blood cell",
-        "dimension": "d",
-        "diameter": "0.000007",
-        "weight": "1e-12",
-        "tags": [
-            "cell"
-        ],
-        "aliases": [
-            "blood",
-            "blood cell"
-        ]
-    },
-    {
         "name": "E. coli",
         "dimension": "l",
         "length": "0.000007",
@@ -61,12 +48,16 @@
         ]
     },
     {
-        "name": "fog particle",
+        "name": "red blood cell",
         "dimension": "d",
-        "diameter": "0.00001",
+        "diameter": "0.000007",
+        "weight": "1e-12",
+        "tags": [
+            "cell"
+        ],
         "aliases": [
-            "fog",
-            "mist"
+            "blood",
+            "blood cell"
         ]
     },
     {
@@ -87,6 +78,15 @@
         "weight": "1.1e-10",
         "aliases": [
             "dust particle"
+        ]
+    },
+    {
+        "name": "fog particle",
+        "dimension": "d",
+        "diameter": "0.00001",
+        "aliases": [
+            "fog",
+            "mist"
         ]
     },
     {
@@ -180,15 +180,15 @@
         ]
     },
     {
-        "name": "pinhead",
-        "dimension": "d",
-        "diameter": "0.002"
-    },
-    {
         "name": "goosebump",
         "dimension": "d",
         "diameter": "0.002",
         "depth": "0.0005"
+    },
+    {
+        "name": "pinhead",
+        "dimension": "d",
+        "diameter": "0.002"
     },
     {
         "name": "fruit fly",
@@ -222,27 +222,18 @@
         "note": "US-style ground pin hole."
     },
     {
-        "name": "carpet fiber",
-        "dimension": "h",
-        "height": "0.00635",
-        "width": "0.0015875",
-        "aliases": [
-            "carpet"
-        ]
-    },
-    {
         "name": "ball bearing",
         "dimension": "d",
         "diameter": "0.00635",
         "weight": "0.8845051"
     },
     {
-        "name": "fly",
-        "dimension": "l",
-        "length": "0.0065",
-        "weight": "0.0115",
-        "tags": [
-            "animal"
+        "name": "carpet fiber",
+        "dimension": "h",
+        "height": "0.00635",
+        "width": "0.0015875",
+        "aliases": [
+            "carpet"
         ]
     },
     {
@@ -254,6 +245,15 @@
             "diamond"
         ],
         "note": "In general, a 1 carat diamond costs between $1,800 and $12,000 USD."
+    },
+    {
+        "name": "fly",
+        "dimension": "l",
+        "length": "0.0065",
+        "weight": "0.0115",
+        "tags": [
+            "animal"
+        ]
     },
     {
         "name": "microUSB port",
@@ -336,17 +336,17 @@
         ]
     },
     {
+        "name": "coffee bean",
+        "dimension": "l",
+        "length": "0.01",
+        "weight": "0.1325"
+    },
+    {
         "name": "staple",
         "dimension": "l",
         "height": "0.0035",
         "length": "0.01",
         "weight": "0.0323995"
-    },
-    {
-        "name": "coffee bean",
-        "dimension": "l",
-        "length": "0.01",
-        "weight": "0.1325"
     },
     {
         "name": "shirt button",
@@ -765,6 +765,16 @@
         "weight": "10"
     },
     {
+        "name": "AirPod™",
+        "dimension": "l",
+        "length": "0.04",
+        "weight": "4",
+        "aliases": [
+            "earbud",
+            "airpod"
+        ]
+    },
+    {
         "name": "lego minifig",
         "dimension": "h",
         "height": "0.04",
@@ -779,16 +789,6 @@
             "lego person",
             "lego people",
             "lego minifigure"
-        ]
-    },
-    {
-        "name": "AirPod™",
-        "dimension": "l",
-        "length": "0.04",
-        "weight": "4",
-        "aliases": [
-            "earbud",
-            "airpod"
         ]
     },
     {
@@ -1029,17 +1029,6 @@
         ]
     },
     {
-        "name": "yeast packet",
-        "dimension": "h",
-        "height": "0.076",
-        "length": "0.0047",
-        "width": "0.063",
-        "weight": "6",
-        "aliases": [
-            "yeast"
-        ]
-    },
-    {
         "name": "Q-tip",
         "dimension": "l",
         "length": "0.076",
@@ -1058,6 +1047,17 @@
         "aliases": [
             "toilet paper",
             "tp"
+        ]
+    },
+    {
+        "name": "yeast packet",
+        "dimension": "h",
+        "height": "0.076",
+        "length": "0.0047",
+        "width": "0.063",
+        "weight": "6",
+        "aliases": [
+            "yeast"
         ]
     },
     {
@@ -1214,6 +1214,13 @@
         ]
     },
     {
+        "name": "coaster",
+        "dimension": "d",
+        "height": "0.0016",
+        "diameter": "0.1016",
+        "weight": "113"
+    },
+    {
         "name": "Joy-Con™",
         "dimension": "l",
         "length": "0.1016",
@@ -1250,13 +1257,6 @@
         ]
     },
     {
-        "name": "coaster",
-        "dimension": "d",
-        "height": "0.0016",
-        "diameter": "0.1016",
-        "weight": "113"
-    },
-    {
         "name": "XBox One™ controller",
         "dimension": "h",
         "height": "0.1019",
@@ -1283,6 +1283,15 @@
         ]
     },
     {
+        "name": "lightbulb",
+        "dimension": "h",
+        "height": "0.11",
+        "weight": "34",
+        "aliases": [
+            "bulb"
+        ]
+    },
+    {
         "name": "Nintendo Gamecube™",
         "dimension": "h",
         "height": "0.11",
@@ -1295,15 +1304,6 @@
         "aliases": [
             "gamecube",
             "nintendo gamecube"
-        ]
-    },
-    {
-        "name": "lightbulb",
-        "dimension": "h",
-        "height": "0.11",
-        "weight": "34",
-        "aliases": [
-            "bulb"
         ]
     },
     {
@@ -1429,6 +1429,18 @@
         ]
     },
     {
+        "name": "Amazon Echo™",
+        "dimension": "h",
+        "height": "0.148",
+        "diameter": "0.099",
+        "weight": "780",
+        "aliases": [
+            "Alexa",
+            "Echo",
+            "Amazon"
+        ]
+    },
+    {
         "name": "Nintendo Game Boy™",
         "dimension": "l",
         "length": "0.148",
@@ -1443,18 +1455,6 @@
         ]
     },
     {
-        "name": "Amazon Echo™",
-        "dimension": "h",
-        "height": "0.148",
-        "diameter": "0.099",
-        "weight": "780",
-        "aliases": [
-            "Alexa",
-            "Echo",
-            "Amazon"
-        ]
-    },
-    {
         "name": "ballpoint pen",
         "dimension": "l",
         "length": "0.149",
@@ -1465,6 +1465,12 @@
         ]
     },
     {
+        "name": "dart",
+        "dimension": "l",
+        "length": "0.1524",
+        "weight": "18"
+    },
+    {
         "name": "rose",
         "dimension": "h",
         "height": "0.1524",
@@ -1473,12 +1479,6 @@
         "aliases": [
             "flower"
         ]
-    },
-    {
-        "name": "dart",
-        "dimension": "l",
-        "length": "0.1524",
-        "weight": "18"
     },
     {
         "name": "toothbrush",
@@ -1506,19 +1506,19 @@
         ]
     },
     {
+        "name": "pencil",
+        "dimension": "l",
+        "length": "0.1905",
+        "width": "0.006",
+        "weight": "42.5243"
+    },
+    {
         "name": "stair height",
         "dimension": "h",
         "height": "0.1905",
         "aliases": [
             "stair"
         ]
-    },
-    {
-        "name": "pencil",
-        "dimension": "l",
-        "length": "0.1905",
-        "width": "0.006",
-        "weight": "42.5243"
     },
     {
         "name": "average hand",
@@ -1545,6 +1545,12 @@
         "note": "Yes, it's funny this name is so specific."
     },
     {
+        "name": "napkin",
+        "dimension": "l",
+        "length": "0.2032",
+        "width": "0.2032"
+    },
+    {
         "name": "remote",
         "dimension": "l",
         "length": "0.2032",
@@ -1553,12 +1559,6 @@
             "remote control",
             "TV remote"
         ]
-    },
-    {
-        "name": "napkin",
-        "dimension": "l",
-        "length": "0.2032",
-        "width": "0.2032"
     },
     {
         "name": "stepstool",
@@ -1614,6 +1614,14 @@
         ]
     },
     {
+        "name": "book",
+        "dimension": "l",
+        "length": "0.2286",
+        "width": "0.1524",
+        "depth": "0.0381",
+        "weight": "442.2526"
+    },
+    {
         "name": "fork",
         "dimension": "l",
         "length": "0.2286",
@@ -1622,14 +1630,6 @@
         "tags": [
             "utensil"
         ]
-    },
-    {
-        "name": "book",
-        "dimension": "l",
-        "length": "0.2286",
-        "width": "0.1524",
-        "depth": "0.0381",
-        "weight": "442.2526"
     },
     {
         "name": "chopstick",
@@ -1807,6 +1807,12 @@
         ]
     },
     {
+        "name": "sock",
+        "dimension": "l",
+        "length": "0.3",
+        "weight": "45"
+    },
+    {
         "name": "vinyl record",
         "dimension": "d",
         "diameter": "0.3",
@@ -1816,10 +1822,11 @@
         ]
     },
     {
-        "name": "sock",
-        "dimension": "l",
-        "length": "0.3",
-        "weight": "45"
+        "name": "dollhouse",
+        "dimension": "h",
+        "height": "0.3048",
+        "length": "0.983",
+        "width": "0.983"
     },
     {
         "name": "XBox Series X™",
@@ -1835,13 +1842,6 @@
             "XSX",
             "Xbox"
         ]
-    },
-    {
-        "name": "dollhouse",
-        "dimension": "h",
-        "height": "0.3048",
-        "length": "0.983",
-        "width": "0.983"
     },
     {
         "name": "wine bottle",
@@ -1882,6 +1882,15 @@
         "weight": "1500"
     },
     {
+        "name": "silverfish",
+        "dimension": "w",
+        "height": "0.3",
+        "width": "0.4",
+        "tags": [
+            "minecraft"
+        ]
+    },
+    {
         "name": "Sony PlayStation 5™",
         "dimension": "h",
         "height": "0.4",
@@ -1894,15 +1903,6 @@
         "aliases": [
             "PS5",
             "PlayStation"
-        ]
-    },
-    {
-        "name": "silverfish",
-        "dimension": "w",
-        "height": "0.3",
-        "width": "0.4",
-        "tags": [
-            "minecraft"
         ]
     },
     {
@@ -2078,6 +2078,16 @@
         ]
     },
     {
+        "name": "bicycle",
+        "dimension": "h",
+        "height": "1.016",
+        "length": "1.6891",
+        "weight": "11800",
+        "aliases": [
+            "bike"
+        ]
+    },
+    {
         "name": "Steinway Upright Piano - Model 40",
         "dimension": "h",
         "height": "1.016",
@@ -2087,16 +2097,6 @@
         "aliases": [
             "upright piano",
             "piano"
-        ]
-    },
-    {
-        "name": "bicycle",
-        "dimension": "h",
-        "height": "1.016",
-        "length": "1.6891",
-        "weight": "11800",
-        "aliases": [
-            "bike"
         ]
     },
     {
@@ -2381,6 +2381,15 @@
         ]
     },
     {
+        "name": "doorway",
+        "dimension": "h",
+        "height": "2.032",
+        "width": "0.8128",
+        "aliases": [
+            "door arch"
+        ]
+    },
+    {
         "name": "queen-size bed",
         "dimension": "l",
         "length": "2.032",
@@ -2393,15 +2402,6 @@
             "queen size bed",
             "queen-size mattress",
             "queen size mattress"
-        ]
-    },
-    {
-        "name": "doorway",
-        "dimension": "h",
-        "height": "2.032",
-        "width": "0.8128",
-        "aliases": [
-            "door arch"
         ]
     },
     {
@@ -2525,6 +2525,17 @@
         ]
     },
     {
+        "name": "double decker bus",
+        "dimension": "l",
+        "height": "4.38",
+        "length": "4.5",
+        "width": "1.905",
+        "weight": "25885610",
+        "aliases": [
+            "double-decker bus"
+        ]
+    },
+    {
         "name": "Honda Civic",
         "dimension": "l",
         "length": "4.5",
@@ -2535,17 +2546,6 @@
         ],
         "aliases": [
             "car"
-        ]
-    },
-    {
-        "name": "double decker bus",
-        "dimension": "l",
-        "height": "4.38",
-        "length": "4.5",
-        "width": "1.905",
-        "weight": "25885610",
-        "aliases": [
-            "double-decker bus"
         ]
     },
     {
@@ -2687,9 +2687,11 @@
         "name": "oak tree",
         "dimension": "h",
         "height": "18",
+        "calories": "24802004.495798726",
         "weight": "7500000",
         "tags": [
-            "plant"
+            "plant",
+            "food"
         ],
         "aliases": [
             "tree"
@@ -2751,6 +2753,7 @@
         "name": "redwood tree",
         "dimension": "h",
         "height": "60.96",
+        "calories": "2400000000",
         "weight": "725747792",
         "tags": [
             "plant"
