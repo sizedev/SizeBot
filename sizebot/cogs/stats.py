@@ -349,8 +349,8 @@ class StatsCog(commands.Cog):
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
 
         embedtosend = comparison.getStatEmbed(statmap["height"])
-        embedtosend.title = f"{userdata1.height:,.3mu} to {userdata2.nickname}"
-        embedtosend.set_footer(text = f"{userdata1.height:,.3mu} is {comparison.multiplier:,.3}x larger than {userdata2.nickname}.")
+        embedtosend.title = f"{comparison.viewed.height:,.3mu} to {comparison.viewer.nickname}"
+        embedtosend.set_footer(text = f"{comparison.viewed.height:,.3mu} is {comparison.multiplier:,.3}x larger than {comparison.viewer.nickname}.")
 
         await ctx.send(embed = embedtosend)
 
