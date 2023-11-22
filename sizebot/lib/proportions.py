@@ -326,12 +326,14 @@ class PersonSpeedComparison:
         _swimtime = (dist / self.viewer.swimperhour) * 60 * 60
         swimsteps = math.ceil(dist / self.viewer.swimsteplength)
         _drivetime = (dist / self.viewer.driveperhour) * 60 * 60
+        _spaceshiptime = (dist / self.viewer.spaceshipperhour) * 60 * 60
         walktime = prettyTimeDelta(_walktime, roundeventually = True)
         runtime = prettyTimeDelta(_runtime, roundeventually = True)
         climbtime = prettyTimeDelta(_climbtime, roundeventually = True)
         crawltime = prettyTimeDelta(_crawltime, roundeventually = True)
         swimtime = prettyTimeDelta(_swimtime, roundeventually = True)
         drivetime = prettyTimeDelta(_drivetime, roundeventually = True)
+        spaceshiptime = prettyTimeDelta(_spaceshiptime, roundeventually = True)
 
         walkspeedstr = f"\n*{emojis.blank}{self.viewer.walkperhour:,.3mu} per hour*"
         runspeedstr = f"\n*{emojis.blank}{self.viewer.runperhour:,.3mu} per hour*"
@@ -339,6 +341,7 @@ class PersonSpeedComparison:
         crawlspeedstr = f"\n*{emojis.blank}{self.viewer.crawlperhour:,.3mu} per hour*"
         swimspeedstr = f"\n*{emojis.blank}{self.viewer.swimperhour:,.3mu} per hour*"
         drivespeedstr = f"\n*{emojis.blank}{self.viewer.driveperhour:,.3mu} per hour*"
+        spacespeedstr = f"\n*{emojis.blank}{self.viewer.spaceshipperhour:,.3mu} per hour*"
 
         if self.viewer.incomprehensible or self.viewed.incomprehensible:
             walkspeedstr = glitch_string(walkspeedstr)
@@ -356,11 +359,12 @@ class PersonSpeedComparison:
             f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}\n"
             f"{emojis.eyes + ' ' + reldist_print + nl if include_relative else ''}{emojis.blank + rel_shoesize + nl if foot and include_relative else ''}"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
-            f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
+            f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed and _runtime >= 1 else ''}\n"
             f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}\n"
-            f"{emojis.crawl} {crawltime} ({crawlsteps:,.3} steps){crawlspeedstr if speed else ''}\n"
+            f"{emojis.crawl} {crawltime} ({crawlsteps:,.3} steps){crawlspeedstr if speed and _crawltime >= 1 else ''}\n"
             f"{emojis.swim} {swimtime} ({swimsteps:,.3} strokes){swimspeedstr if speed else ''}\n"
-            f"{emojis.drive} {drivetime} {drivespeedstr if speed else ''}"
+            f"{emojis.drive} {drivetime} {drivespeedstr if speed and _drivetime >= 1 else ''}\n"
+            f"{emojis.spaceship} {spaceshiptime} {spacespeedstr if speed and _spaceshiptime >= 1 else ''}\n"
         )
 
         return out_str
@@ -554,6 +558,7 @@ class PersonStats:
         average_climbperhour = 4828
         average_crawlperhour = 2556
         average_driveperhour = 96561
+        average_spaceshipperhour = 1000 * 60 * 60
 
         walkstepsperhour = 6900
         runstepsperhour = 10200
@@ -574,6 +579,7 @@ class PersonStats:
         self.crawlperhour = SV(base_crawlperhour * self.scale)
 
         self.driveperhour = SV(average_driveperhour * self.scale)
+        self.spaceshipperhour = SV(average_spaceshipperhour * self.scale)
 
         self.walksteplength = SV(base_walkperhour / walkstepsperhour * self.scale)
         self.runsteplength = SV(base_runperhour / runstepsperhour * self.scale)
