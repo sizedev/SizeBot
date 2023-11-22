@@ -359,15 +359,21 @@ class PersonSpeedComparison:
             f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}\n"
             f"{emojis.eyes + ' ' + reldist_print + nl if include_relative else ''}{emojis.blank + rel_shoesize + nl if foot and include_relative else ''}"
             f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
-            f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed and _runtime >= 1 else ''}\n"
-            f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}\n"
-            f"{emojis.crawl} {crawltime} ({crawlsteps:,.3} steps){crawlspeedstr if speed and _crawltime >= 1 else ''}\n"
-            f"{emojis.swim} {swimtime} ({swimsteps:,.3} strokes){swimspeedstr if speed else ''}\n"
-            f"{emojis.drive} {drivetime} {drivespeedstr if speed and _drivetime >= 1 else ''}\n"
-            f"{emojis.spaceship} {spaceshiptime} {spacespeedstr if speed and _spaceshiptime >= 1 else ''}\n"
         )
+        if _runtime >= 1:
+            out_str += f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
 
-        return out_str
+        out_str += f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}\n"
+        if _crawltime >= 1:
+            out_str += f"{emojis.crawl} {crawltime} ({crawlsteps:,.3} steps){crawlspeedstr if speed else ''}\n"
+        if _swimtime >= 1:
+            out_str += f"{emojis.swim} {swimtime} ({swimsteps:,.3} strokes){swimspeedstr if speed else ''}\n"
+        if _drivetime >= 1:
+            out_str += f"{emojis.drive} {drivetime} {drivespeedstr if speed else ''}\n"
+        if _spaceshiptime >= 1:
+            out_str += f"{emojis.spaceship} {spaceshiptime} {spacespeedstr if speed else ''}\n"
+
+        return out_str.strip()
 
     def getStatEmbed(self, stat):
         descmap = {
