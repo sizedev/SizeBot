@@ -30,13 +30,18 @@ class ObjectsCog(commands.Cog):
 
     @commands.command(
         aliases = ["objects", "objlist", "objectlist"],
-        category = "objects"
+        category = "objects",
+        usage = "[tag]"
     )
-    async def objs(self, ctx):
+    async def objs(self, ctx, tag: str = None):
         """Get a list of the various objects SizeBot accepts."""
         objectunits = []
         for obj in objs.objects:
-            objectunits.append(obj.name)
+            if tag is not None:
+                if tag in obj.tags:
+                    objectunits.append(obj.name)
+            else:
+                objectunits.append(obj.name)
 
         objectunits.sort()
 
