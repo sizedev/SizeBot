@@ -709,7 +709,7 @@ class PersonStats:
         self.fallproof = self.terminalvelocity < FALL_LIMIT
         self.fallproofcheck = emojis.voteyes if self.fallproof else emojis.voteno
 
-        self.visibility = calcVisibilty(self.height)
+        self.visibility = calcVisibility(self.height)
 
     def getFormattedStat(self, stat: str):
         returndict = {
