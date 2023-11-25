@@ -125,11 +125,9 @@ allStats = [
     Stat("Visibility",                  sets="visibility",              requires=["height"],                                                       default_from=lambda s: calcVisibility(s["height"]))
 ]
 
-user = None
-
-allStatValues = [
-    s.set(user) for s in allStats
-]
+# allStatValues = [
+#     s.set(user) for s in allStats
+# ]
 
 def changeUser(guildid: int, userid: int, changestyle: str, amount: SV):
     changestyle = changestyle.lower()
