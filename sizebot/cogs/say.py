@@ -277,10 +277,10 @@ class SayCog(commands.Cog):
             height = user.height
             nick = user.nickname
         except UserNotFoundException:
-            height = userdb.defaultheight
+            height = userdb.DEFAULT_HEIGHT
             nick = ctx.author.display_name
 
-        ratio = height / userdb.defaultheight
+        ratio = height / userdb.DEFAULT_HEIGHT
 
         diff = ratio_to_diff(ratio)
         m = resize_text(message, diff)
@@ -309,7 +309,7 @@ class SayCog(commands.Cog):
             height = user.height
             nick = user.nickname
         except UserNotFoundException:
-            height = userdb.defaultheight
+            height = userdb.DEFAULT_HEIGHT
             nick = ctx.author.display_name
 
         ratio = height / otherheight

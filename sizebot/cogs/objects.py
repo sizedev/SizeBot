@@ -170,7 +170,7 @@ class ObjectsCog(commands.Cog):
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
             compdata = load_or_fake(what)
         elif isinstance(what, str) and what.lower() in ["person", "man", "average", "average person", "average man", "average human", "human"]:
-            compheight = userdb.defaultheight
+            compheight = userdb.DEFAULT_HEIGHT
             compdata = load_or_fake(compheight, nickname = "an average person")
         elif isinstance(what, str) and what.lower() in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
             logger.log(EGG, f"{ctx.author.display_name} found Chocolate!")

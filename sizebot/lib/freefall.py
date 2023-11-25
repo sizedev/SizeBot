@@ -4,6 +4,8 @@ from typing import Tuple
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import TV, WV, SV
 
+AVERAGE_HUMAN_DRAG_COEFFICIENT = Decimal("0.24")
+
 
 def terminal_velocity(m, k):
     g = Decimal("9.807")
@@ -12,7 +14,7 @@ def terminal_velocity(m, k):
 
 def terminal_velocity_from_player(basemass: WV, scale: Decimal):
     m = basemass * (scale ** Decimal(3))
-    k = Decimal("0.24") * (scale ** Decimal(2))
+    k = AVERAGE_HUMAN_DRAG_COEFFICIENT * (scale ** Decimal(2))
     return SV(terminal_velocity(m, k))
 
 
