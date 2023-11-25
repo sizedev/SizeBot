@@ -167,7 +167,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def advancedregister(self, ctx, nick: str, currentheight: SV = userdb.defaultheight, baseheight: SV = userdb.defaultheight, baseweight: WV = userdb.defaultweight, unitsystem: str = "m", species: str = None):
+    async def advancedregister(self, ctx, nick: str, currentheight: SV = userdb.DEFAULT_HEIGHT, baseheight: SV = userdb.DEFAULT_HEIGHT, baseweight: WV = userdb.DEFAULT_WEIGHT, unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot, legacy style.
 
         Parameters:

@@ -1,7 +1,8 @@
+from typing import Callable, Literal, Optional
 from copy import copy
 import math
 import re
-from sizebot.lib.freefall import terminal_velocity_from_player
+from sizebot.lib.freefall import terminal_velocity_from_player, terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
 
 from discord import Embed
 
@@ -10,14 +11,125 @@ from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, WV
-from sizebot.lib.userdb import User, defaultheight as average_height, defaultweight, defaultliftstrength, falllimit
+from sizebot.lib.userdb import User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
+
+DEFAULT_THREAD_THICKNESS = Decimal("0.001016")
+AVERAGE_HEIGHT = average_height
+AVERAGE_WALKPERHOUR = 5630
+AVERAGE_RUNPERHOUR = 10729
+AVERAGE_SWIMPERHOUR = 3219
+AVERAGE_CLIMBPERHOUR = 4828
+AVERAGE_CRAWLPERHOUR = 2556
+AVERAGE_DRIVEPERHOUR = 96561
+WALKSTEPSPERHOUR = 6900
+RUNSTEPSPERHOUR = 10200
+ONE_SOUNDSECOND = SV(340.27)
+ONE_LIGHTSECOND = SV(299792000)
+AVERAGE_CAL_PER_DAY = 2000
+AVERAGE_WATER_PER_DAY = WV(3200)
 
 IS_LARGE = 1.0
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
+
+class Stat:
+    def __init__(self, name:str,
+                 sets:Optional[str]=None,
+                 userkey:Optional[str]=None,
+                 default_from:Optional[Callable]=None,
+                 power:Optional[int]=None,
+                 requires:list[str]=None):
+        self.sets = sets
+        self.requires = requires or []
+        self.power = power
+        self.name = name
+        self.userkey = userkey
+        self.default_from = default_from
+
+    def set(self, user):
+        value = None
+        if self.userkey is not None:
+            value = user.stats[self.userkey]
+        if self.default_from is not None and value is None:
+            value = self.default_from(user.baseheight)
+        return StatValue(self, value)
+    
+    def scale_value(self, value, scale):
+        if self.power is None:
+            raise NotImplementedError
+        return StatValue(self, value * (scale ** self.power))
+
+
+class StatValue:
+    def __init__(self, stat: Stat, value: any):
+        self.stat = stat
+        self.value = value
+
+    def scale(self, scale):
+        return self.stat.scale_value(self.value, scale)
+    
+    def __str__(self):
+        return f"{self.stat.name}: {self.value}"
+
+
+allStats = [
+    Stat("Height",                      sets="height",                                                         power=1, userkey="baseheight"),
+    Stat("Weight",                      sets="weight",                                                         power=3, userkey="baseweight"),
+    Stat("Gender",                      sets="gender",                                                                  userkey="gender"),
+    Stat("Average Scale",               sets="averagescale",            requires=["height"],                   power=1,                            default_from=lambda s: s["height"] / AVERAGE_HEIGHT),
+    Stat("Hair Length",                 sets="hairlength",                                                     power=1, userkey="hairlength"),
+    Stat("Tail Length",                 sets="taillength",                                                     power=1, userkey="taillength"),
+    Stat("Ear Height",                  sets="earheight",                                                      power=1, userkey="earheight"),
+    Stat("Foot Length",                 sets="footlength",              requires=["height"],                   power=1, userkey="footlength",      default_from=lambda s: s["height"]/7),
+    Stat("Lift Strength",               sets="liftstrength",            requires=["height"],                   power=3, userkey="liftstrength",    default_from=lambda s: DEFAULT_LIFT_STRENGTH),
+    Stat("Foot Width",                  sets="footwidth",               requires=["footlength"],               power=1,                            default_from=lambda s: s["footlength"]/7 * (2/3)),
+    Stat("Toe Height",                  sets="toeheight",               requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/65),
+    Stat("Shoeprint Depth",             sets="shoeprintdepth",          requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/135),
+    Stat("Pointer Finger Length",       sets="pointerfingerlength",     requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/17.26),
+    Stat("Thumb Width",                 sets="thumbwidth",              requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/69.06),
+    Stat("Fingertip Length",            sets="fingertiplength",         requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/95.95),
+    Stat("Fingerprint Depth",           sets="fingerprintdepth",        requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/35080),
+    Stat("Thread Thickness",            sets="threadthickness",                                                power=1,                            default_from=lambda s: DEFAULT_THREAD_THICKNESS),
+    Stat("Hair Width",                  sets="hairwidth",               requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/23387),
+    Stat("Nail Thickness",              sets="nailthickness",           requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/2920),
+    Stat("Eye Width",                   sets="eyewidth",                requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/73.083),
+    Stat("Jump Height",                 sets="jumpheight",              requires=["height"],                   power=1,                            default_from=lambda s: s["height"]/3.908),
+    Stat("Average Look Angle",          sets="averagelookangle",        requires=["height"],                                                       default_from=lambda s: abs(calcViewAngle(s["height"], AVERAGE_HEIGHT))),
+    Stat("Average Look Direction",      sets="averagelookdirection",    requires=["height"],                                                       default_from=lambda s: "up" if calcViewAngle(s["height"], AVERAGE_HEIGHT) >= 0 else "down"),
+    Stat("Walk Per Hour",               sets="walkperhour",             requires=["averagescale"],             power=1,                            default_from=lambda s: AVERAGE_WALKPERHOUR * s["averagescale"]),
+    Stat("Run Per Hour",                sets="runperhour",              requires=["averagescale"],             power=1,                            default_from=lambda s: AVERAGE_RUNPERHOUR * s["averagescale"]),
+    Stat("Swim Per Hour",               sets="swimperhour",             requires=["averagescale"],             power=1,                            default_from=lambda s: AVERAGE_SWIMPERHOUR * s["averagescale"]),
+    Stat("Crawl Per Hour",              sets="crawlperhour",            requires=["averagescale"],             power=1,                            default_from=lambda s: AVERAGE_CRAWLPERHOUR * s["averagescale"]),
+    Stat("Drive Per Hour",              sets="driveperhour",                                                   power=1,                            default_from=lambda s: AVERAGE_DRIVEPERHOUR),
+    Stat("Walk Step Length",            sets="walksteplength",          requires=["averagescale"],             power=1,                            default_from=lambda s: AVERAGE_WALKPERHOUR * s["averagescale"] / WALKSTEPSPERHOUR),
+    Stat("Run Step Length",             sets="runsteplength",           requires=["averagescale"],             power=1,                            default_from=lambda s: AVERAGE_RUNPERHOUR * s["averagescale"] / RUNSTEPSPERHOUR),
+    Stat("Climb Step Length",           sets="climbsteplength",         requires=["height"],                   power=1,                            default_from=lambda s: s["height"]*(1/2.5)),
+    Stat("Crawl Step Length",           sets="crawlsteplength",         requires=["height"],                   power=1,                            default_from=lambda s: s["height"]*(1/2.577)),
+    Stat("Swim Step Length",            sets="swimsteplength",          requires=["height"],                   power=1,                            default_from=lambda s: s["height"]*(6/7)),
+    Stat("Distance to Horizon",         sets="distancetohorizon",       requires=["height"],                                                       default_from=lambda s: calcHorizon(s["height"])),
+    Stat("Terminal Velocity",           sets="terminalvelocity",        requires=["weight", "averagescale"],                                       default_from=lambda s: terminal_velocity(s["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * s["averagescale"] ** Decimal(2))),
+    Stat("Fallproof",                   sets="fallproof",               requires=["terminalvelocity"],                                             default_from=lambda s: s["terminalvelocity"] < FALL_LIMIT),
+    Stat("Fallproof Icon",              sets="fallprooficon",           requires=["fallproof"],                                                    default_from=lambda s: emojis.voteyes if s["fallproof"] else emojis.voteno),
+    Stat("Width",                       sets="width",                   requires=["height"],                   power=1,                            default_from=lambda s: s["height"]*(4/17)),
+    Stat("Sound Travel Time",           sets="soundtraveltime",         requires=["height"],                   power=1,                            default_from=lambda s: s["height"]*ONE_SOUNDSECOND),
+    Stat("Light Travel Time",           sets="lighttraveltime",         requires=["height"],                   power=1,                            default_from=lambda s: s["height"]*ONE_LIGHTSECOND),
+    Stat("Calories Needed",             sets="caloriesneeded",                                                 power=3,                            default_from=lambda s: AVERAGE_CAL_PER_DAY),
+    Stat("Water Needed",                sets="waterneeded",                                                    power=3,                            default_from=lambda s: AVERAGE_WATER_PER_DAY),
+    Stat("Lay Area",                    sets="layarea",                 requires=["height"],                   power=2,                            default_from=lambda s: s["height"]*s["height"]*(4/17)),
+    Stat("Foot Area",                   sets="footarea",                requires=["height"],                   power=2,                            default_from=lambda s: s["footlength"]*s["footlength"]*(2/3)),
+    Stat("Fingertip Area",              sets="fingertiparea",           requires=["height"],                   power=2,                            default_from=lambda s: s["fingertiplength"]*s["fingertiplength"]),
+    Stat("Shoe Size",                   sets="shoesize",                requires=["height"],                                                       default_from=lambda s: formatShoeSize(s["footlength"], s["gender"])),
+    Stat("Visibility",                  sets="visibility",              requires=["height"],                                                       default_from=lambda s: calcVisibility(s["height"]))
+]
+
+user = None
+
+allStatValues = [
+    s.set(user) for s in allStats
+]
 
 def changeUser(guildid: int, userid: int, changestyle: str, amount: SV):
     changestyle = changestyle.lower()
@@ -312,8 +424,8 @@ class PersonSpeedComparison:
     def speedcalc(self, dist: SV, *, speed = False, foot = False, include_relative = False):
         reldist = SV(dist * self.viewer.viewscale)
         reldist_print = f"{reldist:,.3mu}"
-        shoesize = " (" + formatShoeSize(dist) + ")"
-        rel_shoesize = " (" + formatShoeSize(reldist) + ")"
+        shoesize = " (" + formatShoeSize(dist, "m") + ")"
+        rel_shoesize = " (" + formatShoeSize(reldist, "m") + ")"
 
         _walktime = (dist / self.viewer.walkperhour) * 60 * 60
         walksteps = math.ceil(dist / self.viewer.walksteplength)
@@ -520,14 +632,14 @@ class PersonStats:
             self.earheight = SV(userdata.earheight / self.viewscale)
 
         if userdata.liftstrength is None:
-            self.liftstrength = WV(defaultliftstrength / (self.viewscale ** 3))
+            self.liftstrength = WV(DEFAULT_LIFT_STRENGTH / (self.viewscale ** 3))
         else:
             self.liftstrength = WV(userdata.liftstrength / (self.viewscale ** 3))
 
         base_footlength = userdata.footlength if userdata.footlength is not None else SV(self.baseheight * self.footfactor)
         self.footlength = SV(base_footlength * self.scale)
 
-        self.shoesize = formatShoeSize(self.footlength, self.gender == "f")
+        self.shoesize = formatShoeSize(self.footlength, self.gender)
 
         if userdata.pawtoggle:
             base_footwidth = SV(base_footlength * Decimal("2/3"))   # TODO: Temp number?
@@ -550,7 +662,7 @@ class PersonStats:
         self.jumpheight = SV(self.baseheight * Decimal("1/3.908") * self.scale)
 
         self.avgheightcomp = SV(average_height * self.viewscale)
-        self.avgweightcomp = WV(defaultweight * self.viewscale ** 3)
+        self.avgweightcomp = WV(DEFAULT_WEIGHT * self.viewscale ** 3)
 
         viewangle = calcViewAngle(self.height, average_height)
         self.avglookangle = abs(viewangle)
@@ -593,19 +705,13 @@ class PersonStats:
         self.crawlsteplength = SV(self.baseheight * Decimal("1/2.577") * self.scale)
         self.swimsteplength = SV(self.baseheight * Decimal("6/7") * self.scale)
 
-        self.horizondistance = SV(math.sqrt(math.pow(self.height + 6378137, 2) - 40680631590769))
+        self.horizondistance = calcHorizon(self.height)
 
         self.terminalvelocity = terminal_velocity_from_player(self.baseweight, self.scale)
-        self.fallproof = self.terminalvelocity < falllimit
+        self.fallproof = self.terminalvelocity < FALL_LIMIT
         self.fallproofcheck = emojis.voteyes if self.fallproof else emojis.voteno
 
-        self.visibility = "only the naked eye"
-        if self.height < SV(0.00025):
-            self.visibility = "a magnifying glass"
-        if self.height < SV(0.00005):
-            self.visibility = "a microscope"
-        if self.height < SV(0.000001):
-            self.visibility = "magic"
+        self.visibility = calcVisibilty(self.height)
 
     def getFormattedStat(self, stat: str):
         returndict = {
@@ -748,7 +854,7 @@ class PersonBaseStats:
         self.footlength = userdata.footlength
 
         if self.footlength:
-            self.shoesize = formatShoeSize(self.footlength, self.gender == "f")
+            self.shoesize = formatShoeSize(self.footlength, self.gender)
         else:
             self.shoesize = None
 
@@ -806,7 +912,8 @@ class PersonBaseStats:
         return embed
 
 
-def formatShoeSize(footlength: SV, women = False):
+def formatShoeSize(footlength: SV, gender: Literal["m","f"]):
+    women = gender == "f"
     # Inch in meters
     inch = Decimal("0.0254")
     footlengthinches = footlength / inch
@@ -856,3 +963,20 @@ def calcViewAngle(viewer: Decimal, viewee: Decimal):
     heightdiff = viewee - viewer
     viewangle = Decimal(math.degrees(math.atan(heightdiff / viewdistance)))
     return viewangle
+
+
+def calcHorizon(height: SV):
+    EARTH_RADIUS = 6378137
+    return SV(math.sqrt((EARTH_RADIUS + height) ** 2 - EARTH_RADIUS ** 2))
+#     sqrt(EARTH_RADIUS + height) ** 2 - EARTH_RADIUS ** 2))
+
+def calcVisibility(height: SV):
+    if height < SV(0.000001):
+        visibility = "magic"
+    elif height < SV(0.00005):
+        visibility = "a microscope"
+    elif height < SV(0.00025):
+        visibility = "a magnifying glass"
+    else:
+        visibility = "only the naked eye"
+    return visibility

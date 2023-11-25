@@ -176,6 +176,6 @@ def test_feetinch_noinchunit():
 
 def test_reverse_shoesize_calc():
     insize = SV.parse("10in")
-    shoesize = formatShoeSize(insize)
+    shoesize = formatShoeSize(insize, "m")
     outsize = fromShoeSize(shoesize)
     assert insize == outsize

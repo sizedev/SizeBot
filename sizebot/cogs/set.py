@@ -347,8 +347,8 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(SV.parse(newfoot) * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength)}), "
-                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale))}")
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength, 'm')}), "
+                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale), 'm')}")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -376,8 +376,8 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(newfoot * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength)}), "
-                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale))}")
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength, 'm')}), "
+                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale), 'm')}")
         await showNextStep(ctx, userdata)
 
     @commands.command(

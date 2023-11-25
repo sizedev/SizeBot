@@ -17,10 +17,10 @@ from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.utils import isURL, truncate
 
 # Defaults
-defaultheight = SV("1.754")            # meters
-defaultweight = WV("66760")            # grams
-falllimit = SV("7.73")                 # meters/second
-defaultliftstrength = WV("18143.7")    # grams
+DEFAULT_HEIGHT = SV("1.754")            # meters
+DEFAULT_WEIGHT = WV("66760")            # grams
+FALL_LIMIT = SV("7.73")                 # meters/second
+DEFAULT_LIFT_STRENGTH = WV("18143.7")    # grams
 
 BASICALLY_ZERO = Decimal("1E-27")
 
@@ -49,9 +49,9 @@ class User:
         self.description: Optional[str] = None
         self._gender: Optional[str] = None
         self.display: bool = True
-        self._height: SV = defaultheight
-        self._baseheight: SV = defaultheight
-        self._baseweight: SV = defaultweight
+        self._height: SV = DEFAULT_HEIGHT
+        self._baseheight: SV = DEFAULT_HEIGHT
+        self._baseweight: SV = DEFAULT_WEIGHT
         self._footlength: Optional[SV] = None
         self._pawtoggle: bool = False
         self._furtoggle: bool = False

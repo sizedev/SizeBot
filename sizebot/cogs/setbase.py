@@ -115,7 +115,7 @@ class SetBaseCog(commands.Cog):
         userdata.footlength = newfoot
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength, 'm')})")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -144,7 +144,7 @@ class SetBaseCog(commands.Cog):
         userdata.footlength = newfoot
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength)})")
+        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength, 'm')})")
         await showNextStep(ctx, userdata)
 
     @commands.command(
