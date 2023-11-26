@@ -49,12 +49,12 @@ class Stat:
         self.userkey = userkey
         self.default_from = default_from
 
-    def set(self, user):
+    def set(self, user: User):
         value = None
         if self.userkey is not None:
             value = user.stats[self.userkey]
         if self.default_from is not None and value is None:
-            value = self.default_from(user.baseheight)
+            value = self.default_from(user.stats)
         return StatValue(self, value)
 
     def scale_value(self, value, scale):
@@ -75,7 +75,7 @@ class StatValue:
         return f"{self.stat.name}: {self.value}"
 
 
-allStats = [
+all_stats = [
     Stat("Height",                      sets="height",                                                         power=1, userkey="baseheight"),
     Stat("Weight",                      sets="weight",                                                         power=3, userkey="baseweight"),
     Stat("Gender",                      sets="gender",                                                                  userkey="gender"),
@@ -125,6 +125,10 @@ allStats = [
     Stat("Visibility",                  sets="visibility",              requires=["height"],                                                       default_from=lambda s: calcVisibility(s["height"]))
 ]
 
+
+class StatBox:
+    def __init__(self, user: User):
+        self.stats = [s.set(user) for s in all_stats]
 
 
 def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
