@@ -36,12 +36,12 @@ compareicon = "https://media.discordapp.net/attachments/650460192009617433/66502
 
 
 class Stat:
-    def __init__(self, name:str,
-                 sets:Optional[str]=None,
-                 userkey:Optional[str]=None,
-                 default_from:Optional[Callable]=None,
-                 power:Optional[int]=None,
-                 requires:list[str]=None):
+    def __init__(self, name: str,
+                 sets: Optional[str] = None,
+                 userkey: Optional[str] = None,
+                 default_from: Optional[Callable] = None,
+                 power: Optional[int] = None,
+                 requires: list[str] = None):
         self.sets = sets
         self.requires = requires or []
         self.power = power
@@ -56,7 +56,7 @@ class Stat:
         if self.default_from is not None and value is None:
             value = self.default_from(user.baseheight)
         return StatValue(self, value)
-    
+
     def scale_value(self, value, scale):
         if self.power is None:
             raise NotImplementedError
@@ -70,7 +70,7 @@ class StatValue:
 
     def scale(self, scale):
         return self.stat.scale_value(self.value, scale)
-    
+
     def __str__(self):
         return f"{self.stat.name}: {self.value}"
 
@@ -125,11 +125,9 @@ allStats = [
     Stat("Visibility",                  sets="visibility",              requires=["height"],                                                       default_from=lambda s: calcVisibility(s["height"]))
 ]
 
-# allStatValues = [
-#     s.set(user) for s in allStats
-# ]
 
-def changeUser(guildid: int, userid: int, changestyle: str, amount: SV):
+
+def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
     changestyle = changestyle.lower()
     if changestyle in ["add", "+", "a", "plus"]:
         changestyle = "add"

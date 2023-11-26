@@ -131,7 +131,7 @@ class ChangeCog(commands.Cog):
 
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
-        proportions.changeUser(guildid, userid, "multiply", randmult)
+        proportions.change_user(guildid, userid, "multiply", randmult)
         await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
@@ -156,7 +156,7 @@ class ChangeCog(commands.Cog):
 
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
-        proportions.changeUser(guildid, ctx.author.id, "divide", randmult)
+        proportions.change_user(guildid, ctx.author.id, "divide", randmult)
         await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
