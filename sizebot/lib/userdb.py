@@ -2,7 +2,7 @@ import json
 from copy import copy
 from functools import total_ordering
 import importlib.resources as pkg_resources
-from typing import Dict, List, Literal, Optional
+from typing import Dict, List, Literal, Optional, TypedDict
 
 import arrow
 from arrow.arrow import Arrow
@@ -20,12 +20,27 @@ from sizebot.lib.utils import isURL, truncate
 DEFAULT_HEIGHT = SV("1.754")            # meters
 DEFAULT_WEIGHT = WV("66760")            # grams
 FALL_LIMIT = SV("7.73")                 # meters/second
-DEFAULT_LIFT_STRENGTH = WV("18143.7")    # grams
+DEFAULT_LIFT_STRENGTH = WV("18143.7")   # grams
 
 BASICALLY_ZERO = Decimal("1E-27")
 
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
+class PlayerStats(TypedDict):
+    height: SV
+    baseheight: SV
+    baseweight: WV 
+    footlength: Optional[SV]
+    pawtoggle: bool
+    furtoggle: bool
+    taillength: Optional[SV]
+    earheight: Optional[SV]
+    liftstrength: Optional[WV]
+    walkperhour: Optional[SV]
+    swimperhour: Optional[SV]
+    runperhour: Optional[SV]
+    gender: Literal["m", "f", "x", None]
+    scale: Decimal
 
 @total_ordering
 class User:
@@ -420,6 +435,26 @@ class User:
             return f"1:{1/self.scale:,.1}"
         else:
             return f"{self.scale:,.3}x"
+
+    @property
+    def stats(self) -> PlayerStats:
+        """A bit of a patchwork solution for transitioning to BetterStats."""
+        return {
+            "height": self.height,  # DO NOT USE, DEPRECATED
+            "baseheight": self.baseheight,
+            "baseweight": self.baseweight,
+            "footlength": self.footlength,
+            "pawtoggle": self.pawtoggle,
+            "furtoggle": self.furtoggle,
+            "taillength": self.taillength,
+            "earheight": self.earheight,
+            "liftstrength": self.liftstrength,
+            "walkperhour": self.walkperhour,
+            "swimperhour": self.swimperhour,
+            "runperhour": self.runperhour,
+            "gender": self.gender,
+            "scale": self.scale
+        }
 
     @property
     def tag(self):
