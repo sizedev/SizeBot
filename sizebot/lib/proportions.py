@@ -141,13 +141,17 @@ class StatBox:
                     self.stats.append(sv)
                     found_stats[sv.stat.sets] = sv.value
             # FInd the everything else
+            loops = 0
             while len(all_stats) != len(found_stats):
+                loops += 1
                 for s in all_stats:
                     if s.sets not in found_stats:
                         if all([r in found_stats for r in s.requires]):
                             sv = s.set(self.user, found_stats)
                             self.stats.append(sv)
                             found_stats[sv.stat.sets] = sv.value
+                if loops >= 10:
+                    raise errors.UnfoundStatException([s.name for s in all_stats if s.sets not in found_stats])
     
     @property
     def scaled(self) -> StatBox:

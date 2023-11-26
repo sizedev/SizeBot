@@ -240,3 +240,13 @@ class ParseError(DigiException):
 
     def formatUserMessage(self):
         return f"Could not parse {self.s} into a {self.t}."
+
+class UnfoundStatException(DigiException):
+    def __init__(self, s) -> None:
+        self.s = s
+    
+    def formatMessage(self):
+        return f"Could not calculate the {self.s} stat."
+
+    def formatUserMessage(self):
+        return f"Could not calculate the {self.s} stat."
