@@ -1,8 +1,9 @@
-from typing import Callable, Literal, Optional
+from __future__ import annotations
+
 from copy import copy
+from typing import Callable, Literal, Optional
 import math
 import re
-from sizebot.lib.freefall import terminal_velocity_from_player, terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
 
 from discord import Embed
 
@@ -10,6 +11,7 @@ from sizebot import __version__
 from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.freefall import terminal_velocity_from_player, terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
@@ -49,12 +51,12 @@ class Stat:
         self.userkey = userkey
         self.default_from = default_from
 
-    def set(self, user: User):
+    def set(self, user: User, found = {}):
         value = None
         if self.userkey is not None:
             value = user.stats[self.userkey]
         if self.default_from is not None and value is None:
-            value = self.default_from(user.stats)
+            value = self.default_from(found)
         return StatValue(self, value)
 
     def scale_value(self, value, scale):
@@ -127,8 +129,30 @@ all_stats = [
 
 
 class StatBox:
-    def __init__(self, user: User):
-        self.stats = [s.set(user) for s in all_stats]
+    def __init__(self, user: User, stats: list[StatValue] = None):
+        self.user = user
+        self.stats = [] if not stats else stats
+        if not stats:
+            found_stats = {}
+            # Find the base stats
+            for s in all_stats:
+                if s.userkey and not s.requires:
+                    sv = s.set(self.user)
+                    self.stats.append(sv)
+                    found_stats[sv.stat.sets] = sv.value
+            # FInd the everything else
+            while len(all_stats) != len(found_stats):
+                for s in all_stats:
+                    if s.sets not in found_stats:
+                        if all([r in found_stats for r in s.requires]):
+                            sv = s.set(self.user, found_stats)
+                            self.stats.append(sv)
+                            found_stats[sv.stat.sets] = sv.value
+    
+    @property
+    def scaled(self) -> StatBox:
+        return StatBox(self.user, [s.scale(self.user.stats["scale"]) for s in self.stats])
+
 
 
 def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
