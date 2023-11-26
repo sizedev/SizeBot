@@ -156,6 +156,10 @@ class StatBox:
     @property
     def scaled(self) -> StatBox:
         return StatBox(self.user, [s.scale(self.user.stats["scale"]) for s in self.stats])
+    
+    def get(self, stat_name: str) -> StatValue | None:
+        g = (s for s in self.stats if s.stat.sets == stat_name)
+        return next(g, None)
 
 
 
@@ -740,6 +744,228 @@ class PersonStats:
         self.fallproofcheck = emojis.voteyes if self.fallproof else emojis.voteno
 
         self.visibility = calcVisibility(self.height)
+
+    def getFormattedStat(self, stat: str):
+        returndict = {
+            "height": f"'s current height is **{self.height:,.3mu}**, or {self.formattedscale} scale.",
+            "weight": f"'s current weight is **{self.weight:,.3mu}**.",
+            "foot": f"'s {self.footname.lower()} is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
+            "toe": f"'s toe is **{self.toeheight:,.3mu}** thick.",
+            "shoeprint": f"'s shoe print is **{self.shoeprintdepth:,.3mu}** deep.",
+            "finger": f"'s pointer finger is **{self.pointerlength:,.3mu}** long.",
+            "thumb": f"'s thumb is **{self.thumbwidth:,.3mu}** wide.",
+            "nail": f"'s nail is **{self.nailthickness:,.3mu}** thick.",
+            "fingerprint": f"'s fingerprint is **{self.fingerprintdepth:,.3mu}** deep.",
+            "thread": f"'s clothing threads are **{self.threadthickness:,.3mu}** thick.",
+            "hairwidth": f"'s {self.hairname.lower()} is **{self.hairwidth:,.3mu}** thick.",
+            "eye": f"'s eye is **{self.eyewidth:,.3mu}** wide.",
+            "walk": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), with {self.walksteplength:,.1m}/{self.walksteplength:,.1u} strides.",
+            "run": f" runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour), with {self.runsteplength:,.1m}/{self.runsteplength:,.1u} strides.",
+            "climb": f" climbs at **{self.climbperhour:,.1M} per hour** ({self.climbperhour:,.1U} per hour), with {self.climbsteplength:,.1m}/{self.climbsteplength:,.1u} pulls.",
+            "crawl": f" crawls at **{self.crawlperhour:,.1M} per hour** ({self.crawlperhour:,.1U} per hour), with {self.crawlsteplength:,.1m}/{self.crawlsteplength:,.1u} strides.",
+            "swim": f" swims at **{self.swimperhour:,.1M} per hour** ({self.swimperhour:,.1U} per hour), with {self.swimsteplength:,.1m}/{self.swimsteplength:,.1u} strokes.",
+            "jump": f" can jump **{self.jumpheight:,.3mu}** high.",
+            "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
+            "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
+            "scale": f" is **{self.formattedscale}** their base height.",
+            "horizondistance": f" can see for **{self.horizondistance:,.3mu}** to the horizon.",
+            "liftstrength": f" can lift and carry **{self.liftstrength:,.3mu}**.",
+            "gender": f"'s current gender is set to **{self.gender}**.",
+            "visibility": f" would need {self.visibility} to be seen."
+        }
+        if self.hairlength:
+            returndict["hair"] = f"'s {self.hairname.lower()} is **{self.hairlength:,.3mu}** long."
+        if self.taillength:
+            returndict["tail"] = f"'s tail is **{self.taillength:,.3mu}** long."
+        if self.earheight:
+            returndict["ear"] = f"'s tail is **{self.earheight:,.3mu}** long."
+
+        if self.fallproof:
+            returndict["terminalvelocity"] = f"'s terminal velocity is {self.terminalvelocity:,.1M} per second ({self.terminalvelocity:,.1U} per second). They can survive a fall from any height!"
+        else:
+            returndict["terminalvelocity"] = f"'s terminal velocity is {self.terminalvelocity:,.1M} per second ({self.terminalvelocity:,.1U} per second)."
+
+        for k, v in returndict.items():
+            returndict[k] = self.nickname + v
+
+        if self.incomprehensible:
+            return glitch_string(returndict.get(stat))
+        return returndict.get(stat)
+
+    def get_speeds(self):
+        return (f"{emojis.walk} {self.walkperhour:,.1M} per hour / {self.walkperhour:,.1U} per hour\n"
+                f"{emojis.run} {self.runperhour:,.1M} per hour / {self.runperhour:,.1U} per hour\n"
+                f"{emojis.climb} {self.climbperhour:,.1M} per hour / {self.climbperhour:,.1U} per hour\n"
+                f"{emojis.crawl} {self.crawlperhour:,.1M} per hour / {self.crawlperhour:,.1U} per hour\n"
+                f"{emojis.swim} {self.swimperhour:,.1M} per hour / {self.swimperhour:,.1U} per hour\n"
+                f"{emojis.drive} {self.driveperhour:,.1M} per hour / {self.driveperhour:,.1U} per hour")
+
+    def __str__(self):
+        return (f"<PersonStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
+                f"HEIGHT = {self.height!r}, BASEHEIGHT = {self.baseheight!r}, VIEWSCALE = {self.viewscale!r}, "
+                f"WEIGHT = {self.weight!r}, BASEWEIGHT = {self.baseweight!r}, FOOTNAME = {self.footname!r}, "
+                f"HAIRNAME = {self.hairname!r}, PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
+                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}"
+                f"HAIRLENGTH = {self.hairlength!r}, TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r},"
+                f"LIFTSTRENGTH = {self.liftstrength!r}, FOOTLENGTH = {self.footlength!r}, "
+                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, VISIBILITY = {self.visibility!r}>")
+
+    def __repr__(self):
+        return str(self)
+
+    def toEmbed(self, requesterID = None):
+        requestertag = f"<@!{requesterID}>"
+        embed = Embed(title=f"Stats for {self.nickname}",
+                      description=f"*Requested by {requestertag}*",
+                      color=colors.cyan)
+        embed.set_author(name=f"SizeBot {__version__}")
+        heightstring = f"{self.height:,.3mu}\n*{self.formattedscale} scale*"
+        if self.height < SV(1):
+            heightstring += f"\n*{self.nickname} would need {self.visibility} to be seen.*"
+        embed.add_field(name="Current Height", value=heightstring, inline=True)
+        embed.add_field(name="Current Weight", value=f"{self.weight:,.3mu}\n*{self.formattedweightscale} scale*", inline=True)
+        embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
+        embed.add_field(name=f"{self.footname} Width", value=format(self.footwidth, ",.3mu"), inline=True)
+        embed.add_field(name="Shoeprint Depth", value=format(self.shoeprintdepth, ",.3mu"), inline=True)
+        embed.add_field(name="Pointer Finger Length", value=format(self.pointerlength, ",.3mu"), inline=True)
+        if self.scale > IS_LARGE:
+            embed.add_field(name="Toe Height", value=format(self.toeheight, ",.3mu"), inline=True)
+            embed.add_field(name="Thumb Width", value=format(self.thumbwidth, ",.3mu"), inline=True)
+            embed.add_field(name="Nail Thickness", value=format(self.nailthickness, ",.3mu"), inline=True)
+            embed.add_field(name="Fingerprint Depth", value=format(self.fingerprintdepth, ",.3mu"), inline=True)
+            embed.add_field(name="Clothing Thread Thickness", value=format(self.threadthickness, ",.3mu"), inline=True)
+        if self.hairlength:
+            embed.add_field(name=f"{self.hairname} Length", value=format(self.hairlength, ",.3mu"), inline=True)
+        if self.taillength:
+            embed.add_field(name="Tail Length", value=format(self.taillength, ",.3mu"), inline=True)
+        if self.earheight:
+            embed.add_field(name="Ear Height", value=format(self.earheight, ",.3mu"), inline=True)
+        if self.scale > IS_LARGE:
+            embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
+            embed.add_field(name="Eye Width", value=format(self.eyewidth, ",.3mu"), inline=True)
+        embed.add_field(name="Jump Height", value=f"{self.jumpheight:,.3mu}", inline=True)
+        embed.add_field(name="View Distance to Horizon", value=f"{self.horizondistance:,.3mu}", inline=True)
+        if self.fallproof:
+            embed.add_field(name="Terminal Velocity", value = f"{self.terminalvelocity:,.1M} per second\n({self.terminalvelocity:,.1U} per second)\n*This user can safely fall from any height.*", inline = True)
+        else:
+            embed.add_field(name="Terminal Velocity", value = f"{self.terminalvelocity:,.1M} per second\n({self.terminalvelocity:,.1U} per second)", inline = True)
+        embed.add_field(name="Lift/Carry Strength", value=f"{self.liftstrength:,.3mu}", inline=True)
+        embed.add_field(name="Speeds", value=self.get_speeds(), inline=False)
+        embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
+        embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
+
+        if self.incomprehensible:
+            ed = embed.to_dict()
+            for field in ed["fields"]:
+                field["value"] = glitch_string(field["value"])
+            embed = Embed.from_dict(ed)
+            embed.set_footer(text = glitch_string(embed.footer.text))
+
+        return embed
+
+
+class PersonStatsNew:
+    def __init__(self, userdata: User):
+        self.nickname = userdata.nickname
+        self.tag = userdata.tag
+        self.gender = userdata.autogender
+
+        # Use the new statbox
+        self.basestats = StatBox(userdata)
+        self.stats = self.basestats.scaled
+
+        # TODO: There's not a good way of getting these yet:
+        self.formattedscale = userdata.getFormattedScale(verbose = True)
+        self.viewscale = userdata.viewscale
+        self.formattedweightscale = userdata.getFormattedScale(scaletype = "weight", verbose = True)
+        self.footname = userdata.footname
+        self.hairname = userdata.hairname
+
+        # Base stats
+        self.baseheight = userdata.stats["baseheight"]
+        self.scale = userdata.stats["scale"]
+        self.baseweight = userdata.stats["baseweight"]
+        self.pawtoggle = userdata.stats["pawtoggle"]
+        self.furtoggle = userdata.stats["furtoggle"]
+
+        # What do I do with these?
+        self.incomprehensible = userdata.incomprehensible
+        self.macrovision_model = userdata.macrovision_model
+        self.macrovision_view = userdata.macrovision_view
+
+        # Other stats
+        self.height = self.stats.get("height")
+        self.weight = self.stats.get("weight")
+        self.width = self.stats.get("width")
+
+        # These are like, the user settable ones?
+        self.hairlength = self.stats.get("hairlength")
+        self.taillength = self.stats.get("taillength")
+        self.earheight = self.stats.get("earheight")
+        self.liftstrength = self.stats.get("liftstrength")
+        self.footlength = self.stats.get("footlength")
+
+        # How does this one work??
+        self.shoesize = formatShoeSize(self.footlength, self.gender)
+
+        # Is this accounted for in the new implementation?:
+        # if userdata.pawtoggle:
+        #     base_footwidth = SV(base_footlength * Decimal("2/3"))   # TODO: Temp number?
+        # else:
+        #     base_footwidth = SV(base_footlength * Decimal("2/5"))
+        # self.footwidth = SV(base_footwidth * self.scale)
+        self.footwidth = self.stats.get("footwidth")
+
+        # OK, here's the stuff StatBox was actually made for.
+        self.toeheight = self.stats.get("toeheight")
+        self.shoeprintdepth = self.stats.get("shoeprintdepth")
+        self.pointerlength = self.stats.get("pointerlength")
+        self.thumbwidth = self.stats.get("thumbwidth")
+        self.fingertiplength = self.stats.get("fingertiplength")
+        self.fingerprintdepth = self.stats.get("fingerprintdepth")
+        self.threadthickness = self.stats.get("")
+        self.hairwidth = self.stats.get("hairwidth")
+        self.nailthickness = self.stats.get("nailthickness")
+        self.eyewidth = self.stats.get("eyewidth")
+        self.jumpheight = self.stats.get("jumpheight")
+
+        # Yeah, I don't think we recreated these.
+        # =======================================
+        self.avgheightcomp = SV(average_height * self.viewscale)
+        self.avgweightcomp = WV(DEFAULT_WEIGHT * self.viewscale ** 3)
+
+        viewangle = calcViewAngle(self.height, average_height)
+        self.avglookangle = abs(viewangle)
+        self.avglookdirection = "up" if viewangle >= 0 else "down"
+
+        base_average_ratio = self.baseheight / average_height  # TODO: Make this a property on userdata?
+                                                               # 11/26/2023: Wait, don't, do something else
+        # =======================================
+
+        # Speeds
+        self.walkperhour = self.stats.get("walkperhour")
+        self.runperhour = self.stats.get("runperhour")
+        self.swimperhour = self.stats.get("swimperhour")
+        self.climbperhour = self.stats.get("climbperhour")
+        self.crawlperhour = self.stats.get("crawlperhour")
+        self.driveperhour = self.stats.get("driveperhour")
+
+        # This got ignored in the port somehow.
+        # self.spaceshipperhour = SV(average_spaceshipperhour * self.scale)
+
+        # Step lengtjs
+        self.walksteplength = self.stats.get("walksteplength")
+        self.runsteplength = self.stats.get("runsteplength")
+        self.climbsteplength = self.stats.get("climbsteplength")
+        self.crawlsteplength = self.stats.get("crawlsteplength")
+        self.swimsteplength = self.stats.get("swimsteplength")
+
+        # The rest of it, I guess.
+        self.horizondistance = self.stats.get("horizondistance")
+        self.terminalvelocity = self.stats.get("terminalvelocity")
+        self.fallproof = self.stats.get("fallproof")
+        self.fallproofcheck = self.stats.get("fallprooficon")
+        self.visibility = self.stats.get("visibility")
 
     def getFormattedStat(self, stat: str):
         returndict = {
