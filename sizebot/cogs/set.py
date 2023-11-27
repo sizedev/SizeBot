@@ -180,7 +180,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def copyheight(self, ctx, user: discord.Member, *, newscale):
+    async def copyheight(self, ctx, user: discord.Member, *, newscale = 1):
         """Be the size of another user, modified by a factor.
 
         Examples:
