@@ -41,10 +41,16 @@ def mag_to_name(mag: float) -> str:
         return "unprecedented"
     elif mag < 21:  # 13 - 21
         return "apocalyptic"
-    elif mag < 22:  # 22 - 23
+    elif mag < 22:  # 21 - 23
         return "earth-cracking"
-    else:  # 23 - inf
+    elif mag < 25:  # 23 - 25
         return "earth-crumbling"
+    elif mag < 32:  # 25 - 32
+        return "sun-shattering"
+    elif mag < 63:  # 32 - 63
+        return "galaxy-collapsing"
+    else:  # 63+
+        return "universe-ending"
 
 def scale_to_joules(user: User, g: float, factor: float) -> Decimal:
     return Decimal((user.weight * Decimal(0.4536)) / 2 * Decimal(g) * (Decimal(factor) * user.scale))
