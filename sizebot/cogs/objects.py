@@ -90,10 +90,10 @@ class ObjectsCog(commands.Cog):
         Used to see how an object would look at your scale.
         Examples:
         `&objectcompare lego`
-        `&objcompare moon as @Kelly`
+        `&objcompare moon to @Kelly`
         """
 
-        argslist = args.rsplit(" as ", 1)
+        argslist = args.rsplit(" to ", 1)
         if len(argslist) == 1:
             what = argslist[0]
             who = None

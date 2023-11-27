@@ -176,7 +176,13 @@ class StatBox:
         # TODO: THIS DOES NOT WORK.
         # .as_dict() is for the base user, so when it goes to do the calculations, it's not using the new one.
         # This only affects equations with power = 0.
-        return StatBox(self.user, [s.scale(self.user.stats["scale"], self.as_dict) for s in self.stats])
+        scaled_stat_box = self.partial_scaled_dict
+        new_stats = []
+        for s in self.stats:
+            ns = s.scale(self.user.stats["scale"], scaled_stat_box)
+            scaled_stat_box[ns.stat.sets] = ns.value
+            new_stats.append(ns)
+        return StatBox(self.user, new_stats)
     
     def get(self, stat_name: str) -> StatValue | None:
         g = (s for s in self.stats if s.stat.sets == stat_name)
@@ -185,6 +191,15 @@ class StatBox:
     @property
     def as_dict(self) -> dict:
         return {s.stat.sets: s.value for s in self.stats if s.value is not None}
+    
+    @property
+    def partial_scaled_dict(self) -> dict:
+        known_stats = {}
+        for s in self.stats:
+            if s.value is not None and s.stat.power is not None:
+                new_stat = s.scale(self.user.stats["scale"], known_stats)
+                known_stats[new_stat.stat.sets] = new_stat.value
+        return known_stats
 
 
 

@@ -60,7 +60,7 @@ async def get_url(people, *, shorten = False):
     if len(people) <= 0:
         raise ValueError("At least one person is required")
 
-    people.sort(key=itemgetter("height"), reverse=True)
+    people.sort(key=itemgetter("height.value"), reverse=True)
 
     world_height = people[0]["height"]
 
