@@ -18,15 +18,15 @@ from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
 DEFAULT_THREAD_THICKNESS = SV("0.001016")
 AVERAGE_HEIGHT = average_height
-AVERAGE_WALKPERHOUR = 5630
-AVERAGE_RUNPERHOUR = 10729
-AVERAGE_SWIMPERHOUR = 3219
-AVERAGE_CLIMBPERHOUR = 4828
-AVERAGE_CRAWLPERHOUR = 2556
-AVERAGE_DRIVEPERHOUR = 96561
-AVERAGE_SPACESHIPPERHOUR = 3600 * 1000
-WALKSTEPSPERHOUR = 6900
-RUNSTEPSPERHOUR = 10200
+AVERAGE_WALKPERHOUR = SV(5630)
+AVERAGE_RUNPERHOUR = SV(10729)
+AVERAGE_SWIMPERHOUR = SV(3219)
+AVERAGE_CLIMBPERHOUR = SV(4828)
+AVERAGE_CRAWLPERHOUR = SV(2556)
+AVERAGE_DRIVEPERHOUR = SV(96561)
+AVERAGE_SPACESHIPPERHOUR = SV(3600 * 1000)
+WALKSTEPSPERHOUR = SV(900)
+RUNSTEPSPERHOUR = SV(10200)
 ONE_SOUNDSECOND = SV(340.27)
 ONE_LIGHTSECOND = SV(299792000)
 AVERAGE_CAL_PER_DAY = 2000
@@ -65,11 +65,14 @@ class Stat:
                 value = self.default_from(found)
         return StatValue(self, value)
 
-    def scale_value(self, value, scale) -> StatValue:
+    def scale_value(self, value, scale, stat_box: dict = None) -> StatValue:
         if value is None:
             return StatValue(self, None)  # None * 2 is None
         if self.power is None:
-            return StatValue(self, value)  # TODO: BAD
+            v = value
+            if stat_box:
+                v = self.default_from(stat_box)
+            return StatValue(self, v)
         if isinstance(value, SV):
             return StatValue(self, SV(value * (scale ** self.power)))
         elif isinstance(value, WV):
@@ -83,8 +86,8 @@ class StatValue:
         self.stat = stat
         self.value = value
 
-    def scale(self, scale):
-        return self.stat.scale_value(self.value, scale)
+    def scale(self, scale, stat_box = None):
+        return self.stat.scale_value(self.value, scale, stat_box)
 
     def __str__(self):
         return f"{self.stat.name}: {self.value}"
@@ -127,7 +130,7 @@ all_stats = [
     Stat("Crawl Step Length",           sets="crawlsteplength",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]*Decimal(1/2.577))),
     Stat("Swim Step Length",            sets="swimsteplength",          requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]*Decimal(6/7))),
     Stat("Distance to Horizon",         sets="horizondistance",         requires=["height"],                                                       default_from=lambda s: calcHorizon(s["height"])),
-    Stat("Terminal Velocity",           sets="terminalvelocity",        requires=["weight", "averagescale"],                                       default_from=lambda s: terminal_velocity(s["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * s["averagescale"] ** Decimal(2))),
+    Stat("Terminal Velocity",           sets="terminalvelocity",        requires=["weight", "averagescale"],                                       default_from=lambda s: SV(terminal_velocity(s["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * s["averagescale"] ** Decimal(2)))),
     Stat("Fallproof",                   sets="fallproof",               requires=["terminalvelocity"],                                             default_from=lambda s: s["terminalvelocity"] < FALL_LIMIT),
     Stat("Fallproof Icon",              sets="fallprooficon",           requires=["fallproof"],                                                    default_from=lambda s: emojis.voteyes if s["fallproof"] else emojis.voteno),
     Stat("Width",                       sets="width",                   requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]*Decimal(4/17))),
@@ -138,7 +141,7 @@ all_stats = [
     Stat("Lay Area",                    sets="layarea",                 requires=["height"],                   power=2,                            default_from=lambda s: SV(s["height"]*s["height"]*Decimal(4/17))),
     Stat("Foot Area",                   sets="footarea",                requires=["height"],                   power=2,                            default_from=lambda s: SV(s["footlength"]*s["footlength"]*Decimal(2/3))),
     Stat("Fingertip Area",              sets="fingertiparea",           requires=["height"],                   power=2,                            default_from=lambda s: SV(s["fingertiplength"]*s["fingertiplength"])),
-    Stat("Shoe Size",                   sets="shoesize",                requires=["height"],                                                       default_from=lambda s: formatShoeSize(s["footlength"], s["gender"])),
+    Stat("Shoe Size",                   sets="shoesize",                requires=["height"],                                                       default_from=lambda s: formatShoeSize(s["footlength"], (s["gender"] if "gender" in s else "m"))),
     Stat("Visibility",                  sets="visibility",              requires=["height"],                                                       default_from=lambda s: calcVisibility(s["height"]))
 ]
 
@@ -170,11 +173,18 @@ class StatBox:
     
     @property
     def scaled(self) -> StatBox:
-        return StatBox(self.user, [s.scale(self.user.stats["scale"]) for s in self.stats])
+        # TODO: THIS DOES NOT WORK.
+        # .as_dict() is for the base user, so when it goes to do the calculations, it's not using the new one.
+        # This only affects equations with power = 0.
+        return StatBox(self.user, [s.scale(self.user.stats["scale"], self.as_dict) for s in self.stats])
     
     def get(self, stat_name: str) -> StatValue | None:
         g = (s for s in self.stats if s.stat.sets == stat_name)
         return next(g, None)
+    
+    @property
+    def as_dict(self) -> dict:
+        return {s.stat.sets: s.value for s in self.stats if s.value is not None}
 
 
 
