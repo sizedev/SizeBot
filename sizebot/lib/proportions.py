@@ -615,28 +615,28 @@ class PersonSpeedComparison:
         )
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
         embed.add_field(name=f"**{self.viewer.nickname}** Speeds", value=(
-            f"{emojis.walk} **Walk Speed:** {self.viewer.walkperhour:,.3mu} per hour\n"
-            f"{emojis.run} **Run Speed:** {self.viewer.runperhour:,.3mu} per hour\n"
-            f"{emojis.climb} **Climb Speed:** {self.viewer.climbperhour:,.3mu} per hour\n"
-            f"{emojis.crawl} **Crawl Speed:** {self.viewer.crawlperhour:,.3mu} per hour\n"
-            f"{emojis.swim} **Swim Speed:** {self.viewer.swimperhour:,.3mu} per hour"), inline=False)
-        embed.add_field(name="Height", value=(self.speedcalc(self.viewedtoviewer.height)), inline=True)
-        embed.add_field(name=f"{self.footlabel} Length", value=(self.speedcalc(self.viewedtoviewer.footlength, foot = True)), inline=True)
-        embed.add_field(name=f"{self.footlabel} Width", value=(self.speedcalc(self.viewedtoviewer.footwidth)), inline=True)
-        embed.add_field(name="Toe Height", value=(self.speedcalc(self.viewedtoviewer.toeheight)), inline=True)
-        embed.add_field(name="Shoeprint Depth", value=(self.speedcalc(self.viewedtoviewer.shoeprintdepth)), inline=True)
-        embed.add_field(name="Pointer Finger Length", value=(self.speedcalc(self.viewedtoviewer.pointerlength)), inline=True)
-        embed.add_field(name="Thumb Width", value=(self.speedcalc(self.viewedtoviewer.thumbwidth)), inline=True)
-        embed.add_field(name="Nail Thickness", value=(self.speedcalc(self.viewedtoviewer.nailthickness)), inline=True)
-        embed.add_field(name="Fingerprint Depth", value=(self.speedcalc(self.viewedtoviewer.fingerprintdepth)), inline=True)
-        if self.viewedtoviewer.hairlength:
-            embed.add_field(name=f"{self.hairlabel} Length", value=(self.speedcalc(self.viewedtoviewer.hairlength)), inline=True)
-        if self.viewedtoviewer.taillength:
-            embed.add_field(name="Tail Length", value=(self.speedcalc(self.viewedtoviewer.taillength)), inline=True)
-        if self.viewedtoviewer.earheight:
-            embed.add_field(name="Ear Height", value=(self.speedcalc(self.viewedtoviewer.earheight)), inline=True)
-        embed.add_field(name=f"{self.hairlabel} Width", value=(self.speedcalc(self.viewedtoviewer.hairwidth)), inline=True)
-        embed.add_field(name="Eye Width", value=(self.speedcalc(self.viewedtoviewer.eyewidth)), inline=True)
+            f"{emojis.walk} **Walk Speed:** {self.viewer.walkperhour.value:,.3mu} per hour\n"
+            f"{emojis.run} **Run Speed:** {self.viewer.runperhour.value:,.3mu} per hour\n"
+            f"{emojis.climb} **Climb Speed:** {self.viewer.climbperhour.value:,.3mu} per hour\n"
+            f"{emojis.crawl} **Crawl Speed:** {self.viewer.crawlperhour.value:,.3mu} per hour\n"
+            f"{emojis.swim} **Swim Speed:** {self.viewer.swimperhour.value:,.3mu} per hour"), inline=False)
+        embed.add_field(name="Height", value=(self.speedcalc(self.viewedtoviewer.height.value)), inline=True)
+        embed.add_field(name=f"{self.footlabel} Length", value=(self.speedcalc(self.viewedtoviewer.footlength.value, foot = True)), inline=True)
+        embed.add_field(name=f"{self.footlabel} Width", value=(self.speedcalc(self.viewedtoviewer.footwidth.value)), inline=True)
+        embed.add_field(name="Toe Height", value=(self.speedcalc(self.viewedtoviewer.toeheight.value)), inline=True)
+        embed.add_field(name="Shoeprint Depth", value=(self.speedcalc(self.viewedtoviewer.shoeprintdepth.value)), inline=True)
+        embed.add_field(name="Pointer Finger Length", value=(self.speedcalc(self.viewedtoviewer.pointerlength.value)), inline=True)
+        embed.add_field(name="Thumb Width", value=(self.speedcalc(self.viewedtoviewer.thumbwidth.value)), inline=True)
+        embed.add_field(name="Nail Thickness", value=(self.speedcalc(self.viewedtoviewer.nailthickness.value)), inline=True)
+        embed.add_field(name="Fingerprint Depth", value=(self.speedcalc(self.viewedtoviewer.fingerprintdepth.value)), inline=True)
+        if self.viewedtoviewer.hairlength.value:
+            embed.add_field(name=f"{self.hairlabel} Length", value=(self.speedcalc(self.viewedtoviewer.hairlength.value)), inline=True)
+        if self.viewedtoviewer.taillength.value:
+            embed.add_field(name="Tail Length", value=(self.speedcalc(self.viewedtoviewer.taillength.value)), inline=True)
+        if self.viewedtoviewer.earheight.value:
+            embed.add_field(name="Ear Height", value=(self.speedcalc(self.viewedtoviewer.earheight.value)), inline=True)
+        embed.add_field(name=f"{self.hairlabel} Width", value=(self.speedcalc(self.viewedtoviewer.hairwidth.value)), inline=True)
+        embed.add_field(name="Eye Width", value=(self.speedcalc(self.viewedtoviewer.eyewidth.value)), inline=True)
         embed.set_footer(text=(f"{self.viewed.nickname} is {self.multiplier:,.3}x taller than {self.viewer.nickname}."))
 
         if self.viewer.incomprehensible or self.viewed.incomprehensible:
@@ -806,7 +806,7 @@ class PersonStats:
                 f"{emojis.climb} {self.climbperhour.value:,.1M} per hour / {self.climbperhour.value:,.1U} per hour\n"
                 f"{emojis.crawl} {self.crawlperhour.value:,.1M} per hour / {self.crawlperhour.value:,.1U} per hour\n"
                 f"{emojis.swim} {self.swimperhour.value:,.1M} per hour / {self.swimperhour.value:,.1U} per hour\n"
-                f"{emojis.drive} {self.driveperhour.value:,.1M} per hour / {self.driveperhour.value:,.1U} per hour"
+                f"{emojis.drive} {self.driveperhour.value:,.1M} per hour / {self.driveperhour.value:,.1U} per hour\n"
                 f"{emojis.spaceship} {self.spaceshipperhour.value:,.1M} per hour / {self.spaceshipperhour.value:,.1U} per hour")
 
     def __str__(self):
