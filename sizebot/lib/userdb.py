@@ -446,6 +446,7 @@ class User:
             "footlength": self.footlength,
             "pawtoggle": self.pawtoggle,
             "furtoggle": self.furtoggle,
+            "hairlength": self.hairlength,
             "taillength": self.taillength,
             "earheight": self.earheight,
             "liftstrength": self.liftstrength,
