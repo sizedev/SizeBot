@@ -11,7 +11,7 @@ from sizebot import __version__
 from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.freefall import terminal_velocity_from_player, terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
+from sizebot.lib.freefall import terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
@@ -871,7 +871,6 @@ class PersonStats:
             embed.set_footer(text = glitch_string(embed.footer.text))
 
         return embed
-
 
 class PersonBaseStats:
     def __init__(self, userdata: User):
