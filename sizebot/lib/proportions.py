@@ -718,7 +718,7 @@ class PersonStats:
         self.avgheightcomp = SV(AVERAGE_HEIGHT * self.viewscale)
         self.avgweightcomp = WV(DEFAULT_WEIGHT * self.viewscale ** 3)
 
-        viewangle = calcViewAngle(self.height.value, average_height)
+        viewangle = calcViewAngle(self.height, average_height)
         self.avglookangle = abs(viewangle)
         self.avglookdirection = "up" if viewangle >= 0 else "down"
 
