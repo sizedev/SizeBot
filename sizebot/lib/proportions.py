@@ -690,7 +690,7 @@ class PersonStats:
         self.footlength = self.stats.get("footlength").value
 
         # How does this one work??
-        self.shoesize = formatShoeSize(self.footlength.value, self.gender)
+        self.shoesize = formatShoeSize(self.footlength, self.gender)
 
         # TODO: Is this accounted for in the new implementation?:
         # if userdata.pawtoggle:
@@ -715,7 +715,7 @@ class PersonStats:
 
         # Yeah, I don't think we recreated these.
         # =======================================
-        self.avgheightcomp = SV(average_height * self.viewscale)
+        self.avgheightcomp = SV(AVERAGE_HEIGHT * self.viewscale)
         self.avgweightcomp = WV(DEFAULT_WEIGHT * self.viewscale ** 3)
 
         viewangle = calcViewAngle(self.height.value, average_height)
@@ -753,7 +753,6 @@ class PersonStats:
         self.visibility = self.stats.get("visibility").value
 
     def getFormattedStat(self, stat: str):
-        print("a")
         returndict = {
             "height": f"'s current height is **{self.height:,.3mu}**, or {self.formattedscale} scale.",
             "weight": f"'s current weight is **{self.weight:,.3mu}**.",
