@@ -158,7 +158,7 @@ class StatBox:
                     sv = s.set(self.user)
                     self.stats.append(sv)
                     found_stats[sv.stat.sets] = sv.value
-            # FInd the everything else
+            # Find the everything else
             loops = 0
             while len(all_stats) != len(found_stats):
                 loops += 1
@@ -173,9 +173,6 @@ class StatBox:
     
     @property
     def scaled(self) -> StatBox:
-        # TODO: THIS DOES NOT WORK.
-        # .as_dict() is for the base user, so when it goes to do the calculations, it's not using the new one.
-        # This only affects equations with power = 0.
         scaled_stat_box = self.partial_scaled_dict
         new_stats = []
         for s in self.stats:
@@ -187,10 +184,6 @@ class StatBox:
     def get(self, stat_name: str) -> StatValue | None:
         g = (s for s in self.stats if s.stat.sets == stat_name)
         return next(g, None)
-    
-    @property
-    def as_dict(self) -> dict:
-        return {s.stat.sets: s.value for s in self.stats if s.value is not None}
     
     @property
     def partial_scaled_dict(self) -> dict:
