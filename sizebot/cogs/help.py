@@ -356,6 +356,27 @@ class HelpCog(commands.Cog):
         await waitMsg.edit(content = response)
 
     @commands.command(
+        usage = [""],
+        category = "help",
+        hidden = True
+    )
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def pong(self, ctx, subcommand: str = ""):
+        """Pong!
+
+        Check SizeBot's current latency.
+
+        Check the bot's latency with `&ping`, or check the Discord API's latency with `&ping discord`."""
+        waitMsg = await ctx.send(emojis.loading)
+
+        if subcommand.lower() in ["heartbeat", "discord"]:
+            response = f"Ping! :ping_pong:\nDiscord HEARTBEAT latency: -{round(self.bot.latency, 3)} seconds"
+        else:
+            messageLatency = waitMsg.created_at - ctx.message.created_at
+            response = f"Ping! :ping_pong:\nCommand latency: -{utils.prettyTimeDelta(messageLatency.total_seconds(), True)}"
+        await waitMsg.edit(content = response)
+
+    @commands.command(
         category = "help"
     )
     async def changelog(self, ctx):
