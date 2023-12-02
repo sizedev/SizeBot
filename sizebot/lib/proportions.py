@@ -71,17 +71,21 @@ class StatValue:
         self.value = value
 
     def scale(self, scale: Decimal, found: dict):
+        # None * 2 is None
         if self.value is None:
-            return StatValue(self, None)  # None * 2 is None
-        if self.stat.power is not None:
-            value = self.value * (scale ** self.stat.power)
-        else:
+            value = None
+        elif self.stat.power is not None:
+            T = type(self.value)
+            value = T(self.value * (scale ** self.stat.power))
+        elif self.stat.default_from:
             if any(r not in found for r in self.stat.requires):
                 return
             value = self.stat.default_from(found)
+        else:
+            value = self.value
         if self.stat.sets:
             found[self.stat.sets] = value
-        return StatValue(self, value)
+        return StatValue(self.stat, value)
 
     def __str__(self):
         return f"{self.stat.name}: {self.value}"
@@ -139,6 +143,10 @@ all_stats = [
     Stat("Visibility",                  sets="visibility",              requires=["height"],                                                       default_from=lambda s: calcVisibility(s["height"]))
 ]
 
+# Example display code
+# display_stats = [
+#    DisplayStat(key="width", name="Width", statout="You're a {} wide chonker!", embedname="Width:", embedvalue="{} :widthicon:")
+# ]
 
 class StatBox:
     def __init__(self, stats: list[StatValue] = None):
@@ -164,7 +172,7 @@ class StatBox:
                     processed.append(sv)
             # If no progress
             if len(queued) == len(processing):
-                raise errors.UnfoundStatException(["Load"] + [s.name for s in queued])
+                raise errors.UnfoundStatException([s.name for s in queued])
         return cls(processed)
 
     def scale(self, scale_value: Decimal) -> StatBox:
@@ -186,7 +194,7 @@ class StatBox:
                     processed.append(sv)
             # If no progress
             if len(queued) == len(processing):
-                raise errors.UnfoundStatException(["Scale"] + [s.stat.name for s in queued])
+                raise errors.UnfoundStatException([s.stat.name for s in queued])
         return StatBox(processed)
 
     def get(self, stat_name: str) -> StatValue | None:
