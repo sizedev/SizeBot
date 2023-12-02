@@ -53,7 +53,7 @@ def mag_to_name(mag: float) -> str:
         return "universe-ending"
 
 def scale_to_joules(user: User, g: float, factor: float) -> Decimal:
-    return (Decimal(user.weight / 1000) / 2) * Decimal(g) * Decimal(factor)
+    return (Decimal(user.weight / 1000) / 2) * (Decimal(g) * Decimal(user.scale)) * Decimal(factor)
 
 def step_joules(user: User) -> int:
     return scale_to_joules(user, G, STEP_FACTOR)
