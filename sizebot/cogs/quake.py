@@ -21,7 +21,7 @@ class QuakeCog(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases = ["quake"],
-        usage = "[user/height]",
+        usage = "[type] [user/height]",
         category = "stats")
     async def earthquake(self, ctx, quake_type: typing.Optional[QuakeType] = "step", user: typing.Union[discord.Member, FakePlayer, SV] = None):
         """See what quakes would be caused by your steps."""
@@ -40,7 +40,7 @@ class QuakeCog(commands.Cog):
         elif quake_type == "poke":
             verb = "poking"
             joules = poke_joules(userdata)
-        elif quake_type == "breath":
+        elif quake_type == "breath" or quake_type == "breathe":
             verb = "breathing"
             joules = breath_joules(userdata)
         else:
