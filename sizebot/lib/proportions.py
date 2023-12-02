@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from copy import copy
-from typing import Callable, Literal, Optional
+from typing import Any, Callable, Literal, Optional
 import math
 import re
 
@@ -13,7 +13,7 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.freefall import terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
 from sizebot.lib.units import SV, WV
-from sizebot.lib.userdb import User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
+from sizebot.lib.userdb import PlayerStats, User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
 DEFAULT_THREAD_THICKNESS = SV("0.001016")
@@ -52,42 +52,36 @@ class Stat:
         self.userkey = userkey
         self.default_from = default_from
 
-    def set(self, user: User, found = {}) -> StatValue:
+    def set(self, stats: PlayerStats, found: dict) -> StatValue:
+        if any(r not in found for r in self.requires):
+            return
         value = None
         if self.userkey is not None:
-            value = user.stats[self.userkey]
+            value = stats[self.userkey]
         if self.default_from is not None and value is None:
-            if isinstance(value, SV):
-                value = SV(self.default_from(found))
-            elif isinstance(value, WV):
-                value = WV(self.default_from(found))
-            else:
-                value = self.default_from(found)
+            value = self.default_from(found)
+        if self.sets:
+            found[self.sets] = value
         return StatValue(self, value)
-
-    def scale_value(self, value, scale, stat_box: dict = None) -> StatValue:
-        if value is None:
-            return StatValue(self, None)  # None * 2 is None
-        if self.power is None:
-            v = value
-            if stat_box:
-                v = self.default_from(stat_box)
-            return StatValue(self, v)
-        if isinstance(value, SV):
-            return StatValue(self, SV(value * (scale ** self.power)))
-        elif isinstance(value, WV):
-            return StatValue(self, WV(value * (scale ** self.power)))
-        else:
-            return StatValue(self, value * (scale ** self.power))
 
 
 class StatValue:
-    def __init__(self, stat: Stat, value: any):
+    def __init__(self, stat: Stat, value: Any):
         self.stat = stat
         self.value = value
 
-    def scale(self, scale, stat_box = None):
-        return self.stat.scale_value(self.value, scale, stat_box)
+    def scale(self, scale: Decimal, found: dict):
+        if self.value is None:
+            return StatValue(self, None)  # None * 2 is None
+        if self.stat.power is not None:
+            value = self.value * (scale ** self.stat.power)
+        else:
+            if any(r not in found for r in self.stat.requires):
+                return
+            value = self.stat.default_from(found)
+        if self.stat.sets:
+            found[self.stat.sets] = value
+        return StatValue(self, value)
 
     def __str__(self):
         return f"{self.stat.name}: {self.value}"
@@ -101,20 +95,20 @@ all_stats = [
     Stat("Hair Length",                 sets="hairlength",                                                     power=1, userkey="hairlength"),
     Stat("Tail Length",                 sets="taillength",                                                     power=1, userkey="taillength"),
     Stat("Ear Height",                  sets="earheight",                                                      power=1, userkey="earheight"),
-    Stat("Foot Length",                 sets="footlength",              requires=["height"],                   power=1, userkey="footlength",      default_from=lambda s: SV(s["height"]/7)),
+    Stat("Foot Length",                 sets="footlength",              requires=["height"],                   power=1, userkey="footlength",      default_from=lambda s: SV(s["height"] / 7)),
     Stat("Lift Strength",               sets="liftstrength",            requires=["height"],                   power=3, userkey="liftstrength",    default_from=lambda s: DEFAULT_LIFT_STRENGTH),
-    Stat("Foot Width",                  sets="footwidth",               requires=["footlength"],               power=1,                            default_from=lambda s: SV(s["footlength"]/7 * Decimal(2/3))),
-    Stat("Toe Height",                  sets="toeheight",               requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/65)),
-    Stat("Shoeprint Depth",             sets="shoeprintdepth",          requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/135)),
-    Stat("Pointer Finger Length",       sets="pointerlength",           requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/Decimal(17.26))),
-    Stat("Thumb Width",                 sets="thumbwidth",              requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/Decimal(69.06))),
-    Stat("Fingertip Length",            sets="fingertiplength",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/Decimal(95.95))),
-    Stat("Fingerprint Depth",           sets="fingerprintdepth",        requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/35080)),
+    Stat("Foot Width",                  sets="footwidth",               requires=["footlength"],               power=1,                            default_from=lambda s: SV(s["footlength"] / 7 * Decimal(2 / 3))),
+    Stat("Toe Height",                  sets="toeheight",               requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / 65)),
+    Stat("Shoeprint Depth",             sets="shoeprintdepth",          requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / 135)),
+    Stat("Pointer Finger Length",       sets="pointerlength",           requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / Decimal(17.26))),
+    Stat("Thumb Width",                 sets="thumbwidth",              requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / Decimal(69.06))),
+    Stat("Fingertip Length",            sets="fingertiplength",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / Decimal(95.95))),
+    Stat("Fingerprint Depth",           sets="fingerprintdepth",        requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / 35080)),
     Stat("Thread Thickness",            sets="threadthickness",                                                power=1,                            default_from=lambda s: DEFAULT_THREAD_THICKNESS),
-    Stat("Hair Width",                  sets="hairwidth",               requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/23387)),
-    Stat("Nail Thickness",              sets="nailthickness",           requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/2920)),
-    Stat("Eye Width",                   sets="eyewidth",                requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/Decimal(73.083))),
-    Stat("Jump Height",                 sets="jumpheight",              requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]/Decimal(3.908))),
+    Stat("Hair Width",                  sets="hairwidth",               requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / 23387)),
+    Stat("Nail Thickness",              sets="nailthickness",           requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / 2920)),
+    Stat("Eye Width",                   sets="eyewidth",                requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / Decimal(73.083))),
+    Stat("Jump Height",                 sets="jumpheight",              requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] / Decimal(3.908))),
     Stat("Average Look Angle",          sets="averagelookangle",        requires=["height"],                                                       default_from=lambda s: abs(calcViewAngle(s["height"], AVERAGE_HEIGHT))),
     Stat("Average Look Direction",      sets="averagelookdirection",    requires=["height"],                                                       default_from=lambda s: "up" if calcViewAngle(s["height"], AVERAGE_HEIGHT) >= 0 else "down"),
     Stat("Walk Per Hour",               sets="walkperhour",             requires=["averagescale"],             power=1,                            default_from=lambda s: SV(AVERAGE_WALKPERHOUR * s["averagescale"])),
@@ -126,74 +120,78 @@ all_stats = [
     Stat("Spaceship Per Hour",          sets="spaceshipperhour",                                               power=1,                            default_from=lambda s: SV(AVERAGE_SPACESHIPPERHOUR)),
     Stat("Walk Step Length",            sets="walksteplength",          requires=["averagescale"],             power=1,                            default_from=lambda s: SV(AVERAGE_WALKPERHOUR * s["averagescale"] / WALKSTEPSPERHOUR)),
     Stat("Run Step Length",             sets="runsteplength",           requires=["averagescale"],             power=1,                            default_from=lambda s: SV(AVERAGE_RUNPERHOUR * s["averagescale"] / RUNSTEPSPERHOUR)),
-    Stat("Climb Step Length",           sets="climbsteplength",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]*Decimal(1/2.5))),
-    Stat("Crawl Step Length",           sets="crawlsteplength",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]*Decimal(1/2.577))),
-    Stat("Swim Step Length",            sets="swimsteplength",          requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]*Decimal(6/7))),
+    Stat("Climb Step Length",           sets="climbsteplength",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] * Decimal(1 / 2.5))),
+    Stat("Crawl Step Length",           sets="crawlsteplength",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] * Decimal(1 / 2.577))),
+    Stat("Swim Step Length",            sets="swimsteplength",          requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] * Decimal(6 / 7))),
     Stat("Distance to Horizon",         sets="horizondistance",         requires=["height"],                                                       default_from=lambda s: calcHorizon(s["height"])),
     Stat("Terminal Velocity",           sets="terminalvelocity",        requires=["weight", "averagescale"],                                       default_from=lambda s: SV(terminal_velocity(s["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * s["averagescale"] ** Decimal(2)))),
     Stat("Fallproof",                   sets="fallproof",               requires=["terminalvelocity"],                                             default_from=lambda s: s["terminalvelocity"] < FALL_LIMIT),
     Stat("Fallproof Icon",              sets="fallprooficon",           requires=["fallproof"],                                                    default_from=lambda s: emojis.voteyes if s["fallproof"] else emojis.voteno),
-    Stat("Width",                       sets="width",                   requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]*Decimal(4/17))),
-    Stat("Sound Travel Time",           sets="soundtraveltime",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]*ONE_SOUNDSECOND)),
-    Stat("Light Travel Time",           sets="lighttraveltime",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"]*ONE_LIGHTSECOND)),
+    Stat("Width",                       sets="width",                   requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] * Decimal(4 / 17))),
+    Stat("Sound Travel Time",           sets="soundtraveltime",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] * ONE_SOUNDSECOND)),
+    Stat("Light Travel Time",           sets="lighttraveltime",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] * ONE_LIGHTSECOND)),
     Stat("Calories Needed",             sets="caloriesneeded",                                                 power=3,                            default_from=lambda s: AVERAGE_CAL_PER_DAY),
     Stat("Water Needed",                sets="waterneeded",                                                    power=3,                            default_from=lambda s: AVERAGE_WATER_PER_DAY),
-    Stat("Lay Area",                    sets="layarea",                 requires=["height"],                   power=2,                            default_from=lambda s: SV(s["height"]*s["height"]*Decimal(4/17))),
-    Stat("Foot Area",                   sets="footarea",                requires=["height"],                   power=2,                            default_from=lambda s: SV(s["footlength"]*s["footlength"]*Decimal(2/3))),
-    Stat("Fingertip Area",              sets="fingertiparea",           requires=["height"],                   power=2,                            default_from=lambda s: SV(s["fingertiplength"]*s["fingertiplength"])),
-    Stat("Shoe Size",                   sets="shoesize",                requires=["height"],                                                       default_from=lambda s: formatShoeSize(s["footlength"], (s["gender"] if "gender" in s else "m"))),
+    Stat("Lay Area",                    sets="layarea",                 requires=["height"],                   power=2,                            default_from=lambda s: SV(s["height"] * s["height"] * Decimal(4 / 17))),
+    Stat("Foot Area",                   sets="footarea",                requires=["footlength"],               power=2,                            default_from=lambda s: SV(s["footlength"] * s["footlength"] * Decimal(2 / 3))),
+    Stat("Fingertip Area",              sets="fingertiparea",           requires=["fingertiplength"],          power=2,                            default_from=lambda s: SV(s["fingertiplength"] * s["fingertiplength"])),
+    Stat("Shoe Size",                   sets="shoesize",                requires=["footlength", "gender"],                                         default_from=lambda s: formatShoeSize(s["footlength"], s["gender"])),
     Stat("Visibility",                  sets="visibility",              requires=["height"],                                                       default_from=lambda s: calcVisibility(s["height"]))
 ]
 
 
 class StatBox:
-    def __init__(self, user: User, stats: list[StatValue] = None):
-        self.user = user
+    def __init__(self, stats: list[StatValue] = None):
         self.stats = [] if not stats else stats
-        if not stats:
-            found_stats = {}
-            # Find the base stats
-            for s in all_stats:
-                if s.userkey and not s.requires:
-                    sv = s.set(self.user)
-                    self.stats.append(sv)
-                    found_stats[sv.stat.sets] = sv.value
-            # Find the everything else
-            loops = 0
-            while len(all_stats) != len(found_stats):
-                loops += 1
-                for s in all_stats:
-                    if s.sets not in found_stats:
-                        if all([r in found_stats for r in s.requires]):
-                            sv = s.set(self.user, found_stats)
-                            self.stats.append(sv)
-                            found_stats[sv.stat.sets] = sv.value
-                if loops >= 10:
-                    raise errors.UnfoundStatException([s.name for s in all_stats if s.sets not in found_stats])
-    
-    @property
-    def scaled(self) -> StatBox:
-        scaled_stat_box = self.partial_scaled_dict
-        new_stats = []
-        for s in self.stats:
-            ns = s.scale(self.user.stats["scale"], scaled_stat_box)
-            scaled_stat_box[ns.stat.sets] = ns.value
-            new_stats.append(ns)
-        return StatBox(self.user, new_stats)
-    
+
+    @classmethod
+    def load(cls, playerStats: PlayerStats) -> StatBox:
+        queued: list[Stat] = all_stats.copy()
+        processing: list[Stat] = []
+        processed: list[StatValue] = []
+        stats_by_key: dict[str, Any] = {}
+
+        while queued:
+            processing = queued
+            queued = []
+            for s in processing:
+                sv = s.set(playerStats, stats_by_key)
+                if sv is None:
+                    # If we can't set it, queue it for later
+                    queued.append(s)
+                else:
+                    # If it's set, just append to the processed stats
+                    processed.append(sv)
+            # If no progress
+            if len(queued) == len(processing):
+                raise errors.UnfoundStatException([s.name for s in queued])
+        return cls(processed)
+
+    def scale(self, scale_value: Decimal) -> StatBox:
+        queued: list[StatValue] = self.stats.copy()
+        processing: list[StatValue] = []
+        processed: list[StatValue] = []
+        stats_by_key: dict[str, Any] = {}
+
+        while queued:
+            processing = queued
+            queued = []
+            for s in processing:
+                sv = s.scale(scale_value, stats_by_key)
+                if sv is None:
+                    # If we can't scale it, queue it for later
+                    queued.append(s)
+                else:
+                    # If it's scaled, just append to the processed stats
+                    processed.append(sv)
+            # If no progress
+            if len(queued) == len(processing):
+                raise errors.UnfoundStatException([s.name for s in queued])
+        return StatBox(processed)
+
     def get(self, stat_name: str) -> StatValue | None:
         g = (s for s in self.stats if s.stat.sets == stat_name)
         return next(g, None)
-    
-    @property
-    def partial_scaled_dict(self) -> dict:
-        known_stats = {}
-        for s in self.stats:
-            if s.value is not None and s.stat.power is not None:
-                new_stat = s.scale(self.user.stats["scale"], known_stats)
-                known_stats[new_stat.stat.sets] = new_stat.value
-        return known_stats
-
 
 
 def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
@@ -641,6 +639,7 @@ class PersonSpeedComparison:
 
         return embed
 
+
 class PersonStats:
     def __init__(self, userdata: User):
         self.nickname = userdata.nickname
@@ -648,8 +647,8 @@ class PersonStats:
         self.gender = userdata.autogender
 
         # Use the new statbox
-        self.basestats = StatBox(userdata)
-        self.stats = self.basestats.scaled
+        self.basestats = StatBox.load(userdata.stats)
+        self.stats = self.basestats.scale(userdata.scale)
 
         # TODO: There's not a good way of getting these yet:
         self.formattedscale = userdata.getFormattedScale(verbose = True)
@@ -715,8 +714,8 @@ class PersonStats:
         self.avglookangle = abs(viewangle)
         self.avglookdirection = "up" if viewangle >= 0 else "down"
 
-        base_average_ratio = self.baseheight / average_height  # TODO: Make this a property on userdata?
-                                                               # 11/26/2023: Wait, don't, do something else
+        # base_average_ratio = self.baseheight / average_height  # TODO: Make this a property on userdata?
+        # 11/26/2023: Wait, don't, do something else
         # =======================================
 
         # Speeds
@@ -864,6 +863,7 @@ class PersonStats:
 
         return embed
 
+
 class PersonBaseStats:
     def __init__(self, userdata: User):
         self.nickname = userdata.nickname
@@ -944,7 +944,7 @@ class PersonBaseStats:
         return embed
 
 
-def formatShoeSize(footlength: SV, gender: Literal["m","f"]):
+def formatShoeSize(footlength: SV, gender: Literal["m", "f"]):
     women = gender == "f"
     # Inch in meters
     inch = Decimal("0.0254")
@@ -1000,7 +1000,7 @@ def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:
 def calcHorizon(height: SV) -> SV:
     EARTH_RADIUS = 6378137
     return SV(math.sqrt((EARTH_RADIUS + height) ** 2 - EARTH_RADIUS ** 2))
-#     sqrt(EARTH_RADIUS + height) ** 2 - EARTH_RADIUS ** 2))
+
 
 def calcVisibility(height: SV) -> str:
     if height < SV(0.000001):
