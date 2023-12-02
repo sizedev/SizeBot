@@ -186,7 +186,7 @@ class StatBox:
                     processed.append(sv)
             # If no progress
             if len(queued) == len(processing):
-                raise errors.UnfoundStatException([s.name for s in queued])
+                raise errors.UnfoundStatException([s.stat.name for s in queued])
         return StatBox(processed)
 
     def get(self, stat_name: str) -> StatValue | None:
