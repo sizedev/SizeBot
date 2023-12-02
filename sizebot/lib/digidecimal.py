@@ -52,7 +52,7 @@ def unwrapDecimal(value):
 @total_ordering
 class Decimal():
     infinity = RawDecimal("infinity")
-    _infinity = RawDecimal("1e100")
+    _infinity = RawDecimal("1e1000")
 
     def __init__(self, value):
         # initialize from Decimal
