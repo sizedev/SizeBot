@@ -473,7 +473,7 @@ class SV(Dimension):
     """Size Value (length in meters)"""
     _units = UnitRegistry()
     _systems = {}
-    _infinity = Decimal("1e100")
+    _infinity = Decimal("8.79848e53")
 
     @classmethod
     def getQuantityPair(cls, s):
