@@ -68,7 +68,7 @@ def jump_joules(user: User) -> Decimal:
     return scale_to_joules(user, G, JUMP_FACTOR)
 
 def breath_joules(user: User) -> Decimal:
-    return Decimal(BREATH_JOULES * (user.scale ** 4))
+    return Decimal(BREATH_JOULES) * (user.scale ** 3)
 
 def poke_joules(user: User) -> Decimal:
-    return Decimal(POKE_JOULES * (user.scale ** 4))
+    return Decimal(POKE_JOULES) * (user.scale ** 3)
