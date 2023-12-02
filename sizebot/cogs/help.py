@@ -356,17 +356,13 @@ class HelpCog(commands.Cog):
         await waitMsg.edit(content = response)
 
     @commands.command(
-        usage = [""],
+        usage = ["[type]"],
         category = "help",
         hidden = True
     )
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def pong(self, ctx, subcommand: str = ""):
-        """Pong!
-
-        Check SizeBot's current latency.
-
-        Check the bot's latency with `&ping`, or check the Discord API's latency with `&ping discord`."""
+        """Ping!"""
         waitMsg = await ctx.send(emojis.loading)
 
         if subcommand.lower() in ["heartbeat", "discord"]:
