@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from sizebot.lib.constants import colors
 from sizebot.lib.fakeplayer import FakePlayer
-from sizebot.lib.quake import joules_to_mag, jump_joules, mag_to_name, mag_to_radius, step_joules, stomp_joules
+from sizebot.lib.quake import breath_joules, joules_to_mag, jump_joules, mag_to_name, mag_to_radius, poke_joules, step_joules, stomp_joules
 from sizebot.lib.units import SV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.errors import UserMessedUpException
@@ -37,6 +37,12 @@ class QuakeCog(commands.Cog):
         elif quake_type == "jump":
             verb = "jumping"
             joules = jump_joules(userdata)
+        elif quake_type == "poke":
+            verb = "poking"
+            joules = poke_joules(userdata)
+        elif quake_type == "breath":
+            verb = "breathing"
+            joules = breath_joules(userdata)
         else:
             raise UserMessedUpException(f"{quake_type} is not a valid quake type.")
         mag = joules_to_mag(joules)

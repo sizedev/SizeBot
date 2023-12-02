@@ -11,6 +11,9 @@ STEP_FACTOR = 0.035
 STOMP_FACTOR = 0.5
 JUMP_FACTOR = 1
 
+BREATH_JOULES = 0.25
+POKE_JOULES = 8
+
 def joules_to_mag(joules: float) -> Decimal:
     # This might not be super accurate.
     return Decimal(2/3) * Decimal(math.log10(joules)) - Decimal(3.2)
@@ -63,3 +66,9 @@ def stomp_joules(user: User) -> int:
 
 def jump_joules(user: User) -> int:
     return scale_to_joules(user, G, JUMP_FACTOR)
+
+def breath_joules(user: User) -> int:
+    return int(BREATH_JOULES * (user.scale ** 4))
+
+def poke_joules(user: User) -> int:
+    return int(POKE_JOULES * (user.scale ** 4))
