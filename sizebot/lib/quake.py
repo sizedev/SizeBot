@@ -11,7 +11,7 @@ STEP_FACTOR = 0.035
 STOMP_FACTOR = 0.5
 JUMP_FACTOR = 1
 
-BREATH_JOULES = 0.25
+BREATH_JOULES = 0.025
 POKE_JOULES = 8
 
 def joules_to_mag(joules: float) -> Decimal:
