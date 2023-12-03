@@ -378,8 +378,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name="Lift/Carry Strength", value=(
             f"{emojis.comparebig}{self.bigToSmall.liftstrength:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.liftstrength:,.3mu}"), inline=True)
-        embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.get_speeds(), inline=False)
-        embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.get_speeds(), inline=False)
+        embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.get_speeds(True), inline=False)
+        embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.get_speeds(True), inline=False)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
@@ -799,7 +799,13 @@ class PersonStats:
             return glitch_string(returndict.get(stat))
         return returndict.get(stat)
 
-    def get_speeds(self):
+    def get_speeds(self, simple = False):
+        if simple:
+            return (f"{emojis.walk} {self.walkperhour:,.1M} per hour / {self.walkperhour:,.1U} per hour\n"
+                f"{emojis.run} {self.runperhour:,.1M} per hour / {self.runperhour:,.1U} per hour\n"
+                f"{emojis.climb} {self.climbperhour:,.1M} per hour / {self.climbperhour:,.1U} per hour\n"
+                f"{emojis.swim} {self.swimperhour:,.1M} per hour / {self.swimperhour:,.1U} per hour")
+
         return (f"{emojis.walk} {self.walkperhour:,.1M} per hour / {self.walkperhour:,.1U} per hour\n"
                 f"{emojis.run} {self.runperhour:,.1M} per hour / {self.runperhour:,.1U} per hour\n"
                 f"{emojis.climb} {self.climbperhour:,.1M} per hour / {self.climbperhour:,.1U} per hour\n"
