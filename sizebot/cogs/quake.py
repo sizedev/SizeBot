@@ -11,8 +11,8 @@ from sizebot.lib.units import SV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.errors import UserMessedUpException
 
-EARTH_RAD = 10_018_570
-UNI_RAD = 4.4E26
+EARTH_RAD = Decimal(10_018_570)
+UNI_RAD = Decimal(4.4E26)
 QuakeType = typing.Literal["step", "stomp", "jump", "poke", "breath", "breathe"]
 
 class QuakeCog(commands.Cog):
