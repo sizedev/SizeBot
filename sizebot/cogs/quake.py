@@ -6,14 +6,14 @@ from discord.ext import commands
 
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.fakeplayer import FakePlayer
-from sizebot.lib.quake import breath_joules, joules_to_mag, jump_joules, mag_to_name, mag_to_radius, poke_joules, step_joules, stomp_joules
+from sizebot.lib.quake import breath_joules, heartbeat_joules, joules_to_mag, jump_joules, mag_to_name, mag_to_radius, poke_joules, step_joules, stomp_joules
 from sizebot.lib.units import SV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.errors import UserMessedUpException
 
 EARTH_RAD = Decimal(10_018_570)
 UNI_RAD = Decimal(4.4E26)
-QuakeType = typing.Literal["step", "stomp", "jump", "poke", "breath", "breathe"]
+QuakeType = typing.Literal["step", "stomp", "jump", "poke", "breath", "breathe", "heartbeat"]
 
 class QuakeCog(commands.Cog):
     """Quake commands."""
@@ -30,20 +30,23 @@ class QuakeCog(commands.Cog):
             user = ctx.author
         userdata = load_or_fake(user)
         if quake_type == "step":
-            verb = "stepping"
+            verb = " stepping"
             joules = step_joules(userdata)
         elif quake_type == "stomp":
-            verb = "stomping"
+            verb = " stomping"
             joules = stomp_joules(userdata)
         elif quake_type == "jump":
-            verb = "jumping"
+            verb = " jumping"
             joules = jump_joules(userdata)
         elif quake_type == "poke":
-            verb = "poking"
+            verb = " poking"
             joules = poke_joules(userdata)
         elif quake_type == "breath" or quake_type == "breathe":
-            verb = "breathing"
+            verb = " breathing"
             joules = breath_joules(userdata)
+        elif quake_type == "heartbeat":
+            verb = "'s heart beating"
+            joules = heartbeat_joules(userdata)
         else:
             raise UserMessedUpException(f"{quake_type} is not a valid quake type.")
         mag = joules_to_mag(joules)
