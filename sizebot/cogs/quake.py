@@ -117,17 +117,17 @@ class QuakeCog(commands.Cog):
 
         steps: int = len(s)
 
-        small_j = step_joules(userdata)
+        small_j = type_joules(userdata)
         small_mag = joules_to_mag(small_j)
         small_type = mag_to_name(small_mag)
 
-        big_j = step_joules(userdata) * steps
+        big_j = type_joules(userdata) * steps
         big_mag = joules_to_mag(big_j)
         big_type = mag_to_name(big_mag)
 
         return_string = (
             f"{userdata.nickname} is {userdata.height:,.3mu} tall, and weighs {userdata.weight:,.3mu}.\n"
-            f"Typing {steps} characters, {userdata.nickname}, caused {steps} **Magnitude {small_mag} earthquakes.** ({small_type})\n"
+            f"Typing {steps} characters, {userdata.nickname} caused **{steps} Magnitude {small_mag} earthquakes.** ({small_type})\n"
             f"That's equivalent to **one Magnitude {big_mag} earthquake**. ({big_type})\n"
         )
 
