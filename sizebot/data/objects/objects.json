@@ -1876,6 +1876,20 @@
         "weight": "250"
     },
     {
+        "name": "Dell Latitude 15 Laptop",
+        "dimension": "w",
+        "height": "0.0436",
+        "width": "0.3578",
+        "depth": "0.02333",
+        "weight": "1613",
+        "aliases": [
+            "laptop",
+            "PC",
+            "computer"
+        ],
+        "note": "Dell Latitude 5540 15\" (2023)"
+    },
+    {
         "name": "bowling pin",
         "dimension": "h",
         "height": "0.381",

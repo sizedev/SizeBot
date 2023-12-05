@@ -45,6 +45,17 @@
         "note": "The tallest point is the One World Trade Center."
     },
     {
+        "name": "Germany",
+        "dimension": "w",
+        "height": "2962",
+        "length": "1005840",
+        "width": "724205",
+        "tags": [
+            "country",
+            "land"
+        ]
+    },
+    {
         "name": "Afghanistan",
         "dimension": "l",
         "height": "7492",
@@ -125,16 +136,5 @@
             "land"
         ],
         "note": "The tallest point is Mount El'brus."
-    },
-    {
-        "name": "Germany",
-        "dimension": "w",
-        "height": "2962",
-        "length": "1005840",
-        "width": "724205",
-        "tags": [
-            "country",
-            "land"
-        ]
     }
 ]
