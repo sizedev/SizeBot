@@ -14,6 +14,7 @@ JUMP_FACTOR = 1
 BREATH_JOULES = 0.025
 POKE_JOULES = 8
 HEARTBEAT_JOULES = 5.38E-9
+TYPE_JOULES = 2.5E-3
 
 def joules_to_mag(joules: float) -> Decimal:
     # This might not be super accurate.
@@ -76,3 +77,6 @@ def poke_joules(user: User) -> Decimal:
 
 def heartbeat_joules(user: User) -> Decimal:
     return Decimal(HEARTBEAT_JOULES) * (user.scale ** 3)
+
+def type_joules(user: User) -> Decimal:
+    return Decimal(TYPE_JOULES) * (user.scale ** 3)
