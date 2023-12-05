@@ -427,9 +427,9 @@ class ObjectsCog(commands.Cog):
         usage = "[object] <user/size>",
         category = "objects"
     )
-    async def scaled(self, ctx, obj: DigiObject):
+    async def scaled(self, ctx, *, obj: DigiObject):
         userdata = load_or_fake(ctx.author)
-        await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} would be {obj.getStatsSentence(userdata.scale, userdata.unitsystem)}")
+        await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} is {obj.getStatsSentence(userdata.scale, userdata.unitsystem)}")
 
 async def setup(bot):
     await bot.add_cog(ObjectsCog(bot))
