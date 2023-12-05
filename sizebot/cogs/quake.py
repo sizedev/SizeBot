@@ -89,6 +89,10 @@ class QuakeCog(commands.Cog):
         stats = proportions.PersonStats(userdata)
         steps: int = int(dist / stats.walksteplength)
 
+        if steps < 1:
+            await ctx.send("You don't even have to take a single step to reach that distance!")
+            return
+
         small_j = step_joules(userdata)
         small_mag = joules_to_mag(small_j)
         small_type = mag_to_name(small_mag)
