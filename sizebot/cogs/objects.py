@@ -242,7 +242,7 @@ class ObjectsCog(commands.Cog):
         usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx, amount: typing.Optional[int] = None, who: typing.Union[discord.Member, FakePlayer] = None):
+    async def stackup(self, ctx, amount: typing.Optional[int] = None, *, who: typing.Union[discord.Member, FakePlayer] = None):
         """How do you stack up against objects?
 
         Example:
@@ -429,7 +429,7 @@ class ObjectsCog(commands.Cog):
     )
     async def scaled(self, ctx, *, obj: DigiObject):
         userdata = load_or_fake(ctx.author)
-        await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} is {obj.getStatsSentence(userdata.scale, userdata.unitsystem)}")
+        await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} is {obj.get_stats_sentence(userdata.scale, userdata.unitsystem)}")
 
 async def setup(bot):
     await bot.add_cog(ObjectsCog(bot))

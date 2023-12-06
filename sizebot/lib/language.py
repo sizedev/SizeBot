@@ -32,12 +32,12 @@ def load():
         engine.defnoun(s, p)
 
 
-def getPlural(noun):
+def get_plural(noun):
     overrides = {}
     if noun in overrides:
         return overrides[noun]
     return engine.plural_noun(noun)
 
 
-def getIndefiniteArticle(noun):
+def get_indefinite_article(noun):
     return engine.a(noun)

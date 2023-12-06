@@ -11,7 +11,7 @@ from sizebot import __version__
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.language import getPlural, getIndefiniteArticle
+from sizebot.lib.language import get_plural, get_indefinite_article
 from sizebot.lib.units import SV, WV, Unit, SystemUnit
 from sizebot.lib.utils import removeprefix, sentence_join
 
@@ -29,14 +29,14 @@ class DigiObject:
 
         self.name = name
         self.dimension = dimension
-        self.namePlural = getPlural(name)
+        self.namePlural = get_plural(name)
         self.singularNames = aliases + [self.name]
-        self.aliases = aliases + [getPlural(a) for a in aliases]
+        self.aliases = aliases + [get_plural(a) for a in aliases]
         self.aliases = self.aliases + [a.replace("™", "").replace("®", "") for a in self.aliases + [self.name]]  # Remove ®, ™
         self.aliases = list(set(self.aliases))  # Remove duplicates
         self._tags = tags
-        self.tags = tags + [getPlural(t) for t in self._tags]
-        self.article = getIndefiniteArticle(self.name).split(" ")[0]
+        self.tags = tags + [get_plural(t) for t in self._tags]
+        self.article = get_indefinite_article(self.name).split(" ")[0]
         self.symbol = symbol or None
         self.note = note or None
 
@@ -66,7 +66,7 @@ class DigiObject:
         # TODO: See issue #153.
         return None
 
-    def addToUnits(self):
+    def add_to_units(self):
         if self.unitlength is not None:
             SV.addUnit(Unit(factor=self.unitlength, name=self.name, namePlural=self.namePlural,
                             names=self.aliases, symbol = self.symbol))
@@ -77,7 +77,7 @@ class DigiObject:
                             names=self.aliases, symbol = self.symbol))
             WV.addSystemUnit("o", SystemUnit(self.name))
 
-    def getStats(self, multiplier = 1):
+    def get_stats(self, multiplier = 1):
         returnstr = ""
         if self.height:
             returnstr += f"{emojis.blank}**{SV(self.height * multiplier):,.3mu}** tall\n"
@@ -98,7 +98,7 @@ class DigiObject:
             returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
         return returnstr
 
-    def getStatsSentence(self, multiplier = 1, system: Literal["m", "u"] = "m"):
+    def get_stats_sentence(self, multiplier = 1, system: Literal["m", "u"] = "m"):
         statsstrings = []
         if self.height:
             statsstrings.append(f"**{SV(self.height * multiplier):,.3{system}}** tall")
@@ -121,7 +121,7 @@ class DigiObject:
 
         return returnstr
 
-    def getStatsEmbed(self, multiplier = 1):
+    def get_stats_embed(self, multiplier = 1):
         embed = Embed()
         embed.set_author(name = f"SizeBot {__version__}")
 
@@ -156,10 +156,10 @@ class DigiObject:
         return embed
 
     def stats(self):
-        return f"{self.article.capitalize()} {self.name} is...\n" + self.getStats()
+        return f"{self.article.capitalize()} {self.name} is...\n" + self.get_stats()
 
     def statsembed(self):
-        embed = self.getStatsEmbed()
+        embed = self.get_stats_embed()
         embed.title = self.name
         embed.description = f"*{self.note}*" if self.note else None
         return embed
@@ -167,15 +167,15 @@ class DigiObject:
     def relativestats(self, userdata):
         return (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
                 f"To {userdata.nickname}, {self.article} {self.name} looks...\n") \
-            + self.getStats(userdata.viewscale)
+            + self.get_stats(userdata.viewscale)
 
     def relativestatssentence(self, userdata):
         return (f"{userdata.nickname} is {userdata.height:,.3{userdata.unitsystem}} tall."
                 f" To them, {self.article} {self.name} looks ") \
-            + self.getStatsSentence(userdata.viewscale, userdata.unitsystem)
+            + self.get_stats_sentence(userdata.viewscale, userdata.unitsystem)
 
     def relativestatsembed(self, userdata):
-        embed = self.getStatsEmbed(userdata.viewscale)
+        embed = self.get_stats_embed(userdata.viewscale)
         embed.title = self.name + " *[relative]*"
         embed.description = (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
                              f"To {userdata.nickname}, {self.article} {self.name} looks...\n")
@@ -197,7 +197,7 @@ class DigiObject:
         return self.unitlength < other
 
     @classmethod
-    def findByName(cls, name):
+    def find_by_name(cls, name):
         lowerName = name.lower()
         for o in objects:
             if o == lowerName:
@@ -209,12 +209,12 @@ class DigiObject:
         return None
 
     @classmethod
-    def fromJson(cls, objJson):
+    def from_JSON(cls, objJson):
         return cls(**objJson)
 
     @classmethod
     async def convert(cls, ctx, argument):
-        obj = cls.findByName(argument)
+        obj = cls.find_by_name(argument)
         if obj is None:
             raise errors.InvalidObject(argument)
         return obj
@@ -226,17 +226,17 @@ class DigiObject:
         return str(self)
 
 
-def loadObjFile(filename):
+def load_obj_file(filename):
     try:
         fileJson = json.loads(pkg_resources.read_text(sizebot.data.objects, filename))
     except FileNotFoundError:
         fileJson = None
-    loadObjJson(fileJson)
+    load_obj_JSON(fileJson)
 
 
-def loadObjJson(fileJson):
+def load_obj_JSON(fileJson):
     for objJson in fileJson:
-        objects.append(DigiObject.fromJson(objJson))
+        objects.append(DigiObject.from_JSON(objJson))
 
 
 def init():
@@ -244,11 +244,11 @@ def init():
 
     for filename in pkg_resources.contents(sizebot.data.objects):
         if filename.endswith(".json"):
-            loadObjFile(filename)
+            load_obj_file(filename)
 
     objects.sort()
     for o in objects:
-        o.addToUnits()
+        o.add_to_units()
 
     # cached values
     food = [o for o in objects if "food" in o.tags]
