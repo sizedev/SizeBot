@@ -29,8 +29,8 @@ class DigiObject:
 
         self.name = name
         self.dimension = dimension
-        self.namePlural = get_plural(name)
-        self.singularNames = aliases + [self.name]
+        self.name_plural = get_plural(name)
+        self.singular_names = aliases + [self.name]
         self.aliases = aliases + [get_plural(a) for a in aliases]
         self.aliases = self.aliases + [a.replace("™", "").replace("®", "") for a in self.aliases + [self.name]]  # Remove ®, ™
         self.aliases = list(set(self.aliases))  # Remove duplicates
@@ -68,12 +68,12 @@ class DigiObject:
 
     def add_to_units(self):
         if self.unitlength is not None:
-            SV.addUnit(Unit(factor=self.unitlength, name=self.name, namePlural=self.namePlural,
+            SV.addUnit(Unit(factor=self.unitlength, name=self.name, namePlural=self.name_plural,
                             names=self.aliases, symbol = self.symbol))
             SV.addSystemUnit("o", SystemUnit(self.name))
 
         if self.weight is not None:
-            WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.namePlural,
+            WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.name_plural,
                             names=self.aliases, symbol = self.symbol))
             WV.addSystemUnit("o", SystemUnit(self.name))
 
@@ -185,7 +185,7 @@ class DigiObject:
         if isinstance(other, str):
             lowerName = other.lower()
             return lowerName == self.name.lower() \
-                or lowerName == self.namePlural \
+                or lowerName == self.name_plural \
                 or lowerName in (n.lower() for n in self.aliases)
         elif isinstance(other, DigiObject):
             return (self.name, self.unitlength) == (other.name, other.unitlength)
