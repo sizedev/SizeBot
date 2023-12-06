@@ -424,7 +424,7 @@ class ObjectsCog(commands.Cog):
         await ctx.send(out)
 
     @commands.command(
-        usage = "[object] <user/size>",
+        usage = "[object]",
         category = "objects"
     )
     async def scaled(self, ctx, *, obj: DigiObject):
