@@ -242,7 +242,7 @@ class ObjectsCog(commands.Cog):
         usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx, *, amount: typing.Optional[int] = None, who: typing.Union[discord.Member, FakePlayer] = None):
+    async def stackup(self, ctx, amount: typing.Optional[int] = None, who: typing.Union[discord.Member, FakePlayer] = None):
         """How do you stack up against objects?
 
         Example:
