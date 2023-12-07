@@ -336,7 +336,7 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeightorTime, str):
             raise errors.InvalidSizeValue(memberOrHeightorTime, "size or time")
         elif isinstance(memberOrHeightorTime, TV):
-            walkpersecond = SV(userdata2.walkperhour / 3600)
+            walkpersecond = SV(userdata2.walkperhour / 3600 * userdata2.scale)
             memberOrHeightorTime = SV(walkpersecond * memberOrHeightorTime)
 
         if isinstance(memberOrHeightorTime, SV):
@@ -345,6 +345,12 @@ class StatsCog(commands.Cog):
             telemetry.SizeViewed(memberOrHeight2).save()
 
         userdata1 = load_or_fake(memberOrHeightorTime)
+
+        if userdata2.height > userdata1.height:
+            h = SV(userdata1.height * userdata2.viewscale)
+            msg = f"To {userdata2.nickname}, {userdata1.height} appears to be **{h:,.3mu}.**"
+            await ctx.send(msg)
+            return
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
 
