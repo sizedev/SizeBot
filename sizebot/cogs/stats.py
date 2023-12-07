@@ -336,7 +336,8 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeightorTime, str):
             raise errors.InvalidSizeValue(memberOrHeightorTime, "size or time")
         elif isinstance(memberOrHeightorTime, TV):
-            walkpersecond = SV(userdata2.walkperhour / 3600 * userdata2.scale)
+            walkpersecond = SV(userdata2.walkperhour / 3600) if userdata2.walkperhour else proportions.AVERAGE_WALKPERHOUR / 3600
+            walkpersecond *= userdata2.scale
             memberOrHeightorTime = SV(walkpersecond * memberOrHeightorTime)
 
         if isinstance(memberOrHeightorTime, SV):
@@ -348,7 +349,7 @@ class StatsCog(commands.Cog):
 
         if userdata2.height > userdata1.height:
             h = SV(userdata1.height * userdata2.viewscale)
-            msg = f"To {userdata2.nickname}, {userdata1.height} appears to be **{h:,.3mu}.**"
+            msg = f"To {userdata2.nickname}, {userdata1.height:,.3mu} appears to be **{h:,.3mu}.**"
             await ctx.send(msg)
             return
 
