@@ -49,13 +49,17 @@ def mag_to_name(mag: float) -> str:
     elif mag < 22:  # 21 - 23
         return "earth-cracking"
     elif mag < 25:  # 23 - 25
-        return "earth-crumbling"
+        d = 10 ** (mag - 22)
+        return f"earth-crumbling x{d:,.0f}"
     elif mag < 32:  # 25 - 32
-        return "sun-shattering"
+        d = 10 ** (mag - 25)
+        return f"sun-shattering x{d:,.0f}"
     elif mag < 63:  # 32 - 63
-        return "galaxy-collapsing"
+        d = 10 ** (mag - 32)
+        return f"galaxy-collapsing x{d:,.0f}"
     else:  # 63+
-        return "universe-ending"
+        d = 10 ** (mag - 63)
+        return f"universe-ending x{d:,.0f}"
 
 def scale_to_joules(user: User, g: float, factor: float) -> Decimal:
     return (Decimal(user.weight / 1000) / 2) * (Decimal(g) * Decimal(user.scale)) * Decimal(factor)
