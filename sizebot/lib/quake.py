@@ -24,6 +24,7 @@ def mag_to_radius(mag: float) -> SV:
     return SV(Decimal(math.exp(Decimal(mag - 1) / Decimal(1.01) - Decimal(0.13))) * 1000)
 
 def mag_to_name(mag: float) -> str:
+    b = ""
     if mag < 1:  # 0 - 1
         r = "no quake"
     elif mag < 3:  # 1 - 3
@@ -50,17 +51,21 @@ def mag_to_name(mag: float) -> str:
         r = "earth-cracking"
     elif mag < 25:  # 23 - 25
         d = 10 ** (mag - 22)
-        r = f"earth-crumbling x{d:,.0f}"
+        r = f"earth-crumbling"
+        b = f" x{d:,.0f}"
     elif mag < 32:  # 25 - 32
         d = 10 ** (mag - 25)
-        r = f"sun-shattering x{d:,.0f}"
+        r = f"sun-shattering"
+        b = f" x{d:,.0f}"
     elif mag < 63:  # 32 - 63
         d = 10 ** (mag - 32)
-        r = f"galaxy-collapsing x{d:,.0f}"
+        r = f"galaxy-collapsing"
+        b = f" x{d:,.0f}"
     else:  # 63+
         d = 10 ** (mag - 63)
-        r = f"universe-ending x{d:,.0f}"
-    return r.title().replace('X', 'x')
+        r = "universe-ending"
+        b = f" x{d:,.0f}"
+    return r.title() + b
 
 def scale_to_joules(user: User, g: float, factor: float) -> Decimal:
     return (Decimal(user.weight / 1000) / 2) * (Decimal(g) * Decimal(user.scale)) * Decimal(factor)
