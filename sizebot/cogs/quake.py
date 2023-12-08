@@ -55,7 +55,7 @@ class QuakeCog(commands.Cog):
         else:
             raise UserMessedUpException(f"{quake_type} is not a valid quake type.")
         mag = joules_to_mag(joules)
-        e_type = mag_to_name(mag).title().replace('X', 'x')
+        e_type = mag_to_name(mag)
         rad = mag_to_radius(mag)
         print_mag = max(mag, Decimal(0.0))
         if rad < EARTH_RAD:
@@ -104,7 +104,7 @@ class QuakeCog(commands.Cog):
         return_string = (
             f"{userdata.nickname} is {userdata.height:,.3mu} tall, and weighs {userdata.weight:,.3mu}.\n"
             f"Walking {dist:,.1mu}, they would take **{steps:,} steps**, each causing a **Magnitude {small_mag} earthquake.** ({small_type})\n"
-            f"That's equivalent to **one Magnitude {big_mag} earthquake**. ({big_type})\n"
+            f"That's equivalent to **one Magnitude {big_mag} earthquake**. ({big_type})"
         )
 
         await ctx.send(return_string)
@@ -132,7 +132,7 @@ class QuakeCog(commands.Cog):
         return_string = (
             f"{userdata.nickname} is {userdata.height:,.3mu} tall, and weighs {userdata.weight:,.3mu}.\n"
             f"Typing {steps} characters, {userdata.nickname} caused **{steps:,} Magnitude {small_mag} earthquakes.** ({small_type})\n"
-            f"That's equivalent to **one Magnitude {big_mag} earthquake**. ({big_type})\n"
+            f"That's equivalent to **one Magnitude {big_mag} earthquake**. ({big_type})"
         )
 
         await ctx.send(return_string)

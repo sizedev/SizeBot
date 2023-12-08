@@ -25,41 +25,42 @@ def mag_to_radius(mag: float) -> SV:
 
 def mag_to_name(mag: float) -> str:
     if mag < 1:  # 0 - 1
-        return "no"
+        r = "no quake"
     elif mag < 3:  # 1 - 3
-        return "unnoticeable"
+        r = "unnoticeable"
     elif mag < 4:  # 3 - 4
-        return "minor"
+        r = "minor"
     elif mag < 5:  # 4 - 5
-        return "light"
+        r = "light"
     elif mag < 6:  # 5 - 6
-        return "moderate"
+        r = "moderate"
     elif mag < 7:  # 6 - 7
-        return "strong"
+        r = "strong"
     elif mag < 8:  # 7 - 8
-        return "major"
+        r = "major"
     elif mag < 9:  # 8 - 9
-        return "great"
+        r = "great"
     elif mag < 10:  # 9 - 10
-        return "extreme"
+        r = "extreme"
     elif mag < 13:  # 10 - 13 [at this point I'm making s*** up]
-        return "unprecedented"
+        r = "unprecedented"
     elif mag < 21:  # 13 - 21 [I did do research tho, I didn't just pull this out of my butt]
-        return "apocalyptic"
+        r = "apocalyptic"
     elif mag < 22:  # 21 - 23
-        return "earth-cracking"
+        r = "earth-cracking"
     elif mag < 25:  # 23 - 25
         d = 10 ** (mag - 22)
-        return f"earth-crumbling x{d:,.0f}"
+        r = f"earth-crumbling x{d:,.0f}"
     elif mag < 32:  # 25 - 32
         d = 10 ** (mag - 25)
-        return f"sun-shattering x{d:,.0f}"
+        r = f"sun-shattering x{d:,.0f}"
     elif mag < 63:  # 32 - 63
         d = 10 ** (mag - 32)
-        return f"galaxy-collapsing x{d:,.0f}"
+        r = f"galaxy-collapsing x{d:,.0f}"
     else:  # 63+
         d = 10 ** (mag - 63)
-        return f"universe-ending x{d:,.0f}"
+        r = f"universe-ending x{d:,.0f}"
+    return r.title().replace('X', 'x')
 
 def scale_to_joules(user: User, g: float, factor: float) -> Decimal:
     return (Decimal(user.weight / 1000) / 2) * (Decimal(g) * Decimal(user.scale)) * Decimal(factor)
