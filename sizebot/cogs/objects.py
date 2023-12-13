@@ -314,12 +314,12 @@ class ObjectsCog(commands.Cog):
 
         days_per_food = food.calories / cals_needed
         food_per_day = 1 / days_per_food
-        cost = food.price * food_per_day if food.price else None
+        cost = (food.price * food_per_day) if food.price else None
 
         if food_per_day >= 1:
             foodout = f"{userdata.nickname} would need to eat **{food_per_day:,.1} {food.name_plural}** per day."
             if cost:
-                foodout += f"\nThat would cost **${cost:,.2}**."
+                foodout += f"\nThat would cost **${cost:,.2f}**."
             foodout += f"\n(1 {food.name} is {food.calories} calories.)"
         else:
             foodout = f"A {food.name} ({food.calories} calories) would last {userdata.nickname} **{prettyTimeDelta(86400 * days_per_food, roundeventually=True)}.**"
