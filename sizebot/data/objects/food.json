@@ -120,6 +120,7 @@
         "width": "0.0127",
         "thickness": "0.0127",
         "calories": "3.7",
+        "price": "0.15",
         "weight": "0.55",
         "tags": [
             "food"
@@ -131,6 +132,7 @@
         "length": "0.0254",
         "diameter": "0.0127",
         "calories": "23",
+        "price": "0.056",
         "weight": "6",
         "tags": [
             "food"
@@ -143,6 +145,7 @@
         "width": "0.018",
         "depth": "0.0075",
         "calories": "10.7",
+        "price": "0.028",
         "weight": "1.75",
         "tags": [
             "food"
@@ -157,6 +160,7 @@
         "dimension": "d",
         "diameter": "0.04",
         "calories": "87",
+        "price": "0.695",
         "weight": "21.8",
         "tags": [
             "food"
@@ -173,6 +177,7 @@
         "height": "0.009",
         "diameter": "0.04445",
         "calories": "160",
+        "price": "0.0883",
         "weight": "11.3",
         "tags": [
             "food"
@@ -187,6 +192,7 @@
         "height": "0.045",
         "diameter": "0.2275",
         "calories": "131",
+        "price": "2",
         "weight": "80",
         "tags": [
             "food"
@@ -202,6 +208,7 @@
         "width": "0.03",
         "depth": "0.01",
         "calories": "59",
+        "price": "0.50",
         "weight": "16",
         "tags": [
             "food"
@@ -218,6 +225,7 @@
         "diameter": "0.053",
         "thickness": "0.003175",
         "calories": "10",
+        "price": "0.182",
         "weight": "12",
         "tags": [
             "food"
@@ -228,6 +236,7 @@
         "dimension": "h",
         "height": "0.05312",
         "calories": "78",
+        "price": "0.17",
         "weight": "48.1942",
         "tags": [
             "food"
@@ -241,6 +250,7 @@
         "dimension": "d",
         "diameter": "0.0725",
         "calories": "45",
+        "price": "0.95",
         "weight": "88",
         "tags": [
             "food"
@@ -253,6 +263,7 @@
         "width": "0.022225",
         "thickness": "0.00238125",
         "calories": "11",
+        "price": "0.095",
         "weight": "2.9",
         "tags": [
             "food"
@@ -267,6 +278,7 @@
         "dimension": "h",
         "height": "0.075",
         "calories": "95",
+        "price": "0.69",
         "weight": "85",
         "tags": [
             "food"
@@ -279,6 +291,7 @@
         "width": "0.0899",
         "thickness": "0.003",
         "calories": "113",
+        "price": "0.226",
         "weight": "17",
         "tags": [
             "food"
@@ -293,6 +306,7 @@
         "height": "0.06985",
         "diameter": "0.09525",
         "calories": "563",
+        "price": "0.27",
         "weight": "215.456",
         "tags": [
             "food"
@@ -309,6 +323,7 @@
         "dimension": "l",
         "length": "0.10541",
         "calories": "218",
+        "price": "1.99",
         "weight": "42.5",
         "tags": [
             "food"
@@ -324,6 +339,7 @@
         "width": "0.06",
         "depth": "0.04",
         "calories": "85",
+        "price": "0.31",
         "weight": "170.097",
         "tags": [
             "food"
@@ -339,6 +355,7 @@
         "height": "0.11",
         "diameter": "0.0953",
         "calories": "163",
+        "price": "0.10",
         "weight": "320",
         "tags": [
             "food"
@@ -353,6 +370,7 @@
         "length": "0.1143",
         "width": "0.0762",
         "calories": "200",
+        "price": "0.3275",
         "weight": "47.9815679",
         "tags": [
             "food"
@@ -368,6 +386,7 @@
         "height": "0.0635",
         "diameter": "0.12065",
         "calories": "677",
+        "price": "3",
         "weight": "300.5049",
         "tags": [
             "food"
@@ -379,6 +398,7 @@
         "height": "0.122",
         "diameter": "0.058",
         "calories": "140",
+        "price": "0.55",
         "weight": "355",
         "tags": [
             "food"
@@ -396,6 +416,7 @@
         "length": "0.127",
         "depth": "0.047625",
         "calories": "156",
+        "price": "1.79",
         "weight": "99.2233",
         "tags": [
             "food"
@@ -408,6 +429,7 @@
         "width": "0.09525",
         "depth": "0.01905",
         "calories": "310",
+        "price": "1.49",
         "weight": "127",
         "tags": [
             "food"
@@ -419,6 +441,7 @@
         "length": "0.15",
         "diameter": "0.0254",
         "calories": "102",
+        "price": "0.75",
         "weight": "28.35",
         "tags": [
             "food"
@@ -432,6 +455,7 @@
         "dimension": "l",
         "length": "0.1905",
         "calories": "105",
+        "price": "0.27",
         "weight": "120",
         "tags": [
             "food"
@@ -446,6 +470,7 @@
         "dimension": "l",
         "length": "0.2",
         "calories": "234",
+        "price": "0.88",
         "weight": "500",
         "tags": [
             "food"
@@ -457,6 +482,7 @@
         "height": "0.21",
         "diameter": "0.085",
         "calories": "0",
+        "price": "1.25",
         "weight": "793.787",
         "tags": [
             "food"
@@ -474,6 +500,7 @@
         "dimension": "d",
         "diameter": "0.3",
         "calories": "1680",
+        "price": "8",
         "weight": "726",
         "tags": [
             "food"
@@ -492,6 +519,7 @@
         "height": "0.3",
         "diameter": "0.08",
         "calories": "980",
+        "price": "2.24",
         "weight": "149",
         "tags": [
             "food"
@@ -508,6 +536,7 @@
         "dimension": "l",
         "length": "0.3048",
         "calories": "620",
+        "price": "5",
         "weight": "907.185",
         "tags": [
             "food"

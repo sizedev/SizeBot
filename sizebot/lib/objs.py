@@ -24,7 +24,7 @@ tags: dict[str, int] = {}
 @total_ordering
 class DigiObject:
     def __init__(self, name, dimension, aliases=[], tags=[], symbol = None, height = None, length = None,
-                 width = None, diameter = None, depth = None, thickness = None, calories = None,
+                 width = None, diameter = None, depth = None, thickness = None, calories = None, price = None,
                  weight = None, note = None):
 
         self.name = name
@@ -47,6 +47,7 @@ class DigiObject:
         self.depth = depth and SV(depth)
         self.thickness = thickness and SV(thickness)
         self.calories = SV(calories) if calories is not None else None
+        self.price = Decimal(price) if price is not None else None
         self.weight = weight and WV(weight)
 
         dimensionmap = {
@@ -93,6 +94,8 @@ class DigiObject:
             returnstr += f"{emojis.blank}**{SV(self.thickness * multiplier):,.3mu}** thick\n"
         if self.calories is not None:
             returnstr += f"{emojis.blank}has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n"
+        if self.price is not None:
+            returnstr += f"{emojis.blank}costs **${Decimal(self.price * (multiplier ** 3)):,.2}**\n"
         if self.weight:
             returnstr += "and weighs...\n"
             returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
@@ -114,6 +117,8 @@ class DigiObject:
             statsstrings.append(f"**{SV(self.thickness * multiplier):,.3{system}}** thick")
         if self.calories is not None:
             statsstrings.append(f"has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories")
+        if self.price is not None:
+            statsstrings.append(f"costs **${Decimal(self.price * (multiplier ** 3)):,.2}**")
         if self.weight:
             statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
 
@@ -146,6 +151,9 @@ class DigiObject:
         if self.calories is not None:
             embed.add_field(name = "Calories",
                             value = f"has **{Decimal(self.calories * (multiplier **3)):,.3}** calories\n")
+        if self.price is not None:
+            embed.add_field(name = "Price",
+                            value = f"costs **${Decimal(self.price * (multiplier ** 3)):,.2}**")
         if self.weight:
             embed.add_field(name = "Weight",
                             value = f"**{WV(self.weight * (multiplier ** 3)):,.3mu}**")
