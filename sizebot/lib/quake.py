@@ -51,15 +51,15 @@ def mag_to_name(mag: float) -> str:
         r = "earth-cracking"
     elif mag < 25:  # 23 - 25
         d = 10 ** (mag - 22)
-        r = f"earth-crumbling"
+        r = "earth-crumbling"
         b = f" x{d:,.0f}"
     elif mag < 32:  # 25 - 32
         d = 10 ** (mag - 25)
-        r = f"sun-shattering"
+        r = "sun-shattering"
         b = f" x{d:,.0f}"
     elif mag < 63:  # 32 - 63
         d = 10 ** (mag - 32)
-        r = f"galaxy-collapsing"
+        r = "galaxy-collapsing"
         b = f" x{d:,.0f}"
     else:  # 63+
         d = 10 ** (mag - 63)
