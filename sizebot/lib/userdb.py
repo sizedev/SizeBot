@@ -29,7 +29,7 @@ modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 class PlayerStats(TypedDict):
     height: SV
     baseheight: SV
-    baseweight: WV 
+    baseweight: WV
     footlength: Optional[SV]
     pawtoggle: bool
     furtoggle: bool
@@ -440,21 +440,20 @@ class User:
     def stats(self) -> PlayerStats:
         """A bit of a patchwork solution for transitioning to BetterStats."""
         return {
-            "height": self.height,  # DO NOT USE, DEPRECATED
-            "baseheight": self.baseheight,
-            "baseweight": self.baseweight,
-            "footlength": self.footlength,
-            "pawtoggle": self.pawtoggle,
-            "furtoggle": self.furtoggle,
-            "hairlength": self.hairlength,
-            "taillength": self.taillength,
-            "earheight": self.earheight,
-            "liftstrength": self.liftstrength,
-            "walkperhour": self.walkperhour,
-            "swimperhour": self.swimperhour,
-            "runperhour": self.runperhour,
-            "gender": self.gender,
-            "scale": self.scale
+            "height": str(self.baseheight),
+            "weight": str(self.baseweight),
+            "footlength": str(self.footlength),
+            "pawtoggle": str(self.pawtoggle),
+            "furtoggle": str(self.furtoggle),
+            "hairlength": str(self.hairlength),
+            "taillength": str(self.taillength),
+            "earheight": str(self.earheight),
+            "liftstrength": str(self.liftstrength),
+            "walkperhour": str(self.walkperhour),
+            "swimperhour": str(self.swimperhour),
+            "runperhour": str(self.runperhour),
+            "gender": str(self.gender),
+            "scale": str(self.scale)
         }
 
     @property

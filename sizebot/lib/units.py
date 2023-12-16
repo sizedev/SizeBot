@@ -354,6 +354,7 @@ class SystemUnit():
 
 class Dimension(Decimal):
     """Dimension"""
+
     def __format__(self, spec):
         value = Decimal(self)
         dSpec = DecimalSpec.parse(spec)
@@ -385,7 +386,8 @@ class Dimension(Decimal):
     @classmethod
     def parse(cls, s):
         value, unitStr = cls.getQuantityPair(s)
-        kind = "size" if cls == SV else "weight" if cls == WV else "time" if cls == TV else "size"
+        kinds = {"SV": "size", "WV": "weight", "TV": "time"}
+        kind = kinds.get(cls.__name__, cls.__name__)
         if value is None and unitStr is None:
             raise errors.InvalidSizeValue(s, kind)
         if value is None:
@@ -468,6 +470,9 @@ class Dimension(Decimal):
             cls._systems[systemname] = system
         return system
 
+    def __repr__(self):
+        return f"{type(self).__name__}('{self}')"
+
 
 class SV(Dimension):
     """Size Value (length in meters)"""
@@ -519,9 +524,6 @@ class SV(Dimension):
         totalinches = (feetval * 12) + inchval
         return f"{str(totalinches)}in"
 
-    def __repr__(self):
-        return f"SV('{self}')"
-
 
 class WV(Dimension):
     """Weight Value (mass in grams)"""
@@ -552,9 +554,6 @@ class WV(Dimension):
             value, unit = match.group("value"), match.group("unit")
         return value, unit
 
-    def __repr__(self):
-        return f"WV('{self}')"
-
 
 class TV(Dimension):
     """Time Value (time in seconds)"""
@@ -575,8 +574,15 @@ class TV(Dimension):
             value = "1"
         return value, unit
 
-    def __repr__(self):
-        return f"TV('{self}')"
+
+class AV(Dimension):
+    """Area Value (area in meters-squared)"""
+    _units = UnitRegistry()
+    _systems = {}
+
+    @classmethod
+    def parse(cls, s: str):
+        raise NotImplementedError
 
 
 def loadJsonFile(filename):
@@ -593,3 +599,4 @@ def init():
     SV.addSystemUnit(systemname="u", systemunit=SystemUnit(unit=("'", "\"")))
     WV.loadFromFile("wv.json")
     TV.loadFromFile("tv.json")
+    AV.loadFromFile("av.json")
