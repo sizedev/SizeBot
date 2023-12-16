@@ -12,7 +12,7 @@ from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.freefall import terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
-from sizebot.lib.units import SV, WV
+from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import PlayerStats, User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
 
@@ -92,8 +92,8 @@ class StatValue:
 
 
 all_stats = [
-    Stat("Height",                      sets="height",                                                         power=1, userkey="baseheight"),
-    Stat("Weight",                      sets="weight",                                                         power=3, userkey="baseweight"),
+    Stat("Height",                      sets="height",                                                         power=1, userkey="height"),
+    Stat("Weight",                      sets="weight",                                                         power=3, userkey="weight"),
     Stat("Gender",                      sets="gender",                                                                  userkey="gender"),
     Stat("Average Scale",               sets="averagescale",            requires=["height"],                   power=1,                            default_from=lambda s: s["height"] / AVERAGE_HEIGHT),
     Stat("Hair Length",                 sets="hairlength",                                                     power=1, userkey="hairlength"),
@@ -136,9 +136,9 @@ all_stats = [
     Stat("Light Travel Time",           sets="lighttraveltime",         requires=["height"],                   power=1,                            default_from=lambda s: SV(s["height"] * ONE_LIGHTSECOND)),
     Stat("Calories Needed",             sets="caloriesneeded",                                                 power=3,                            default_from=lambda s: AVERAGE_CAL_PER_DAY),
     Stat("Water Needed",                sets="waterneeded",                                                    power=3,                            default_from=lambda s: AVERAGE_WATER_PER_DAY),
-    Stat("Lay Area",                    sets="layarea",                 requires=["height"],                   power=2,                            default_from=lambda s: SV(s["height"] * s["height"] * Decimal(4 / 17))),
-    Stat("Foot Area",                   sets="footarea",                requires=["footlength"],               power=2,                            default_from=lambda s: SV(s["footlength"] * s["footlength"] * Decimal(2 / 3))),
-    Stat("Fingertip Area",              sets="fingertiparea",           requires=["fingertiplength"],          power=2,                            default_from=lambda s: SV(s["fingertiplength"] * s["fingertiplength"])),
+    Stat("Lay Area",                    sets="layarea",                 requires=["height", "width"],          power=2,                            default_from=lambda s: AV(s["height"] * s["width"])),
+    Stat("Foot Area",                   sets="footarea",                requires=["footlength", "footwidth"],  power=2,                            default_from=lambda s: AV(s["footlength"] * s["footwidth"])),
+    Stat("Fingertip Area",              sets="fingertiparea",           requires=["fingertiplength"],          power=2,                            default_from=lambda s: AV(s["fingertiplength"] * s["fingertiplength"])),
     Stat("Shoe Size",                   sets="shoesize",                requires=["footlength", "gender"],                                         default_from=lambda s: formatShoeSize(s["footlength"], s["gender"])),
     Stat("Visibility",                  sets="visibility",              requires=["height"],                                                       default_from=lambda s: calcVisibility(s["height"]))
 ]
