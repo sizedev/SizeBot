@@ -26,6 +26,13 @@ BASICALLY_ZERO = Decimal("1E-27")
 
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
+
+def str_or_none(v):
+    if v is None:
+        return None
+    return str(v)
+
+
 class PlayerStats(TypedDict):
     height: SV
     baseheight: SV
@@ -440,20 +447,20 @@ class User:
     def stats(self) -> PlayerStats:
         """A bit of a patchwork solution for transitioning to BetterStats."""
         return {
-            "height": str(self.baseheight),
-            "weight": str(self.baseweight),
-            "footlength": str(self.footlength),
-            "pawtoggle": str(self.pawtoggle),
-            "furtoggle": str(self.furtoggle),
-            "hairlength": str(self.hairlength),
-            "taillength": str(self.taillength),
-            "earheight": str(self.earheight),
-            "liftstrength": str(self.liftstrength),
-            "walkperhour": str(self.walkperhour),
-            "swimperhour": str(self.swimperhour),
-            "runperhour": str(self.runperhour),
-            "gender": str(self.gender),
-            "scale": str(self.scale)
+            "height": str_or_none(self.baseheight),
+            "weight": str_or_none(self.baseweight),
+            "footlength": str_or_none(self.footlength),
+            "pawtoggle": str_or_none(self.pawtoggle),
+            "furtoggle": str_or_none(self.furtoggle),
+            "hairlength": str_or_none(self.hairlength),
+            "taillength": str_or_none(self.taillength),
+            "earheight": str_or_none(self.earheight),
+            "liftstrength": str_or_none(self.liftstrength),
+            "walkperhour": str_or_none(self.walkperhour),
+            "swimperhour": str_or_none(self.swimperhour),
+            "runperhour": str_or_none(self.runperhour),
+            "gender": str_or_none(self.gender),
+            "scale": str_or_none(self.scale)
         }
 
     @property
