@@ -107,7 +107,7 @@ all_stats = [
     Stat("Ear Height",                  sets="earheight",                                                      power=1, type=SV,        userkey="earheight"),
     Stat("Foot Length",                 sets="footlength",              requires=["height"],                   power=1, type=SV,        userkey="footlength",   default_from=lambda s: s["height"] / 7),
     Stat("Lift Strength",               sets="liftstrength",            requires=["height"],                   power=3, type=WV,        userkey="liftstrength", default_from=lambda s: DEFAULT_LIFT_STRENGTH),
-    Stat("Foot Width",                  sets="footwidth",               requires=["footlength"],               power=1, type=SV,                                default_from=lambda s: s["footlength"] / 7 * Decimal(2 / 3)),
+    Stat("Foot Width",                  sets="footwidth",               requires=["footlength"],               power=1, type=SV,                                default_from=lambda s: s["footlength"] * Decimal(2 / 3)),
     Stat("Toe Height",                  sets="toeheight",               requires=["height"],                   power=1, type=SV,                                default_from=lambda s: s["height"] / 65),
     Stat("Shoeprint Depth",             sets="shoeprintdepth",          requires=["height"],                   power=1, type=SV,                                default_from=lambda s: s["height"] / 135),
     Stat("Pointer Finger Length",       sets="pointerlength",           requires=["height"],                   power=1, type=SV,                                default_from=lambda s: s["height"] / Decimal(17.26)),
