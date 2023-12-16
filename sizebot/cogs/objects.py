@@ -16,7 +16,7 @@ from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects, tags
-from sizebot.lib.units import SV, WV
+from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import glitch_string, parseMany, prettyTimeDelta
 
@@ -392,18 +392,21 @@ class ObjectsCog(commands.Cog):
         land_height = SV(land.height / scale)
         fingertip_name = "paw bean" if userdata.pawtoggle else "fingertip"
 
-        land_area = land.width * land.height
-        lay_percentage = (stats.height * stats.width) / land_area
-        foot_percentage = (stats.footlength * stats.footwidth) / land_area
-        finger_percentage = (stats.fingertiplength * stats.fingertiplength) / land_area
+        land_area = AV(land.width * land.height)
+        area = AV(stats.height * stats.width)
+        lay_percentage = area / land_area
+        foot_area = AV(stats.footlength * stats.footwidth)
+        finger_area = AV(stats.fingertiplength * stats.fingertiplength)
+        foot_percentage = foot_area / land_area
+        finger_percentage = finger_area / land_area
 
-        landout = (f"To {userdata.nickname}, {land.name} looks **{land_width:,.3mu}** wide and **{land_length:,.3mu}** long. The highest peak looks **{land_height:,.3mu}** tall. ({land.note})\n\n"
+        landout = (f"To {userdata.nickname}, {land.name} looks **{land_width:,.1mu}** wide and **{land_length:,.1mu}** long. ({land_area:,.1mu}) The highest peak looks **{land_height:,.1mu}** tall. ({land.note})\n\n"
                    f"Laying down, {userdata.nickname} would cover **{lay_percentage:,.2}%** of the land.\n"
-                   f"{emojis.blank}({stats.height:,.3mu} tall and {stats.width:,.3mu} wide)\n"
+                   f"{emojis.blank}({stats.height:,.1mu} tall and {stats.width:,.1mu} wide, or {area:,.1mu})\n"
                    f"{userdata.nickname}'s {userdata.footname.lower()} would cover **{foot_percentage:,.2}%** of the land.\n"
-                   f"{emojis.blank}({stats.footlength:,.3mu} long and {stats.footwidth:,.3mu} wide)\n"
+                   f"{emojis.blank}({stats.footlength:,.1mu} long and {stats.footwidth:,.1mu} wide, or {foot_area:,.1mu})\n"
                    f"{userdata.nickname}'s {fingertip_name} would cover **{finger_percentage:,.2}%** of the land.\n"
-                   f"{emojis.blank}({stats.fingertiplength:,.3mu} long and wide)")
+                   f"{emojis.blank}({stats.fingertiplength:,.1mu} long and wide, or {finger_area:,.1mu})")
 
         embed = discord.Embed(
             title = f"{userdata.nickname} on {land.name}",
