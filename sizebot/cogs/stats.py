@@ -46,7 +46,8 @@ statmap = AliasMap({
     "terminalvelocity": ("velocity", "fall"),
     "liftstrength":     ("strength", "lift", "carry", "carrystrength"),
     "gender":           (),
-    "visibility":       ("visible", "see")
+    "visibility":       ("visible", "see"),
+    "layarea":          ()
 })
 
 
