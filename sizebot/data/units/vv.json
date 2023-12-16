@@ -1,0 +1,383 @@
+{
+    "units": [
+        {
+            "factor": "1e-72",
+            "symbol": "ym³",
+            "name": "cubic yoctometer",
+            "namePlural": "cubic yoctometers",
+            "symbols": ["ym3"]
+        },
+        {
+            "factor": "1e-63",
+            "symbol": "zm³",
+            "name": "cubic zeptometer",
+            "namePlural": "cubic zeptometers",
+            "symbols": ["zm3"]
+        },
+        {
+            "factor": "1e-54",
+            "symbol": "am³",
+            "name": "cubic attometer",
+            "namePlural": "cubic attometers"
+            ,
+            "symbols": ["am3"]
+        },
+        {
+            "factor": "1e-45",
+            "symbol": "fm³",
+            "name": "cubic femtometer",
+            "namePlural": "cubic femtometers",
+            "symbols": ["fm3"]
+        },
+        {
+            "factor": "1e-36",
+            "symbol": "pm³",
+            "name": "cubic picometer",
+            "namePlural": "cubic picometers",
+            "symbols": ["pm3"]
+        },
+        {
+            "factor": "1e-27",
+            "symbol": "nm³",
+            "name": "cubic nanometer",
+            "namePlural": "cubic nanometers",
+            "symbols": ["nm3"]
+        },
+        {
+            "factor": "1e-18",
+            "symbol": "µm³",
+            "name": "cubic micrometer",
+            "namePlural": "cubic micrometers",
+            "symbols": [
+                "µm3",
+                "um³",
+                "um3"
+            ]
+        },
+        {
+            "factor": "1e-9",
+            "symbol": "mm³",
+            "name": "cubic millimeter",
+            "namePlural": "cubic millimeters",
+            "symbols": ["mm3"]
+        },
+        {
+            "factor": "1e-6",
+            "symbol": "cm³",
+            "name": "cubic centimeter",
+            "namePlural": "cubic centimeters",
+            "symbols": ["cm3"]
+        },
+        {
+            "factor": "1.63810e-5",
+            "symbol": "in³",
+            "name": "cubic inch",
+            "namePlural": "cubic inches",
+            "symbols": ["in3"]
+        },
+        {
+            "factor": "2.83155e-2",
+            "symbol": "ft³",
+            "name": "cubic foot",
+            "namePlural": "cubic feet",
+            "symbols": ["ft3"]
+        },
+        {
+            "factor": "1e0",
+            "symbol": "m³",
+            "name": "cubic meter",
+            "namePlural": "cubic meters",
+            "symbols": ["m3"]
+        },
+        {
+            "factor": "1e9",
+            "symbol": "km³",
+            "name": "cubic kilometer",
+            "namePlural": "cubic kilometers",
+            "symbols": ["km3"]
+        },
+        {
+            "factor": "1e18",
+            "symbol": "Mm³",
+            "name": "cubic megameter",
+            "namePlural": "cubic megameters",
+            "symbols": ["Mm3"]
+        },
+        {
+            "factor": "1e27",
+            "symbol": "Gm³",
+            "name": "cubic gigameter",
+            "namePlural": "cubic gigameters",
+            "symbols": ["Gm3"]
+        },
+        {
+            "factor": "1e36",
+            "symbol": "Tm³",
+            "name": "cubic terameter",
+            "namePlural": "cubic terameters",
+            "symbols": ["Tm3"]
+        },
+        {
+            "factor": "1e45",
+            "symbol": "Pm³",
+            "name": "cubic petameter",
+            "namePlural": "cubic petameters",
+            "symbols": ["Pm3"]
+        },
+        {
+            "factor": "1e54",
+            "symbol": "Em³",
+            "name": "cubic exameter",
+            "namePlural": "cubic exameters",
+            "symbols": ["Em3"]
+        },
+        {
+            "factor": "1e63",
+            "symbol": "Zm³",
+            "name": "cubic zettameter",
+            "namePlural": "cubic zettameters",
+            "symbols": ["Zm3"]
+        },
+        {
+            "factor": "1e72",
+            "symbol": "Ym³",
+            "name": "cubic yottameter",
+            "namePlural": "cubic yottameters",
+            "symbols": ["Ym3"]
+        },
+        {
+            "factor": "4.16818e9",
+            "symbol": "mi³",
+            "name": "cubic mile",
+            "namePlural": "cubic miles",
+            "symbols": ["mi3"]
+        },
+        {
+            "factor": "8.45045e47",
+            "symbol": "ly³",
+            "name": "cubic lightyear",
+            "namePlural": "cubic lightyears",
+            "symbols": ["ly3"]
+        },
+        {
+            "factor": "3.34792e33",
+            "symbol": "AU³",
+            "name": "cubic astronomical_unit",
+            "namePlural": "cubic astronomical units",
+            "symbols": ["AU3"]
+        },
+        {
+            "factor": "6.81118e80",
+            "symbol": "uni³",
+            "name": "cubic universe",
+            "namePlural": "cubic universes",
+            "symbols": ["uni3"]
+        },
+        {
+            "factor": "6.81118e89",
+            "symbol": "kuni³",
+            "name": "cubic kilouniverse",
+            "namePlural": "cubic kilouniverses",
+            "symbols": ["kuni3"]
+        },
+        {
+            "factor": "6.81118e98",
+            "symbol": "Muni³",
+            "name": "cubic megauniverse",
+            "namePlural": "cubic megauniverses",
+            "symbols": ["Muni3"]
+        },
+        {
+            "factor": "6.81118e107",
+            "symbol": "Guni³",
+            "name": "cubic gigauniverse",
+            "namePlural": "cubic gigauniverses",
+            "symbols": ["Guni3"]
+        },
+        {
+            "factor": "6.81118e116",
+            "symbol": "Tuni³",
+            "name": "cubic terauniverse",
+            "namePlural": "cubic terauniverses",
+            "symbols": ["Tuni3"]
+        },
+        {
+            "factor": "6.81118e125",
+            "symbol": "Puni³",
+            "name": "cubic petauniverse",
+            "namePlural": "cubic petauniverses",
+            "symbols": ["Puni3"]
+        },
+        {
+            "factor": "6.81118e136",
+            "symbol": "Euni³",
+            "name": "cubic exauniverse",
+            "namePlural": "cubic exauniverses",
+            "symbols": ["Euni3"]
+        },
+        {
+            "factor": "6.81118e145",
+            "symbol": "Zuni³",
+            "name": "cubic zettauniverse",
+            "namePlural": "cubic zettauniverses",
+            "symbols": ["Zuni3"]
+        },
+        {
+            "factor": "6.81118e154",
+            "symbol": "Yuni³",
+            "name": "cubic yottauniverse",
+            "namePlural": "cubic yottauniverses",
+            "symbols": ["Yuni3"]
+        }
+    ],
+    "systems": {
+        "m": [
+            {
+                "unit": "ym³"
+            },
+            {
+                "unit": "zm³"
+            },
+            {
+                "unit": "am³"
+            },
+            {
+                "unit": "fm³"
+            },
+            {
+                "unit": "pm³"
+            },
+            {
+                "unit": "nm³"
+            },
+            {
+                "unit": "µm³"
+            },
+            {
+                "unit": "mm³"
+            },
+            {
+                "unit": "cm³"
+            },
+            {
+                "unit": "m³"
+            },
+            {
+                "unit": "km³"
+            },
+            {
+                "unit": "Mm³"
+            },
+            {
+                "unit": "Gm³"
+            },
+            {
+                "unit": "Tm³"
+            },
+            {
+                "unit": "Pm³"
+            },
+            {
+                "unit": "Em³"
+            },
+            {
+                "unit": "Zm³"
+            },
+            {
+                "unit": "Ym³"
+            },
+            {
+                "unit": "uni³"
+            },
+            {
+                "unit": "kuni³"
+            },
+            {
+                "unit": "Muni³"
+            },
+            {
+                "unit": "Guni³"
+            },
+            {
+                "unit": "Tuni³"
+            },
+            {
+                "unit": "Puni³"
+            },
+            {
+                "unit": "Euni³"
+            },
+            {
+                "unit": "Zuni³"
+            },
+            {
+                "unit": "Yuni³"
+            }
+        ],
+        "u": [
+            {
+                "unit": "ym³"
+            },
+            {
+                "unit": "zm³"
+            },
+            {
+                "unit": "am³"
+            },
+            {
+                "unit": "fm³"
+            },
+            {
+                "unit": "pm³"
+            },
+            {
+                "unit": "nm³"
+            },
+            {
+                "unit": "µm³"
+            },
+            {
+                "unit": "mm³"
+            },
+            {
+                "unit": "in³"
+            },
+            {
+                "unit": "mi³"
+            },
+            {
+                "unit": "AU³"
+            },
+            {
+                "unit": "ly³"
+            },
+            {
+                "unit": "uni³"
+            },
+            {
+                "unit": "kuni³"
+            },
+            {
+                "unit": "Muni³"
+            },
+            {
+                "unit": "Guni³"
+            },
+            {
+                "unit": "Tuni³"
+            },
+            {
+                "unit": "Puni³"
+            },
+            {
+                "unit": "Euni³"
+            },
+            {
+                "unit": "Zuni³"
+            },
+            {
+                "unit": "Yuni³"
+            }
+        ]
+    }
+}
