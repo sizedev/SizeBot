@@ -1,0 +1,383 @@
+{
+    "units": [
+        {
+            "factor": "1e-48",
+            "symbol": "ym²",
+            "name": "square yoctometer",
+            "namePlural": "square yoctometers",
+            "symbols": ["ym2"]
+        },
+        {
+            "factor": "1e-42",
+            "symbol": "zm²",
+            "name": "square zeptometer",
+            "namePlural": "square zeptometers",
+            "symbols": ["zm2"]
+        },
+        {
+            "factor": "1e-36",
+            "symbol": "am²",
+            "name": "square attometer",
+            "namePlural": "square attometers"
+            ,
+            "symbols": ["am2"]
+        },
+        {
+            "factor": "1e-30",
+            "symbol": "fm²",
+            "name": "square femtometer",
+            "namePlural": "square femtometers",
+            "symbols": ["fm2"]
+        },
+        {
+            "factor": "1e-24",
+            "symbol": "pm²",
+            "name": "square picometer",
+            "namePlural": "square picometers",
+            "symbols": ["pm2"]
+        },
+        {
+            "factor": "1e-18",
+            "symbol": "nm²",
+            "name": "square nanometer",
+            "namePlural": "square nanometers",
+            "symbols": ["nm2"]
+        },
+        {
+            "factor": "1e-12",
+            "symbol": "µm²",
+            "name": "square micrometer",
+            "namePlural": "square micrometers",
+            "symbols": [
+                "µm2",
+                "um²",
+                "um2"
+            ]
+        },
+        {
+            "factor": "1e-6",
+            "symbol": "mm²",
+            "name": "square millimeter",
+            "namePlural": "square millimeters",
+            "symbols": ["mm2"]
+        },
+        {
+            "factor": "1e-4",
+            "symbol": "cm²",
+            "name": "square centimeter",
+            "namePlural": "square centimeters",
+            "symbols": ["cm2"]
+        },
+        {
+            "factor": "6.45e-4",
+            "symbol": "in²",
+            "name": "square inch",
+            "namePlural": "square inches",
+            "symbols": ["in2"]
+        },
+        {
+            "factor": "9.29e-2",
+            "symbol": "ft²",
+            "name": "square foot",
+            "namePlural": "square feet",
+            "symbols": ["ft2"]
+        },
+        {
+            "factor": "1e0",
+            "symbol": "m²",
+            "name": "square meter",
+            "namePlural": "square meters",
+            "symbols": ["m2"]
+        },
+        {
+            "factor": "1e6",
+            "symbol": "km²",
+            "name": "square kilometer",
+            "namePlural": "square kilometers",
+            "symbols": ["km2"]
+        },
+        {
+            "factor": "1e12",
+            "symbol": "Mm²",
+            "name": "square megameter",
+            "namePlural": "square megameters",
+            "symbols": ["Mm2"]
+        },
+        {
+            "factor": "1e18",
+            "symbol": "Gm²",
+            "name": "square gigameter",
+            "namePlural": "square gigameters",
+            "symbols": ["Gm2"]
+        },
+        {
+            "factor": "1e24",
+            "symbol": "Tm²",
+            "name": "square terameter",
+            "namePlural": "square terameters",
+            "symbols": ["Tm2"]
+        },
+        {
+            "factor": "1e30",
+            "symbol": "Pm²",
+            "name": "square petameter",
+            "namePlural": "square petameters",
+            "symbols": ["Pm2"]
+        },
+        {
+            "factor": "1e36",
+            "symbol": "Em²",
+            "name": "square exameter",
+            "namePlural": "square exameters",
+            "symbols": ["Em2"]
+        },
+        {
+            "factor": "1e42",
+            "symbol": "Zm²",
+            "name": "square zettameter",
+            "namePlural": "square zettameters",
+            "symbols": ["Zm2"]
+        },
+        {
+            "factor": "1e48",
+            "symbol": "Ym²",
+            "name": "square yottameter",
+            "namePlural": "square yottameters",
+            "symbols": ["Ym2"]
+        },
+        {
+            "factor": "2.589988e6",
+            "symbol": "mi²",
+            "name": "square mile",
+            "namePlural": "square miles",
+            "symbols": ["mi2"]
+        },
+        {
+            "factor": "8.938266e31",
+            "symbol": "ly²",
+            "name": "square lightyear",
+            "namePlural": "square lightyears",
+            "symbols": ["ly2"]
+        },
+        {
+            "factor": "2.23795e22",
+            "symbol": "AU²",
+            "name": "square astronomical_unit",
+            "namePlural": "square astronomical units",
+            "symbols": ["AU2"]
+        },
+        {
+            "factor": "7.74132e53",
+            "symbol": "uni²",
+            "name": "square universe",
+            "namePlural": "square universes",
+            "symbols": ["uni2"]
+        },
+        {
+            "factor": "7.74132e59",
+            "symbol": "kuni²",
+            "name": "square kilouniverse",
+            "namePlural": "square kilouniverses",
+            "symbols": ["kuni2"]
+        },
+        {
+            "factor": "7.74132e64",
+            "symbol": "Muni²",
+            "name": "square megauniverse",
+            "namePlural": "square megauniverses",
+            "symbols": ["Muni2"]
+        },
+        {
+            "factor": "7.74132e70",
+            "symbol": "Guni²",
+            "name": "square gigauniverse",
+            "namePlural": "square gigauniverses",
+            "symbols": ["Guni2"]
+        },
+        {
+            "factor": "7.74132e76",
+            "symbol": "Tuni²",
+            "name": "square terauniverse",
+            "namePlural": "square terauniverses",
+            "symbols": ["Tuni2"]
+        },
+        {
+            "factor": "7.74132e82",
+            "symbol": "Puni²",
+            "name": "square petauniverse",
+            "namePlural": "square petauniverses",
+            "symbols": ["Puni2"]
+        },
+        {
+            "factor": "7.74132e88",
+            "symbol": "Euni²",
+            "name": "square exauniverse",
+            "namePlural": "square exauniverses",
+            "symbols": ["Euni2"]
+        },
+        {
+            "factor": "7.74132e94",
+            "symbol": "Zuni²",
+            "name": "square zettauniverse",
+            "namePlural": "square zettauniverses",
+            "symbols": ["Zuni2"]
+        },
+        {
+            "factor": "7.74132e100",
+            "symbol": "Yuni²",
+            "name": "square yottauniverse",
+            "namePlural": "square yottauniverses",
+            "symbols": ["Yuni2"]
+        }
+    ],
+    "systems": {
+        "m": [
+            {
+                "unit": "ym²"
+            },
+            {
+                "unit": "zm²"
+            },
+            {
+                "unit": "am²"
+            },
+            {
+                "unit": "fm²"
+            },
+            {
+                "unit": "pm²"
+            },
+            {
+                "unit": "nm²"
+            },
+            {
+                "unit": "µm²"
+            },
+            {
+                "unit": "mm²"
+            },
+            {
+                "unit": "cm²"
+            },
+            {
+                "unit": "m²"
+            },
+            {
+                "unit": "km²"
+            },
+            {
+                "unit": "Mm²"
+            },
+            {
+                "unit": "Gm²"
+            },
+            {
+                "unit": "Tm²"
+            },
+            {
+                "unit": "Pm²"
+            },
+            {
+                "unit": "Em²"
+            },
+            {
+                "unit": "Zm²"
+            },
+            {
+                "unit": "Ym²"
+            },
+            {
+                "unit": "uni²"
+            },
+            {
+                "unit": "kuni²"
+            },
+            {
+                "unit": "Muni²"
+            },
+            {
+                "unit": "Guni²"
+            },
+            {
+                "unit": "Tuni²"
+            },
+            {
+                "unit": "Puni²"
+            },
+            {
+                "unit": "Euni²"
+            },
+            {
+                "unit": "Zuni²"
+            },
+            {
+                "unit": "Yuni²"
+            }
+        ],
+        "u": [
+            {
+                "unit": "ym²"
+            },
+            {
+                "unit": "zm²"
+            },
+            {
+                "unit": "am²"
+            },
+            {
+                "unit": "fm²"
+            },
+            {
+                "unit": "pm²"
+            },
+            {
+                "unit": "nm²"
+            },
+            {
+                "unit": "µm²"
+            },
+            {
+                "unit": "mm²"
+            },
+            {
+                "unit": "in²"
+            },
+            {
+                "unit": "mi²"
+            },
+            {
+                "unit": "AU²"
+            },
+            {
+                "unit": "ly²"
+            },
+            {
+                "unit": "uni²"
+            },
+            {
+                "unit": "kuni²"
+            },
+            {
+                "unit": "Muni²"
+            },
+            {
+                "unit": "Guni²"
+            },
+            {
+                "unit": "Tuni²"
+            },
+            {
+                "unit": "Puni²"
+            },
+            {
+                "unit": "Euni²"
+            },
+            {
+                "unit": "Zuni²"
+            },
+            {
+                "unit": "Yuni²"
+            }
+        ]
+    }
+}
