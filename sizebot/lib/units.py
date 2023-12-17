@@ -14,7 +14,7 @@ from sizebot.lib.digidecimal import Decimal, DecimalSpec
 from sizebot.lib.picker import getRandomCloseUnit
 
 
-__all__ = ["Rate", "Mult", "SV", "WV", "TV"]
+__all__ = ["Rate", "Mult", "SV", "WV", "TV", "AV", "VV"]
 
 logger = logging.getLogger("sizebot")
 
@@ -137,7 +137,7 @@ class Unit():
         if symbol is not None:
             self.symbols.add(symbol.strip())
 
-        self.names = utils.iset(n.strip() for n in names)        # case insensitive names
+        self.names = utils.iset(n.strip() for n in names)  # case insensitive names
         if name is not None:
             self.names.add(name.strip())
         if namePlural is not None:
@@ -182,10 +182,10 @@ class Unit():
 
         return formatted
 
-    def toBaseUnit(self, v):
+    def to_base_unit(self, v):
         return v * self.factor
 
-    def isUnit(self, u):
+    def is_unit(self, u):
         if isinstance(u, str):
             u = u.strip()
         return isinstance(u, str) and (u in self.names or u in self.symbols)
@@ -216,7 +216,7 @@ class FixedUnit(Unit):
     def format(self, value, spec="", preferName=False):
         return self.symbol
 
-    def toBaseUnit(self, v):
+    def to_base_unit(self, v):
         return self.factor
 
 
@@ -250,10 +250,10 @@ class FeetAndInchesUnit(Unit):
         formatted = f"{feetval:{feetSpec}}'{inchval:{inchSpec}}\""
         return formatted
 
-    def toBaseUnit(self, v):
+    def to_base_unit(self, v):
         return None
 
-    def isUnit(self, u):
+    def is_unit(self, u):
         return u == self.symbol
 
 
@@ -291,7 +291,7 @@ class SystemRegistry():
         self.isSorted = False
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
-    def getBestUnit(self, value):
+    def get_best_unit(self, value):
         if not self.isSorted:
             self._systemunits.sort()
         value = abs(value)
@@ -304,15 +304,15 @@ class SystemRegistry():
         return self._systemunits[-1].unit
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
-    def getGoodUnit(self, value):
+    def get_good_unit(self, value):
         if not self.isSorted:
             self._systemunits.sort()
         systemunit = getRandomCloseUnit(value, self._systemunits)
         if systemunit is None:
-            return self.getBestUnit(value)
+            return self.get_best_unit(value)
         return systemunit.unit
 
-    def addSystemUnit(self, systemunit):
+    def add_system_unit(self, systemunit):
         self.isSorted = False
         self._systemunits.append(systemunit)
         systemunit.load(self.dimension._units)
@@ -385,7 +385,7 @@ class Dimension(Decimal):
 
     @classmethod
     def parse(cls, s):
-        value, unitStr = cls.getQuantityPair(s)
+        value, unitStr = cls.get_quantity_pair(s)
         kinds = {"SV": "size", "WV": "weight", "TV": "time"}
         kind = kinds.get(cls.__name__, cls.__name__)
         if value is None and unitStr is None:
@@ -405,65 +405,65 @@ class Dimension(Decimal):
         return cls.parse(argument)
 
     @classmethod
-    def getQuantityPair(cls, s) -> Tuple:
+    def get_quantity_pair(cls, s) -> Tuple:
         raise NotImplementedError
 
-    def toBestUnit(self, sysname, *args, **kwargs):
+    def to_best_unit(self, sysname, *args, **kwargs):
         value = Decimal(self)
         system = self._systems[sysname]
         unit = system.getBestUnit(value)
         return unit.format(value, *args, **kwargs)
 
-    def toGoodUnit(self, sysname, *args, **kwargs):
+    def to_good_unit(self, sysname, *args, **kwargs):
         value = Decimal(self)
         system = self._systems[sysname]
         unit = system.getGoodUnit(value)
         return unit.format(value, *args, **kwargs)
 
-    def toUnit(self, sysname, unitname, *args, **kwargs):
+    def to_unit(self, sysname, unitname, *args, **kwargs):
         value = Decimal(self)
         system = self._systems[sysname]
         unit = system[unitname]
         return unit.format(value, *args, **kwargs)
 
     @classmethod
-    def loadFromFile(cls, filename):
+    def load_from_file(cls, filename):
         try:
             fileJson = json.loads(pkg_resources.read_text(sizebot.data.units, filename))
         except FileNotFoundError:
             logger.error(f"Error loading {filename}")
             return
-        cls.loadFromJson(fileJson)
+        cls.load_from_JSON(fileJson)
 
     @classmethod
-    def loadFromJson(cls, json):
+    def load_from_JSON(cls, json):
         for u in json["units"]:
-            cls.addUnitFromJson(**u)
+            cls.add_unit_from_JSON(**u)
         for systemname, systemunits in json["systems"].items():
             for u in systemunits:
-                cls.addSystemUnitFromJson(systemname, **u)
+                cls.add_system_unit_from_JSON(systemname, **u)
 
     @classmethod
-    def addUnitFromJson(cls, **kwargs):
+    def add_unit_from_JSON(cls, **kwargs):
         unit = Unit(**kwargs)
-        cls.addUnit(unit)
+        cls.add_unit(unit)
 
     @classmethod
-    def addUnit(cls, unit):
+    def add_unit(cls, unit):
         cls._units.addUnit(unit)
 
     @classmethod
-    def addSystemUnitFromJson(cls, systemname, **kwargs):
+    def add_system_unit_from_JSON(cls, systemname, **kwargs):
         systemunit = SystemUnit(**kwargs)
-        cls.addSystemUnit(systemname, systemunit)
+        cls.add_system_unit(systemname, systemunit)
 
     @classmethod
-    def addSystemUnit(cls, systemname, systemunit):
-        system = cls.getOrAddSystem(systemname)
-        system.addSystemUnit(systemunit)
+    def add_system_unit(cls, systemname, systemunit):
+        system = cls.get_or_add_system(systemname)
+        system.add_system_unit(systemunit)
 
     @classmethod
-    def getOrAddSystem(cls, systemname):
+    def get_or_add_system(cls, systemname):
         system = cls._systems.get(systemname)
         if system is None:
             system = SystemRegistry(cls)
@@ -481,9 +481,9 @@ class SV(Dimension):
     _infinity = Decimal("8.79848e53")
 
     @classmethod
-    def getQuantityPair(cls, s):
+    def get_quantity_pair(cls, s):
         s = utils.removeBrackets(s)
-        s = cls.isFeetAndInchesAndIfSoFixIt(s)
+        s = cls.is_feet_and_inches_and_if_so_fix_it(s)
         # TODO: These are temporary patches.
         # Comma patch
         s = s.replace(",", "")
@@ -507,7 +507,7 @@ class SV(Dimension):
         return value, unit
 
     @staticmethod
-    def isFeetAndInchesAndIfSoFixIt(value):
+    def is_feet_and_inches_and_if_so_fix_it(value):
         regex = r"^(?P<feet>\d+\.?\d*)(ft|foot|feet|')(?P<inch>\d+\.?\d*)(in|\")?"
         m = re.match(regex, value, flags = re.I)
         if not m:
@@ -532,7 +532,7 @@ class WV(Dimension):
     _infinity = Decimal("1e1000")
 
     @classmethod
-    def getQuantityPair(cls, s):
+    def get_quantity_pair(cls, s):
         s = utils.removeBrackets(s)
         # TODO: These are temporary patches.
         # Comma patch
@@ -561,7 +561,7 @@ class TV(Dimension):
     _systems = {}
 
     @classmethod
-    def getQuantityPair(cls, s):
+    def get_quantity_pair(cls, s):
         s = utils.removeBrackets(s)
         # . patch
         if s.startswith("."):
@@ -585,18 +585,29 @@ class AV(Dimension):
         raise NotImplementedError
 
 
-def loadJsonFile(filename):
+class VV(Dimension):
+    """Area Value (area in meters-cubed)"""
+    _units = UnitRegistry()
+    _systems = {}
+
+    @classmethod
+    def parse(cls, s: str):
+        raise NotImplementedError
+
+
+def load_json_file(filename):
     try:
-        unitsJson = json.loads(pkg_resources.read_text(sizebot.data, filename))
+        units_JSON = json.loads(pkg_resources.read_text(sizebot.data, filename))
     except FileNotFoundError:
-        unitsJson = None
-    return unitsJson
+        units_JSON = None
+    return units_JSON
 
 
 def init():
-    SV.loadFromFile("sv.json")
-    SV.addUnit(FeetAndInchesUnit())
-    SV.addSystemUnit(systemname="u", systemunit=SystemUnit(unit=("'", "\"")))
-    WV.loadFromFile("wv.json")
-    TV.loadFromFile("tv.json")
-    AV.loadFromFile("av.json")
+    SV.load_from_file("sv.json")
+    SV.add_unit(FeetAndInchesUnit())
+    SV.add_system_unit(systemname="u", systemunit=SystemUnit(unit=("'", "\"")))
+    WV.load_from_file("wv.json")
+    TV.load_from_file("tv.json")
+    AV.load_from_file("av.json")
+    VV.load_from_file("vv.json")

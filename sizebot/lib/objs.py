@@ -12,7 +12,7 @@ from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import get_plural, get_indefinite_article
-from sizebot.lib.units import SV, WV, Unit, SystemUnit
+from sizebot.lib.units import AV, SV, VV, WV, Unit, SystemUnit
 from sizebot.lib.utils import removeprefix, sentence_join
 
 objects: list["DigiObject"] = []
@@ -69,14 +69,14 @@ class DigiObject:
 
     def add_to_units(self):
         if self.unitlength is not None:
-            SV.addUnit(Unit(factor=self.unitlength, name=self.name, namePlural=self.name_plural,
+            SV.add_unit(Unit(factor=self.unitlength, name=self.name, namePlural=self.name_plural,
                             names=self.aliases, symbol = self.symbol))
-            SV.addSystemUnit("o", SystemUnit(self.name))
+            SV.add_system_unit("o", SystemUnit(self.name))
 
         if self.weight is not None:
-            WV.addUnit(Unit(factor=self.weight, name=self.name, namePlural=self.name_plural,
+            WV.add_unit(Unit(factor=self.weight, name=self.name, namePlural=self.name_plural,
                             names=self.aliases, symbol = self.symbol))
-            WV.addSystemUnit("o", SystemUnit(self.name))
+            WV.add_system_unit("o", SystemUnit(self.name))
 
     def get_stats(self, multiplier = 1):
         returnstr = ""
