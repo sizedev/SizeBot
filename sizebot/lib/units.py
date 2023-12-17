@@ -265,7 +265,7 @@ class UnitRegistry(collections.abc.Mapping):
 
     def __getitem__(self, key):
         try:
-            return next(unit for unit in self._units if unit.isUnit(key))
+            return next(unit for unit in self._units if unit.is_unit(key))
         except StopIteration:
             raise KeyError(key)
 
@@ -369,7 +369,7 @@ class Dimension(Decimal):
             for s in systems:
                 preferName = s.upper() == s
                 system = self._systems[s.casefold()]
-                unit = system.getBestUnit(value)
+                unit = system.get_best_unit(value)
                 formattedUnits.append(unit.format(value, numspec, preferName))
 
             # Remove duplicates
