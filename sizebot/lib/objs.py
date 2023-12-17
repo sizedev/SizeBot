@@ -1,8 +1,9 @@
 from functools import total_ordering
 import importlib.resources as pkg_resources
 import json
+import math
 import random
-from typing import Literal
+from typing import Literal, Optional
 
 from discord import Embed
 
@@ -67,15 +68,36 @@ class DigiObject:
         # TODO: See issue #153.
         return None
 
+    @property
+    def area(self) -> Optional[AV]:
+        if self.height is not None and self.width is not None:
+            return AV(self.height * self.width)
+        elif self.length is not None and self.width is not None:
+            return AV(self.length * self.width)
+        elif self.diameter:
+            r = self.diameter / 2
+            r2 = r ** 2
+            return AV(math.pi * r2)
+        return None
+
+    @property
+    def volume(self) -> Optional[VV]:
+        if self.area is not None:
+            if self.depth is not None:
+                return VV(self.area * self.depth)
+            elif self.thickness is not None:
+                return VV(self.area * self.thickness)
+        return None
+
     def add_to_units(self):
         if self.unitlength is not None:
             SV.add_unit(Unit(factor=self.unitlength, name=self.name, namePlural=self.name_plural,
-                            names=self.aliases, symbol = self.symbol))
+                             names=self.aliases, symbol = self.symbol))
             SV.add_system_unit("o", SystemUnit(self.name))
 
         if self.weight is not None:
             WV.add_unit(Unit(factor=self.weight, name=self.name, namePlural=self.name_plural,
-                            names=self.aliases, symbol = self.symbol))
+                             names=self.aliases, symbol = self.symbol))
             WV.add_system_unit("o", SystemUnit(self.name))
 
     def get_stats(self, multiplier = 1):
@@ -148,6 +170,12 @@ class DigiObject:
         if self.thickness:
             embed.add_field(name = "Thickness",
                             value = f"**{SV(self.thickness * multiplier):,.3mu}** thick\n")
+        if self.area is not None:
+            embed.add_field(name = "Area",
+                            value = f"**{AV(self.area * (multiplier ** 2)):,.3mu}**\n")
+        if self.volume is not None:
+            embed.add_field(name = "Volume",
+                            value = f"**{VV(self.volume * (multiplier ** 3)):,.3mu}**\n")
         if self.calories is not None:
             embed.add_field(name = "Calories",
                             value = f"has **{Decimal(self.calories * (multiplier **3)):,.3}** calories\n")

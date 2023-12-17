@@ -438,5 +438,6 @@ class ObjectsCog(commands.Cog):
         userdata = load_or_fake(ctx.author)
         await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} is {obj.get_stats_sentence(userdata.scale, userdata.unitsystem)}")
 
+
 async def setup(bot):
     await bot.add_cog(ObjectsCog(bot))
