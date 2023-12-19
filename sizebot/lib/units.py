@@ -278,7 +278,7 @@ class UnitRegistry(collections.abc.Mapping):
     def __len__(self):
         return len(self._units)
 
-    def addUnit(self, unit):
+    def add_unit(self, unit):
         self._units.append(unit)
 
 
