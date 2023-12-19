@@ -93,6 +93,7 @@ class QuakeCog(commands.Cog):
         userdata = load_or_fake(user)
         userdata.scale *= userstats.viewscale
         e = quake_embed(userdata, quake_type)
+        e.title = e.title + f" as seen by {self_user.nickname}"
         e.description = f"To {self_user.nickname}, " + e.description
         await ctx.send(embed = e)
 
