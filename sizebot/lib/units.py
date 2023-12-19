@@ -11,7 +11,7 @@ import sizebot.data
 import sizebot.data.units
 from sizebot.lib import errors, utils
 from sizebot.lib.digidecimal import Decimal, DecimalSpec
-from sizebot.lib.picker import getRandomCloseUnit
+from sizebot.lib.picker import get_random_close_unit
 
 
 __all__ = ["Rate", "Mult", "SV", "WV", "TV", "AV", "VV"]
@@ -307,7 +307,7 @@ class SystemRegistry():
     def get_good_unit(self, value):
         if not self.isSorted:
             self._systemunits.sort()
-        systemunit = getRandomCloseUnit(value, self._systemunits)
+        systemunit = get_random_close_unit(value, self._systemunits)
         if systemunit is None:
             return self.get_best_unit(value)
         return systemunit.unit
@@ -397,7 +397,7 @@ class Dimension(Decimal):
         unit = cls._units.get(unitStr, None)
         if unit is None:
             raise errors.InvalidSizeValue(s, kind)
-        baseUnit = unit.toBaseUnit(value)
+        baseUnit = unit.to_base_unit(value)
         return cls(baseUnit)
 
     @classmethod
@@ -411,13 +411,13 @@ class Dimension(Decimal):
     def to_best_unit(self, sysname, *args, **kwargs):
         value = Decimal(self)
         system = self._systems[sysname]
-        unit = system.getBestUnit(value)
+        unit = system.get_best_unit(value)
         return unit.format(value, *args, **kwargs)
 
     def to_good_unit(self, sysname, *args, **kwargs):
         value = Decimal(self)
         system = self._systems[sysname]
-        unit = system.getGoodUnit(value)
+        unit = system.get_good_unit(value)
         return unit.format(value, *args, **kwargs)
 
     def to_unit(self, sysname, unitname, *args, **kwargs):
@@ -450,7 +450,7 @@ class Dimension(Decimal):
 
     @classmethod
     def add_unit(cls, unit):
-        cls._units.addUnit(unit)
+        cls._units.add_unit(unit)
 
     @classmethod
     def add_system_unit_from_JSON(cls, systemname, **kwargs):

@@ -3,7 +3,7 @@ import random
 from sizebot.lib.digidecimal import roundFraction
 
 
-def isGood(n):
+def is_good(n):
     r = roundFraction(n, 4)
     if r == 0:
         return False
@@ -11,14 +11,14 @@ def isGood(n):
     return creditRating < 0.075
 
 
-def getCloseUnitsWithLimit(val, limit, units):
-    return [u for u in units if 1 <= roundFraction(val / u.factor, 4) <= limit and isGood(val / u.factor)]
+def get_close_units_with_limit(val, limit, units):
+    return [u for u in units if 1 <= roundFraction(val / u.factor, 4) <= limit and is_good(val / u.factor)]
 
 
-def getRandomCloseUnit(val, units):
-    closeUnits = getCloseUnitsWithLimit(val, 6, units)
+def get_random_close_unit(val, units):
+    closeUnits = get_close_units_with_limit(val, 6, units)
     if not closeUnits:
-        closeUnits = getCloseUnitsWithLimit(val, 10, units)
+        closeUnits = get_close_units_with_limit(val, 10, units)
     if not closeUnits:
         return None
     return random.choice(closeUnits)
