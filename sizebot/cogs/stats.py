@@ -104,9 +104,9 @@ class StatsCog(commands.Cog):
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
+        userdata.scale = scale_factor
 
         stats = proportions.PersonStats(userdata)
-        stats.scale *= scale_factor
 
         embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
