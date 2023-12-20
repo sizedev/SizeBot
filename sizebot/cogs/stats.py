@@ -118,7 +118,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def basestats(self, ctx, member: discord.Member = None, *, customName = None):
+    async def basestats(self, ctx, *, member: discord.Member = None):
         """User basestats command.
 
         Get the base stats about yourself or a user.
@@ -145,7 +145,7 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def statsas(self, ctx, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
-                      memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
+                      memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None):
         """User stats command with modified bases.
 
         Get tons of user stats about yourself, a user, or a raw height, as if they were a different height.
@@ -166,7 +166,7 @@ class StatsCog(commands.Cog):
             telemetry.SizeViewed(memberOrHeight).save()
 
         userdata = load_or_fake(memberOrHeight)
-        userdata2 = load_or_fake(memberOrHeight2, customName)
+        userdata2 = load_or_fake(memberOrHeight2)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
         userdata2.height = userdata.height
 
@@ -181,7 +181,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stat(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
+    async def stat(self, ctx, stat, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
         """User stat command.
 
         Get a single stat about yourself, a user, or a raw height.
@@ -201,7 +201,7 @@ class StatsCog(commands.Cog):
             telemetry.SizeViewed(memberOrHeight).save()
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = load_or_fake(memberOrHeight, customName, allow_unreg=same_user)
+        userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
 
         stats = proportions.PersonStats(userdata)
 
@@ -231,7 +231,7 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def statas(self, ctx, stat, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
-                     memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
+                     memberOrHeight2: typing.Union[discord.Member, FakePlayer, SV] = None):
         """User stat command with custom bases.
 
         Get a single stat about yourself, a user, or a raw height, as if they were a different height.
@@ -255,7 +255,7 @@ class StatsCog(commands.Cog):
             telemetry.SizeViewed(memberOrHeight).save()
 
         userdata = load_or_fake(memberOrHeight)
-        userdata2 = load_or_fake(memberOrHeight2, customName)
+        userdata2 = load_or_fake(memberOrHeight2)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
         userdata2.height = userdata.height
 
@@ -313,12 +313,12 @@ class StatsCog(commands.Cog):
 
     @commands.command(
         aliases = ["compas"],
-        usage = "[user/height] [user/height] <custom name>",
+        usage = "[user/height] [user/height]",
         category = "stats"
     )
     @commands.guild_only()
     async def compareas(self, ctx, asHeight: typing.Union[discord.Member, FakePlayer, SV] = None,
-                        memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
+                        memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Compare yourself as a different height and another user."""
 
         if isinstance(asHeight, SV):
@@ -327,7 +327,7 @@ class StatsCog(commands.Cog):
             telemetry.SizeViewed(memberOrHeight).save()
 
         userdata = load_or_fake(ctx.message.author)
-        asdata = load_or_fake(asHeight, customName)
+        asdata = load_or_fake(asHeight)
         userdata.height = asdata.height
         userdata.nickname += " as " + asdata.nickname
         comparedata = load_or_fake(memberOrHeight)
