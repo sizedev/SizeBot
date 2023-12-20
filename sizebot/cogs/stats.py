@@ -225,6 +225,49 @@ class StatsCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
     @commands.command(
+        usage = "<from> <to> <stat> [user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def statso(self, ctx, sv1: SV, sv2: SV, stat, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
+        """User stat command as if an implied scale.
+
+        Available stats are: #STATS#`
+        """
+
+        if memberOrHeight is None:
+            memberOrHeight = ctx.author
+
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight).save()
+
+        same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
+        userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
+        scale_factor = sv1 / sv2
+        userdata.scale = scale_factor
+
+        stats = proportions.PersonStats(userdata)
+
+        if stat not in statmap.keys():
+            await ctx.send(f"The `{stat}` stat is not an available option.")
+            return
+
+        try:
+            stat = statmap[stat]
+        except KeyError:
+            await ctx.send(f"`{stat}` is not a stat.")
+            return
+
+        stattosend = stats.getFormattedStat(stat)
+
+        if stattosend is None:
+            await ctx.send(f"The `{stat}` stat is unavailable for this user.")
+            return
+
+        await ctx.send(stattosend)
+        await showNextStep(ctx, userdata)
+
+    @commands.command(
         aliases = ["getas"],
         usage = "<stat> [user/height]",
         category = "stats"
