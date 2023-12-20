@@ -60,7 +60,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stats(self, ctx, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None, *, customName = None):
+    async def stats(self, ctx, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
@@ -77,7 +77,7 @@ class StatsCog(commands.Cog):
             telemetry.SizeViewed(memberOrHeight).save()
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = load_or_fake(memberOrHeight, customName, allow_unreg=same_user)
+        userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
 
         stats = proportions.PersonStats(userdata)
 
