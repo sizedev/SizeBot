@@ -87,6 +87,33 @@ class StatsCog(commands.Cog):
         await showNextStep(ctx, userdata)
 
     @commands.command(
+        usage = "<from> <to> [user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def statsso(self, ctx, sv1: SV, sv2: SV, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
+        """Stats so that from looks like to.
+        """
+        if memberOrHeight is None:
+            memberOrHeight = ctx.author
+
+        if isinstance(memberOrHeight, SV):
+            telemetry.SizeViewed(memberOrHeight).save()
+
+        scale_factor = sv1 / sv2
+
+        same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
+        userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
+
+        stats = proportions.PersonStats(userdata)
+        stats.scale *= scale_factor
+
+        embedtosend = stats.toEmbed(ctx.author.id)
+        await ctx.send(embed = embedtosend)
+
+        await showNextStep(ctx, userdata)
+
+    @commands.command(
         usage = "[user/height]",
         category = "stats"
     )
