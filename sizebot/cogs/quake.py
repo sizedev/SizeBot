@@ -72,7 +72,8 @@ class QuakeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases = ["quake"],
+    @commands.command(
+        aliases = ["quake"],
         usage = "[type] [user/height]",
         category = "stats")
     async def earthquake(self, ctx, quake_type: typing.Optional[QuakeType] = "step", user: typing.Union[discord.Member, FakePlayer, SV] = None):
@@ -83,7 +84,8 @@ class QuakeCog(commands.Cog):
         e = quake_embed(userdata, quake_type)
         await ctx.send(embed = e)
 
-    @commands.command(aliases = ["quakecomp"],
+    @commands.command(
+        aliases = ["quakecomp"],
         usage = "[type] [user]",
         category = "stats")
     async def quakecompare(self, ctx, user: typing.Union[discord.Member, FakePlayer], quake_type: typing.Optional[QuakeType] = "step"):
@@ -97,7 +99,8 @@ class QuakeCog(commands.Cog):
         e.description = f"To {self_user.nickname}, " + e.description
         await ctx.send(embed = e)
 
-    @commands.command(aliases = [],
+    @commands.command(
+        aliases = [],
         usage = "<dist> [user/height]",
         category = "stats")
     async def quakewalk(self, ctx, dist: SV, user: typing.Union[discord.Member, FakePlayer, SV] = None):
@@ -128,7 +131,8 @@ class QuakeCog(commands.Cog):
 
         await ctx.send(return_string)
 
-    @commands.command(aliases = [],
+    @commands.command(
+        aliases = [],
         usage = "<string>",
         category = "stats")
     async def quaketype(self, ctx, s: str):
