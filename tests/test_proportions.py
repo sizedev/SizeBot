@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from sizebot.lib import units
-from sizebot.lib.proportions import formatShoeSize, fromShoeSize
+from sizebot.lib.proportions import format_shoe_size, fromShoeSize
 from sizebot.lib.units import SV, WV, TV, Mult, Rate
 
 units.init()
@@ -176,6 +176,6 @@ def test_feetinch_noinchunit():
 
 def test_reverse_shoesize_calc():
     insize = SV.parse("10in")
-    shoesize = formatShoeSize(insize, "m")
+    shoesize = format_shoe_size(insize, "m")
     outsize = fromShoeSize(shoesize)
     assert insize == outsize

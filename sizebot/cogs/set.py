@@ -11,7 +11,7 @@ from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.proportions import formatShoeSize, fromShoeSize
+from sizebot.lib.proportions import format_shoe_size, fromShoeSize
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, glitch_string, parse_scale, randrange_log
 
@@ -368,8 +368,8 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(SV.parse(newfoot) * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength, 'm')}), "
-                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale), 'm')}")
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({format_shoe_size(userdata.footlength, 'm')}), "
+                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {format_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -397,8 +397,8 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(newfoot * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({formatShoeSize(userdata.footlength, 'm')}), "
-                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {formatShoeSize(SV(userdata.footlength * userdata.scale), 'm')}")
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({format_shoe_size(userdata.footlength, 'm')}), "
+                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {format_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
         await showNextStep(ctx, userdata)
 
     @commands.command(

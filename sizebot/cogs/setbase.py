@@ -8,7 +8,7 @@ from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import emojis
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.proportions import formatShoeSize, fromShoeSize
+from sizebot.lib.proportions import format_shoe_size, fromShoeSize
 from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
@@ -115,7 +115,7 @@ class SetBaseCog(commands.Cog):
         userdata.footlength = newfoot
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength, 'm')})")
+        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({format_shoe_size(userdata.footlength, 'm')})")
         await showNextStep(ctx, userdata)
 
     @commands.command(
@@ -144,7 +144,7 @@ class SetBaseCog(commands.Cog):
         userdata.footlength = newfoot
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({formatShoeSize(userdata.footlength, 'm')})")
+        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({format_shoe_size(userdata.footlength, 'm')})")
         await showNextStep(ctx, userdata)
 
     @commands.command(

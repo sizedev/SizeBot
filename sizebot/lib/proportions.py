@@ -145,7 +145,7 @@ all_stats = [
     Stat("Lay Area",                    sets="layarea",                 requires=["height", "width"],          power=2, type=AV,                                default_from=lambda s: s["height"] * s["width"]),
     Stat("Foot Area",                   sets="footarea",                requires=["footlength", "footwidth"],  power=2, type=AV,                                default_from=lambda s: s["footlength"] * s["footwidth"]),
     Stat("Fingertip Area",              sets="fingertiparea",           requires=["fingertiplength"],          power=2, type=AV,                                default_from=lambda s: s["fingertiplength"] * s["fingertiplength"]),
-    Stat("Shoe Size",                   sets="shoesize",                requires=["footlength", "gender"],              type=str,                               default_from=lambda s: formatShoeSize(s["footlength"], s["gender"])),
+    Stat("Shoe Size",                   sets="shoesize",                requires=["footlength", "gender"],              type=str,                               default_from=lambda s: format_shoe_size(s["footlength"], s["gender"])),
     Stat("Visibility",                  sets="visibility",              requires=["height"],                            type=str,                               default_from=lambda s: calcVisibility(s["height"]))
 ]
 
@@ -502,8 +502,8 @@ class PersonSpeedComparison:
     def speedcalc(self, dist: SV, *, speed = False, foot = False, include_relative = False):
         reldist = SV(dist * self.viewer.viewscale)
         reldist_print = f"{reldist:,.3mu}"
-        shoesize = " (" + formatShoeSize(dist, "m") + ")"
-        rel_shoesize = " (" + formatShoeSize(reldist, "m") + ")"
+        shoesize = " (" + format_shoe_size(dist, "m") + ")"
+        rel_shoesize = " (" + format_shoe_size(reldist, "m") + ")"
 
         _walktime = (dist / self.viewer.walkperhour) * 60 * 60
         walksteps = math.ceil(dist / self.viewer.walksteplength)
@@ -697,7 +697,7 @@ class PersonStats:
         self.footlength = self.stats.get("footlength").value
 
         # How does this one work??
-        self.shoesize = formatShoeSize(self.footlength, self.gender)
+        self.shoesize = format_shoe_size(self.footlength, self.gender)
 
         # TODO: Is this accounted for in the new implementation?:
         # if userdata.pawtoggle:
@@ -908,7 +908,7 @@ class PersonBaseStats:
         self.footlength = userdata.footlength
 
         if self.footlength:
-            self.shoesize = formatShoeSize(self.footlength, self.gender)
+            self.shoesize = format_shoe_size(self.footlength, self.gender)
         else:
             self.shoesize = None
 
@@ -966,7 +966,7 @@ class PersonBaseStats:
         return embed
 
 
-def formatShoeSize(footlength: SV, gender: Literal["m", "f"]):
+def format_shoe_size(footlength: SV, gender: Literal["m", "f"]):
     women = gender == "f"
     # Inch in meters
     inch = Decimal("0.0254")
