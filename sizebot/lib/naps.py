@@ -8,7 +8,7 @@ from sizebot.lib.digidecimal import Decimal
 logger = logging.getLogger("sizebot")
 
 
-_activeNannies = {}
+_active_nannies = {}
 
 
 class Nanny:
@@ -29,7 +29,7 @@ class Nanny:
         await member.move_to(None, reason="Naptime!")
         return False
 
-    def toJson(self):
+    def toJSON(self):
         return {
             "userid": self.userid,
             "guildid": self.guildid,
@@ -52,50 +52,50 @@ def stop(userid):
 
 async def check(bot):
     """Have the nannies check their watches"""
-    global _activeNannies
+    global _active_nannies
     runningNannies = {}
-    for userid, nanny in _activeNannies.items():
+    for userid, nanny in _active_nannies.items():
         try:
             running = await nanny.check(bot)
             if running:
                 runningNannies[userid] = nanny
         except Exception as e:
             logger.error(e)
-    _activeNannies = runningNannies
-    saveToFile()
+    _active_nannies = runningNannies
+    save_to_file()
 
 
 def _activate(nanny):
     """Activate a new naptime nanny"""
-    _activeNannies[nanny.userid] = nanny
-    saveToFile()
+    _active_nannies[nanny.userid] = nanny
+    save_to_file()
 
 
 def _deactivate(userid):
     """Deactivate a waiting naptime nanny"""
-    nanny = _activeNannies.pop(userid, None)
-    saveToFile()
+    nanny = _active_nannies.pop(userid, None)
+    save_to_file()
     return nanny
 
 
-def loadFromFile():
+def load_from_file():
     """Load all naptime nannies from file"""
     try:
         with open(paths.naptimepath, "r") as f:
-            nanniesJson = json.load(f)
+            nanniesJSON = json.load(f)
     except FileNotFoundError:
-        nanniesJson = []
-    for nannyJson in nanniesJson:
-        nanny = Nanny(**nannyJson)
+        nanniesJSON = []
+    for nannyJSON in nanniesJSON:
+        nanny = Nanny(**nannyJSON)
         _activate(nanny)
 
 
-def saveToFile():
+def save_to_file():
     """Save all naptime nannies to a file"""
-    nanniesJson = [n.toJson() for n in _activeNannies.values()]
+    nanniesJSON = [n.toJSON() for n in _active_nannies.values()]
     with open(paths.naptimepath, "w") as f:
-        json.dump(nanniesJson, f)
+        json.dump(nanniesJSON, f)
 
 
-def formatSummary():
-    return "\n".join(str(n) for n in _activeNannies.values())
+def format_summary():
+    return "\n".join(str(n) for n in _active_nannies.values())

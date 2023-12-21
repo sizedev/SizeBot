@@ -20,7 +20,7 @@ logger = logging.getLogger("sizebot")
 class ChangeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        changes.loadFromFile()
+        changes.load_from_file()
 
     @commands.Cog.listener()
     async def on_first_ready(self):
@@ -92,7 +92,7 @@ class ChangeCog(commands.Cog):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
 
-        changeDump = changes.formatSummary()
+        changeDump = changes.format_summary()
 
         if not changeDump:
             changeDump = "No active changes"

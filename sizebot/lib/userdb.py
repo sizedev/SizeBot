@@ -49,6 +49,7 @@ class PlayerStats(TypedDict):
     gender: Literal["m", "f", "x", None]
     scale: Decimal
 
+
 @total_ordering
 class User:
     # __slots__ declares to python what attributes to expect.

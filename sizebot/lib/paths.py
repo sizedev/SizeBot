@@ -3,7 +3,7 @@ from pathlib import Path
 import appdirs
 
 
-def getDataDir():
+def get_data_dir():
     appname = "SizeBot"
     appauthor = "DigiDuncan"
     datadir = Path(appdirs.user_data_dir(appname, appauthor))
@@ -11,7 +11,7 @@ def getDataDir():
 
 
 # File paths
-datadir = getDataDir()
+datadir = get_data_dir()
 winkpath = datadir / "winkcount.txt"
 guilddbpath = datadir / "guilds"
 telemetrypath = datadir / "telemetry"

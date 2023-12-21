@@ -326,7 +326,7 @@ class RegisterCog(commands.Cog):
 
         # remove the sizetag
         if ctx.me.guild_permissions.manage_nicknames:
-            await nickmanager.nickReset(user)
+            await nickmanager.nick_reset(user)
         # delete the user file
         userdb.delete(guild.id, user.id)
         # remove the user role

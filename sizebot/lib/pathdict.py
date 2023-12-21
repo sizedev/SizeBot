@@ -10,7 +10,7 @@ class BadPathException(Exception):
     pass
 
 
-def parseComponent(component):
+def parse_component(component):
     index_match = RE_INDEX.match(component)
     if index_match:
         return int(index_match[1])
@@ -35,7 +35,7 @@ def buildPath(components):
 
 
 def parsePath(path):
-    components = [parseComponent(c) for c in RE_COMPONENT.findall(path)]
+    components = [parse_component(c) for c in RE_COMPONENT.findall(path)]
     if path != buildPath(components):
         raise BadPathException
     return components

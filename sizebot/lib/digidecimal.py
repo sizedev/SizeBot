@@ -96,7 +96,7 @@ class Decimal():
                     denom = int(fractional[1])
                 except IndexError:
                     denom = 8
-                rounded = roundFraction(value, denom)
+                rounded = round_fraction(value, denom)
             else:
                 rounded = round(value, precision)
         else:
@@ -106,16 +106,16 @@ class Decimal():
         numspec = str(dSpec)
         if fractional:
             whole = rounded.to_integral_value(ROUND_DOWN)
-            rawwhole = fixZeroes(whole._rawvalue)
+            rawwhole = fix_zeroes(whole._rawvalue)
             formatted = format(rawwhole, numspec)
             part = abs(whole - rounded)
-            fraction = formatFraction(part)
+            fraction = format_fraction(part)
             if fraction:
                 if formatted == "0":
                     formatted = ""
                 formatted += fraction
         else:
-            rawvalue = fixZeroes(rounded._rawvalue)
+            rawvalue = fix_zeroes(rounded._rawvalue)
             formatted = format(rawvalue, numspec)
 
         if dSpec.type == "f":
@@ -420,23 +420,23 @@ class DecimalSpec:
         return spec
 
 
-def roundDecimal(d, accuracy = 0):
+def round_decimal(d, accuracy = 0):
     if d.is_infinite():
         return d
     places = Decimal(10) ** -accuracy
     return d.quantize(places)
 
 
-def roundFraction(number, denominator):
+def round_fraction(number, denominator):
     rounded = round(number * denominator) / denominator
     return rounded
 
 
-def formatFraction(value):
+def format_fraction(value):
     if value is None:
         return None
     fractionStrings = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
-    part = roundFraction(value % 1, 8)
+    part = round_fraction(value % 1, 8)
     index = int(part * len(fractionStrings)) % len(fractionStrings)
     try:
         fraction = fractionStrings[index]
@@ -451,7 +451,7 @@ def formatFraction(value):
     return fraction
 
 
-def fixZeroes(d):
+def fix_zeroes(d):
     """Reset the precision of a Decimal to avoid values that use exponents like '1e3' and values with trailing zeroes like '100.000'
 
     fixZeroes(Decimal('1e3')) -> Decimal('100')

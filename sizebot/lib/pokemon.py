@@ -66,7 +66,7 @@ class Pokemon:
             return self.natdex < other.natdex
 
     @classmethod
-    def fromJson(cls, obj_json):
+    def fromJSON(cls, obj_json):
         c = cls(**obj_json)
         c.height = SV(c.height)
         c.weight = WV(c.weight)
@@ -84,4 +84,4 @@ def init():
 
     pokefile = pkg_resources.read_text(sizebot.data, "pokemon.json")
     p = json.loads(pokefile)
-    pokemon = [Pokemon.fromJson(j) for j in p]
+    pokemon = [Pokemon.fromJSON(j) for j in p]

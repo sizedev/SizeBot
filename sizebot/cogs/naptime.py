@@ -65,7 +65,7 @@ class NaptimeCog(commands.Cog):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
 
-        nannyDump = naps.formatSummary()
+        nannyDump = naps.format_summary()
 
         if not nannyDump:
             nannyDump = "No active nannies."

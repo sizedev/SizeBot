@@ -10,7 +10,7 @@ from sizebot.lib.utils import pretty_time_delta
 logger = logging.getLogger("sizebot")
 
 
-_activeChanges = {}
+_active_changes = {}
 
 
 class Change:
@@ -86,7 +86,7 @@ class Change:
             out += f", stop after {pretty_time_delta(Decimal(self.stopTV))}"
         return out
 
-    def toJson(self):
+    def toJSON(self):
         return {
             "userid": self.userid,
             "guildid": self.guildid,
@@ -115,50 +115,50 @@ def stop(userid, guildid):
 
 async def apply(bot):
     """Apply slow growth changes"""
-    global _activeChanges
+    global _active_changes
     runningChanges = {}
-    for key, change in _activeChanges.items():
+    for key, change in _active_changes.items():
         try:
             running = await change.apply(bot)
             if running:
                 runningChanges[key] = change
         except Exception as e:
             logger.error(e)
-    _activeChanges = runningChanges
-    saveToFile()
+    _active_changes = runningChanges
+    save_to_file()
 
 
 def _activate(change):
     """Activate a new change task"""
-    _activeChanges[change.userid, change.guildid] = change
-    saveToFile()
+    _active_changes[change.userid, change.guildid] = change
+    save_to_file()
 
 
 def _deactivate(userid, guildid):
     """Deactivate a running change task"""
-    change = _activeChanges.pop((userid, guildid), None)
-    saveToFile()
+    change = _active_changes.pop((userid, guildid), None)
+    save_to_file()
     return change
 
 
-def loadFromFile():
+def load_from_file():
     """Load all change tasks from a file"""
     try:
         with open(paths.changespath, "r") as f:
-            changesJson = json.load(f)
+            changesJSON = json.load(f)
     except FileNotFoundError:
-        changesJson = []
-    for changeJson in changesJson:
-        change = Change(**changeJson)
+        changesJSON = []
+    for changeJSON in changesJSON:
+        change = Change(**changeJSON)
         _activate(change)
 
 
-def saveToFile():
+def save_to_file():
     """Save all change tasks to a file"""
-    changesJson = [c.toJson() for c in _activeChanges.values()]
+    changesJson = [c.toJSON() for c in _active_changes.values()]
     with open(paths.changespath, "w") as f:
         json.dump(changesJson, f)
 
 
-def formatSummary():
-    return "\n".join(str(c) for c in _activeChanges.values())
+def format_summary():
+    return "\n".join(str(c) for c in _active_changes.values())
