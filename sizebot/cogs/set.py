@@ -182,7 +182,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setso(self, ctx, *, sv1: typing.Union[discord.Member, FakePlayer, SV], sv2: SV):
+    async def setso(self, ctx, sv1: typing.Union[discord.Member, FakePlayer, SV], sv2: SV):
         """Change height by scale."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
