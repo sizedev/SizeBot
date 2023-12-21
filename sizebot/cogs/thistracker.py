@@ -23,7 +23,7 @@ class ThisTracker():
             points = {int(k): v for k, v in points.items()}
         self.points = points
 
-    def incrementPoints(self, id):
+    def increment_points(self, id):
         count = self.points.get(id, 0)
         self.points[id] = count + 1
 
@@ -54,7 +54,7 @@ class ThisTracker():
         return ThisTracker(points)
 
 
-def isAgreementEmoji(emoji):
+def is_agreement_emoji(emoji):
     unicodeagreements = ["🔼", "⬆️", "⤴️", "☝️", "👆"]
     if isinstance(emoji, (discord.Emoji, discord.PartialEmoji)):
         if "this" in emoji.name.lower():
@@ -64,14 +64,14 @@ def isAgreementEmoji(emoji):
             return True
 
 
-def isAgreementMessage(message):
+def is_agreement_message(message):
     textagreements = ["this", "^", "agree"]
-    return isAgreementEmoji(message) or message.lower() in textagreements or message.startswith("^")
+    return is_agreement_emoji(message) or message.lower() in textagreements or message.startswith("^")
 
 
-def findLatestNonThis(messages):
+def find_latest_non_this(messages):
     for message in messages:
-        if not isAgreementMessage(message.content):
+        if not is_agreement_message(message.content):
             return message
 
 
@@ -107,13 +107,13 @@ class ThisCog(commands.Cog):
     async def on_message(self, m):
         if m.author.bot:
             return
-        if isAgreementMessage(m.content):
+        if is_agreement_message(m.content):
             channel = m.channel
             messages = [m async for m in channel.history(limit=100)]
-            if findLatestNonThis(messages).author.id == m.author.id:
+            if find_latest_non_this(messages).author.id == m.author.id:
                 return
             tracker = ThisTracker.load()
-            tracker.incrementPoints(findLatestNonThis(messages).author.id)
+            tracker.increment_points(find_latest_non_this(messages).author.id)
             tracker.save()
 
     @commands.Cog.listener()
@@ -122,9 +122,9 @@ class ThisCog(commands.Cog):
             return
         if r.message.author.id == u.id:
             return
-        if isAgreementEmoji(r.emoji):
+        if is_agreement_emoji(r.emoji):
             tracker = ThisTracker.load()
-            tracker.incrementPoints(r.message.author.id)
+            tracker.increment_points(r.message.author.id)
             tracker.save()
 
 

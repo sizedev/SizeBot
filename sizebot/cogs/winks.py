@@ -14,7 +14,7 @@ starttime = datetime(2019, 9, 15)
 milestones = [1000, 2500, 4200, 5000, 6000, 6666, 6969, 7500, 9001, 10000, 25000, 42000, 50000, 69000, 75000, 100000]
 
 
-def getWinks():
+def get_winks():
     try:
         with open(paths.winkpath, "r") as f:
             winkcount = int(f.read())
@@ -23,19 +23,19 @@ def getWinks():
     return winkcount
 
 
-def addWinks(count = 1):
-    winkcount = getWinks()
+def add_winks(count = 1):
+    winkcount = get_winks()
     winkcount += count
     with open(paths.winkpath, "w") as winkfile:
         winkfile.write(str(winkcount))
     return winkcount
 
 
-def countWinks(s):
+def count_winks(s):
     return len(winkPattern.findall(s))
 
 
-async def sayMilestone(channel, winkcount):
+async def say_milestone(channel, winkcount):
     now = datetime.today()
     timesince = now - starttime
     prettytimesince = utils.pretty_time_delta(timesince.total_seconds())
@@ -70,22 +70,22 @@ class WinksCog(commands.Cog):
         if message.author.id != ids.yukio:
             return
 
-        winksSeen = countWinks(message.content)
+        winksSeen = count_winks(message.content)
         if winksSeen == 0:
             return
 
-        winkcount = addWinks(winksSeen)
+        winkcount = add_winks(winksSeen)
         if winkcount % 100 == 0:
             logger.info(f"Yukio has winked {winkcount} times!")
         if winkcount in milestones:
-            await sayMilestone(message.channel, winkcount)
+            await say_milestone(message.channel, winkcount)
 
     @commands.command(
         hidden = True,
         category = "misc"
     )
     async def winkcount(self, ctx):
-        winkcount = getWinks()
+        winkcount = get_winks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
         logger.info(f"Wink count requested by {ctx.author.nickname}! Current count: {winkcount} times!")
 
