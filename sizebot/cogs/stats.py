@@ -91,7 +91,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statsso(self, ctx, sv1: SV, sv2: SV, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def statsso(self, ctx, sv1: typing.Union[discord.Member, FakePlayer, SV], sv2: SV, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Stats so that from looks like to.
         """
         if memberOrHeight is None:
@@ -100,6 +100,7 @@ class StatsCog(commands.Cog):
         if isinstance(memberOrHeight, SV):
             telemetry.SizeViewed(memberOrHeight).save()
 
+        sv1 = load_or_fake(sv1).height  # This feels like a hack. Is this awful?
         scale_factor = sv1 / sv2
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
@@ -229,7 +230,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statso(self, ctx, sv1: SV, sv2: SV, stat, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def statso(self, ctx, sv1: typing.Union[discord.Member, FakePlayer, SV], sv2: SV, stat, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
         """User stat command as if an implied scale.
 
         Available stats are: #STATS#`
@@ -243,6 +244,7 @@ class StatsCog(commands.Cog):
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
+        sv1 = load_or_fake(sv1).height  # This feels like a hack. Is this awful?
         scale_factor = sv1 / sv2
         userdata.scale = scale_factor
 

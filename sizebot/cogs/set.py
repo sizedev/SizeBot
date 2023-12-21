@@ -1,4 +1,5 @@
 import logging
+import typing
 
 import discord
 from discord.ext import commands
@@ -8,6 +9,7 @@ from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
@@ -167,6 +169,25 @@ class SetCog(commands.Cog):
             raise
 
         userdata.height = userdata.baseheight * scale
+        userdb.save(userdata)
+
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
+
+        await nickmanager.nick_update(ctx.author)
+        await showNextStep(ctx, userdata)
+
+    @commands.command(
+        aliases = ["setheightso", "setscaleso", "setsizeso"],
+        usage = "<from> <to>",
+        category = "set"
+    )
+    @commands.guild_only()
+    async def setso(self, ctx, *, sv1: typing.Union[discord.Member, FakePlayer, SV], sv2: SV):
+        """Change height by scale."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+
+        sv1 = userdb.load_or_fake(sv1).height  # This feels like a hack. Is this awful?
+        userdata.scale = sv1 / sv2
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
