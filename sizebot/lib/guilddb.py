@@ -61,19 +61,19 @@ class Guild:
         return guilddata
 
 
-def getGuildPath(guildid):
+def get_guild_path(guildid):
     return paths.guilddbpath / f"{guildid}"
 
 
-def getGuildDataPath(guildid):
-    return getGuildPath(guildid) / "guild.json"
+def get_guild_data_path(guildid):
+    return get_guild_path(guildid) / "guild.json"
 
 
 def save(guilddata):
     guildid = guilddata.id
     if guildid is None:
         raise errors.CannotSaveWithoutIDException
-    path = getGuildDataPath(guildid)
+    path = get_guild_data_path(guildid)
     path.parent.mkdir(exist_ok = True, parents = True)
     jsondata = guilddata.toJSON()
     with open(path, "w") as f:
@@ -81,7 +81,7 @@ def save(guilddata):
 
 
 def load(guildid):
-    path = getGuildDataPath(guildid)
+    path = get_guild_data_path(guildid)
     try:
         with open(path, "r") as f:
             jsondata = json.load(f)
@@ -93,7 +93,7 @@ def load(guildid):
     return guild
 
 
-def loadOrCreate(guildid):
+def load_or_create(guildid):
     try:
         guilddata = load(guildid)
     except errors.GuildNotFoundException:
@@ -103,7 +103,7 @@ def loadOrCreate(guildid):
 
 
 def delete(guildid):
-    path = getGuildPath(guildid)
+    path = get_guild_path(guildid)
     path.unlink(missing_ok = True)
 
 

@@ -60,7 +60,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def edges(self, ctx):
         """See who is set to be the smallest and largest users."""
-        guilddata = guilddb.loadOrCreate(ctx.guild.id)
+        guilddata = guilddb.load_or_create(ctx.guild.id)
         await ctx.send(f"**SERVER-SET SMALLEST AND LARGEST USERS:**\nSmallest: {'*Unset*' if guilddata.small_edge is None else guilddata.small_edge}\nLargest: {'*Unset*' if guilddata.large_edge is None else guilddata.large_edge}")
 
     @commands.command(
@@ -72,7 +72,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def setsmallest(self, ctx, *, member: discord.Member):
         """Set the smallest user."""
-        guilddata = guilddb.loadOrCreate(ctx.guild.id)
+        guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.small_edge = member.id
         guilddb.save(guilddata)
         await ctx.send(f"<@{member.id}> is now the smallest user. They will be automatically adjusted to be the smallest user until they are removed from this role.")
@@ -87,7 +87,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def setlargest(self, ctx, *, member: discord.Member):
         """Set the largest user."""
-        guilddata = guilddb.loadOrCreate(ctx.guild.id)
+        guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.large_edge = member.id
         guilddb.save(guilddata)
         await ctx.send(f"<@{member.id}> is now the largest user. They will be automatically adjusted to be the largest user until they are removed from this role.")
@@ -101,7 +101,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def clearsmallest(self, ctx):
         """Clear the role of 'smallest user.'"""
-        guilddata = guilddb.loadOrCreate(ctx.guild.id)
+        guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.small_edge = None
         guilddb.save(guilddata)
         await ctx.send("Smallest user unset.")
@@ -115,7 +115,7 @@ class EdgeCog(commands.Cog):
     @is_mod()
     async def clearlargest(self, ctx):
         """Clear the role of 'largest user.'"""
-        guilddata = guilddb.loadOrCreate(ctx.guild.id)
+        guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.large_edge = None
         guilddb.save(guilddata)
         await ctx.send("Largest user unset.")

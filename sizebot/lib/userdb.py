@@ -684,12 +684,12 @@ class User:
         return newuserdata
 
 
-def getGuildUsersPath(guildid):
+def get_guild_users_path(guildid):
     return paths.guilddbpath / f"{guildid}" / "users"
 
 
-def getUserPath(guildid, userid):
-    return getGuildUsersPath(guildid) / f"{userid}.json"
+def get_user_path(guildid, userid):
+    return get_guild_users_path(guildid) / f"{userid}.json"
 
 
 def save(userdata):
@@ -697,7 +697,7 @@ def save(userdata):
     userid = userdata.id
     if guildid is None or userid is None:
         raise errors.CannotSaveWithoutIDException
-    path = getUserPath(guildid, userid)
+    path = get_user_path(guildid, userid)
     path.parent.mkdir(exist_ok = True, parents = True)
     jsondata = userdata.toJSON()
     with open(path, "w") as f:
@@ -705,7 +705,7 @@ def save(userdata):
 
 
 def load(guildid, userid, *, member=None, allow_unreg=False) -> User:
-    path = getUserPath(guildid, userid)
+    path = get_user_path(guildid, userid)
     try:
         with open(path, "r") as f:
             jsondata = json.load(f)
@@ -724,7 +724,7 @@ def load(guildid, userid, *, member=None, allow_unreg=False) -> User:
 
 
 def delete(guildid, userid):
-    path = getUserPath(guildid, userid)
+    path = get_user_path(guildid, userid)
     path.unlink(missing_ok = True)
 
 
