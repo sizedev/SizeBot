@@ -13,7 +13,7 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.language import engine
 from sizebot.lib.units import SV, TV
 from sizebot.lib.userdb import load_or_fake
-from sizebot.lib.utils import AliasMap, glitch_string, prettyTimeDelta, sentence_join
+from sizebot.lib.utils import AliasMap, glitch_string, pretty_time_delta, sentence_join
 
 logger = logging.getLogger("sizebot")
 
@@ -568,7 +568,7 @@ class StatsCog(commands.Cog):
         traveldist = userstats.height
 
         soundtime = TV(traveldist / ONE_SOUNDSECOND)
-        printtime = prettyTimeDelta(soundtime, True, True)
+        printtime = pretty_time_delta(soundtime, True, True)
 
         if is_SV:
             desc = f"To travel {traveldist:,.3mu}, it would take sound **{printtime}**."
@@ -601,7 +601,7 @@ class StatsCog(commands.Cog):
         traveldist = userstats.height
 
         lighttime = TV(traveldist / ONE_LIGHTSECOND)
-        printtime = prettyTimeDelta(lighttime, True, True)
+        printtime = pretty_time_delta(lighttime, True, True)
 
         if is_SV:
             desc = f"To travel {traveldist:,.3mu}, it would take light **{printtime}**."
@@ -624,7 +624,7 @@ class StatsCog(commands.Cog):
         basemass = userdata.baseweight
         scale = userdata.scale
         time, vm, fl = freefall(basemass, distance, scale)
-        ftime = prettyTimeDelta(time, millisecondAccuracy = True, roundeventually = True)
+        ftime = pretty_time_delta(time, millisecondAccuracy = True, roundeventually = True)
 
         await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!\n"
                        f"𝑉𝑚𝑎𝑥: {vm:.3m}/s [That feels like falling **{fl:,.3mu}**!]")
@@ -642,7 +642,7 @@ class StatsCog(commands.Cog):
         scale = 1
         fakedistance = SV(distance / userdata.scale)
         time, vm, fl = freefall(basemass, distance, scale)
-        ftime = prettyTimeDelta(time, millisecondAccuracy = True, roundeventually = True)
+        ftime = pretty_time_delta(time, millisecondAccuracy = True, roundeventually = True)
 
         await ctx.send(f"You fell **{fakedistance:,.3mu}** in **{ftime}**!\n"
                        f"𝑉𝑚𝑎𝑥: {vm:.3m}/s [That feels like falling **{fl:,.3mu}**!]")

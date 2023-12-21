@@ -227,12 +227,12 @@ def main():
         totaltime = end - start
 
         latency = (
-            f"Discord Latency: {utils.prettyTimeDelta(discordlatency.total_seconds(), True)}\n"
-            f"Command Process Latency: {utils.prettyTimeDelta(processlatency.total_seconds(), True)}\n"
-            f"Nick Update Latency: {utils.prettyTimeDelta(nickupdatelatency.total_seconds(), True)}\n"
-            f"Monika Latency: {utils.prettyTimeDelta(monikalatency.total_seconds(), True)}\n"
-            f"User Active Check Latency: {utils.prettyTimeDelta(activelatency.total_seconds(), True)}\n"
-            f"**Total Latency: {utils.prettyTimeDelta(totaltime.total_seconds(), True)}**"
+            f"Discord Latency: {utils.pretty_time_delta(discordlatency.total_seconds(), True)}\n"
+            f"Command Process Latency: {utils.pretty_time_delta(processlatency.total_seconds(), True)}\n"
+            f"Nick Update Latency: {utils.pretty_time_delta(nickupdatelatency.total_seconds(), True)}\n"
+            f"Monika Latency: {utils.pretty_time_delta(monikalatency.total_seconds(), True)}\n"
+            f"User Active Check Latency: {utils.pretty_time_delta(activelatency.total_seconds(), True)}\n"
+            f"**Total Latency: {utils.pretty_time_delta(totaltime.total_seconds(), True)}**"
         )
         await message.channel.send(latency)
 

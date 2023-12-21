@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from sizebot.lib.utils import chunkMsg
+from sizebot.lib.utils import chunk_msg
 
 
 class AsyncHandler(logging.Handler):
@@ -33,5 +33,5 @@ class DiscordHandler(AsyncHandler):
     async def asyncemit(self, record):
         message = record.getMessage().replace("```", r"\`\`\`")
 
-        for m in chunkMsg(message):
+        for m in chunk_msg(message):
             await self.__channel.send(m)

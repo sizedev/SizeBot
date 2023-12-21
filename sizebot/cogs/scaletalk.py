@@ -1,7 +1,7 @@
 import logging
 import re
 from copy import copy
-from sizebot.lib.utils import tryInt
+from sizebot.lib.utils import try_int
 
 import discord
 from discord.ext import commands
@@ -47,7 +47,7 @@ class ScaleTypeCog(commands.Cog):
         if match := re.fullmatch(re_char, change):
             diff = Diff.parse(match.group(1))
             if match.group(2):
-                chars = tryInt(match.group(2))
+                chars = try_int(match.group(2))
                 if chars == "":
                     chars = 1
         else:

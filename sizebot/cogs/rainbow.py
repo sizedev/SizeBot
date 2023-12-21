@@ -4,7 +4,7 @@ import logging
 import discord
 from discord.ext import commands, tasks
 
-from sizebot.lib.utils import formatTraceback
+from sizebot.lib.utils import format_traceback
 
 colorgen = itertools.cycle([
     discord.Color.red(),     # red
@@ -41,7 +41,7 @@ class RainbowCog(commands.Cog):
                         # PERMISSION: requires manage_roles
                         await role.edit(color = next(colorgen))
         except Exception as err:
-            logger.error(formatTraceback(err))
+            logger.error(format_traceback(err))
 
     @rainbower.before_loop
     async def before_rainbower(self):

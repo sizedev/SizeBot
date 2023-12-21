@@ -5,7 +5,7 @@ import time
 from sizebot.lib import userdb, paths, nickmanager
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, TV
-from sizebot.lib.utils import prettyTimeDelta
+from sizebot.lib.utils import pretty_time_delta
 
 logger = logging.getLogger("sizebot")
 
@@ -83,7 +83,7 @@ class Change:
         if self.stopSV is not None:
             out += f", stop at {self.stopSV}"
         if self.stopTV is not None:
-            out += f", stop after {prettyTimeDelta(Decimal(self.stopTV))}"
+            out += f", stop after {pretty_time_delta(Decimal(self.stopTV))}"
         return out
 
     def toJson(self):

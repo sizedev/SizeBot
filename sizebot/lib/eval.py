@@ -73,10 +73,10 @@ def eformat(name, value):
 
 def edir(o):
     """send embed of an object's attributes, with type notation"""
-    e = Embed(title=utils.getFullname(o))
+    e = Embed(title=utils.get_fullname(o))
     attrs = [eformat(n, v) for n, v in utils.ddir(o).items()]
     pageLen = math.ceil(len(attrs) / 3)
-    for page in utils.chunkList(attrs, pageLen):
+    for page in utils.chunk_list(attrs, pageLen):
         e.add_field(value="\n".join(page))
     return e
 
@@ -121,7 +121,7 @@ def getEvalGlobals():
     evalGlobals = {
         "__builtins__": evalBuiltins,
         "inspect": inspect,
-        "help": utils.strHelp,
+        "help": utils.str_help,
         "Decimal": Decimal,
         "discord": discord,
         "logging": logging,
@@ -140,7 +140,7 @@ def getEvalGlobals():
         "emojis": emojis,
         "itertools": itertools,
         "conf": conf,
-        "findOne": utils.findOne,
+        "findOne": utils.find_one,
         "datetime": datetime,
         "date": date,
         "time": time,

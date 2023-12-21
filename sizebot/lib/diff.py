@@ -36,7 +36,7 @@
 
 import re
 from sizebot.lib.errors import InvalidSizeValue, ParseError, ThisShouldNeverHappenException
-from sizebot.lib.utils import regexbuild, tryOrNone
+from sizebot.lib.utils import regexbuild, try_or_none
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, TV
 from typing import Literal, Union
@@ -217,7 +217,7 @@ class LimitedRate:
 
         r = Rate.parse(m.group(1))
 
-        st = tryOrNone(SV.parse, m.group(3), (InvalidSizeValue,)) or tryOrNone(TV.parse, m.group(3), (InvalidSizeValue,))
+        st = try_or_none(SV.parse, m.group(3), (InvalidSizeValue,)) or try_or_none(TV.parse, m.group(3), (InvalidSizeValue,))
 
         if st is None:
             raise ParseError(s, "LimitedRate")

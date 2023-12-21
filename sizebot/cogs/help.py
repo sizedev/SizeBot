@@ -84,10 +84,10 @@ class HelpCog(commands.Cog):
 
         embed = Embed(title=f"Units [SizeBot {__version__}]")
 
-        for n, units in enumerate(utils.chunkList(heightunits, math.ceil(len(heightunits) / 3))):
+        for n, units in enumerate(utils.chunk_list(heightunits, math.ceil(len(heightunits) / 3))):
             embed.add_field(name="Height" if n == 0 else "\u200b", value="\n".join(units))
 
-        for n, units in enumerate(utils.chunkList(weightunits, math.ceil(len(weightunits) / 3))):
+        for n, units in enumerate(utils.chunk_list(weightunits, math.ceil(len(weightunits) / 3))):
             embed.add_field(name="Weight" if n == 0 else "\u200b", value="\n".join(units))
 
         await ctx.send(embed=embed)
@@ -352,7 +352,7 @@ class HelpCog(commands.Cog):
             response = f"Pong! :ping_pong:\nDiscord HEARTBEAT latency: {round(self.bot.latency, 3)} seconds"
         else:
             messageLatency = waitMsg.created_at - ctx.message.created_at
-            response = f"Pong! :ping_pong:\nCommand latency: {utils.prettyTimeDelta(messageLatency.total_seconds(), True)}"
+            response = f"Pong! :ping_pong:\nCommand latency: {utils.pretty_time_delta(messageLatency.total_seconds(), True)}"
         await waitMsg.edit(content = response)
 
     @commands.command(
@@ -369,7 +369,7 @@ class HelpCog(commands.Cog):
             response = f"Ping! :ping_pong:\nDiscord HEARTBEAT latency: -{round(self.bot.latency, 3)} seconds"
         else:
             messageLatency = waitMsg.created_at - ctx.message.created_at
-            response = f"Ping! :ping_pong:\nCommand latency: -{utils.prettyTimeDelta(messageLatency.total_seconds(), True)}"
+            response = f"Ping! :ping_pong:\nCommand latency: -{utils.pretty_time_delta(messageLatency.total_seconds(), True)}"
         await waitMsg.edit(content = response)
 
     @commands.command(

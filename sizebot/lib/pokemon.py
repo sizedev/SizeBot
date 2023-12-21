@@ -6,7 +6,7 @@ from discord import Embed
 import sizebot.data
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import User
-from sizebot.lib.utils import intToRoman
+from sizebot.lib.utils import int_to_roman
 
 pokemon: list["Pokemon"] = []
 
@@ -18,7 +18,7 @@ class Pokemon:
         self.name = name
         self.natdex = natdex
         self.generation = generation
-        self.roman_generation = intToRoman(self.generation)
+        self.roman_generation = int_to_roman(self.generation)
         self.region = region
         self.height = height
         self.weight = weight

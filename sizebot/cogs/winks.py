@@ -38,9 +38,9 @@ def countWinks(s):
 async def sayMilestone(channel, winkcount):
     now = datetime.today()
     timesince = now - starttime
-    prettytimesince = utils.prettyTimeDelta(timesince.total_seconds())
+    prettytimesince = utils.pretty_time_delta(timesince.total_seconds())
     timeperwink = timesince / winkcount
-    prettytimeperwink = utils.prettyTimeDelta(timeperwink.total_seconds())
+    prettytimeperwink = utils.pretty_time_delta(timeperwink.total_seconds())
     winksperday = winkcount / (timesince / timedelta(days = 1))
 
     await channel.send(

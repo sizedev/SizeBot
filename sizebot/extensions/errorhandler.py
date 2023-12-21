@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from sizebot.lib import errors, utils, telemetry
 from sizebot.lib.constants import emojis
-from sizebot.lib.utils import prettyTimeDelta
+from sizebot.lib.utils import pretty_time_delta
 
 logger = logging.getLogger("sizebot")
 
@@ -40,7 +40,7 @@ async def setup(bot):
             message = await err.formatMessage(ctx)
             if message is not None:
                 logger.log(err.level, message)
-                logger.error(utils.formatTraceback(error))
+                logger.error(utils.format_traceback(error))
             userMessage = await err.formatUserMessage(ctx)
             if userMessage is not None:
                 await ctx.send(f"{emojis.warning} {userMessage}")
@@ -49,7 +49,7 @@ async def setup(bot):
             message = err.formatMessage()
             if message is not None:
                 logger.log(err.level, message)
-                logger.error(utils.formatTraceback(error))
+                logger.error(utils.format_traceback(error))
             userMessage = err.formatUserMessage()
             if userMessage is not None:
                 await ctx.send(f"{emojis.warning} {userMessage}")
@@ -67,7 +67,7 @@ async def setup(bot):
         elif isinstance(err, commands.errors.CheckFailure):
             await ctx.send(f"{emojis.error} You do not have permission to run this command.")
         elif isinstance(err, commands.CommandOnCooldown):
-            await ctx.send(f"{emojis.info} You're using that command too fast! Try again in {prettyTimeDelta(err.retry_after)}.")
+            await ctx.send(f"{emojis.info} You're using that command too fast! Try again in {pretty_time_delta(err.retry_after)}.")
         elif isinstance(err, InvalidOperation):
             await ctx.send(f"{emojis.warning} That's... not math I can do.")
         elif isinstance(err, OverflowError):
@@ -76,7 +76,7 @@ async def setup(bot):
             # Default command error handling
             await ctx.send(f"{emojis.error} Something went wrong.")
             logger.error(f"Ignoring exception in command {ctx.command}:")
-            logger.error(utils.formatTraceback(error))
+            logger.error(utils.format_traceback(error))
 
     @bot.event
     async def on_error(event, *args, **kwargs):
@@ -88,12 +88,12 @@ async def setup(bot):
             message = err.formatMessage()
             if message is not None:
                 logger.log(err.level, message)
-                logger.error(utils.formatTraceback(error))
+                logger.error(utils.format_traceback(error))
         if isinstance(err, errors.DigiContextException):
             message = str(err)
             if message is not None:
                 logger.log(err.level, message)
-                logger.error(utils.formatTraceback(error))
+                logger.error(utils.format_traceback(error))
         else:
             logger.error(f"Ignoring exception in {event}")
-            logger.error(utils.formatTraceback(error))
+            logger.error(utils.format_traceback(error))

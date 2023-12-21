@@ -23,7 +23,7 @@ class EvalCog(commands.Cog):
     @commands.is_owner()
     async def eval(self, ctx, *, evalStr):
         """Evaluate a Python expression."""
-        evalStr = utils.removeCodeBlock(evalStr)
+        evalStr = utils.remove_code_block(evalStr)
 
         logger.info(f"{ctx.author.display_name} tried to eval {evalStr!r}.")
 
@@ -36,8 +36,8 @@ class EvalCog(commands.Cog):
             try:
                 result = await runEval(ctx, evalStr)
             except Exception as err:
-                logger.error("eval error:\n" + utils.formatTraceback(err))
-                await ctx.send(emojis.warning + f" ` {utils.formatError(err)} `")
+                logger.error("eval error:\n" + utils.format_traceback(err))
+                await ctx.send(emojis.warning + f" ` {utils.format_error(err)} `")
                 return
             finally:
                 # Remove wait message when done
@@ -48,7 +48,7 @@ class EvalCog(commands.Cog):
             await ctx.send(embed=result)
         else:
             strResult = str(result).replace("```", r"\`\`\`")
-            for m in utils.chunkMsg(strResult):
+            for m in utils.chunk_msg(strResult):
                 await ctx.send(m)
 
     @commands.command(
@@ -61,7 +61,7 @@ class EvalCog(commands.Cog):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay = 0)
 
-        evalStr = utils.removeCodeBlock(evalStr)
+        evalStr = utils.remove_code_block(evalStr)
 
         logger.info(f"{ctx.author.display_name} tried to quietly eval {evalStr!r}.")
 
@@ -69,8 +69,8 @@ class EvalCog(commands.Cog):
             try:
                 await runEval(ctx, evalStr, returnValue = False)
             except Exception as err:
-                logger.error("eval error:\n" + utils.formatTraceback(err))
-                await ctx.author.send(emojis.warning + f" ` {utils.formatError(err)} `")
+                logger.error("eval error:\n" + utils.format_traceback(err))
+                await ctx.author.send(emojis.warning + f" ` {utils.format_error(err)} `")
 
 
 async def setup(bot):

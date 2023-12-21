@@ -13,7 +13,7 @@ from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.proportions import formatShoeSize, fromShoeSize
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import AliasMap, glitch_string, parse_scale, randRangeLog
+from sizebot.lib.utils import AliasMap, glitch_string, parse_scale, randrange_log
 
 logger = logging.getLogger("sizebot")
 
@@ -258,7 +258,7 @@ class SetCog(commands.Cog):
         if maxheight < 0:
             maxheight = SV(0)
 
-        newheightSV = randRangeLog(minheight, maxheight)
+        newheightSV = randrange_log(minheight, maxheight)
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -290,7 +290,7 @@ class SetCog(commands.Cog):
         if maxscale < 0:
             maxscale = 0
 
-        newscale = Decimal(randRangeLog(float(minscale), float(maxscale)))
+        newscale = Decimal(randrange_log(float(minscale), float(maxscale)))
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 

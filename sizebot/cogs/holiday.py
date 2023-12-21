@@ -9,7 +9,7 @@ from discord.utils import sleep_until
 
 import sizebot.data
 from sizebot.conf import conf
-from sizebot.lib.utils import intToRoman, formatTraceback
+from sizebot.lib.utils import int_to_roman, format_traceback
 
 logger = logging.getLogger("sizebot")
 
@@ -43,7 +43,7 @@ class HolidayCog(commands.Cog):
 
             if now.month == 1 and now.day == 1:  # New Year's Day
                 logger.info("Happy new year!")
-                newnick += f" {intToRoman(int(now.year))}"
+                newnick += f" {int_to_roman(int(now.year))}"
                 newactivityname = "Happy New Year!"
             elif now.month == 1 and now.day == 31:
                 newnick += " 🎉"
@@ -109,7 +109,7 @@ class HolidayCog(commands.Cog):
             next_midnight = arrow.get(now).replace(hour=0, minute=0, second=0).shift(days=1)
             await sleep_until(next_midnight.datetime)
         except Exception as err:
-            logger.error(formatTraceback(err))
+            logger.error(format_traceback(err))
 
     @holidayTask.before_loop
     async def before_holidayTask(self):

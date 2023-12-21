@@ -18,7 +18,7 @@ from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake
-from sizebot.lib.utils import glitch_string, parseMany, prettyTimeDelta
+from sizebot.lib.utils import glitch_string, parse_many, pretty_time_delta
 
 
 logger = logging.getLogger("sizebot")
@@ -49,7 +49,7 @@ class ObjectsCog(commands.Cog):
 
         embed = Embed(title=f"Objects [SizeBot {__version__}]", description = f"*NOTE: All of these objects have multiple aliases. If there is an alias that you think should work for a listed object but doesn't, report it with `{ctx.prefix}suggestobject` and note that it's an alias.*")
 
-        for n, units in enumerate(utils.chunkList(objectunits, math.ceil(len(objectunits) / 6))):
+        for n, units in enumerate(utils.chunk_list(objectunits, math.ceil(len(objectunits) / 6))):
             embed.add_field(name="Objects" if n == 0 else "\u200b", value="\n".join(units))
 
         await ctx.send(embed=embed)
@@ -103,11 +103,11 @@ class ObjectsCog(commands.Cog):
 
         mc = MemberConverter()
 
-        what = await parseMany(ctx, what, [DigiObject, mc, SV])
-        who = await parseMany(ctx, who, [mc, SV])
+        what = await parse_many(ctx, what, [DigiObject, mc, SV])
+        who = await parse_many(ctx, who, [mc, SV])
 
         if who is None:
-            what = await parseMany(ctx, args, [DigiObject, mc, SV])
+            what = await parse_many(ctx, args, [DigiObject, mc, SV])
             who = ctx.author
 
         if isinstance(who, SV):
@@ -322,7 +322,7 @@ class ObjectsCog(commands.Cog):
                 foodout += f"\nThat would cost **${cost:,.2f}**."
             foodout += f"\n(1 {food.name} is {food.calories} calories.)"
         else:
-            foodout = f"A {food.name} ({food.calories} calories) would last {userdata.nickname} **{prettyTimeDelta(86400 * days_per_food, roundeventually=True)}.**"
+            foodout = f"A {food.name} ({food.calories} calories) would last {userdata.nickname} **{pretty_time_delta(86400 * days_per_food, roundeventually=True)}.**"
 
         cal_per_day_string = f"{cals_needed:,.0} calories" if cals_needed > 1 else "less than 1 calorie"
 

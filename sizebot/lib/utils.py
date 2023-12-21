@@ -29,7 +29,7 @@ def clamp(minVal, val, maxVal):
     return max(minVal, min(maxVal, val))
 
 
-def prettyTimeDelta(totalSeconds, millisecondAccuracy = False, roundeventually = False) -> str:
+def pretty_time_delta(totalSeconds, millisecondAccuracy = False, roundeventually = False) -> str:
     """Get a human readable string representing an amount of time passed."""
     MILLISECONDS_PER_YEAR = 86400 * 365 * 1000
     MILLISECONDS_PER_DAY = 86400 * 1000
@@ -86,7 +86,7 @@ def prettyTimeDelta(totalSeconds, millisecondAccuracy = False, roundeventually =
     return s
 
 
-def tryInt(val):
+def try_int(val):
     """Try to cast `val` to an `int`, if it can't, just return `val`."""
     try:
         val = int(val)
@@ -95,12 +95,12 @@ def tryInt(val):
     return val
 
 
-def hasPath(root, path):
+def has_path(root, path):
     """Get a value using a path in nested dicts/lists."""
     """utils.getPath(myDict, "path.to.value", default=100)"""
     branch = root
     components = path.split(".")
-    components = [tryInt(c) for c in components]
+    components = [try_int(c) for c in components]
     for component in components:
         try:
             branch = branch[component]
@@ -109,12 +109,12 @@ def hasPath(root, path):
     return True
 
 
-def getPath(root, path, default=None):
+def get_path(root, path, default=None):
     """Get a value using a path in nested dicts/lists."""
     """utils.getPath(myDict, "path.to.value", default=100)"""
     branch = root
     components = path.split(".")
-    components = [tryInt(c) for c in components]
+    components = [try_int(c) for c in components]
     for component in components:
         try:
             branch = branch[component]
@@ -123,14 +123,14 @@ def getPath(root, path, default=None):
     return branch
 
 
-def chunkList(lst, chunklen):
+def chunk_list(lst, chunklen):
     while lst:
         yield lst[:chunklen]
         lst = lst[chunklen:]
 
 
-def chunkStr(s, chunklen, prefix="", suffix=""):
-    """chunkStr(3, "ABCDEFG") --> ['ABC', 'DEF', 'G']"""
+def chunk_str(s, chunklen, prefix="", suffix=""):
+    """chunk_str(3, "ABCDEFG") --> ['ABC', 'DEF', 'G']"""
     innerlen = chunklen - len(prefix) - len(suffix)
     if innerlen <= 0:
         raise ValueError("Cannot fit prefix and suffix within chunklen")
@@ -144,14 +144,14 @@ def chunkStr(s, chunklen, prefix="", suffix=""):
         yield prefix + chunk + suffix
 
 
-def chunkMsg(m) -> list:
+def chunk_msg(m) -> list:
     p = "```\n"
     if m.startswith("Traceback") or m.startswith("eval error") or m.startswith("Executing eval"):
         p = "```python\n"
-    return chunkStr(m, chunklen=2000, prefix=p, suffix="\n```")
+    return chunk_str(m, chunklen=2000, prefix=p, suffix="\n```")
 
 
-def chunkLines(s, chunklen):
+def chunk_lines(s, chunklen):
     """Split a string into groups of lines that don't go over the chunklen. Individual lines longer the chunklen will be split"""
     lines = s.split("\n")
 
@@ -171,13 +171,13 @@ def chunkLines(s, chunklen):
         yield "\n".join(linesout)
 
 
-def removeBrackets(s) -> str:
+def remove_brackets(s) -> str:
     """Remove all [] and <>s from a string."""
     s = re.sub(r"[\[\]<>]", "", s)
     return s
 
 
-def formatTraceback(err) -> str:
+def format_traceback(err) -> str:
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
 
 
@@ -206,7 +206,7 @@ def ddir(o):
     # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
 
 
-def getFullname(o):
+def get_fullname(o):
     moduleName = o.__class__.__module__
     if moduleName == "builtins":
         moduleName = ""
@@ -218,8 +218,8 @@ def getFullname(o):
     return fullname
 
 
-def formatError(err) -> str:
-    fullname = getFullname(err)
+def format_error(err) -> str:
+    fullname = get_fullname(err)
 
     errMessage = str(err)
     if errMessage:
@@ -228,7 +228,7 @@ def formatError(err) -> str:
     return f"{fullname}{errMessage}"
 
 
-def tryOrNone(fn, *args, ignore=(), **kwargs):
+def try_or_none(fn, *args, ignore=(), **kwargs):
     "Try to run a function. If it throws an error that's in `ignore`, just return `None`."""
     try:
         result = fn(*args, **kwargs)
@@ -259,7 +259,7 @@ class iset(set):
         return super().remove(item)
 
 
-def strHelp(topic) -> str:
+def str_help(topic) -> str:
     return pydoc.plain(pydoc.render_doc(topic))
 
 
@@ -271,7 +271,7 @@ def minmax(first, second) -> tuple:
     return small, big
 
 
-def removeCodeBlock(s) -> str:
+def remove_code_block(s) -> str:
     re_codeblock = re.compile(r"^\s*```(?:python)?(.*)```\s*$", re.DOTALL)
     s_nocodeblock = re.sub(re_codeblock, r"\1", s)
     if s_nocodeblock != s:
@@ -285,7 +285,7 @@ def removeCodeBlock(s) -> str:
     return s
 
 
-def intToRoman(input) -> str:
+def int_to_roman(input) -> str:
     """Convert an integer to a Roman numeral."""
 
     if not isinstance(input, type(1)):
@@ -302,7 +302,7 @@ def intToRoman(input) -> str:
     return ''.join(result)
 
 
-def findOne(iterator):
+def find_one(iterator):
     try:
         val = next(iterator)
     except StopIteration:
@@ -310,7 +310,7 @@ def findOne(iterator):
     return val
 
 
-async def parseMany(ctx, arg, types: list, default = None):
+async def parse_many(ctx, arg, types: list, default = None):
     for t in types:
         try:
             return await t.convert(ctx, arg)
@@ -507,7 +507,7 @@ def parse_scale(scalestr: str):
     return scale
 
 
-def randRangeLog(minval, maxval, precision=26):
+def randrange_log(minval, maxval, precision=26):
     """Generate a logarithmically scaled random number."""
     minval = Decimal(minval)
     maxval = Decimal(maxval)
@@ -532,12 +532,12 @@ def randRangeLog(minval, maxval, precision=26):
     return newval
 
 
-def roundFraction(number, denominator):
+def round_fraction(number, denominator):
     rounded = round(number * denominator) / denominator
     return rounded
 
 
-def fixZeroes(d):
+def fix_zeroes(d):
     """Reset the precision of a Decimal to avoid values that use exponents like '1e3' and values with trailing zeroes like '100.000'
 
     fixZeroes(Decimal('1e3')) -> Decimal('100')

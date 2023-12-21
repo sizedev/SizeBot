@@ -11,7 +11,7 @@ from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, DigiContextException, ValueIsZeroException
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.units import SV
-from sizebot.lib.utils import tryInt
+from sizebot.lib.utils import try_int
 
 logger = logging.getLogger("sizebot")
 
@@ -258,7 +258,7 @@ class ScaleWalkCog(commands.Cog):
         if steps is None:
             steps = 1
 
-        steps = tryInt(steps)
+        steps = try_int(steps)
         if steps == "car":
             await ctx.send("Cronch.")
             logger.log(EGG, f"{ctx.author.display_name} stepped on a car.")

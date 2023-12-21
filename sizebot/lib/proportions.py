@@ -14,7 +14,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.freefall import terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
 from sizebot.lib.units import SV, TV, WV, AV
 from sizebot.lib.userdb import PlayerStats, User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
-from sizebot.lib.utils import glitch_string, minmax, prettyTimeDelta, url_safe
+from sizebot.lib.utils import glitch_string, minmax, pretty_time_delta, url_safe
 
 DEFAULT_THREAD_THICKNESS = SV("0.001016")
 AVERAGE_HEIGHT = average_height
@@ -517,13 +517,13 @@ class PersonSpeedComparison:
         swimsteps = math.ceil(dist / self.viewer.swimsteplength)
         _drivetime = (dist / self.viewer.driveperhour) * 60 * 60
         _spaceshiptime = (dist / self.viewer.spaceshipperhour) * 60 * 60
-        walktime = prettyTimeDelta(_walktime, roundeventually = True)
-        runtime = prettyTimeDelta(_runtime, roundeventually = True)
-        climbtime = prettyTimeDelta(_climbtime, roundeventually = True)
-        crawltime = prettyTimeDelta(_crawltime, roundeventually = True)
-        swimtime = prettyTimeDelta(_swimtime, roundeventually = True)
-        drivetime = prettyTimeDelta(_drivetime, roundeventually = True)
-        spaceshiptime = prettyTimeDelta(_spaceshiptime, roundeventually = True)
+        walktime = pretty_time_delta(_walktime, roundeventually = True)
+        runtime = pretty_time_delta(_runtime, roundeventually = True)
+        climbtime = pretty_time_delta(_climbtime, roundeventually = True)
+        crawltime = pretty_time_delta(_crawltime, roundeventually = True)
+        swimtime = pretty_time_delta(_swimtime, roundeventually = True)
+        drivetime = pretty_time_delta(_drivetime, roundeventually = True)
+        spaceshiptime = pretty_time_delta(_spaceshiptime, roundeventually = True)
 
         walkspeedstr = f"\n*{emojis.blank}{self.viewer.walkperhour:,.3mu} per hour*"
         runspeedstr = f"\n*{emojis.blank}{self.viewer.runperhour:,.3mu} per hour*"

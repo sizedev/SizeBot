@@ -21,7 +21,7 @@ class DigiException(Exception):
         return None
 
     def __repr__(self):
-        return utils.getFullname(self)
+        return utils.get_fullname(self)
 
     def __str__(self):
         return self.formatMessage() or self.formatUserMessage() or repr(self)
@@ -37,7 +37,7 @@ class DigiContextException(Exception):
         return None
 
     def __repr__(self):
-        return utils.getFullname(self)
+        return utils.get_fullname(self)
 
     def __str__(self):
         return repr(self)

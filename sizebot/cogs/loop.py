@@ -10,7 +10,7 @@ from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import ed, ing
 from sizebot.lib.proportions import PersonStats
-from sizebot.lib.utils import prettyTimeDelta
+from sizebot.lib.utils import pretty_time_delta
 
 logger = logging.getLogger("sizebot")
 
@@ -63,7 +63,7 @@ class LoopCog(commands.Cog):
 
         if userdata.currentmovetype:
             t, distance = calc_move_dist(userdata)
-            nicetime = prettyTimeDelta(t)
+            nicetime = pretty_time_delta(t)
             await ctx.send(
                 f"{emojis.warning} You're already {ing[userdata.currentmovetype]}.\n"
                 f"You've gone **{distance:,.3mu}** so far in **{nicetime}**!"
@@ -88,7 +88,7 @@ class LoopCog(commands.Cog):
             return
 
         t, distance = calc_move_dist(userdata)
-        nicetime = prettyTimeDelta(t)
+        nicetime = pretty_time_delta(t)
         await ctx.send(f"You stopped {ing[userdata.currentmovetype]}. You {ed[userdata.currentmovetype]} **{distance:,.3mu}** in **{nicetime}**!")
 
         userdata.currentmovetype = None
@@ -118,7 +118,7 @@ class LoopCog(commands.Cog):
             return
 
         elapsed_seconds, distance = calc_move_dist(userdata)
-        nicetime = prettyTimeDelta(elapsed_seconds)
+        nicetime = pretty_time_delta(elapsed_seconds)
 
         out = (f"{userdata.nickname} has been {ing[userdata.currentmovetype]} for **{nicetime}**.\n"
                f"They've gone **{distance:,.3mu}** so far!")

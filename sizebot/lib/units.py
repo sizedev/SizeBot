@@ -59,25 +59,25 @@ class Rate():
 
         isSub = prefix in cls.subPrefixes
 
-        valueSV = utils.tryOrNone(SV.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
+        valueSV = utils.try_or_none(SV.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
         valueMult = None
         if valueSV is None:
-            valueMult = utils.tryOrNone(Mult.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
+            valueMult = utils.try_or_none(Mult.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
         if valueSV is None and valueMult is None:
             raise errors.InvalidSizeValue(s, "size")
         if valueSV and isSub:
             valueSV = -valueSV
 
-        valueTV = utils.tryOrNone(TV.parse, tvStr, ignore=errors.InvalidSizeValue)
+        valueTV = utils.try_or_none(TV.parse, tvStr, ignore=errors.InvalidSizeValue)
         if valueTV is None:
             raise errors.InvalidSizeValue(s, "time")
 
         stopSV = None
         stopTV = None
         if stopStr is not None:
-            stopSV = utils.tryOrNone(SV.parse, stopStr, ignore=errors.InvalidSizeValue)
+            stopSV = utils.try_or_none(SV.parse, stopStr, ignore=errors.InvalidSizeValue)
             if stopSV is None:
-                stopTV = utils.tryOrNone(TV.parse, stopStr, ignore=errors.InvalidSizeValue)
+                stopTV = utils.try_or_none(TV.parse, stopStr, ignore=errors.InvalidSizeValue)
             if stopSV is None and stopTV is None:
                 raise errors.InvalidSizeValue(s, "stop")
 
@@ -482,7 +482,7 @@ class SV(Dimension):
 
     @classmethod
     def get_quantity_pair(cls, s):
-        s = utils.removeBrackets(s)
+        s = utils.remove_brackets(s)
         s = cls.is_feet_and_inches_and_if_so_fix_it(s)
         # TODO: These are temporary patches.
         # Comma patch
@@ -533,7 +533,7 @@ class WV(Dimension):
 
     @classmethod
     def get_quantity_pair(cls, s):
-        s = utils.removeBrackets(s)
+        s = utils.remove_brackets(s)
         # TODO: These are temporary patches.
         # Comma patch
         s = s.replace(",", "")
@@ -562,7 +562,7 @@ class TV(Dimension):
 
     @classmethod
     def get_quantity_pair(cls, s):
-        s = utils.removeBrackets(s)
+        s = utils.remove_brackets(s)
         # . patch
         if s.startswith("."):
             s = "0" + s
