@@ -70,7 +70,7 @@ class ChangeCog(commands.Cog):
 
             userdb.save(userdata)
 
-            await ctx.send(f"User <@{userid}> is now {userdata.height:m} ({userdata.height:u}) tall.")
+            await ctx.send(f"{userdata.nickname} is now {userdata.height:m} ({userdata.height:u}) tall.")
 
         elif isinstance(string, ParseableRate) or isinstance(string, LimitedRate):
             addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(string.original)
@@ -139,7 +139,7 @@ class ChangeCog(commands.Cog):
         line = random.choice(lines)
 
         await ctx.send(
-            f"<@{userid}> ate a :cake:! *{line}*\n"
+            f"{userdata.nickname} ate a :cake:! *{line}*\n"
             f"They multiplied {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
     @commands.command(
@@ -164,7 +164,7 @@ class ChangeCog(commands.Cog):
         line = random.choice(lines)
 
         await ctx.send(
-            f"<@{ctx.author.id}> drank a :milk:! *{line}*\n"
+            f"{userdata.nickname} drank a :milk:! *{line}*\n"
             f"They shrunk {randmult}x and are now {userdata.height:m} tall. ({userdata.height:u})")
 
     @commands.command(
