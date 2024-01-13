@@ -1,8 +1,8 @@
 from __future__ import annotations
-from collections.abc import Callable
+# from collections.abc import Callable
 
 from copy import copy
-from typing import Any, Literal, Optional, TypeVar, Union
+from typing import Any, Literal, Optional, TypeVar, Union, Callable
 import math
 import re
 
