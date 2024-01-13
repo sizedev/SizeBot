@@ -40,7 +40,7 @@ compareicon = "https://media.discordapp.net/attachments/650460192009617433/66502
 
 class Stat:
     def __init__(self,
-                 sets: str,
+                 key: str,
                  format_title: str,
                  format_string: str,
                  format_embed: str,
@@ -50,7 +50,7 @@ class Stat:
                  requires: list[str] = None,
                  type: Optional[Callable] = None,
                  ):
-        self.sets = sets
+        self.key = key
         self.format_title = format_title
         self.format_string = format_string
         self.format_embed = format_embed
@@ -70,8 +70,8 @@ class Stat:
             value = self.default_from(found)
         if self.type and value is not None:
             value = self.type(value)
-        if self.sets:
-            found[self.sets] = value
+        if self.key:
+            found[self.key] = value
         return StatValue(self, value)
 
 
@@ -95,8 +95,8 @@ class StatValue:
             value = self.value
         if self.stat.type and value is not None:
             value = self.stat.type(value)
-        if self.stat.sets:
-            found[self.stat.sets] = value
+        if self.stat.key:
+            found[self.stat.key] = value
         return StatValue(self.stat, value)
 
     def to_string(self, stats: StatBox, nickname: str, scale: Decimal):
@@ -223,11 +223,11 @@ class StatBox:
         return StatBox(processed)
 
     def get(self, stat_name: str) -> StatValue | None:
-        g = (s for s in self.stats if s.stat.sets == stat_name)
+        g = (s for s in self.stats if s.stat.key == stat_name)
         return next(g, None)
 
     def to_dict(self) -> dict[str, StatValue]:
-        return {s.stat.sets: s.value for s in self.stats}
+        return {s.stat.key: s.value for s in self.stats}
 
 
 def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
