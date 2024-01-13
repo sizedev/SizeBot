@@ -107,7 +107,7 @@ class StatValue:
 
     def to_string(self, format_dict: dict(str, str)):
         if self.value is None:
-            return "The {self.stat.format_title} stat is unavailable for this user."
+            return f"The {self.stat.format_title} stat is unavailable for this user."
         return run_formatter(self.stat.format_string, format_dict)
 
     def to_embed_title(self, format_dict: dict(str, str)):
