@@ -14,7 +14,6 @@ from PIL import Image, ImageDraw
 
 from sizebot.conf import conf
 from sizebot.cogs import thistracker
-from sizebot.cogs.stats import statmap
 from sizebot.lib import errors, guilddb, proportions, userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.digidecimal import Decimal
@@ -156,7 +155,6 @@ def getEvalGlobals():
         "logger": logger,
         "errors": errors,
         "arrow": arrow,
-        "statmap": statmap,
         "roll": roll,
         "evalmath": evalmath
     }

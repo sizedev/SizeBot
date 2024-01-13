@@ -176,21 +176,18 @@ all_stats = {s.key: s for s in [
 stataliases = {
     "height":           ["size"],
     "weight":           ["mass"],
-    "foot":             ["feet", "shoe", "shoes", "paw", "paws"],
-    "toe":              ["toes"],
-    "shoeprint":        ["footprint"],
-    "finger":           ["pointer"],
-    "nail":             ["fingernail"],
-    "eye":              ["eyes"],
-    "hair":             ["fur", "hairlength", "furlength"],
+    "footlength":       ["foot", "feet", "shoe", "shoes", "paw", "paws"],
+    "toeheight":        ["toe", "toes"],
+    "shoeprintdepth":   ["shoeprint", "footprint"],
+    "pointerlength":    ["finger", "pointer"],
+    "nailthickness":    ["nail", "fingernail"],
+    "eyewidth":         ["eye", "eyes"],
+    "hairlength":       ["hair", "fur", "furlength"],
     "hairwidth":        ["furwidth"],
-    "walk":             ["speed", "step"],
-    "climb":            ["pull"],
-    "swim":             ["stroke"],
-    "jump":             ["jumpheight"],
-    "base":             ["baseheight", "baseweight", "basesize"],
-    "compare":          ["look"],
-    "scale":            ["multiplier", "mult", "factor"],
+    "walkperhour":      ["walk", "speed", "step"],
+    "climbperhour":     ["climb", "pull"],
+    "swimperhour":      ["swim", "stroke"],
+    "jumpheight":       ["jump"],
     "horizondistance":  ["horizon"],
     "terminalvelocity": ["velocity", "fall"],
     "liftstrength":     ["strength", "lift", "carry", "carrystrength"],
@@ -199,7 +196,7 @@ stataliases = {
 statmap = {}
 for stat, aliases in stataliases.items():
     if stat not in all_stats:
-        raise "WTF MATE"
+        raise Exception(f"WTF MATE {stat}")
     for alias in aliases:
         statmap[alias] = stat
 for stat in all_stats.keys():

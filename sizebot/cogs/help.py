@@ -9,7 +9,6 @@ from discord import Embed, Webhook
 from discord.ext import commands
 
 from sizebot import __version__
-from sizebot.cogs.stats import statmap
 from sizebot.conf import conf
 from sizebot.lib import checks, userdb, utils
 from sizebot.lib.constants import colors, emojis
@@ -201,7 +200,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
         if "guild_only" in repr(cmd.checks):
             description += "*This command can only be run in a server, and not in DMs.*\n"
-        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", str(statmap)).replace("#ALPHA#", alpha_warning)
+        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", "TODO: REPLACE ME").replace("#ALPHA#", alpha_warning)
 
         embed = Embed(
             title=signature,
