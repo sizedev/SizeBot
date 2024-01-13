@@ -2,7 +2,7 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from copy import copy
-from typing import Any, Literal, Optional, TypeVar
+from typing import Any, Literal, Optional, TypeVar, Union
 import math
 import re
 
@@ -38,11 +38,13 @@ IS_LARGE = 1.0
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
+Formatter = Union[Callable[[Any, dict[str, Any]], str], str]
+
 
 class Stat:
     def __init__(self,
                  key: str,
-                 format_title: str,
+                 format_title: Formatter,
                  format_string: str,
                  format_embed: str,
                  userkey: Optional[str] = None,
@@ -74,6 +76,13 @@ class Stat:
         return StatValue(self, value)
 
 
+def run_formatter(formatter: Formatter, format_dict: dict[str, Any]) -> str:
+    if isinstance(formatter, str):
+        return formatter.format(**format_dict)
+    else:
+        return formatter(format_dict)
+
+
 class StatValue:
     def __init__(self, stat: Stat, value: Any):
         self.stat = stat
@@ -96,17 +105,16 @@ class StatValue:
             value = self.stat.type(value)
         return StatValue(self.stat, value)
 
-    def to_string(self, stats: StatBox, nickname: str, scale: Decimal):
-        format_dict = stats.to_dict() | {"nickname": nickname, "scale": format_scale(scale)}
-        return self.stat.format_string.format(**format_dict)
+    def to_string(self, format_dict: dict(str, str)):
+        if self.value is None:
+            return "The {self.stat.format_title} stat is unavailable for this user."
+        return run_formatter(self.stat.format_string, format_dict)
 
-    def to_embed_title(self, stats: StatBox, nickname: str, scale: Decimal):
-        format_dict = stats.to_dict() | {"nickname": nickname, "scale": format_scale(scale)}
-        return self.stat.format_title.format(**format_dict)
+    def to_embed_title(self, format_dict: dict(str, str)):
+        return run_formatter(self.stat.format_title, format_dict)
 
-    def to_embed_value(self, stats: StatBox, nickname: str, scale: Decimal):
-        format_dict = stats.to_dict() | {"nickname": nickname, "scale": format_scale(scale)}
-        return self.stat.format_embed.format(**format_dict)
+    def to_embed_value(self, format_dict: dict(str, str)):
+        return run_formatter(self.stat.format_embed, format_dict)
 
     def __str__(self):
         return f"{self.stat.format_title}: {self.value}"
@@ -142,7 +150,7 @@ all_stats = {s.key: s for s in [
     Stat("climbperhour",            "Climb Per Hour",              "{nickname} climbs **{climbperhour:,.3mu} per hour**.",                                      "{climbperhour:,.3mu} per hour",     requires=["averagescale"],             power=1, type=SV,                                default_from=lambda s: AVERAGE_CLIMBPERHOUR * s["averagescale"]),
     Stat("crawlperhour",            "Crawl Per Hour",              "{nickname} crawls **{crawlperhour:,.3mu} per hour**.",                                      "{crawlperhour:,.3mu} per hour",     requires=["averagescale"],             power=1, type=SV,                                default_from=lambda s: AVERAGE_CRAWLPERHOUR * s["averagescale"]),
     Stat("driveperhour",            "Drive Per Hour",              "{nickname} drives **{driveperhour:,.3mu} per hour**.",                                      "{driveperhour:,.3mu} per hour",                                            power=1, type=SV,                                default_from=lambda s: AVERAGE_DRIVEPERHOUR),
-    Stat("spaceshipperhour",        "Spaceship Per Hour",          "{nickname} flys at spaceship at **{spaeshipperhour:,.3mu} per hour**.",                     "{spaeshipperhour:,.3mu} per hour",                                         power=1, type=SV,                                default_from=lambda s: AVERAGE_SPACESHIPPERHOUR),
+    Stat("spaceshipperhour",        "Spaceship Per Hour",          "{nickname} flys at spaceship at **{spaceshipperhour:,.3mu} per hour**.",                     "{spaeshipperhour:,.3mu} per hour",                                         power=1, type=SV,                                default_from=lambda s: AVERAGE_SPACESHIPPERHOUR),
     Stat("walksteplength",          "Walk Step Length",            "{nickname} takes **{walksteplength:,.3mu}** strides while walking.",                        "{walksteplength:,.3mu}",            requires=["averagescale"],             power=1, type=SV,                                default_from=lambda s: AVERAGE_WALKPERHOUR * s["averagescale"] / WALKSTEPSPERHOUR),
     Stat("runsteplength",           "Run Step Length",             "{nickname} takes **{runsteplength:,.3mu}** strides while runing.",                          "{runsteplength:,.3mu}",             requires=["averagescale"],             power=1, type=SV,                                default_from=lambda s: AVERAGE_RUNPERHOUR * s["averagescale"] / RUNSTEPSPERHOUR),
     Stat("climbsteplength",         "Climb Step Length",           "{nickname} takes **{climbsteplength:,.3mu}** strides while climbing.",                      "{climbsteplength:,.3mu}",           requires=["height"],                   power=1, type=SV,                                default_from=lambda s: s["height"] * Decimal(1 / 2.5)),
@@ -150,8 +158,8 @@ all_stats = {s.key: s for s in [
     Stat("swimsteplength",          "Swim Step Length",            "{nickname} takes **{swimsteplength:,.3mu}** strides while swiming.",                        "{swimsteplength:,.3mu}",            requires=["height"],                   power=1, type=SV,                                default_from=lambda s: s["height"] * Decimal(6 / 7)),
     Stat("horizondistance",         "Distance to Horizon",         "{nickname} can see **{horizondistance:,.3mu}** to the horizon.",                            "{horizondistance:,.3mu}",           requires=["height"],                            type=SV,                                default_from=lambda s: calcHorizon(s["height"])),
     Stat("terminalvelocity",        "Terminal Velocity",           "{nickname}'s terminal velocity is **{terminalvelocity:,.3mu} per hour.**",                  "{terminalvelocity:,.3mu} per hour", requires=["weight", "averagescale"],            type=SV,                                default_from=lambda s: terminal_velocity(s["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * s["averagescale"] ** Decimal(2))),
-    Stat("fallproof",               "Fallproof",                   "{nickname} {'is' if fallproof else 'isn\'t'} fallproof.",                                   "{'✅' if fallproof else '❎'}",       requires=["terminalvelocity"],                  type=bool,                              default_from=lambda s: s["terminalvelocity"] < FALL_LIMIT),
-    Stat("fallprooficon",           "Fallproof Icon",              "{'✅' if fallproof else '❎'}",                                                             "{'✅' if fallproof else '❎'}",         requires=["fallproof"],                         type=str,                               default_from=lambda s: emojis.voteyes if s["fallproof"] else emojis.voteno),
+    Stat("fallproof",               "Fallproof",                   lambda s: f"""{s['nickname']} {'is' if s['fallproof'] else "isn't"} fallproof.""",                                   "{'✅' if fallproof else '❎'}",       requires=["terminalvelocity"],                  type=bool,                              default_from=lambda s: s["terminalvelocity"] < FALL_LIMIT),
+    Stat("fallprooficon",           "Fallproof Icon",              lambda s: '✅' if s['fallproof'] else '❎',                                                             "{'✅' if fallproof else '❎'}",         requires=["fallproof"],                         type=str,                               default_from=lambda s: emojis.voteyes if s["fallproof"] else emojis.voteno),
     Stat("width",                   "Width",                       "{nickname} is **{width:,.3mu}** wide.",                                                     "{width:,.3mu}",                     requires=["height"],                   power=1, type=SV,                                default_from=lambda s: s["height"] * Decimal(4 / 17)),
     Stat("soundtraveltime",         "Sound Travel Time",           "It would take sound **{soundtraveltime:,.3}** to travel {nickname}'s height.",              "{soundtraveltime:,.3mu}",           requires=["height"],                   power=1, type=TV,                                default_from=lambda s: s["height"] * ONE_SOUNDSECOND),
     Stat("lighttraveltime",         "Light Travel Time",           "It would take light **{lighttraveltime:,.3}** to travel {nickname}'s height.",              "{lighttraveltime:,.3mu}",           requires=["height"],                   power=1, type=TV,                                default_from=lambda s: s["height"] * ONE_LIGHTSECOND),
@@ -163,6 +171,39 @@ all_stats = {s.key: s for s in [
     Stat("shoesize",                "Shoe Size",                   "{nickname}'s shoe size is **{shoesize}**.",                                                 "{shoesize}",                        requires=["footlength", "gender"],              type=str,                               default_from=lambda s: format_shoe_size(s["footlength"], s["gender"])),
     Stat("visibility",              "Visibility",                  "You would need **{visibility}** to see {nickname}.",                                        "{visibility}",                      requires=["height"],                            type=str,                               default_from=lambda s: calcVisibility(s["height"]))
 ]}
+
+
+stataliases = {
+    "height":           ["size"],
+    "weight":           ["mass"],
+    "foot":             ["feet", "shoe", "shoes", "paw", "paws"],
+    "toe":              ["toes"],
+    "shoeprint":        ["footprint"],
+    "finger":           ["pointer"],
+    "nail":             ["fingernail"],
+    "eye":              ["eyes"],
+    "hair":             ["fur", "hairlength", "furlength"],
+    "hairwidth":        ["furwidth"],
+    "walk":             ["speed", "step"],
+    "climb":            ["pull"],
+    "swim":             ["stroke"],
+    "jump":             ["jumpheight"],
+    "base":             ["baseheight", "baseweight", "basesize"],
+    "compare":          ["look"],
+    "scale":            ["multiplier", "mult", "factor"],
+    "horizondistance":  ["horizon"],
+    "terminalvelocity": ["velocity", "fall"],
+    "liftstrength":     ["strength", "lift", "carry", "carrystrength"],
+    "visibility":       ["visible", "see"]
+}
+statmap = {}
+for stat, aliases in stataliases.items():
+    if stat not in all_stats:
+        raise "WTF MATE"
+    for alias in aliases:
+        statmap[alias] = stat
+for stat in all_stats.keys():
+    statmap[stat] = stat
 
 # Example display code
 # display_stats = [
@@ -236,8 +277,8 @@ class StatBox:
         return self.stats[key].value
 
     def __iter__(self):
-        for k in self.stats.items():
-            yield k, self.stats[k].value
+        for k, sv in self.stats.items():
+            yield k, sv.value
 
 
 def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
@@ -596,7 +637,12 @@ class PersonSpeedComparison:
 
         return out_str.strip()
 
-    def getStatEmbed(self, stat):
+    def getStatEmbed(self, stat: str):
+        try:
+            mapped_stat = statmap[stat]
+        except KeyError:
+            return None
+
         descmap = {
             "height":           self.speedcalc(self.viewedtoviewer.height, speed = True, include_relative = True),
             "foot":             self.speedcalc(self.viewedtoviewer.footlength, speed = True, foot = True, include_relative = True),
@@ -612,7 +658,7 @@ class PersonSpeedComparison:
             "ear":              self.speedcalc(self.viewedtoviewer.earheight, speed = True, include_relative = True) if self.viewedtoviewer.earheight is not None else None
         }
 
-        if descmap[stat] is None:
+        if descmap[mapped_stat] is None:
             return None
 
         statnamemap = {
@@ -630,11 +676,11 @@ class PersonSpeedComparison:
             "ear":              "Ear Height",
         }
 
-        statname = statnamemap[stat].replace("Foot", self.viewertovieweddata.footname) \
+        statname = statnamemap[mapped_stat].replace("Foot", self.viewertovieweddata.footname) \
                                     .replace("Hair", self.viewertovieweddata.hairname) \
                                     .lower()
 
-        desc = descmap[stat]
+        desc = descmap[mapped_stat]
 
         if self.viewer.incomprehensible or self.viewed.incomprehensible:
             desc = glitch_string(desc)
@@ -792,52 +838,18 @@ class PersonStats:
         self.visibility = self.stats["visibility"]
 
     def getFormattedStat(self, stat: str):
-        returndict = {
-            "height": self.stats.stats["height"].to_string(self.stats, self.nickname, self.scale),
-            "weight": f"'s current weight is **{self.weight:,.3mu}**.",
-            "foot": f"'s {self.footname.lower()} is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
-            "toe": f"'s toe is **{self.toeheight:,.3mu}** thick.",
-            "shoeprint": f"'s shoe print is **{self.shoeprintdepth:,.3mu}** deep.",
-            "finger": f"'s pointer finger is **{self.pointerlength:,.3mu}** long.",
-            "thumb": f"'s thumb is **{self.thumbwidth:,.3mu}** wide.",
-            "nail": f"'s nail is **{self.nailthickness:,.3mu}** thick.",
-            "fingerprint": f"'s fingerprint is **{self.fingerprintdepth:,.3mu}** deep.",
-            "thread": f"'s clothing threads are **{self.threadthickness:,.3mu}** thick.",
-            "hairwidth": f"'s {self.hairname.lower()} is **{self.hairwidth:,.3mu}** thick.",
-            "eye": f"'s eye is **{self.eyewidth:,.3mu}** wide.",
-            "walk": f" walks at **{self.walkperhour:,.1M} per hour** ({self.walkperhour:,.1U} per hour), with {self.walksteplength:,.1m}/{self.walksteplength:,.1u} strides.",
-            "run": f" runs at **{self.runperhour:,.1M} per hour** ({self.runperhour:,.1U} per hour), with {self.runsteplength:,.1m}/{self.runsteplength:,.1u} strides.",
-            "climb": f" climbs at **{self.climbperhour:,.1M} per hour** ({self.climbperhour:,.1U} per hour), with {self.climbsteplength:,.1m}/{self.climbsteplength:,.1u} pulls.",
-            "crawl": f" crawls at **{self.crawlperhour:,.1M} per hour** ({self.crawlperhour:,.1U} per hour), with {self.crawlsteplength:,.1m}/{self.crawlsteplength:,.1u} strides.",
-            "swim": f" swims at **{self.swimperhour:,.1M} per hour** ({self.swimperhour:,.1U} per hour), with {self.swimsteplength:,.1m}/{self.swimsteplength:,.1u} strokes.",
-            "jump": f" can jump **{self.jumpheight:,.3mu}** high.",
-            "base": f" is **{self.baseheight:,.3mu}** tall and weigh **{self.baseweight:,.3mu}** at their base size.",
-            "compare": f" sees an average person as being **{self.avgheightcomp:,.3mu}** and weighing **{self.avgweightcomp:,.3mu}**.",
-            "scale": f" is **{self.formattedscale}** their base height.",
-            "horizondistance": f" can see for **{self.horizondistance:,.3mu}** to the horizon.",
-            "liftstrength": f" can lift and carry **{self.liftstrength:,.3mu}**.",
-            "gender": f"'s current gender is set to **{self.gender}**.",
-            "visibility": f" would need {self.visibility} to be seen.",
-            "layarea": f" is awesome with an area of {self.stats['layarea']:,.1mu} all to herself."
-        }
-        if self.hairlength:
-            returndict["hair"] = f"'s {self.hairname.lower()} is **{self.hairlength:,.3mu}** long."
-        if self.taillength:
-            returndict["tail"] = f"'s tail is **{self.taillength:,.3mu}** long."
-        if self.earheight:
-            returndict["ear"] = f"'s tail is **{self.earheight:,.3mu}** long."
+        # "foot": f"'s {self.footname.lower()} is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
+        try:
+            mapped_stat = statmap[stat]
+        except KeyError:
+            return None
 
-        if self.fallproof:
-            returndict["terminalvelocity"] = f"'s terminal velocity is {self.terminalvelocity:,.1M} per second ({self.terminalvelocity:,.1U} per second). They can survive a fall from any height!"
-        else:
-            returndict["terminalvelocity"] = f"'s terminal velocity is {self.terminalvelocity:,.1M} per second ({self.terminalvelocity:,.1U} per second)."
-
-        # for k, v in returndict.items():
-        #     returndict[k] = self.nickname + v
+        format_dict = dict(self.stats) | {"nickname": self.nickname, "scale": format_scale(self.scale)}
+        returndict = {k: sv.to_string(format_dict) for k, sv in self.stats.stats.items()}
 
         if self.incomprehensible:
             return glitch_string(returndict.get(stat))
-        return returndict.get(stat)
+        return returndict.get(mapped_stat)
 
     def get_speeds(self, simple = False):
         if simple:

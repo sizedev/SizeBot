@@ -13,44 +13,11 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.language import engine
 from sizebot.lib.units import SV, TV
 from sizebot.lib.userdb import load_or_fake
-from sizebot.lib.utils import AliasMap, glitch_string, pretty_time_delta, sentence_join
+from sizebot.lib.utils import glitch_string, pretty_time_delta, sentence_join
 
 logger = logging.getLogger("sizebot")
 
 MemberOrSize = typing.Union[discord.Member, FakePlayer, SV]
-
-statmap = AliasMap({
-    "height":           ("size"),
-    "weight":           ("mass"),
-    "foot":             ("feet", "shoe", "shoes", "paw", "paws"),
-    "toe":              ("toes"),
-    "shoeprint":        ("footprint"),
-    "finger":           ("pointer"),
-    "thumb":            (),
-    "nail":             ("fingernail"),
-    "fingerprint":      (),
-    "thread":           (),
-    "eye":              ("eyes"),
-    "hair":             ("fur", "hairlength", "furlength"),
-    "hairwidth":        ("furwidth"),
-    "tail":             (),
-    "ear":              (),
-    "walk":             ("speed", "step"),
-    "run":              (),
-    "climb":            ("pull"),
-    "crawl":            (),
-    "swim":             ("stroke"),
-    "jump":             ("jumpheight"),
-    "base":             ("baseheight", "baseweight", "basesize"),
-    "compare":          ("look"),
-    "scale":            ("multiplier", "mult", "factor"),
-    "horizondistance":  ("horizon"),
-    "terminalvelocity": ("velocity", "fall"),
-    "liftstrength":     ("strength", "lift", "carry", "carrystrength"),
-    "gender":           (),
-    "visibility":       ("visible", "see"),
-    "layarea":          ()
-})
 
 
 class StatsCog(commands.Cog):
@@ -208,16 +175,6 @@ class StatsCog(commands.Cog):
 
         stats = proportions.PersonStats(userdata)
 
-        if stat not in statmap.keys():
-            await ctx.send(f"The `{stat}` stat is not an available option.")
-            return
-
-        try:
-            stat = statmap[stat]
-        except KeyError:
-            await ctx.send(f"`{stat}` is not a stat.")
-            return
-
         stattosend = stats.getFormattedStat(stat)
 
         if stattosend is None:
@@ -251,16 +208,6 @@ class StatsCog(commands.Cog):
         userdata.scale = scale_factor
 
         stats = proportions.PersonStats(userdata)
-
-        if stat not in statmap.keys():
-            await ctx.send(f"The `{stat}` stat is not an available option.")
-            return
-
-        try:
-            stat = statmap[stat]
-        except KeyError:
-            await ctx.send(f"`{stat}` is not a stat.")
-            return
 
         stattosend = stats.getFormattedStat(stat)
 
@@ -307,16 +254,6 @@ class StatsCog(commands.Cog):
         userdata2.height = userdata.height
 
         stats = proportions.PersonStats(userdata2)
-
-        if stat not in statmap.keys():
-            await ctx.send(f"The `{stat}` stat is not an available option.")
-            return
-
-        try:
-            stat = statmap[stat]
-        except KeyError:
-            await ctx.send(f"`{stat}` is not a stat.")
-            return
 
         stattosend = stats.getFormattedStat(stat)
 
@@ -429,8 +366,13 @@ class StatsCog(commands.Cog):
             return
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
+        stat = "height"
+        embedtosend = comparison.getStatEmbed(stat)
 
-        embedtosend = comparison.getStatEmbed(statmap["height"])
+        if embedtosend is None:
+            await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
+            return
+
         embedtosend.title = f"{comparison.viewed.height:,.3mu} to {comparison.viewer.nickname}"
         embedtosend.set_footer(text = f"{comparison.viewed.height:,.3mu} is {comparison.multiplier:,.3}x larger than {comparison.viewer.nickname}.")
 
@@ -500,11 +442,7 @@ class StatsCog(commands.Cog):
 
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
 
-        try:
-            embedtosend = comparison.getStatEmbed(statmap[stat])
-        except KeyError:
-            await ctx.send(f"`{stat}` is not a stat.")
-            return
+        embedtosend = comparison.getStatEmbed(stat)
 
         if embedtosend is None:
             await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
