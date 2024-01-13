@@ -33,6 +33,21 @@ def str_or_none(v):
     return str(v)
 
 
+def format_scale(scale: Decimal, scaletype: Literal["height", "weight"] = "height"):
+    if scaletype == "weight":
+        scale = (scale ** 3)
+    reversescale = 1 / scale
+
+    if reversescale > 10:
+        dec = 0
+    elif reversescale > 1:
+        dec = 1
+    else:
+        return f"{scale:,.3}x"
+
+    return f"{scale:,.3}x (1:{reversescale:,.{dec}})"
+
+
 class PlayerStats(TypedDict):
     height: SV
     baseheight: SV
@@ -514,37 +529,6 @@ class User:
         if value not in modelJSON[self.macrovision_model].keys():
             raise errors.InvalidMacrovisionViewException(self.macrovision_model, value)
         self._macrovision_view = value
-
-    def getFormattedScale(self, scaletype: Literal["height", "weight"] = "height", verbose = False):
-        if scaletype == "height":
-            reversescale = 1 / self.scale
-            if reversescale > 10:
-                if verbose:
-                    return f"{self.scale:,.3}x (1:{reversescale:,.0})"
-                else:
-                    return f"1:{reversescale:,.0}"
-            elif reversescale > 1:
-                if verbose:
-                    return f"{self.scale:,.3}x (1:{reversescale:,.1})"
-                else:
-                    return f"1:{reversescale:,.1}"
-            else:
-                return f"{self.scale:,.3}x"
-        elif scaletype == "weight":
-            weightscale = self.scale ** 3
-            reverseweightscale = 1 / weightscale
-            if reverseweightscale > 10:
-                if verbose:
-                    return f"{weightscale:,.3}x (1:{reverseweightscale:,.0})"
-                else:
-                    return f"1:{reverseweightscale:,.0}"
-            elif reverseweightscale > 1:
-                if verbose:
-                    return f"{weightscale:,.3}x (1:{reverseweightscale:,.1})"
-                else:
-                    return f"1:{reverseweightscale:,.1}"
-            else:
-                return f"{weightscale:,.3}x"
 
     # Return an python dictionary for json exporting
     def toJSON(self):
