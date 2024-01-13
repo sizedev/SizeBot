@@ -1,7 +1,8 @@
 from __future__ import annotations
+from collections.abc import Callable
 
 from copy import copy
-from typing import Any, Callable, Literal, Optional
+from typing import Any, Literal, Optional, TypeVar
 import math
 import re
 
@@ -70,8 +71,6 @@ class Stat:
             value = self.default_from(found)
         if self.type and value is not None:
             value = self.type(value)
-        if self.key:
-            found[self.key] = value
         return StatValue(self, value)
 
 
@@ -95,8 +94,6 @@ class StatValue:
             value = self.value
         if self.stat.type and value is not None:
             value = self.stat.type(value)
-        if self.stat.key:
-            found[self.stat.key] = value
         return StatValue(self.stat, value)
 
     def to_string(self, stats: StatBox, nickname: str, scale: Decimal):
@@ -115,7 +112,7 @@ class StatValue:
         return f"{self.stat.format_title}: {self.value}"
 
 
-all_stats = [
+all_stats = {s.key: s for s in [
     Stat("height",                  "Height",                      "{nickname}'s current height is **{height:,.3mu}**, or {scale} scale.",                      "{height:,.3mu}",                                                           power=1, type=SV,        userkey="height"),
     Stat("weight",                  "Weight",                      "{nickname}'s current weight is **{weight:,.3mu}**.",                                        "{weight:,.3mu}",                                                           power=3, type=WV,        userkey="weight"),
     Stat("gender",                  "Gender",                      "{nickname}'s gender is {gender}.",                                                          "{gender}",                                                                          type=str,       userkey="gender"),
@@ -165,7 +162,7 @@ all_stats = [
     Stat("fingertiparea",           "Fingertip Area",              "{nickname}'s fingertip would cover **{fingertiparea:,.3mu}** of area.",                     "{fingertiparea:,.3mu}",             requires=["fingertiplength"],          power=2, type=AV,                                default_from=lambda s: s["fingertiplength"] * s["fingertiplength"]),
     Stat("shoesize",                "Shoe Size",                   "{nickname}'s shoe size is **{shoesize}**.",                                                 "{shoesize}",                        requires=["footlength", "gender"],              type=str,                               default_from=lambda s: format_shoe_size(s["footlength"], s["gender"])),
     Stat("visibility",              "Visibility",                  "You would need **{visibility}** to see {nickname}.",                                        "{visibility}",                      requires=["height"],                            type=str,                               default_from=lambda s: calcVisibility(s["height"]))
-]
+]}
 
 # Example display code
 # display_stats = [
@@ -173,61 +170,74 @@ all_stats = [
 # ]
 
 
+T = TypeVar('T', Stat, StatValue)
+
+
+def process_stats(source: dict[str, T], _process: Callable[[T, dict[str, Any]], StatValue]) -> StatBox:
+    queued: dict[str, T] = source.copy()
+    processing: dict[str, T] = {}
+    processed: dict[str, StatValue] = {}
+    processed_values: dict[str, Any] = {}
+
+    while queued:
+        processing = queued
+        queued = {}
+        for k, s in processing.items():
+            sv = _process(s, processed_values)
+            if sv is None:
+                # If we can't scale it, queue it for later
+                queued[k] = s
+            else:
+                # If it's scaled, just append to the processed stats
+                processed_values[k] = sv.value
+                processed[k] = sv
+        # If no progress
+        if len(queued) == len(processing):
+            raise errors.UnfoundStatException(queued.keys())
+    return StatBox(processed)
+
+
 class StatBox:
-    def __init__(self, stats: list[StatValue] = None):
-        self.stats = [] if not stats else stats
+    def __init__(self, stats: dict[str, StatValue]):
+        self.stats = stats
+
+    @classmethod
+    def process(cls, source: dict[str, T], _process: Callable[[T, dict[str, Any]], StatValue]) -> StatBox:
+        queued: dict[str, T] = source.copy()
+        processing: dict[str, T] = {}
+        processed: dict[str, StatValue] = {}
+        processed_values: dict[str, Any] = {}
+
+        while queued:
+            processing = queued
+            queued = {}
+            for k, s in processing.items():
+                sv = _process(s, processed_values)
+                if sv is None:
+                    # If we can't scale it, queue it for later
+                    queued[k] = s
+                else:
+                    # If it's scaled, just append to the processed stats
+                    processed_values[k] = sv.value
+                    processed[k] = sv
+            # If no progress
+            if len(queued) == len(processing):
+                raise errors.UnfoundStatException(queued.keys())
+        return cls(processed)
 
     @classmethod
     def load(cls, playerStats: PlayerStats) -> StatBox:
-        queued: list[Stat] = all_stats.copy()
-        processing: list[Stat] = []
-        processed: list[StatValue] = []
-        stats_by_key: dict[str, Any] = {}
-
-        while queued:
-            processing = queued
-            queued = []
-            for s in processing:
-                sv = s.set(playerStats, stats_by_key)
-                if sv is None:
-                    # If we can't set it, queue it for later
-                    queued.append(s)
-                else:
-                    # If it's set, just append to the processed stats
-                    processed.append(sv)
-            # If no progress
-            if len(queued) == len(processing):
-                raise errors.UnfoundStatException([s.name for s in queued])
-        return cls(processed)
+        return cls.process(all_stats, lambda s, vals: s.set(playerStats, vals))
 
     def scale(self, scale_value: Decimal) -> StatBox:
-        queued: list[StatValue] = self.stats.copy()
-        processing: list[StatValue] = []
-        processed: list[StatValue] = []
-        stats_by_key: dict[str, Any] = {}
+        return self.process(self.stats, lambda s, vals: s.scale(scale_value, vals))
 
-        while queued:
-            processing = queued
-            queued = []
-            for s in processing:
-                sv = s.scale(scale_value, stats_by_key)
-                if sv is None:
-                    # If we can't scale it, queue it for later
-                    queued.append(s)
-                else:
-                    # If it's scaled, just append to the processed stats
-                    processed.append(sv)
-            # If no progress
-            if len(queued) == len(processing):
-                raise errors.UnfoundStatException([s.stat.name for s in queued])
-        return StatBox(processed)
+    def __getitem__(self, key: str):
+        return self.stats[key].value
 
-    def get(self, stat_name: str) -> StatValue | None:
-        g = (s for s in self.stats if s.stat.key == stat_name)
-        return next(g, None)
-
-    def to_dict(self) -> dict[str, StatValue]:
-        return {s.stat.key: s.value for s in self.stats}
+    def __iter__(self):
+        for k in self.stats.items():
+            yield k, self.stats[k].value
 
 
 def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
@@ -696,8 +706,8 @@ class PersonStats:
 
         # Base stats
         self.scale = userdata.scale
-        self.baseheight = self.basestats.get("height").value
-        self.baseweight = self.basestats.get("weight").value
+        self.baseheight = self.basestats["height"]
+        self.baseweight = self.basestats["weight"]
         self.pawtoggle = userdata.pawtoggle
         self.furtoggle = userdata.furtoggle
 
@@ -707,16 +717,16 @@ class PersonStats:
         self.macrovision_view = userdata.macrovision_view
 
         # Other stats
-        self.height = self.stats.get("height").value
-        self.weight = self.stats.get("weight").value
-        self.width = self.stats.get("width").value
+        self.height = self.stats["height"]
+        self.weight = self.stats["weight"]
+        self.width = self.stats["width"]
 
         # These are like, the user settable ones?
-        self.hairlength = self.stats.get("hairlength").value
-        self.taillength = self.stats.get("taillength").value
-        self.earheight = self.stats.get("earheight").value
-        self.liftstrength = self.stats.get("liftstrength").value
-        self.footlength = self.stats.get("footlength").value
+        self.hairlength = self.stats["hairlength"]
+        self.taillength = self.stats["taillength"]
+        self.earheight = self.stats["earheight"]
+        self.liftstrength = self.stats["liftstrength"]
+        self.footlength = self.stats["footlength"]
 
         # How does this one work??
         self.shoesize = format_shoe_size(self.footlength, self.gender)
@@ -727,20 +737,20 @@ class PersonStats:
         # else:
         #     base_footwidth = SV(base_footlength * Decimal("2/5"))
         # self.footwidth = SV(base_footwidth * self.scale)
-        self.footwidth = self.stats.get("footwidth").value
+        self.footwidth = self.stats["footwidth"]
 
         # OK, here's the stuff StatBox was actually made for.
-        self.toeheight = self.stats.get("toeheight").value
-        self.shoeprintdepth = self.stats.get("shoeprintdepth").value
-        self.pointerlength = self.stats.get("pointerlength").value
-        self.thumbwidth = self.stats.get("thumbwidth").value
-        self.fingertiplength = self.stats.get("fingertiplength").value
-        self.fingerprintdepth = self.stats.get("fingerprintdepth").value
-        self.threadthickness = self.stats.get("threadthickness").value
-        self.hairwidth = self.stats.get("hairwidth").value
-        self.nailthickness = self.stats.get("nailthickness").value
-        self.eyewidth = self.stats.get("eyewidth").value
-        self.jumpheight = self.stats.get("jumpheight").value
+        self.toeheight = self.stats["toeheight"]
+        self.shoeprintdepth = self.stats["shoeprintdepth"]
+        self.pointerlength = self.stats["pointerlength"]
+        self.thumbwidth = self.stats["thumbwidth"]
+        self.fingertiplength = self.stats["fingertiplength"]
+        self.fingerprintdepth = self.stats["fingerprintdepth"]
+        self.threadthickness = self.stats["threadthickness"]
+        self.hairwidth = self.stats["hairwidth"]
+        self.nailthickness = self.stats["nailthickness"]
+        self.eyewidth = self.stats["eyewidth"]
+        self.jumpheight = self.stats["jumpheight"]
 
         # Yeah, I don't think we recreated these.
         # =======================================
@@ -756,34 +766,34 @@ class PersonStats:
         # =======================================
 
         # Speeds
-        self.walkperhour = self.stats.get("walkperhour").value
-        self.runperhour = self.stats.get("runperhour").value
-        self.swimperhour = self.stats.get("swimperhour").value
-        self.climbperhour = self.stats.get("climbperhour").value
-        self.crawlperhour = self.stats.get("crawlperhour").value
-        self.driveperhour = self.stats.get("driveperhour").value
-        self.spaceshipperhour = self.stats.get("spaceshipperhour").value
+        self.walkperhour = self.stats["walkperhour"]
+        self.runperhour = self.stats["runperhour"]
+        self.swimperhour = self.stats["swimperhour"]
+        self.climbperhour = self.stats["climbperhour"]
+        self.crawlperhour = self.stats["crawlperhour"]
+        self.driveperhour = self.stats["driveperhour"]
+        self.spaceshipperhour = self.stats["spaceshipperhour"]
 
         # This got ignored in the port somehow.
         # self.spaceshipperhour = SV(average_spaceshipperhour * self.scale)
 
         # Step lengths
-        self.walksteplength = self.stats.get("walksteplength").value
-        self.runsteplength = self.stats.get("runsteplength").value
-        self.climbsteplength = self.stats.get("climbsteplength").value
-        self.crawlsteplength = self.stats.get("crawlsteplength").value
-        self.swimsteplength = self.stats.get("swimsteplength").value
+        self.walksteplength = self.stats["walksteplength"]
+        self.runsteplength = self.stats["runsteplength"]
+        self.climbsteplength = self.stats["climbsteplength"]
+        self.crawlsteplength = self.stats["crawlsteplength"]
+        self.swimsteplength = self.stats["swimsteplength"]
 
         # The rest of it, I guess.
-        self.horizondistance = self.stats.get("horizondistance").value
-        self.terminalvelocity = self.stats.get("terminalvelocity").value
-        self.fallproof = self.stats.get("fallproof").value
-        self.fallproofcheck = self.stats.get("fallprooficon").value
-        self.visibility = self.stats.get("visibility").value
+        self.horizondistance = self.stats["horizondistance"]
+        self.terminalvelocity = self.stats["terminalvelocity"]
+        self.fallproof = self.stats["fallproof"]
+        self.fallproofcheck = self.stats["fallprooficon"]
+        self.visibility = self.stats["visibility"]
 
     def getFormattedStat(self, stat: str):
         returndict = {
-            "height": self.stats.get("height").to_string(self.stats, self.nickname, self.scale),
+            "height": self.stats.stats["height"].to_string(self.stats, self.nickname, self.scale),
             "weight": f"'s current weight is **{self.weight:,.3mu}**.",
             "foot": f"'s {self.footname.lower()} is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
             "toe": f"'s toe is **{self.toeheight:,.3mu}** thick.",
@@ -808,7 +818,7 @@ class PersonStats:
             "liftstrength": f" can lift and carry **{self.liftstrength:,.3mu}**.",
             "gender": f"'s current gender is set to **{self.gender}**.",
             "visibility": f" would need {self.visibility} to be seen.",
-            "layarea": f" is awesome with an area of {self.stats.get('layarea').value:,.1mu} all to herself."
+            "layarea": f" is awesome with an area of {self.stats['layarea']:,.1mu} all to herself."
         }
         if self.hairlength:
             returndict["hair"] = f"'s {self.hairname.lower()} is **{self.hairlength:,.3mu}** long."

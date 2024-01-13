@@ -243,11 +243,11 @@ class ParseError(DigiException):
 
 
 class UnfoundStatException(DigiException):
-    def __init__(self, s) -> None:
-        self.s = s
+    def __init__(self, s: list[str]) -> None:
+        self.s = utils.sentence_join(s)
 
     def formatMessage(self):
-        return f"Could not calculate the {self.s} stat."
+        return f"Could not calculate the {self.s} stat(s)."
 
     def formatUserMessage(self):
-        return f"Could not calculate the {self.s} stat."
+        return f"Could not calculate the {self.s} stat(s)."
