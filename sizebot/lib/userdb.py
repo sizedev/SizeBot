@@ -35,21 +35,6 @@ def str_or_none(v):
     return str(v)
 
 
-def format_scale(scale: Decimal, scaletype: Literal["height", "weight"] = "height"):
-    if scaletype == "weight":
-        scale = (scale ** 3)
-    reversescale = 1 / scale
-
-    if reversescale > 10:
-        dec = 0
-    elif reversescale > 1:
-        dec = 1
-    else:
-        return f"{scale:,.3}x"
-
-    return f"{scale:,.3}x (1:{reversescale:,.{dec}})"
-
-
 class PlayerStats(TypedDict):
     height: SV
     baseheight: SV
@@ -452,15 +437,6 @@ class User:
         """Scale the user height to match the scale"""
         self.height = SV(self.baseheight * scale)
 
-    def formattedscale(self):
-        """For printing scale in strings."""
-        if self.scale < 0.1:
-            return f"1:{1/self.scale:,.0}"
-        elif self.scale < 1:
-            return f"1:{1/self.scale:,.1}"
-        else:
-            return f"{self.scale:,.3}x"
-
     @property
     def stats(self) -> PlayerStats:
         """A bit of a patchwork solution for transitioning to BetterStats."""
@@ -477,8 +453,9 @@ class User:
             "walkperhour": str_or_none(self.walkperhour),
             "swimperhour": str_or_none(self.swimperhour),
             "runperhour": str_or_none(self.runperhour),
-            "gender": str_or_none(self.gender),
-            "scale": str_or_none(self.scale)
+            "gender": str_or_none(self.gender),     # TODO: Should this be autogender?
+            "scale": str_or_none(self.scale),
+            "nickname": str_or_none(self.nickname)
         }
 
     @property

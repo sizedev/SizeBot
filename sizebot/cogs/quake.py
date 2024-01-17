@@ -93,7 +93,7 @@ class QuakeCog(commands.Cog):
         self_user = load_or_fake(ctx.author)
         userstats = proportions.PersonStats(self_user)
         userdata = load_or_fake(user)
-        userdata.scale *= userstats.viewscale
+        userdata.scale *= userstats.stats.values["viewscale"]
         e = quake_embed(userdata, quake_type)
         e.title = e.title + f" as seen by {self_user.nickname}"
         e.description = f"To {self_user.nickname}, " + e.description

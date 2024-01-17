@@ -472,7 +472,7 @@ class StatsCog(commands.Cog):
             await ctx.send(f"{userdata.tag} doesn't exist...")
             return
 
-        newlength = SV(length / userstats.viewscale)
+        newlength = SV(length / userstats.stats.values["viewscale"])
 
         desc = f"To everyone else, {userstats.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
         if userdata.incomprehensible:
