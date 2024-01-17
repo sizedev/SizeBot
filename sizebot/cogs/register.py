@@ -30,7 +30,7 @@ async def removeUserRole(member):
     await member.remove_roles(role, reason="Unregistered as sizebot user")
 
 
-async def showNextStep(ctx, userdata, completed=False):
+async def showNextStep(ctx, userdata: userdb.User, completed=False):
     if completed or not userdata.registered:
         telemetry.RegisterStepCompleted(ctx.guild.id, ctx.author.id, ctx.command.name, completed = completed).save()
 

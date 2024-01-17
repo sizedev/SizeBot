@@ -1,4 +1,5 @@
 import logging
+import typing
 from sizebot.lib.units import SV, TV
 
 from discord.ext import commands
@@ -8,14 +9,14 @@ import arrow
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.language import ed, ing
+import sizebot.lib.language as lang
 from sizebot.lib.proportions import PersonStats
 from sizebot.lib.utils import pretty_time_delta
 
 logger = logging.getLogger("sizebot")
 
 
-def calc_move_dist(userdata):
+def calc_move_dist(userdata: userdb.User):
     movetype = userdata.currentmovetype
     starttime = userdata.movestarted
     stoptime = userdata.movestop
@@ -47,7 +48,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def start(self, ctx, action, stop: TV = None):
+    async def start(self, ctx, action: str, stop: TV = None):
         """Keep moving forward -- Walt Disney
 
         `<type>` can be one of the following: walk, run, climb, crawl, swim
@@ -59,13 +60,16 @@ class LoopCog(commands.Cog):
             await ctx.send(f"{emojis.warning} {action} is not a recognized movement type.")
             return
 
+        # Fix typing now that we've checked it
+        action = typing.cast(userdb.MoveTypeStr, action)
+
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         if userdata.currentmovetype:
             t, distance = calc_move_dist(userdata)
             nicetime = pretty_time_delta(t)
             await ctx.send(
-                f"{emojis.warning} You're already {ing[userdata.currentmovetype]}.\n"
+                f"{emojis.warning} You're already {lang.ing[userdata.currentmovetype]}.\n"
                 f"You've gone **{distance:,.3mu}** so far in **{nicetime}**!"
             )
             return
@@ -74,7 +78,7 @@ class LoopCog(commands.Cog):
         userdata.movestarted = arrow.now()
         userdata.movestop = stop
         userdb.save(userdata)
-        await ctx.send(f"{userdata.nickname} is now {ing[userdata.currentmovetype]}.")
+        await ctx.send(f"{userdata.nickname} is now {lang.ing[userdata.currentmovetype]}.")
 
     @commands.command(
         category = "loop"
@@ -89,7 +93,7 @@ class LoopCog(commands.Cog):
 
         t, distance = calc_move_dist(userdata)
         nicetime = pretty_time_delta(t)
-        await ctx.send(f"You stopped {ing[userdata.currentmovetype]}. You {ed[userdata.currentmovetype]} **{distance:,.3mu}** in **{nicetime}**!")
+        await ctx.send(f"You stopped {lang.ing[userdata.currentmovetype]}. You {lang.ed[userdata.currentmovetype]} **{distance:,.3mu}** in **{nicetime}**!")
 
         userdata.currentmovetype = None
         userdata.movestarted = None
@@ -120,7 +124,7 @@ class LoopCog(commands.Cog):
         elapsed_seconds, distance = calc_move_dist(userdata)
         nicetime = pretty_time_delta(elapsed_seconds)
 
-        out = (f"{userdata.nickname} has been {ing[userdata.currentmovetype]} for **{nicetime}**.\n"
+        out = (f"{userdata.nickname} has been {lang.ing[userdata.currentmovetype]} for **{nicetime}**.\n"
                f"They've gone **{distance:,.3mu}** so far!")
 
         await ctx.send(out)

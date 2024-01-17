@@ -9,7 +9,7 @@ from discord import Embed
 
 import sizebot.data.objects
 from sizebot import __version__
-from sizebot.lib import errors
+from sizebot.lib import errors, userdb
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import get_plural, get_indefinite_article
@@ -200,17 +200,17 @@ class DigiObject:
         embed.description = f"*{self.note}*" if self.note else None
         return embed
 
-    def relativestats(self, userdata):
+    def relativestats(self, userdata: userdb.User):
         return (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
                 f"To {userdata.nickname}, {self.article} {self.name} looks...\n") \
             + self.get_stats(userdata.viewscale)
 
-    def relativestatssentence(self, userdata):
+    def relativestatssentence(self, userdata: userdb.User):
         return (f"{userdata.nickname} is {userdata.height:,.3{userdata.unitsystem}} tall."
                 f" To them, {self.article} {self.name} looks ") \
             + self.get_stats_sentence(userdata.viewscale, userdata.unitsystem)
 
-    def relativestatsembed(self, userdata):
+    def relativestatsembed(self, userdata: userdb.User):
         embed = self.get_stats_embed(userdata.viewscale)
         embed.title = self.name + " *[relative]*"
         embed.description = (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"

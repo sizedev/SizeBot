@@ -26,6 +26,8 @@ BASICALLY_ZERO = Decimal("1E-27")
 
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
+MoveTypeStr = Literal["walk", "run", "climb", "crawl", "swim"]
+
 
 def str_or_none(v):
     if v is None:
@@ -104,7 +106,7 @@ class User:
         self._currentscalestep: Optional[Diff] = None
         self._currentscaletalk: Optional[Diff] = None
         self.scaletalklock: bool = False
-        self.currentmovetype: Optional[str] = None
+        self.currentmovetype: Optional[MoveTypeStr] = None
         self.movestarted: Optional[Arrow] = None
         self.movestop: Optional[TV] = None
         self.triggers: Dict[str, Diff] = {}
@@ -677,7 +679,7 @@ def get_user_path(guildid, userid):
     return get_guild_users_path(guildid) / f"{userid}.json"
 
 
-def save(userdata):
+def save(userdata: User):
     guildid = userdata.guildid
     userid = userdata.id
     if guildid is None or userid is None:
