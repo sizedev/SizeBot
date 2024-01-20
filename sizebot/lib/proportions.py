@@ -898,7 +898,7 @@ class PersonStats:
         embed.add_field(name=self.stats.get_embed_title('height'), value=
                         f"{self.stats.get_embed_value('height')}"
                         f"\n*{self.stats.get_embed_value('scale')} scale*"
-                        + (f"\n*{self.stats.get_embed_value('visibility')}" if self.stats.values["height"] < SV(1) else ""), inline=True)
+                        + (f"\n{self.stats.get_embed_value('visibility')}" if self.stats.values["height"] < SV(1) else ""), inline=True)
         embed.add_field(name=self.stats.get_embed_title('weight'), value=
                         f"{self.stats.get_embed_value('weight')}"
                         f"\n*{self.stats.get_embed_value('cubescale')} scale*", inline=True)
