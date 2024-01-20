@@ -59,8 +59,8 @@ class Stat:
     def __init__(self,
                  key: str,
                  format_title: Formatter,
-                 format_string: str,
-                 format_embed: str,
+                 format_string: Formatter,
+                 format_embed: Formatter,
                  is_shown: Callable[[dict[str, any]], bool] = lambda s: True,
                  userkey: Optional[str] = None,
                  default_from: Optional[Callable] = None,
@@ -199,6 +199,42 @@ all_stats = {s.key: s for s in [
     Stat("visibility",              "Visibility",               "You would need **{visibility}** to see {nickname}.",                               "*{nickname} would need {visibility} to be seen.*",                                                 requires=["height"],                                type=str,                               default_from=lambda s: calcVisibility(s["height"]))
 ]}
 
+
+class ComplexEmbed:
+    def __init__(self,
+                 key: str,
+                 format_title: Formatter,
+                 format_embed: Formatter,
+                 is_shown: Callable[[dict[str, any]], bool] = lambda s: True):
+        self.key = key
+        self.format_title = format_title
+        self.format_embed = format_embed
+        self.is_shown = is_shown
+
+    def to_embed_title(self, stats: StatBox):
+        return run_formatter(self.format_title, stats)
+
+    def to_embed_value(self, stats: StatBox):
+        return run_formatter(self.format_embed, stats)
+
+    def get_embed(self, stats: StatBox) -> dict:
+        return {
+            "name": self.to_embed_title(stats),
+            "value": self.to_embed_value(stats),
+            "inline": True
+        }
+
+
+complex_embeds = {s.key: s for s in [
+    ComplexEmbed(
+        "height",
+        lambda s: s.get_embed_title("height"),
+        lambda s:
+            f"{s.get_embed_value('height')}"
+            f"\n*{s.get_embed_value('scale')} scale*"
+            + (f"\n*{s.get_embed_value('visibility')}" if s.values["height"] < SV(1) else "")
+    )
+]}
 
 stataliases = {
     "height":           ["size"],
@@ -895,10 +931,7 @@ class PersonStats:
                       description=f"*Requested by {requestertag}*",
                       color=colors.cyan)
         embed.set_author(name=f"SizeBot {__version__}")
-        embed.add_field(name=self.stats.get_embed_title('height'), value=
-                        f"{self.stats.get_embed_value('height')}"
-                        f"\n*{self.stats.get_embed_value('scale')} scale*"
-                        + (f"\n{self.stats.get_embed_value('visibility')}" if self.stats.values["height"] < SV(1) else ""), inline=True)
+        embed.add_field(**complex_embeds["height"].get_embed(self.stats))
         embed.add_field(name=self.stats.get_embed_title('weight'), value=
                         f"{self.stats.get_embed_value('weight')}"
                         f"\n*{self.stats.get_embed_value('cubescale')} scale*", inline=True)
