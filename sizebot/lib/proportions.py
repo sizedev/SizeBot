@@ -176,8 +176,8 @@ all_stats = {s.key: s for s in [
     Stat("climbsteplength",         "Climb Step Length",        "{nickname} takes **{climbsteplength:,.3mu}** strides while climbing.",             "{climbsteplength:,.3mu}",                              requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] * Decimal(1 / 2.5)),
     Stat("crawlsteplength",         "Crawl Step Length",        "{nickname} takes **{crawlsteplength:,.3mu}** strides while crawling.",             "{crawlsteplength:,.3mu}",                              requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] * Decimal(1 / 2.577)),
     Stat("swimsteplength",          "Swim Step Length",         "{nickname} takes **{swimsteplength:,.3mu}** strides while swiming.",               "{swimsteplength:,.3mu}",                               requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] * Decimal(6 / 7)),
-    Stat("horizondistance",         "Distance to Horizon",      "{nickname} can see **{horizondistance:,.3mu}** to the horizon.",                   "{horizondistance:,.3mu}",                              requires=["height"],                                type=SV,                                default_from=lambda s: calcHorizon(s["height"])),
-    Stat("terminalvelocity",        "Terminal Velocity",        "{nickname}'s terminal velocity is **{terminalvelocity:,.3mu} per hour.**",         "{terminalvelocity:,.3mu} per hour",                    requires=["weight", "averagescale"],                type=SV,                                default_from=lambda s: terminal_velocity(s["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * s["averagescale"] ** Decimal(2))),
+    Stat("horizondistance",         "View Distance to Horizon", "{nickname} can see **{horizondistance:,.3mu}** to the horizon.",                   "{horizondistance:,.3mu}",                              requires=["height"],                                type=SV,                                default_from=lambda s: calcHorizon(s["height"])),
+    Stat("terminalvelocity",        "Terminal Velocity",        "{nickname}'s terminal velocity is **{terminalvelocity:,.3mu} per hour.**",         lambda s: f"{s['terminalvelocity']:,.1M} per second\n({s['terminalvelocity']:,.1U} per second)" + ("\n*This user can safely fall from any height.*" if s["fallproof"] else ""),                    requires=["weight", "averagescale"],                type=SV,                                default_from=lambda s: terminal_velocity(s["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * s["averagescale"] ** Decimal(2))),
     Stat("fallproof",               "Fallproof",                lambda s: f"""{s['nickname']} {'is' if s['fallproof'] else "isn't"} fallproof.""",  lambda s: CHK_Y if s['fallproof'] else CHK_N,           requires=["terminalvelocity"],                      type=bool,                              default_from=lambda s: s["terminalvelocity"] < FALL_LIMIT),
     Stat("fallprooficon",           "Fallproof Icon",           lambda s: CHK_Y if s['fallproof'] else CHK_N,                                       lambda s: CHK_Y if s['fallproof'] else CHK_N,           requires=["fallproof"],                             type=str,                               default_from=lambda s: emojis.voteyes if s["fallproof"] else emojis.voteno),
     Stat("width",                   "Width",                    "{nickname} is **{width:,.3mu}** wide.",                                            "{width:,.3mu}",                                        requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] * Decimal(4 / 17)),
@@ -896,11 +896,11 @@ class PersonStats:
                       description=f"*Requested by {requestertag}*",
                       color=colors.cyan)
         embed.set_author(name=f"SizeBot {__version__}")
-        embed.add_field(name="Current Height", value=
+        embed.add_field(name=self.stats.get_embed_title('height'), value=
                         f"{self.stats.get_embed_value('height')}"
                         f"\n*{self.stats.get_embed_value('scale')} scale*"
                         (f"\n*{self.stats.get_embed_value('visibility')}" if self.stats.values["height"] < SV(1) else ""), inline=True)
-        embed.add_field(name="Current Weight", value=
+        embed.add_field(name=self.stats.get_embed_title('weight'), value=
                         f"{self.stats.get_embed_value('weight')}"
                         f"\n*{self.stats.get_embed_value('cubescale')} scale*", inline=True)
         embed.add_field(name=f"{self.footname} Length", value=
@@ -911,10 +911,14 @@ class PersonStats:
         embed.add_field(**self.stats.get_embed("pointerlength"))
         if self.stats.values["scale"] > IS_LARGE:
             embed.add_field(**self.stats.get_embed("toeheight"))
+        if self.stats.values["scale"] > IS_LARGE:
             embed.add_field(**self.stats.get_embed("thumbwidth"))
+        if self.stats.values["scale"] > IS_LARGE:
             embed.add_field(**self.stats.get_embed("nailthickness"))
+        if self.stats.values["scale"] > IS_LARGE:
             embed.add_field(**self.stats.get_embed("fingerprintdepth"))
-            embed.add_field(name="Clothing Thread Thickness", value=self.stats.get_embed_value("threadthickness"), inline=True)
+        if self.stats.values["scale"] > IS_LARGE:
+            embed.add_field(**self.stats.get_embed("threadthickness"))
         if self.stats.values["hairlength"]:
             embed.add_field(name=f"{self.hairname} Length", value=self.stats.get_embed_value("hairlength"), inline=True)
         if self.stats.values["taillength"]:
@@ -923,14 +927,15 @@ class PersonStats:
             embed.add_field(**self.stats.get_embed("earheight"))
         if self.stats.values["scale"] > IS_LARGE:
             embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
+        if self.stats.values["scale"] > IS_LARGE:
             embed.add_field(**self.stats.get_embed("eyewidth"))
         embed.add_field(**self.stats.get_embed("jumpheight"))
-        embed.add_field(name="View Distance to Horizon", value=self.stats.get_embed_value("horizondistance"), inline=True)
-        terminal_velocity_value = f"{self.terminalvelocity:,.1M} per second\n({self.terminalvelocity:,.1U} per second)" + ("\n*This user can safely fall from any height.*" if self.stats.values["fallproof"] else "")
-        embed.add_field(name=self.stats.get_embed_title("terminalvelocity"), value=terminal_velocity_value, inline=True)
-        embed.add_field(name="Lift/Carry Strength", value=self.stats.get_embed_value("liftstrength"), inline=True)
+        embed.add_field(**self.stats.get_embed("horizondistance"))
+        embed.add_field(**self.stats.get_embed("terminalvelocity"))
+        embed.add_field(**self.stats.get_embed("liftstrength"))
         embed.add_field(name="Speeds", value=self.get_speeds(), inline=False)
-        embed.add_field(name="Character Bases", value=f"{self.baseheight:,.3mu} | {self.baseweight:,.3mu}", inline=False)
+        embed.add_field(name="Character Bases", value=f"{self.basestats.get_embed_value('height')} | {self.basestats.get_embed_value('weight')}", inline=False)
+
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
 
         if self.incomprehensible:
