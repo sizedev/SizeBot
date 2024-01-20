@@ -34,6 +34,7 @@ AVERAGE_CAL_PER_DAY = 2000
 AVERAGE_WATER_PER_DAY = WV(3200)
 
 IS_LARGE = 1.0
+IS_VERY_LARGE = 10.0
 
 
 def format_scale(scale: Decimal):
@@ -151,22 +152,22 @@ all_stats = {s.key: s for s in [
     Stat("weight",                  "Weight",                   "{nickname}'s current weight is **{weight:,.3mu}**.",                               "{weight:,.3mu}",                                                                                                                           power=3,    type=WV,        userkey="weight"),
     Stat("gender",                  "Gender",                   "{nickname}'s gender is {gender}.",                                                 "{gender}",                                                                                                                                             type=str,       userkey="gender"),  # TODO: Should this be autogender?
     Stat("averagescale",            "Average Scale",            "{nickname} is {averagescale} times taller than an average person.",                "{averagescale}",                                                                                   requires=["height"],                    power=1,    type=Decimal,                           default_from=lambda s: s["height"] / AVERAGE_HEIGHT),
-    Stat("hairlength",              "Hair Length",              "{nickname}'s hair is **{hairlength:,.3mu}** long.",                                "{hairlength:,.3mu}",                                                                                                                       power=1,    type=SV,        userkey="hairlength"),
-    Stat("taillength",              "Tail Length",              "{nickname}'s tail is **{taillength:,.3mu}** long.",                                "{taillength:,.3mu}",                                                                                                                       power=1,    type=SV,        userkey="taillength"),
-    Stat("earheight",               "Ear Height",               "{nickname}'s ear is **{earheight:,.3mu}** tall.",                                  "{earheight:,.3mu}",                                                                                                                        power=1,    type=SV,        userkey="earheight"),
+    Stat("hairlength",              "Hair Length",              "{nickname}'s hair is **{hairlength:,.3mu}** long.",                                "{hairlength:,.3mu}",                                   is_shown=lambda s: s["hairlength"],                                                 power=1,    type=SV,        userkey="hairlength"),
+    Stat("taillength",              "Tail Length",              "{nickname}'s tail is **{taillength:,.3mu}** long.",                                "{taillength:,.3mu}",                                   is_shown=lambda s: s["taillength"],                                                 power=1,    type=SV,        userkey="taillength"),
+    Stat("earheight",               "Ear Height",               "{nickname}'s ear is **{earheight:,.3mu}** tall.",                                  "{earheight:,.3mu}",                                    is_shown=lambda s: s["earheight"],                                                  power=1,    type=SV,        userkey="earheight"),
     Stat("footlength",              "Foot Length",              "{nickname}'s foot is **{footlength:,.3mu}** long.",                                "{footlength:,.3mu}",                                                                               requires=["height"],                    power=1,    type=SV,        userkey="footlength",   default_from=lambda s: s["height"] / 7),
     Stat("liftstrength",            "Lift Strength",            "{nickname} can lift {liftstrength:,.3mu}.",                                        "{liftstrength:,.3mu}",                                                                             requires=["height"],                    power=3,    type=WV,        userkey="liftstrength", default_from=lambda s: DEFAULT_LIFT_STRENGTH),
     Stat("footwidth",               "Foot Width",               "{nickname}'s foot is **{footwidth:,.3mu}** wide.",                                 "{footwidth:,.3mu}",                                                                                requires=["footlength"],                power=1,    type=SV,                                default_from=lambda s: s["footlength"] * Decimal(2 / 3)),
     Stat("toeheight",               "Toe Height",               "{nickname}'s toe is **{toeheight:,.3mu}** thick.",                                 "{toeheight:,.3mu}",                                    is_shown=lambda s: s["scale"] > IS_LARGE,   requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / 65),
-    Stat("shoeprintdepth",          "Shoeprint Depth",          "{nickname}'s shoeprint is **{shoeprintdepth:,.3mu}** deep.",                       "{shoeprintdepth:,.3mu}",                                                                           requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / 135),
+    Stat("shoeprintdepth",          "Shoeprint Depth",          "{nickname}'s shoeprint is **{shoeprintdepth:,.3mu}** deep.",                       "{shoeprintdepth:,.3mu}",                               is_shown=lambda s: s["scale"] > IS_LARGE,   requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / 135),
     Stat("pointerlength",           "Pointer Finger Length",    "{nickname}'s pointer finger is **{pointerlength:,.3mu}** long.",                   "{pointerlength:,.3mu}",                                                                            requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / Decimal(17.26)),
-    Stat("thumbwidth",              "Thumb Width",              "{nickname}'s thumb is **{thumbwidth:,.3mu}** wide.",                               "{thumbwidth:,.3mu}",                                                                               requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / Decimal(69.06)),
-    Stat("fingertiplength",         "Fingertip Length",         "{nickname}'s fingertip is **{fingertiplength:,.3mu}** long.",                      "{fingertiplength:,.3mu}",                                                                          requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / Decimal(95.95)),
-    Stat("fingerprintdepth",        "Fingerprint Depth",        "{nickname}'s fingerprint is **{fingerprintdepth:,.3mu}** deep.",                   "{fingerprintdepth:,.3mu}",                                                                         requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / 35080),
-    Stat("threadthickness",         "Thread Thickness",         "{nickname}'s clothing threads are **{threadthickness:,.3mu}** thick.",             "{threadthickness:,.3mu}",                                                                                                                  power=1,    type=SV,                                default_from=lambda s: DEFAULT_THREAD_THICKNESS),
-    Stat("hairwidth",               "Hair Width",               "{nickname}'s hair is **{hairwidth:,.3mu}** wide.",                                 "{hairwidth:,.3mu}",                                                                                requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / 23387),
-    Stat("nailthickness",           "Nail Thickness",           "{nickname}'s nails are **{nailthickness:,.3mu}** thick.",                          "{nailthickness:,.3mu}",                                                                            requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / 2920),
-    Stat("eyewidth",                "Eye Width",                "{nickname}'s eyes are **{eyewidth:,.3mu}** wide.",                                 "{eyewidth:,.3mu}",                                                                                 requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / Decimal(73.083)),
+    Stat("thumbwidth",              "Thumb Width",              "{nickname}'s thumb is **{thumbwidth:,.3mu}** wide.",                               "{thumbwidth:,.3mu}",                                   is_shown=lambda s: s["scale"] > IS_LARGE,   requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / Decimal(69.06)),
+    Stat("fingertiplength",         "Fingertip Length",         "{nickname}'s fingertip is **{fingertiplength:,.3mu}** long.",                      "{fingertiplength:,.3mu}",                              is_shown=lambda s: s["scale"] > IS_LARGE,   requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / Decimal(95.95)),
+    Stat("fingerprintdepth",        "Fingerprint Depth",        "{nickname}'s fingerprint is **{fingerprintdepth:,.3mu}** deep.",                   "{fingerprintdepth:,.3mu}",                        is_shown=lambda s: s["scale"] > IS_VERY_LARGE,   requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / 35080),
+    Stat("threadthickness",         "Thread Thickness",         "{nickname}'s clothing threads are **{threadthickness:,.3mu}** thick.",             "{threadthickness:,.3mu}",                              is_shown=lambda s: s["scale"] > IS_LARGE,                                           power=1,    type=SV,                                default_from=lambda s: DEFAULT_THREAD_THICKNESS),
+    Stat("hairwidth",               "Hair Width",               "{nickname}'s hair is **{hairwidth:,.3mu}** wide.",                                 "{hairwidth:,.3mu}",                               is_shown=lambda s: s["scale"] > IS_VERY_LARGE,   requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / 23387),
+    Stat("nailthickness",           "Nail Thickness",           "{nickname}'s nails are **{nailthickness:,.3mu}** thick.",                          "{nailthickness:,.3mu}",                           is_shown=lambda s: s["scale"] > IS_VERY_LARGE,   requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / 2920),
+    Stat("eyewidth",                "Eye Width",                "{nickname}'s eyes are **{eyewidth:,.3mu}** wide.",                                 "{eyewidth:,.3mu}",                                     is_shown=lambda s: s["scale"] > IS_LARGE,   requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / Decimal(73.083)),
     Stat("jumpheight",              "Jump Height",              "{nickname} can jump **{jumpheight:,.3mu}** high.",                                 "{jumpheight:,.3mu}",                                                                               requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / Decimal(3.908)),
     Stat("averagelookangle",        "Average Look Angle",       "{nickname} would have to look {averagelookangle} to see the average person.",      "{averagelookangle}",                                                                               requires=["height"],                                type=Decimal,                           default_from=lambda s: abs(calcViewAngle(s["height"], AVERAGE_HEIGHT))),
     Stat("averagelookdirection",    "Average Look Direction",   "...",                                                                              "{averagelookdirection}",                                                                           requires=["height"],                                type=str,                               default_from=lambda s: "up" if calcViewAngle(s["height"], AVERAGE_HEIGHT) >= 0 else "down"),
@@ -909,23 +910,23 @@ class PersonStats:
         embed.add_field(**self.stats.get_embed("pointerlength"))
         if self.stats.is_shown("toeheight"):
             embed.add_field(**self.stats.get_embed("toeheight"))
-        if self.stats.values["scale"] > IS_LARGE:
+        if self.stats.is_shown("thumbwidth"):
             embed.add_field(**self.stats.get_embed("thumbwidth"))
-        if self.stats.values["scale"] > IS_LARGE:
+        if self.stats.is_shown("nailthickness"):
             embed.add_field(**self.stats.get_embed("nailthickness"))
-        if self.stats.values["scale"] > IS_LARGE:
+        if self.stats.is_shown("fingerprintdepth"):
             embed.add_field(**self.stats.get_embed("fingerprintdepth"))
-        if self.stats.values["scale"] > IS_LARGE:
+        if self.stats.is_shown("threadthickness"):
             embed.add_field(**self.stats.get_embed("threadthickness"))
-        if self.stats.values["hairlength"]:
+        if self.stats.is_shown("hairlength"):
             embed.add_field(name=f"{self.hairname} Length", value=self.stats.get_embed_value("hairlength"), inline=True)
-        if self.stats.values["taillength"]:
+        if self.stats.is_shown("taillength"):
             embed.add_field(**self.stats.get_embed("taillength"))
-        if self.stats.values["earheight"]:
+        if self.stats.is_shown("earheight"):
             embed.add_field(**self.stats.get_embed("earheight"))
-        if self.stats.values["scale"] > IS_LARGE:
+        if self.stats.is_shown("hairwidth"):
             embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
-        if self.stats.values["scale"] > IS_LARGE:
+        if self.stats.is_shown("eyewidth"):
             embed.add_field(**self.stats.get_embed("eyewidth"))
         embed.add_field(**self.stats.get_embed("jumpheight"))
         embed.add_field(**self.stats.get_embed("horizondistance"))
