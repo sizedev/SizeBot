@@ -170,13 +170,13 @@ all_stats = {s.key: s for s in [
     Stat("jumpheight",              "Jump Height",              "{nickname} can jump **{jumpheight:,.3mu}** high.",                                 "{jumpheight:,.3mu}",                                                                               requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] / Decimal(3.908)),
     Stat("averagelookangle",        "Average Look Angle",       "{nickname} would have to look {averagelookangle} to see the average person.",      "{averagelookangle}",                                                                               requires=["height"],                                type=Decimal,                           default_from=lambda s: abs(calcViewAngle(s["height"], AVERAGE_HEIGHT))),
     Stat("averagelookdirection",    "Average Look Direction",   "...",                                                                              "{averagelookdirection}",                                                                           requires=["height"],                                type=str,                               default_from=lambda s: "up" if calcViewAngle(s["height"], AVERAGE_HEIGHT) >= 0 else "down"),
-    Stat("walkperhour",             "Walk Per Hour",            "{nickname} walks **{walkperhour:,.3mu} per hour**.",                               "{walkperhour:,.3mu} per hour",                                                                     requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_WALKPERHOUR * s["averagescale"]),
-    Stat("runperhour",              "Run Per Hour",             "{nickname} runs **{runperhour:,.3mu} per hour**.",                                 "{runperhour:,.3mu} per hour",                                                                      requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_RUNPERHOUR * s["averagescale"]),
-    Stat("swimperhour",             "Swim Per Hour",            "{nickname} swims **{swimperhour:,.3mu} per hour**.",                               "{swimperhour:,.3mu} per hour",                                                                     requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_SWIMPERHOUR * s["averagescale"]),
-    Stat("climbperhour",            "Climb Per Hour",           "{nickname} climbs **{climbperhour:,.3mu} per hour**.",                             "{climbperhour:,.3mu} per hour",                                                                    requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_CLIMBPERHOUR * s["averagescale"]),
-    Stat("crawlperhour",            "Crawl Per Hour",           "{nickname} crawls **{crawlperhour:,.3mu} per hour**.",                             "{crawlperhour:,.3mu} per hour",                                                                    requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_CRAWLPERHOUR * s["averagescale"]),
-    Stat("driveperhour",            "Drive Per Hour",           "{nickname} drives **{driveperhour:,.3mu} per hour**.",                             "{driveperhour:,.3mu} per hour",                                                                                                            power=1,    type=SV,                                default_from=lambda s: AVERAGE_DRIVEPERHOUR),
-    Stat("spaceshipperhour",        "Spaceship Per Hour",       "{nickname} flys at spaceship at **{spaceshipperhour:,.3mu} per hour**.",           "{spaceshipperhour:,.3mu} per hour",                                                                                                        power=1,    type=SV,                                default_from=lambda s: AVERAGE_SPACESHIPPERHOUR),
+    Stat("walkperhour",             "Walk Per Hour",            "{nickname} walks **{walkperhour:,.3mu} per hour**.",                               emojis.walk + "{walkperhour:,.1M} per hour / {walkperhour:,.1U} per hour",                          requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_WALKPERHOUR * s["averagescale"]),
+    Stat("runperhour",              "Run Per Hour",             "{nickname} runs **{runperhour:,.3mu} per hour**.",                                 emojis.run + " {runperhour:,.1M} per hour / {runperhour:,.1U} per hour",                            requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_RUNPERHOUR * s["averagescale"]),
+    Stat("swimperhour",             "Swim Per Hour",            "{nickname} swims **{swimperhour:,.3mu} per hour**.",                               emojis.climb + " {swimperhour:,.1M} per hour / {swimperhour:,.1U} per hour",                        requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_SWIMPERHOUR * s["averagescale"]),
+    Stat("climbperhour",            "Climb Per Hour",           "{nickname} climbs **{climbperhour:,.3mu} per hour**.",                             emojis.crawl + " {climbperhour:,.1M} per hour / {climbperhour:,.1U} per hour",                      requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_CLIMBPERHOUR * s["averagescale"]),
+    Stat("crawlperhour",            "Crawl Per Hour",           "{nickname} crawls **{crawlperhour:,.3mu} per hour**.",                             emojis.swim + " {crawlperhour:,.1M} per hour / {crawlperhour:,.1U} per hour",                       requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_CRAWLPERHOUR * s["averagescale"]),
+    Stat("driveperhour",            "Drive Per Hour",           "{nickname} drives **{driveperhour:,.3mu} per hour**.",                             emojis.drive + " {driveperhour:,.1M} per hour / {driveperhour:,.1U} per hour",                                                              power=1,    type=SV,                                default_from=lambda s: AVERAGE_DRIVEPERHOUR),
+    Stat("spaceshipperhour",        "Spaceship Per Hour",       "{nickname} flys at spaceship at **{spaceshipperhour:,.3mu} per hour**.",           emojis.spaceship + " {spaceshipperhour:,.1M} per hour / {spaceshipperhour:,.1U} per hour",                                                  power=1,    type=SV,                                default_from=lambda s: AVERAGE_SPACESHIPPERHOUR),
     Stat("walksteplength",          "Walk Step Length",         "{nickname} takes **{walksteplength:,.3mu}** strides while walking.",               "{walksteplength:,.3mu}",                                                                           requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_WALKPERHOUR * s["averagescale"] / WALKSTEPSPERHOUR),
     Stat("runsteplength",           "Run Step Length",          "{nickname} takes **{runsteplength:,.3mu}** strides while runing.",                 "{runsteplength:,.3mu}",                                                                            requires=["averagescale"],              power=1,    type=SV,                                default_from=lambda s: AVERAGE_RUNPERHOUR * s["averagescale"] / RUNSTEPSPERHOUR),
     Stat("climbsteplength",         "Climb Step Length",        "{nickname} takes **{climbsteplength:,.3mu}** strides while climbing.",             "{climbsteplength:,.3mu}",                                                                          requires=["height"],                    power=1,    type=SV,                                default_from=lambda s: s["height"] * Decimal(1 / 2.5)),
@@ -868,23 +868,12 @@ class PersonStats:
         return return_stat
 
     def get_speeds(self, simple = False):
-        field_template = "{emo} {val:,.1M} per hour / {val:,.1U} per hour",
-        fields = {
-            "walk": format(field_template, emo=emojis.walk, val=self.stats.values['walkperhour']),
-            "run": format(field_template, emo=emojis.run, val=self.stats.values['run']),
-            "climb": format(field_template, emo=emojis.climb, val=self.stats.values['climb']),
-            "crawl": format(field_template, emo=emojis.crawl, val=self.stats.values['crawl']),
-            "swim": format(field_template, emo=emojis.swim, val=self.stats.values['swim']),
-            "drive": format(field_template, emo=emojis.drive, val=self.stats.values['drive']),
-            "spaceship": format(field_template, emo=emojis.spaceship, val=self.stats.values['spaceship'])
-        }
-
         if simple:
-            returned_fields = ["walk", "run", "climb", "swim"]
+            returned_fields = ["walkperhour", "runperhour", "climbperhour", "swimperhour"]
         else:
-            returned_fields = ["walk", "run", "climb", "crawl", "swim", "drive", "spaceship"]
+            returned_fields = ["walkperhour", "runperhour", "climbperhour", "crawlperhour", "swimperhour", "driveperhour", "spaceshipperhour"]
 
-        return "\n".join(fields[f] for f in returned_fields)
+        return "\n".join(self.stats.get_embed_value(f) for f in returned_fields)
 
     def __str__(self):
         return (f"<PersonStats NICKNAME = {self.stats.values['nickname']!r}, TAG = {self.tag!r}, GENDER = {self.stats.values['gender']!r}, "
@@ -908,7 +897,7 @@ class PersonStats:
         embed.add_field(name=self.stats.get_embed_title('height'), value=
                         f"{self.stats.get_embed_value('height')}"
                         f"\n*{self.stats.get_embed_value('scale')} scale*"
-                        (f"\n*{self.stats.get_embed_value('visibility')}" if self.stats.values["height"] < SV(1) else ""), inline=True)
+                        + (f"\n*{self.stats.get_embed_value('visibility')}" if self.stats.values["height"] < SV(1) else ""), inline=True)
         embed.add_field(name=self.stats.get_embed_title('weight'), value=
                         f"{self.stats.get_embed_value('weight')}"
                         f"\n*{self.stats.get_embed_value('cubescale')} scale*", inline=True)
