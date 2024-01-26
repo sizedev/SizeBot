@@ -427,6 +427,17 @@
         ]
     },
     {
+        "name": "dollar bill",
+        "dimension": "l",
+        "length": "0.0153",
+        "width": "0.0663",
+        "thickness": "0.00011",
+        "weight": "1",
+        "aliases": [
+            "dollar"
+        ]
+    },
+    {
         "name": "Monopoly hotel",
         "dimension": "h",
         "height": "0.015875",
@@ -1196,6 +1207,7 @@
         "height": "0.095",
         "diameter": "0.082",
         "depth": "0.091",
+        "price": "0.27",
         "weight": "368.544",
         "aliases": [
             "mug"
@@ -3043,5 +3055,17 @@
         "aliases": [
             "river"
         ]
+    },
+    {
+        "name": "water bottle",
+        "dimension": "h",
+        "height": "0.203",
+        "diameter": "0.0635",
+        "weight": "480"
+    },
+    {
+        "name": "vape juice bottle",
+        "dimension": "h",
+        "height": "0.1015"
     }
 ]
