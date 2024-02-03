@@ -99,6 +99,13 @@ def run_formatter(formatter: Formatter, format_dict: dict[str, Any]) -> str:
         return formatter(format_dict)
 
 
+def run_statbox_formatter(formatter: Formatter, statbox: StatBox) -> str:
+    if isinstance(formatter, str):
+        return formatter
+    else:
+        return formatter(statbox)
+
+
 class StatValue:
     def __init__(self, stat: Stat, value: Any):
         self.stat = stat
@@ -212,10 +219,10 @@ class ComplexEmbed:
         self.is_shown = is_shown
 
     def to_embed_title(self, stats: StatBox):
-        return run_formatter(self.format_title, stats)
+        return run_statbox_formatter(self.format_title, stats)
 
     def to_embed_value(self, stats: StatBox):
-        return run_formatter(self.format_embed, stats)
+        return run_statbox_formatter(self.format_embed, stats)
 
     def get_embed(self, stats: StatBox) -> dict:
         return {
