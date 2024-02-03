@@ -72,7 +72,7 @@ class Stat:
         self.format_title = format_title
         self.format_string = format_string
         self.format_embed = format_embed
-        self.is_shown = lambda s: is_shown if is_shown is bool else is_shown
+        self.is_shown = lambda s: is_shown if isinstance(is_shown, bool) else is_shown
         self.requires = requires or []
         self.power = power
         self.userkey = userkey
