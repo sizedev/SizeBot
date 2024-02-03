@@ -126,7 +126,7 @@ class StatValue:
             return f"The {self.stat.format_title} stat is unavailable for this user."
         return run_formatter(self.stat.format_string, format_dict)
 
-    def is_shown(self, value_dict: dict[str, any]):
+    def is_shown(self, value_dict: dict[str, any]) -> bool:
         return self.stat.is_shown(value_dict)
 
     def to_embed_title(self, format_dict: dict[str, str]):
