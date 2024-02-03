@@ -231,8 +231,37 @@ complex_embeds = {s.key: s for s in [
         lambda s: s.get_embed_title("height"),
         lambda s:
             f"{s.get_embed_value('height')}"
-            f"\n*{s.get_embed_value('scale')} scale*" +
+            f"\n*{s.get_embed_value('scale')} scale*"
             (f"\n*{s.get_embed_value('visibility')}" if s.is_shown('visibility') else "")
+    ),
+    ComplexEmbed(
+        "weight",
+        lambda s: s.get_embed_title("weight"),
+        lambda s:
+            f"{s.get_embed_value('weight')}"
+            f"\n*{s.get_embed_value('cubescale')} scale*"
+    ),
+    ComplexEmbed(
+        "footlength",
+        lambda s: "[FOOTNAME] length",
+        lambda s:
+            f"{s.get_embed_value('footlength')}"
+            f"\n({s.get_embed_value('shoesize')})"
+    ),
+    ComplexEmbed(
+        "simplespeeds",
+        "Speeds",
+        lambda s: "\n".join(s.get_embed_value(f) for f in ["walkperhour", "runperhour", "climbperhour", "swimperhour"])
+    ),
+    ComplexEmbed(
+        "speeds",
+        "Speeds",
+        lambda s: "\n".join(s.get_embed_value(f) for f in ["walkperhour", "runperhour", "climbperhour", "crawlperhour", "swimperhour", "driveperhour", "spaceshipperhour"])
+    ),
+    ComplexEmbed(
+        "bases",
+        "Character Bases",
+        lambda s: f"{s.get_embed_value('height')} | {s.get_embed_value('weight')}"
     )
 ]}
 
@@ -264,11 +293,6 @@ for stat, aliases in stataliases.items():
         statmap[alias] = stat
 for stat in all_stats.keys():
     statmap[stat] = stat
-
-# Example display code
-# display_stats = [
-#    DisplayStat(key="width", name="Width", statout="You're a {} wide chonker!", embedname="Width:", embedvalue="{} :widthicon:")
-# ]
 
 
 T = TypeVar('T', Stat, StatValue)
@@ -513,8 +537,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name="Lift/Carry Strength", value=(
             f"{emojis.comparebig}{self.bigToSmall.liftstrength:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.liftstrength:,.3mu}"), inline=True)
-        embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.get_speeds(True), inline=False)
-        embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.get_speeds(True), inline=False)
+        embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.simplespeeds, inline=False)
+        embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.simplespeeds, inline=False)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
@@ -890,6 +914,8 @@ class PersonStats:
         self.fallproofcheck = self.stats.values["fallprooficon"]               # UNUSED
         self.visibility = self.stats.values["visibility"]                      # UNUSED
 
+        self.simplespeeds = complex_embeds["simplespeeds"].get_embed_value()
+
     def getFormattedStat(self, stat: str):
         # "foot": f"'s {self.footname.lower()} is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
         try:
@@ -903,14 +929,6 @@ class PersonStats:
         if self.incomprehensible:
             return_stat = glitch_string(return_stat)
         return return_stat
-
-    def get_speeds(self, simple = False):
-        if simple:
-            returned_fields = ["walkperhour", "runperhour", "climbperhour", "swimperhour"]
-        else:
-            returned_fields = ["walkperhour", "runperhour", "climbperhour", "crawlperhour", "swimperhour", "driveperhour", "spaceshipperhour"]
-
-        return "\n".join(self.stats.get_embed_value(f) for f in returned_fields)
 
     def __str__(self):
         return (f"<PersonStats NICKNAME = {self.stats.values['nickname']!r}, TAG = {self.tag!r}, GENDER = {self.stats.values['gender']!r}, "
@@ -932,12 +950,8 @@ class PersonStats:
                       color=colors.cyan)
         embed.set_author(name=f"SizeBot {__version__}")
         embed.add_field(**complex_embeds["height"].get_embed(self.stats))
-        embed.add_field(name=self.stats.get_embed_title('weight'), value=
-                        f"{self.stats.get_embed_value('weight')}"
-                        f"\n*{self.stats.get_embed_value('cubescale')} scale*", inline=True)
-        embed.add_field(name=f"{self.footname} Length", value=
-                        f"{self.stats.get_embed_value('footlength')}"
-                        f"\n({self.stats.get_embed_value('shoesize')})", inline=True)
+        embed.add_field(**complex_embeds["weight"].get_embed(self.stats))
+        embed.add_field(**complex_embeds["footlength"].get_embed(self.stats))
         embed.add_field(name=f"{self.footname} Width", value=self.stats.get_embed_value("footwidth"), inline=True)
         embed.add_field(**self.stats.get_embed("shoeprintdepth"))
         embed.add_field(**self.stats.get_embed("pointerlength"))
@@ -965,8 +979,8 @@ class PersonStats:
         embed.add_field(**self.stats.get_embed("horizondistance"))
         embed.add_field(**self.stats.get_embed("terminalvelocity"))
         embed.add_field(**self.stats.get_embed("liftstrength"))
-        embed.add_field(name="Speeds", value=self.get_speeds(), inline=False)
-        embed.add_field(name="Character Bases", value=f"{self.basestats.get_embed_value('height')} | {self.basestats.get_embed_value('weight')}", inline=False)
+        embed.add_field(**complex_embeds["speeds"].get_embed(self.stats))
+        embed.add_field(**complex_embeds["bases"].get_embed(self.basestats))
 
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
 
