@@ -61,7 +61,7 @@ class Stat:
                  format_title: Formatter,
                  format_string: Formatter,
                  format_embed: Formatter,
-                 is_shown: Callable[[dict[str, any]], bool] = lambda s: True,
+                 is_shown: Union[Callable[[dict[str, any]], bool], bool] = lambda s: True,
                  userkey: Optional[str] = None,
                  default_from: Optional[Callable] = None,
                  power: Optional[int] = None,
