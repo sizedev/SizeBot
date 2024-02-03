@@ -914,7 +914,7 @@ class PersonStats:
         self.fallproofcheck = self.stats.values["fallprooficon"]               # UNUSED
         self.visibility = self.stats.values["visibility"]                      # UNUSED
 
-        self.simplespeeds = complex_embeds["simplespeeds"].to_embed_value()
+        self.simplespeeds = complex_embeds["simplespeeds"].to_embed_value(self.stats)
 
     def getFormattedStat(self, stat: str):
         # "foot": f"'s {self.footname.lower()} is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
