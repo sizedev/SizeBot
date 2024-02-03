@@ -212,11 +212,13 @@ class ComplexEmbed:
                  key: str,
                  format_title: Formatter,
                  format_embed: Formatter,
-                 is_shown: Callable[[dict[str, any]], bool] = lambda s: True):
+                 is_shown: Union[Callable[[dict[str, any]], bool], bool] = lambda s: True,
+                 inline: bool = True):
         self.key = key
         self.format_title = format_title
         self.format_embed = format_embed
-        self.is_shown = is_shown
+        self.is_shown = (lambda s: is_shown) if isinstance(is_shown, bool) else is_shown
+        self.inline = inline
 
     def to_embed_title(self, stats: StatBox):
         return run_statbox_formatter(self.format_title, stats)
@@ -228,7 +230,7 @@ class ComplexEmbed:
         return {
             "name": self.to_embed_title(stats),
             "value": self.to_embed_value(stats),
-            "inline": True
+            "inline": self.inline
         }
 
 
@@ -263,7 +265,8 @@ complex_embeds = {s.key: s for s in [
     ComplexEmbed(
         "speeds",
         "Speeds",
-        lambda s: "\n".join(s.get_embed_value(f) for f in ["walkperhour", "runperhour", "climbperhour", "crawlperhour", "swimperhour", "driveperhour", "spaceshipperhour"])
+        lambda s: "\n".join(s.get_embed_value(f) for f in ["walkperhour", "runperhour", "climbperhour", "crawlperhour", "swimperhour", "driveperhour", "spaceshipperhour"]),
+        inline=False
     ),
     ComplexEmbed(
         "bases",
