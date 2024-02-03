@@ -232,7 +232,7 @@ complex_embeds = {s.key: s for s in [
         lambda s:
             f"{s.get_embed_value('height')}"
             f"\n*{s.get_embed_value('scale')} scale*"
-            (f"\n*{s.get_embed_value('visibility')}" if s.is_shown('visibility') else "")
+            + (f"\n*{s.get_embed_value('visibility')}" if s.is_shown('visibility') else "")
     ),
     ComplexEmbed(
         "weight",
