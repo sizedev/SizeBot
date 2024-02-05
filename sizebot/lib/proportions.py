@@ -276,7 +276,7 @@ complex_embeds = {s.key: s for s in [
         "speeds",
         "Speeds",
         lambda s: "\n".join(s.get_embed_value(f) for f in ["walkperhour", "runperhour", "climbperhour", "crawlperhour", "swimperhour", "driveperhour", "spaceshipperhour"]),
-        z = -2
+        z = -2,
         inline=False
     ),
     ComplexEmbed(
