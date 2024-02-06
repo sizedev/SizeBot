@@ -53,10 +53,8 @@ initial_cogs = [
     "pokemon",
     "profile",
     "quake",
-    # "rainbow",
     "register",
     "roll",
-    "run",
     "say",
     "scaletalk",
     "scalewalk",
@@ -195,7 +193,6 @@ def main():
 
         if hasattr(message.author, "guild") and message.author.guild is not None:
             await nickmanager.nick_update(message.author)
-        # await meicros.on_message(message)
         await monika.on_message(message)
         await active.on_message(message)
 

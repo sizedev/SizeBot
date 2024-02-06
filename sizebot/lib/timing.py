@@ -23,8 +23,3 @@ def timethis(name):
 
 for fn in timedfuncs:
     print(fn.name, fn.end - fn.start)
-
-
-@timethis("digipee")
-def on_message(m):
-    m.reply("digipee")
