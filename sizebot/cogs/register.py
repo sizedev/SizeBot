@@ -12,7 +12,7 @@ from sizebot.lib.units import SV, WV
 logger = logging.getLogger("sizebot")
 
 
-async def addUserRole(member):
+async def add_user_role(member):
     role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
@@ -21,7 +21,7 @@ async def addUserRole(member):
     await member.add_roles(role, reason="Registered as sizebot user")
 
 
-async def removeUserRole(member):
+async def remove_user_role(member):
     role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
@@ -30,7 +30,7 @@ async def removeUserRole(member):
     await member.remove_roles(role, reason="Unregistered as sizebot user")
 
 
-async def showNextStep(ctx, userdata: userdb.User, completed=False):
+async def show_next_step(ctx, userdata: userdb.User, completed=False):
     if completed or not userdata.registered:
         telemetry.RegisterStepCompleted(ctx.guild.id, ctx.author.id, ctx.command.name, completed = completed).save()
 
@@ -87,7 +87,7 @@ class RegisterCog(commands.Cog):
                 await ctx.send("Sorry! You already registered with SizeBot.\n"
                                f"To unregister, use the `{conf.prefix}unregister` command.")
             else:
-                await showNextStep(ctx, userdata)
+                await show_next_step(ctx, userdata)
             return
 
         # User is already in different guilds, offer to copy profile to this guild?
@@ -139,7 +139,7 @@ class RegisterCog(commands.Cog):
 
         userdb.save(userdata)
 
-        await addUserRole(ctx.author)
+        await add_user_role(ctx.author)
 
         logger.warn(f"Started registration for a new user: {ctx.author} in guild {ctx.guild.name}!")
         logger.info(userdata)
@@ -149,7 +149,7 @@ class RegisterCog(commands.Cog):
             await ctx.send("I can't update a server owner's nick. You'll have to manage it manually.")
 
         await ctx.send("Initial registration completed!")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @register.error
     async def register_handler(self, ctx, error):
@@ -260,7 +260,7 @@ class RegisterCog(commands.Cog):
 
         userdb.save(userdata)
 
-        await addUserRole(ctx.author)
+        await add_user_role(ctx.author)
 
         logger.warn(f"Made a new user: {ctx.author}!")
         logger.info(userdata)
@@ -330,7 +330,7 @@ class RegisterCog(commands.Cog):
         # delete the user file
         userdb.delete(guild.id, user.id)
         # remove the user role
-        await removeUserRole(user)
+        await remove_user_role(user)
 
         telemetry.Unregistered(ctx.guild.id, ctx.author.id).save()
         logger.warn(f"User {user.id} successfully unregistered.")

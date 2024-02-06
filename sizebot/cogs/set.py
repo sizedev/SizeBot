@@ -4,7 +4,7 @@ import typing
 import discord
 from discord.ext import commands
 
-from sizebot.cogs.register import showNextStep
+from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.diff import Diff
 from sizebot.lib.diff import Rate as ParseableRate
@@ -41,7 +41,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>'s nick is now {userdata.nickname}.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<species>",
@@ -58,7 +58,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s species is now a {userdata.species}.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["clearspecies"],
@@ -75,7 +75,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s species is now cleared.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<Y/N>",
@@ -99,7 +99,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s display is now set to {userdata.display}.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<M/U>",
@@ -129,7 +129,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s system is now set to {userdata.unitsystem}.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         aliases = ["setsize", "s"],
@@ -148,7 +148,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<scale>",
@@ -174,7 +174,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["setheightso", "setscaleso", "setsizeso"],
@@ -193,7 +193,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["copysize"],
@@ -222,7 +222,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         aliases = ["resetsize", "reset", "resetscale"],
@@ -239,7 +239,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{ctx.author.display_name} reset their size.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["setrandomsize"],
@@ -269,7 +269,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<minscale> <maxscale>",
@@ -301,7 +301,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         aliases = ["inf"],
@@ -319,7 +319,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname} is now infinitely tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         aliases = ["0"],
@@ -337,7 +337,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname} is now nothing.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<weight>",
@@ -354,7 +354,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s weight is now {userdata.weight:mu}")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<foot>",
@@ -370,7 +370,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({format_shoe_size(userdata.footlength, 'm')}), "
                        f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {format_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["setshoesize"],
@@ -399,7 +399,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({format_shoe_size(userdata.footlength, 'm')}), "
                        f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {format_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["clearfoot", "unsetfoot"],
@@ -414,7 +414,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s foot length is now default.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["pawtoggle"],
@@ -429,7 +429,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"The end of {userdata.nickname}'s legs are now called a {userdata.footname.lower()}.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["furtoggle"],
@@ -444,7 +444,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"The hair of {userdata.nickname} is now called {userdata.hairname.lower()}.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["incomprehensibletoggle", "toggleincomp", "incomptoggle"],
@@ -465,7 +465,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(out_str)
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<hair>",
@@ -482,7 +482,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s base hair length is now {userdata.hairlength:mu} long, "
                        f"or {SV(userdata.hairlength):mu} currently.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<tail>",
@@ -499,7 +499,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s base tail length is now {userdata.taillength:mu} long, "
                        f"or {SV(userdata.taillength):mu} currently.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["cleartail", "unsettail"],
@@ -514,7 +514,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s tail length is now cleared.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<ear>",
@@ -531,7 +531,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s base ear height is now {userdata.earheight:mu} long, "
                        f"or {SV(userdata.earheight):mu} currently.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["clearear", "unsetear"],
@@ -546,7 +546,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s ear height is now cleared.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["setlift"],
@@ -563,7 +563,7 @@ class SetCog(commands.Cog):
 
         await ctx.send(f"{userdata.nickname}'s base lift strength is now {WV(userdata.liftstrength):mu}, "
                        f"or {WV(userdata.liftstrength):mu} currently.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["clearstrength", "unsetstrength"],
@@ -578,7 +578,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s lift/carry strength is now cleared.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -595,7 +595,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base walk speed is now {userdata.walkperhour:mu} per hour. (Current speed is {newwalk:mu})")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["clearwalk", "unsetwalk"],
@@ -610,7 +610,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s walk speed is now cleared.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -627,7 +627,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour.  (Current speed is {newrun:mu})")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["clearrun", "unsetrun"],
@@ -642,7 +642,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s run speed is now cleared.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -659,7 +659,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.  (Current speed is {newswim:mu})")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["clearswim", "unsetswim"],
@@ -674,7 +674,7 @@ class SetCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s swim speed is now cleared.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<male/female/none>",
@@ -703,7 +703,7 @@ class SetCog(commands.Cog):
         await nickmanager.nick_update(user)
 
         await ctx.send(f"{userdata.nickname}'s gender is now set to {userdata.gender}.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["cleargender", "unsetgender"],
@@ -722,7 +722,7 @@ class SetCog(commands.Cog):
         await nickmanager.nick_update(user)
 
         await ctx.send(f"{userdata.nickname}'s gender is now reset.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         category = "mod",

@@ -3,7 +3,7 @@ import typing
 
 from discord.ext import commands
 
-from sizebot.cogs.register import showNextStep
+from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import emojis
 from sizebot.lib.diff import Rate as ParseableRate
@@ -39,7 +39,7 @@ class SetBaseCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s base height is now {userdata.baseheight:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<weight>",
@@ -61,7 +61,7 @@ class SetBaseCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s base weight is now {userdata.baseweight:mu}")
 
         await nickmanager.nick_update(ctx.author)
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<height/weight> [height/weight]",
@@ -100,7 +100,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname} changed their base height and weight to {userdata.baseheight:,.3mu} and {userdata.baseweight:,.3mu}.")
-        await showNextStep(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         usage = "<length>",
@@ -116,7 +116,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({format_shoe_size(userdata.footlength, 'm')})")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["setbaseshoesize"],
@@ -145,7 +145,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({format_shoe_size(userdata.footlength, 'm')})")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -162,7 +162,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s hair is now {userdata.hairlength:mu} long.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["clearhair", "unsethair"],
@@ -177,7 +177,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s hair length is now cleared.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -194,7 +194,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s tail is now {userdata.taillength:mu} long.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -211,7 +211,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s ear is now {userdata.earheight:mu} long.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["setbaselift"],
@@ -228,7 +228,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s strength is now {WV(userdata.liftstrength):mu}.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -244,7 +244,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s walk is now {userdata.walkperhour:mu} per hour.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -260,7 +260,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s run is now {userdata.runperhour:mu} per hour.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<length>",
@@ -276,7 +276,7 @@ class SetBaseCog(commands.Cog):
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s swim is now {userdata.swimperhour:mu} per hour.")
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
 
 async def setup(bot):

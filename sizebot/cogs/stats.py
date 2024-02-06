@@ -7,7 +7,7 @@ import typing
 import discord
 from discord.ext import commands
 
-from sizebot.cogs.register import showNextStep
+from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.language import engine
@@ -56,7 +56,7 @@ class StatsCog(commands.Cog):
             embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<from> <to> [user/height]",
@@ -84,7 +84,7 @@ class StatsCog(commands.Cog):
         embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "[user/height]",
@@ -110,7 +110,7 @@ class StatsCog(commands.Cog):
         embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "[user/height]",
@@ -185,7 +185,7 @@ class StatsCog(commands.Cog):
             return
 
         await ctx.send(stattosend)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         usage = "<from> <to> <stat> [user/height]",
@@ -219,7 +219,7 @@ class StatsCog(commands.Cog):
             return
 
         await ctx.send(stattosend)
-        await showNextStep(ctx, userdata)
+        await show_next_step(ctx, userdata)
 
     @commands.command(
         aliases = ["getas"],
