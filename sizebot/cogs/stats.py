@@ -25,11 +25,11 @@ class StatsCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
-        usage = "[user/height]",
+        usage = "[user/height] [tag]",
         category = "stats"
     )
     @commands.guild_only()
-    async def stats(self, ctx, *, memberOrHeight: MemberOrSize = None):
+    async def stats(self, ctx, memberOrHeight: typing.Optional[MemberOrSize] = None, tag = None):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
@@ -50,7 +50,10 @@ class StatsCog(commands.Cog):
 
         stats = proportions.PersonStats(userdata)
 
-        embedtosend = stats.toEmbed(ctx.author.id)
+        if tag:
+            embedtosend = stats.to_tag_embed(tag, ctx.author)
+        else:
+            embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
         await showNextStep(ctx, userdata)

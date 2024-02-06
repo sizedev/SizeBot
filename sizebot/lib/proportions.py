@@ -1004,6 +1004,18 @@ class PersonStats:
 
         return embed
 
+    def to_tag_embed(self, tag: str, requesterID = None):
+        requestertag = f"<@!{requesterID}>"
+        embed = Embed(title=f"Stats for {self.nickname} tagged `{tag}`",
+                      description=f"*Requested by {requestertag}*",
+                      color=colors.cyan)
+        embed.set_author(name=f"SizeBot {__version__}")
+        for stat_name in self.stats.sorted_keys():
+            if tag in self.stats.stats[stat_name].stat.tags:  # this sucks
+                embed.add_field(**self.stats.get_embed(stat_name))
+
+        return embed
+
 
 class PersonBaseStats:
     def __init__(self, userdata: User):
