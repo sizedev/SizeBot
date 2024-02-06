@@ -18,7 +18,7 @@ async def add_user_role(member):
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
     # PERMISSION: requires manage_roles
-    await member.add_roles(role, reason="Registered as sizebot user")
+    await member.add_roles(role, reason="Registered as SizeBot user")
 
 
 async def remove_user_role(member):
@@ -27,7 +27,7 @@ async def remove_user_role(member):
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
         return
     # PERMISSION: requires manage_roles
-    await member.remove_roles(role, reason="Unregistered as sizebot user")
+    await member.remove_roles(role, reason="Unregistered as SizeBot user")
 
 
 async def show_next_step(ctx, userdata: userdb.User, completed=False):
