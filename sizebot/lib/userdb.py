@@ -118,7 +118,7 @@ class User:
                 f"FOOTLENGTH = {self.footlength!r}, HAIRLENGTH = {self.hairlength!r}, "
                 f"TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r}, LIFTSTRENGTH = {self.liftstrength!r}, "
                 f"PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
-                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}, INCOMPREHENSIBLE = {self.incomprehensible!r}, "
+                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}, "
                 f"CURRENTSCALESTEP = {self.currentscalestep!r}, CURRENTSCALETALK = {self.currentscaletalk!r}, "
                 f"CURRENTMOVETYPE = {self.currentmovetype!r}, MOVESTARTED = {self.movestarted!r}, MOVESTOP = {self.movestop!r}, "
                 f"TRIGGERS = {self.triggers!r}, BUTTON = {self.button!r}, TRA_REPORTS = {self.tra_reports!r}, "
@@ -533,7 +533,7 @@ class User:
             "walkperhour":      None if self.walkperhour is None else str(self.walkperhour),
             "runperhour":       None if self.runperhour is None else str(self.runperhour),
             "swimperhour":      None if self.swimperhour is None else str(self.swimperhour),
-            "incomprehensible": self.incomprehensible,
+            "incomprehensible": False,
             "currentscalestep": None if self.currentscalestep is None else self.currentscalestep.toJSON(),
             "currentscaletalk": None if self.currentscaletalk is None else self.currentscaletalk.toJSON(),
             "scaletalklock":    self.scaletalklock,
@@ -578,7 +578,7 @@ class User:
         userdata.walkperhour = jsondata.get("walkperhour")
         userdata.runperhour = jsondata.get("runperhour")
         userdata.swimperhour = jsondata.get("swimperhour")
-        userdata.incomprehensible = jsondata.get("incomprehensible", False)
+        userdata.incomprehensible = False
         currentscalestep = jsondata.get("currentscalestep")
         if currentscalestep is not None:
             currentscalestep = Diff.fromJSON(currentscalestep)

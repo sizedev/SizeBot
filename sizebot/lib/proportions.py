@@ -579,13 +579,6 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
             f"{self.big.nickname} would need {self.smallToBig.visibility} to see {self.small.nickname}."))
 
-        if self.small.incomprehensible or self.big.incomprehensible:
-            ed = embed.to_dict()
-            for field in ed["fields"]:
-                field["value"] = glitch_string("somebody once told me") + "\n" + glitch_string("the world was gonna roll me")
-            embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(embed.footer.text))
-
         return embed
 
     async def toSimpleEmbed(self, requesterID = None):
@@ -621,13 +614,6 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
             f"{self.big.nickname} would need {self.smallToBig.visibility} to see {self.small.nickname}."))
 
-        if self.small.incomprehensible or self.big.incomprehensible:
-            ed = embed.to_dict()
-            for field in ed["fields"]:
-                field["value"] = glitch_string("somebody once told me") + "\n" + glitch_string("the world was gonna roll me")
-            embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(embed.footer.text))
-
         return embed
 
     async def url(self):
@@ -648,8 +634,6 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
                 "height": self.big.height
             }
         ])
-        if self.small.incomprehensible or self.big.incomprehensible:
-            return "https://cutt.ly/ik1uWDk"
 
         return compUrl
 
@@ -720,16 +704,6 @@ class PersonSpeedComparison:
         drivespeedstr = f"\n*{emojis.blank}{self.viewer.driveperhour:,.3mu} per hour*"
         spacespeedstr = f"\n*{emojis.blank}{self.viewer.spaceshipperhour:,.3mu} per hour*"
 
-        if self.viewer.incomprehensible or self.viewed.incomprehensible:
-            walkspeedstr = glitch_string(walkspeedstr)
-            runspeedstr = glitch_string(runspeedstr)
-            climbspeedstr = glitch_string(climbspeedstr)
-            crawlspeedstr = glitch_string(crawlspeedstr)
-            swimspeedstr = glitch_string(swimspeedstr)
-            drivespeedstr = glitch_string(drivespeedstr)
-            reldist_print = glitch_string(reldist_print)
-            shoesize = glitch_string(shoesize)
-
         nl = "\n"
 
         out_str = (
@@ -797,9 +771,6 @@ class PersonSpeedComparison:
 
         desc = descmap[mapped_stat]
 
-        if self.viewer.incomprehensible or self.viewed.incomprehensible:
-            desc = glitch_string(desc)
-
         return Embed(
             title = f"To move the distance of {self.viewedtoviewerdata.nickname}'s {statname}, it would take {self.viewertovieweddata.nickname}...",
             description = desc)
@@ -837,13 +808,6 @@ class PersonSpeedComparison:
         embed.add_field(name="Eye Width", value=(self.speedcalc(self.viewedtoviewer.eyewidth)), inline=True)
         embed.set_footer(text=(f"{self.viewed.nickname} is {self.multiplier:,.3}x taller than {self.viewer.nickname}."))
 
-        if self.viewer.incomprehensible or self.viewed.incomprehensible:
-            ed = embed.to_dict()
-            for field in ed["fields"]:
-                field["value"] = glitch_string(field["value"])
-            embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(embed.footer.text))
-
         return embed
 
 
@@ -870,7 +834,6 @@ class PersonStats:
         self.furtoggle = userdata.furtoggle                             # UNUSED
 
         # What do I do with these?
-        self.incomprehensible = userdata.incomprehensible               # UNUSED
         self.macrovision_model = userdata.macrovision_model             # UNUSED
         self.macrovision_view = userdata.macrovision_view               # UNUSED
 
@@ -961,8 +924,6 @@ class PersonStats:
         returndict = {k: self.stats.get_string(k) for k in self.stats}
 
         return_stat = returndict.get(mapped_stat)
-        if self.incomprehensible:
-            return_stat = glitch_string(return_stat)
         return return_stat
 
     def __str__(self):
@@ -994,13 +955,6 @@ class PersonStats:
         embed.add_field(**complex_embeds["bases"].get_embed(self.basestats))
 
         embed.set_footer(text=f"An average person would look {self.avgheightcomp:,.3mu}, and weigh {self.avgweightcomp:,.3mu} to you. You'd have to look {self.avglookdirection} {self.avglookangle:.0f}° to see them.")
-
-        if self.incomprehensible:
-            ed = embed.to_dict()
-            for field in ed["fields"]:
-                field["value"] = glitch_string(field["value"])
-            embed = Embed.from_dict(ed)
-            embed.set_footer(text = glitch_string(embed.footer.text))
 
         return embed
 

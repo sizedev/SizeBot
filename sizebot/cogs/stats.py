@@ -405,13 +405,6 @@ class StatsCog(commands.Cog):
         comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
         embedtosend = await comparison.toEmbed(ctx.author.id)
 
-        if userdata1.incomprehensible or userdata2.incomprehensible:
-            ed = embedtosend.to_dict()
-            for field in ed["fields"]:
-                field["value"] = glitch_string(field["value"])
-            embedtosend = discord.Embed.from_dict(ed)
-            embedtosend.set_footer(text = glitch_string(embedtosend.footer.text))
-
         await ctx.send(embed = embedtosend)
 
     @commands.command(
@@ -475,8 +468,6 @@ class StatsCog(commands.Cog):
         newlength = SV(length / userstats.stats.values["viewscale"])
 
         desc = f"To everyone else, {userstats.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
-        if userdata.incomprehensible:
-            desc = glitch_string(desc)
 
         e = discord.Embed(
             title = f"{userstats.nickname}'s {length:,.3mu} to the world",
