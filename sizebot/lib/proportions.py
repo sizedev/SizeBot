@@ -349,6 +349,19 @@ class StatBox:
                 raise errors.UnfoundStatException(queued.keys())
         return cls(processed)
 
+    def sorted_keys(self) -> list[str]:
+        li = []
+        positives = {k: v for (k, v) in self.stats.items() if v.stat.z and v.stat.z >= 0}
+        neutrals = {k: v for (k, v) in self.stats.items() if v.stat.z is None}
+        negatives = {k: v for (k, v) in self.stats.items() if v.stat.z and v.stat.z < 0}
+        for k, v in sorted(positives.items(), key = lambda item: item[1].stat.z):
+            li.append(k)
+        for k, v in neutrals.items():
+            li.append(k)
+        for k, v in sorted(negatives.items(), key = lambda item: item[1].stat.z):
+            li.append(k)
+        return li
+
     @classmethod
     def load(cls, playerStats: PlayerStats) -> StatBox:
         return cls.process(all_stats, lambda s, vals: s.set(playerStats, vals))
@@ -973,34 +986,9 @@ class PersonStats:
         embed.set_author(name=f"SizeBot {__version__}")
         embed.add_field(**complex_embeds["height"].get_embed(self.stats))
         embed.add_field(**complex_embeds["weight"].get_embed(self.stats))
-        embed.add_field(**complex_embeds["footlength"].get_embed(self.stats))
-        embed.add_field(name=f"{self.footname} Width", value=self.stats.get_embed_value("footwidth"), inline=True)
-        embed.add_field(**self.stats.get_embed("shoeprintdepth"))
-        embed.add_field(**self.stats.get_embed("pointerlength"))
-        if self.stats.is_shown("toeheight"):
-            embed.add_field(**self.stats.get_embed("toeheight"))
-        if self.stats.is_shown("thumbwidth"):
-            embed.add_field(**self.stats.get_embed("thumbwidth"))
-        if self.stats.is_shown("nailthickness"):
-            embed.add_field(**self.stats.get_embed("nailthickness"))
-        if self.stats.is_shown("fingerprintdepth"):
-            embed.add_field(**self.stats.get_embed("fingerprintdepth"))
-        if self.stats.is_shown("threadthickness"):
-            embed.add_field(**self.stats.get_embed("threadthickness"))
-        if self.stats.is_shown("hairlength"):
-            embed.add_field(name=f"{self.hairname} Length", value=self.stats.get_embed_value("hairlength"), inline=True)
-        if self.stats.is_shown("taillength"):
-            embed.add_field(**self.stats.get_embed("taillength"))
-        if self.stats.is_shown("earheight"):
-            embed.add_field(**self.stats.get_embed("earheight"))
-        if self.stats.is_shown("hairwidth"):
-            embed.add_field(name=f"{self.hairname} Width", value=format(self.hairwidth, ",.3mu"), inline=True)
-        if self.stats.is_shown("eyewidth"):
-            embed.add_field(**self.stats.get_embed("eyewidth"))
-        embed.add_field(**self.stats.get_embed("jumpheight"))
-        embed.add_field(**self.stats.get_embed("horizondistance"))
-        embed.add_field(**self.stats.get_embed("terminalvelocity"))
-        embed.add_field(**self.stats.get_embed("liftstrength"))
+        for stat_name in self.stats.sorted_keys():
+            if self.stats.is_shown(stat_name):
+                embed.add_field(**self.stats.get_embed(stat_name))
         embed.add_field(**complex_embeds["speeds"].get_embed(self.stats))
         embed.add_field(**complex_embeds["bases"].get_embed(self.basestats))
 
