@@ -160,6 +160,8 @@ class ObjectsCog(commands.Cog):
         if isinstance(what, str):
             what = what.lower()
 
+        # TODO: Should easter eggs be in a different place?
+
         if isinstance(what, DigiObject):
             telemetry.ObjectUsed(str(what)).save()
             la = what.relativestatssentence(userdata)

@@ -243,7 +243,7 @@ class HelpCog(commands.Cog):
     async def about(self, ctx):
         """Get the credits and some facts about SizeBot."""
         now = datetime.now()
-        embed = Embed(title = "SizeBot3½", description = "Think of a new slogan!", color = colors.cyan)
+        embed = Embed(title = "SizeBot3½", description = "Credits", color = colors.cyan)
         embed.set_author(name = "DigiDuncan")
         embed.set_image(url = "https://cdn.discordapp.com/attachments/650460192009617433/698529527965417552/sizebotlogot.png")
         embed.add_field(name = "Credits",
@@ -251,27 +251,9 @@ class HelpCog(commands.Cog):
                                  "**Additional Equations** *by Benyovski and Arceus3251*\n"
                                  "**Originally Tested** *by Aria, Kelly, worstgender, and Arceus3251*\n"),
                         inline = False)
-        # embed.add_field(name = "Servers",
-        #               value = ("**[Size Matters](https://discord.gg/UbMxrW)**: a size server moderated by DigiDuncan and others *(see below)*\n"
-        #                        "**[SW Dollhouse](https://discord.gg/5mMBRnjJ3J)**: a shrinking women server run by Natalie"),
-        #               inline = False)
         embed.add_field(name = "Technical Details",
-                        value = "Written in Python 3.6, and slowly upgraded to 3.9. Originally written using Atom, and now Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
+                        value = "Written in Python 3.6, and slowly upgraded to 3.9. Written Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
                         inline = False)
-        # embed.add_field(name = "Special Thanks",
-        #               value = ("**Special thanks** *to Reol, jyubari, and Memekip for making the Size Matters server, and Yukio and SpiderGnome for helping moderate it.*\n"
-        #                        "**Special thanks** *to Chocola, the creator of [Mei](https://chocola.codes/) and Arachne, for inspiration and moral support.*\n"
-        #                        "**Special thanks** *to the discord.py Community Discord for helping with code.*\n"
-        #                        f"**Special thanks** *to the {userdb.count_users()} users of SizeBot.*"),
-        #               inline = False)
-        # embed.add_field(name = "Testimonials",
-        #               value = ("\"I want to put SizeBot in charge of the world government.\" *-- AWK*\n"
-        #                        "\"Insanity is doing the exact same thing over and over again expecting things to change.\" *-- Chocola*\n"
-        #                        "\"Um... I like it?\" *-- Goddess Syn*\n"
-        #                        "\"I fixed the bot.\" *-- Natalie*\n"
-        #                        "\"I am the only person who has accidentally turned my fetish into a tech support job.\" *-- DigiDuncan*\n"
-        #                       "\"Insanity is doing the exact same thing over and over again expecting things to change.\" *-- Chocola*\n"),
-        #               inline = False)
         embed.set_footer(text = f"Version {__version__} | {now.strftime('%d %b %Y')}")
         await ctx.send(embed = embed)
 
