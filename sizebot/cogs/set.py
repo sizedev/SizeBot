@@ -447,27 +447,6 @@ class SetCog(commands.Cog):
         await show_next_step(ctx, userdata)
 
     @commands.command(
-        aliases = ["incomprehensibletoggle", "toggleincomp", "incomptoggle"],
-        category = "set"
-    )
-    @commands.guild_only()
-    async def toggleincomprehensible(self, ctx):
-        """You stare into the void."""
-        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.incomprehensible = not userdata.incomprehensible
-        userdb.save(userdata)
-
-        out_str = f"{userdata.nickname} is now understandable by mortals."
-
-        if userdata.incomprehensible:
-            out_str = f"{userdata.nickname} " + glitch_string(" i ain't the sharpest tool in the shed") + "."
-
-        await ctx.send(out_str)
-        await nickmanager.nick_update(ctx.author)
-        await show_next_step(ctx, userdata)
-
-    @commands.command(
         usage = "<hair>",
         category = "set"
     )

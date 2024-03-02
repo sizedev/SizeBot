@@ -153,10 +153,6 @@ class ObjectsCog(commands.Cog):
 
         userdata = load_or_fake(ctx.author)
 
-        if userdata.incomprehensible:
-            await ctx.send(glitch_string("hey now, you're an all star, get your game on, go play"))
-            return
-
         if isinstance(what, str):
             what = what.lower()
 
