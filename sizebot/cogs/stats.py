@@ -11,6 +11,7 @@ from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.language import engine
+from sizebot.lib.metal import Metal, metal_value
 from sizebot.lib.units import SV, TV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import glitch_string, pretty_time_delta, sentence_join
@@ -742,6 +743,34 @@ class StatsCog(commands.Cog):
         gs = (Decimal(9.81) * f) / (smaller_person.weight / 1000)
 
         await ctx.send(f"Standing on {larger_person.nickname}, {smaller_person.nickname} would experience **{gs:.3}**g of gravitational force.")
+    
+    @commands.command(
+        aliases = ["gold", "silver", "palladium", "platinum"],
+        usage = "[user]",
+        category = "stats"
+    )
+    async def metal(self, ctx, *, who: MemberOrSize = None):
+        """Get the price of your weight in gold (and other metals!)"""
+
+        if who is None:
+            who = ctx.message.author
+
+        userdata = load_or_fake(who)
+        userstats = proportions.PersonStats(userdata)
+        weight = userstats.weight
+        
+        gold_dollars = metal_value("gold", weight)
+        silver_dollars = metal_value("silver", weight)
+        platinum_dollars = metal_value("platinum", weight)
+        palladium_dollars = metal_value("palladium", weight)
+
+        e = discord.Embed(color = discord.Color.gold, title = f"Price of {weight:,.1mu} in metal")
+        e.add_field(name = "Gold", value = f"${gold_dollars:,.2}")
+        e.add_field(name = "Silver", value = f"${silver_dollars:,.2}")
+        e.add_field(name = "Platinum", value = f"${platinum_dollars:,.2}")
+        e.add_field(name = "Palladium", value = f"${palladium_dollars:,.2}")
+
+        await ctx.send(embed = e)
 
 
 async def setup(bot):
