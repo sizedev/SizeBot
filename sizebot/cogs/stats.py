@@ -764,7 +764,7 @@ class StatsCog(commands.Cog):
         platinum_dollars = metal_value("platinum", weight)
         palladium_dollars = metal_value("palladium", weight)
 
-        e = discord.Embed(color = discord.Color.gold, title = f"Price of {weight:,.1mu} in metal")
+        e = discord.Embed(color = discord.Color.gold(), title = f"Price of {weight:,.1mu} in metal")
         e.add_field(name = "Gold", value = f"${gold_dollars:,.2}")
         e.add_field(name = "Silver", value = f"${silver_dollars:,.2}")
         e.add_field(name = "Platinum", value = f"${platinum_dollars:,.2}")
