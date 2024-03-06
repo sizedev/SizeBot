@@ -40,7 +40,7 @@ def metal_value(metal: Metal, weight: WV) -> Dollars:
     
     j = get_json_response(url)
 
-    PRICE_PER_OZ = j[0]["spreadProfilePrices"][0]["ask"]
+    PRICE_PER_OZ = Decimal(j[0]["spreadProfilePrices"][0]["ask"])
     PRICE_PER_G = PRICE_PER_OZ * OZ_TO_G
 
     return Decimal(weight) * PRICE_PER_G
