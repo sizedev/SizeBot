@@ -753,17 +753,17 @@ class PersonSpeedComparison:
 
         statnamemap = {
             "height":           "Height",
-            "foot":             f"{self.viewed.footname} Length",
-            "toe":              "Toe Height",
-            "shoeprint":        "Shoeprint Depth",
-            "finger":           "Finger Length",
-            "thumb":            "Thumb Width",
-            "fingerprint":      "Fingerprint Depth",
-            "eye":              "Eye Width",
+            "footlength":       f"{self.viewed.footname} Length",
+            "toeheight":        "Toe Height",
+            "shoeprintdepth":   "Shoeprint Depth",
+            "fingerlength":     "Finger Length",
+            "thumbwidth":       "Thumb Width",
+            "fingerprintdepth": "Fingerprint Depth",
+            "eyewidth":         "Eye Width",
             "hairwidth":        f"{self.viewed.hairname} Width",
-            "hair":             f"{self.viewed.hairname} Length",
-            "tail":             "Tail Length",
-            "ear":              "Ear Height",
+            "hairlength":       f"{self.viewed.hairname} Length",
+            "taillength":       "Tail Length",
+            "earheight":        "Ear Height",
         }
 
         statname = statnamemap[mapped_stat].replace("Foot", self.viewertovieweddata.footname) \
