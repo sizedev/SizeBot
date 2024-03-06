@@ -22,7 +22,7 @@ def get_json_response(url: str) -> Any:
         j = json.loads(r.text)
     except json.JSONDecodeError as e:
         raise e
-    if r.status != 200:
+    if r.status_code != 200:
         raise Exception(f"The API returned a code {r.status}.")
     return j
 
