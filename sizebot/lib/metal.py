@@ -9,7 +9,7 @@ from sizebot.lib.units import WV
 OZ_TO_G = Decimal("28.3495")
 
 GOLD_URL = R"https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAU/USD"
-SILVER_URL = R"https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAU/USD"
+SILVER_URL = R"https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAG/USD"
 PLATINUM_URL = R"https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XPT/USD"
 PALLADIUM_URL = R"https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XPD/USD"
 
