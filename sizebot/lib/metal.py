@@ -19,7 +19,7 @@ Metal = Literal["gold", "silver", "platinum", "palladium"]
 def get_json_response(url: str) -> Any:
     r = requests.get(url)
     try:
-        j = json.loads(r.text())
+        j = json.loads(r.text)
     except json.JSONDecodeError as e:
         raise e
     if r.status != 200:
