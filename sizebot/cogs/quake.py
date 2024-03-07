@@ -45,7 +45,7 @@ def quake_embed(userdata: userdb.User, quake_type: QuakeType, scale_rad = 1) -> 
     mag = joules_to_mag(joules)
     e_type = mag_to_name(mag)
     rad = mag_to_radius(mag)
-    rad *= scale_rad ** 3
+    rad *= SV(scale_rad ** 3)
     print_mag = max(mag, Decimal(0.0))
     if rad < EARTH_RAD:
         print_rad = f"{rad:,.1mu}"
@@ -95,7 +95,7 @@ class QuakeCog(commands.Cog):
         userstats = proportions.PersonStats(self_user)
         userdata = load_or_fake(user)
         userdata.scale *= userstats.stats.values["viewscale"]
-        e = quake_embed(userdata, quake_type, scale_rad = userdata.scale)
+        e = quake_embed(userdata, quake_type, scale_rad = userdata.viewscale)
         e.title = e.title + f" as seen by {self_user.nickname}"
         e.description = f"To {self_user.nickname}, " + e.description
         await ctx.send(embed = e)
