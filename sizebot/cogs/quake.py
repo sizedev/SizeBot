@@ -63,7 +63,7 @@ def quake_embed(userdata: userdb.User, quake_type: QuakeType, scale_rad = 1) -> 
     e.add_field(name = "Magnitude", value = f"{print_mag:,.1}")
     e.add_field(name = "Joules", value = f"{joules:,.0}")
     e.add_field(name = "Earthquake Type", value = e_type)
-    e.add_field(name = "Radius", value = print_rad)
+    e.add_field(name = "Radius" if scale_rad is 1 else "Percieved Radius", value = print_rad)
     return e
 
 
