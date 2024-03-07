@@ -45,7 +45,7 @@ def quake_embed(userdata: userdb.User, quake_type: QuakeType, scale_rad = 1) -> 
     mag = joules_to_mag(joules)
     e_type = mag_to_name(mag)
     rad = mag_to_radius(mag)
-    rad = SV(rad * scale_rad ** 3)
+    rad = SV(rad * scale_rad)
     print_mag = max(mag, Decimal(0.0))
     if rad < EARTH_RAD:
         print_rad = f"{rad:,.1mu}"
