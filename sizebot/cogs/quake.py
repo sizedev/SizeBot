@@ -18,7 +18,7 @@ UNI_RAD = Decimal(4.4E26)
 QuakeType = typing.Literal["step", "stomp", "jump", "poke", "breath", "breathe", "heartbeat", "type", "typing"]
 
 
-def quake_embed(userdata: userdb.User, quake_type: QuakeType) -> discord.Embed:
+def quake_embed(userdata: userdb.User, quake_type: QuakeType, scale_rad = 1) -> discord.Embed:
     if quake_type == "step":
         verb = " stepping"
         joules = step_joules(userdata)
@@ -45,6 +45,7 @@ def quake_embed(userdata: userdb.User, quake_type: QuakeType) -> discord.Embed:
     mag = joules_to_mag(joules)
     e_type = mag_to_name(mag)
     rad = mag_to_radius(mag)
+    rad *= scale_rad ** 3
     print_mag = max(mag, Decimal(0.0))
     if rad < EARTH_RAD:
         print_rad = f"{rad:,.1mu}"
@@ -94,7 +95,7 @@ class QuakeCog(commands.Cog):
         userstats = proportions.PersonStats(self_user)
         userdata = load_or_fake(user)
         userdata.scale *= userstats.stats.values["viewscale"]
-        e = quake_embed(userdata, quake_type)
+        e = quake_embed(userdata, quake_type, scale_rad = userdata.scale)
         e.title = e.title + f" as seen by {self_user.nickname}"
         e.description = f"To {self_user.nickname}, " + e.description
         await ctx.send(embed = e)
