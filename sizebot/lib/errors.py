@@ -1,6 +1,7 @@
 import importlib.resources as pkg_resources
 import logging
 import json
+from typing import Any
 
 import sizebot.data
 from sizebot.conf import conf
@@ -243,8 +244,8 @@ class ParseError(DigiException):
 
 
 class UnfoundStatException(DigiException):
-    def __init__(self, s: list[str]) -> None:
-        self.s = utils.sentence_join(s)
+    def __init__(self, s: list[Any]) -> None:
+        self.s = utils.sentence_join(getattr(s, "key", repr(s)) for s in s)
 
     def formatMessage(self):
         return f"Could not calculate the {self.s} stat(s)."
