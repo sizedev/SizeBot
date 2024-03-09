@@ -49,14 +49,14 @@ def metal_value(metal: Metal, weight: WV) -> Dollars:
 def nugget_value(weight: WV) -> tuple[Dollars, int]:
     NUGGET_WEIGHT = 16
     prices = [(40, 13.49), (20, 7.49), (10, 6.39), (6, 3.99), (4, 2.49), (1, 0.50)]
-    prices = [(p[0], p[1] / p[0]) for p in prices]
+    prices: list[tuple[int, float]] = [(p[0], p[1] / p[0]) for p in prices]
 
     nugget_count = weight / NUGGET_WEIGHT
     nc = nugget_count
     total = 0
     for count, price in prices:
         available_nuggets = (nc // count) * count
-        total += available_nuggets * price
+        total += available_nuggets * Decimal(price)
         nc -= available_nuggets
     if nc:
         total += (nc * 0.50)
