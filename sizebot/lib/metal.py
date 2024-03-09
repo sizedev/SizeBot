@@ -6,7 +6,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import ThisShouldNeverHappenException
 from sizebot.lib.units import WV
 
-OZ_TO_G = Decimal("28.3495")
+G_PER_OZ = Decimal("28.3495")
 
 GOLD_URL = R"https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAU/USD"
 SILVER_URL = R"https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAG/USD"
@@ -41,6 +41,6 @@ def metal_value(metal: Metal, weight: WV) -> Dollars:
     j = get_json_response(url)
 
     PRICE_PER_OZ = Decimal(j[0]["spreadProfilePrices"][0]["ask"])
-    PRICE_PER_G = PRICE_PER_OZ * OZ_TO_G
+    PRICE_PER_G = PRICE_PER_OZ / G_PER_OZ
 
     return Decimal(weight) * PRICE_PER_G
