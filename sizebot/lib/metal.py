@@ -59,5 +59,5 @@ def nugget_value(weight: WV) -> tuple[Dollars, int]:
         total += available_nuggets * Decimal(price)
         nc -= available_nuggets
     if nc:
-        total += (nc * 0.50)
+        total += (nc * Decimal(0.50))
     return total, ceil(nugget_count)
