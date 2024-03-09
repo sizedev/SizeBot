@@ -749,7 +749,7 @@ class StatsCog(commands.Cog):
         usage = "[user]",
         category = "stats"
     )
-    async def metal(self, ctx, *, who: MemberOrSize | WV = None):
+    async def metal(self, ctx, *, who: typing.Union[MemberOrSize, WV] = None):
         """Get the price of your weight in gold (and other metals!)"""
 
         if who is None:
