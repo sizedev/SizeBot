@@ -774,7 +774,7 @@ class StatsCog(commands.Cog):
         e.add_field(name = "Silver", value = f"${silver_dollars:,.2}")
         e.add_field(name = "Platinum", value = f"${platinum_dollars:,.2}")
         e.add_field(name = "Palladium", value = f"${palladium_dollars:,.2}")
-        e.add_field(name = "Chicken Nuggets", value = f"${nugget_dollars:,.2}\n*(≈{nugget_count:,.2} nuggets)")
+        e.add_field(name = "Chicken Nuggets", value = f"${nugget_dollars:,.2}\n*(≈{nugget_count:,.2} nuggets)*")
 
         msg = await ctx.send(emojis.loading + " *Asking the Swiss Bank...*")
         await msg.edit(content = "", embed = e)
