@@ -12,7 +12,7 @@ from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.language import engine
 from sizebot.lib.metal import Metal, metal_value
-from sizebot.lib.units import SV, TV
+from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import glitch_string, pretty_time_delta, sentence_join
 
@@ -749,15 +749,18 @@ class StatsCog(commands.Cog):
         usage = "[user]",
         category = "stats"
     )
-    async def metal(self, ctx, *, who: MemberOrSize = None):
+    async def metal(self, ctx, *, who: MemberOrSize | WV = None):
         """Get the price of your weight in gold (and other metals!)"""
 
         if who is None:
             who = ctx.message.author
 
-        userdata = load_or_fake(who)
-        userstats = proportions.PersonStats(userdata)
-        weight = userstats.weight
+        if isinstance(who, WV):
+            weight = who
+        else:
+            userdata = load_or_fake(who)
+            userstats = proportions.PersonStats(userdata)
+            weight = userstats.weight
         
         gold_dollars = metal_value("gold", weight)
         silver_dollars = metal_value("silver", weight)
@@ -770,7 +773,8 @@ class StatsCog(commands.Cog):
         e.add_field(name = "Platinum", value = f"${platinum_dollars:,.2}")
         e.add_field(name = "Palladium", value = f"${palladium_dollars:,.2}")
 
-        await ctx.send(embed = e)
+        msg = await ctx.send(emojis.loading + " *Asking the Swiss Bank...*")
+        await msg.edit(content = "", embed = e)
 
 
 async def setup(bot):
