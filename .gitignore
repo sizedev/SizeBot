@@ -1,6 +1,7 @@
 # Compiled python
 *.pyc
 .pytest_cache
+build
 
 # Visual Studio
 .vs
