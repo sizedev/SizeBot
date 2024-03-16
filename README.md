@@ -15,6 +15,13 @@ To install the latest release of SizeBot, simply run:
 
 `pip install git+git://github.com/SizeDev/SizeBot@master`
 
+## Installing with pipenv
+Clone to local directory
+
+`pipenv install`
+
+`pipenv run sizebot`
+
 ## Optional Requirements
 
 If you want to host SizeBot as a systemd daemon, make sure to install the cysystemd library:
