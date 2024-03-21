@@ -25,7 +25,7 @@ class QuakeData(typing.NamedTuple):
     print_rad: str
 
 
-def quake_data(userdata: userdb.User, quake_type: QuakeType, scale_rad = 1) -> QuakeData
+def quake_data(userdata: userdb.User, quake_type: QuakeType, scale_rad = 1) -> QuakeData:
     if quake_type == "step":
         verb = " stepping"
         joules = step_joules(userdata)
