@@ -14,7 +14,7 @@ from sizebot.lib.language import engine
 from sizebot.lib.metal import Metal, metal_value, nugget_value
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import load_or_fake
-from sizebot.lib.utils import glitch_string, pretty_time_delta, sentence_join
+from sizebot.lib.utils import glitch_string, pretty_time_delta, round_fraction, sentence_join
 
 logger = logging.getLogger("sizebot")
 
@@ -605,6 +605,20 @@ class StatsCog(commands.Cog):
 
         await ctx.send(f"You fell **{fakedistance:,.3mu}** in **{ftime}**!\n"
                        f"𝑉𝑚𝑎𝑥: {vm:.3m}/s [That feels like falling **{fl:,.3mu}**!]")
+        
+    @commands.command(
+        usage = "<distance>"
+    )
+    async def mcfall(self, ctx, distance: MemberOrSize):
+        if isinstance(distance, discord.Member):
+            ud = userdb.load(ctx.guild.id, distance.id)
+            distance = ud.height
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        new_dist = SV(distance * userdata.viewscale)
+        hearts = round_fraction(max(0, new_dist - 3) / 2, 2)
+
+        await ctx.send(f"You fell **{distance:,.3mu}**, and took {hearts:,.1}❤️ damage!\n"
+                       f"[That feels like falling **{new_dist:,.3mu}**!]")
 
     @commands.command(
         aliases = [],
