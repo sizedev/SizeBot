@@ -124,9 +124,9 @@ class QuakeCog(commands.Cog):
 
     @commands.command(
         aliases = ["quakecomp"],
-        usage = "[type] [user]",
+        usage = "[user] [type]",
         category = "stats")
-    async def quakecompare(self, ctx, user: typing.Union[discord.Member, FakePlayer], quake_type: typing.Optional[QuakeType] = "step"):
+    async def quakecompare(self, ctx, user: typing.Union[discord.Member, FakePlayer, SV], quake_type: typing.Optional[QuakeType] = "step"):
         """See what quakes would be caused by someone else's steps."""
         self_user = load_or_fake(ctx.author)
         userstats = proportions.PersonStats(self_user)
