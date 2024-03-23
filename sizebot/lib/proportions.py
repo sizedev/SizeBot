@@ -388,19 +388,20 @@ class PersonSpeedComparison:
         except KeyError:
             return None
 
+        # TODO: Make this dynamically?
         descmap = {
             "height":           self.speedcalc(self.viewedtoviewer.height, speed = True, include_relative = True),
-            "foot":             self.speedcalc(self.viewedtoviewer.footlength, speed = True, foot = True, include_relative = True),
-            "toe":              self.speedcalc(self.viewedtoviewer.toeheight, speed = True, include_relative = True),
-            "shoeprint":        self.speedcalc(self.viewedtoviewer.shoeprintdepth, speed = True, include_relative = True),
-            "finger":           self.speedcalc(self.viewedtoviewer.pointerlength, speed = True, include_relative = True),
-            "fingerprint":      self.speedcalc(self.viewedtoviewer.fingerprintdepth, speed = True, include_relative = True),
-            "thumb":            self.speedcalc(self.viewedtoviewer.thumbwidth, speed = True, include_relative = True),
-            "eye":              self.speedcalc(self.viewedtoviewer.eyewidth, speed = True, include_relative = True),
+            "footlength":       self.speedcalc(self.viewedtoviewer.footlength, speed = True, foot = True, include_relative = True),
+            "toeheight":        self.speedcalc(self.viewedtoviewer.toeheight, speed = True, include_relative = True),
+            "shoeprintdepth":   self.speedcalc(self.viewedtoviewer.shoeprintdepth, speed = True, include_relative = True),
+            "fingerlength":     self.speedcalc(self.viewedtoviewer.pointerlength, speed = True, include_relative = True),
+            "fingerprintdepth": self.speedcalc(self.viewedtoviewer.fingerprintdepth, speed = True, include_relative = True),
+            "thumbwidth":       self.speedcalc(self.viewedtoviewer.thumbwidth, speed = True, include_relative = True),
+            "eyewidth":         self.speedcalc(self.viewedtoviewer.eyewidth, speed = True, include_relative = True),
             "hairwidth":        self.speedcalc(self.viewedtoviewer.hairwidth, speed = True, include_relative = True),
-            "hair":             self.speedcalc(self.viewedtoviewer.hairlength, speed = True, include_relative = True) if self.viewedtoviewer.hairlength is not None else None,
-            "tail":             self.speedcalc(self.viewedtoviewer.taillength, speed = True, include_relative = True) if self.viewedtoviewer.taillength is not None else None,
-            "ear":              self.speedcalc(self.viewedtoviewer.earheight, speed = True, include_relative = True) if self.viewedtoviewer.earheight is not None else None
+            "hairlength":       self.speedcalc(self.viewedtoviewer.hairlength, speed = True, include_relative = True) if self.viewedtoviewer.hairlength is not None else None,
+            "taillength":       self.speedcalc(self.viewedtoviewer.taillength, speed = True, include_relative = True) if self.viewedtoviewer.taillength is not None else None,
+            "earheight":        self.speedcalc(self.viewedtoviewer.earheight, speed = True, include_relative = True) if self.viewedtoviewer.earheight is not None else None
         }
 
         if descmap[mapped_key] is None:
@@ -408,17 +409,17 @@ class PersonSpeedComparison:
 
         statnamemap = {
             "height":           "Height",
-            "foot":             f"{self.viewed.footname} Length",
-            "toe":              "Toe Height",
-            "shoeprint":        "Shoeprint Depth",
-            "finger":           "Finger Length",
-            "thumb":            "Thumb Width",
-            "fingerprint":      "Fingerprint Depth",
-            "eye":              "Eye Width",
+            "footlength":       f"{self.viewed.footname} Length",
+            "toeheight":        "Toe Height",
+            "shoeprintdepth":   "Shoeprint Depth",
+            "fingerlength":     "Finger Length",
+            "thumbwidth":       "Thumb Width",
+            "fingerprintdepth": "Fingerprint Depth",
+            "eyewidth":         "Eye Width",
             "hairwidth":        f"{self.viewed.hairname} Width",
-            "hair":             f"{self.viewed.hairname} Length",
-            "tail":             "Tail Length",
-            "ear":              "Ear Height",
+            "hairlength":       f"{self.viewed.hairname} Length",
+            "taillength":       "Tail Length",
+            "earheight":        "Ear Height",
         }
 
         statname = statnamemap[mapped_key].replace("Foot", self.viewertovieweddata.footname) \

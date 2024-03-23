@@ -11,9 +11,10 @@ from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.language import engine
-from sizebot.lib.units import SV, TV
+from sizebot.lib.metal import Metal, metal_value, nugget_value
+from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import load_or_fake
-from sizebot.lib.utils import glitch_string, pretty_time_delta, sentence_join
+from sizebot.lib.utils import glitch_string, pretty_time_delta, round_fraction, sentence_join
 
 logger = logging.getLogger("sizebot")
 
@@ -604,6 +605,20 @@ class StatsCog(commands.Cog):
 
         await ctx.send(f"You fell **{fakedistance:,.3mu}** in **{ftime}**!\n"
                        f"𝑉𝑚𝑎𝑥: {vm:.3m}/s [That feels like falling **{fl:,.3mu}**!]")
+        
+    @commands.command(
+        usage = "<distance>"
+    )
+    async def mcfall(self, ctx, distance: MemberOrSize):
+        if isinstance(distance, discord.Member):
+            ud = userdb.load(ctx.guild.id, distance.id)
+            distance = ud.height
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        new_dist = SV(distance * userdata.viewscale)
+        hearts = round_fraction(max(0, new_dist - 3) / 2, 2)
+
+        await ctx.send(f"You fell **{distance:,.3mu}**, and took {hearts:,.1}❤️ damage!\n"
+                       f"[That feels like falling **{new_dist:,.3mu}**!]")
 
     @commands.command(
         aliases = [],
@@ -742,6 +757,41 @@ class StatsCog(commands.Cog):
         gs = (Decimal(9.81) * f) / (smaller_person.weight / 1000)
 
         await ctx.send(f"Standing on {larger_person.nickname}, {smaller_person.nickname} would experience **{gs:.3}**g of gravitational force.")
+    
+    @commands.command(
+        aliases = ["gold", "silver", "palladium", "platinum", "nugget", "nuggets"],
+        usage = "[user]",
+        category = "stats"
+    )
+    async def metal(self, ctx, *, who: typing.Union[MemberOrSize, WV] = None):
+        """Get the price of your weight in gold (and other metals!)"""
+
+        if who is None:
+            who = ctx.message.author
+
+        if isinstance(who, WV):
+            weight = who
+        else:
+            userdata = load_or_fake(who)
+            userstats = proportions.PersonStats(userdata)
+            weight = userstats.weight
+        
+        gold_dollars = metal_value("gold", weight)
+        silver_dollars = metal_value("silver", weight)
+        platinum_dollars = metal_value("platinum", weight)
+        palladium_dollars = metal_value("palladium", weight)
+
+        nugget_dollars, nugget_count = nugget_value(weight)
+
+        e = discord.Embed(color = discord.Color.gold(), title = f"Price of {weight:,.1mu} in metal")
+        e.add_field(name = "Gold", value = f"${gold_dollars:,.2}")
+        e.add_field(name = "Silver", value = f"${silver_dollars:,.2}")
+        e.add_field(name = "Platinum", value = f"${platinum_dollars:,.2}")
+        e.add_field(name = "Palladium", value = f"${palladium_dollars:,.2}")
+        e.add_field(name = "Chicken Nuggets", value = f"${nugget_dollars:,.2}\n*(≈{nugget_count:,.2} nuggets)*")
+
+        msg = await ctx.send(emojis.loading + " *Asking the Swiss Bank...*")
+        await msg.edit(content = "", embed = e)
 
 
 async def setup(bot):
