@@ -16,37 +16,8 @@ from sizebot.lib.userdb import User, DEFAULT_HEIGHT as average_height, DEFAULT_W
 from sizebot.lib.utils import minmax, pretty_time_delta, url_safe
 from sizebot.lib.stats import statmap, StatBox
 
-DEFAULT_THREAD_THICKNESS = SV("0.001016")
 AVERAGE_HEIGHT = average_height
 AVERAGE_WALKPERHOUR = SV(5630)
-AVERAGE_RUNPERHOUR = SV(10729)
-AVERAGE_SWIMPERHOUR = SV(3219)
-AVERAGE_CLIMBPERHOUR = SV(4828)
-AVERAGE_CRAWLPERHOUR = SV(2556)
-AVERAGE_DRIVEPERHOUR = SV(96561)
-AVERAGE_SPACESHIPPERHOUR = SV(3600 * 1000)
-WALKSTEPSPERHOUR = SV(900)
-RUNSTEPSPERHOUR = SV(10200)
-ONE_SOUNDSECOND = SV(340.27)
-ONE_LIGHTSECOND = SV(299792000)
-AVERAGE_CAL_PER_DAY = 2000
-AVERAGE_WATER_PER_DAY = WV(3200)
-
-IS_LARGE = 1.0
-IS_VERY_LARGE = 10.0
-
-
-def format_scale(scale: Decimal):
-    reversescale = 1 / scale
-
-    if reversescale > 10:
-        dec = 0
-    elif reversescale > 1:
-        dec = 1
-    else:
-        return f"{scale:,.3}x"
-
-    return f"{scale:,.3}x (1:{reversescale:,.{dec}})"
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
@@ -755,20 +726,3 @@ def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:
     heightdiff = viewee - viewer
     viewangle = Decimal(math.degrees(math.atan(heightdiff / viewdistance)))
     return viewangle
-
-
-def calcHorizon(height: SV) -> SV:
-    EARTH_RADIUS = 6378137
-    return SV(math.sqrt((EARTH_RADIUS + height) ** 2 - EARTH_RADIUS ** 2))
-
-
-def calcVisibility(height: SV) -> str:
-    if height < SV(0.000001):
-        visibility = "magic"
-    elif height < SV(0.00005):
-        visibility = "a microscope"
-    elif height < SV(0.00025):
-        visibility = "a magnifying glass"
-    else:
-        visibility = "only the naked eye"
-    return visibility
