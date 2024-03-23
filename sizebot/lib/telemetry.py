@@ -22,7 +22,7 @@ class TelemetryMessage:
         data = self.toJSON()
         if "date" in data:
             raise ExistingDateException
-        data["date"] = arrow.now().timestamp
+        data["date"] = arrow.now().timestamp()
         data["version"] = __version__
         stringified = json.dumps(data)
         paths.telemetrypath.mkdir(exist_ok = True)
