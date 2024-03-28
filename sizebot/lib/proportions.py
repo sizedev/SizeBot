@@ -549,7 +549,7 @@ class PersonStats:
         except KeyError:
             return None
 
-        returndict = {s.key: s.string() for s in self.stats}
+        returndict = {s.key: s.string for s in self.stats}
 
         return_stat = returndict.get(mapped_key)
         return return_stat
