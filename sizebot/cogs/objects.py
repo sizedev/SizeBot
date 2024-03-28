@@ -170,8 +170,18 @@ class ObjectsCog(commands.Cog):
                 logger.log(EGG, f"{ctx.author.display_name} was slain by an Enderman.")
             await ctx.send(la)
             return
-        elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make a sentence)
-            compdata = load_or_fake(what)
+        elif isinstance(what, discord.Member) or isinstance(what, SV):
+            # TODO: This whole if-chain is clogged to heck and does too many different things.
+            # The crux of this problem stems from the fact that "lookat" is supposed to be a sort of
+            # catch-all command for "basic comparison" with a variety of things, and also, easter eggs.
+            # This needs restructuring desperately.
+            compdata = load_or_fake(what)  # We should NOT use load_or_fake to normalize [SV, Member] but I'm tired rn
+            height = SV(compdata.height * userdata.viewscale)
+            s = (f"{userdata.nickname} is {userdata.height:,.1{userdata.unitsystem}} tall."
+            f" To them, {compdata.height:,.1mu} looks like **{height:,.1mu}**."
+            f" That's about **{height.to_best_unit('o', preferName=True, spec=".2%4")}**.")
+            await ctx.send(s)
+            return
         elif isinstance(what, str) and what.lower() in ["person", "man", "average", "average person", "average man", "average human", "human"]:
             compheight = userdb.DEFAULT_HEIGHT
             compdata = load_or_fake(compheight, nickname = "an average person")
