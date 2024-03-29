@@ -15,8 +15,8 @@ def get_close_units_with_limit(val, limit, units):
     return [u for u in units if 1 <= round_fraction(val / u.factor, 4) <= limit and is_good(val / u.factor)]
 
 
-def get_random_close_unit(val, units):
-    closeUnits = get_close_units_with_limit(val, 6, units)
+def get_random_close_unit(val, units, options = 6):
+    closeUnits = get_close_units_with_limit(val, options, units)
     if not closeUnits:
         closeUnits = get_close_units_with_limit(val, 10, units)
     if not closeUnits:

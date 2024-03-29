@@ -304,10 +304,10 @@ class SystemRegistry():
         return self._systemunits[-1].unit
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
-    def get_good_unit(self, value):
+    def get_good_unit(self, value, options = 6):
         if not self.isSorted:
             self._systemunits.sort()
-        systemunit = get_random_close_unit(value, self._systemunits)
+        systemunit = get_random_close_unit(value, self._systemunits, options)
         if systemunit is None:
             return self.get_best_unit(value)
         return systemunit.unit
@@ -414,10 +414,10 @@ class Dimension(Decimal):
         unit = system.get_best_unit(value)
         return unit.format(value, *args, **kwargs)
 
-    def to_good_unit(self, sysname, *args, **kwargs):
+    def to_good_unit(self, sysname, options = 6, *args, **kwargs):
         value = Decimal(self)
         system = self._systems[sysname]
-        unit = system.get_good_unit(value)
+        unit = system.get_good_unit(value, options)
         return unit.format(value, *args, **kwargs)
 
     def to_unit(self, sysname, unitname, *args, **kwargs):
