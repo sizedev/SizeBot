@@ -2545,7 +2545,7 @@
         "name": "story",
         "dimension": "h",
         "height": "4.3",
-        "symbol": "f",
+        "symbol": "st",
         "aliases": [
             "floor"
         ]
