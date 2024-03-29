@@ -179,7 +179,7 @@ class ObjectsCog(commands.Cog):
             height = SV(compdata.height * userdata.viewscale)
             s = (f"{userdata.nickname} is {userdata.height:,.1{userdata.unitsystem}} tall."
             f" To them, {compdata.height:,.1mu} looks like **{height:,.1mu}**."
-            f" That's about **{height.to_good_unit('o', options = 3, preferName=True, spec=".1")}**.")
+            f" That's about **{height.to_best_unit('o', preferName=True, spec=".1")}**.")
             await ctx.send(s)
             return
         elif isinstance(what, str) and what.lower() in ["person", "man", "average", "average person", "average man", "average human", "human"]:
