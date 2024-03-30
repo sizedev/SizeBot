@@ -79,6 +79,7 @@ def grouped_z(z: int) -> tuple[int, int]:
 class StatDef:
     def __init__(self,
                  key: str,
+                 *,
                  title: Callable[[StatBox], str] | str,
                  string: Callable[[StatBox], str] | str,
                  body: Callable[[StatBox], str] | str,
