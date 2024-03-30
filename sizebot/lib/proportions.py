@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from copy import copy
-from typing import Literal
 import math
-import re
 
 from discord import Embed
 
@@ -11,10 +9,12 @@ from sizebot import __version__
 from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.speed import speedcalc
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT
-from sizebot.lib.utils import minmax, pretty_time_delta, url_safe
+from sizebot.lib.utils import minmax, url_safe
 from sizebot.lib.stats import statmap, StatBox
+from sizebot.lib.shoesize import to_shoe_size
 
 AVERAGE_HEIGHT = average_height
 AVERAGE_WALKPERHOUR = SV(5630)
@@ -269,89 +269,28 @@ class PersonSpeedComparison:
     def __init__(self, userdata1: User, userdata2: User):
         self._viewer, self._viewed = minmax(userdata1, userdata2)
 
-        self.viewer = PersonStats(self._viewer)
-        self.viewed = PersonStats(self._viewed)
+        # Use the new statbox
+        self.viewer = StatBox.load(self._viewer.stats).scale(self._viewer.scale)
+        self.viewed = StatBox.load(self._viewed.stats).scale(self._viewed.scale)
 
-        self.viewertovieweddata = copy(self._viewer)
-        self.viewedtoviewerdata = copy(self._viewed)
-
-        if self.viewer.height == 0 and self.viewed.height == 0:
+        if self.viewer["height"].value == 0 and self.viewed["height"].value == 0:
             self.multiplier = Decimal(1)
         else:
-            self.multiplier = self.viewed.height / self.viewer.height
+            self.multiplier = self.viewed["height"].value / self.viewer["height"].value
 
-        self.viewedtoviewer = PersonStats(self.viewedtoviewerdata)
-        self.viewertoviewed = PersonStats(self.viewertovieweddata)
+        self.footlabel = "Paw" if self.viewed["pawtoggle"].value else "Foot"
+        self.hairlabel = "Fur" if self.viewed["furtoggle"].value else "Hair"
 
-        self.footlabel = "Paw" if self.viewed.pawtoggle else "Foot"
-        self.hairlabel = "Fur" if self.viewed.furtoggle else "Hair"
-
-        viewangle = calcViewAngle(self.viewer.height, self.viewed.height)
+        viewangle = calcViewAngle(self.viewer["height"].value, self.viewed["height"].value)
         self.lookangle = abs(viewangle)
         self.lookdirection = "up" if viewangle >= 0 else "down"
 
     def __str__(self):
         return f"<PersonSpeedComparison VIEWER = {self.viewer!r}, VIEWED = {self.viewed!r}, \
-            VIEWERTOVIEWED = {self.viewertoviewed!r}, VIEWEDTOVIEWER = {self.viewedtoviewer!r}>"
+            VIEWERTOVIEWED = {self.viewer!r}, VIEWEDTOVIEWER = {self.viewed!r}>"
 
     def __repr__(self):
         return str(self)
-
-    def speedcalc(self, dist: SV, *, speed = False, foot = False, include_relative = False):
-        reldist = SV(dist * self.viewer.viewscale)
-        reldist_print = f"{reldist:,.3mu}"
-        shoesize = " (" + format_shoe_size(dist, "m") + ")"
-        rel_shoesize = " (" + format_shoe_size(reldist, "m") + ")"
-
-        _walktime = (dist / self.viewer.walkperhour) * 60 * 60
-        walksteps = math.ceil(dist / self.viewer.walksteplength)
-        _runtime = (dist / self.viewer.runperhour) * 60 * 60
-        runsteps = math.ceil(dist / self.viewer.runsteplength)
-        _climbtime = (dist / self.viewer.climbperhour) * 60 * 60
-        climbsteps = math.ceil(dist / self.viewer.climbsteplength)
-        _crawltime = (dist / self.viewer.crawlperhour) * 60 * 60
-        crawlsteps = math.ceil(dist / self.viewer.crawlsteplength)
-        _swimtime = (dist / self.viewer.swimperhour) * 60 * 60
-        swimsteps = math.ceil(dist / self.viewer.swimsteplength)
-        _drivetime = (dist / self.viewer.driveperhour) * 60 * 60
-        _spaceshiptime = (dist / self.viewer.spaceshipperhour) * 60 * 60
-        walktime = pretty_time_delta(_walktime, roundeventually = True)
-        runtime = pretty_time_delta(_runtime, roundeventually = True)
-        climbtime = pretty_time_delta(_climbtime, roundeventually = True)
-        crawltime = pretty_time_delta(_crawltime, roundeventually = True)
-        swimtime = pretty_time_delta(_swimtime, roundeventually = True)
-        drivetime = pretty_time_delta(_drivetime, roundeventually = True)
-        spaceshiptime = pretty_time_delta(_spaceshiptime, roundeventually = True)
-
-        walkspeedstr = f"\n*{emojis.blank}{self.viewer.walkperhour:,.3mu} per hour*"
-        runspeedstr = f"\n*{emojis.blank}{self.viewer.runperhour:,.3mu} per hour*"
-        climbspeedstr = f"\n*{emojis.blank}{self.viewer.climbperhour:,.3mu} per hour*"
-        crawlspeedstr = f"\n*{emojis.blank}{self.viewer.crawlperhour:,.3mu} per hour*"
-        swimspeedstr = f"\n*{emojis.blank}{self.viewer.swimperhour:,.3mu} per hour*"
-        drivespeedstr = f"\n*{emojis.blank}{self.viewer.driveperhour:,.3mu} per hour*"
-        spacespeedstr = f"\n*{emojis.blank}{self.viewer.spaceshipperhour:,.3mu} per hour*"
-
-        nl = "\n"
-
-        out_str = (
-            f"{emojis.ruler} {dist:,.3mu}{shoesize if foot else ''}\n"
-            f"{emojis.eyes + ' ' + reldist_print + nl if include_relative else ''}{emojis.blank + rel_shoesize + nl if foot and include_relative else ''}"
-            f"{emojis.walk} {walktime} ({walksteps:,.3} steps){walkspeedstr if speed else ''}\n"
-        )
-        if _runtime >= 1:
-            out_str += f"{emojis.run} {runtime} ({runsteps:,.3} strides){runspeedstr if speed else ''}\n"
-
-        out_str += f"{emojis.climb} {climbtime} ({climbsteps:,.3} pulls){climbspeedstr if speed else ''}\n"
-        if _crawltime >= 1:
-            out_str += f"{emojis.crawl} {crawltime} ({crawlsteps:,.3} steps){crawlspeedstr if speed else ''}\n"
-        if _swimtime >= 1:
-            out_str += f"{emojis.swim} {swimtime} ({swimsteps:,.3} strokes){swimspeedstr if speed else ''}\n"
-        if _drivetime >= 1:
-            out_str += f"{emojis.drive} {drivetime} {drivespeedstr if speed else ''}\n"
-        if _spaceshiptime >= 1:
-            out_str += f"{emojis.spaceship} {spaceshiptime} {spacespeedstr if speed else ''}\n"
-
-        return out_str.strip()
 
     def getStatEmbed(self, key: str):
         try:
@@ -359,82 +298,47 @@ class PersonSpeedComparison:
         except KeyError:
             return None
 
-        # TODO: Make this dynamically?
-        descmap = {
-            "height":           self.speedcalc(self.viewedtoviewer.height, speed = True, include_relative = True),
-            "footlength":       self.speedcalc(self.viewedtoviewer.footlength, speed = True, foot = True, include_relative = True),
-            "toeheight":        self.speedcalc(self.viewedtoviewer.toeheight, speed = True, include_relative = True),
-            "shoeprintdepth":   self.speedcalc(self.viewedtoviewer.shoeprintdepth, speed = True, include_relative = True),
-            "fingerlength":     self.speedcalc(self.viewedtoviewer.pointerlength, speed = True, include_relative = True),
-            "fingerprintdepth": self.speedcalc(self.viewedtoviewer.fingerprintdepth, speed = True, include_relative = True),
-            "thumbwidth":       self.speedcalc(self.viewedtoviewer.thumbwidth, speed = True, include_relative = True),
-            "eyewidth":         self.speedcalc(self.viewedtoviewer.eyewidth, speed = True, include_relative = True),
-            "hairwidth":        self.speedcalc(self.viewedtoviewer.hairwidth, speed = True, include_relative = True),
-            "hairlength":       self.speedcalc(self.viewedtoviewer.hairlength, speed = True, include_relative = True) if self.viewedtoviewer.hairlength is not None else None,
-            "taillength":       self.speedcalc(self.viewedtoviewer.taillength, speed = True, include_relative = True) if self.viewedtoviewer.taillength is not None else None,
-            "earheight":        self.speedcalc(self.viewedtoviewer.earheight, speed = True, include_relative = True) if self.viewedtoviewer.earheight is not None else None
-        }
+        stat = self.viewed[mapped_key]
 
-        if descmap[mapped_key] is None:
+        if stat.value is None:
             return None
 
-        statnamemap = {
-            "height":           "Height",
-            "footlength":       f"{self.viewed.footname} Length",
-            "toeheight":        "Toe Height",
-            "shoeprintdepth":   "Shoeprint Depth",
-            "fingerlength":     "Finger Length",
-            "thumbwidth":       "Thumb Width",
-            "fingerprintdepth": "Fingerprint Depth",
-            "eyewidth":         "Eye Width",
-            "hairwidth":        f"{self.viewed.hairname} Width",
-            "hairlength":       f"{self.viewed.hairname} Length",
-            "taillength":       "Tail Length",
-            "earheight":        "Ear Height",
-        }
-
-        statname = statnamemap[mapped_key].replace("Foot", self.viewertovieweddata.footname) \
-                                          .replace("Hair", self.viewertovieweddata.hairname) \
-                                          .lower()
-
-        desc = descmap[mapped_key]
-
         return Embed(
-            title = f"To move the distance of {self.viewedtoviewerdata.nickname}'s {statname}, it would take {self.viewertovieweddata.nickname}...",
-            description = desc)
+            title = f"To move the distance of {self.viewed["nickname"].value}'s {stat.title.lower()}, it would take {self.viewer["nickname"].value}...",
+            description = speedcalc(self.viewer, stat.value, speed = True, include_relative = True, foot = mapped_key == "footlength"))
 
     async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
-            title=f"Speed/Distance Comparison of {self.viewed.nickname} and {self.viewer.nickname}",
+            title=f"Speed/Distance Comparison of {self.viewed["nickname"].value} and {self.viewer["nickname"].value}",
             description=f"*Requested by {requestertag}*",
             color=colors.purple
         )
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
-        embed.add_field(name=f"**{self.viewer.nickname}** Speeds", value=(
-            f"{emojis.walk} **Walk Speed:** {self.viewer.walkperhour:,.3mu} per hour\n"
-            f"{emojis.run} **Run Speed:** {self.viewer.runperhour:,.3mu} per hour\n"
-            f"{emojis.climb} **Climb Speed:** {self.viewer.climbperhour:,.3mu} per hour\n"
-            f"{emojis.crawl} **Crawl Speed:** {self.viewer.crawlperhour:,.3mu} per hour\n"
-            f"{emojis.swim} **Swim Speed:** {self.viewer.swimperhour:,.3mu} per hour"), inline=False)
-        embed.add_field(name="Height", value=(self.speedcalc(self.viewedtoviewer.height)), inline=True)
-        embed.add_field(name=f"{self.footlabel} Length", value=(self.speedcalc(self.viewedtoviewer.footlength, foot = True)), inline=True)
-        embed.add_field(name=f"{self.footlabel} Width", value=(self.speedcalc(self.viewedtoviewer.footwidth)), inline=True)
-        embed.add_field(name="Toe Height", value=(self.speedcalc(self.viewedtoviewer.toeheight)), inline=True)
-        embed.add_field(name="Shoeprint Depth", value=(self.speedcalc(self.viewedtoviewer.shoeprintdepth)), inline=True)
-        embed.add_field(name="Pointer Finger Length", value=(self.speedcalc(self.viewedtoviewer.pointerlength)), inline=True)
-        embed.add_field(name="Thumb Width", value=(self.speedcalc(self.viewedtoviewer.thumbwidth)), inline=True)
-        embed.add_field(name="Nail Thickness", value=(self.speedcalc(self.viewedtoviewer.nailthickness)), inline=True)
-        embed.add_field(name="Fingerprint Depth", value=(self.speedcalc(self.viewedtoviewer.fingerprintdepth)), inline=True)
-        if self.viewedtoviewer.hairlength:
-            embed.add_field(name=f"{self.hairlabel} Length", value=(self.speedcalc(self.viewedtoviewer.hairlength)), inline=True)
-        if self.viewedtoviewer.taillength:
-            embed.add_field(name="Tail Length", value=(self.speedcalc(self.viewedtoviewer.taillength)), inline=True)
-        if self.viewedtoviewer.earheight:
-            embed.add_field(name="Ear Height", value=(self.speedcalc(self.viewedtoviewer.earheight)), inline=True)
-        embed.add_field(name=f"{self.hairlabel} Width", value=(self.speedcalc(self.viewedtoviewer.hairwidth)), inline=True)
-        embed.add_field(name="Eye Width", value=(self.speedcalc(self.viewedtoviewer.eyewidth)), inline=True)
-        embed.set_footer(text=(f"{self.viewed.nickname} is {self.multiplier:,.3}x taller than {self.viewer.nickname}."))
+        embed.add_field(name=f"**{self.viewer["nickname"].value}** Speeds", value=(
+            f"{emojis.walk} **Walk Speed:** {self.viewer["walkperhour"].value:,.3mu} per hour\n"
+            f"{emojis.run} **Run Speed:** {self.viewer["runperhour"].value:,.3mu} per hour\n"
+            f"{emojis.climb} **Climb Speed:** {self.viewer["climbperhour"].value:,.3mu} per hour\n"
+            f"{emojis.crawl} **Crawl Speed:** {self.viewer["crawlperhour"].value:,.3mu} per hour\n"
+            f"{emojis.swim} **Swim Speed:** {self.viewer["swimperhour"].value:,.3mu} per hour"), inline=False)
+        embed.add_field(name="Height", value=(speedcalc(self.viewer, self.viewed["height"].value)), inline=True)
+        embed.add_field(name=f"{self.footlabel} Length", value=(speedcalc(self.viewer, self.viewed["footlength"].value, foot = True)), inline=True)
+        embed.add_field(name=f"{self.footlabel} Width", value=(speedcalc(self.viewer, self.viewed["footwidth"].value)), inline=True)
+        embed.add_field(name="Toe Height", value=(speedcalc(self.viewer, self.viewed["toeheight"].value)), inline=True)
+        embed.add_field(name="Shoeprint Depth", value=(speedcalc(self.viewer, self.viewed["shoeprintdepth"].value)), inline=True)
+        embed.add_field(name="Pointer Finger Length", value=(speedcalc(self.viewer, self.viewed["pointerlength"].value)), inline=True)
+        embed.add_field(name="Thumb Width", value=(speedcalc(self.viewer, self.viewed["thumbwidth"].value)), inline=True)
+        embed.add_field(name="Nail Thickness", value=(speedcalc(self.viewer, self.viewed["nailthickness"].value)), inline=True)
+        embed.add_field(name="Fingerprint Depth", value=(speedcalc(self.viewer, self.viewed["fingerprintdepth"].value)), inline=True)
+        if self.viewed["hairlength"].value:
+            embed.add_field(name=f"{self.hairlabel} Length", value=(speedcalc(self.viewed["hairlength"].value)), inline=True)
+        if self.viewed["taillength"].value:
+            embed.add_field(name="Tail Length", value=(speedcalc(self.viewer, self.viewed["taillength"].value)), inline=True)
+        if self.viewed["earheight"].value:
+            embed.add_field(name="Ear Height", value=(speedcalc(self.viewer, self.viewed["earheight"].value)), inline=True)
+        embed.add_field(name=f"{self.hairlabel} Width", value=(speedcalc(self.viewer, self.viewed["hairwidth"].value)), inline=True)
+        embed.add_field(name="Eye Width", value=(speedcalc(self.viewer, self.viewed["eyewidth"].value)), inline=True)
+        embed.set_footer(text=(f"{self.viewed["nickname"].value} is {self.multiplier:,.3}x taller than {self.viewer["nickname"].value}."))
 
         return embed
 
@@ -617,7 +521,7 @@ class PersonBaseStats:
         self.footlength = userdata.footlength
 
         if self.footlength:
-            self.shoesize = format_shoe_size(self.footlength, self.gender)
+            self.shoesize = to_shoe_size(self.footlength, self.gender)
         else:
             self.shoesize = None
 
@@ -673,38 +577,6 @@ class PersonBaseStats:
         if self.macrovision_model and self.macrovision_model != "Human":
             embed.add_field(name="Macrovision Custom Model", value=f"{self.macrovision_model}, {self.macrovision_view}", inline=True)
         return embed
-
-
-def format_shoe_size(footlength: SV, gender: Literal["m", "f"]):
-    women = gender == "f"
-    # Inch in meters
-    inch = Decimal("0.0254")
-    footlengthinches = footlength / inch
-    shoesizeNum = (3 * (footlengthinches + Decimal("2/3"))) - 24
-    prefix = ""
-    if shoesizeNum < 1:
-        prefix = "Children's "
-        women = False
-        shoesizeNum += 12 + Decimal("1/3")
-    if shoesizeNum < 0:
-        return "No shoes exist this small!"
-    if women:
-        shoesize = format(Decimal(shoesizeNum + 1), ",.2%2")
-    else:
-        shoesize = format(Decimal(shoesizeNum), ",.2%2")
-    if women:
-        return f"Size US Women's {prefix}{shoesize}"
-    return f"Size US {prefix}{shoesize}"
-
-
-def fromShoeSize(shoesize: str) -> SV:
-    shoesizenum = unmodifiedshoesizenum = Decimal(re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)[0])
-    if "w" in shoesize.lower():
-        shoesizenum = unmodifiedshoesizenum - 1
-    if "c" in shoesize.lower():  # Intentional override, children's sizes have no women/men distinction.
-        shoesizenum = unmodifiedshoesizenum - (12 + Decimal("1/3"))
-    footlengthinches = ((shoesizenum + 24) / 3) - Decimal("2/3")
-    return SV.parse(f"{footlengthinches}in")
 
 
 def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:

@@ -403,8 +403,8 @@ class StatsCog(commands.Cog):
             await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
             return
 
-        embedtosend.title = f"{comparison.viewed.height:,.3mu} to {comparison.viewer.nickname}"
-        embedtosend.set_footer(text = f"{comparison.viewed.height:,.3mu} is {comparison.multiplier:,.3}x larger than {comparison.viewer.nickname}.")
+        embedtosend.title = f"{comparison.viewed['height'].value:,.3mu} to {comparison.viewer['nickname'].value}"
+        embedtosend.set_footer(text = f"{comparison.viewed['height'].value:,.3mu} is {comparison.multiplier:,.3}x larger than {comparison.viewer['nickname'].value}.")
 
         await ctx.send(embed = embedtosend)
 
@@ -463,9 +463,7 @@ class StatsCog(commands.Cog):
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
-        comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
-
-        embedtosend = comparison.getStatEmbed(stat)
+        embedtosend = proportions.PersonSpeedComparison(userdata2, userdata1).getStatEmbed(stat)
 
         if embedtosend is None:
             await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
