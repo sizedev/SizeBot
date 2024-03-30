@@ -835,11 +835,25 @@ all_stats = [
             userkey="pawtoggle"),
     StatDef("furtoggle",
             title="Fur Toggle",
-            string="{nickname}'s paw toggle is {furtoggle}.",
+            string="{nickname}'s fur toggle is {furtoggle}.",
             body="{furtoggle}",
             is_shown=False,
             type=bool,
-            userkey="furtoggle")
+            userkey="furtoggle"),
+    StatDef("footname",
+            title="Foot Name",
+            string="{nickname}'s foot name is {footname}.",
+            body="{footname}",
+            is_shown=False,
+            type=str,
+            value=lambda v: "Paw" if v["pawtoggle"] else "Foot"),
+    StatDef("hairname",
+            title="Hair Name",
+            string="{nickname}'s hair name is {hairname}.",
+            body="{hairname}",
+            is_shown=False,
+            type=str,
+            value=lambda v: "Fur" if v["furtoggle"] else "Hair")
 ]
 
 
