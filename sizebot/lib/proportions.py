@@ -302,6 +302,8 @@ class PersonSpeedComparison:
 
         if stat.value is None:
             return None
+        elif isinstance(stat.value, (str, bool)):
+            return None
 
         return Embed(
             title = f"To move the distance of {self.viewed["nickname"].value}'s {stat.title.lower()}, it would take {self.viewer["nickname"].value}...",

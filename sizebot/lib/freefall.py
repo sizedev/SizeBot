@@ -12,8 +12,8 @@ def terminal_velocity(m, k):
     return Decimal(math.sqrt(g * m / k))
 
 
-def terminal_velocity_from_player(basemass: WV, scale: Decimal):
-    m = basemass * (scale ** Decimal(3))
+def terminal_velocity_from_player(mass: WV, scale: Decimal):
+    m = mass
     k = AVERAGE_HUMAN_DRAG_COEFFICIENT * (scale ** Decimal(2))
     return SV(terminal_velocity(m, k))
 

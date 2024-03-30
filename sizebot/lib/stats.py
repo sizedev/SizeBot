@@ -7,7 +7,7 @@ import math
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.freefall import terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
+from sizebot.lib.freefall import terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT, terminal_velocity_from_player
 from sizebot.lib.units import SV, TV, WV, AV
 from sizebot.lib.userdb import PlayerStats, DEFAULT_HEIGHT as average_height, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.shoesize import to_shoe_size
@@ -638,7 +638,7 @@ all_stats = [
             body=lambda s: f"{s['terminalvelocity'].value:,.1M} per second\n({s['terminalvelocity'].value:,.1U} per second)" + ("\n*This user can safely fall from any height.*" if s["fallproof"].value else ""),
             requires=["weight", "averagescale"],
             type=SV,
-            value=lambda v: terminal_velocity(v["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * v["averagescale"] ** Decimal(2)),
+            value=lambda v: terminal_velocity_from_player(v["weight"], v["averagescale"]),
             aliases=["velocity", "fall"]),
     StatDef("fallproof",
             title="Fallproof",
