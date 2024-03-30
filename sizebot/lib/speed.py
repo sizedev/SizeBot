@@ -70,11 +70,11 @@ class Movement:
 
 def speedcalc(traveller: StatBox, dist: SV, *, speed = False, foot = False, include_relative = False):
     movements = [
-        Movement("walk",      dist, stats=traveller, showspeed=speed, stepname="steps", always_active=True),
-        Movement("run",       dist, stats=traveller, showspeed=speed, stepname="strides"),
-        Movement("climb",     dist, stats=traveller, showspeed=speed, stepname="pulls", always_active=True),
-        Movement("crawl",     dist, stats=traveller, showspeed=speed, stepname="steps"),
-        Movement("swim",      dist, stats=traveller, showspeed=speed, stepname="strokes"),
+        Movement("walk",      dist, stats=traveller, showspeed=speed, steps="steps", always_active=True),
+        Movement("run",       dist, stats=traveller, showspeed=speed, steps="strides"),
+        Movement("climb",     dist, stats=traveller, showspeed=speed, steps="pulls", always_active=True),
+        Movement("crawl",     dist, stats=traveller, showspeed=speed, steps="steps"),
+        Movement("swim",      dist, stats=traveller, showspeed=speed, steps="strokes"),
         Movement("drive",     dist, stats=traveller, showspeed=speed),
         Movement("spaceship", dist, stats=traveller, showspeed=speed)
     ]
