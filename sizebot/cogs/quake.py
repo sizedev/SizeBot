@@ -17,6 +17,7 @@ EARTH_RAD = Decimal(10_018_570)
 UNI_RAD = Decimal(4.4E26)
 QuakeType = typing.Literal["step", "stomp", "jump", "poke", "breath", "breathe", "heartbeat", "type", "typing"]
 
+
 class QuakeData(typing.NamedTuple):
     verb: str
     print_mag: str
@@ -65,6 +66,7 @@ def quake_data(userdata: userdb.User, quake_type: QuakeType, scale_rad = 1) -> Q
     qd = QuakeData(verb, f"{print_mag:,.1}", f"{joules:,.0}", e_type, print_rad)
     return qd
 
+
 def quake_embed(userdata: userdb.User, quake_type: QuakeType, scale_rad = 1) -> discord.Embed:
     qd = quake_data(userdata, quake_type, scale_rad)
     e = Embed(
@@ -75,8 +77,9 @@ def quake_embed(userdata: userdb.User, quake_type: QuakeType, scale_rad = 1) -> 
     e.add_field(name = "Magnitude", value = qd.print_mag)
     e.add_field(name = "Joules", value = qd.print_joules)
     e.add_field(name = "Earthquake Type", value = qd.e_type)
-    e.add_field(name = "Radius" if scale_rad is 1 else "Percieved Radius", value = qd.print_rad)
+    e.add_field(name = "Radius" if (scale_rad == 1) else "Percieved Radius", value = qd.print_rad)
     return e
+
 
 def quake_stats_embed(userdata: userdb.User, scale_rad = 1) -> discord.Embed:
     e = Embed(
@@ -114,7 +117,7 @@ class QuakeCog(commands.Cog):
         aliases = ["quakestats"],
         usage = "[user/height]",
         category = "stats")
-    async def earthquakestats(self, ctx,user: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def earthquakestats(self, ctx, user: typing.Union[discord.Member, FakePlayer, SV] = None):
         """See what quakes would be caused by your steps."""
         if user is None:
             user = ctx.author
