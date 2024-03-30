@@ -91,7 +91,8 @@ class StatDef:
                  type: Optional[Callable[[Any], Any]] = None,
                  z: Optional[int] = None,
                  tags: list[str] = None,
-                 inline: bool = True
+                 inline: bool = True,
+                 aliases: list[str] = None
                  ):
         self.key = key
         self.get_title = wrap_str(title)
@@ -106,6 +107,7 @@ class StatDef:
         self.orderkey = grouped_z(z)
         self.tags = tags or []
         self.inline = inline
+        self.aliases = aliases or []
 
     def get_stat(self,
                  sb: StatBox,
@@ -304,7 +306,8 @@ all_stats = [
             power=1,
             type=SV,
             userkey="height",
-            tags=["height"]),
+            tags=["height"],
+            aliases=["size"]),
     StatDef("weight",
             title="Weight",
             string="{nickname}'s current weight is **{weight:,.3mu}**.",
@@ -312,7 +315,8 @@ all_stats = [
             is_shown=False,
             power=3,
             type=WV,
-            userkey="weight"),
+            userkey="weight",
+            aliases=["mass"]),
     StatDef("gender",
             title="Gender",
             string="{nickname}'s gender is {gender}.",
@@ -365,7 +369,8 @@ all_stats = [
             type=SV,
             userkey="footlength",
             value=lambda v: v["height"] / 7,
-            tags=["foot"]),
+            tags=["foot"],
+            aliases=["foot", "feet", "shoe", "shoes", "paw", "paws"]),
     StatDef("liftstrength",
             title="Lift Strength",
             string="{nickname} can lift {liftstrength:,.3mu}.",
@@ -374,7 +379,8 @@ all_stats = [
             power=3,
             type=WV,
             userkey="liftstrength",
-            value=lambda v: DEFAULT_LIFT_STRENGTH),
+            value=lambda v: DEFAULT_LIFT_STRENGTH,
+            aliases=["strength", "lift", "carry", "carrystrength"]),
     StatDef("footwidth",
             title="Foot Width",
             string="{nickname}'s foot is **{footwidth:,.3mu}** wide.",
@@ -392,7 +398,8 @@ all_stats = [
             requires=["height"],
             power=1,
             type=SV,
-            value=lambda v: v["height"] / 135),
+            value=lambda v: v["height"] / 135,
+            aliases=["shoeprint", "footprint"]),
     StatDef("pointerlength",
             title="Pointer Finger Length",
             string="{nickname}'s pointer finger is **{pointerlength:,.3mu}** long.",
@@ -401,7 +408,8 @@ all_stats = [
             power=1,
             type=SV,
             value=(lambda v: v["height"] / Decimal(17.26)),
-            tags=["hand"]),
+            tags=["hand"],
+            aliases=["finger", "pointer"]),
     StatDef("thumbwidth",
             title="Thumb Width",
             string="{nickname}'s thumb is **{thumbwidth:,.3mu}** wide.",
@@ -458,7 +466,8 @@ all_stats = [
             power=1,
             type=SV,
             value=(lambda v: v["height"] / 2920),
-            tags=["hand"]),
+            tags=["hand"],
+            aliases=["nail", "fingernail"]),
     StatDef("eyewidth",
             title="Eye Width",
             string="{nickname}'s eyes are **{eyewidth:,.3mu}** wide.",
@@ -467,7 +476,8 @@ all_stats = [
             requires=["height"],
             power=1,
             type=SV,
-            value=lambda v: v["height"] / Decimal(73.083)),
+            value=lambda v: v["height"] / Decimal(73.083),
+            aliases=["eye", "eyes"]),
     StatDef("jumpheight",
             title="Jump Height",
             string="{nickname} can jump **{jumpheight:,.3mu}** high.",
@@ -475,7 +485,8 @@ all_stats = [
             requires=["height"],
             power=1,
             type=SV,
-            value=lambda v: v["height"] / Decimal(3.908)),
+            value=lambda v: v["height"] / Decimal(3.908),
+            aliases=["jump"]),
     StatDef("averagelookangle",
             title="Average Look Angle",
             string="{nickname} would have to look {averagelookangle} to see the average person.",
@@ -501,7 +512,8 @@ all_stats = [
             power=1,
             type=SV,
             value=(lambda v: AVERAGE_WALKPERHOUR * v["averagescale"]),
-            tags=["movement"]),
+            tags=["movement"],
+            aliases=["walk", "speed", "step"]),
     StatDef("runperhour",
             title="Run Per Hour",
             string="{nickname} runs **{runperhour:,.3mu} per hour**.",
@@ -521,7 +533,8 @@ all_stats = [
             power=1,
             type=SV,
             value=(lambda v: AVERAGE_SWIMPERHOUR * v["averagescale"]),
-            tags=["movement"]),
+            tags=["movement"],
+            aliases=["swim", "stroke"]),
     StatDef("climbperhour",
             title="Climb Per Hour",
             string="{nickname} climbs **{climbperhour:,.3mu} per hour**.",
@@ -531,7 +544,8 @@ all_stats = [
             power=1,
             type=SV,
             value=(lambda v: AVERAGE_CLIMBPERHOUR * v["averagescale"]),
-            tags=["movement"]),
+            tags=["movement"],
+            aliases=["climb", "pull"]),
     StatDef("crawlperhour",
             title="Crawl Per Hour",
             string="{nickname} crawls **{crawlperhour:,.3mu} per hour**.",
@@ -617,14 +631,16 @@ all_stats = [
             is_shown=False,
             requires=["height"],
             type=SV,
-            value=lambda v: calcHorizon(v["height"])),
+            value=lambda v: calcHorizon(v["height"]),
+            aliases=["horizon"]),
     StatDef("terminalvelocity",
             title="Terminal Velocity",
             string="{nickname}'s terminal velocity is **{terminalvelocity:,.3mu} per hour.**",
             body=lambda s: f"{s['terminalvelocity'].value:,.1M} per second\n({s['terminalvelocity'].value:,.1U} per second)" + ("\n*This user can safely fall from any height.*" if s["fallproof"].value else ""),
             requires=["weight", "averagescale"],
             type=SV,
-            value=lambda v: terminal_velocity(v["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * v["averagescale"] ** Decimal(2))),
+            value=lambda v: terminal_velocity(v["weight"], AVERAGE_HUMAN_DRAG_COEFFICIENT * v["averagescale"] ** Decimal(2)),
+            aliases=["velocity", "fall"]),
     StatDef("fallproof",
             title="Fallproof",
             string=lambda s: f"""{s['nickname'].value} {'is' if s['fallproof'].value else "isn't"} fallproof.""",
@@ -729,7 +745,8 @@ all_stats = [
             is_shown=lambda s: s["scale"].value < 1,
             requires=["height"],
             type=str,
-            value=lambda v: calcVisibility(v["height"])),
+            value=lambda v: calcVisibility(v["height"]),
+            aliases=["visible", "see"]),
     StatDef("shoulderheight",
             title="Shoulder Height",
             string="{nickname}'s shoulder is **{shoulderheight:,.3mu}** high.",
@@ -779,7 +796,8 @@ all_stats = [
             power=1,
             type=SV,
             value=(lambda v: v["height"] / 65),
-            tags=["height"]),
+            tags=["height"],
+            aliases=["toe", "toes"]),
     StatDef("height+",
             title=lambda s: s['height'].title,
             string="",
@@ -814,36 +832,20 @@ all_stats = [
 
 def generate_statmap() -> dict[str, str]:
     statmap = {}
+    # Load all keys
     for stat in all_stats:
+        if stat.key in statmap:
+            raise Exception(f"Duplicate key: {stat.key}")
         statmap[stat.key] = stat.key
-    for statkey, aliases in stataliases.items():
-        if statkey not in statmap:
-            raise Exception(f"Alias for unrecognized stat: {statkey}")
-        for alias in aliases:
-            statmap[alias] = statkey
+    # Load all aliases
+    for stat in all_stats:
+        for alias in stat.aliases:
+            if alias in statmap:
+                raise Exception(f"Duplicate alias: {alias}")
+            statmap[alias] = stat.key
     return statmap
 
 
-stataliases = {
-    "height":           ["size"],
-    "weight":           ["mass"],
-    "footlength":       ["foot", "feet", "shoe", "shoes", "paw", "paws"],
-    "toeheight":        ["toe", "toes"],
-    "shoeprintdepth":   ["shoeprint", "footprint"],
-    "pointerlength":    ["finger", "pointer"],
-    "nailthickness":    ["nail", "fingernail"],
-    "eyewidth":         ["eye", "eyes"],
-    "hairlength":       ["hair", "fur", "furlength"],
-    "hairwidth":        ["furwidth"],
-    "walkperhour":      ["walk", "speed", "step"],
-    "climbperhour":     ["climb", "pull"],
-    "swimperhour":      ["swim", "stroke"],
-    "jumpheight":       ["jump"],
-    "horizondistance":  ["horizon"],
-    "terminalvelocity": ["velocity", "fall"],
-    "liftstrength":     ["strength", "lift", "carry", "carrystrength"],
-    "visibility":       ["visible", "see"]
-}
 statmap = generate_statmap()
 
 
