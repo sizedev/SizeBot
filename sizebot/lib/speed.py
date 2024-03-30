@@ -57,15 +57,15 @@ class Movement:
 
     @property
     def pretty_steps_to_travel(self) -> str:
-        return f" {self.steps_to_travel:,.3} {self.stepname}" if self.stepname else ""
+        return f"{self.steps_to_travel:,.3} {self.stepname}" if self.stepname else ""
 
     @property
     def pretty_speed(self) -> str:
-        return f"\n*{emojis['blank']}{self.perhour:,.3mu} per hour*" if self.showspeed else ""
+        return f"*{emojis['blank']}{self.perhour:,.3mu} per hour*" if self.showspeed else ""
 
     @property
     def string(self):
-        return f"{self.emoji} {self.pretty_time_to_travel}{self.pretty_steps_to_travel}{self.pretty_speed}"
+        return f"{self.emoji} {self.pretty_time_to_travel}, {self.pretty_steps_to_travel}\n{self.pretty_speed}"
 
 
 def speedcalc(traveller: StatBox, dist: SV, *, speed = False, foot = False, include_relative = False):
