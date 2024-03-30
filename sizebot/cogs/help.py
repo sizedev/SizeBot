@@ -36,7 +36,7 @@ logger = logging.getLogger("sizebot")
 # aliases = []
 
 alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
-stats_string = utils.sentence_join([f"`{v}`" for v in statmap.values()])
+stats_string = utils.sentence_join([f"`{v}`" for v in statmap.keys()])
 
 async def post_report(report_type, message, report_text):
     async with aiohttp.ClientSession() as session:
