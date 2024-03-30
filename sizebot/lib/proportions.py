@@ -302,7 +302,7 @@ class PersonSpeedComparison:
 
         if stat.value is None:
             return None
-        elif isinstance(stat.value, (str, bool)):
+        elif not isinstance(stat.value, SV):
             return None
 
         return Embed(
