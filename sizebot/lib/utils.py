@@ -4,7 +4,7 @@ import random
 import re
 from sizebot.lib import errors
 import traceback
-from typing import Dict, Hashable, Sequence
+from typing import Dict, Hashable, Sequence, TypeVar
 from urllib.parse import quote
 
 import validator_collection
@@ -263,7 +263,10 @@ def str_help(topic) -> str:
     return pydoc.plain(pydoc.render_doc(topic))
 
 
-def minmax(first, second) -> tuple:
+T = TypeVar('T')
+
+
+def minmax(first: T, second: T) -> tuple[T, T]:
     """Return a tuple where item 0 is the smaller value, and item 1 is the larger value."""
     small, big = first, second
     if small > big:
