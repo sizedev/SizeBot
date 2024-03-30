@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 from functools import cached_property
-from typing import Any, Literal, Optional, TypeVar, Callable
+from typing import Any, Optional, TypeVar, Callable
 import math
-import re
 
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
@@ -11,7 +10,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.freefall import terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT
 from sizebot.lib.units import SV, TV, WV, AV
 from sizebot.lib.userdb import PlayerStats, DEFAULT_HEIGHT as average_height, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
-
+from sizebot.lib.shoesize import to_shoe_size
 
 DEFAULT_THREAD_THICKNESS = SV("0.001016")
 AVERAGE_HEIGHT = average_height
@@ -736,7 +735,7 @@ all_stats = [
             is_shown=False,
             requires=["footlength", "gender", "scale"],
             type=str,
-            value=(lambda v: format_shoe_size(v["footlength"] * v["scale"], v["gender"])),
+            value=(lambda v: to_shoe_size(v["footlength"] * v["scale"], v["gender"])),
             tags=["foot"]),
     StatDef("visibility",
             title="Visibility",
@@ -826,7 +825,21 @@ all_stats = [
             title="Character Bases",
             string="",
             body=lambda s: f"{s['height'].body} | {s['weight'].body}",
-            z=-1)
+            z=-1),
+    StatDef("pawtoggle",
+            title="Paw Toggle",
+            string="{nickname}'s paw toggle is {pawtoggle}.",
+            body="{pawtoggle}",
+            is_shown=False,
+            type=bool,
+            userkey="pawtoggle"),
+    StatDef("furtoggle",
+            title="Fur Toggle",
+            string="{nickname}'s paw toggle is {furtoggle}.",
+            body="{furtoggle}",
+            is_shown=False,
+            type=bool,
+            userkey="furtoggle")
 ]
 
 
@@ -847,38 +860,6 @@ def generate_statmap() -> dict[str, str]:
 
 
 statmap = generate_statmap()
-
-
-def format_shoe_size(footlength: SV, gender: Literal["m", "f"]):
-    women = gender == "f"
-    # Inch in meters
-    inch = Decimal("0.0254")
-    footlengthinches = footlength / inch
-    shoesizeNum = (3 * (footlengthinches + Decimal("2/3"))) - 24
-    prefix = ""
-    if shoesizeNum < 1:
-        prefix = "Children's "
-        women = False
-        shoesizeNum += 12 + Decimal("1/3")
-    if shoesizeNum < 0:
-        return "No shoes exist this small!"
-    if women:
-        shoesize = format(Decimal(shoesizeNum + 1), ",.2%2")
-    else:
-        shoesize = format(Decimal(shoesizeNum), ",.2%2")
-    if women:
-        return f"Size US Women's {prefix}{shoesize}"
-    return f"Size US {prefix}{shoesize}"
-
-
-def fromShoeSize(shoesize: str) -> SV:
-    shoesizenum = unmodifiedshoesizenum = Decimal(re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)[0])
-    if "w" in shoesize.lower():
-        shoesizenum = unmodifiedshoesizenum - 1
-    if "c" in shoesize.lower():  # Intentional override, children's sizes have no women/men distinction.
-        shoesizenum = unmodifiedshoesizenum - (12 + Decimal("1/3"))
-    footlengthinches = ((shoesizenum + 24) / 3) - Decimal("2/3")
-    return SV.parse(f"{footlengthinches}in")
 
 
 def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:

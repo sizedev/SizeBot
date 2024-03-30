@@ -2,7 +2,7 @@ import re
 
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.errors import InvalidSizeValue, InvalidStat
-from sizebot.lib.proportions import fromShoeSize
+from sizebot.lib.shoesize import from_shoe_size
 from sizebot.lib.userdb import User
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, parse_scale, truthy
@@ -75,7 +75,7 @@ class FakePlayer(User):
             if collapsed_key == "scale":
                 player.scale = parse_scale(val)
             elif collapsed_key == "shoesize":
-                player.footlength = fromShoeSize(val)
+                player.footlength = from_shoe_size(val)
             elif unit == bool:
                 setattr(player, collapsed_key, truthy(val))
             elif unit == str:

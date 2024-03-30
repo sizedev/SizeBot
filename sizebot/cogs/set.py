@@ -11,9 +11,9 @@ from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.proportions import format_shoe_size, fromShoeSize
+from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import AliasMap, glitch_string, parse_scale, randrange_log
+from sizebot.lib.utils import AliasMap, parse_scale, randrange_log
 
 logger = logging.getLogger("sizebot")
 
@@ -368,8 +368,8 @@ class SetCog(commands.Cog):
         userdata.footlength = SV(SV.parse(newfoot) * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({format_shoe_size(userdata.footlength, 'm')}), "
-                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {format_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({to_shoe_size(userdata.footlength, 'm')}), "
+                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {to_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -392,13 +392,13 @@ class SetCog(commands.Cog):
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        newfoot = fromShoeSize(newshoe)
+        newfoot = from_shoe_size(newshoe)
 
         userdata.footlength = SV(newfoot * userdata.viewscale)
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({format_shoe_size(userdata.footlength, 'm')}), "
-                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {format_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({to_shoe_size(userdata.footlength, 'm')}), "
+                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {to_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
         await show_next_step(ctx, userdata)
 
     @commands.command(
