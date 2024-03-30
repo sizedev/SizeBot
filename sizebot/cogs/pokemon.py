@@ -47,6 +47,9 @@ class PokemonCog(commands.Cog):
 
         userdata = userdb.load_or_fake(who)
 
+        if pkmn == "lad":
+            pkmn = "kricketot"
+
         if isinstance(pkmn, str):
             p = next((m for m in pokemon if m.name.lower() == pkmn.lower()), None)
         elif isinstance(pkmn, int):
