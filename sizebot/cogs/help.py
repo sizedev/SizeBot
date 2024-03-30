@@ -13,6 +13,7 @@ from sizebot.conf import conf
 from sizebot.lib import checks, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.menu import Menu
+from sizebot.lib.stats import statmap
 from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
@@ -35,7 +36,7 @@ logger = logging.getLogger("sizebot")
 # aliases = []
 
 alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
-
+stats_string = utils.sentence_join([f"`{v}`" for v in statmap.values()])
 
 async def post_report(report_type, message, report_text):
     async with aiohttp.ClientSession() as session:
@@ -200,7 +201,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
         if "guild_only" in repr(cmd.checks):
             description += "*This command can only be run in a server, and not in DMs.*\n"
-        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", "TODO: REPLACE ME").replace("#ALPHA#", alpha_warning)
+        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", stats_string).replace("#ALPHA#", alpha_warning)
 
         embed = Embed(
             title=signature,
