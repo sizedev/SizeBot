@@ -791,6 +791,24 @@ class StatsCog(commands.Cog):
         msg = await ctx.send(emojis.loading + " *Asking the Swiss Bank...*")
         await msg.edit(content = "", embed = e)
 
+    @commands.command(
+        usage = "[value]",
+        category = "stats"
+    )
+    async def convert(self, ctx, *, value: typing.Union[MemberOrSize, WV] = None):
+        """Convert from metric to US, or the other way around.
+        
+        %ALPHA%
+        """
+        # TODO: Replace this with a real conversion command. This is not that.
+
+        if value is None:
+            value = ctx.message.author
+        if not isinstance(value, WV):  # Really hope the only three options are Member, Size, and WV lol
+            value = load_or_fake(value).height # FIXME: we really need to stop using load_or_fake for SV coersion
+        
+        await ctx.send(f"{value:,.3mu}")
+
 
 async def setup(bot):
     await bot.add_cog(StatsCog(bot))
