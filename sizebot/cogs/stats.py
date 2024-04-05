@@ -626,6 +626,7 @@ class StatsCog(commands.Cog):
     @commands.guild_only()
     async def lineup(self, ctx):
         """Lineup a bunch of people for comparison."""
+        # TODO: Oh god this sucks, and doesn't support raw heights because of it
         if not ctx.message.mentions:
             await ctx.send("At least one person is required")
             return
