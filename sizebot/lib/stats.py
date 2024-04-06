@@ -7,7 +7,6 @@ import math
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.freefall import terminal_velocity, AVERAGE_HUMAN_DRAG_COEFFICIENT, terminal_velocity_from_player
 from sizebot.lib.units import SV, TV, WV, AV
 from sizebot.lib.userdb import PlayerStats, DEFAULT_HEIGHT as average_height, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.shoesize import to_shoe_size
@@ -27,6 +26,8 @@ ONE_SOUNDSECOND = SV(340.27)
 ONE_LIGHTSECOND = SV(299792000)
 AVERAGE_CAL_PER_DAY = 2000
 AVERAGE_WATER_PER_DAY = WV(3200)
+AVERAGE_HUMAN_DRAG_COEFFICIENT = Decimal("0.24")
+GRAVITY = Decimal("9.807")
 
 IS_LARGE = 1.0
 IS_VERY_LARGE = 10.0
@@ -632,13 +633,20 @@ all_stats = [
             type=SV,
             value=lambda v: calcHorizon(v["height"]),
             aliases=["horizon"]),
+    StatDef("dragcoefficient",
+            title="Drag Coefficient",
+            string="{nickname}'s drag coefficient is {dragcoefficient}",
+            body="{dragcoefficient}",
+            requires=["averagescale"],
+            type=Decimal,
+            value=lambda v: AVERAGE_HUMAN_DRAG_COEFFICIENT * v["averagescale"] ** Decimal(2)),
     StatDef("terminalvelocity",
             title="Terminal Velocity",
             string="{nickname}'s terminal velocity is **{terminalvelocity:,.3mu} per hour.**",
             body=lambda s: f"{s['terminalvelocity'].value:,.1M} per second\n({s['terminalvelocity'].value:,.1U} per second)" + ("\n*This user can safely fall from any height.*" if s["fallproof"].value else ""),
-            requires=["weight", "averagescale"],
+            requires=["weight", "dragcoefficient"],
             type=SV,
-            value=lambda v: terminal_velocity_from_player(v["weight"], v["averagescale"]),
+            value=lambda v: math.sqrt(GRAVITY * v["weight"] / v["dragcoefficient"]),
             aliases=["velocity", "fall"]),
     StatDef("fallproof",
             title="Fallproof",

@@ -4,19 +4,6 @@ from typing import Tuple
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import TV, WV, SV
 
-AVERAGE_HUMAN_DRAG_COEFFICIENT = Decimal("0.24")
-
-
-def terminal_velocity(m, k):
-    g = Decimal("9.807")
-    return Decimal(math.sqrt(g * m / k))
-
-
-def terminal_velocity_from_player(mass: WV, scale: Decimal):
-    m = mass
-    k = AVERAGE_HUMAN_DRAG_COEFFICIENT * (scale ** Decimal(2))
-    return SV(terminal_velocity(m, k))
-
 
 def freefall(basemass: WV, altitude: SV, scale: Decimal) -> Tuple[Decimal, Decimal, Decimal]:
     """
