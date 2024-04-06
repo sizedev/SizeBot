@@ -726,7 +726,7 @@ def list_users(*, guildid = None, userid = None):
     return users
 
 
-def load_or_fake(memberOrSV: discord.Member | FakePlayer, nickname = None, *, allow_unreg=False) -> User:
+def load_or_fake(memberOrSV: discord.Member | FakePlayer | SV, nickname = None, *, allow_unreg=False) -> User:
     if isinstance(memberOrSV, discord.Member):
         return load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
     if type(memberOrSV).__name__ == "FakePlayer":  # can't use isinstance, circular import
