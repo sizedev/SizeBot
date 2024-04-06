@@ -335,7 +335,7 @@ all_stats = [
             value=lambda v: v["height"] / AVERAGE_HEIGHT),
     StatDef("hairlength",
             title="{hairname} Length",
-            string=lambda s: f"{s['nickname'].value}'s {s['hairname'].value.lower()} is **{s['hairlength']:,.3mu}** long.",
+            string=lambda s: f"{s['nickname'].value}'s {s['hairname'].value.lower()} is **{s['hairlength'].value:,.3mu}** long.",
             body="{hairlength:,.3mu}",
             is_shown=lambda s: s["hairlength"].value,
             power=1,
