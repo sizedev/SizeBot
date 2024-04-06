@@ -1,8 +1,13 @@
+from __future__ import annotations
+
 import json
 from copy import copy
 from functools import total_ordering
 import importlib.resources as pkg_resources
-from typing import Dict, List, Literal, Optional, TypedDict
+from typing import Dict, List, Literal, Optional, TypedDict, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from sizebot.lib.fakeplayer import FakePlayer
 
 import arrow
 from arrow.arrow import Arrow
@@ -721,7 +726,7 @@ def list_users(*, guildid = None, userid = None):
     return users
 
 
-def load_or_fake(memberOrSV, nickname = None, *, allow_unreg=False) -> User:
+def load_or_fake(memberOrSV: discord.Member | FakePlayer, nickname = None, *, allow_unreg=False) -> User:
     if isinstance(memberOrSV, discord.Member):
         return load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
     if type(memberOrSV).__name__ == "FakePlayer":  # can't use isinstance, circular import
