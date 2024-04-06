@@ -796,18 +796,20 @@ class StatsCog(commands.Cog):
         usage = "[value]",
         category = "stats"
     )
-    async def convert(self, ctx, *, value: typing.Union[MemberOrSize, WV] = None):
+    async def convert(self, ctx, *, whoOrWhat: MemberOrSize | WV = None):
         """Convert from metric to US, or the other way around.
-        
+
         %ALPHA%
         """
         # TODO: Replace this with a real conversion command. This is not that.
+        if whoOrWhat is None:
+            whoOrWhat = ctx.message.author
 
-        if value is None:
-            value = ctx.message.author
-        if not isinstance(value, WV):  # Really hope the only three options are Member, Size, and WV lol
-            value = load_or_fake(value).height # FIXME: we really need to stop using load_or_fake for SV coersion
-        
+        if isinstance(whoOrWhat, (SV, WV)):
+            value = whoOrWhat
+        else:
+            value = load_or_fake(whoOrWhat).height
+
         await ctx.send(f"{value:,.3mu}")
 
 
