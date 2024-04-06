@@ -117,8 +117,13 @@ class StatDef:
                  scale: Decimal = 1,
                  old_value: Any = None
                  ) -> None | Stat:
-        value = old_value
-        if value is None:
+        value = None
+
+        if old_value is not None and self.power:
+            # Just using the existing value if the value already exists and is scalable
+            value = old_value
+        else:
+            # Load/calculate the value if it's not set, or can't be scaled by power
             if any(r not in values for r in self.requires):
                 return
             if self.userkey is not None and userstats is not None:
