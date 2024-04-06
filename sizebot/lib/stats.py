@@ -121,7 +121,7 @@ class StatDef:
 
         if old_value is not None and self.power:
             # Just using the existing value if the value already exists and is scalable
-            value = old_value
+            value = old_value * (scale ** self.power)
         else:
             # Load/calculate the value if it's not set, or can't be scaled by power
             if any(r not in values for r in self.requires):
@@ -131,9 +131,6 @@ class StatDef:
             if value is None and self.get_value is not None:
                 value = self.get_value(values)
 
-        if value is not None and self.power:
-            # existing values with power attribute can be scaled
-            value = value * (scale ** self.power)
         if value is not None and self.type:
             value = self.type(value)
         return Stat(sb, self, value)
