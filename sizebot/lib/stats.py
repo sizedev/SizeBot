@@ -26,8 +26,9 @@ ONE_SOUNDSECOND = SV(340.27)
 ONE_LIGHTSECOND = SV(299792000)
 AVERAGE_CAL_PER_DAY = 2000
 AVERAGE_WATER_PER_DAY = WV(3200)
-AVERAGE_HUMAN_DRAG_COEFFICIENT = Decimal("0.24")
-GRAVITY = Decimal("9.807")
+AVERAGE_HUMAN_DRAG_COEFFICIENT = Decimal("1.123")
+GRAVITY = Decimal("9.807")  # m/s^2
+AIR_DENSITY = Decimal("1.204")  # kg/m3
 
 IS_LARGE = 1.0
 IS_VERY_LARGE = 10.0
@@ -76,6 +77,22 @@ def grouped_z(z: int) -> tuple[int, int]:
         return (0, z)
 
 
+T = TypeVar("T")
+
+
+def wrap_type(f: Callable[[Any], T] | None) -> Callable[[Any], T | None]:
+    if f is None:
+        def default_func(v):
+            return v
+        f = default_func
+
+    def wrapped(v: any) -> T | None:
+        if v is None:
+            return None
+        return f(v)
+    return wrapped
+
+
 class StatDef:
     def __init__(self,
                  key: str,
@@ -94,6 +111,8 @@ class StatDef:
                  inline: bool = True,
                  aliases: list[str] = None
                  ):
+        if userkey is not None and power is None:
+            raise Exception(f'StatDef("{key}") with userkey must have power set')
         self.key = key
         self.get_title = wrap_str(title)
         self.get_body = wrap_str(body)
@@ -103,37 +122,66 @@ class StatDef:
         self.get_value = value
         self.requires = requires or []
         self.power = power
-        self.type = type
+        self.type = wrap_type(type)
         self.orderkey = grouped_z(z)
         self.tags = tags or []
         self.inline = inline
         self.aliases = aliases or []
 
-    def get_stat(self,
-                 sb: StatBox,
-                 values: dict[str, Any],
-                 *,
-                 userstats: PlayerStats = None,
-                 scale: Decimal = 1,
-                 old_value: Any = None
-                 ) -> None | Stat:
-        value = None
+    def load_stat(self,
+                  sb: StatBox,
+                  values: dict[str, Any],
+                  *,
+                  userstats: PlayerStats
+                  ) -> None | Stat:
 
-        if old_value is not None and self.power:
-            # Just using the existing value if the value already exists and is scalable
-            value = old_value * (scale ** self.power)
-        else:
-            # Load/calculate the value if it's not set, or can't be scaled by power
+        value = None
+        if self.userkey is not None and self.get_value is not None:
+            # try to load from userstats
+            value = userstats.get(self.userkey, None)
+            # else calculate from value()
+            if value is None:
+                value = self.get_value(values)
+        elif self.userkey is not None:
+            # load from userstats
+            value = userstats[self.userkey]
+        elif self.get_value is not None:
+            # calculate from value()
             if any(r not in values for r in self.requires):
                 return
-            if self.userkey is not None and userstats is not None:
-                value = userstats[self.userkey]
-            if value is None and self.get_value is not None:
-                value = self.get_value(values)
+            value = self.get_value(values)
+        else:
+            value = None
 
-        if value is not None and self.type:
-            value = self.type(value)
-        return Stat(sb, self, value)
+        return Stat(sb, self, self.type(value))
+
+    def scale_stat(self,
+                   sb: StatBox,
+                   values: dict[str, Any],
+                   *,
+                   scale: Decimal = 1,
+                   old_value: Any = None
+                   ) -> None | Stat:
+        value = None
+        if self.userkey is None and self.get_value is None:
+            # Can't scale without userkey or get_value
+            value = None
+        elif self.power is not None:
+            if old_value is None:
+                value = None
+            elif self.power == 0:
+                # Just use the old value
+                value = old_value
+            else:
+                # Scale by the power
+                value = old_value * (scale ** self.power)
+        else:
+            # calculate from value()
+            if any(r not in values for r in self.requires):
+                return
+            value = self.get_value(values)
+
+        return Stat(sb, self, self.type(value))
 
 
 class Stat:
@@ -228,7 +276,7 @@ class StatBox:
         sb = StatBox()
 
         def _process(sdef: StatDef):
-            result = sdef.get_stat(sb, values, userstats=userstats)
+            result = sdef.load_stat(sb, values, userstats=userstats)
             if result is not None:
                 values[result.key] = result.value
             return result
@@ -241,7 +289,7 @@ class StatBox:
         sb = StatBox()
 
         def _process(s: Stat):
-            result = s.definition.get_stat(sb, values, scale=scale_value, old_value=s.value)
+            result = s.definition.scale_stat(sb, values, scale=scale_value, old_value=s.value)
             if result is not None:
                 values[result.key] = result.value
             return result
@@ -267,12 +315,14 @@ all_stats = [
             body="{nickname}",
             is_shown=False,
             type=str,
+            power=0,
             userkey="nickname"),
     StatDef("scale",
             title="Scale",
             string=lambda s: format_scale(s['scale'].value),
             body=lambda s: format_scale(s['scale'].value),
             type=Decimal,
+            power=1,
             userkey="scale"),
     StatDef("viewscale",
             title="Viewscale",
@@ -324,6 +374,7 @@ all_stats = [
             string="{nickname}'s gender is {gender}.",
             body="{gender}",
             is_shown=False,
+            power=0,
             type=str,
             userkey="gender"),  # TODO: Should this be autogender?
     StatDef("averagescale",
@@ -648,7 +699,7 @@ all_stats = [
             body=lambda s: f"{s['terminalvelocity'].value:,.1M} per second\n({s['terminalvelocity'].value:,.1U} per second)" + ("\n*This user can safely fall from any height.*" if s["fallproof"].value else ""),
             requires=["weight", "dragcoefficient"],
             type=SV,
-            value=lambda v: math.sqrt(GRAVITY * v["weight"] / v["dragcoefficient"]),
+            value=lambda v: math.sqrt((2 * GRAVITY * (v["weight"] / 1000)) / (v["dragcoefficient"] * AIR_DENSITY)),
             aliases=["velocity", "fall"]),
     StatDef("fallproof",
             title="Fallproof",
@@ -850,6 +901,7 @@ all_stats = [
             body="{pawtoggle}",
             is_shown=False,
             type=bool,
+            power=0,
             userkey="pawtoggle"),
     StatDef("furtoggle",
             title="Fur Toggle",
@@ -857,6 +909,7 @@ all_stats = [
             body="{furtoggle}",
             is_shown=False,
             type=bool,
+            power=0,
             userkey="furtoggle"),
     StatDef("footname",
             title="Foot Name",

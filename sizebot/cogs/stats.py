@@ -603,7 +603,7 @@ class StatsCog(commands.Cog):
 
         await ctx.send(f"You fell **{fakedistance:,.3mu}** in **{ftime}**!\n"
                        f"𝑉𝑚𝑎𝑥: {vm:.3m}/s [That feels like falling **{fl:,.3mu}**!]")
-        
+
     @commands.command(
         usage = "<distance>"
     )
@@ -756,7 +756,7 @@ class StatsCog(commands.Cog):
         gs = (Decimal(9.81) * f) / (smaller_person.weight / 1000)
 
         await ctx.send(f"Standing on {larger_person.nickname}, {smaller_person.nickname} would experience **{gs:.3}**g of gravitational force.")
-    
+
     @commands.command(
         aliases = ["gold", "silver", "palladium", "platinum", "nugget", "nuggets"],
         usage = "[user]",
@@ -774,7 +774,7 @@ class StatsCog(commands.Cog):
             userdata = load_or_fake(who)
             userstats = proportions.PersonStats(userdata)
             weight = userstats.weight
-        
+
         gold_dollars = metal_value("gold", weight)
         silver_dollars = metal_value("silver", weight)
         platinum_dollars = metal_value("platinum", weight)
