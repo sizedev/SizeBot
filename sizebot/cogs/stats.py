@@ -584,25 +584,7 @@ class StatsCog(commands.Cog):
         ftime = pretty_time_delta(time, millisecondAccuracy = True, roundeventually = True)
 
         await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!\n"
-                       f"𝑉𝑚𝑎𝑥: {vm:.3m}/s [That feels like falling **{fl:,.3mu}**!]")
-
-    @commands.command(
-        usage = "<distance>",
-        hidden = True
-    )
-    async def rpfall(self, ctx, distance: MemberOrSize):
-        if isinstance(distance, discord.Member):
-            ud = userdb.load(ctx.guild.id, distance.id)
-            distance = ud.height
-        userdata = userdb.load(ctx.guild.id, ctx.author.id)
-        basemass = userdata.baseweight
-        scale = 1
-        fakedistance = SV(distance / userdata.scale)
-        time, vm, fl = freefall(basemass, distance, scale)
-        ftime = pretty_time_delta(time, millisecondAccuracy = True, roundeventually = True)
-
-        await ctx.send(f"You fell **{fakedistance:,.3mu}** in **{ftime}**!\n"
-                       f"𝑉𝑚𝑎𝑥: {vm:.3m}/s [That feels like falling **{fl:,.3mu}**!]")
+                       f"Your max speed: {vm:.3m}/s")
 
     @commands.command(
         usage = "<distance>"
