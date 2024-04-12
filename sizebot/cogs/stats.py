@@ -57,36 +57,6 @@ class StatsCog(commands.Cog):
         await show_next_step(ctx, userdata)
 
     @commands.command(
-        usage = "<tag> [user/height]",
-        category = "stats"
-    )
-    @commands.guild_only()
-    async def statsbytag(self, ctx, tag: StatProxy, memberOrHeight: typing.Optional[MemberOrSize] = None):
-        """User stats command.
-
-        Get tons of user stats about yourself, a user, or a raw height.
-
-        Examples:
-        `&stats` (defaults to stats about you.)
-        `&stats @User`
-        `&stats 10ft`
-        """
-        if memberOrHeight is None:
-            memberOrHeight = ctx.author
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
-        same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
-
-        stats = proportions.PersonStats(userdata)
-        embedtosend = stats.to_tag_embed(tag, ctx.author.id)
-        await ctx.send(embed = embedtosend)
-
-        await show_next_step(ctx, userdata)
-
-    @commands.command(
         usage = "<from> <to> [user/height]",
         category = "stats"
     )
