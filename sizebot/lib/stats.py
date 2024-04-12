@@ -960,6 +960,7 @@ def generate_taglist() -> list[str]:
         if stat.tags:
             tags.extend(stat.tags)
     tags = list(set(tags))
+    return tags
 
 
 statmap = generate_statmap()

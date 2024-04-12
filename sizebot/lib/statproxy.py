@@ -21,27 +21,18 @@ class StatProxy:
     
     @classmethod
     def parse(cls, s: str):
-        logger.info(f"{s}: checking StatProxy...")
         tag = False
         if s.startswith("#"):
-            logger.info("Looks like a tag.")
             tag = True
             s = s.removeprefix("#")
 
         if tag:
-            logger.info(f"Checking {s} against {taglist}...")
             if s not in taglist:
-                logger.info(f"Looks like {s} isn't a tag.")
-                logger.info(f"It's not in this list: {taglist}")
                 raise InvalidStatTag(s)
-            logger.info("Check passed!")
             return StatProxy(s, True)
         else:
             if s not in statmap.keys():
-                logger.info(f"Looks like {s} isn't a stat.")
-                logger.info(f"It's not in this list: {statmap.keys()}")
                 raise InvalidStat(s)
-            logger.info("Check passed!")
             return StatProxy(statmap[s], False)
 
     @classmethod
