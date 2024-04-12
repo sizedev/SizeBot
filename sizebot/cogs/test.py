@@ -17,7 +17,7 @@ class TestCog(commands.Cog):
         if isinstance(stat, StatProxy):
             await ctx.send(f"You input **\"{stat.name}\"**\nIt's a **{'tag' if stat.tag else 'stat'}.**")
         else:
-            await ctx.send(f"You input **\"{stat.name}\"**. That's not a stat or a tag.")
+            await ctx.send(f"You input **\"{stat}\"**. That's not a stat or a tag.")
 
 
 async def setup(bot):
