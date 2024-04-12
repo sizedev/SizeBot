@@ -435,12 +435,14 @@ class ObjectsCog(commands.Cog):
         stattags = sentence_join([f"`{t}`" for t in taglist])
         out += stattags
 
-        out += "\n\n__**Object Tags**__"
+        out += "\n\n__**Object Tags**__\n"
 
         for tag in sorted(tags, key=tags.get, reverse=True):
             if tags[tag] <= 1:
                 break
-            out += f"\n**{tag}**: {tags[tag]}"
+            out += f"`{tag}` ({tags[tag]}), "
+
+        out = out.removesuffix(", ")
 
         await ctx.send(out)
 
