@@ -29,6 +29,7 @@ class StatProxy:
             s = s.removeprefix("#")
 
         if tag:
+            logger.info(f"Checking {s} against {taglist}...")
             if s not in taglist:
                 logger.info(f"Looks like {s} isn't a tag.")
                 logger.info(f"It's not in this list: {taglist}")
