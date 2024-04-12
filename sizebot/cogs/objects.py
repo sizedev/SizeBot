@@ -16,9 +16,10 @@ from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects, tags
+from sizebot.lib.stats import taglist
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake
-from sizebot.lib.utils import glitch_string, parse_many, pretty_time_delta
+from sizebot.lib.utils import glitch_string, parse_many, pretty_time_delta, sentence_join
 
 
 logger = logging.getLogger("sizebot")
@@ -427,9 +428,14 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     async def tags(self, ctx):
-        """Get the list of object tags."""
+        """Get the list of object and stat tags."""
 
-        out = "__**Object Tags**__"
+        out = "__**Stat Tags**__\n"
+
+        stattags = sentence_join([f"`{t}`" for t in taglist])
+        out += stattags
+
+        out += "\n\n__**Object Tags**__"
 
         for tag in sorted(tags, key=tags.get, reverse=True):
             if tags[tag] <= 1:
