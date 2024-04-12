@@ -943,8 +943,16 @@ def generate_statmap() -> dict[str, str]:
             statmap[alias] = stat.key
     return statmap
 
+def generate_taglist() -> list[str]:
+    tags = []
+    for stat in all_stats:
+        if stat.tags:
+            tags.extend(stat.tags)
+    tags = list(set(tags))
+
 
 statmap = generate_statmap()
+taglist = generate_taglist()
 
 
 def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:

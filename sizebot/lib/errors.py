@@ -138,6 +138,14 @@ class InvalidStat(DigiException):
 
     def formatUserMessage(self):
         return f"{self.value!r} is an unrecognized stat."
+    
+
+class InvalidStatTag(DigiException):
+    def __init__(self, value):
+        self.value = value
+
+    def formatUserMessage(self):
+        return f"{self.value!r} is an unrecognized stat tag."
 
 
 class InvalidObject(DigiException):
