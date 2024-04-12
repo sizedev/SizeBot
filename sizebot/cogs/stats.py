@@ -1,7 +1,4 @@
 import logging
-from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.fakeplayer import FakePlayer
-from sizebot.lib.freefall import freefall
 import typing
 
 import discord
@@ -10,11 +7,15 @@ from discord.ext import commands
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
 from sizebot.lib.constants import colors, emojis
+from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.fakeplayer import FakePlayer
+from sizebot.lib.freefall import freefall
 from sizebot.lib.language import engine
-from sizebot.lib.metal import Metal, metal_value, nugget_value
+from sizebot.lib.metal import metal_value, nugget_value
+from sizebot.lib.statproxy import StatProxy
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import load_or_fake
-from sizebot.lib.utils import glitch_string, pretty_time_delta, round_fraction, sentence_join
+from sizebot.lib.utils import pretty_time_delta, round_fraction, sentence_join
 
 logger = logging.getLogger("sizebot")
 
@@ -60,7 +61,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statsbytag(self, ctx, tag: str, memberOrHeight: typing.Optional[MemberOrSize] = None):
+    async def statsbytag(self, ctx, tag: StatProxy, memberOrHeight: typing.Optional[MemberOrSize] = None):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
@@ -181,7 +182,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stat(self, ctx, stat, *, memberOrHeight: MemberOrSize = None):
+    async def stat(self, ctx, stat: StatProxy, *, memberOrHeight: MemberOrSize = None):
         """User stat command.
 
         Get a single stat about yourself, a user, or a raw height.
@@ -205,13 +206,16 @@ class StatsCog(commands.Cog):
 
         stats = proportions.PersonStats(userdata)
 
-        stattosend = stats.getFormattedStat(stat)
-
-        if stattosend is None:
-            await ctx.send(f"The `{stat}` stat is unavailable for this user.")
-            return
-
-        await ctx.send(stattosend)
+        if stat.tag:
+            embedtosend = stats.to_tag_embed(stat.name, ctx.author.id)
+            await ctx.send(embed = embedtosend)
+        else:
+            stattosend = stats.getFormattedStat(stat.name)
+            if stattosend is None:
+                await ctx.send(f"The `{stat.name}` stat is unavailable for this user.")
+                return
+            await ctx.send(stattosend)
+        
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -219,7 +223,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statso(self, ctx, sv1: MemberOrSize, sv2: SV, stat, *, memberOrHeight: MemberOrSize = None):
+    async def statso(self, ctx, sv1: MemberOrSize, sv2: SV, stat: StatProxy, *, memberOrHeight: MemberOrSize = None):
         """User stat command as if an implied scale.
 
         Available stats are: #STATS#`
@@ -239,13 +243,16 @@ class StatsCog(commands.Cog):
 
         stats = proportions.PersonStats(userdata)
 
-        stattosend = stats.getFormattedStat(stat)
+        if stat.tag:
+            embedtosend = stats.to_tag_embed(stat.name, ctx.author.id)
+            await ctx.send(embed = embedtosend)
+        else:
+            stattosend = stats.getFormattedStat(stat.name)
+            if stattosend is None:
+                await ctx.send(f"The `{stat.name}` stat is unavailable for this user.")
+                return
+            await ctx.send(stattosend)
 
-        if stattosend is None:
-            await ctx.send(f"The `{stat}` stat is unavailable for this user.")
-            return
-
-        await ctx.send(stattosend)
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -254,7 +261,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statas(self, ctx, stat, memberOrHeight: MemberOrSize = None,
+    async def statas(self, ctx, stat: StatProxy, memberOrHeight: MemberOrSize = None,
                      memberOrHeight2: MemberOrSize = None):
         """User stat command with custom bases.
 
@@ -285,13 +292,15 @@ class StatsCog(commands.Cog):
 
         stats = proportions.PersonStats(userdata2)
 
-        stattosend = stats.getFormattedStat(stat)
-
-        if stattosend is None:
-            await ctx.send(f"The `{stat}` stat is unavailable for this user.")
-            return
-
-        await ctx.send(stattosend)
+        if stat.tag:
+            embedtosend = stats.to_tag_embed(stat.name, ctx.author.id)
+            await ctx.send(embed = embedtosend)
+        else:
+            stattosend = stats.getFormattedStat(stat.name)
+            if stattosend is None:
+                await ctx.send(f"The `{stat.name}` stat is unavailable for this user.")
+                return
+            await ctx.send(stattosend)
 
     @commands.command(
         aliases = ["comp", "comparison"],
