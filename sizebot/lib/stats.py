@@ -312,8 +312,14 @@ class StatBox:
         return self.stats_by_key[k]
 
 
-CHK_Y = "✅"
-CHK_N = "❎"
+def bool_to_icon(value):
+    CHK_Y = "✅"
+    CHK_N = "❎"
+    if value:
+        return CHK_Y
+    else:
+        return CHK_N
+
 
 all_stats = [
     StatDef("nickname",
@@ -720,15 +726,15 @@ all_stats = [
     StatDef("fallproof",
             title="Fallproof",
             string=lambda s: f"""{s['nickname'].value} {'is' if s['fallproof'].value else "isn't"} fallproof.""",
-            body=lambda s: CHK_Y if s['fallproof'].value else CHK_N,
+            body=lambda s: bool_to_icon(s['fallproof'].value),
             is_shown=False,
             requires=["terminalvelocity"],
             type=bool,
             value=lambda v: v["terminalvelocity"] < FALL_LIMIT),
     StatDef("fallprooficon",
             title="Fallproof Icon",
-            string=lambda s: CHK_Y if s['fallproof'] else CHK_N,
-            body=lambda s: CHK_Y if s['fallproof'].value else CHK_N,
+            string=lambda s: bool_to_icon(s['fallproof']),
+            body=lambda s: bool_to_icon(s['fallproof'].value),
             is_shown=False,
             requires=["fallproof"],
             type=str,
@@ -916,7 +922,7 @@ all_stats = [
     StatDef("pawtoggle",
             title="Paw Toggle",
             string="{nickname}'s paw toggle is {pawtoggle}.",
-            body="{pawtoggle}",
+            body=lambda s: bool_to_icon(s['pawtoggle'].value),
             is_shown=False,
             type=bool,
             power=0,
@@ -924,7 +930,7 @@ all_stats = [
     StatDef("furtoggle",
             title="Fur Toggle",
             string="{nickname}'s fur toggle is {furtoggle}.",
-            body="{furtoggle}",
+            body=lambda s: bool_to_icon(s['furtoggle'].value),
             is_shown=False,
             type=bool,
             power=0,

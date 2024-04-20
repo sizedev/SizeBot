@@ -14,7 +14,6 @@ from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT
 from sizebot.lib.utils import minmax, url_safe
 from sizebot.lib.stats import statmap, StatBox
-from sizebot.lib.shoesize import to_shoe_size
 
 AVERAGE_HEIGHT = average_height
 AVERAGE_WALKPERHOUR = SV(5630)
