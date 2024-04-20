@@ -90,12 +90,12 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def basestats(self, ctx, *, member: discord.Member = None):
-        """User basestats command.
+        """Show user stats at 1x scale.
 
-        Get the base stats about yourself or a user.
+        Get the 1x scale stats about yourself or a user.
 
         Examples:
-        `&sbasetats` (defaults to stats about you.)
+        `&basestats` (defaults to stats about you.)
         `&basestats @User`
         """
         if member is None:
@@ -104,6 +104,31 @@ class StatsCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, member.id)
 
         embedtosend = proportions.get_basestats_embed(userdata, requesterID=ctx.author.id)
+
+        await ctx.send(embed = embedtosend)
+
+        await show_next_step(ctx, userdata)
+
+    @commands.command(
+        usage = "[user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def settings(self, ctx, *, member: discord.Member = None):
+        """Show settable values on SizeBot.
+
+        Get all settable values on SizeBot for yourself or a user.
+
+        Examples:
+        `&settings` (defaults to stats about you.)
+        `&settings @User`
+        """
+        if member is None:
+            member = ctx.author
+
+        userdata = userdb.load(ctx.guild.id, member.id)
+
+        embedtosend = proportions.get_settings_embed(userdata, requesterID=ctx.author.id)
 
         await ctx.send(embed = embedtosend)
 

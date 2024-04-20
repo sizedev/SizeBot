@@ -541,6 +541,21 @@ def get_basestats_embed(userdata: User, requesterID = None):
     return embed
 
 
+def get_settings_embed(userdata: User, requesterID = None):
+    basestats = StatBox.load(userdata.stats)
+    requestertag = f"<@!{requesterID}>"
+    embed = Embed(title=f"Base Stats for {basestats['nickname'].value}",
+                  description=f"*Requested by {requestertag}*",
+                  color=colors.cyan)
+    embed.set_author(name=f"SizeBot {__version__}")
+
+    for stat in basestats:
+        if stat.definition.userkey:
+            embed.add_field(**stat.embed)
+
+    return embed
+
+
 # TODO: CamelCase
 def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:
     viewer = abs(Decimal(viewer))
