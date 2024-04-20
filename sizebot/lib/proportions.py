@@ -114,8 +114,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         bigstat = self.bigToSmall.stats[mapped_key]
         smallstat = self.smallToBig.stats[mapped_key]
 
-        bigstattext = bigstat.body if bigstat else f"{self.big.nickname} doesn't have that stat."
-        smallstattext = smallstat.body if smallstat else f"{self.small.nickname} doesn't have that stat."
+        bigstattext = bigstat.body if bigstat.value is not None else f"{self.big.nickname} doesn't have that stat."
+        smallstattext = smallstat.body if smallstat.value is not None else f"{self.small.nickname} doesn't have that stat."
 
         return_stat = (f"Comparing `{key}` between {emojis.comparebigcenter}**{self.big.nickname}** and **{emojis.comparesmallcenter}{self.small.nickname}**:\n"
                        f"{emojis.comparebig}{bigstattext}\n"
