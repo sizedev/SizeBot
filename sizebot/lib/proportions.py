@@ -111,17 +111,13 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         except KeyError:
             return None
 
-        bigdict = {s.key: s.body for s in self.bigToSmall.stats}
-        smalldict = {s.key: s.body for s in self.smallToBig.stats}
-
-        bigstat = bigdict.get(mapped_key)
-        smallstat = smalldict.get(mapped_key)
+        bigstat = self.bigToSmall.stats[mapped_key].body
+        smallstat = self.smallToBig.stats[mapped_key].body
 
         return_stat = (f"Comparing `{key}` between {emojis.comparebigcenter}**{self.big.nickname}** and **{emojis.comparesmallcenter}{self.small.nickname}**:\n"
                        f"{emojis.comparebig}{bigstat}\n"
                        f"{emojis.comparesmall}{smallstat}")
 
-        
         return return_stat
 
     def __str__(self):
