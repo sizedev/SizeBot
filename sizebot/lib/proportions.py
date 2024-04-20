@@ -105,6 +105,25 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         self.lookangle = abs(viewangle)
         self.lookdirection = "up" if viewangle >= 0 else "down"
 
+    def getFormattedStat(self, key: str):
+        try:
+            mapped_key = statmap[key]
+        except KeyError:
+            return None
+
+        bigdict = {s.key: s.body for s in self.bigToSmall.stats}
+        smalldict = {s.key: s.body for s in self.smallToBig.stats}
+
+        bigstat = bigdict.get(mapped_key)
+        smallstat = smalldict.get(mapped_key)
+
+        return_stat = (f"Comparing `{key}` between {emojis.comparebigcenter}**{self.big.nickname}** and **{emojis.comparesmallcenter}{self.small.nickname}**:\n"
+                       f"{emojis.comparebig}{bigstat}\n"
+                       f"{emojis.comparesmall}{smallstat}")
+
+        
+        return return_stat
+
     def __str__(self):
         return f"<PersonComparison SMALL = {self.small!r}, BIG = {self.big!r}, SMALLTOBIG = {self.smallToBig!r}, BIGTOSMALL = {self.bigToSmall!r}>"
 

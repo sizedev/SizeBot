@@ -332,6 +332,34 @@ class StatsCog(commands.Cog):
         await msg.edit(content = "", embed = embedtosend)
 
     @commands.command(
+        aliases = ["compstat"],
+        usage = "<stat> [user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def comparestat(self, ctx, stat: StatProxy, *, memberOrHeight: MemberOrSize, memberOrHeight2: MemberOrSize = None):
+        if memberOrHeight2 is None:
+            memberOrHeight2 = ctx.author
+
+        if memberOrHeight is None:
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
+            return
+
+        userdata1 = load_or_fake(memberOrHeight)
+        userdata2 = load_or_fake(memberOrHeight2)
+
+        stats = proportions.PersonComparison(userdata1, userdata2)
+
+        if stat.tag:
+            await ctx.send("Not supported right now, sorry!")
+        else:
+            stattosend = stats.getFormattedStat(stat.name)
+            if stattosend is None:
+                await ctx.send(f"The `{stat.name}` stat is unavailable for this user.")
+                return
+            await ctx.send(stattosend)
+
+    @commands.command(
         aliases = ["dist", "walk", "run", "climb", "swim", "crawl", "drive"],
         usage = "<length> [user]",
         category = "stats"
