@@ -323,7 +323,7 @@ all_stats = [
             body=lambda s: format_scale(s['scale'].value),
             type=Decimal,
             power=1,
-            userkey="scale"),
+            value=lambda v: 1),
     StatDef("viewscale",
             title="Viewscale",
             string=lambda s: format_scale(s['viewscale'].value),
@@ -808,9 +808,9 @@ all_stats = [
             string="{nickname}'s shoe size is **{shoesize}**.",
             body="{shoesize}",
             is_shown=False,
-            requires=["footlength", "gender", "scale"],
+            requires=["footlength", "gender"],
             type=str,
-            value=(lambda v: to_shoe_size(v["footlength"] * v["scale"], v["gender"])),
+            value=(lambda v: to_shoe_size(v["footlength"], v["gender"])),
             tags=["foot"],
             aliases=["shoe", "shoes"]),
     StatDef("visibility",
@@ -953,6 +953,7 @@ def generate_statmap() -> dict[str, str]:
                 raise Exception(f"Duplicate alias: {alias}")
             statmap[alias] = stat.key
     return statmap
+
 
 def generate_taglist() -> list[str]:
     tags = []

@@ -18,7 +18,7 @@ class StatProxy:
 
     def __str__(self):
         return self.__repr__()
-    
+
     @classmethod
     def parse(cls, s: str):
         tag = False
