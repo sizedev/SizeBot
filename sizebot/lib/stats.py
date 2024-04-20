@@ -968,6 +968,7 @@ statmap = generate_statmap()
 taglist = generate_taglist()
 
 
+# TODO: CamelCase
 def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:
     viewer = abs(Decimal(viewer))
     viewee = abs(Decimal(viewee))
@@ -989,11 +990,13 @@ def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:
     return viewangle
 
 
+# TODO: CamelCase
 def calcHorizon(height: SV) -> SV:
     EARTH_RADIUS = 6378137
     return SV(math.sqrt((EARTH_RADIUS + height) ** 2 - EARTH_RADIUS ** 2))
 
 
+# TODO: CamelCase
 def calcVisibility(height: SV) -> str:
     if height < SV(0.000001):
         visibility = "magic"

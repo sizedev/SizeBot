@@ -29,6 +29,7 @@ class HolidayCog(commands.Cog):
     def cog_unload(self):
         self.holidayTask.cancel()
 
+    # TODO: CamelCase
     @tasks.loop(seconds=60)
     async def holidayTask(self):
         """Holiday checker"""

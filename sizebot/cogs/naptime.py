@@ -73,6 +73,7 @@ class NaptimeCog(commands.Cog):
         await ctx.author.send("**WAITING NANNIES**\n" + nannyDump)
         logger.info(f"User {ctx.author.id} ({ctx.author.display_name}) dumped the waiting nannies.")
 
+    # TODO: CamelCase
     @tasks.loop(seconds=60)
     async def nannyTask(self):
         """Nanny task"""

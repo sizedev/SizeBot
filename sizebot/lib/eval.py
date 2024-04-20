@@ -80,6 +80,7 @@ def edir(o):
     return e
 
 
+# TODO: CamelCase
 def cachedCopy(fn):
     """Decorator that calls the wrapper function the first time it's called, and returns copies of the cached result on all later calls"""
     isCached = False

@@ -236,6 +236,7 @@ class ChangeCog(commands.Cog):
 
         await ctx.send(f"You outshrunk {obj.article} **{obj.name}** *({obj.unitlength:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
 
+    # TODO: CamelCase
     @tasks.loop(seconds=6)
     async def changeTask(self):
         """Slow growth task"""

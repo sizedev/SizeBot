@@ -77,6 +77,7 @@ initial_extensions = [
 discordplus.patch()
 
 
+# TODO: CamelCase
 def initConf():
     print("Initializing configuration file")
     try:

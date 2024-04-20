@@ -16,6 +16,7 @@ from sizebot.lib.units import SV
 logger = logging.getLogger("sizebot")
 
 
+# TODO: CamelCase
 def getUserSizes(g):
     # Find the largest and smallest current users.
     # TODO: Can this be faster?

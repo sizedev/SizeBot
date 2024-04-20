@@ -4,6 +4,7 @@ import discord
 old_history = Messageable.history
 
 
+# TODO: CamelCase
 def wrapSnowflake(name, kwargs):
     if name not in kwargs:
         return

@@ -21,6 +21,7 @@ class BadLegacyUser(Exception):
     pass
 
 
+# TODO: CamelCase
 def loadLegacy(path):
     """Load a user from the old file format"""
     with open(path, "r", encoding = "utf-8") as f:

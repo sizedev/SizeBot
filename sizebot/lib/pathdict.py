@@ -20,6 +20,7 @@ def parse_component(component):
         raise BadPathException
 
 
+# TODO: CamelCase
 def buildPath(components):
     path = ""
     for c in components:
@@ -34,6 +35,7 @@ def buildPath(components):
     return path
 
 
+# TODO: CamelCase
 def parsePath(path):
     components = [parse_component(c) for c in RE_COMPONENT.findall(path)]
     if path != buildPath(components):
@@ -84,6 +86,7 @@ class PathDict:
         except KeyError:
             return default
 
+    # TODO: CamelCase
     def toDict(self):
         return self._values
 

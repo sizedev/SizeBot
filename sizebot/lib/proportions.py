@@ -111,6 +111,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
     def __repr__(self):
         return str(self)
 
+    # TODO: CamelCase
     async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
@@ -208,6 +209,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
         return embed
 
+    # TODO: CamelCase
     async def toSimpleEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
@@ -292,6 +294,7 @@ class PersonSpeedComparison:
     def __repr__(self):
         return str(self)
 
+    # TODO: CamelCase
     def getStatEmbed(self, key: str):
         try:
             mapped_key = statmap[key]
@@ -309,6 +312,7 @@ class PersonSpeedComparison:
             title = f"To move the distance of {self.viewed["nickname"].value}'s {stat.title.lower()}, it would take {self.viewer["nickname"].value}...",
             description = speedcalc(self.viewer, stat.value, speed = True, include_relative = True, foot = mapped_key == "footlength"))
 
+    # TODO: CamelCase
     async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
@@ -448,7 +452,8 @@ class PersonStats:
 
         self.simplespeeds = self.stats["simplespeeds+"].body
 
-    def getFormattedStat(self, key: str):
+    # TODO: CamelCase
+    def getFormattedStat(self, key: str) -> str:
         # "foot": f"'s {self.footname.lower()} is **{self.footlength:,.3mu}** long and **{self.footwidth:,.3mu}** wide. ({self.shoesize})",
         try:
             mapped_key = statmap[key]
@@ -473,6 +478,7 @@ class PersonStats:
     def __repr__(self):
         return str(self)
 
+    # TODO: CamelCase
     def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(title=f"Stats for {self.nickname}",
@@ -503,6 +509,9 @@ class PersonStats:
 
 class PersonBaseStats:
     def __init__(self, userdata: User):
+        # Use the new statbox
+        self.basestats = StatBox.load(userdata.stats)
+
         self.nickname = userdata.nickname
         self.tag = userdata.tag
         self.gender = userdata.autogender
@@ -550,6 +559,7 @@ class PersonBaseStats:
     def __repr__(self):
         return str(self)
 
+    # TODO: CamelCase
     def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(title=f"Base Stats for {self.nickname}",
@@ -581,6 +591,7 @@ class PersonBaseStats:
         return embed
 
 
+# TODO: CamelCase
 def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:
     viewer = abs(Decimal(viewer))
     viewee = abs(Decimal(viewee))

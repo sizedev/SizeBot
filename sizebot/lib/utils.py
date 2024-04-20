@@ -322,6 +322,7 @@ async def parse_many(ctx, arg, types: list, default = None):
     return default
 
 
+# TODO: CamelCase
 def isURL(value) -> bool:
     """Returns True when given either a valid URL, or `None`."""
     try:
