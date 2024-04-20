@@ -103,9 +103,8 @@ class StatsCog(commands.Cog):
 
         userdata = userdb.load(ctx.guild.id, member.id)
 
-        stats = proportions.PersonBaseStats(userdata)
+        embedtosend = proportions.get_basestats_embed(userdata, requesterID=ctx.author.id)
 
-        embedtosend = stats.toEmbed(ctx.author.id)
         await ctx.send(embed = embedtosend)
 
         await show_next_step(ctx, userdata)

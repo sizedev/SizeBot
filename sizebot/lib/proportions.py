@@ -499,7 +499,7 @@ class PersonStats:
     # TODO: CamelCase
     def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
-        embed = Embed(title=f"Stats for {self.nickname}",
+        embed = Embed(title=f"Stats for {self.stats['nickname'].value}",
                       description=f"*Requested by {requestertag}*",
                       color=colors.cyan)
         embed.set_author(name=f"SizeBot {__version__}")
@@ -525,88 +525,20 @@ class PersonStats:
         return embed
 
 
-class PersonBaseStats:
-    def __init__(self, userdata: User):
-        # Use the new statbox
-        self.basestats = StatBox.load(userdata.stats)
+def get_basestats_embed(userdata: User, requesterID = None):
+    basestats = StatBox.load(userdata.stats)
+    requestertag = f"<@!{requesterID}>"
+    embed = Embed(title=f"Base Stats for {basestats['nickname'].value}",
+                  description=f"*Requested by {requestertag}*",
+                  color=colors.cyan)
+    embed.set_author(name=f"SizeBot {__version__}")
 
-        self.nickname = userdata.nickname
-        self.tag = userdata.tag
-        self.gender = userdata.autogender
-        self.baseheight = userdata.baseheight
-        self.baseweight = userdata.baseweight
-        self.height = userdata.height
-        self.footname = userdata.footname
-        self.hairname = userdata.hairname
-        self.pawtoggle = userdata.pawtoggle
-        self.macrovision_model = userdata.macrovision_model
-        self.macrovision_view = userdata.macrovision_view
+    for stat in basestats:
+        if stat.is_shown:
+            embed.add_field(**stat.embed)
 
-        self.hairlength = userdata.hairlength
-        self.taillength = userdata.taillength
-        self.earheight = userdata.earheight
-        self.liftstrength = userdata.liftstrength
-
-        self.footlength = userdata.footlength
-
-        if self.footlength:
-            self.shoesize = to_shoe_size(self.footlength, self.gender)
-        else:
-            self.shoesize = None
-
-        self.walkperhour = userdata.walkperhour
-        self.runperhour = userdata.runperhour
-        self.swimperhour = userdata.swimperhour
-
-        self.currentscalestep = userdata.currentscalestep
-        self.unitsystem = userdata.unitsystem
-
-        self.furcheck = emojis.voteyes if userdata.furtoggle else emojis.voteno
-        self.pawcheck = emojis.voteyes if userdata.pawtoggle else emojis.voteno
-        self.tailcheck = emojis.voteyes if userdata.taillength else emojis.voteno
-
-    def __str__(self):
-        return (f"<PersonBaseStats NICKNAME = {self.nickname!r}, TAG = {self.tag!r}, GENDER = {self.gender!r}, "
-                f"BASEHEIGHT = {self.baseheight!r}, BASEWEIGHT = {self.baseweight!r}, FOOTNAME = {self.footname!r}, "
-                f"HAIRNAME = {self.hairname!r}, PAWTOGGLE = {self.pawtoggle!r}, FURTOGGLE = {self.furtoggle!r}, "
-                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}, "
-                f"HAIRLENGTH = {self.hairlength!r}, TAILLENGTH = {self.taillength!r}, EARHEIGHT = {self.earheight!r}, "
-                f"LIFTSTRENGTH = {self.liftstrength!r}, FOOTLENGTH = {self.footlength!r}, "
-                f"WALKPERHOUR = {self.walkperhour!r}, RUNPERHOUR = {self.runperhour!r}, SWIMPERHOUR = {self.swimperhour!r}>")
-
-    def __repr__(self):
-        return str(self)
-
-    # TODO: CamelCase
-    def toEmbed(self, requesterID = None):
-        requestertag = f"<@!{requesterID}>"
-        embed = Embed(title=f"Base Stats for {self.nickname}",
-                      description=f"*Requested by {requestertag}*",
-                      color=colors.cyan)
-        embed.set_author(name=f"SizeBot {__version__}")
-        embed.add_field(name="Base Height", value=f"{self.baseheight:,.3mu}\n*{self.height / average_height:,.3} average*", inline=True)
-        embed.add_field(name="Base Weight", value=f"{self.baseweight:,.3mu}\n*{self.height / average_height:,.3} average*", inline=True)
-        embed.add_field(name="Unit System", value=f"{self.unitsystem.capitalize()}", inline=True)
-        embed.add_field(name="Furry", value=f"**Fur: **{self.furcheck}\n**Paws: **{self.pawcheck}\n**Tail: **{self.tailcheck}\n")
-        if self.footlength:
-            embed.add_field(name=f"{self.footname} Length", value=f"{self.footlength:.3mu}\n({self.shoesize})", inline=True)
-        if self.hairlength:
-            embed.add_field(name=f"{self.hairname} Length", value=format(self.hairlength, ",.3mu"), inline=True)
-        if self.taillength:
-            embed.add_field(name="Tail Length", value=format(self.taillength, ",.3mu"), inline=True)
-        if self.earheight:
-            embed.add_field(name="Ear Height", value=format(self.earheight, ",.3mu"), inline=True)
-        if self.walkperhour:
-            embed.add_field(name="Walk Speed", value=f"{self.walkperhour:,.1M} per hour\n({self.walkperhour:,.1U} per hour)", inline=True)
-        if self.runperhour:
-            embed.add_field(name="Run Speed", value=f"{self.runperhour:,.1M} per hour\n({self.runperhour:,.1U} per hour)", inline=True)
-        if self.swimperhour:
-            embed.add_field(name="Swim Speed", value=f"{self.swimperhour:,.1M} per hour\n({self.swimperhour:,.1U} per hour)", inline=True)
-        if self.liftstrength:
-            embed.add_field(name="Lift/Carry Strength", value=f"{self.liftstrength:,.3mu}", inline=True)
-        if self.macrovision_model and self.macrovision_model != "Human":
-            embed.add_field(name="Macrovision Custom Model", value=f"{self.macrovision_model}, {self.macrovision_view}", inline=True)
-        return embed
+    # REMOVED: unitsystem, furcheck, pawcheck, tailcheck, macrovision_model, macrovision_view
+    return embed
 
 
 # TODO: CamelCase
