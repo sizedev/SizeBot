@@ -37,12 +37,14 @@ def values(fn):
     return wrapped
 
 
+# TODO: CamelCase
 def clampInf(value, limit):
     if limit and abs(value) >= limit:
         value = RawDecimal("infinity") * int(math.copysign(1, value))
     return value
 
 
+# TODO: CamelCase
 def unwrapDecimal(value):
     if isinstance(value, Decimal):
         value = value._rawvalue

@@ -97,6 +97,7 @@ def cachedCopy(fn):
     return wrapper
 
 
+# TODO: CamelCase
 @cachedCopy
 def getEvalGlobals():
     """Construct a globals dict for eval"""
@@ -163,6 +164,7 @@ def getEvalGlobals():
     return evalGlobals
 
 
+# TODO: CamelCase
 def buildEvalWrapper(evalStr, addReturn = True):
     """Build a wrapping async function that lets the eval command run multiple lines, and return the result of the last line"""
     evalLines = evalStr.rstrip().split("\n")
@@ -182,6 +184,7 @@ def buildEvalWrapper(evalStr, addReturn = True):
     return evalWrapper, evalWrapperStr
 
 
+# TODO: CamelCase
 async def runEval(ctx, evalStr):
     evalGlobals = getEvalGlobals()
     evalLocals = {}
