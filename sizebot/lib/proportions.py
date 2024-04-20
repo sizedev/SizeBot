@@ -544,14 +544,21 @@ def get_basestats_embed(userdata: User, requesterID = None):
 def get_settings_embed(userdata: User, requesterID = None):
     basestats = StatBox.load(userdata.stats)
     requestertag = f"<@!{requesterID}>"
-    embed = Embed(title=f"Base Stats for {basestats['nickname'].value}",
+    embed = Embed(title=f"Settings for {basestats['nickname'].value}",
                   description=f"*Requested by {requestertag}*",
                   color=colors.cyan)
     embed.set_author(name=f"SizeBot {__version__}")
 
     for stat in basestats:
-        if stat.definition.userkey:
-            embed.add_field(**stat.embed)
+        if stat.definition.userkey is not None:
+            if stat.is_setbyuser:
+                embed.add_field(**stat.embed)
+            else:
+                embed.add_field(
+                    name=stat.title,
+                    value="**NOT SET**",
+                    inline=stat.definition.inline
+                )
 
     return embed
 

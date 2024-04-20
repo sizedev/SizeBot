@@ -135,16 +135,21 @@ class StatDef:
                   userstats: PlayerStats
                   ) -> None | Stat:
 
+        is_setbyuser = False
         value = None
         if self.userkey is not None and self.get_value is not None:
             # try to load from userstats
             value = userstats.get(self.userkey, None)
-            # else calculate from value()
-            if value is None:
+            if value is not None:
+                is_setbyuser = True
+            else:
+                # else calculate from value()
                 value = self.get_value(values)
         elif self.userkey is not None:
             # load from userstats
             value = userstats[self.userkey]
+            if value is not None:
+                is_setbyuser = True
         elif self.get_value is not None:
             # calculate from value()
             if any(r not in values for r in self.requires):
@@ -153,14 +158,15 @@ class StatDef:
         else:
             value = None
 
-        return Stat(sb, self, self.type(value))
+        return Stat(sb, self, self.type(value), is_setbyuser)
 
     def scale_stat(self,
                    sb: StatBox,
                    values: dict[str, Any],
                    *,
                    scale: Decimal = 1,
-                   old_value: Any = None
+                   old_value: Any = None,
+                   is_setbyuser: bool
                    ) -> None | Stat:
         value = None
         if self.userkey is None and self.get_value is None:
@@ -181,14 +187,15 @@ class StatDef:
                 return
             value = self.get_value(values)
 
-        return Stat(sb, self, self.type(value))
+        return Stat(sb, self, self.type(value), is_setbyuser)
 
 
 class Stat:
-    def __init__(self, sb: StatBox, definition: StatDef, value: Any):
+    def __init__(self, sb: StatBox, definition: StatDef, value: Any, is_setbyuser: bool):
         self.sb = sb
         self.definition = definition
         self.value = value
+        self.is_setbyuser = is_setbyuser
 
     @property
     def key(self):
@@ -289,7 +296,7 @@ class StatBox:
         sb = StatBox()
 
         def _process(s: Stat):
-            result = s.definition.scale_stat(sb, values, scale=scale_value, old_value=s.value)
+            result = s.definition.scale_stat(sb, values, scale=scale_value, old_value=s.value, is_setbyuser=s.is_setbyuser)
             if result is not None:
                 values[result.key] = result.value
             return result
