@@ -1,15 +1,20 @@
 import base64
+from dataclasses import dataclass
 import json
 import importlib.resources as pkg_resources
 from json.decoder import JSONDecodeError
+from typing import Optional
 import aiohttp
 from aiohttp_requests import requests
-from operator import itemgetter
 import logging
 
 import sizebot.data
 from sizebot.conf import conf
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.stats import StatBox
+from sizebot.lib.units import SV
+from sizebot.lib.userdb import User
+from sizebot.lib.utils import url_safe
 
 logger = logging.getLogger("sizebot")
 
@@ -55,29 +60,63 @@ async def shorten_url(url):
     return short_url
 
 
-async def get_url(people, *, shorten = False):
-    """Accepts an array of dictionary objects with 'model', 'name', and 'height' properties"""
-    if len(people) <= 0:
+@dataclass
+class MacrovisionEntity():
+    name: str
+    model: str
+    view: Optional[str]
+    height: SV
+    x: float = 0
+
+
+def user_to_entity(u: User) -> MacrovisionEntity:
+    return MacrovisionEntity(
+        name=u.nickname,
+        model=u.macrovision_model,
+        view=u.macrovision_view,
+        height=u.height
+    )
+
+
+def statbox_to_entity(s: StatBox) -> MacrovisionEntity:
+    return MacrovisionEntity(
+        name=s['nickname'].value,
+        model=s['macrovision_model'].value,
+        view=s['macrovision_view'].value,
+        height=s['height'].value
+    )
+
+
+def get_url_from_users(users: list[User]) -> str:
+    return get_url([user_to_entity(u) for u in users])
+
+
+def get_url_from_statboxes(statboxes: list[StatBox]) -> str:
+    return get_url([statbox_to_entity(s) for s in statboxes])
+
+
+def get_url(entities: list[MacrovisionEntity]) -> str:
+    if len(entities) <= 0:
         raise ValueError("At least one person is required")
 
-    people.sort(key=itemgetter("height"), reverse=True)
+    entities.sort(key=lambda e: e.height, reverse=True)
 
-    world_height = people[0]["height"]
+    world_height = entities[0].height
 
-    entities = []
     x_offset = Decimal(0)
-    for p in people:
-        name, model, view, height = p["name"], p["model"], p.get("view"), p["height"]
+    for p in entities:
+        p.name = url_safe(p.name)
         # Backwards compatibility
-        if view is None:
-            view = model
-            model = "Human"
-        entities.append(get_entity_json(name, model, view, height, x_offset))
-        # A crude width estimate for now
-        x_offset += height / 4
+        if p.view is None:
+            p.view = p.model
+            p.model = "Human"
+        p.x = x_offset
+        x_offset += p.height / 4
+
+    entities_json = [get_entity_json(e.name, e.model, e.view, e.height, e.x) for e in entities]
 
     url_json = {
-        "entities": entities,
+        "entities": entities_json,
         "world": {
             "height": float(world_height),
             "unit": "meters",
@@ -91,6 +130,4 @@ async def get_url(people, *, shorten = False):
     base64_bytes = base64.b64encode(json_bytes)
     base64_string = base64_bytes.decode("ascii")
     url = f"https://macrovision.crux.sexy/?scene={base64_string}"
-    if shorten:
-        url = await shorten_url(url)
     return url

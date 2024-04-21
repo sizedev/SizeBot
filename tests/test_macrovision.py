@@ -34,8 +34,7 @@ async def test_macrovision():
         [
             {"name": "Duncan", "model": "male", "height": Decimal("0.0127")},
             {"name": "Natalie", "model": "female", "height": Decimal("0.1524")}
-        ],
-        shorten = False
+        ]
     )
     assert macrovision_url == expected_url
 
@@ -55,8 +54,7 @@ async def test_macrovision_SV():
         [
             {"name": "Duncan", "model": "male", "height": SV.parse("0.5in")},
             {"name": "Natalie", "model": "female", "height": SV.parse("6in")}
-        ],
-        shorten = False
+        ]
     )
     assert macrovision_url == expected_url
 
@@ -76,7 +74,6 @@ async def test_weird_names():
         [
             {"name": r"r'(?<!\.)[.?!](?!\.)', z [1.22m]", "model": "male", "height": Decimal("1.219")},
             {"name": "Natalie", "model": "female", "height": Decimal("0.1524")}
-        ],
-        shorten = False
+        ]
     )
     assert macrovision_url == expected_url

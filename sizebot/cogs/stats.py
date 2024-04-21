@@ -665,14 +665,12 @@ class StatsCog(commands.Cog):
 
         msg = await ctx.send(emojis.loading + " *Loading comparison...*")
 
-        users = [{"name": u.nickname, "model": u.macrovision_model, "view": u.macrovision_view, "height": u.height} for u in userdatas]
-
         nicks = sentence_join((u.nickname for u in userdatas), oxford=True)
         e = discord.Embed(
             title="Click here for lineup image!",
             description=f"Lineup of {nicks}",
             color=colors.cyan,
-            url = await macrovision.get_url(users)
+            url = macrovision.get_url_from_users(userdatas)
         )
         await msg.edit(content = "", embed = e)
 
