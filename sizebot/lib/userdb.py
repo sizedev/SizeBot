@@ -460,7 +460,8 @@ class User:
             "runperhour": str_or_none(self.runperhour),
             "gender": str_or_none(self.gender),     # TODO: Should this be autogender?
             "scale": str_or_none(self.scale),
-            "nickname": str_or_none(self.nickname)
+            "nickname": str_or_none(self.nickname),
+            "id": str_or_none(self.id)
         }
 
     @property

@@ -87,8 +87,6 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         self.big_stats_viewedby_small = self.big_stats.scale(self.small_stats["viewscale"].value)
 
         smallUserdata, bigUserdata = utils.minmax(userdata1, userdata2)
-        self.big = PersonStats(bigUserdata)
-        self.small = PersonStats(smallUserdata)
 
         bigToSmallUserdata = copy(bigUserdata)
         smallToBigUserdata = copy(smallUserdata)
@@ -120,9 +118,9 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         smallstat = self.smallToBig.stats[mapped_key]
 
         bigstattext = bigstat.body if bigstat.value is not None else f"{self.big_stats['nickname'].value} doesn't have that stat."
-        smallstattext = smallstat.body if smallstat.value is not None else f"{self.small.nickname} doesn't have that stat."
+        smallstattext = smallstat.body if smallstat.value is not None else f"{self.small_stats['nickname'].value} doesn't have that stat."
 
-        return_stat = (f"Comparing `{key}` between {emojis.comparebigcenter}**{self.big_stats['nickname'].value}** and **{emojis.comparesmallcenter}{self.small.nickname}**:\n"
+        return_stat = (f"Comparing `{key}` between {emojis.comparebigcenter}**{self.big_stats['nickname'].value}** and **{emojis.comparesmallcenter}{self.small_stats['nickname'].value}**:\n"
                        f"{emojis.comparebig}{bigstattext}\n"
                        f"{emojis.comparesmall}{smallstattext}")
 
@@ -138,25 +136,25 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
     async def toEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
-            title=f"Comparison of {self.big_stats['nickname'].value} and {self.small.nickname} {emojis.link}",
+            title=f"Comparison of {self.big_stats['nickname'].value} and {self.small_stats['nickname'].value} {emojis.link}",
             description=f"*Requested by {requestertag}*",
             color=colors.purple,
-            url = macrovision.get_url_from_users([self.small, self.big])
+            url = macrovision.get_url_from_statboxes([self.small_stats, self.big_stats])
         )
-        if requestertag == self.big.tag:
+        if requesterID == self.big_stats['id'].value:
             embed.color = colors.blue
-        if requestertag == self.small.tag:
+        if requesterID == self.small_stats['id'].value:
             embed.color = colors.red
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
         embed.add_field(name=f"{emojis.comparebigcenter} **{self.big_stats['nickname'].value}**", value=(
             f"{emojis.blank}{emojis.blank} **Height:** {self.big_stats['height'].value:,.3mu}\n"
             f"{emojis.blank}{emojis.blank} **Weight:** {self.big_stats['weight'].value:,.3mu}\n"), inline=True)
-        embed.add_field(name=f"{emojis.comparesmallcenter} **{self.small.nickname}**", value=(
-            f"{emojis.blank}{emojis.blank} **Height:** {self.small.height:,.3mu}\n"
-            f"{emojis.blank}{emojis.blank} **Weight:** {self.small.weight:,.3mu}\n"), inline=True)
+        embed.add_field(name=f"{emojis.comparesmallcenter} **{self.small_stats['nickname'].value}**", value=(
+            f"{emojis.blank}{emojis.blank} **Height:** {self.small_stats['height'].value:,.3mu}\n"
+            f"{emojis.blank}{emojis.blank} **Weight:** {self.small_stats['weight'].value:,.3mu}\n"), inline=True)
         embed.add_field(value=(
-            f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big_stats['nickname'].value}** looks to {emojis.comparesmallcenter} **{self.small.nickname}**.\n"
-            f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big_stats['nickname'].value}**."), inline=False)
+            f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big_stats['nickname'].value}** looks to {emojis.comparesmallcenter} **{self.small_stats['nickname'].value}**.\n"
+            f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small_stats['nickname'].value}** looks to {emojis.comparebigcenter} **{self.big_stats['nickname'].value}**."), inline=False)
         embed.add_field(name="Height", value=(
             f"{emojis.comparebig}{self.bigToSmall.height:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.height:,.3mu}"), inline=True)
@@ -226,9 +224,9 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.simplespeeds, inline=False)
         embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.simplespeeds, inline=False)
         embed.set_footer(text=(
-            f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big_stats['nickname'].value}'s face.\n"
-            f"{self.big_stats['nickname'].value} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
-            f"{self.big_stats['nickname'].value} would need {self.smallToBig.visibility} to see {self.small.nickname}."))
+            f"{self.small_stats['nickname'].value} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big_stats['nickname'].value}'s face.\n"
+            f"{self.big_stats['nickname'].value} is {self.multiplier:,.3}x taller than {self.small_stats['nickname'].value}.\n"
+            f"{self.big_stats['nickname'].value} would need {self.smallToBig.visibility} to see {self.small_stats['nickname'].value}."))
 
         return embed
 
@@ -236,25 +234,25 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
     async def toSimpleEmbed(self, requesterID = None):
         requestertag = f"<@!{requesterID}>"
         embed = Embed(
-            title=f"Comparison of {self.big_stats['nickname'].value} and {self.small.nickname} {emojis.link}",
+            title=f"Comparison of {self.big_stats['nickname'].value} and {self.small_stats['nickname'].value} {emojis.link}",
             description=f"*Requested by {requestertag}*",
             color=colors.purple,
-            url = macrovision.get_url_from_users([self.small, self.big])
+            url = macrovision.get_url_from_statboxes([self.small_stats, self.big_stats])
         )
-        if requestertag == self.big.tag:
+        if requesterID == self.big_stats['id'].value:
             embed.color = colors.blue
-        if requestertag == self.small.tag:
+        if requesterID == self.small_stats['id'].value:
             embed.color = colors.red
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
         embed.add_field(name=f"{emojis.comparebigcenter} **{self.big_stats['nickname'].value}**", value=(
             f"{emojis.blank}{emojis.blank} **Height:** {self.big_stats['height'].value:,.3mu}\n"
             f"{emojis.blank}{emojis.blank} **Weight:** {self.big_stats['weight'].value:,.3mu}\n"), inline=True)
-        embed.add_field(name=f"{emojis.comparesmallcenter} **{self.small.nickname}**", value=(
-            f"{emojis.blank}{emojis.blank} **Height:** {self.small.height:,.3mu}\n"
-            f"{emojis.blank}{emojis.blank} **Weight:** {self.small.weight:,.3mu}\n"), inline=True)
+        embed.add_field(name=f"{emojis.comparesmallcenter} **{self.small_stats['nickname'].value}**", value=(
+            f"{emojis.blank}{emojis.blank} **Height:** {self.small_stats['height'].value:,.3mu}\n"
+            f"{emojis.blank}{emojis.blank} **Weight:** {self.small_stats['weight'].value:,.3mu}\n"), inline=True)
         embed.add_field(value=(
-            f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big_stats['nickname'].value}** looks to {emojis.comparesmallcenter} **{self.small.nickname}**.\n"
-            f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big_stats['nickname'].value}**."), inline=False)
+            f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big_stats['nickname'].value}** looks to {emojis.comparesmallcenter} **{self.small_stats['nickname'].value}**.\n"
+            f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small_stats['nickname'].value}** looks to {emojis.comparebigcenter} **{self.big_stats['nickname'].value}**."), inline=False)
         embed.add_field(name="Height", value=(
             f"{emojis.comparebig}{self.bigToSmall.height:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.height:,.3mu}"), inline=True)
@@ -262,9 +260,9 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             f"{emojis.comparebig}{self.bigToSmall.weight:,.3mu}\n"
             f"{emojis.comparesmall}{self.smallToBig.weight:,.3mu}"), inline=True)
         embed.set_footer(text=(
-            f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big_stats['nickname'].value}'s face.\n"
-            f"{self.big_stats['nickname'].value} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
-            f"{self.big_stats['nickname'].value} would need {self.smallToBig.visibility} to see {self.small.nickname}."))
+            f"{self.small_stats['nickname'].value} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big_stats['nickname'].value}'s face.\n"
+            f"{self.big_stats['nickname'].value} is {self.multiplier:,.3}x taller than {self.small_stats['nickname'].value}.\n"
+            f"{self.big_stats['nickname'].value} would need {self.smallToBig.visibility} to see {self.small_stats['nickname'].value}."))
 
         return embed
 

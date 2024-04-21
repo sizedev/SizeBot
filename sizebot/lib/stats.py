@@ -322,6 +322,22 @@ def bool_to_icon(value):
 
 
 all_stats = [
+    StatDef("id",
+            title="ID",
+            string="{id}",
+            body="{id}",
+            is_shown=False,
+            type=int,
+            power=0,
+            userkey="id"),
+    StatDef("tag",
+            title="Tag",
+            string="{tag}",
+            body="{tag}",
+            is_shown=False,
+            type=str,
+            power=0,
+            value=lambda v: f"<@!{v['id']}>"),
     StatDef("nickname",
             title="Nickname",
             string="{nickname}",
