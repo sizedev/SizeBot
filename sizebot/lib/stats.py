@@ -13,6 +13,7 @@ from sizebot.lib.shoesize import to_shoe_size
 
 DEFAULT_THREAD_THICKNESS = SV("0.001016")
 AVERAGE_HEIGHT = average_height
+AVERAGE_BREATHEPERHOUR = SV(720)
 AVERAGE_WALKPERHOUR = SV(5630)
 AVERAGE_RUNPERHOUR = SV(10729)
 AVERAGE_SWIMPERHOUR = SV(3219)
@@ -586,6 +587,16 @@ all_stats = [
             value=(lambda v: AVERAGE_WALKPERHOUR * v["averagescale"]),
             tags=["movement"],
             aliases=["walk", "speed", "step"]),
+    StatDef("breathewindspeed",
+            title="Breate Wind Speed",
+            string="{nickname}'s breath is **{breathewindspeed:,.3mu} per hour**.",
+            body="{breathewindspeed:,.1M} per hour / {breathewindspeed:,.1U} per hour",
+            is_shown=False,
+            requires=["averagescale"],
+            power=1,
+            type=SV,
+            value=(lambda v: AVERAGE_BREATHEPERHOUR * v["averagescale"]),
+            aliases=["breath", "breathe", "wind"]),
     StatDef("runperhour",
             title="Run Per Hour",
             string="{nickname} runs **{runperhour:,.3mu} per hour**.",
