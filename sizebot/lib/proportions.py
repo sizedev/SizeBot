@@ -157,7 +157,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         
 
         for sstat, bstat in zip(self.smallToBig.stats, self.bigToSmall.stats):
-            if (sstat.is_shown or bstat.is_shown) and (sstat.value is not None or bstat.value is not None):
+            if (sstat.is_shown or bstat.is_shown) and (sstat.body or bstat.body):
                 embed.add_field(name = sstat.title, value = self.get_single_body(sstat.key), inline = True)
 
         embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.simplespeeds, inline=False)
