@@ -116,8 +116,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         bigstat = self.bigToSmall.stats[mapped_key]
         smallstat = self.smallToBig.stats[mapped_key]
 
-        bigstattext = bigstat.body if bigstat.value is not None else f"{self.big.nickname} doesn't have that stat."
-        smallstattext = smallstat.body if smallstat.value is not None else f"{self.small.nickname} doesn't have that stat."
+        bigstattext = bigstat.body if bigstat.body else f"{self.big.nickname} doesn't have that stat."
+        smallstattext = smallstat.body if smallstat.body else f"{self.small.nickname} doesn't have that stat."
 
         return_stat = (f"{emojis.comparebig}{bigstattext}\n"
                        f"{emojis.comparesmall}{smallstattext}")
@@ -157,7 +157,6 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         
 
         for sstat, bstat in zip(self.smallToBig.stats, self.bigToSmall.stats):
-            logger.info(f"{sstat.key}, {bstat.key} [{(sstat.is_shown or bstat.is_shown)}]: {sstat.value}, {bstat.value}")
             if (sstat.is_shown or bstat.is_shown) and (sstat.value is not None or bstat.value is not None):
                 embed.add_field(name = sstat.title, value = self.get_single_body(sstat.key), inline = True)
 
