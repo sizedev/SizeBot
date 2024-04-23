@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import copy
+import logging
 import math
 
 from discord import Embed
@@ -17,6 +18,8 @@ from sizebot.lib.stats import statmap, StatBox
 
 AVERAGE_HEIGHT = average_height
 AVERAGE_WALKPERHOUR = SV(5630)
+
+logger = logging.getLogger("sizebot")
 
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
@@ -154,7 +157,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         
 
         for sstat, bstat in zip(self.smallToBig.stats, self.bigToSmall.stats):
-            if sstat.is_shown or bstat.is_shown and (sstat.value is not None or bstat.value is not None):
+            if (sstat.is_shown or bstat.is_shown) and (sstat.value is not None or bstat.value is not None):
+                logger.info(f"{sstat.key}, {bstat.key}: {sstat.value}, {bstat.value}")
                 embed.add_field(name = sstat.title, value = self.get_single_body(sstat.key), inline = True)
 
         embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.simplespeeds, inline=False)
