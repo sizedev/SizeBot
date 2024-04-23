@@ -128,11 +128,11 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         
         return f"Comparing `{key}` between {emojis.comparebigcenter}**{self.big.nickname}** and **{emojis.comparesmallcenter}{self.small.nickname}**:\n" + body
 
-    def __str__(self):
-        return f"<PersonComparison SMALL = {self.small!r}, BIG = {self.big!r}, SMALLTOBIG = {self.smallToBig!r}, BIGTOSMALL = {self.bigToSmall!r}>"
-
     def __repr__(self):
-        return str(self)
+        return f"<PersonComparison SMALL = {self.small.nickname}, BIG = {self.big.nickname}>"
+
+    def __str__(self):
+        return repr(self)
 
     # TODO: CamelCase
     async def toEmbed(self, requesterID = None):
@@ -154,8 +154,8 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         
 
         for sstat, bstat in zip(self.smallToBig.stats, self.bigToSmall.stats):
-            if sstat.is_shown or bstat.is_shown:
-                embed.add_field(name = sstat.title, value = self.get_single_body(sstat.key), inline = False)
+            if sstat.is_shown or bstat.is_shown and (sstat.value is not None or bstat.value is not None):
+                embed.add_field(name = sstat.title, value = self.get_single_body(sstat.key), inline = True)
 
         embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.simplespeeds, inline=False)
         embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.simplespeeds, inline=False)

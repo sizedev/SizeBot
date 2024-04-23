@@ -723,6 +723,7 @@ all_stats = [
             title="Drag Coefficient",
             string="{nickname}'s drag coefficient is {dragcoefficient}",
             body="{dragcoefficient}",
+            is_shown = False,
             requires=["averagescale"],
             type=Decimal,
             value=lambda v: AVERAGE_HUMAN_DRAG_COEFFICIENT * v["averagescale"] ** Decimal(2)),
