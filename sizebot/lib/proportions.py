@@ -202,6 +202,34 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
 
         return embed
 
+    async def to_tag_embed(self, tag: str, requesterID = None):
+        requestertag = f"<@!{requesterID}>"
+        embed = Embed(
+            title=f"Comparison of {self.big.nickname} and {self.small.nickname} {emojis.link} of stats tagged `{tag}`",
+            description=f"*Requested by {requestertag}*",
+            color=colors.purple,
+            url = await self.url()
+        )
+        if requestertag == self.big.tag:
+            embed.color = colors.blue
+        if requestertag == self.small.tag:
+            embed.color = colors.red
+        embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
+        embed.add_field(value=(
+            f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big.nickname}** looks to {emojis.comparesmallcenter} **{self.small.nickname}**.\n"
+            f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big.nickname}**."), inline=False)
+
+        for sstat, bstat in zip(self.smallToBig.stats, self.bigToSmall.stats):
+            if tag in sstat.tags and (sstat.body or bstat.body):
+                embed.add_field(name = sstat.title, value = self.get_single_body(sstat.key), inline = sstat.definition.inline)
+
+        embed.set_footer(text=(
+            f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
+            f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
+            f"{self.big.nickname} would need {self.smallToBig.visibility} to see {self.small.nickname}."))
+
+        return embed
+
     async def url(self):
         safeSmallNick = url_safe(self.small.nickname)
         safeBigNick = url_safe(self.big.nickname)

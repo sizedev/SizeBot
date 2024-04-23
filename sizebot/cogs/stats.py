@@ -375,7 +375,8 @@ class StatsCog(commands.Cog):
         stats = proportions.PersonComparison(userdata1, userdata2)
 
         if stat.tag:
-            await ctx.send("Not supported right now, sorry!")
+            embedtosend = stats.to_tag_embed(stat.name, requesterID = ctx.author.id)
+            await ctx.send(embed = embedtosend)
         else:
             stattosend = stats.getFormattedStat(stat.name)
             if stattosend is None:
