@@ -154,14 +154,11 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         embed.add_field(value=(
             f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big.nickname}** looks to {emojis.comparesmallcenter} **{self.small.nickname}**.\n"
             f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big.nickname}**."), inline=False)
-        
 
         for sstat, bstat in zip(self.smallToBig.stats, self.bigToSmall.stats):
             if (sstat.is_shown or bstat.is_shown) and (sstat.body or bstat.body):
-                embed.add_field(name = sstat.title, value = self.get_single_body(sstat.key), inline = True)
+                embed.add_field(name = sstat.title, value = self.get_single_body(sstat.key), inline = sstat.definition.inline)
 
-        embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.simplespeeds, inline=False)
-        embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.simplespeeds, inline=False)
         embed.set_footer(text=(
             f"{self.small.nickname} would have to look {self.lookdirection} {self.lookangle:.0f}° to look at {self.big.nickname}'s face.\n"
             f"{self.big.nickname} is {self.multiplier:,.3}x taller than {self.small.nickname}.\n"
