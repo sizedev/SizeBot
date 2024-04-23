@@ -958,7 +958,7 @@ all_stats = [
     StatDef("footlength+",
             title="{footname} Length",
             string="",
-            body=lambda s: f"{s['footlength'].body}" + f"\n({s['shoesize'].body})"
+            body=lambda s: f"{s['footlength'].body}" + f"\n({s['shoesize'].body})",
             z=3),
     StatDef("simplespeeds+",
             title="Speeds",
