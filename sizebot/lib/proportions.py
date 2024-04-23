@@ -104,7 +104,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         self.lookangle = abs(viewangle)
         self.lookdirection = "up" if viewangle >= 0 else "down"
 
-    def getFormattedStat(self, key: str):
+    def get_single_body(self, key: str) -> str:
         try:
             mapped_key = statmap[key]
         except KeyError:
@@ -116,11 +116,17 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         bigstattext = bigstat.body if bigstat.value is not None else f"{self.big.nickname} doesn't have that stat."
         smallstattext = smallstat.body if smallstat.value is not None else f"{self.small.nickname} doesn't have that stat."
 
-        return_stat = (f"Comparing `{key}` between {emojis.comparebigcenter}**{self.big.nickname}** and **{emojis.comparesmallcenter}{self.small.nickname}**:\n"
-                       f"{emojis.comparebig}{bigstattext}\n"
+        return_stat = (f"{emojis.comparebig}{bigstattext}\n"
                        f"{emojis.comparesmall}{smallstattext}")
 
         return return_stat
+
+    def getFormattedStat(self, key: str):
+        body = self.get_single_body(key)
+        if body is None:
+            return None
+        
+        return f"Comparing `{key}` between {emojis.comparebigcenter}**{self.big.nickname}** and **{emojis.comparesmallcenter}{self.small.nickname}**:\n" + body
 
     def __str__(self):
         return f"<PersonComparison SMALL = {self.small!r}, BIG = {self.big!r}, SMALLTOBIG = {self.smallToBig!r}, BIGTOSMALL = {self.bigToSmall!r}>"
@@ -142,81 +148,15 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         if requestertag == self.small.tag:
             embed.color = colors.red
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
-        embed.add_field(name=f"{emojis.comparebigcenter} **{self.big.nickname}**", value=(
-            f"{emojis.blank}{emojis.blank} **Height:** {self.big.height:,.3mu}\n"
-            f"{emojis.blank}{emojis.blank} **Weight:** {self.big.weight:,.3mu}\n"), inline=True)
-        embed.add_field(name=f"{emojis.comparesmallcenter} **{self.small.nickname}**", value=(
-            f"{emojis.blank}{emojis.blank} **Height:** {self.small.height:,.3mu}\n"
-            f"{emojis.blank}{emojis.blank} **Weight:** {self.small.weight:,.3mu}\n"), inline=True)
         embed.add_field(value=(
             f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{self.big.nickname}** looks to {emojis.comparesmallcenter} **{self.small.nickname}**.\n"
             f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{self.small.nickname}** looks to {emojis.comparebigcenter} **{self.big.nickname}**."), inline=False)
-        embed.add_field(name="Height", value=(
-            f"{emojis.comparebig}{self.bigToSmall.height:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.height:,.3mu}"), inline=True)
-        embed.add_field(name="Weight", value=(
-            f"{emojis.comparebig}{self.bigToSmall.weight:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.weight:,.3mu}"), inline=True)
-        embed.add_field(name=f"{self.footlabel} Length", value=(
-            f"{emojis.comparebig}{self.bigToSmall.footlength:,.3mu}\n({self.bigToSmall.shoesize})\n"
-            f"{emojis.comparesmall}{self.smallToBig.footlength:,.3mu}\n({self.smallToBig.shoesize})"), inline=True)
-        embed.add_field(name=f"{self.footlabel} Width", value=(
-            f"{emojis.comparebig}{self.bigToSmall.footwidth:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.footwidth:,.3mu}"), inline=True)
-        embed.add_field(name="Toe Height", value=(
-            f"{emojis.comparebig}{self.bigToSmall.toeheight:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.toeheight:,.3mu}"), inline=True)
-        embed.add_field(name="Shoeprint Depth", value=(
-            f"{emojis.comparebig}{self.bigToSmall.shoeprintdepth:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.shoeprintdepth:,.3mu}"), inline=True)
-        embed.add_field(name="Pointer Finger Length", value=(
-            f"{emojis.comparebig}{self.bigToSmall.pointerlength:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.pointerlength:,.3mu}"), inline=True)
-        embed.add_field(name="Thumb Width", value=(
-            f"{emojis.comparebig}{self.bigToSmall.thumbwidth:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.thumbwidth:,.3mu}"), inline=True)
-        embed.add_field(name="Nail Thickness", value=(
-            f"{emojis.comparebig}{self.bigToSmall.nailthickness:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.nailthickness:,.3mu}"), inline=True)
-        embed.add_field(name="Fingerprint Depth", value=(
-            f"{emojis.comparebig}{self.bigToSmall.fingerprintdepth:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.fingerprintdepth:,.3mu}"), inline=True)
-        if self.bigToSmall.hairlength or self.smallToBig.hairlength:
-            hairfield = ""
-            if self.bigToSmall.hairlength:
-                hairfield += f"{emojis.comparebig}{self.bigToSmall.hairlength:,.3mu}\n"
-            if self.smallToBig.hairlength:
-                hairfield += f"{emojis.comparesmall}{self.smallToBig.hairlength:,.3mu}\n"
-            hairfield = hairfield.strip()
-            embed.add_field(name=f"{self.hairlabel} Length", value=hairfield, inline=True)
-        if self.bigToSmall.taillength or self.smallToBig.taillength:
-            tailfield = ""
-            if self.bigToSmall.taillength:
-                tailfield += f"{emojis.comparebig}{self.bigToSmall.taillength:,.3mu}\n"
-            if self.smallToBig.taillength:
-                tailfield += f"{emojis.comparesmall}{self.smallToBig.taillength:,.3mu}\n"
-            tailfield = tailfield.strip()
-            embed.add_field(name="Tail Length", value=tailfield, inline=True)
-        if self.bigToSmall.earheight or self.smallToBig.earheight:
-            earfield = ""
-            if self.bigToSmall.earheight:
-                earfield += f"{emojis.comparebig}{self.bigToSmall.earheight:,.3mu}\n"
-            if self.smallToBig.earheight:
-                earfield += f"{emojis.comparesmall}{self.smallToBig.earheight:,.3mu}\n"
-            earfield = earfield.strip()
-            embed.add_field(name="Ear Height", value=earfield, inline=True)
-        embed.add_field(name=f"{self.hairlabel} Width", value=(
-            f"{emojis.comparebig}{self.bigToSmall.hairwidth:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.hairwidth:,.3mu}"), inline=True)
-        embed.add_field(name="Eye Width", value=(
-            f"{emojis.comparebig}{self.bigToSmall.eyewidth:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.eyewidth:,.3mu}"), inline=True)
-        embed.add_field(name="Jump Height", value=(
-            f"{emojis.comparebig}{self.bigToSmall.jumpheight:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.jumpheight:,.3mu}"), inline=True)
-        embed.add_field(name="Lift/Carry Strength", value=(
-            f"{emojis.comparebig}{self.bigToSmall.liftstrength:,.3mu}\n"
-            f"{emojis.comparesmall}{self.smallToBig.liftstrength:,.3mu}"), inline=True)
+        
+
+        for sstat, bstat in zip(self.smallToBig.stats, self.bigToSmall.stats):
+            if sstat.is_shown or bstat.is_shown:
+                embed.add_field(name = sstat.title, value = self.get_single_body(sstat.key), inline = False)
+
         embed.add_field(name=f"{emojis.comparebig} Speeds", value=self.bigToSmall.simplespeeds, inline=False)
         embed.add_field(name=f"{emojis.comparesmall} Speeds", value=self.smallToBig.simplespeeds, inline=False)
         embed.set_footer(text=(
@@ -482,18 +422,11 @@ class PersonStats:
         return_stat = returndict.get(mapped_key)
         return return_stat
 
-    def __str__(self):
-        return (f"<PersonStats NICKNAME = {self.stats['nickname'].values!r}, TAG = {self.tag!r}, GENDER = {self.stats['gender'].values!r}, "
-                f"HEIGHT = {self.stats['height'].values!r}, BASEHEIGHT = {self.stats['baseheight'].values!r}, VIEWSCALE = {self.stats['viewscale'].values!r}, "
-                f"WEIGHT = {self.stats['weight'].values!r}, BASEWEIGHT = {self.stats['baseweight'].values!r}, FOOTNAME = {self.stats['footname'].values!r}, "
-                f"HAIRNAME = {self.stats['hairname'].values!r}, PAWTOGGLE = {self.stats['pawtoggle'].values!r}, FURTOGGLE = {self.stats['furtoggle'].values!r}, "
-                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}"
-                f"HAIRLENGTH = {self.stats['hairlength'].values!r}, TAILLENGTH = {self.stats['taillength'].values!r}, EARHEIGHT = {self.stats['earheight'].values!r},"
-                f"LIFTSTRENGTH = {self.stats['liftstrength'].values!r}, FOOTLENGTH = {self.stats['footlength'].values!r}, "
-                f"WALKPERHOUR = {self.stats['walkperhour'].values!r}, RUNPERHOUR = {self.stats['runperhour'].values!r}, VISIBILITY = {self.stats['visibility'].values!r}>")
-
     def __repr__(self):
-        return str(self)
+        return (f"<PersonStats NICKNAME = {self.stats['nickname'].values!r}>")
+
+    def __str__(self):
+        return repr(self)
 
     # TODO: CamelCase
     def toEmbed(self, requesterID = None):
