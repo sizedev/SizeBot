@@ -303,8 +303,9 @@ class PersonSpeedComparison:
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
         embed.add_field(name=f"**{self.viewer["nickname"].value}** Speeds", value=self.viewer.stats_by_key["simplespeeds+"].body, inline=False)
         
+        embed.add_field(name="Height", value=self.viewer.stats_by_key["height"].value, inline=True)  # hardcode height because it's weird
         for stat in self.viewed.stats:
-            if stat.is_shown and self.viewed[stat.key].value is not None:
+            if stat.is_shown and self.viewed[stat.key].value is not None and isinstance(SV, self.viewed[stat.key].value):
                 embed.add_field(name = stat.title, value=(speedcalc(self.viewer, self.viewed[stat.key].value)))
 
         embed.set_footer(text=(f"{self.viewed["nickname"].value} is {self.multiplier:,.3}x taller than {self.viewer["nickname"].value}."))
