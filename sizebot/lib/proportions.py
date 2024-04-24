@@ -305,7 +305,7 @@ class PersonSpeedComparison:
         
         embed.add_field(name="Height", value=speedcalc(self.viewer, self.viewed["height"].value), inline=True)  # hardcode height because it's weird
         for stat in self.viewed.stats:
-            if stat.is_shown and self.viewed[stat.key].value is not None and isinstance(SV, self.viewed[stat.key].value):
+            if stat.is_shown and self.viewed[stat.key].value is not None and isinstance(self.viewed[stat.key].value, SV):
                 embed.add_field(name = stat.title, value=(speedcalc(self.viewer, self.viewed[stat.key].value)))
 
         embed.set_footer(text=(f"{self.viewed["nickname"].value} is {self.multiplier:,.3}x taller than {self.viewer["nickname"].value}."))
