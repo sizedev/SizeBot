@@ -305,7 +305,7 @@ class PersonSpeedComparison:
         
         for stat in self.viewed.stats:
             if stat.is_shown and self.viewed[stat.key].value is not None:
-                embed.add_field(title = stat.title, value=(speedcalc(self.viewer, self.viewed[stat.key].value)))
+                embed.add_field(name = stat.title, value=(speedcalc(self.viewer, self.viewed[stat.key].value)))
 
         embed.set_footer(text=(f"{self.viewed["nickname"].value} is {self.multiplier:,.3}x taller than {self.viewer["nickname"].value}."))
 
