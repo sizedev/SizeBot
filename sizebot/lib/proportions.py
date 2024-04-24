@@ -97,15 +97,12 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
             bigToSmallUserdata.height = bigUserdata.height * smallUserdata.viewscale
             smallToBigUserdata.height = smallUserdata.height * bigUserdata.viewscale
 
-        self.bigToSmall = PersonStats(bigToSmallUserdata)
-        self.smallToBig = PersonStats(smallToBigUserdata)
-
-        self.footlabel = "Foot/Paw" if bigUserdata.pawtoggle or smallUserdata.pawtoggle else "Foot"
-        self.hairlabel = "Hair/Fur" if bigUserdata.furtoggle or smallUserdata.furtoggle else "Hair"
-
         viewangle = calcViewAngle(smallUserdata.height, bigUserdata.height)
         self.lookangle = abs(viewangle)
         self.lookdirection = "up" if viewangle >= 0 else "down"
+
+        self.bigToSmall = PersonStats(bigToSmallUserdata)
+        self.smallToBig = PersonStats(smallToBigUserdata)
 
     def get_single_body(self, key: str) -> str:
         try:
@@ -265,9 +262,6 @@ class PersonSpeedComparison:
         else:
             self.multiplier = self.viewed["height"].value / self.viewer["height"].value
 
-        self.footlabel = "Paw" if self.viewed["pawtoggle"].value else "Foot"
-        self.hairlabel = "Fur" if self.viewed["furtoggle"].value else "Hair"
-
         viewangle = calcViewAngle(self.viewer["height"].value, self.viewed["height"].value)
         self.lookangle = abs(viewangle)
         self.lookdirection = "up" if viewangle >= 0 else "down"
@@ -305,30 +299,14 @@ class PersonSpeedComparison:
             description=f"*Requested by {requestertag}*",
             color=colors.purple
         )
+        # value=(speedcalc(self.viewer, self.viewed["height"].value))
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
-        embed.add_field(name=f"**{self.viewer["nickname"].value}** Speeds", value=(
-            f"{emojis.walk} **Walk Speed:** {self.viewer["walkperhour"].value:,.3mu} per hour\n"
-            f"{emojis.run} **Run Speed:** {self.viewer["runperhour"].value:,.3mu} per hour\n"
-            f"{emojis.climb} **Climb Speed:** {self.viewer["climbperhour"].value:,.3mu} per hour\n"
-            f"{emojis.crawl} **Crawl Speed:** {self.viewer["crawlperhour"].value:,.3mu} per hour\n"
-            f"{emojis.swim} **Swim Speed:** {self.viewer["swimperhour"].value:,.3mu} per hour"), inline=False)
-        embed.add_field(name="Height", value=(speedcalc(self.viewer, self.viewed["height"].value)), inline=True)
-        embed.add_field(name=f"{self.footlabel} Length", value=(speedcalc(self.viewer, self.viewed["footlength"].value, foot = True)), inline=True)
-        embed.add_field(name=f"{self.footlabel} Width", value=(speedcalc(self.viewer, self.viewed["footwidth"].value)), inline=True)
-        embed.add_field(name="Toe Height", value=(speedcalc(self.viewer, self.viewed["toeheight"].value)), inline=True)
-        embed.add_field(name="Shoeprint Depth", value=(speedcalc(self.viewer, self.viewed["shoeprintdepth"].value)), inline=True)
-        embed.add_field(name="Pointer Finger Length", value=(speedcalc(self.viewer, self.viewed["pointerlength"].value)), inline=True)
-        embed.add_field(name="Thumb Width", value=(speedcalc(self.viewer, self.viewed["thumbwidth"].value)), inline=True)
-        embed.add_field(name="Nail Thickness", value=(speedcalc(self.viewer, self.viewed["nailthickness"].value)), inline=True)
-        embed.add_field(name="Fingerprint Depth", value=(speedcalc(self.viewer, self.viewed["fingerprintdepth"].value)), inline=True)
-        if self.viewed["hairlength"].value:
-            embed.add_field(name=f"{self.hairlabel} Length", value=(speedcalc(self.viewed["hairlength"].value)), inline=True)
-        if self.viewed["taillength"].value:
-            embed.add_field(name="Tail Length", value=(speedcalc(self.viewer, self.viewed["taillength"].value)), inline=True)
-        if self.viewed["earheight"].value:
-            embed.add_field(name="Ear Height", value=(speedcalc(self.viewer, self.viewed["earheight"].value)), inline=True)
-        embed.add_field(name=f"{self.hairlabel} Width", value=(speedcalc(self.viewer, self.viewed["hairwidth"].value)), inline=True)
-        embed.add_field(name="Eye Width", value=(speedcalc(self.viewer, self.viewed["eyewidth"].value)), inline=True)
+        embed.add_field(name=f"**{self.viewer["nickname"].value}** Speeds", value=self.viewer.stats["simplespeeds"], inline=False)
+        
+        for stat in self.viewed.stats:
+            if stat.is_shown:
+                embed.add_field(title = stat.title, alue=(speedcalc(self.viewer, self.viewed[stat.key].value)))
+
         embed.set_footer(text=(f"{self.viewed["nickname"].value} is {self.multiplier:,.3}x taller than {self.viewer["nickname"].value}."))
 
         return embed
