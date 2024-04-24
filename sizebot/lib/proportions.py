@@ -301,7 +301,7 @@ class PersonSpeedComparison:
         )
         # value=(speedcalc(self.viewer, self.viewed["height"].value))
         embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
-        embed.add_field(name=f"**{self.viewer["nickname"].value}** Speeds", value=self.viewer.stats["simplespeeds"], inline=False)
+        embed.add_field(name=f"**{self.viewer["nickname"].value}** Speeds", value=self.viewer.stats_by_key["simplespeeds"], inline=False)
         
         for stat in self.viewed.stats:
             if stat.is_shown:
