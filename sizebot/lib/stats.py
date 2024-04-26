@@ -1009,7 +1009,7 @@ all_stats = [
             value=lambda v: "Fur" if v["furtoggle"] else "Hair"),
     StatDef("walkonwater",
             title="Can Walk On Water",
-            string="Can {nickname} walk on water? **{walkonwater}**",
+            string=lambda s: f"""{s['nickname'].value} {'can' if s['fallproof'].value else "can't"} walk on water.""",
             body=lambda s: bool_to_icon(s['walkonwater'].value),
             requires=["weight", "footlength", "footwidth"],
             type=bool,
