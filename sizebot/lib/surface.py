@@ -1,6 +1,4 @@
 import logging
-
-from math import acos, pi
 from sizebot.lib.units import SV, WV
 
 GRAVITY = 980.7  # cm/s^2
