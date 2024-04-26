@@ -1013,6 +1013,7 @@ all_stats = [
             body=lambda s: bool_to_icon(s['walkonwater'].value),
             requires=["weight", "footlength", "footwidth"],
             type=bool,
+            is_shown=False,
             value=lambda v: can_walk_on_water(v["weight"], v["footlength"], v["footwidth"]),
             aliases=["surfacetension", "tension", "float"])
 ]
