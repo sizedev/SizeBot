@@ -10,6 +10,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, TV, WV, AV
 from sizebot.lib.userdb import PlayerStats, DEFAULT_HEIGHT as average_height, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.shoesize import to_shoe_size
+from sizebot.lib.surface import can_walk_on_water
 
 DEFAULT_THREAD_THICKNESS = SV("0.001016")
 AVERAGE_HEIGHT = average_height
@@ -1005,7 +1006,15 @@ all_stats = [
             body="{hairname}",
             is_shown=False,
             type=str,
-            value=lambda v: "Fur" if v["furtoggle"] else "Hair")
+            value=lambda v: "Fur" if v["furtoggle"] else "Hair"),
+    StatDef("walkonwater",
+            title="Can Walk On Water",
+            string="Can {nickname} walk on water? **{walkonwater}**",
+            body=lambda s: bool_to_icon(s['walkonwater'].value),
+            requires=["weight", "footlength", "footwidth"],
+            type=bool,
+            value=lambda v: can_walk_on_water(v["weight"], v["footlength"], v["footwidth"]),
+            aliases=["surfacetension", "tension", "float"]),
 ]
 
 
