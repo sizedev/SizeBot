@@ -1012,6 +1012,7 @@ all_stats = [
             string=lambda s: f"""{s['nickname'].value} {'can' if s['fallproof'].value else "can't"} walk on water.""",
             body=lambda s: bool_to_icon(s['walkonwater'].value),
             requires=["weight", "footlength", "footwidth"],
+            power=0,
             type=bool,
             value=lambda v: can_walk_on_water(v["weight"], v["footlength"], v["footwidth"]),
             aliases=["surfacetension", "tension", "float"])
