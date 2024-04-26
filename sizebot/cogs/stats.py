@@ -209,7 +209,7 @@ class StatsCog(commands.Cog):
                 await ctx.send(f"The `{stat.name}` stat is unavailable for this user.")
                 return
             await ctx.send(stattosend)
-        
+
         await show_next_step(ctx, userdata)
 
     @commands.command(

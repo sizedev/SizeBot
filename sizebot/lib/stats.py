@@ -1014,7 +1014,7 @@ all_stats = [
             requires=["weight", "footlength", "footwidth"],
             type=bool,
             value=lambda v: can_walk_on_water(v["weight"], v["footlength"], v["footwidth"]),
-            aliases=["surfacetension", "tension", "float"]),
+            aliases=["surfacetension", "tension", "float"])
 ]
 
 

@@ -1,7 +1,7 @@
 from math import acos, pi
-from sizebot.lib.stats import GRAVITY
 from sizebot.lib.units import SV, WV
 
+GRAVITY = 9.807  # m/s^2
 WATER_SURFACE_TENSION = 72.8  # mN/m
 
 def can_walk_on_water(weight: WV, footlength: SV, footwidth: SV) -> bool:
