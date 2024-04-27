@@ -589,7 +589,7 @@ all_stats = [
             tags=["movement"],
             aliases=["walk", "speed", "step"]),
     StatDef("breathewindspeed",
-            title="Breate Wind Speed",
+            title="Breathe Wind Speed",
             string="{nickname}'s breath is **{breathewindspeed:,.3mu} per hour**.",
             body="{breathewindspeed:,.1M} per hour / {breathewindspeed:,.1U} per hour",
             is_shown=False,
