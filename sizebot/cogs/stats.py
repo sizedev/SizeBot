@@ -606,6 +606,10 @@ class StatsCog(commands.Cog):
         usage = "<distance>"
     )
     async def fall(self, ctx, distance: MemberOrSize):
+        """
+        Fall down.
+        #ACC#
+        """
         if isinstance(distance, discord.Member):
             ud = userdb.load(ctx.guild.id, distance.id)
             distance = ud.height
@@ -743,6 +747,7 @@ class StatsCog(commands.Cog):
                              *, memberOrHeight2: MemberOrSize = None):
         """
         Compare two users' gravitation pull.
+        #ACC#
         """
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author

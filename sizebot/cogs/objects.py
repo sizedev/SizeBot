@@ -369,6 +369,7 @@ class ObjectsCog(commands.Cog):
     )
     async def land(self, ctx, land: typing.Union[DigiObject, str], *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Get stats about how you cover land.
+        #ACC#
 
         Example:
         `&land random`

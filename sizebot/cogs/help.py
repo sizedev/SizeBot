@@ -36,6 +36,7 @@ logger = logging.getLogger("sizebot")
 # aliases = []
 
 alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
+accuracy_warning = f"{emojis.warning} **This command may not be entirely accurate.** It makes assumptions and guesses that have a decent amount of wiggle room, even because the information isn't known or because the calculations are meant to be for fiction only. Don't take these results at face value!"
 stats_string = utils.sentence_join([f"`{v}`" for v in statmap.keys()])
 
 async def post_report(report_type, message, report_text):
@@ -201,7 +202,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
         if "guild_only" in repr(cmd.checks):
             description += "*This command can only be run in a server, and not in DMs.*\n"
-        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", stats_string).replace("#ALPHA#", alpha_warning)
+        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", stats_string).replace("#ALPHA#", alpha_warning).replace("#ACC#", accuracy_warning)
 
         embed = Embed(
             title=signature,

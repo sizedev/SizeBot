@@ -106,7 +106,7 @@ class QuakeCog(commands.Cog):
         usage = "[type] [user/height]",
         category = "stats")
     async def earthquake(self, ctx, quake_type: typing.Optional[QuakeType] = "step", user: typing.Union[discord.Member, FakePlayer, SV] = None):
-        """See what quakes would be caused by your steps."""
+        """See what quakes would be caused by your steps.\n#ACC#"""
         if user is None:
             user = ctx.author
         userdata = load_or_fake(user)
@@ -118,7 +118,7 @@ class QuakeCog(commands.Cog):
         usage = "[user/height]",
         category = "stats")
     async def earthquakestats(self, ctx, user: typing.Union[discord.Member, FakePlayer, SV] = None):
-        """See what quakes would be caused by your steps."""
+        """See what quakes would be caused by your steps.\n#ACC#"""
         if user is None:
             user = ctx.author
         userdata = load_or_fake(user)
@@ -130,7 +130,7 @@ class QuakeCog(commands.Cog):
         usage = "[user] [type]",
         category = "stats")
     async def quakecompare(self, ctx, user: typing.Union[discord.Member, FakePlayer, SV], quake_type: typing.Optional[QuakeType] = "step"):
-        """See what quakes would be caused by someone else's steps."""
+        """See what quakes would be caused by someone else's steps.\n#ACC#"""
         self_user = load_or_fake(ctx.author)
         userstats = proportions.PersonStats(self_user)
         userdata = load_or_fake(user)
@@ -145,7 +145,7 @@ class QuakeCog(commands.Cog):
         usage = "<dist> [user/height]",
         category = "stats")
     async def quakewalk(self, ctx, dist: SV, user: typing.Union[discord.Member, FakePlayer, SV] = None):
-        """Walk a distance and cause some quakes."""
+        """Walk a distance and cause some quakes.\n#ACC#"""
         if user is None:
             user = ctx.author
         userdata = load_or_fake(user)
@@ -177,7 +177,7 @@ class QuakeCog(commands.Cog):
         usage = "<string>",
         category = "stats")
     async def quaketype(self, ctx, s: str):
-        """Type a sentence and cause some quakes."""
+        """Type a sentence and cause some quakes.\n#ACC#"""
         guildid = ctx.guild.id
         userid = ctx.author.id
 
