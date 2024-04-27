@@ -378,7 +378,11 @@ class HelpCog(commands.Cog):
     @checks.is_mod()
     async def invite(self, ctx):
         """Request an invite for SizeBot!"""
-        await ctx.send("## Thank you for the interest in the bot!\n You can invite SizeBot to your server now! Use one of these links:\n- [https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=563365424786496&scope=bot](Invite SizeBot with the default roles!)\n- [https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=0&scope=bot](Just invite SizeBot, I'll set up it's role myself!)\n If you need help, reach out to DigiDuncan (`@digiduncan`) and use `&help`!")
+        await ctx.send("## Thank you for the interest in the bot!\n"
+                       "You can invite SizeBot to your server now! Use one of these links:\n"
+                       "- [Invite SizeBot with the default roles!](https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=563365424786496&scope=bot)\n"
+                       "- [Just invite SizeBot, I'll set up it's role myself!](https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=0&scope=bot)\n"
+                       "If you need help, reach out to DigiDuncan (`@digiduncan`) and use `&help`!")
 
 
 class HelpCategory:
