@@ -13,8 +13,6 @@ from sizebot.lib.userdb import User
 from sizebot.lib.utils import minmax
 from sizebot.lib.stats import calc_view_angle, statmap, StatBox
 
-AVERAGE_WALKPERHOUR = SV(5630)
-
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
