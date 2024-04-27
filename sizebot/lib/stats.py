@@ -1015,7 +1015,16 @@ all_stats = [
             type=bool,
             is_shown=False,
             value=lambda v: can_walk_on_water(v["weight"], v["footlength"], v["footwidth"]),
-            aliases=["surfacetension", "tension", "float"])
+            aliases=["surfacetension", "tension", "float"]),
+    StatDef("blowoverspeed",
+            title="Wind Speed to Blow Over",
+            string=lambda s: f"""{s['nickname'].value} would blow over from {s['blowoverspeed'].value} per hour wind.""",
+            body=lambda s: f"{s['blowoverspeed'].value} per hour",
+            requires=["height", "width", "weight"],
+            type=SV,
+            is_shown=False,
+            value=lambda v: SV(math.sqrt((float(v["weight"]) * GRAVITY) / (float(v["height"] * v["width"]) * AIR_DENSITY)) * 60 * 60),
+            aliases=["wind", "blow"])
 ]
 
 
