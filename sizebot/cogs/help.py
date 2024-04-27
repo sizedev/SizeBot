@@ -39,6 +39,7 @@ alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, b
 accuracy_warning = f"{emojis.warning} **This command may not be entirely accurate.** It makes assumptions and guesses that have a decent amount of wiggle room, even because the information isn't known or because the calculations are meant to be for fiction only. Don't take these results at face value!"
 stats_string = utils.sentence_join([f"`{v}`" for v in statmap.keys()])
 
+
 async def post_report(report_type, message, report_text):
     async with aiohttp.ClientSession() as session:
         webhook = Webhook.from_url(conf.bugwebhookurl, session = session)

@@ -17,6 +17,7 @@ PALLADIUM_URL = R"https://forex-data-feed.swissquote.com/public-quotes/bboquotes
 Dollars = float
 Metal = Literal["gold", "silver", "platinum", "palladium"]
 
+
 def get_json_response(url: str) -> Any:
     r = requests.get(url)
     try:
@@ -26,6 +27,7 @@ def get_json_response(url: str) -> Any:
     if r.status_code != 200:
         raise Exception(f"The API returned a code {r.status}.")
     return j
+
 
 def metal_value(metal: Metal, weight: WV) -> Dollars:
     if metal == "gold":
@@ -38,13 +40,14 @@ def metal_value(metal: Metal, weight: WV) -> Dollars:
         url = SILVER_URL
     else:
         raise ThisShouldNeverHappenException(f"Metal type {metal} unrecognized.")
-    
+
     j = get_json_response(url)
 
     PRICE_PER_OZ = Decimal(j[0]["spreadProfilePrices"][0]["ask"])
     PRICE_PER_G = PRICE_PER_OZ / G_PER_OZ
 
     return Decimal(weight) * PRICE_PER_G
+
 
 def nugget_value(weight: WV) -> tuple[Dollars, int]:
     NUGGET_WEIGHT = 16

@@ -178,7 +178,7 @@ class DigiObject:
                             value = f"**{VV(self.volume * (multiplier ** 3)):,.3mu}**\n")
         if self.calories is not None:
             embed.add_field(name = "Calories",
-                            value = f"**{Decimal(self.calories * (multiplier **3)):,.3}** calories\n")
+                            value = f"**{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n")
         if self.price is not None:
             embed.add_field(name = "Price",
                             value = f"**${Decimal(self.price * (multiplier ** 3)):,.2}**")

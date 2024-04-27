@@ -19,7 +19,7 @@ from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.stats import taglist
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake
-from sizebot.lib.utils import glitch_string, parse_many, pretty_time_delta, sentence_join
+from sizebot.lib.utils import parse_many, pretty_time_delta, sentence_join
 
 
 logger = logging.getLogger("sizebot")
@@ -179,8 +179,8 @@ class ObjectsCog(commands.Cog):
             compdata = load_or_fake(what)  # We should NOT use load_or_fake to normalize [SV, Member] but I'm tired rn
             height = SV(compdata.height * userdata.viewscale)
             s = (f"{userdata.nickname} is {userdata.height:,.1{userdata.unitsystem}} tall."
-            f" To them, {compdata.height:,.1mu} looks like **{height:,.1mu}**."
-            f" That's about **{height.to_best_unit('o', preferName=True, spec=".1")}**.")
+                 f" To them, {compdata.height:,.1mu} looks like **{height:,.1mu}**."
+                 f" That's about **{height.to_best_unit('o', preferName=True, spec=".1")}**.")
             await ctx.send(s)
             return
         elif isinstance(what, str) and what.lower() in ["person", "man", "average", "average person", "average man", "average human", "human"]:

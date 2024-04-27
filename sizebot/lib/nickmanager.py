@@ -2,7 +2,6 @@ import discord
 import logging
 
 from sizebot.lib import errors, userdb
-from sizebot.lib.utils import glitch_string
 
 MAX_NICK_LEN = 32
 

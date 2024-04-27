@@ -125,7 +125,7 @@ class PersonComparison:  # TODO: Make a one-sided comparison option.
         body = self.get_single_body(key)
         if body is None:
             return None
-        
+
         return f"Comparing `{key}` between {emojis.comparebigcenter}**{self.big.nickname}** and **{emojis.comparesmallcenter}{self.small.nickname}**:\n" + body
 
     def __repr__(self):

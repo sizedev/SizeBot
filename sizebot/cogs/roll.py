@@ -35,7 +35,7 @@ class RollCog(commands.Cog):
                   f"__**TOTAL: {result.total}**__\n")
         rollstrings = []
         for i, r in enumerate(result.rolls):
-            rollheader = f"Roll {i+1}: **{r.total}** | "
+            rollheader = f"Roll {i + 1}: **{r.total}** | "
             dicestrings = []
             if r.used:
                 dicestrings.append(f"{', '.join([str(u) for u in sorted(r.used)])}")

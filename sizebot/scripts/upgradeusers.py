@@ -1,4 +1,3 @@
-import asyncio
 from pathlib import Path
 
 from sizebot.lib.digidecimal import Decimal
