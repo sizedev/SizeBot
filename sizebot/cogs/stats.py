@@ -50,9 +50,8 @@ class StatsCog(commands.Cog):
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
 
-        stats = proportions.PersonStats(userdata)
-        embedtosend = stats.toEmbed(ctx.author.id)
-        await ctx.send(embed = embedtosend)
+        tosend = proportions.get_stats(userdata, ctx.author.id)
+        await ctx.send(**tosend)
 
         await show_next_step(ctx, userdata)
 
@@ -77,10 +76,8 @@ class StatsCog(commands.Cog):
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
         userdata.scale = scale_factor
 
-        stats = proportions.PersonStats(userdata)
-
-        embedtosend = stats.toEmbed(ctx.author.id)
-        await ctx.send(embed = embedtosend)
+        tosend = proportions.get_stats(userdata, ctx.author.id)
+        await ctx.send(**tosend)
 
         await show_next_step(ctx, userdata)
 
@@ -103,9 +100,9 @@ class StatsCog(commands.Cog):
 
         userdata = userdb.load(ctx.guild.id, member.id)
 
-        embedtosend = proportions.get_basestats_embed(userdata, requesterID=ctx.author.id)
+        tosend = proportions.get_basestats(userdata, requesterID=ctx.author.id)
 
-        await ctx.send(embed = embedtosend)
+        await ctx.send(**tosend)
 
         await show_next_step(ctx, userdata)
 
@@ -128,9 +125,9 @@ class StatsCog(commands.Cog):
 
         userdata = userdb.load(ctx.guild.id, member.id)
 
-        embedtosend = proportions.get_settings_embed(userdata, requesterID=ctx.author.id)
+        tosend = proportions.get_settings(userdata, requesterID=ctx.author.id)
 
-        await ctx.send(embed = embedtosend)
+        await ctx.send(**tosend)
 
         await show_next_step(ctx, userdata)
 
@@ -165,10 +162,8 @@ class StatsCog(commands.Cog):
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
         userdata2.height = userdata.height
 
-        stats = proportions.PersonStats(userdata2)
-
-        embedtosend = stats.toEmbed(ctx.author.id)
-        await ctx.send(embed = embedtosend)
+        tosend = proportions.get_stats(userdata2, ctx.author.id)
+        await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["get"],
@@ -198,18 +193,16 @@ class StatsCog(commands.Cog):
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
 
-        stats = proportions.PersonStats(userdata)
-
         if stat.tag:
-            embedtosend = stats.to_tag_embed(stat.name, ctx.author.id)
-            await ctx.send(embed = embedtosend)
+            tosend = proportions.get_stats_bytag(userdata, stat.name, ctx.author.id)
+            await ctx.send(**tosend)
         else:
-            stattosend = stats.getFormattedStat(stat.name)
-            if stattosend is None:
+            tosend = proportions.get_stat(userdata, stat.name)
+            if tosend is None:
                 await ctx.send(f"The `{stat.name}` stat is unavailable for this user.")
                 return
-            await ctx.send(stattosend)
-        
+            await ctx.send(**tosend)
+
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -235,17 +228,15 @@ class StatsCog(commands.Cog):
         scale_factor = sv1 / sv2
         userdata.scale = scale_factor
 
-        stats = proportions.PersonStats(userdata)
-
         if stat.tag:
-            embedtosend = stats.to_tag_embed(stat.name, ctx.author.id)
-            await ctx.send(embed = embedtosend)
+            tosend = proportions.get_stats_bytag(userdata, stat.name, ctx.author.id)
+            await ctx.send(**tosend)
         else:
-            stattosend = stats.getFormattedStat(stat.name)
-            if stattosend is None:
+            tosend = proportions.get_stat(userdata, stat.name)
+            if tosend is None:
                 await ctx.send(f"The `{stat.name}` stat is unavailable for this user.")
                 return
-            await ctx.send(stattosend)
+            await ctx.send(**tosend)
 
         await show_next_step(ctx, userdata)
 
@@ -284,17 +275,15 @@ class StatsCog(commands.Cog):
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
         userdata2.height = userdata.height
 
-        stats = proportions.PersonStats(userdata2)
-
         if stat.tag:
-            embedtosend = stats.to_tag_embed(stat.name, ctx.author.id)
-            await ctx.send(embed = embedtosend)
+            tosend = proportions.get_stats_bytag(userdata2, stat.name, ctx.author.id)
+            await ctx.send(**tosend)
         else:
-            stattosend = stats.getFormattedStat(stat.name)
-            if stattosend is None:
+            tosend = proportions.get_stat(userdata2, stat.name)
+            if tosend is None:
                 await ctx.send(f"The `{stat.name}` stat is unavailable for this user.")
                 return
-            await ctx.send(stattosend)
+            await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["comp", "comparison"],
@@ -324,9 +313,8 @@ class StatsCog(commands.Cog):
 
         msg = await ctx.send(emojis.loading + " *Loading comparison...*")
 
-        comparison = proportions.PersonComparison(userdata1, userdata2)
-        embedtosend = await comparison.toEmbed(ctx.author.id)
-        await msg.edit(content = "", embed = embedtosend)
+        tosend = proportions.get_compare(userdata1, userdata2, ctx.author.id)
+        await msg.edit(content = "", **tosend)
 
     @commands.command(
         aliases = ["compas"],
@@ -351,9 +339,8 @@ class StatsCog(commands.Cog):
 
         msg = await ctx.send(emojis.loading + " *Loading comparison...*")
 
-        comparison = proportions.PersonComparison(userdata, comparedata)
-        embedtosend = await comparison.toEmbed(ctx.author.id)
-        await msg.edit(content = "", embed = embedtosend)
+        tosend = proportions.get_compare(userdata, comparedata, ctx.author.id)
+        await msg.edit(content = "", **tosend)
 
     @commands.command(
         aliases = ["compstat"],
@@ -372,24 +359,22 @@ class StatsCog(commands.Cog):
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
-        stats = proportions.PersonComparison(userdata1, userdata2)
-
         if stat.tag:
             await ctx.send("Not supported right now, sorry!")
         else:
-            stattosend = stats.getFormattedStat(stat.name)
-            if stattosend is None:
+            tosend = proportions.get_compare_stat(userdata1, userdata2, stat.name)
+            if tosend is None:
                 await ctx.send(f"The `{stat.name}` stat is unavailable for this user.")
                 return
-            await ctx.send(stattosend)
+            await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["dist", "walk", "run", "climb", "swim", "crawl", "drive"],
         usage = "<length> [user]",
         category = "stats"
     )
-    async def distance(self, ctx, memberOrHeightorTime: typing.Union[discord.Member, FakePlayer, SV, TV, str] = None,
-                       *, memberOrHeight2: MemberOrSize = None):
+    async def distance(self, ctx, goal: typing.Union[discord.Member, FakePlayer, SV, TV],
+                       *, member: MemberOrSize = None):
         """How long will it take to walk, run, climb, etc. a distance/time?
 
         If a time is supplied, it is calculated by how much distance you could walk in that time at your base walk speed.
@@ -397,47 +382,20 @@ class StatsCog(commands.Cog):
         Example:
         `&distance <length or time> [user]`"""
 
-        if memberOrHeight2 is None:
-            memberOrHeight2 = ctx.author
+        if member is None:
+            member = ctx.author
 
-        if memberOrHeightorTime is None:
-            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
-            return
+        userdata = load_or_fake(member)
 
-        userdata2 = load_or_fake(memberOrHeight2)
+        if not isinstance(goal, (SV, TV)):
+            goal = load_or_fake(goal).height
 
-        if isinstance(memberOrHeightorTime, str):
-            raise errors.InvalidSizeValue(memberOrHeightorTime, "size or time")
-        elif isinstance(memberOrHeightorTime, TV):
-            walkpersecond = SV(userdata2.walkperhour / 3600) if userdata2.walkperhour else proportions.AVERAGE_WALKPERHOUR / 3600
-            walkpersecond *= userdata2.scale
-            memberOrHeightorTime = SV(walkpersecond * memberOrHeightorTime)
+        if isinstance(goal, SV):
+            tosend = proportions.get_speeddistance(userdata, goal)
+        elif isinstance(goal, TV):
+            tosend = proportions.get_speedtime(userdata, goal)
 
-        if isinstance(memberOrHeightorTime, SV):
-            telemetry.SizeViewed(memberOrHeightorTime).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight2).save()
-
-        userdata1 = load_or_fake(memberOrHeightorTime)
-
-        if userdata2.height > userdata1.height:
-            h = SV(userdata1.height * userdata2.viewscale)
-            msg = f"To {userdata2.nickname}, {userdata1.height:,.3mu} appears to be **{h:,.3mu}.**"
-            await ctx.send(msg)
-            return
-
-        comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
-        stat = "height"
-        embedtosend = comparison.getStatEmbed(stat)
-
-        if embedtosend is None:
-            await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
-            return
-
-        embedtosend.title = f"{comparison.viewed['height'].value:,.3mu} to {comparison.viewer['nickname'].value}"
-        embedtosend.set_footer(text = f"{comparison.viewed['height'].value:,.3mu} is {comparison.multiplier:,.3}x larger than {comparison.viewer['nickname'].value}.")
-
-        await ctx.send(embed = embedtosend)
+        await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["diststats"],
@@ -463,10 +421,9 @@ class StatsCog(commands.Cog):
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
-        comparison = proportions.PersonSpeedComparison(userdata2, userdata1)
-        embedtosend = await comparison.toEmbed(ctx.author.id)
+        tosend = proportions.get_speedcompare(userdata2, userdata1, ctx.author.id)
 
-        await ctx.send(embed = embedtosend)
+        await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["diststat"],
@@ -494,13 +451,13 @@ class StatsCog(commands.Cog):
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
-        embedtosend = proportions.PersonSpeedComparison(userdata2, userdata1).getStatEmbed(stat)
+        tosend = proportions.get_speedcompare_stat(userdata2, userdata1, stat)
 
-        if embedtosend is None:
+        if tosend is None:
             await ctx.send(f"{userdata1.nickname} doesn't have the `{stat}` stat.")
             return
 
-        await ctx.send(embed = embedtosend)
+        await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["reversedistance", "reversedist", "revdist"],
@@ -518,18 +475,17 @@ class StatsCog(commands.Cog):
             who = ctx.message.author
 
         userdata = load_or_fake(who)
-        userstats = proportions.PersonStats(userdata)
 
         if userdata.height == 0:
             await ctx.send(f"{userdata.tag} doesn't exist...")
             return
 
-        newlength = SV(length / userstats.stats.values["viewscale"])
+        newlength = SV(length / userdata.viewscale)
 
-        desc = f"To everyone else, {userstats.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
+        desc = f"To everyone else, {userdata.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
 
         e = discord.Embed(
-            title = f"{userstats.nickname}'s {length:,.3mu} to the world",
+            title = f"{userdata.nickname}'s {length:,.3mu} to the world",
             description = desc
         )
 
@@ -551,9 +507,8 @@ class StatsCog(commands.Cog):
             is_SV = True
 
         userdata = load_or_fake(who)
-        userstats = proportions.PersonStats(userdata)
 
-        traveldist = userstats.height
+        traveldist = userdata.height
 
         soundtime = TV(traveldist / ONE_SOUNDSECOND)
         printtime = pretty_time_delta(soundtime, True, True)
@@ -561,7 +516,7 @@ class StatsCog(commands.Cog):
         if is_SV:
             desc = f"To travel {traveldist:,.3mu}, it would take sound **{printtime}**."
         else:
-            desc = f"To travel from **{userstats.nickname}**'s head to their {engine.plural(userstats.footname).lower()}, it would take sound **{printtime}**."
+            desc = f"To travel from **{userdata.nickname}**'s head to their {engine.plural(userdata.footname).lower()}, it would take sound **{printtime}**."
 
         embedtosend = discord.Embed(title = f"Sound Travel Time in {traveldist:,.3mu}",
                                     description = desc)
@@ -584,9 +539,8 @@ class StatsCog(commands.Cog):
             is_SV = True
 
         userdata = load_or_fake(who)
-        userstats = proportions.PersonStats(userdata)
 
-        traveldist = userstats.height
+        traveldist = userdata.height
 
         lighttime = TV(traveldist / ONE_LIGHTSECOND)
         printtime = pretty_time_delta(lighttime, True, True)
@@ -594,7 +548,7 @@ class StatsCog(commands.Cog):
         if is_SV:
             desc = f"To travel {traveldist:,.3mu}, it would take light **{printtime}**."
         else:
-            desc = f"To travel from **{userstats.nickname}**'s head to their {engine.plural(userstats.footname).lower()}, it would take light **{printtime}**."
+            desc = f"To travel from **{userdata.nickname}**'s head to their {engine.plural(userdata.footname).lower()}, it would take light **{printtime}**."
 
         embedtosend = discord.Embed(title = f"Light Travel Time in {traveldist:,.3mu}",
                                     description = desc)
@@ -702,9 +656,8 @@ class StatsCog(commands.Cog):
 
         msg = await ctx.send(emojis.loading + " *Loading comparison...*")
 
-        comparison = proportions.PersonComparison(userdata1, userdata2)
-        e = await comparison.toSimpleEmbed(ctx.author.id)
-        await msg.edit(content = "", embed = e)
+        tosend = proportions.get_compare_simple(userdata1, userdata2, ctx.author.id)
+        await msg.edit(content = "", **tosend)
 
     @commands.command(
         aliases = ["minecraft", "scopic"],
@@ -720,14 +673,13 @@ class StatsCog(commands.Cog):
             who = ctx.message.author
 
         userdata = load_or_fake(who)
-        userstats = proportions.PersonStats(userdata)
 
         if userdata.height == 0:
             await ctx.send(f"{userdata.nickname} doesn't exist...")
             return
 
         STEVE = SV(1.8)
-        user_pehkui = Decimal(userstats.height / STEVE)
+        user_pehkui = Decimal(userdata.height / STEVE)
 
         await ctx.send(f"{userdata.nickname}'s Pehkui scale is **{user_pehkui:.6}**.")
 
@@ -783,8 +735,7 @@ class StatsCog(commands.Cog):
             weight = who
         else:
             userdata = load_or_fake(who)
-            userstats = proportions.PersonStats(userdata)
-            weight = userstats.weight
+            weight = userdata.weight
 
         gold_dollars = metal_value("gold", weight)
         silver_dollars = metal_value("silver", weight)

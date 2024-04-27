@@ -8,11 +8,10 @@ from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, TV, WV, AV
-from sizebot.lib.userdb import PlayerStats, DEFAULT_HEIGHT as average_height, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
+from sizebot.lib.userdb import PlayerStats, DEFAULT_HEIGHT as AVERAGE_HEIGHT, DEFAULT_WEIGHT as AVERAGE_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.shoesize import to_shoe_size
 
 DEFAULT_THREAD_THICKNESS = SV("0.001016")
-AVERAGE_HEIGHT = average_height
 AVERAGE_WALKPERHOUR = SV(5630)
 AVERAGE_RUNPERHOUR = SV(10729)
 AVERAGE_SWIMPERHOUR = SV(3219)
@@ -290,6 +289,18 @@ class StatBox:
         stats = process_queue(all_stats, _process)
         sb.set_stats(stats)
         return sb
+
+    @classmethod
+    def load_average(cls) -> StatBox:
+        average_userdata: PlayerStats = {
+            "height": str(AVERAGE_HEIGHT),
+            "weight": str(AVERAGE_WEIGHT),
+            "pawtoggle": False,
+            "furtoggle": False,
+            "nickname": "Average",
+            "id": "0"
+        }
+        return cls.load(average_userdata)
 
     def scale(self, scale_value: Decimal) -> StatBox:
         values: dict[str, Any] = {}
@@ -582,7 +593,7 @@ all_stats = [
             is_shown=False,
             requires=["height"],
             type=Decimal,
-            value=lambda v: abs(calcViewAngle(v["height"], AVERAGE_HEIGHT))),
+            value=lambda v: abs(calc_view_angle(v["height"], AVERAGE_HEIGHT))),
     StatDef("averagelookdirection",
             title="Average Look Direction",
             string="...",
@@ -590,7 +601,7 @@ all_stats = [
             is_shown=False,
             requires=["height"],
             type=str,
-            value=lambda v: "up" if calcViewAngle(v["height"], AVERAGE_HEIGHT) >= 0 else "down"),
+            value=lambda v: "up" if calc_view_angle(v["height"], AVERAGE_HEIGHT) >= 0 else "down"),
     StatDef("walkperhour",
             title="Walk Per Hour",
             string="{nickname} walks **{walkperhour:,.3mu} per hour**.",
@@ -997,22 +1008,13 @@ statmap = generate_statmap()
 taglist = generate_taglist()
 
 
-# TODO: CamelCase
-def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:
-    viewer = abs(Decimal(viewer))
-    viewee = abs(Decimal(viewee))
-    if viewer.is_infinite() and viewee.is_infinite():
-        viewer = Decimal(1)
-        viewee = Decimal(1)
-    elif viewer.is_infinite():
-        viewer = Decimal(1)
-        viewee = Decimal(0)
-    elif viewee.is_infinite():
-        viewer = Decimal(0)
-        viewee = Decimal(1)
-    elif viewee == 0 and viewer == 0:
-        viewer = Decimal(1)
-        viewee = Decimal(1)
+def calc_view_angle(viewer: SV, viewee: SV) -> Decimal:
+    if viewer == viewee:
+        return Decimal(0)
+    if viewer.is_infinite() or viewee == 0:
+        return Decimal(-90)
+    if viewer == 0 or viewee.is_infinite():
+        return Decimal(90)
     viewdistance = viewer / 2
     heightdiff = viewee - viewer
     viewangle = Decimal(math.degrees(math.atan(heightdiff / viewdistance)))

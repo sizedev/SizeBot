@@ -41,20 +41,21 @@ def str_or_none(v):
 
 
 class PlayerStats(TypedDict):
-    height: SV
-    baseheight: SV
-    baseweight: WV
-    footlength: Optional[SV]
+    height: str
+    weight: str
+    footlength: Optional[str]
     pawtoggle: bool
     furtoggle: bool
-    taillength: Optional[SV]
-    earheight: Optional[SV]
-    liftstrength: Optional[WV]
-    walkperhour: Optional[SV]
-    swimperhour: Optional[SV]
-    runperhour: Optional[SV]
+    hairlength: Optional[str]
+    taillength: Optional[str]
+    earheight: Optional[str]
+    liftstrength: Optional[str]
+    walkperhour: Optional[str]
+    swimperhour: Optional[str]
+    runperhour: Optional[str]
     gender: Literal["m", "f", "x", None]
-    scale: Decimal
+    nickname: str
+    id: str
 
 
 @total_ordering

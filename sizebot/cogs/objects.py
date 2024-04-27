@@ -16,7 +16,7 @@ from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects, tags
-from sizebot.lib.stats import taglist
+from sizebot.lib.stats import StatBox, taglist
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.utils import glitch_string, parse_many, pretty_time_delta, sentence_join
@@ -115,7 +115,7 @@ class ObjectsCog(commands.Cog):
             telemetry.SizeViewed(who).save()
 
         userdata = load_or_fake(who)
-        userstats = proportions.PersonStats(userdata)
+        userstats = StatBox.load(userdata.stats).scale(userdata.scale)
 
         if isinstance(what, DigiObject):
             oc = what.relativestatsembed(userdata)
@@ -124,15 +124,14 @@ class ObjectsCog(commands.Cog):
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make one sided)
             compdata = load_or_fake(what)
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
-            compheight = userstats.avgheightcomp
+            compheight = userstats['averagescale'].value
             compdata = load_or_fake(compheight)
         else:
             telemetry.UnknownObject(str(what)).save()
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             return
-        stats = proportions.PersonComparison(userdata, compdata)
-        embedtosend = await stats.toEmbed(ctx.author.id)
-        await ctx.send(embed = embedtosend)
+        tosend = proportions.get_compare(userdata, compdata, ctx.author.id)
+        await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["look", "examine"],
@@ -224,9 +223,8 @@ class ObjectsCog(commands.Cog):
             )
             telemetry.UnknownObject(str(what)).save()
             return
-        stats = proportions.PersonComparison(userdata, compdata)
-        embedtosend = await stats.toSimpleEmbed(requesterID = ctx.message.author.id)
-        await ctx.send(embed = embedtosend)
+        tosend = proportions.get_compare_simple(userdata, compdata, ctx.message.author.id)
+        await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["objectstats"],
@@ -387,7 +385,7 @@ class ObjectsCog(commands.Cog):
             who = ctx.author
 
         userdata = userdb.load_or_fake(who)
-        stats = proportions.PersonStats(userdata)
+        stats = StatBox.load(userdata.stats).scale(userdata.scale)
         scale = userdata.scale
 
         if land == "random":
@@ -402,20 +400,20 @@ class ObjectsCog(commands.Cog):
         fingertip_name = "paw bean" if userdata.pawtoggle else "fingertip"
 
         land_area = AV(land.width * land.height)
-        area = AV(stats.height * stats.width)
+        area = AV(stats['height'].value * stats['width'].value)
         lay_percentage = area / land_area
-        foot_area = AV(stats.footlength * stats.footwidth)
-        finger_area = AV(stats.fingertiplength * stats.fingertiplength)
+        foot_area = AV(stats['footlength'].value * stats['footwidth'].value)
+        finger_area = AV(stats['fingertiplength'].value * stats['fingertiplength'].value)
         foot_percentage = foot_area / land_area
         finger_percentage = finger_area / land_area
 
         landout = (f"To {userdata.nickname}, {land.name} looks **{land_width:,.1mu}** wide and **{land_length:,.1mu}** long. ({land_area:,.1mu}) The highest peak looks **{land_height:,.1mu}** tall. ({land.note})\n\n"
                    f"Laying down, {userdata.nickname} would cover **{lay_percentage:,.2}%** of the land.\n"
-                   f"{emojis.blank}({stats.height:,.1mu} tall and {stats.width:,.1mu} wide, or {area:,.1mu})\n"
+                   f"{emojis.blank}({stats['height'].value:,.1mu} tall and {stats['width'].value:,.1mu} wide, or {area:,.1mu})\n"
                    f"{userdata.nickname}'s {userdata.footname.lower()} would cover **{foot_percentage:,.2}%** of the land.\n"
-                   f"{emojis.blank}({stats.footlength:,.1mu} long and {stats.footwidth:,.1mu} wide, or {foot_area:,.1mu})\n"
+                   f"{emojis.blank}({stats['footlength'].value:,.1mu} long and {stats['footwidth'].value:,.1mu} wide, or {foot_area:,.1mu})\n"
                    f"{userdata.nickname}'s {fingertip_name} would cover **{finger_percentage:,.2}%** of the land.\n"
-                   f"{emojis.blank}({stats.fingertiplength:,.1mu} long and wide, or {finger_area:,.1mu})")
+                   f"{emojis.blank}({stats['fingertiplength'].value:,.1mu} long and wide, or {finger_area:,.1mu})")
 
         embed = discord.Embed(
             title = f"{userdata.nickname} on {land.name}",
