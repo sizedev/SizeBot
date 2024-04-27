@@ -375,7 +375,6 @@ class HelpCog(commands.Cog):
     @commands.command(
         category = "help"
     )
-    @checks.is_mod()
     async def invite(self, ctx):
         """Request an invite for SizeBot!"""
         await ctx.send("## Thank you for the interest in the bot!\n"
