@@ -1024,7 +1024,7 @@ all_stats = [
             type=SV,
             is_shown=False,
             value=lambda v: SV(math.sqrt((float(v["weight"]) * GRAVITY) / (float(v["height"] * v["width"]) * AIR_DENSITY)) * 60 * 60),
-            aliases=["wind", "blow"])
+            aliases=["blow"])
 ]
 
 
