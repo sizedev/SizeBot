@@ -1023,7 +1023,7 @@ all_stats = [
             requires=["height", "width", "weight"],
             type=SV,
             is_shown=False,
-            value=lambda v: SV(math.sqrt((float(v["weight"]) * GRAVITY) / (float(v["height"] * v["width"]) * AIR_DENSITY)) * 60 * 60),
+            value=lambda v: SV(math.sqrt((v["weight"] * GRAVITY) / (v["height"] * v["width"] * AIR_DENSITY)) * 60 * 60),
             aliases=["blow"])
 ]
 
