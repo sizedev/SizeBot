@@ -1027,12 +1027,12 @@ all_stats = [
             aliases=["blow"]),
     StatDef("percievedvolume",
             title="Percieved Sound Volume Scale",
-            string=lambda s: f"{s['nickname'].value} would percieve sound to be {s['percievedvolume'].value:.2f} times louder." if s['percievedvolume'].value < 1 else f"{s['nickname'].value} would percieve sound to be {1 / s['percievedvolume'].value:.2f} times quieter.",
-            body=lambda s: f"{s['percievedvolume'].value:.2f}x louder" if s['percievedvolume'].value < 1 else f"{1 / s['percievedvolume'].value:.2f}x quieter",
+            string=lambda s: f"{s['nickname'].value} would percieve sound to be {s['percievedvolume'].value:.2f} times louder." if s['percievedvolume'].value > 1 else f"{s['nickname'].value} would percieve sound to be {1 / s['percievedvolume'].value:.2f} times quieter.",
+            body=lambda s: f"{s['percievedvolume'].value:.2f}x louder" if s['percievedvolume'].value > 1 else f"{1 / s['percievedvolume'].value:.2f}x quieter",
             requires=["scale"],
             type=Decimal,
             is_shown=False,
-            value=lambda v: Decimal(math.pow(10, (math.log(2) / math.log(10)) * (20 * math.log(v["scale"]) * math.log10(math.e)) / 10)),
+            value=lambda v: 1 / Decimal(math.pow(10, (math.log(2) / math.log(10)) * (20 * math.log(v["scale"]) * math.log10(math.e)) / 10)),
             aliases=["soundvolume", "volume"])
 ]
 
