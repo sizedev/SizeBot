@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import show_next_step
-from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
+from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.fakeplayer import FakePlayer
@@ -44,9 +44,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
 
@@ -66,9 +63,6 @@ class StatsCog(commands.Cog):
         """
         if memberOrHeight is None:
             memberOrHeight = ctx.author
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
 
         sv1 = load_or_fake(sv1).height  # This feels like a hack. Is this awful?
         scale_factor = sv1 / sv2
@@ -155,11 +149,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
@@ -192,9 +181,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
 
@@ -225,9 +211,6 @@ class StatsCog(commands.Cog):
 
         if memberOrHeight is None:
             memberOrHeight = ctx.author
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
@@ -274,11 +257,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
@@ -314,11 +292,6 @@ class StatsCog(commands.Cog):
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
@@ -337,11 +310,6 @@ class StatsCog(commands.Cog):
     async def compareas(self, ctx, asHeight: MemberOrSize = None,
                         memberOrHeight: MemberOrSize = None):
         """Compare yourself as a different height and another user."""
-
-        if isinstance(asHeight, SV):
-            telemetry.SizeViewed(asHeight).save()
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
 
         userdata = load_or_fake(ctx.message.author)
         asdata = load_or_fake(asHeight)
@@ -414,11 +382,6 @@ class StatsCog(commands.Cog):
             walkpersecond *= userdata2.scale
             memberOrHeightorTime = SV(walkpersecond * memberOrHeightorTime)
 
-        if isinstance(memberOrHeightorTime, SV):
-            telemetry.SizeViewed(memberOrHeightorTime).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight2).save()
-
         userdata1 = load_or_fake(memberOrHeightorTime)
 
         if userdata2.height > userdata1.height:
@@ -456,11 +419,6 @@ class StatsCog(commands.Cog):
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight2).save()
-
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
@@ -486,11 +444,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight2).save()
 
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
@@ -699,11 +652,6 @@ class StatsCog(commands.Cog):
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
@@ -755,11 +703,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
 
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)

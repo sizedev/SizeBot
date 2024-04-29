@@ -4,7 +4,7 @@ from decimal import InvalidOperation
 
 from discord.ext import commands
 
-from sizebot.lib import errors, utils, telemetry
+from sizebot.lib import errors, utils
 from sizebot.lib.constants import emojis
 from sizebot.lib.utils import pretty_time_delta
 
@@ -17,10 +17,6 @@ async def setup(bot):
         # Get actual error
         err = getattr(error, "original", error)
 
-        # TODO: Check if command exists better
-        if ctx.command is not None:
-            telemetry.ErrorThrown(ctx.command.name, error.__class__.__name__).save()
-
         # If we got some bad arguments, use a generic argument exception error
         if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument) or isinstance(err, commands.BadArgument):
             err = errors.ArgumentException()
@@ -30,10 +26,6 @@ async def setup(bot):
 
         if isinstance(err, commands.BadMultilineCommand):
             err = errors.MultilineAsNonFirstCommandException()
-
-        if isinstance(err, errors.AdminPermissionException):
-            # Log Admin Permission Exceptions to telemetry
-            telemetry.AdminCommand(ctx.author.id, ctx.command.name).save()
 
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
@@ -53,9 +45,6 @@ async def setup(bot):
             userMessage = err.formatUserMessage()
             if userMessage is not None:
                 await ctx.send(f"{emojis.warning} {userMessage}")
-        elif isinstance(err, commands.errors.CommandNotFound):
-            # log unknown commmands to telemetry
-            telemetry.UnknownCommand(ctx.message.content.split(" ")[0][1:]).save()
         elif isinstance(err, commands.errors.MissingRequiredArgument):
             await ctx.send(f"{emojis.warning} Missing required argument(s) for `{ctx.prefix}{ctx.command}`.")
         elif isinstance(err, commands.errors.ExpectedClosingQuoteError):

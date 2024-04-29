@@ -5,7 +5,7 @@ from discord.utils import get
 from discord.ext import commands
 
 from sizebot.conf import conf
-from sizebot.lib import errors, telemetry, userdb, nickmanager
+from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import ids, emojis
 from sizebot.lib.units import SV, WV
 
@@ -31,9 +31,6 @@ async def remove_user_role(member):
 
 
 async def show_next_step(ctx, userdata: userdb.User, completed=False):
-    if completed or not userdata.registered:
-        telemetry.RegisterStepCompleted(ctx.guild.id, ctx.author.id, ctx.command.name, completed = completed).save()
-
     if completed:
         congrats_message = (
             f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n"
@@ -122,7 +119,6 @@ class RegisterCog(commands.Cog):
             if reaction.emoji != emojis.check:
                 return
 
-        telemetry.RegisterStarted(ctx.guild.id, ctx.author.id).save()
         userdata = userdb.User()
         userdata.guildid = ctx.guild.id
         userdata.id = ctx.author.id
@@ -246,7 +242,6 @@ class RegisterCog(commands.Cog):
         if unitsystem.lower() == "i":
             unitsystem = "u"
 
-        telemetry.AdvancedRegisterUsed(ctx.guild.id, ctx.author.id).save()
         userdata = userdb.User()
         userdata.guildid = ctx.guild.id
         userdata.id = ctx.author.id
@@ -332,7 +327,6 @@ class RegisterCog(commands.Cog):
         # remove the user role
         await remove_user_role(user)
 
-        telemetry.Unregistered(ctx.guild.id, ctx.author.id).save()
         logger.warn(f"User {user.id} successfully unregistered.")
         await ctx.send(f"Unregistered {user.name}.")
 
@@ -419,8 +413,6 @@ class RegisterCog(commands.Cog):
         userdata = userdb.load(chosenguildid, ctx.author.id)
         userdata.guildid = ctx.guild.id
         userdb.save(userdata)
-
-        telemetry.ProfileCopied(ctx.guild.id, ctx.author.id).save()
 
         await outmsg.delete()
         await ctx.send(f"Successfully copied profile from *{self.bot.get_guild(int(chosenguildid)).name}* to here!")

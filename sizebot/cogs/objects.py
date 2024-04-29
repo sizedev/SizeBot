@@ -10,7 +10,7 @@ from discord.ext import commands
 from discord.ext.commands.converter import MemberConverter
 
 from sizebot import __version__
-from sizebot.lib import objs, proportions, telemetry, userdb, utils
+from sizebot.lib import objs, proportions, userdb, utils
 from sizebot.lib.constants import emojis
 from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
@@ -65,9 +65,6 @@ class ObjectsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata = load_or_fake(memberOrHeight)
 
         if userdata.height == 0:
@@ -111,9 +108,6 @@ class ObjectsCog(commands.Cog):
             what = await parse_many(ctx, args, [DigiObject, mc, SV])
             who = ctx.author
 
-        if isinstance(who, SV):
-            telemetry.SizeViewed(who).save()
-
         userdata = load_or_fake(who)
         userstats = proportions.PersonStats(userdata)
 
@@ -127,7 +121,6 @@ class ObjectsCog(commands.Cog):
             compheight = userstats.avgheightcomp
             compdata = load_or_fake(compheight)
         else:
-            telemetry.UnknownObject(str(what)).save()
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             return
         stats = proportions.PersonComparison(userdata, compdata)
@@ -149,9 +142,6 @@ class ObjectsCog(commands.Cog):
         `&look book`
         `&examine building`"""
 
-        if isinstance(what, SV):
-            telemetry.SizeViewed(what).save()
-
         userdata = load_or_fake(ctx.author)
 
         if isinstance(what, str):
@@ -160,7 +150,6 @@ class ObjectsCog(commands.Cog):
         # TODO: Should easter eggs be in a different place?
 
         if isinstance(what, DigiObject):
-            telemetry.ObjectUsed(str(what)).save()
             la = what.relativestatssentence(userdata)
             # Easter eggs.
             if what.name == "photograph":
@@ -222,7 +211,6 @@ class ObjectsCog(commands.Cog):
                 f"use `{ctx.prefix}suggestobject` to suggest it "
                 f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
             )
-            telemetry.UnknownObject(str(what)).save()
             return
         stats = proportions.PersonComparison(userdata, compdata)
         embedtosend = await stats.toSimpleEmbed(requesterID = ctx.message.author.id)
@@ -240,7 +228,6 @@ class ObjectsCog(commands.Cog):
         `&objstats book`"""
 
         if isinstance(what, str):
-            telemetry.UnknownObject(str(what)).save()
             await ctx.send(f"`{what}` is not a valid object.")
             return
 
