@@ -61,7 +61,7 @@ class DigiObject:
             "c": "calories",
         }
 
-        self.unitlength = getattr(self, dimensionmap[dimension])
+        self.unitlength: SV = getattr(self, dimensionmap[dimension])
 
     @property
     def image(self):

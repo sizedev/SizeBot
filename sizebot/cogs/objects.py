@@ -16,6 +16,7 @@ from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects, tags
+from sizebot.lib.picker import format_close_object_smart, get_close_object_smart
 from sizebot.lib.stats import taglist
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake
@@ -71,7 +72,7 @@ class ObjectsCog(commands.Cog):
             await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about... huh. I can't find them.")
             return
 
-        goodheightout = userdata.height.to_good_unit('o', preferName=True, spec=".2%4")
+        goodheightout = format_close_object_smart(userdata.height, 10)
         goodweightout = userdata.weight.to_good_unit('o', preferName=True, spec=".2%4")
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
