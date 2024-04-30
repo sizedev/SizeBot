@@ -787,7 +787,7 @@ class StatsCog(commands.Cog):
 
         userdata1 = load_or_fake(who)
 
-        embedtosend = proportions.get_keypoints_embed(userdata1)
+        embedtosend = proportions.get_keypoints_embed(userdata1, ctx.author.id)
 
         await ctx.send(embed = embedtosend)
 
