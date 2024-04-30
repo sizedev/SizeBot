@@ -297,7 +297,7 @@ def init():
                 tags[tag] += 1
 
 
-def get_close_object_smart(val: SV, tolerance: int) -> DigiObject:
+def get_close_object_smart(val: SV) -> DigiObject:
     """This is a "smart" algorithm meant for use in &lookslike and &keypoints.
 
     Tries to get a single object for comparison, prioritizing integer closeness.
@@ -306,21 +306,27 @@ def get_close_object_smart(val: SV, tolerance: int) -> DigiObject:
     random.shuffle(scrambled)
 
     sorted_list: list[tuple[float, int, DigiObject]] = []
+    NON_INT_WEIGHT = 10
+    PI_ON_TWO = Decimal(math.pi) / 2
+    PI_ON_TWENTY = Decimal(math.pi) / 20
     for n, obj in enumerate(scrambled):
-        scale_ratio = obj.unitlength / val
-        rounded_ratio = round_fraction(scale_ratio, tolerance)
+        scale_ratio = val / obj.unitlength
+        rounded_ratio = round(scale_ratio)
+        not_integerness = (rounded_ratio - scale_ratio)
         # random_weight prioritzes integer-ness and closeness to 1.
-        random_weight = abs(1 / (rounded_ratio - scale_ratio)) - abs(rounded_ratio / 10) - 1
+        int_weight = float(max(0, (-NON_INT_WEIGHT * not_integerness + NON_INT_WEIGHT)))
+        one_weight = math.sin(PI_ON_TWO * scale_ratio) if scale_ratio >= 1.1 else math.cos((PI_ON_TWENTY * scale_ratio) - PI_ON_TWENTY)  # This kinda approximates a log center function? idk help
+        random_weight = int_weight * one_weight
         sorted_list.append((random_weight, n, obj))
 
     sorted_list.sort()
 
     # Get the first ten objects and randomly select one by weight.
-    possibilities = sorted_list[:10]
-    return random.choices([p[2] for p in possibilities], [p[1] for p in possibilities])
+    possibilities = sorted_list[-10:]
+    return random.choices([p[2] for p in possibilities], [p[0] for p in possibilities])[0]
 
 
-def format_close_object_smart(val: SV, tolerance: int) -> str:
-    obj = get_close_object_smart(val, tolerance)
+def format_close_object_smart(val: SV) -> str:
+    obj = get_close_object_smart(val)
     ans = round(obj.unitlength / val, 1)
     return f"{ans:.1f} {obj.name_plural if ans != 1 else obj.name}"
