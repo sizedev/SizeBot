@@ -302,12 +302,14 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
     Tries to get a single object for comparison, prioritizing integer closeness.
     """
+    INTNESS_PRIORITY = 50
+    ONENESS_PRIORITY = 1
+    DIST_LIMIT = 1
+
     sorted_list: list[tuple[float, DigiObject]] = []
 
     weight = isinstance(val, WV)
 
-    INTNESS_PRIORITY = 50
-    ONENESS_PRIORITY = 1
     for obj in objects:
         ratio = val / obj.unitlength if not weight else val / (obj.weight if obj.weight else Decimal.infinity)
         rounded_ratio = round(ratio)
@@ -323,8 +325,8 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
     # Get the first ten objects and randomly select one by weight.
     possibilites = sorted_list[:10]
-    possible_objects = [p[1] for p in possibilites]
-    return random.choice(possible_objects)
+    possible_objects = [p[1] for p in possibilites if p[0] < DIST_LIMIT]
+    return random.choice(possible_objects) if possible_objects else possibilites[0]
 
 
 def format_close_object_smart(val: SV) -> str:
