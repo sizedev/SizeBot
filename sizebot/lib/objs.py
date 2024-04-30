@@ -297,33 +297,34 @@ def init():
                 tags[tag] += 1
 
 
-def get_close_object_smart(val: SV) -> DigiObject:
+def get_close_object_smart(val: SV | WV) -> DigiObject:
     """This is a "smart" algorithm meant for use in &lookslike and &keypoints.
 
     Tries to get a single object for comparison, prioritizing integer closeness.
     """
-    scrambled = objects.copy()
-    random.shuffle(scrambled)
+    sorted_list: list[tuple[float, DigiObject]] = []
 
-    sorted_list: list[tuple[float, int, DigiObject]] = []
-    NON_INT_WEIGHT = 10
-    PI_ON_TWO = Decimal(math.pi) / 2
-    PI_ON_TWENTY = Decimal(math.pi) / 20
-    for n, obj in enumerate(scrambled):
-        scale_ratio = val / obj.unitlength
-        rounded_ratio = round(scale_ratio)
-        not_integerness = (rounded_ratio - scale_ratio)
-        # random_weight prioritzes integer-ness and closeness to 1.
-        int_weight = float(max(0, (-NON_INT_WEIGHT * not_integerness + NON_INT_WEIGHT)))
-        one_weight = math.sin(PI_ON_TWO * scale_ratio) if scale_ratio >= 1.1 else math.cos((PI_ON_TWENTY * scale_ratio) - PI_ON_TWENTY)  # This kinda approximates a log center function? idk help
-        random_weight = int_weight * one_weight
-        sorted_list.append((random_weight, n, obj))
+    weight = isinstance(val, WV)
+
+    INTNESS_PRIORITY = 10
+    ONENESS_PRIORITY = 1
+    for obj in objects:
+        ratio = val / obj.unitlength if not weight else val / (obj.weight if obj.weight else Decimal.infinity)
+        rounded_ratio = round(ratio)
+        intness = abs(ratio - rounded_ratio)  # 0 to 1, 0 = int, 1 = very not int
+
+        oneness = (ratio if ratio > 1 else 1 / ratio) - 1
+
+        dist = math.dist((0, 0), (intness * Decimal(1 / INTNESS_PRIORITY), oneness * Decimal(1 / ONENESS_PRIORITY)))
+
+        sorted_list.append((dist, obj))
 
     sorted_list.sort()
 
     # Get the first ten objects and randomly select one by weight.
-    possibilities = sorted_list[-10:]
-    return random.choices([p[2] for p in possibilities], [p[0] for p in possibilities])[0]
+    possibilites = sorted_list[:10]
+    possible_weights, possible_objects = [1 - p[0] for p in possibilites], [p[1] for p in possibilites]
+    return random.choices(possible_objects, possible_weights)[0]
 
 
 def format_close_object_smart(val: SV) -> str:

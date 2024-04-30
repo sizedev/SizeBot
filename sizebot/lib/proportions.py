@@ -513,7 +513,7 @@ def get_keypoints_embed(userdata: User, requesterID = None):
     embed.set_author(name=f"SizeBot {__version__}")
     for stat in stats:
         if "keypoint" in stat.tags:
-            lookslike = format_close_object_smart(stats["height"].value)
+            lookslike = format_close_object_smart(stat.value)
             embed.add_field(name = stat.title, value = f"{stat.body}\n*~{lookslike}*")
 
     return embed
