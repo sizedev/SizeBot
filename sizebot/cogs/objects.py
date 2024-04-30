@@ -15,8 +15,7 @@ from sizebot.lib.constants import emojis
 from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.objs import DigiObject, objects, tags
-from sizebot.lib.picker import format_close_object_smart, get_close_object_smart
+from sizebot.lib.objs import DigiObject, objects, tags, format_close_object_smart
 from sizebot.lib.stats import taglist
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake
