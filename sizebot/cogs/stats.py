@@ -774,6 +774,24 @@ class StatsCog(commands.Cog):
 
         await ctx.send(f"{value:,.3mu}")
 
+    @commands.command(
+        aliases = ["keypoint", "measurements", "measure"],
+        usage = "[user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def keypoints(self, ctx, memberOrHeight: MemberOrSize = None):
+        """See a users key points."""
+        if memberOrHeight is None:
+            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
+            return
+
+        userdata1 = load_or_fake(memberOrHeight)
+
+        embedtosend = proportions.get_keypoints_embed(userdata1)
+
+        await ctx.send(embed = embedtosend)
+
 
 async def setup(bot):
     await bot.add_cog(StatsCog(bot))

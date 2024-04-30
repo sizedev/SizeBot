@@ -10,6 +10,7 @@ from sizebot import __version__
 from sizebot.lib import errors, macrovision, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.speed import speedcalc
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import User, DEFAULT_HEIGHT as average_height, DEFAULT_WEIGHT
@@ -499,6 +500,21 @@ def get_settings_embed(userdata: User, requesterID = None):
                     value="**NOT SET**",
                     inline=stat.definition.inline
                 )
+
+    return embed
+
+
+def get_keypoints_embed(self, userdata: User, requesterID = None):
+    stats = StatBox.load(userdata.stats)
+    requestertag = f"<@!{requesterID}>"
+    embed = Embed(title=f"Keypoints for {self.nickname}",
+                  description=f"*Requested by {requestertag}*",
+                  color=colors.cyan)
+    embed.set_author(name=f"SizeBot {__version__}")
+    for stat in stats:
+        if "keypoint" in stat.tags:
+            lookslike = format_close_object_smart(stats["height"])
+            embed.add_field(name = stat.title, value = f"{stat.body}\n*~{lookslike}*")
 
     return embed
 
