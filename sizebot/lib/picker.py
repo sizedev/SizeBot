@@ -1,8 +1,6 @@
 import random
 
 from sizebot.lib.digidecimal import round_fraction
-from sizebot.lib.objs import DigiObject, objects
-from sizebot.lib.units import SV
 
 
 def is_good(n):
