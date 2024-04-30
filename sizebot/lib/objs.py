@@ -328,5 +328,5 @@ def get_close_object_smart(val: SV) -> DigiObject:
 
 def format_close_object_smart(val: SV) -> str:
     obj = get_close_object_smart(val)
-    ans = round(obj.unitlength / val, 1)
+    ans = round(val / obj.unitlength, 1)
     return f"{ans:.1f} {obj.name_plural if ans != 1 else obj.name}"
