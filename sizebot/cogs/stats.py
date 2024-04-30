@@ -780,13 +780,12 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def keypoints(self, ctx, memberOrHeight: MemberOrSize = None):
+    async def keypoints(self, ctx, who: MemberOrSize = None):
         """See a users key points."""
-        if memberOrHeight is None:
-            await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
-            return
+        if who is None:
+            who = ctx.message.author
 
-        userdata1 = load_or_fake(memberOrHeight)
+        userdata1 = load_or_fake(who)
 
         embedtosend = proportions.get_keypoints_embed(userdata1)
 
