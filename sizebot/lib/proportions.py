@@ -505,7 +505,7 @@ def get_settings_embed(userdata: User, requesterID = None):
 
 
 def get_keypoints_embed(userdata: User, requesterID = None):
-    stats = StatBox.load(userdata.stats)
+    stats = StatBox.load(userdata.stats).scale(userdata.scale)
     requestertag = f"<@!{requesterID}>"
     embed = Embed(title=f"Keypoints for {userdata.nickname}",
                   description=f"*Requested by {requestertag}*",
