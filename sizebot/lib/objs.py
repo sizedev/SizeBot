@@ -306,7 +306,7 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
     weight = isinstance(val, WV)
 
-    INTNESS_PRIORITY = 10
+    INTNESS_PRIORITY = 50
     ONENESS_PRIORITY = 1
     for obj in objects:
         ratio = val / obj.unitlength if not weight else val / (obj.weight if obj.weight else Decimal.infinity)
@@ -323,8 +323,8 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
     # Get the first ten objects and randomly select one by weight.
     possibilites = sorted_list[:10]
-    possible_weights, possible_objects = [1 - p[0] for p in possibilites], [p[1] for p in possibilites]
-    return random.choices(possible_objects, possible_weights)[0]
+    possible_objects = [p[1] for p in possibilites]
+    return random.choice(possible_objects)
 
 
 def format_close_object_smart(val: SV) -> str:
