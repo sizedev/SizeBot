@@ -504,10 +504,10 @@ def get_settings_embed(userdata: User, requesterID = None):
     return embed
 
 
-def get_keypoints_embed(self, userdata: User, requesterID = None):
+def get_keypoints_embed(userdata: User, requesterID = None):
     stats = StatBox.load(userdata.stats)
     requestertag = f"<@!{requesterID}>"
-    embed = Embed(title=f"Keypoints for {self.nickname}",
+    embed = Embed(title=f"Keypoints for {userdata.nickname}",
                   description=f"*Requested by {requestertag}*",
                   color=colors.cyan)
     embed.set_author(name=f"SizeBot {__version__}")
