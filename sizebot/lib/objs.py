@@ -322,7 +322,7 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
     for obj in objects:
         if weight and not obj.weight:
             continue
-        ratio = val / float(obj.unitlength) if not weight else val / (float(obj.weight))
+        ratio = val / float(obj.unitlength) if not weight else val / float(obj.weight)
         ratio_semi = round(ratio, 1)
         rounded_ratio = round(ratio)
 
@@ -351,7 +351,8 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
     return random.choice(possible_objects)[-1]
 
 
-def format_close_object_smart(val: SV) -> str:
+def format_close_object_smart(val: SV | WV) -> str:
+    weight = isinstance(val, WV)
     obj = get_close_object_smart(val)
-    ans = round(val / obj.unitlength, 1)
+    ans = round(val / obj.unitlength, 1) if not weight else round(val / obj.weight, 1)
     return f"{ans:.1f} {obj.name_plural if ans != 1 else obj.name}"
