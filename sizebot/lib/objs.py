@@ -11,7 +11,7 @@ import sizebot.data.objects
 from sizebot import __version__
 from sizebot.lib import errors, userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.digidecimal import Decimal, round_fraction
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import get_plural, get_indefinite_article
 from sizebot.lib.units import AV, SV, VV, WV, Unit, SystemUnit
 from sizebot.lib.utils import removeprefix, sentence_join
