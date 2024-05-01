@@ -395,6 +395,19 @@
         ]
     },
     {
+        "name": "D6",
+        "dimension": "d",
+        "diameter": "0.014",
+        "weight": "0.03",
+        "tags": [
+            "toy",
+            "dice"
+        ],
+        "aliases": [
+            "6 sided die"
+        ]
+    },
+    {
         "name": "marble",
         "dimension": "d",
         "diameter": "0.0142875",
@@ -449,6 +462,19 @@
         ]
     },
     {
+        "name": "D12",
+        "dimension": "d",
+        "diameter": "0.017",
+        "weight": "0.04",
+        "tags": [
+            "toy",
+            "dice"
+        ],
+        "aliases": [
+            "12 sided die"
+        ]
+    },
+    {
         "name": "dime",
         "dimension": "d",
         "diameter": "0.01791",
@@ -474,6 +500,19 @@
             "five pence",
             "5p",
             "5 pence coin"
+        ]
+    },
+    {
+        "name": "D4",
+        "dimension": "d",
+        "diameter": "0.018",
+        "weight": "0.02",
+        "tags": [
+            "toy",
+            "dice"
+        ],
+        "aliases": [
+            "4 sided die"
         ]
     },
     {
@@ -566,6 +605,32 @@
         ]
     },
     {
+        "name": "D20",
+        "dimension": "d",
+        "diameter": "0.022",
+        "weight": "0.05",
+        "tags": [
+            "toy",
+            "dice"
+        ],
+        "aliases": [
+            "20 sided die"
+        ]
+    },
+    {
+        "name": "D10",
+        "dimension": "d",
+        "diameter": "0.022",
+        "weight": "0.035",
+        "tags": [
+            "toy",
+            "dice"
+        ],
+        "aliases": [
+            "10 sided die"
+        ]
+    },
+    {
         "name": "one pound coin",
         "dimension": "d",
         "diameter": "0.0223",
@@ -597,6 +662,19 @@
         "weight": "0.41",
         "aliases": [
             "thumbtack"
+        ]
+    },
+    {
+        "name": "D8",
+        "dimension": "d",
+        "diameter": "0.023",
+        "weight": "0.031",
+        "tags": [
+            "toy",
+            "dice"
+        ],
+        "aliases": [
+            "8 sided die"
         ]
     },
     {
@@ -1003,7 +1081,8 @@
         "depth": "0.0625",
         "symbol": "mcpx",
         "tags": [
-            "minecraft"
+            "minecraft",
+            "nc"
         ],
         "note": "Assuming a 16x texture pack, which is defautl."
     },
@@ -1224,6 +1303,11 @@
             "cassette",
             "cassette tape"
         ]
+    },
+    {
+        "name": "vape juice bottle",
+        "dimension": "h",
+        "height": "0.1015"
     },
     {
         "name": "coaster",
@@ -1555,6 +1639,13 @@
             "thermos"
         ],
         "note": "Yes, it's funny this name is so specific."
+    },
+    {
+        "name": "water bottle",
+        "dimension": "h",
+        "height": "0.203",
+        "diameter": "0.0635",
+        "weight": "480"
     },
     {
         "name": "napkin",
@@ -1913,7 +2004,8 @@
         "height": "0.3",
         "width": "0.4",
         "tags": [
-            "minecraft"
+            "minecraft",
+            "nc"
         ]
     },
     {
@@ -1937,7 +2029,8 @@
         "height": "0.4064",
         "weight": "6000",
         "tags": [
-            "Pokemon"
+            "Pokemon",
+            "nc"
         ]
     },
     {
@@ -2028,7 +2121,8 @@
         "height": "0.75",
         "weight": "93750",
         "tags": [
-            "character"
+            "character",
+            "nc"
         ]
     },
     {
@@ -2058,7 +2152,8 @@
         "height": "0.7874",
         "weight": "19958.1",
         "tags": [
-            "character"
+            "character",
+            "nc"
         ],
         "aliases": [
             "Tails"
@@ -2092,7 +2187,8 @@
         "height": "1",
         "weight": "35000",
         "tags": [
-            "character"
+            "character",
+            "nc"
         ],
         "aliases": [
             "sonic",
@@ -2211,7 +2307,8 @@
         "height": "1.49",
         "tags": [
             "doki",
-            "character"
+            "character",
+            "nc"
         ]
     },
     {
@@ -2220,7 +2317,8 @@
         "height": "1.52",
         "weight": "47000",
         "tags": [
-            "people"
+            "people",
+            "nc"
         ],
         "aliases": [
             "ariana"
@@ -2256,7 +2354,8 @@
         "height": "1.57",
         "tags": [
             "doki",
-            "character"
+            "character",
+            "nc"
         ]
     },
     {
@@ -2265,7 +2364,8 @@
         "height": "1.6",
         "tags": [
             "doki",
-            "character"
+            "character",
+            "nc"
         ]
     },
     {
@@ -2274,7 +2374,8 @@
         "height": "1.65",
         "tags": [
             "doki",
-            "character"
+            "character",
+            "nc"
         ]
     },
     {
@@ -2283,7 +2384,8 @@
         "height": "1.7",
         "width": "0.6",
         "tags": [
-            "minecraft"
+            "minecraft",
+            "nc"
         ]
     },
     {
@@ -2315,7 +2417,8 @@
         "symbol": "mc",
         "tags": [
             "character",
-            "minecraft"
+            "minecraft",
+            "nc"
         ],
         "aliases": [
             "Steve"
@@ -2380,7 +2483,8 @@
         "height": "2",
         "weight": "350000",
         "tags": [
-            "character"
+            "character",
+            "nc"
         ],
         "aliases": [
             "Adeptus Astartes",
@@ -2436,10 +2540,24 @@
         "height": "2.16",
         "weight": "147000",
         "tags": [
-            "people"
+            "people",
+            "nc"
         ],
         "aliases": [
             "Shaquille O'Neal"
+        ]
+    },
+    {
+        "name": "two-by-four",
+        "dimension": "l",
+        "length": "2.4384",
+        "width": "0.0889",
+        "depth": "0.0381",
+        "weight": "4082.33",
+        "aliases": [
+            "2x4",
+            "2 by 4",
+            "two by four"
         ]
     },
     {
@@ -2469,7 +2587,8 @@
         "width": "1.4",
         "weight": "29200000",
         "tags": [
-            "minecraft"
+            "minecraft",
+            "nc"
         ]
     },
     {
@@ -2478,7 +2597,8 @@
         "height": "2.9",
         "width": "0.6",
         "tags": [
-            "minecraft"
+            "minecraft",
+            "nc"
         ]
     },
     {
@@ -2514,7 +2634,8 @@
         "height": "3.5",
         "width": "0.9",
         "tags": [
-            "minecraft"
+            "minecraft",
+            "nc"
         ]
     },
     {
@@ -2538,7 +2659,8 @@
         "height": "4",
         "width": "4",
         "tags": [
-            "minecraft"
+            "minecraft",
+            "nc"
         ]
     },
     {
@@ -2638,7 +2760,8 @@
         "length": "16",
         "width": "16",
         "tags": [
-            "minecraft"
+            "minecraft",
+            "nc"
         ]
     },
     {
@@ -2694,7 +2817,8 @@
         "depth": "16",
         "symbol": "mcc",
         "tags": [
-            "minecraft"
+            "minecraft",
+            "nc"
         ],
         "aliases": [
             "chunk"
@@ -3055,17 +3179,5 @@
         "aliases": [
             "river"
         ]
-    },
-    {
-        "name": "water bottle",
-        "dimension": "h",
-        "height": "0.203",
-        "diameter": "0.0635",
-        "weight": "480"
-    },
-    {
-        "name": "vape juice bottle",
-        "dimension": "h",
-        "height": "0.1015"
     }
 ]

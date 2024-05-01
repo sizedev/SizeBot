@@ -322,6 +322,8 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
     for obj in objects:
         if weight and not obj.weight:
             continue
+        if "nc" in obj.tags:
+            continue
         ratio = val / float(obj.unitlength) if not weight else val / float(obj.weight)
         ratio_semi = round(ratio, 1)
         rounded_ratio = round(ratio)
