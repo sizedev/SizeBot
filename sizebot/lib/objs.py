@@ -302,34 +302,6 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
     Tries to get a single object for comparison, prioritizing integer closeness.
     """
-    INTNESS_PRIORITY = 50
-    ONENESS_PRIORITY = 1
-    DIST_LIMIT = 1
-
-    sorted_list: list[tuple[float, DigiObject]] = []
-
-    weight = isinstance(val, WV)
-
-    for obj in objects:
-        ratio = val / obj.unitlength if not weight else val / (obj.weight if obj.weight else Decimal.infinity)
-        rounded_ratio = round(ratio)
-        intness = abs(ratio - rounded_ratio)  # 0 to 1, 0 = int, 1 = very not int
-
-        oneness = (ratio if ratio > 1 else 1 / ratio) - 1
-
-        dist = math.dist((0, 0), (intness * Decimal(1 / INTNESS_PRIORITY), oneness * Decimal(1 / ONENESS_PRIORITY)))
-
-        sorted_list.append((dist, obj))
-
-    sorted_list.sort()
-
-    # Get the first ten objects and randomly select one by weight.
-    possibilites = sorted_list[:10]
-    possible_objects = [p[1] for p in possibilites if p[0] < DIST_LIMIT]
-    return random.choice(possible_objects) if possible_objects else possibilites[0]
-
-
-def format_close_object_smart(val: SV) -> str:
     best_dict: dict[float, list] = {
         1.0: [],
         0.5: [],
@@ -342,9 +314,12 @@ def format_close_object_smart(val: SV) -> str:
         6.0: []
     }
 
+    weight = isinstance(val, WV)
+
     dists = []
     for obj in objects:
-        ratio = float(val) / float(obj.unitlength)
+        val = float(val)
+        ratio = val / float(obj.unitlength) if not weight else val / (float(obj.weight) if obj.weight else float("inf"))
         ratio_semi = round(ratio, 1)
         rounded_ratio = round(ratio)
 
@@ -369,5 +344,11 @@ def format_close_object_smart(val: SV) -> str:
         dists = sorted(dists, key=lambda p: p[0])
         best.extend(dists[:10])
 
-    options = best[:10]
-    return random.choice(options)
+    possible_objects = best[:10]
+    return random.choice(possible_objects)[-1]
+
+
+def format_close_object_smart(val: SV) -> str:
+    obj = get_close_object_smart(val)
+    ans = round(val / obj.unitlength, 1)
+    return f"{ans:.1f} {obj.name_plural if ans != 1 else obj.name}"
