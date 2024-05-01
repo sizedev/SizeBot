@@ -330,6 +330,44 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
 
 def format_close_object_smart(val: SV) -> str:
-    obj = get_close_object_smart(val)
-    ans = round(val / obj.unitlength, 1)
-    return f"{ans:.1f} {obj.name_plural if ans != 1 else obj.name}"
+    best_dict: dict[float, list] = {
+        1.0: [],
+        0.5: [],
+        2.0: [],
+        1.5: [],
+        3.0: [],
+        2.5: [],
+        4.0: [],
+        5.0: [],
+        6.0: []
+    }
+
+    dists = []
+    for obj in objects:
+        ratio = float(val) / float(obj.unitlength)
+        ratio_semi = round(ratio, 1)
+        rounded_ratio = round(ratio)
+
+        intness = 2.0 * (ratio - rounded_ratio)
+
+        oneness = (1.0 - ratio if ratio > 1.0 else 1.0 / ratio - 1.0)
+
+        dist = intness**2 + oneness**2
+
+        p = (dist, (oneness, intness), obj)
+        if ratio_semi in best_dict:
+            best_dict[ratio_semi].append(p)
+        else:
+            dists.append(p)
+
+    best = []
+    for at_val in best_dict.values():
+        best.extend(at_val)
+        if len(best) >= 10:
+            break
+    else:
+        dists = sorted(dists, key=lambda p: p[0])
+        best.extend(dists[:10])
+
+    options = best[:10]
+    return random.choice(options)
