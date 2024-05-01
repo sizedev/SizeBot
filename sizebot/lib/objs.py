@@ -316,10 +316,13 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
     weight = isinstance(val, WV)
 
+    val = float(val)
+
     dists = []
     for obj in objects:
-        val = float(val)
-        ratio = val / float(obj.unitlength) if not weight else val / (float(obj.weight) if obj.weight else float("inf"))
+        if weight and not obj.weight:
+            continue
+        ratio = val / float(obj.unitlength) if not weight else val / (float(obj.weight))
         ratio_semi = round(ratio, 1)
         rounded_ratio = round(ratio)
 
