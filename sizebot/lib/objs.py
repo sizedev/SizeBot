@@ -117,7 +117,7 @@ class DigiObject:
         if self.calories is not None:
             returnstr += f"{emojis.blank}has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n"
         if self.price is not None:
-            returnstr += f"{emojis.blank}costs **${Decimal(self.price * (multiplier ** 3)):,.2}**\n"
+            returnstr += f"{emojis.blank}costs **${Decimal(self.price * (multiplier ** 3)):,.2f}**\n"
         if self.weight:
             returnstr += "and weighs...\n"
             returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
@@ -140,7 +140,7 @@ class DigiObject:
         if self.calories is not None:
             statsstrings.append(f"has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories")
         if self.price is not None:
-            statsstrings.append(f"costs **${Decimal(self.price * (multiplier ** 3)):,.2}**")
+            statsstrings.append(f"costs **${Decimal(self.price * (multiplier ** 3)):,.2f}**")
         if self.weight:
             statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
 
