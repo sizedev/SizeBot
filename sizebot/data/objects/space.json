@@ -1,5 +1,18 @@
 [
     {
+        "name": "Milky Way",
+        "dimension": "d",
+        "diameter": "1e+24",
+        "weight": "2.983e+45",
+        "tags": [
+            "galaxy"
+        ],
+        "aliases": [
+            "galaxy"
+        ],
+        "note": "The largest object in the bot."
+    },
+    {
         "name": "Pluto",
         "dimension": "d",
         "diameter": "2376600",
@@ -8,15 +21,6 @@
             "planet"
         ],
         "note": "Pluto has the planet tag in SIzeBot. It's my bot, and I say it deserves it."
-    },
-    {
-        "name": "moon",
-        "dimension": "d",
-        "diameter": "3474200",
-        "weight": "7.35e+25",
-        "aliases": [
-            "Luna"
-        ]
     },
     {
         "name": "Mercury",
@@ -128,6 +132,15 @@
         ]
     },
     {
+        "name": "moon",
+        "dimension": "d",
+        "diameter": "3474200",
+        "weight": "7.35e+25",
+        "aliases": [
+            "Luna"
+        ]
+    },
+    {
         "name": "M87 Black Hole",
         "dimension": "d",
         "diameter": "38000000000000",
@@ -135,18 +148,5 @@
         "aliases": [
             "black hole"
         ]
-    },
-    {
-        "name": "Milky Way",
-        "dimension": "d",
-        "diameter": "1e+24",
-        "weight": "2.983e+45",
-        "tags": [
-            "galaxy"
-        ],
-        "aliases": [
-            "galaxy"
-        ],
-        "note": "The largest object in the bot."
     }
 ]
