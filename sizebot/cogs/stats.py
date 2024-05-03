@@ -12,6 +12,7 @@ from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.freefall import freefall
 from sizebot.lib.language import engine
 from sizebot.lib.metal import metal_value, nugget_value
+from sizebot.lib.neuron import get_neuron_embed
 from sizebot.lib.statproxy import StatProxy
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import load_or_fake
@@ -788,6 +789,22 @@ class StatsCog(commands.Cog):
         userdata1 = load_or_fake(who)
 
         embedtosend = proportions.get_keypoints_embed(userdata1, ctx.author.id)
+
+        await ctx.send(embed = embedtosend)
+
+    @commands.command(
+        usage = "[user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def neuron(self, ctx, who: MemberOrSize = None):
+        """How long would brain signals take to travel for a person?"""
+        if who is None:
+            who = ctx.message.author
+
+        userdata = load_or_fake(who)
+
+        embedtosend = get_neuron_embed(userdata)
 
         await ctx.send(embed = embedtosend)
 
