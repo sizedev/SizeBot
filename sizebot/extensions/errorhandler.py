@@ -17,6 +17,9 @@ async def setup(bot):
         # Get actual error
         err = getattr(error, "original", error)
 
+        if isinstance(err, commands.CommandNotFound):
+            return
+
         # If we got some bad arguments, use a generic argument exception error
         if isinstance(err, commands.BadUnionArgument) or isinstance(err, commands.MissingRequiredArgument) or isinstance(err, commands.BadArgument):
             err = errors.ArgumentException()
