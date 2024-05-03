@@ -793,6 +793,7 @@ class StatsCog(commands.Cog):
         await ctx.send(embed = embedtosend)
 
     @commands.command(
+        aliases = ["reaction", "reactiontime", "react"],
         usage = "[user/height]",
         category = "stats"
     )
