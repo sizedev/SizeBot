@@ -384,7 +384,7 @@ class Dimension(Decimal):
         return formatted
 
     @classmethod
-    def parse(cls, s):
+    def parse(cls, s, scale = 1):
         value, unitStr = cls.get_quantity_pair(s)
         kinds = {"SV": "size", "WV": "weight", "TV": "time"}
         kind = kinds.get(cls.__name__, cls.__name__)
@@ -393,7 +393,7 @@ class Dimension(Decimal):
         if value is None:
             value = Decimal(1)
         else:
-            value = Decimal(value)
+            value = Decimal(value) * Decimal(scale)
         unit = cls._units.get(unitStr, None)
         if unit is None:
             raise errors.InvalidSizeValue(s, kind)
@@ -401,8 +401,16 @@ class Dimension(Decimal):
         return cls(baseUnit)
 
     @classmethod
-    async def convert(cls, ctx, argument):
-        return cls.parse(argument)
+    async def convert(cls, ctx, argument: str):
+        import userdb
+        scale = 1
+        if argument.endswith("!"):
+            argument = argument.removesuffix("!")
+            try:
+                scale = userdb.load(ctx.guild.id, ctx.author.id).scale
+            except errors.UserNotFoundException:
+                pass
+        return cls.parse(argument, scale = scale)
 
     @classmethod
     def get_quantity_pair(cls, s) -> Tuple:
