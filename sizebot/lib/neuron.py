@@ -17,7 +17,7 @@ def get_speed_to_part(statbox: StatBox, part: Part) -> Decimal:
         case "arm":
             length: SV = statbox.stats_by_key["height"].value - statbox.stats_by_key["shoulderheight"].value
         case "hand":
-            length: SV = statbox.stats_by_key["height"].value - statbox.stats_by_key["shoulderheight"].value + statbox.stats_by_key["armlegnth"].value
+            length: SV = statbox.stats_by_key["height"].value - statbox.stats_by_key["shoulderheight"].value + statbox.stats_by_key["armlength"].value
         case "leg":
             length: SV = statbox.stats_by_key["height"].value - statbox.stats_by_key["waistheight"].value
         case "foot":
