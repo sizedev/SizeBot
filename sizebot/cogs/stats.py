@@ -330,7 +330,8 @@ class StatsCog(commands.Cog):
 
         if stat.tag:
             # TODO: Properly merge this
-            await ctx.send("Not supported right now, sorry!")
+            tosend = proportions.get_compare_bytag(userdata1, userdata2, stat.name, requesterID=ctx.author.id)
+            await ctx.send(**tosend)
         else:
             tosend = proportions.get_compare_stat(userdata1, userdata2, stat.name)
             if tosend is None:
