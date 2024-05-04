@@ -8,12 +8,11 @@ from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, TV, WV, AV
-from sizebot.lib.userdb import PlayerStats, DEFAULT_HEIGHT as average_height, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
+from sizebot.lib.userdb import PlayerStats, DEFAULT_HEIGHT as AVERAGE_HEIGHT, DEFAULT_WEIGHT as AVERAGE_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.shoesize import to_shoe_size
 from sizebot.lib.surface import can_walk_on_water
 
 DEFAULT_THREAD_THICKNESS = SV("0.001016")
-AVERAGE_HEIGHT = average_height
 AVERAGE_BREATHEPERHOUR = SV(720)
 AVERAGE_WALKPERHOUR = SV(5630)
 AVERAGE_RUNPERHOUR = SV(10729)
@@ -129,6 +128,7 @@ class StatDef:
         self.tags = tags or []
         self.inline = inline
         self.aliases = aliases or []
+        self.settable = value is not None or userkey is not None
 
     def load_stat(self,
                   sb: StatBox,
@@ -198,6 +198,7 @@ class Stat:
         self.definition = definition
         self.value = value
         self.is_setbyuser = is_setbyuser
+        self.is_set = value is not None or not definition.settable
 
     @property
     def key(self):
@@ -293,6 +294,24 @@ class StatBox:
         sb.set_stats(stats)
         return sb
 
+    @classmethod
+    def load_average(cls) -> StatBox:
+        average_userdata: PlayerStats = {
+            "height": str(AVERAGE_HEIGHT),
+            "weight": str(AVERAGE_WEIGHT),
+            "pawtoggle": False,
+            "furtoggle": False,
+            "nickname": "Average",
+            "id": "0",
+            "gender": None,
+            "hairlength": None,
+            "taillength": None,
+            "earheight": None,
+            "macrovision_model": None,
+            "macrovision_view": None
+        }
+        return cls.load(average_userdata)
+
     def scale(self, scale_value: Decimal) -> StatBox:
         values: dict[str, Any] = {}
         sb = StatBox()
@@ -324,6 +343,22 @@ def bool_to_icon(value):
 
 
 all_stats = [
+    StatDef("id",
+            title="ID",
+            string="{id}",
+            body="{id}",
+            is_shown=False,
+            type=int,
+            power=0,
+            userkey="id"),
+    StatDef("tag",
+            title="Tag",
+            string="{tag}",
+            body="{tag}",
+            is_shown=False,
+            type=str,
+            power=0,
+            value=lambda v: f"<@!{v['id']}>"),
     StatDef("nickname",
             title="Nickname",
             string="{nickname}",
@@ -336,6 +371,7 @@ all_stats = [
             title="Scale",
             string=lambda s: format_scale(s['scale'].value),
             body=lambda s: format_scale(s['scale'].value),
+            is_shown=False,
             type=Decimal,
             power=1,
             value=lambda v: 1),
@@ -568,7 +604,7 @@ all_stats = [
             is_shown=False,
             requires=["height"],
             type=Decimal,
-            value=lambda v: abs(calcViewAngle(v["height"], AVERAGE_HEIGHT))),
+            value=lambda v: abs(calc_view_angle(v["height"], AVERAGE_HEIGHT))),
     StatDef("averagelookdirection",
             title="Average Look Direction",
             string="...",
@@ -576,7 +612,7 @@ all_stats = [
             is_shown=False,
             requires=["height"],
             type=str,
-            value=lambda v: "up" if calcViewAngle(v["height"], AVERAGE_HEIGHT) >= 0 else "down"),
+            value=lambda v: "up" if calc_view_angle(v["height"], AVERAGE_HEIGHT) >= 0 else "down"),
     StatDef("walkperhour",
             title="Walk Per Hour",
             string="{nickname} walks **{walkperhour:,.3mu} per hour**.",
@@ -724,7 +760,7 @@ all_stats = [
             title="Drag Coefficient",
             string="{nickname}'s drag coefficient is {dragcoefficient}",
             body="{dragcoefficient}",
-            is_shown = False,
+            is_shown=False,
             requires=["averagescale"],
             type=Decimal,
             value=lambda v: AVERAGE_HUMAN_DRAG_COEFFICIENT * v["averagescale"] ** Decimal(2)),
@@ -982,12 +1018,7 @@ all_stats = [
             title="Speeds",
             string="",
             body=lambda s: "\n".join(s[f].body for f in ["walkperhour", "runperhour", "climbperhour", "crawlperhour", "swimperhour", "driveperhour", "spaceshipperhour"]),
-            is_shown = False),
-    StatDef("bases+",
-            title="Character Bases",
-            string="",
-            body=lambda s: f"{s['height'].body} | {s['weight'].body}",
-            z=-1),
+            is_shown=False),
     StatDef("pawtoggle",
             title="Paw Toggle",
             string="{nickname}'s paw toggle is {pawtoggle}.",
@@ -1044,7 +1075,23 @@ all_stats = [
             type=Decimal,
             is_shown=False,
             value=lambda v: 1 / Decimal(math.pow(10, (math.log(2) / math.log(10)) * (20 * math.log(v["scale"]) * math.log10(math.e)) / 10)),
-            aliases=["soundvolume", "volume"])
+            aliases=["soundvolume", "volume"]),
+    StatDef("macrovision_model",
+            title="Macrovision Model",
+            string="{macrovision_model}",
+            body="{macrovision_model}",
+            is_shown=False,
+            type=str,
+            power=0,
+            userkey="macrovision_model"),
+    StatDef("macrovision_view",
+            title="Macrovision View",
+            string="{macrovision_view}",
+            body="{macrovision_view}",
+            is_shown=False,
+            type=str,
+            power=0,
+            userkey="macrovision_view")
 ]
 
 
@@ -1077,22 +1124,13 @@ statmap = generate_statmap()
 taglist = generate_taglist()
 
 
-# TODO: CamelCase
-def calcViewAngle(viewer: Decimal, viewee: Decimal) -> Decimal:
-    viewer = abs(Decimal(viewer))
-    viewee = abs(Decimal(viewee))
-    if viewer.is_infinite() and viewee.is_infinite():
-        viewer = Decimal(1)
-        viewee = Decimal(1)
-    elif viewer.is_infinite():
-        viewer = Decimal(1)
-        viewee = Decimal(0)
-    elif viewee.is_infinite():
-        viewer = Decimal(0)
-        viewee = Decimal(1)
-    elif viewee == 0 and viewer == 0:
-        viewer = Decimal(1)
-        viewee = Decimal(1)
+def calc_view_angle(viewer: SV, viewee: SV) -> Decimal:
+    if viewer == viewee:
+        return Decimal(0)
+    if viewer.is_infinite() or viewee == 0:
+        return Decimal(-90)
+    if viewer == 0 or viewee.is_infinite():
+        return Decimal(90)
     viewdistance = viewer / 2
     heightdiff = viewee - viewer
     viewangle = Decimal(math.degrees(math.atan(heightdiff / viewdistance)))

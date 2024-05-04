@@ -16,9 +16,9 @@ from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects, tags, format_close_object_smart
-from sizebot.lib.stats import taglist
+from sizebot.lib.stats import StatBox, taglist
 from sizebot.lib.units import SV, WV, AV
-from sizebot.lib.userdb import load_or_fake
+from sizebot.lib.userdb import load_or_fake, DEFAULT_HEIGHT as AVERAGE_HEIGHT
 from sizebot.lib.utils import parse_many, pretty_time_delta, sentence_join
 
 
@@ -109,7 +109,7 @@ class ObjectsCog(commands.Cog):
             who = ctx.author
 
         userdata = load_or_fake(who)
-        userstats = proportions.PersonStats(userdata)
+        userstats = StatBox.load(userdata.stats).scale(userdata.scale)
 
         if isinstance(what, DigiObject):
             oc = what.relativestatsembed(userdata)
@@ -118,14 +118,13 @@ class ObjectsCog(commands.Cog):
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make one sided)
             compdata = load_or_fake(what)
         elif isinstance(what, str) and what in ["person", "man", "average", "average person", "average man", "average human", "human"]:
-            compheight = userstats.avgheightcomp
+            compheight = userstats['averagescale'].value
             compdata = load_or_fake(compheight)
         else:
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             return
-        stats = proportions.PersonComparison(userdata, compdata)
-        embedtosend = await stats.toEmbed(ctx.author.id)
-        await ctx.send(embed = embedtosend)
+        tosend = proportions.get_compare(userdata, compdata, ctx.author.id)
+        await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["look", "examine"],
@@ -149,72 +148,86 @@ class ObjectsCog(commands.Cog):
 
         # TODO: Should easter eggs be in a different place?
 
+        # Compare to registered DigiObject by string name
         if isinstance(what, DigiObject):
             la = what.relativestatssentence(userdata)
             # Easter eggs.
-            if what.name == "photograph":
-                la += "\n\n<https://www.youtube.com/watch?v=BB0DU4DoPP4>"
-                logger.log(EGG, f"{ctx.author.display_name} is jamming to Nickleback.")
-            if what.name == "enderman":
-                la += f"\n\n`{ctx.author.display_name} was slain by an Enderman.`"
-                logger.log(EGG, f"{ctx.author.display_name} was slain by an Enderman.")
+            eggs = {
+                "photograph": ("<https://www.youtube.com/watch?v=BB0DU4DoPP4>", f"{ctx.author.display_name} is jamming to Nickleback."),
+                "enderman": (f"`{ctx.author.display_name} was slain by an Enderman.`", f"{ctx.author.display_name} was slain by an Enderman.")
+            }
+            if what.name in eggs:
+                msg, logmsg = eggs[what.name]
+                la += "\n\n" + msg
+                logger.log(EGG, logmsg)
             await ctx.send(la)
             return
-        elif isinstance(what, discord.Member) or isinstance(what, SV):
-            # TODO: This whole if-chain is clogged to heck and does too many different things.
-            # The crux of this problem stems from the fact that "lookat" is supposed to be a sort of
-            # catch-all command for "basic comparison" with a variety of things, and also, easter eggs.
-            # This needs restructuring desperately.
-            compdata = load_or_fake(what)  # We should NOT use load_or_fake to normalize [SV, Member] but I'm tired rn
-            height = SV(compdata.height * userdata.viewscale)
+
+        # Member comparisons are just height comparisons
+        if isinstance(what, (discord.Member, FakePlayer)):
+            compdata = load_or_fake(what)
+            what = compdata.height
+
+        # Height comparisons
+        if isinstance(what, SV):
+            height = SV(what * userdata.viewscale)
             s = (f"{userdata.nickname} is {userdata.height:,.1{userdata.unitsystem}} tall."
-                 f" To them, {compdata.height:,.1mu} looks like **{height:,.1mu}**."
+                 f" To them, {what:,.1mu} looks like **{height:,.1mu}**."
                  f" That's about **{height.to_best_unit('o', preferName=True, spec=".1")}**.")
             await ctx.send(s)
             return
-        elif isinstance(what, str) and what.lower() in ["person", "man", "average", "average person", "average man", "average human", "human"]:
-            compheight = userdb.DEFAULT_HEIGHT
-            compdata = load_or_fake(compheight, nickname = "an average person")
-        elif isinstance(what, str) and what.lower() in ["chocolate", "stuffed animal", "stuffed beaver", "beaver"]:
-            logger.log(EGG, f"{ctx.author.display_name} found Chocolate!")
-            compdata = load_or_fake(SV.parse("11in"), nickname = "Chocolate [Stuffed Beaver]")
-            compdata.baseweight = WV.parse("4.8oz")
-            compdata.footlength = SV.parse("2.75in")
-            compdata.taillength = SV.parse("12cm")
-        elif isinstance(what, str) and what.lower() in ["me", "myself"]:
-            compdata = userdb.load(ctx.guild.id, ctx.author.id)
-        else:
-            # Easter eggs.
-            if what.lower() in ["all those chickens", "chickens"]:
-                await ctx.send("https://www.youtube.com/watch?v=NsLKQTh-Bqo")
-                logger.log(EGG, f"{ctx.author.display_name} looked at all those chickens.")
-                return
-            if what.lower() == "that horse":
-                await ctx.send("https://www.youtube.com/watch?v=Uz4bW2yOLXA")
-                logger.log(EGG, f"{ctx.author.display_name} looked at that horse (it may in fact be a moth.)")
-                return
-            if what.lower() == "my horse":
-                await ctx.send("https://www.youtube.com/watch?v=o7cCJqya7wc")
-                logger.log(EGG, f"{ctx.author.display_name} looked at my horse (my horse is amazing.)")
-                return
-            if what.lower() == "cake":
-                await ctx.send("The cake is a lie.")
-                logger.log(EGG, f"{ctx.author.display_name} realized the cake was lie.")
-                return
-            if what.lower() == "snout":
-                await ctx.send("https://www.youtube.com/watch?v=k2mFvwDTTt0")
-                logger.log(EGG, f"{ctx.author.display_name} took a closer look at that snout.")
-                return
-            await ctx.send(
-                f"Sorry, I don't know what `{what}` is.\n"
-                f"If this is an object or alias you'd like added to SizeBot, "
-                f"use `{ctx.prefix}suggestobject` to suggest it "
-                f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
-            )
+
+        # Easter Eggs
+        eggs = {
+            "all those chickens": ("https://www.youtube.com/watch?v=NsLKQTh-Bqo", f"{ctx.author.display_name} looked at all those chickens."),
+            "chickens": ("https://www.youtube.com/watch?v=NsLKQTh-Bqo", f"{ctx.author.display_name} looked at all those chickens."),
+            "that horse": ("https://www.youtube.com/watch?v=Uz4bW2yOLXA", f"{ctx.author.display_name} looked at that horse (it may in fact be a moth.)"),
+            "my horse": ("https://www.youtube.com/watch?v=o7cCJqya7wc", f"{ctx.author.display_name} looked at my horse (my horse is amazing.)"),
+            "cake": ("The cake is a lie.", f"{ctx.author.display_name} realized the cake was lie."),
+            "snout": ("https://www.youtube.com/watch?v=k2mFvwDTTt0", f"{ctx.author.display_name} took a closer look at that snout."),
+        }
+        if what in eggs:
+            msg, logmsg = eggs[what]
+            await ctx.send(msg)
+            logger.log(EGG, logmsg)
             return
-        stats = proportions.PersonComparison(userdata, compdata)
-        embedtosend = await stats.toSimpleEmbed(requesterID = ctx.message.author.id)
-        await ctx.send(embed = embedtosend)
+
+        average_data = load_or_fake(AVERAGE_HEIGHT, nickname = "an average person")
+        choc_data = load_or_fake(SV.parse("11in"), nickname = "Chocolate [Stuffed Beaver]")
+        choc_data.baseweight = WV.parse("4.8oz")
+        choc_data.footlength = SV.parse("2.75in")
+        choc_data.taillength = SV.parse("12cm")
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+
+        # Comparison command
+        comp_keys = {
+            "person": average_data,
+            "man": average_data,
+            "average": average_data,
+            "average person": average_data,
+            "average man": average_data,
+            "average human": average_data,
+            "human": average_data,
+            "chocolate": choc_data,
+            "stuffed animal": choc_data,
+            "stuffed beaver": choc_data,
+            "beaver": choc_data,
+            "me": userdata,
+            "myself": userdata
+        }
+        if what in comp_keys:
+            compdata = comp_keys[what]
+            tosend = proportions.get_compare_simple(userdata, compdata, ctx.message.author.id)
+            await ctx.send(**tosend)
+            return
+
+        # Not found
+        await ctx.send(
+            f"Sorry, I don't know what `{what}` is.\n"
+            f"If this is an object or alias you'd like added to SizeBot, "
+            f"use `{ctx.prefix}suggestobject` to suggest it "
+            f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
+        )
 
     @commands.command(
         aliases = ["objectstats"],
@@ -375,7 +388,7 @@ class ObjectsCog(commands.Cog):
             who = ctx.author
 
         userdata = userdb.load_or_fake(who)
-        stats = proportions.PersonStats(userdata)
+        stats = StatBox.load(userdata.stats).scale(userdata.scale)
         scale = userdata.scale
 
         if land == "random":
@@ -390,20 +403,20 @@ class ObjectsCog(commands.Cog):
         fingertip_name = "paw bean" if userdata.pawtoggle else "fingertip"
 
         land_area = AV(land.width * land.height)
-        area = AV(stats.height * stats.width)
+        area = AV(stats['height'].value * stats['width'].value)
         lay_percentage = area / land_area
-        foot_area = AV(stats.footlength * stats.footwidth)
-        finger_area = AV(stats.fingertiplength * stats.fingertiplength)
+        foot_area = AV(stats['footlength'].value * stats['footwidth'].value)
+        finger_area = AV(stats['fingertiplength'].value * stats['fingertiplength'].value)
         foot_percentage = foot_area / land_area
         finger_percentage = finger_area / land_area
 
         landout = (f"To {userdata.nickname}, {land.name} looks **{land_width:,.1mu}** wide and **{land_length:,.1mu}** long. ({land_area:,.1mu}) The highest peak looks **{land_height:,.1mu}** tall. ({land.note})\n\n"
                    f"Laying down, {userdata.nickname} would cover **{lay_percentage:,.2}%** of the land.\n"
-                   f"{emojis.blank}({stats.height:,.1mu} tall and {stats.width:,.1mu} wide, or {area:,.1mu})\n"
+                   f"{emojis.blank}({stats['height'].value:,.1mu} tall and {stats['width'].value:,.1mu} wide, or {area:,.1mu})\n"
                    f"{userdata.nickname}'s {userdata.footname.lower()} would cover **{foot_percentage:,.2}%** of the land.\n"
-                   f"{emojis.blank}({stats.footlength:,.1mu} long and {stats.footwidth:,.1mu} wide, or {foot_area:,.1mu})\n"
+                   f"{emojis.blank}({stats['footlength'].value:,.1mu} long and {stats['footwidth'].value:,.1mu} wide, or {foot_area:,.1mu})\n"
                    f"{userdata.nickname}'s {fingertip_name} would cover **{finger_percentage:,.2}%** of the land.\n"
-                   f"{emojis.blank}({stats.fingertiplength:,.1mu} long and wide, or {finger_area:,.1mu})")
+                   f"{emojis.blank}({stats['fingertiplength'].value:,.1mu} long and wide, or {finger_area:,.1mu})")
 
         embed = discord.Embed(
             title = f"{userdata.nickname} on {land.name}",

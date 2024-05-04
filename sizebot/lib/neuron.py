@@ -2,6 +2,7 @@ from typing import Literal, get_args
 
 from discord import Embed
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.proportions import EmbedToSend
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV
 from sizebot.lib.userdb import User
@@ -26,11 +27,11 @@ def get_speed_to_part(statbox: StatBox, part: Part) -> Decimal:
     return Decimal(length / NEURON_SPEED)
 
 
-def get_neuron_embed(userdata: User) -> Embed:
+def get_neuron_embed(userdata: User) -> EmbedToSend:
     statbox = StatBox.load(userdata.stats).scale(userdata.scale)
-    e = Embed(title = f"Neuron Travel Distance for {statbox.stats_by_key['nickname'].value}",
-              description = f"{statbox.stats_by_key['nickname'].value} is {statbox.stats_by_key['height'].value:.1mu} tall.")
+    embed = Embed(title = f"Neuron Travel Distance for {statbox.stats_by_key['nickname'].value}",
+                  description = f"{statbox.stats_by_key['nickname'].value} is {statbox.stats_by_key['height'].value:.1mu} tall.")
     for part in get_args(Part):
-        e.add_field(name = part.title(), value = pretty_time_delta(get_speed_to_part(statbox, part), millisecondAccuracy = True, roundeventually = True))
+        embed.add_field(name = part.title(), value = pretty_time_delta(get_speed_to_part(statbox, part), millisecondAccuracy = True, roundeventually = True))
 
-    return e
+    return {"embed": embed}

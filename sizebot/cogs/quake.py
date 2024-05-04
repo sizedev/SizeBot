@@ -3,12 +3,12 @@ import typing
 from discord import Embed
 import discord
 from discord.ext import commands
-from sizebot.lib import proportions
 from sizebot.lib import userdb
 
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.quake import breath_joules, heartbeat_joules, joules_to_mag, jump_joules, mag_to_name, mag_to_radius, poke_joules, step_joules, stomp_joules, type_joules
+from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV
 from sizebot.lib.userdb import load_or_fake
 from sizebot.lib.errors import UserMessedUpException
@@ -132,9 +132,8 @@ class QuakeCog(commands.Cog):
     async def quakecompare(self, ctx, user: typing.Union[discord.Member, FakePlayer, SV], quake_type: typing.Optional[QuakeType] = "step"):
         """See what quakes would be caused by someone else's steps.\n#ACC#"""
         self_user = load_or_fake(ctx.author)
-        userstats = proportions.PersonStats(self_user)
         userdata = load_or_fake(user)
-        userdata.scale *= userstats.stats.values["viewscale"]
+        userdata.scale *= userdata.viewscale
         e = quake_embed(userdata, quake_type, scale_rad = userdata.viewscale)
         e.title = e.title + f" as seen by {self_user.nickname}"
         e.description = f"To {self_user.nickname}, " + e.description
@@ -149,8 +148,8 @@ class QuakeCog(commands.Cog):
         if user is None:
             user = ctx.author
         userdata = load_or_fake(user)
-        stats = proportions.PersonStats(userdata)
-        steps: int = int(dist / stats.walksteplength)
+        stats = StatBox.load(userdata.stats).scale(userdata.scale)
+        steps: int = int(dist / stats['walksteplength'].value)
 
         if steps < 1:
             await ctx.send("You don't even have to take a single step to reach that distance!")

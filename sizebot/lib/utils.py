@@ -563,3 +563,7 @@ def truthy(s: str):
         return True
     elif lowered in ('no', 'n', 'false', 'f', '0', 'disable', 'off'):
         return False
+
+
+def join_unique(items: list[str], *, sep: str) -> str:
+    return sep.join(set(items))

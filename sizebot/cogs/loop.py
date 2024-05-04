@@ -1,5 +1,6 @@
 import logging
 import typing
+from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV, TV
 
 from discord.ext import commands
@@ -10,7 +11,6 @@ from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 import sizebot.lib.language as lang
-from sizebot.lib.proportions import PersonStats
 from sizebot.lib.utils import pretty_time_delta
 
 logger = logging.getLogger("sizebot")
@@ -28,10 +28,11 @@ def calc_move_dist(userdata: userdb.User):
     if stopped:
         elapsed_seconds = stoptime
 
-    stats = PersonStats(userdata)
-    speed = getattr(stats, f"{movetype}perhour", None)
-    if speed is None:
-        raise ValueError(f"{movetype}perhour is not an attribute on a PersonStats.")
+    stats = StatBox.load(userdata.stats).scale(userdata.scale)
+    try:
+        speed = stats[f"{movetype}perhour"]
+    except KeyError:
+        raise ValueError(f"{movetype}perhour is not a valid stat.")
 
     persecond = SV(speed / 60 / 60)
     distance = SV(Decimal(elapsed_seconds) * persecond)
