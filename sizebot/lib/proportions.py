@@ -21,62 +21,6 @@ logger = logging.getLogger("sizebot")
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
 
-def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
-    changestyle = changestyle.lower()
-    if changestyle in ["add", "+", "a", "plus"]:
-        changestyle = "add"
-    if changestyle in ["subtract", "sub", "-", "minus"]:
-        changestyle = "subtract"
-    if changestyle in ["power", "exp", "pow", "exponent", "^", "**"]:
-        changestyle = "power"
-    if changestyle in ["multiply", "mult", "m", "x", "times", "*"]:
-        changestyle = "multiply"
-    if changestyle in ["divide", "d", "/", "div"]:
-        changestyle = "divide"
-    if changestyle in ["percent", "per", "perc", "%"]:
-        changestyle = "percent"
-
-    if changestyle not in ["add", "subtract", "multiply", "divide", "power", "percent"]:
-        raise errors.ChangeMethodInvalidException(changestyle)
-
-    amountSV = None
-    amountVal = None
-    newamount = None
-
-    if changestyle in ["add", "subtract"]:
-        amountSV = SV.parse(amount)
-    elif changestyle in ["multiply", "divide", "power"]:
-        amountVal = Decimal(amount)
-        if amountVal == 1:
-            raise errors.ValueIsOneException
-        if amountVal == 0:
-            raise errors.ValueIsZeroException
-    elif changestyle in ["percent"]:
-        amountVal = Decimal(amount)
-        if amountVal == 0:
-            raise errors.ValueIsZeroException
-
-    userdata = userdb.load(guildid, userid)
-
-    if changestyle == "add":
-        newamount = userdata.height + amountSV
-    elif changestyle == "subtract":
-        newamount = userdata.height - amountSV
-    elif changestyle == "multiply":
-        newamount = userdata.height * amountVal
-    elif changestyle == "divide":
-        newamount = userdata.height / amountVal
-    elif changestyle == "power":
-        userdata = userdata ** amountVal
-    elif changestyle == "percent":
-        newamount = userdata.height * (amountVal / 100)
-
-    if changestyle != "power":
-        userdata.height = newamount
-
-    userdb.save(userdata)
-
-
 class EmbedToSend(TypedDict):
     embed: str
 

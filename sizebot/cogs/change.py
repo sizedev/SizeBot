@@ -1,13 +1,14 @@
 import importlib.resources as pkg_resources
 import logging
 import random
+from sizebot.lib import errors
 from sizebot.lib.digidecimal import Decimal
 from typing import Union
 
 from discord.ext import commands, tasks
 
 import sizebot.data
-from sizebot.lib import changes, proportions, userdb, nickmanager
+from sizebot.lib import changes, userdb, nickmanager
 from sizebot.lib.diff import Diff, LimitedRate
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.errors import ChangeMethodInvalidException
@@ -131,7 +132,7 @@ class ChangeCog(commands.Cog):
 
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
-        proportions.change_user(guildid, userid, "multiply", randmult)
+        change_user(guildid, userid, "multiply", randmult)
         await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
@@ -156,7 +157,7 @@ class ChangeCog(commands.Cog):
 
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
-        proportions.change_user(guildid, ctx.author.id, "divide", randmult)
+        change_user(guildid, ctx.author.id, "divide", randmult)
         await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
@@ -244,6 +245,62 @@ class ChangeCog(commands.Cog):
             await changes.apply(self.bot)
         except Exception as e:
             logger.error(e)
+
+
+def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
+    changestyle = changestyle.lower()
+    if changestyle in ["add", "+", "a", "plus"]:
+        changestyle = "add"
+    if changestyle in ["subtract", "sub", "-", "minus"]:
+        changestyle = "subtract"
+    if changestyle in ["power", "exp", "pow", "exponent", "^", "**"]:
+        changestyle = "power"
+    if changestyle in ["multiply", "mult", "m", "x", "times", "*"]:
+        changestyle = "multiply"
+    if changestyle in ["divide", "d", "/", "div"]:
+        changestyle = "divide"
+    if changestyle in ["percent", "per", "perc", "%"]:
+        changestyle = "percent"
+
+    if changestyle not in ["add", "subtract", "multiply", "divide", "power", "percent"]:
+        raise errors.ChangeMethodInvalidException(changestyle)
+
+    amountSV = None
+    amountVal = None
+    newamount = None
+
+    if changestyle in ["add", "subtract"]:
+        amountSV = SV.parse(amount)
+    elif changestyle in ["multiply", "divide", "power"]:
+        amountVal = Decimal(amount)
+        if amountVal == 1:
+            raise errors.ValueIsOneException
+        if amountVal == 0:
+            raise errors.ValueIsZeroException
+    elif changestyle in ["percent"]:
+        amountVal = Decimal(amount)
+        if amountVal == 0:
+            raise errors.ValueIsZeroException
+
+    userdata = userdb.load(guildid, userid)
+
+    if changestyle == "add":
+        newamount = userdata.height + amountSV
+    elif changestyle == "subtract":
+        newamount = userdata.height - amountSV
+    elif changestyle == "multiply":
+        newamount = userdata.height * amountVal
+    elif changestyle == "divide":
+        newamount = userdata.height / amountVal
+    elif changestyle == "power":
+        userdata = userdata ** amountVal
+    elif changestyle == "percent":
+        newamount = userdata.height * (amountVal / 100)
+
+    if changestyle != "power":
+        userdata.height = newamount
+
+    userdb.save(userdata)
 
 
 async def setup(bot):
