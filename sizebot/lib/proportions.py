@@ -11,10 +11,10 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.speed import speedcalc
-from sizebot.lib.units import SV, TV
+from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import User
-from sizebot.lib.utils import join_unique, minmax
-from sizebot.lib.stats import calc_view_angle, statmap, StatBox
+from sizebot.lib.utils import minmax
+from sizebot.lib.stats import Stat, calc_view_angle, statmap, StatBox
 
 logger = logging.getLogger("sizebot")
 
@@ -85,6 +85,12 @@ class StrToSend(TypedDict):
     content: str
 
 
+class EmbedField(TypedDict):
+    name: str
+    value: str
+    inline: bool
+
+
 def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
     _viewer, _viewed = minmax(userdata1, userdata2)
 
@@ -97,9 +103,6 @@ def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> Embe
     else:
         multiplier = viewed['height'].value / viewer['height'].value
 
-    footlabel = viewed['footname'].value
-    hairlabel = viewed['hairname'].value
-
     requestertag = f"<@!{requesterID}>"
     embed = Embed(
         title=f"Speed/Distance Comparison of {viewed['nickname'].value} and {viewer['nickname'].value}",
@@ -107,29 +110,16 @@ def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> Embe
         color=colors.purple
     )
     embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
-    embed.add_field(name=f"**{viewer['nickname'].value}** Speeds", value=(
-        f"{emojis.walk} **Walk Speed:** {viewer['walkperhour'].value:,.3mu} per hour\n"
-        f"{emojis.run} **Run Speed:** {viewer['runperhour'].value:,.3mu} per hour\n"
-        f"{emojis.climb} **Climb Speed:** {viewer['climbperhour'].value:,.3mu} per hour\n"
-        f"{emojis.crawl} **Crawl Speed:** {viewer['crawlperhour'].value:,.3mu} per hour\n"
-        f"{emojis.swim} **Swim Speed:** {viewer['swimperhour'].value:,.3mu} per hour"), inline=False)
-    embed.add_field(name="Height", value=(speedcalc(viewer, viewed['height'].value)), inline=True)
-    embed.add_field(name=f"{footlabel} Length", value=(speedcalc(viewer, viewed['footlength'].value, foot = True)), inline=True)
-    embed.add_field(name=f"{footlabel} Width", value=(speedcalc(viewer, viewed['footwidth'].value)), inline=True)
-    embed.add_field(name="Toe Height", value=(speedcalc(viewer, viewed['toeheight'].value)), inline=True)
-    embed.add_field(name="Shoeprint Depth", value=(speedcalc(viewer, viewed['shoeprintdepth'].value)), inline=True)
-    embed.add_field(name="Pointer Finger Length", value=(speedcalc(viewer, viewed['pointerlength'].value)), inline=True)
-    embed.add_field(name="Thumb Width", value=(speedcalc(viewer, viewed['thumbwidth'].value)), inline=True)
-    embed.add_field(name="Nail Thickness", value=(speedcalc(viewer, viewed['nailthickness'].value)), inline=True)
-    embed.add_field(name="Fingerprint Depth", value=(speedcalc(viewer, viewed['fingerprintdepth'].value)), inline=True)
-    if viewed['hairlength'].value:
-        embed.add_field(name=f"{hairlabel} Length", value=(speedcalc(viewed['hairlength'].value)), inline=True)
-    if viewed['taillength'].value:
-        embed.add_field(name="Tail Length", value=(speedcalc(viewer, viewed['taillength'].value)), inline=True)
-    if viewed['earheight'].value:
-        embed.add_field(name="Ear Height", value=(speedcalc(viewer, viewed['earheight'].value)), inline=True)
-    embed.add_field(name=f"{hairlabel} Width", value=(speedcalc(viewer, viewed['hairwidth'].value)), inline=True)
-    embed.add_field(name="Eye Width", value=(speedcalc(viewer, viewed['eyewidth'].value)), inline=True)
+
+    embed.add_field(name=f"**{viewer["nickname"].value}** Speeds", value=viewer.stats_by_key["simplespeeds+"].body, inline=False)
+
+    embed.add_field(name="Height", value=speedcalc(viewer, viewed["height"].value, include_relative = True), inline=True)  # hardcode height because it's weird
+    embed.add_field(name="Foot Length", value=speedcalc(viewer, viewed["footlength"].value, include_relative = True, foot = True), inline=True)  # hardcode height because it's weird
+
+    for stat in viewed.stats:
+        if stat.is_shown and stat.value is not None and isinstance(stat.value, SV) and stat.key != "terminalvelocity":
+            embed.add_field(name = stat.title, value=(speedcalc(viewer, stat.value, include_relative = True, foot = stat.key == "footlength")))
+
     embed.set_footer(text=(f"{viewed['nickname'].value} is {multiplier:,.3}x taller than {viewer['nickname'].value}."))
 
     return {"embed": embed}
@@ -190,21 +180,11 @@ def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSe
         # TODO: This feels awkward
         small_viewby_big = small.scale(1)
         big_viewby_small = big.scale(1)
-        multiplier = Decimal(1)
     else:
         small_viewby_big = small.scale(big['viewscale'].value)
         big_viewby_small = big.scale(small['viewscale'].value)
-        multiplier = big['height'].value / small['height'].value
-
-    footname = join_unique([small['footname'].value, big['footname'].value], sep="/")
-    hairname = join_unique([small['hairname'].value, big['hairname'].value], sep="/")
-
-    viewangle = calc_view_angle(small['height'].value, big['height'].value)
-    lookangle = abs(viewangle)
-    lookdirection = "up" if viewangle >= 0 else "down"
 
     requestertag = f"<@!{requesterID}>"
-
     embed = Embed(
         title=f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link}",
         description=f"*Requested by {requestertag}*",
@@ -216,87 +196,13 @@ def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSe
     if requesterID == small['id'].value:
         embed.color = colors.red
     embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
-    embed.add_field(name=f"{emojis.comparebigcenter} **{big['nickname'].value}**", value=(
-        f"{emojis.blank}{emojis.blank} **Height:** {big['height'].value:,.3mu}\n"
-        f"{emojis.blank}{emojis.blank} **Weight:** {big['weight'].value:,.3mu}\n"), inline=True)
-    embed.add_field(name=f"{emojis.comparesmallcenter} **{small['nickname'].value}**", value=(
-        f"{emojis.blank}{emojis.blank} **Height:** {small['height'].value:,.3mu}\n"
-        f"{emojis.blank}{emojis.blank} **Weight:** {small['weight'].value:,.3mu}\n"), inline=True)
     embed.add_field(value=(
         f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{big['nickname'].value}** looks to {emojis.comparesmallcenter} **{small['nickname'].value}**.\n"
         f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{small['nickname'].value}** looks to {emojis.comparebigcenter} **{big['nickname'].value}**."), inline=False)
-    embed.add_field(name="Height", value=(
-        f"{emojis.comparebig}{big_viewby_small['height'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['height'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Weight", value=(
-        f"{emojis.comparebig}{big_viewby_small['weight'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['weight'].value:,.3mu}"), inline=True)
-    embed.add_field(name=f"{footname} Length", value=(
-        f"{emojis.comparebig}{big_viewby_small['footlength'].value:,.3mu}\n({big_viewby_small['shoesize'].value})\n"
-        f"{emojis.comparesmall}{small_viewby_big['footlength'].value:,.3mu}\n({small_viewby_big['shoesize'].value})"), inline=True)
-    embed.add_field(name=f"{footname} Width", value=(
-        f"{emojis.comparebig}{big_viewby_small['footwidth'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['footwidth'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Toe Height", value=(
-        f"{emojis.comparebig}{big_viewby_small['toeheight'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['toeheight'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Shoeprint Depth", value=(
-        f"{emojis.comparebig}{big_viewby_small['shoeprintdepth'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['shoeprintdepth'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Pointer Finger Length", value=(
-        f"{emojis.comparebig}{big_viewby_small['pointerlength'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['pointerlength'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Thumb Width", value=(
-        f"{emojis.comparebig}{big_viewby_small['thumbwidth'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['thumbwidth'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Nail Thickness", value=(
-        f"{emojis.comparebig}{big_viewby_small['nailthickness'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['nailthickness'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Fingerprint Depth", value=(
-        f"{emojis.comparebig}{big_viewby_small['fingerprintdepth'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['fingerprintdepth'].value:,.3mu}"), inline=True)
-    if big_viewby_small['hairlength'].value or small_viewby_big['hairlength'].value:
-        hairfield = ""
-        if big_viewby_small['hairlength'].value:
-            hairfield += f"{emojis.comparebig}{big_viewby_small['hairlength'].value:,.3mu}\n"
-        if small_viewby_big['hairlength'].value:
-            hairfield += f"{emojis.comparesmall}{small_viewby_big['hairlength'].value:,.3mu}\n"
-        hairfield = hairfield.strip()
-        embed.add_field(name=f"{hairname} Length", value=hairfield, inline=True)
-    if big_viewby_small['taillength'].value or small_viewby_big['taillength'].value:
-        tailfield = ""
-        if big_viewby_small['taillength'].value:
-            tailfield += f"{emojis.comparebig}{big_viewby_small['taillength'].value:,.3mu}\n"
-        if small_viewby_big['taillength'].value:
-            tailfield += f"{emojis.comparesmall}{small_viewby_big['taillength'].value:,.3mu}\n"
-        tailfield = tailfield.strip()
-        embed.add_field(name="Tail Length", value=tailfield, inline=True)
-    if big_viewby_small['earheight'].value or small_viewby_big['earheight'].value:
-        earfield = ""
-        if big_viewby_small['earheight'].value:
-            earfield += f"{emojis.comparebig}{big_viewby_small['earheight'].value:,.3mu}\n"
-        if small_viewby_big['earheight'].value:
-            earfield += f"{emojis.comparesmall}{small_viewby_big['earheight'].value:,.3mu}\n"
-        earfield = earfield.strip()
-        embed.add_field(name="Ear Height", value=earfield, inline=True)
-    embed.add_field(name=f"{hairname} Width", value=(
-        f"{emojis.comparebig}{big_viewby_small['hairwidth'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['hairwidth'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Eye Width", value=(
-        f"{emojis.comparebig}{big_viewby_small['eyewidth'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['eyewidth'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Jump Height", value=(
-        f"{emojis.comparebig}{big_viewby_small['jumpheight'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['jumpheight'].value:,.3mu}"), inline=True)
-    embed.add_field(name="Lift/Carry Strength", value=(
-        f"{emojis.comparebig}{big_viewby_small['liftstrength'].value:,.3mu}\n"
-        f"{emojis.comparesmall}{small_viewby_big['liftstrength'].value:,.3mu}"), inline=True)
-    embed.add_field(name=f"{emojis.comparebig} Speeds", value=big_viewby_small['simplespeeds+'].body, inline=False)
-    embed.add_field(name=f"{emojis.comparesmall} Speeds", value=small_viewby_big['simplespeeds+'].body, inline=False)
-    embed.set_footer(text=(
-        f"{small['nickname'].value} would have to look {lookdirection} {lookangle:.0f}° to look at {big['nickname'].value}'s face.\n"
-        f"{big['nickname'].value} is {multiplier:,.3}x taller than {small['nickname'].value}.\n"
-        f"{big['nickname'].value} would need {small_viewby_big['visibility'].value} to see {small['nickname'].value}."))
+
+    for small_stat, big_stat in zip(small_viewby_big, big_viewby_small):
+        if (small_stat.is_shown or big_stat.is_shown) and (small_stat.body or big_stat.body):
+            embed.add_field(**get_compare_field(small, big, small_stat, big_stat))
 
     return {"embed": embed}
 
@@ -356,23 +262,6 @@ def get_compare_simple(userdata1: User, userdata2: User, requesterID: int) -> Em
 
 
 def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: int) -> EmbedToSend:
-    def get_single_body(key: str) -> str:
-        try:
-            mapped_key = statmap[key]
-        except KeyError:
-            return None
-
-        bigstat = big_viewby_small[mapped_key]
-        smallstat = small_viewby_big[mapped_key]
-
-        bigstattext = bigstat.body if bigstat.body else f"{big['nickname'].value} doesn't have that stat."
-        smallstattext = smallstat.body if smallstat.body else f"{small['nickname'].value} doesn't have that stat."
-
-        return_stat = (f"{emojis.comparebig}{bigstattext}\n"
-                       f"{emojis.comparesmall}{smallstattext}")
-
-        return return_stat
-
     stats1 = StatBox.load(userdata1.stats).scale(userdata1.scale)
     stats2 = StatBox.load(userdata2.stats).scale(userdata2.scale)
     small, big = sorted([stats1, stats2], key=lambda s: s['height'].value)
@@ -406,9 +295,10 @@ def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: i
         f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{big['nickname'].value}** looks to {emojis.comparesmallcenter} **{small['nickname'].value}**.\n"
         f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{small['nickname'].value}** looks to {emojis.comparebigcenter} **{big['nickname'].value}**."), inline=False)
 
-    for sstat, bstat in zip(small_viewby_big, big_viewby_small):
-        if tag in sstat.tags and (sstat.body or bstat.body):
-            embed.add_field(name = sstat.title, value = get_single_body(sstat.key), inline = sstat.definition.inline)
+    # TODO: Zip only works if we can guarantee each statbox has the same stats in the same order.
+    for small_stat, big_stat in zip(small_viewby_big, big_viewby_small):
+        if tag in small_stat.tags and (small_stat.body or big_stat.body):
+            embed.add_field(**get_compare_field(small, big, small_stat, big_stat))
 
     embed.set_footer(text=(
         f"{small['nickname'].value} would have to look {lookdirection} {lookangle:.0f}° to look at {big['nickname'].value}'s face.\n"
@@ -435,16 +325,17 @@ def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | 
     except KeyError:
         return None
 
-    smallstat = small_viewby_big[mapped_key]
-    bigstat = big_viewby_small[mapped_key]
+    small_stat = small_viewby_big[mapped_key]
+    big_stat = big_viewby_small[mapped_key]
 
-    bigstattext = bigstat.body if bigstat.value is not None else f"{big['nickname'].value} doesn't have that stat."
-    smallstattext = smallstat.body if smallstat.value is not None else f"{small['nickname'].value} doesn't have that stat."
+    body = get_compare_body(small, big, small_stat, big_stat)
+    if body is None:
+        return None
 
     msg = (
-        f"Comparing `{key}` between {emojis.comparebigcenter}**{big['nickname'].value}** and **{emojis.comparesmallcenter}{small['nickname'].value}**:\n"
-        f"{emojis.comparebig}{bigstattext}\n"
-        f"{emojis.comparesmall}{smallstattext}")
+        f"Comparing `{key}` between {emojis.comparebigcenter}**{big['nickname'].value}** and **{emojis.comparesmallcenter}{small['nickname'].value}**:"
+        f"\n{body}"
+    )
 
     return {"content": msg}
 
@@ -496,7 +387,10 @@ def get_stat(userdata: User, key: str) -> StrToSend | None:
         mapped_key = statmap[key]
     except KeyError:
         return None
-    msg = stats[mapped_key].string
+    stat = stats[mapped_key]
+    msg = f"{stat.string}"
+    if isinstance(stat.value, (SV, WV)):
+        msg += f"\n*That\'s about {format_close_object_smart(stat.value)}.*"
     return {"content": msg}
 
 
@@ -555,3 +449,20 @@ def get_keypoints_embed(userdata: User, requesterID: int = None) -> EmbedToSend:
             embed.add_field(name = stat.title, value = f"{stat.body}\n*~{lookslike}*")
 
     return {"embed": embed}
+
+
+def get_compare_field(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> EmbedField:
+    embedfield = {
+        "name": small_stat.title,
+        "value": get_compare_body(small, big, small_stat, big_stat),
+        "inline": small_stat.definition.inline
+    }
+
+    return embedfield
+
+
+def get_compare_body(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> str:
+    return (
+        emojis.comparebig + (big_stat.body or f"{small['nickname'].value} doesn't have that stat.") + "\n"
+        + emojis.comparesmall + (small_stat.body or f"{big['nickname'].value} doesn't have that stat.")
+    )

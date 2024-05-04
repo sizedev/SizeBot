@@ -445,12 +445,12 @@ class StatsCog(commands.Cog):
 
         desc = f"To everyone else, {userdata.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
 
-        e = discord.Embed(
+        embed = discord.Embed(
             title = f"{userdata.nickname}'s {length:,.3mu} to the world",
             description = desc
         )
 
-        await ctx.send(embed = e)
+        await ctx.send(embed = embed)
 
     @commands.command(
         usage = "<user or length>",
@@ -479,10 +479,10 @@ class StatsCog(commands.Cog):
         else:
             desc = f"To travel from **{userdata.nickname}**'s head to their {engine.plural(userdata.footname).lower()}, it would take sound **{printtime}**."
 
-        embedtosend = discord.Embed(title = f"Sound Travel Time in {traveldist:,.3mu}",
+        embed = discord.Embed(title = f"Sound Travel Time in {traveldist:,.3mu}",
                                     description = desc)
 
-        await ctx.send(embed = embedtosend)
+        await ctx.send(embed = embed)
 
     @commands.command(
         usage = "<user or length>",
@@ -511,10 +511,10 @@ class StatsCog(commands.Cog):
         else:
             desc = f"To travel from **{userdata.nickname}**'s head to their {engine.plural(userdata.footname).lower()}, it would take light **{printtime}**."
 
-        embedtosend = discord.Embed(title = f"Light Travel Time in {traveldist:,.3mu}",
-                                    description = desc)
+        embed = discord.Embed(title = f"Light Travel Time in {traveldist:,.3mu}",
+                                      description = desc)
 
-        await ctx.send(embed = embedtosend)
+        await ctx.send(embed = embed)
 
     @commands.command(
         usage = "<distance>"
@@ -743,9 +743,9 @@ class StatsCog(commands.Cog):
 
         userdata1 = load_or_fake(who)
 
-        embedtosend = proportions.get_keypoints_embed(userdata1, ctx.author.id)
+        tosend = proportions.get_keypoints_embed(userdata1, ctx.author.id)
 
-        await ctx.send(embed = embedtosend)
+        await ctx.send(**tosend)
 
     @commands.command(
         aliases = ["reaction", "reactiontime", "react"],
@@ -760,9 +760,9 @@ class StatsCog(commands.Cog):
 
         userdata = load_or_fake(who)
 
-        embedtosend = get_neuron_embed(userdata)
+        tosend = get_neuron_embed(userdata)
 
-        await ctx.send(embed = embedtosend)
+        await ctx.send(**tosend)
 
 
 async def setup(bot):
