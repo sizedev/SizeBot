@@ -13,6 +13,7 @@ from sizebot.lib.freefall import freefall
 from sizebot.lib.language import engine
 from sizebot.lib.metal import metal_value, nugget_value
 from sizebot.lib.neuron import get_neuron_embed
+from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.statproxy import StatProxy
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import load_or_fake
@@ -443,7 +444,7 @@ class StatsCog(commands.Cog):
 
         newlength = SV(length / userdata.viewscale)
 
-        desc = f"To everyone else, {userdata.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**"
+        desc = f"To everyone else, {userdata.nickname}'s {length:,.3mu} would look to be **{newlength:,.3mu}.**, or about {format_close_object_smart(newlength)}."
 
         embed = discord.Embed(
             title = f"{userdata.nickname}'s {length:,.3mu} to the world",
