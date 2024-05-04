@@ -423,6 +423,22 @@
         ]
     },
     {
+        "name": "chocolate bar",
+        "dimension": "l",
+        "length": "0.136398",
+        "width": "0.054102",
+        "depth": "0.00635",
+        "calories": "214",
+        "price": "1.99",
+        "weight": "39",
+        "tags": [
+            "food"
+        ],
+        "aliases": [
+            "chocolate"
+        ]
+    },
+    {
         "name": "Hot Pocket",
         "dimension": "l",
         "length": "0.1397",

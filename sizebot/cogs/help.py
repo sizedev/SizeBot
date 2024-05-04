@@ -36,7 +36,9 @@ logger = logging.getLogger("sizebot")
 # aliases = []
 
 alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
+accuracy_warning = f"{emojis.warning} **This command may not be entirely accurate.** It makes assumptions and guesses that have a decent amount of wiggle room, even because the information isn't known or because the calculations are meant to be for fiction only. Don't take these results at face value!"
 stats_string = utils.sentence_join([f"`{v}`" for v in statmap.keys()])
+
 
 async def post_report(report_type, message, report_text):
     async with aiohttp.ClientSession() as session:
@@ -201,7 +203,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
         if "guild_only" in repr(cmd.checks):
             description += "*This command can only be run in a server, and not in DMs.*\n"
-        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", stats_string).replace("#ALPHA#", alpha_warning)
+        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", stats_string).replace("#ALPHA#", alpha_warning).replace("#ACC#", accuracy_warning)
 
         embed = Embed(
             title=signature,
@@ -249,11 +251,11 @@ class HelpCog(commands.Cog):
         embed.set_image(url = "https://cdn.discordapp.com/attachments/650460192009617433/698529527965417552/sizebotlogot.png")
         embed.add_field(name = "Credits",
                         value = ("**Coding Assistance** *by Natalie*\n"
-                                 "**Additional Equations** *by Benyovski and Arceus3251*\n"
+                                 "**Additional Equations** *by Benyovski, Arceus3251 and DragonMoffon*\n"
                                  "**Originally Tested** *by Aria, Kelly, worstgender, and Arceus3251*\n"),
                         inline = False)
         embed.add_field(name = "Technical Details",
-                        value = "Written in Python 3.6, and slowly upgraded to 3.9. Written Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
+                        value = "Written in Python 3.6, and slowly upgraded to 3.12. Written Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
                         inline = False)
         embed.set_footer(text = f"Version {__version__} | {now.strftime('%d %b %Y')}")
         await ctx.send(embed = embed)
@@ -268,7 +270,7 @@ class HelpCog(commands.Cog):
             f"<@{ctx.author.id}>\n"
             "SizeBot is coded (mainly) and hosted by DigiDuncan, and for absolutely free.\n"
             "However, if you wish to contribute to DigiDuncan directly, you can do so here:\n"
-            "<http://donate.digiduncan.com>\n"
+            "<https://paypal.me/DigiDuncanPayPal>\n"
             "SizeBot has been a passion project coded over a period of four years and learning a lot of Python along the way.\n"
             "Thank you so much for being here throughout this journey!")
 
@@ -375,10 +377,13 @@ class HelpCog(commands.Cog):
     @commands.command(
         category = "help"
     )
-    @checks.is_mod()
     async def invite(self, ctx):
         """Request an invite for SizeBot!"""
-        await ctx.send("Thanks for the interest in SizeBot!\nSizeBot is currently in closed beta, but you can request to be added to that here!\nhttps://forms.gle/qEdkCpsB891AhAoz5\nRollout is slow, so it may take a while to be approved and you may bot get approved at all right now. Be patient and good luck!")
+        await ctx.send("## Thank you for the interest in the bot!\n"
+                       "You can invite SizeBot to your server now! Use one of these links:\n"
+                       "- [Invite SizeBot with the default roles!](https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=563365424786496&scope=bot)\n"
+                       "- [Just invite SizeBot, I'll set up it's role myself!](https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=0&scope=bot)\n"
+                       "If you need help, reach out to DigiDuncan (`@digiduncan`) and use `&help`!")
 
 
 class HelpCategory:

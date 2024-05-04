@@ -5,13 +5,14 @@ import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import show_next_step
-from sizebot.lib import errors, proportions, userdb, macrovision, telemetry
+from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.freefall import freefall
 from sizebot.lib.language import engine
 from sizebot.lib.metal import metal_value, nugget_value
+from sizebot.lib.neuron import get_neuron_embed
 from sizebot.lib.statproxy import StatProxy
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import load_or_fake
@@ -44,9 +45,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
 
@@ -65,9 +63,6 @@ class StatsCog(commands.Cog):
         """
         if memberOrHeight is None:
             memberOrHeight = ctx.author
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
 
         sv1 = load_or_fake(sv1).height  # This feels like a hack. Is this awful?
         scale_factor = sv1 / sv2
@@ -152,11 +147,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
@@ -187,9 +177,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
 
@@ -218,9 +205,6 @@ class StatsCog(commands.Cog):
 
         if memberOrHeight is None:
             memberOrHeight = ctx.author
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
@@ -265,11 +249,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
         userdata2.nickname = userdata2.nickname + " as " + userdata.nickname
@@ -303,11 +282,6 @@ class StatsCog(commands.Cog):
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
@@ -325,11 +299,6 @@ class StatsCog(commands.Cog):
     async def compareas(self, ctx, asHeight: MemberOrSize = None,
                         memberOrHeight: MemberOrSize = None):
         """Compare yourself as a different height and another user."""
-
-        if isinstance(asHeight, SV):
-            telemetry.SizeViewed(asHeight).save()
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
 
         userdata = load_or_fake(ctx.message.author)
         asdata = load_or_fake(asHeight)
@@ -360,6 +329,7 @@ class StatsCog(commands.Cog):
         userdata2 = load_or_fake(memberOrHeight2)
 
         if stat.tag:
+            # TODO: Properly merge this
             await ctx.send("Not supported right now, sorry!")
         else:
             tosend = proportions.get_compare_stat(userdata1, userdata2, stat.name)
@@ -413,11 +383,6 @@ class StatsCog(commands.Cog):
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight2).save()
-
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
@@ -442,11 +407,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight2).save()
 
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
@@ -559,6 +519,10 @@ class StatsCog(commands.Cog):
         usage = "<distance>"
     )
     async def fall(self, ctx, distance: MemberOrSize):
+        """
+        Fall down.
+        #ACC#
+        """
         if isinstance(distance, discord.Member):
             ud = userdb.load(ctx.guild.id, distance.id)
             distance = ud.height
@@ -646,11 +610,6 @@ class StatsCog(commands.Cog):
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
 
@@ -692,6 +651,7 @@ class StatsCog(commands.Cog):
                              *, memberOrHeight2: MemberOrSize = None):
         """
         Compare two users' gravitation pull.
+        #ACC#
         """
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
@@ -699,11 +659,6 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             await ctx.send("Please use either two parameters to compare two people or sizes, or one to compare with yourself.")
             return
-
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-        if isinstance(memberOrHeight2, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
 
         userdata1 = load_or_fake(memberOrHeight)
         userdata2 = load_or_fake(memberOrHeight2)
@@ -773,6 +728,40 @@ class StatsCog(commands.Cog):
             value = load_or_fake(whoOrWhat).height
 
         await ctx.send(f"{value:,.3mu}")
+
+    @commands.command(
+        aliases = ["keypoint", "measurements", "measure"],
+        usage = "[user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def keypoints(self, ctx, who: MemberOrSize = None):
+        """See a users key points."""
+        if who is None:
+            who = ctx.message.author
+
+        userdata1 = load_or_fake(who)
+
+        embedtosend = proportions.get_keypoints_embed(userdata1, ctx.author.id)
+
+        await ctx.send(embed = embedtosend)
+
+    @commands.command(
+        aliases = ["reaction", "reactiontime", "react"],
+        usage = "[user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def neuron(self, ctx, who: MemberOrSize = None):
+        """How long would brain signals take to travel for a person?"""
+        if who is None:
+            who = ctx.message.author
+
+        userdata = load_or_fake(who)
+
+        embedtosend = get_neuron_embed(userdata)
+
+        await ctx.send(embed = embedtosend)
 
 
 async def setup(bot):

@@ -88,6 +88,6 @@ def speedcalc(traveller: StatBox, dist: SV, *, speed = False, foot = False, incl
         out += f"{emojis['eyes']} {reldist:,.3mu}\n"
         if foot:
             out += f"{emojis['blank']} ({to_shoe_size(reldist, 'm')})\n"
-    out += "\n".join(m.string for m in movements if m.is_active)
+    out += "\n".join(m.string.strip() for m in movements if m.is_active)
 
     return out

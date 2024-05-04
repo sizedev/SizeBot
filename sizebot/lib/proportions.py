@@ -1,18 +1,22 @@
 from __future__ import annotations
 from typing import TypedDict
 
+import logging
+
 from discord import Embed
 
 from sizebot import __version__
 from sizebot.lib import errors, macrovision, userdb
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.speed import speedcalc
 from sizebot.lib.units import SV, TV
 from sizebot.lib.userdb import User
 from sizebot.lib.utils import join_unique, minmax
 from sizebot.lib.stats import calc_view_angle, statmap, StatBox
 
+logger = logging.getLogger("sizebot")
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
@@ -351,6 +355,69 @@ def get_compare_simple(userdata1: User, userdata2: User, requesterID: int) -> Em
     return {"embed": embed}
 
 
+def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: int) -> EmbedToSend:
+    def get_single_body(key: str) -> str:
+        try:
+            mapped_key = statmap[key]
+        except KeyError:
+            return None
+
+        bigstat = big_viewby_small[mapped_key]
+        smallstat = small_viewby_big[mapped_key]
+
+        bigstattext = bigstat.body if bigstat.body else f"{big['nickname'].value} doesn't have that stat."
+        smallstattext = smallstat.body if smallstat.body else f"{small['nickname'].value} doesn't have that stat."
+
+        return_stat = (f"{emojis.comparebig}{bigstattext}\n"
+                       f"{emojis.comparesmall}{smallstattext}")
+
+        return return_stat
+
+    stats1 = StatBox.load(userdata1.stats).scale(userdata1.scale)
+    stats2 = StatBox.load(userdata2.stats).scale(userdata2.scale)
+    small, big = sorted([stats1, stats2], key=lambda s: s['height'].value)
+    if small['height'].value == 0 and big['height'].value == 0:
+        # TODO: This feels awkward
+        small_viewby_big = small.scale(1)
+        big_viewby_small = big.scale(1)
+        multiplier = Decimal(1)
+    else:
+        small_viewby_big = small.scale(big['viewscale'].value)
+        big_viewby_small = big.scale(small['viewscale'].value)
+        multiplier = big['height'].value / small['height'].value
+
+    viewangle = calc_view_angle(small['height'].value, big['height'].value)
+    lookangle = abs(viewangle)
+    lookdirection = "up" if viewangle >= 0 else "down"
+
+    requestertag = f"<@!{requesterID}>"
+    embed = Embed(
+        title=f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link} of stats tagged `{tag}`",
+        description=f"*Requested by {requestertag}*",
+        color=colors.purple,
+        url = macrovision.get_url_from_statboxes([small, big])
+    )
+    if requesterID == big['id'].value:
+        embed.color = colors.blue
+    if requesterID == small['id'].value:
+        embed.color = colors.red
+    embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
+    embed.add_field(value=(
+        f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{big['nickname'].value}** looks to {emojis.comparesmallcenter} **{small['nickname'].value}**.\n"
+        f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{small['nickname'].value}** looks to {emojis.comparebigcenter} **{big['nickname'].value}**."), inline=False)
+
+    for sstat, bstat in zip(small_viewby_big, big_viewby_small):
+        if tag in sstat.tags and (sstat.body or bstat.body):
+            embed.add_field(name = sstat.title, value = get_single_body(sstat.key), inline = sstat.definition.inline)
+
+    embed.set_footer(text=(
+        f"{small['nickname'].value} would have to look {lookdirection} {lookangle:.0f}° to look at {big['nickname'].value}'s face.\n"
+        f"{big['nickname'].value} is {multiplier:,.3}x taller than {small['nickname'].value}.\n"
+        f"{big['nickname'].value} would need {small_viewby_big['visibility'].value} to see {small['nickname'].value}."))
+
+    return {"embed": embed}
+
+
 def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | None:
     stats1 = StatBox.load(userdata1.stats).scale(userdata1.scale)
     stats2 = StatBox.load(userdata2.stats).scale(userdata2.scale)
@@ -408,12 +475,14 @@ def get_stats(userdata: User, requesterID: int) -> EmbedToSend:
 
 def get_stats_bytag(userdata: User, tag: str, requesterID: int) -> EmbedToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
+
     requestertag = f"<@!{requesterID}>"
     embed = Embed(
         title=f"Stats for {stats['nickname'].value} tagged `{tag}`",
         description=f"*Requested by {requestertag}*",
         color=colors.cyan)
     embed.set_author(name=f"SizeBot {__version__}")
+
     for stat in stats:
         if tag in stat.tags:
             embed.add_field(**stat.embed)
@@ -431,8 +500,9 @@ def get_stat(userdata: User, key: str) -> StrToSend | None:
     return {"content": msg}
 
 
-def get_basestats(userdata: User, requesterID = None) -> EmbedToSend:
+def get_basestats(userdata: User, requesterID: int = None) -> EmbedToSend:
     basestats = StatBox.load(userdata.stats)
+
     requestertag = f"<@!{requesterID}>"
     embed = Embed(title=f"Base Stats for {basestats['nickname'].value}",
                   description=f"*Requested by {requestertag}*",
@@ -447,8 +517,9 @@ def get_basestats(userdata: User, requesterID = None) -> EmbedToSend:
     return {"embed": embed}
 
 
-def get_settings(userdata: User, requesterID = None) -> EmbedToSend:
+def get_settings(userdata: User, requesterID: int = None) -> EmbedToSend:
     basestats = StatBox.load(userdata.stats)
+
     requestertag = f"<@!{requesterID}>"
     embed = Embed(title=f"Settings for {basestats['nickname'].value}",
                   description=f"*Requested by {requestertag}*",
@@ -465,5 +536,22 @@ def get_settings(userdata: User, requesterID = None) -> EmbedToSend:
                     value="**NOT SET**",
                     inline=stat.definition.inline
                 )
+
+    return {"embed": embed}
+
+
+def get_keypoints_embed(userdata: User, requesterID: int = None) -> EmbedToSend:
+    stats = StatBox.load(userdata.stats).scale(userdata.scale)
+
+    requestertag = f"<@!{requesterID}>"
+    embed = Embed(title=f"Keypoints for {stats['nickname'].value}",
+                  description=f"*Requested by {requestertag}*",
+                  color=colors.cyan)
+    embed.set_author(name=f"SizeBot {__version__}")
+
+    for stat in stats:
+        if "keypoint" in stat.tags:
+            lookslike = format_close_object_smart(stat.value)
+            embed.add_field(name = stat.title, value = f"{stat.body}\n*~{lookslike}*")
 
     return {"embed": embed}

@@ -14,7 +14,7 @@ import discordplus
 
 from sizebot import __version__
 from sizebot.conf import conf
-from sizebot.lib import language, objs, paths, pokemon, status, telemetry, units, utils, nickmanager
+from sizebot.lib import language, objs, paths, pokemon, status, units, utils, nickmanager
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.lib.utils import truncate
@@ -70,7 +70,6 @@ initial_cogs = [
 initial_extensions = [
     "banned",
     "errorhandler",
-    "telemetry",
     "tupperbox"
 ]
 
@@ -170,10 +169,6 @@ def main():
     async def on_command(ctx):
         guild = truncate(ctx.guild.name, 20) if (hasattr(ctx, "guild") and ctx.guild is not None) else "DM"
         logger.log(CMD, f"G {guild}, U {ctx.message.author.name}: {ctx.message.content}")
-
-    @bot.event
-    async def on_command_completion(ctx):
-        telemetry.CommandRun(ctx.command.name).save()
 
     @bot.event
     async def on_message(message):

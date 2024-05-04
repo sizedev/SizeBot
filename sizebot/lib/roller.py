@@ -78,7 +78,7 @@ class Result:
         output = (f"Total: {self.total}\n"
                   f"Rolls:\n")
         for i, r in enumerate(self.rolls):
-            output += (f"Roll {i+1}:\n"
+            output += (f"Roll {i + 1}:\n"
                        f"{r}")
         return output
 
