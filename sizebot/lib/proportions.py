@@ -105,7 +105,7 @@ def get_speeddistance(userdata: User, distance: SV) -> EmbedToSend | StrToSend:
     embed = Embed(
         title = f"{distance:,.3mu} to {stats['nickname'].value}",
         description = speedcalc(stats, distance, speed = True, include_relative = True))
-    embed.set_footer(text = f"{distance:,.3mu} is {multiplier:,.3}x larger than {stats['nickname'].value}."),
+    embed.set_footer(text = f"{distance:,.3mu} is {multiplier:,.3}x larger than {stats['nickname'].value}. It looks to be about {format_close_object_smart(distance_viewed)}."),
     return {"embed": embed}
 
 
