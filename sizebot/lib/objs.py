@@ -61,7 +61,7 @@ class DigiObject:
             "c": "calories",
         }
 
-        self.unitlength = getattr(self, dimensionmap[dimension])
+        self.unitlength: SV = getattr(self, dimensionmap[dimension])
 
     @property
     def image(self):
@@ -117,7 +117,7 @@ class DigiObject:
         if self.calories is not None:
             returnstr += f"{emojis.blank}has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n"
         if self.price is not None:
-            returnstr += f"{emojis.blank}costs **${Decimal(self.price * (multiplier ** 3)):,.2}**\n"
+            returnstr += f"{emojis.blank}costs **USD ${Decimal(self.price * (multiplier ** 3)):,.2f}**\n"
         if self.weight:
             returnstr += "and weighs...\n"
             returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
@@ -140,7 +140,7 @@ class DigiObject:
         if self.calories is not None:
             statsstrings.append(f"has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories")
         if self.price is not None:
-            statsstrings.append(f"costs **${Decimal(self.price * (multiplier ** 3)):,.2}**")
+            statsstrings.append(f"costs **USD ${Decimal(self.price * (multiplier ** 3)):,.2f}**")
         if self.weight:
             statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
 
@@ -178,7 +178,7 @@ class DigiObject:
                             value = f"**{VV(self.volume * (multiplier ** 3)):,.3mu}**\n")
         if self.calories is not None:
             embed.add_field(name = "Calories",
-                            value = f"**{Decimal(self.calories * (multiplier **3)):,.3}** calories\n")
+                            value = f"**{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n")
         if self.price is not None:
             embed.add_field(name = "Price",
                             value = f"**${Decimal(self.price * (multiplier ** 3)):,.2}**")
@@ -295,3 +295,66 @@ def init():
                 tags[tag] = 1
             else:
                 tags[tag] += 1
+
+
+def get_close_object_smart(val: SV | WV) -> DigiObject:
+    """This is a "smart" algorithm meant for use in &lookslike and &keypoints.
+
+    Tries to get a single object for comparison, prioritizing integer closeness.
+    """
+    best_dict: dict[float, list] = {
+        1.0: [],
+        0.5: [],
+        2.0: [],
+        1.5: [],
+        3.0: [],
+        2.5: [],
+        4.0: [],
+        5.0: [],
+        6.0: []
+    }
+
+    weight = isinstance(val, WV)
+
+    val = float(val)
+
+    dists = []
+    for obj in objects:
+        if weight and not obj.weight:
+            continue
+        if "nc" in obj.tags:
+            continue
+        ratio = val / float(obj.unitlength) if not weight else val / float(obj.weight)
+        ratio_semi = round(ratio, 1)
+        rounded_ratio = round(ratio)
+
+        intness = 2.0 * (ratio - rounded_ratio)
+
+        oneness = (1.0 - ratio if ratio > 1.0 else 1.0 / ratio - 1.0)
+
+        dist = intness**2 + oneness**2
+
+        p = (dist, (oneness, intness), obj)
+        if ratio_semi in best_dict:
+            best_dict[ratio_semi].append(p)
+        else:
+            dists.append(p)
+
+    best = []
+    for at_val in best_dict.values():
+        best.extend(at_val)
+        if len(best) >= 10:
+            break
+    else:
+        dists = sorted(dists, key=lambda p: p[0])
+        best.extend(dists[:10])
+
+    possible_objects = best[:10]
+    return random.choice(possible_objects)[-1]
+
+
+def format_close_object_smart(val: SV | WV) -> str:
+    weight = isinstance(val, WV)
+    obj = get_close_object_smart(val)
+    ans = round(val / obj.unitlength, 1) if not weight else round(val / obj.weight, 1)
+    return f"{ans:.1f} {obj.name_plural if ans != 1 else obj.name}"

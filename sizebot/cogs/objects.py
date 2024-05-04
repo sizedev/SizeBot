@@ -10,12 +10,12 @@ from discord.ext import commands
 from discord.ext.commands.converter import MemberConverter
 
 from sizebot import __version__
-from sizebot.lib import objs, proportions, telemetry, userdb, utils
+from sizebot.lib import objs, proportions, userdb, utils
 from sizebot.lib.constants import emojis
 from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.objs import DigiObject, objects, tags
+from sizebot.lib.objs import DigiObject, objects, tags, format_close_object_smart
 from sizebot.lib.stats import StatBox, taglist
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake, DEFAULT_HEIGHT as AVERAGE_HEIGHT
@@ -65,17 +65,14 @@ class ObjectsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        if isinstance(memberOrHeight, SV):
-            telemetry.SizeViewed(memberOrHeight).save()
-
         userdata = load_or_fake(memberOrHeight)
 
         if userdata.height == 0:
             await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about... huh. I can't find them.")
             return
 
-        goodheightout = userdata.height.to_good_unit('o', preferName=True, spec=".2%4")
-        goodweightout = userdata.weight.to_good_unit('o', preferName=True, spec=".2%4")
+        goodheightout = format_close_object_smart(userdata.height)
+        goodweightout = format_close_object_smart(userdata.weight)
 
         await ctx.send(f"{userdata.tag} is really {userdata.height:,.3mu}, or about **{goodheightout}**. They weigh about **{goodweightout}**.")
 
@@ -111,9 +108,6 @@ class ObjectsCog(commands.Cog):
             what = await parse_many(ctx, args, [DigiObject, mc, SV])
             who = ctx.author
 
-        if isinstance(who, SV):
-            telemetry.SizeViewed(who).save()
-
         userdata = load_or_fake(who)
         userstats = StatBox.load(userdata.stats).scale(userdata.scale)
 
@@ -127,7 +121,6 @@ class ObjectsCog(commands.Cog):
             compheight = userstats['averagescale'].value
             compdata = load_or_fake(compheight)
         else:
-            telemetry.UnknownObject(str(what)).save()
             await ctx.send(f"`{what}` is not a valid object, member, or height.")
             return
         tosend = proportions.get_compare(userdata, compdata, ctx.author.id)
@@ -148,9 +141,6 @@ class ObjectsCog(commands.Cog):
         `&look book`
         `&examine building`"""
 
-        if isinstance(what, SV):
-            telemetry.SizeViewed(what).save()
-
         userdata = load_or_fake(ctx.author)
 
         if isinstance(what, str):
@@ -160,7 +150,6 @@ class ObjectsCog(commands.Cog):
 
         # Compare to registered DigiObject by string name
         if isinstance(what, DigiObject):
-            telemetry.ObjectUsed(str(what)).save()
             la = what.relativestatssentence(userdata)
             # Easter eggs.
             eggs = {
@@ -183,8 +172,8 @@ class ObjectsCog(commands.Cog):
         if isinstance(what, SV):
             height = SV(what * userdata.viewscale)
             s = (f"{userdata.nickname} is {userdata.height:,.1{userdata.unitsystem}} tall."
-                 + f" To them, {what:,.1mu} looks like **{height:,.1mu}**."
-                 + f" That's about **{height.to_best_unit('o', preferName=True, spec=".1")}**.")
+                 f" To them, {what:,.1mu} looks like **{height:,.1mu}**."
+                 f" That's about **{height.to_best_unit('o', preferName=True, spec=".1")}**.")
             await ctx.send(s)
             return
 
@@ -239,7 +228,6 @@ class ObjectsCog(commands.Cog):
             f"use `{ctx.prefix}suggestobject` to suggest it "
             f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
         )
-        telemetry.UnknownObject(str(what)).save()
 
     @commands.command(
         aliases = ["objectstats"],
@@ -253,7 +241,6 @@ class ObjectsCog(commands.Cog):
         `&objstats book`"""
 
         if isinstance(what, str):
-            telemetry.UnknownObject(str(what)).save()
             await ctx.send(f"`{what}` is not a valid object.")
             return
 
@@ -382,6 +369,7 @@ class ObjectsCog(commands.Cog):
     )
     async def land(self, ctx, land: typing.Union[DigiObject, str], *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Get stats about how you cover land.
+        #ACC#
 
         Example:
         `&land random`
