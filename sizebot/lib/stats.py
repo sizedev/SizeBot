@@ -298,7 +298,13 @@ class StatBox:
             "pawtoggle": False,
             "furtoggle": False,
             "nickname": "Average",
-            "id": "0"
+            "id": "0",
+            "gender": None,
+            "hairlength": None,
+            "taillength": None,
+            "earheight": None,
+            "macrovision_model": None,
+            "macrovision_view": None
         }
         return cls.load(average_userdata)
 
@@ -975,7 +981,23 @@ all_stats = [
             body="{hairname}",
             is_shown=False,
             type=str,
-            value=lambda v: "Fur" if v["furtoggle"] else "Hair")
+            value=lambda v: "Fur" if v["furtoggle"] else "Hair"),
+    StatDef("macrovision_model",
+            title="Macrovision Model",
+            string="{macrovision_model}",
+            body="{macrovision_model}",
+            is_shown=False,
+            type=str,
+            power=0,
+            userkey="macrovision_model"),
+    StatDef("macrovision_view",
+            title="Macrovision View",
+            string="{macrovision_view}",
+            body="{macrovision_view}",
+            is_shown=False,
+            type=str,
+            power=0,
+            userkey="macrovision_view")
 ]
 
 

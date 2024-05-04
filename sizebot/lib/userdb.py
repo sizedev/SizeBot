@@ -40,22 +40,27 @@ def str_or_none(v):
     return str(v)
 
 
+Gender = Literal["m", "f", "x"]
+
+
 class PlayerStats(TypedDict):
     height: str
     weight: str
-    footlength: Optional[str]
+    footlength: str | None
     pawtoggle: bool
     furtoggle: bool
-    hairlength: Optional[str]
-    taillength: Optional[str]
-    earheight: Optional[str]
-    liftstrength: Optional[str]
-    walkperhour: Optional[str]
-    swimperhour: Optional[str]
-    runperhour: Optional[str]
-    gender: Literal["m", "f", "x", None]
+    hairlength: str | None
+    taillength: str | None
+    earheight: str | None
+    liftstrength: str | None
+    walkperhour: str | None
+    swimperhour: str | None
+    runperhour: str | None
+    gender: Gender | None
     nickname: str
     id: str
+    macrovision_model: str | None
+    macrovision_view: str | None
 
 
 @total_ordering
@@ -462,7 +467,9 @@ class User:
             "gender": str_or_none(self.gender),     # TODO: Should this be autogender?
             "scale": str_or_none(self.scale),
             "nickname": str_or_none(self.nickname),
-            "id": str_or_none(self.id)
+            "id": str_or_none(self.id),
+            "macrovision_model": str_or_none(self.macrovision_model),
+            "macrovision_view": str_or_none(self.macrovision_view)
         }
 
     @property

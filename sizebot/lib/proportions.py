@@ -10,7 +10,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.speed import speedcalc
 from sizebot.lib.units import SV, TV
 from sizebot.lib.userdb import User
-from sizebot.lib.utils import minmax
+from sizebot.lib.utils import join_unique, minmax
 from sizebot.lib.stats import calc_view_angle, statmap, StatBox
 
 
@@ -78,7 +78,57 @@ class EmbedToSend(TypedDict):
 
 
 class StrToSend(TypedDict):
-    embed: str
+    content: str
+
+
+def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
+    _viewer, _viewed = minmax(userdata1, userdata2)
+
+    # Use the new statbox
+    viewer = StatBox.load(_viewer.stats).scale(_viewer.scale)
+    viewed = StatBox.load(_viewed.stats).scale(_viewed.scale)
+
+    if viewer['height'].value == 0 and viewed['height'].value == 0:
+        multiplier = Decimal(1)
+    else:
+        multiplier = viewed['height'].value / viewer['height'].value
+
+    footlabel = viewed['footname'].value
+    hairlabel = viewed['hairname'].value
+
+    requestertag = f"<@!{requesterID}>"
+    embed = Embed(
+        title=f"Speed/Distance Comparison of {viewed['nickname'].value} and {viewer['nickname'].value}",
+        description=f"*Requested by {requestertag}*",
+        color=colors.purple
+    )
+    embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
+    embed.add_field(name=f"**{viewer['nickname'].value}** Speeds", value=(
+        f"{emojis.walk} **Walk Speed:** {viewer['walkperhour'].value:,.3mu} per hour\n"
+        f"{emojis.run} **Run Speed:** {viewer['runperhour'].value:,.3mu} per hour\n"
+        f"{emojis.climb} **Climb Speed:** {viewer['climbperhour'].value:,.3mu} per hour\n"
+        f"{emojis.crawl} **Crawl Speed:** {viewer['crawlperhour'].value:,.3mu} per hour\n"
+        f"{emojis.swim} **Swim Speed:** {viewer['swimperhour'].value:,.3mu} per hour"), inline=False)
+    embed.add_field(name="Height", value=(speedcalc(viewer, viewed['height'].value)), inline=True)
+    embed.add_field(name=f"{footlabel} Length", value=(speedcalc(viewer, viewed['footlength'].value, foot = True)), inline=True)
+    embed.add_field(name=f"{footlabel} Width", value=(speedcalc(viewer, viewed['footwidth'].value)), inline=True)
+    embed.add_field(name="Toe Height", value=(speedcalc(viewer, viewed['toeheight'].value)), inline=True)
+    embed.add_field(name="Shoeprint Depth", value=(speedcalc(viewer, viewed['shoeprintdepth'].value)), inline=True)
+    embed.add_field(name="Pointer Finger Length", value=(speedcalc(viewer, viewed['pointerlength'].value)), inline=True)
+    embed.add_field(name="Thumb Width", value=(speedcalc(viewer, viewed['thumbwidth'].value)), inline=True)
+    embed.add_field(name="Nail Thickness", value=(speedcalc(viewer, viewed['nailthickness'].value)), inline=True)
+    embed.add_field(name="Fingerprint Depth", value=(speedcalc(viewer, viewed['fingerprintdepth'].value)), inline=True)
+    if viewed['hairlength'].value:
+        embed.add_field(name=f"{hairlabel} Length", value=(speedcalc(viewed['hairlength'].value)), inline=True)
+    if viewed['taillength'].value:
+        embed.add_field(name="Tail Length", value=(speedcalc(viewer, viewed['taillength'].value)), inline=True)
+    if viewed['earheight'].value:
+        embed.add_field(name="Ear Height", value=(speedcalc(viewer, viewed['earheight'].value)), inline=True)
+    embed.add_field(name=f"{hairlabel} Width", value=(speedcalc(viewer, viewed['hairwidth'].value)), inline=True)
+    embed.add_field(name="Eye Width", value=(speedcalc(viewer, viewed['eyewidth'].value)), inline=True)
+    embed.set_footer(text=(f"{viewed['nickname'].value} is {multiplier:,.3}x taller than {viewer['nickname'].value}."))
+
+    return {"embed": embed}
 
 
 def get_speedcompare_stat(userdata1: User, userdata2: User, key: str) -> EmbedToSend | None:
@@ -101,18 +151,18 @@ def get_speedcompare_stat(userdata1: User, userdata2: User, key: str) -> EmbedTo
         return None
 
     embed = Embed(
-        title = f"To move the distance of {viewed["nickname"].value}'s {stat.title.lower()}, it would take {viewer["nickname"].value}...",
+        title = f"To move the distance of {viewed['nickname'].value}'s {stat.title.lower()}, it would take {viewer['nickname'].value}...",
         description = speedcalc(viewer, stat.value, speed = True, include_relative = True, foot = mapped_key == "footlength"))
     return {"embed": embed}
 
 
 def get_speeddistance(userdata: User, distance: SV) -> EmbedToSend | StrToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
-    if stats["height"].value > distance:
-        distance_viewed = SV(distance * stats["viewscale"].value)
+    if stats['height'].value > distance:
+        distance_viewed = SV(distance * stats['viewscale'].value)
         msg = f"To {stats['nickname'].value}, {distance:,.3mu} appears to be **{distance_viewed:,.3mu}.**"
         return {"content": msg}
-    multiplier = distance / stats['height']
+    multiplier = distance / stats['height'].value
 
     embed = Embed(
         title = f"{distance:,.3mu} to {stats['nickname'].value}",
@@ -128,56 +178,6 @@ def get_speedtime(userdata: User, time: TV) -> EmbedToSend | StrToSend:
     return get_speeddistance(userdata, distance)
 
 
-def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
-    _viewer, _viewed = minmax(userdata1, userdata2)
-
-    # Use the new statbox
-    viewer = StatBox.load(_viewer.stats).scale(_viewer.scale)
-    viewed = StatBox.load(_viewed.stats).scale(_viewed.scale)
-
-    if viewer["height"].value == 0 and viewed["height"].value == 0:
-        multiplier = Decimal(1)
-    else:
-        multiplier = viewed["height"].value / viewer["height"].value
-
-    footlabel = viewed["footname"].value
-    hairlabel = viewed["hairname"].value
-
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(
-        title=f"Speed/Distance Comparison of {viewed["nickname"].value} and {viewer["nickname"].value}",
-        description=f"*Requested by {requestertag}*",
-        color=colors.purple
-    )
-    embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
-    embed.add_field(name=f"**{viewer["nickname"].value}** Speeds", value=(
-        f"{emojis.walk} **Walk Speed:** {viewer["walkperhour"].value:,.3mu} per hour\n"
-        f"{emojis.run} **Run Speed:** {viewer["runperhour"].value:,.3mu} per hour\n"
-        f"{emojis.climb} **Climb Speed:** {viewer["climbperhour"].value:,.3mu} per hour\n"
-        f"{emojis.crawl} **Crawl Speed:** {viewer["crawlperhour"].value:,.3mu} per hour\n"
-        f"{emojis.swim} **Swim Speed:** {viewer["swimperhour"].value:,.3mu} per hour"), inline=False)
-    embed.add_field(name="Height", value=(speedcalc(viewer, viewed["height"].value)), inline=True)
-    embed.add_field(name=f"{footlabel} Length", value=(speedcalc(viewer, viewed["footlength"].value, foot = True)), inline=True)
-    embed.add_field(name=f"{footlabel} Width", value=(speedcalc(viewer, viewed["footwidth"].value)), inline=True)
-    embed.add_field(name="Toe Height", value=(speedcalc(viewer, viewed["toeheight"].value)), inline=True)
-    embed.add_field(name="Shoeprint Depth", value=(speedcalc(viewer, viewed["shoeprintdepth"].value)), inline=True)
-    embed.add_field(name="Pointer Finger Length", value=(speedcalc(viewer, viewed["pointerlength"].value)), inline=True)
-    embed.add_field(name="Thumb Width", value=(speedcalc(viewer, viewed["thumbwidth"].value)), inline=True)
-    embed.add_field(name="Nail Thickness", value=(speedcalc(viewer, viewed["nailthickness"].value)), inline=True)
-    embed.add_field(name="Fingerprint Depth", value=(speedcalc(viewer, viewed["fingerprintdepth"].value)), inline=True)
-    if viewed["hairlength"].value:
-        embed.add_field(name=f"{hairlabel} Length", value=(speedcalc(viewed["hairlength"].value)), inline=True)
-    if viewed["taillength"].value:
-        embed.add_field(name="Tail Length", value=(speedcalc(viewer, viewed["taillength"].value)), inline=True)
-    if viewed["earheight"].value:
-        embed.add_field(name="Ear Height", value=(speedcalc(viewer, viewed["earheight"].value)), inline=True)
-    embed.add_field(name=f"{hairlabel} Width", value=(speedcalc(viewer, viewed["hairwidth"].value)), inline=True)
-    embed.add_field(name="Eye Width", value=(speedcalc(viewer, viewed["eyewidth"].value)), inline=True)
-    embed.set_footer(text=(f"{viewed["nickname"].value} is {multiplier:,.3}x taller than {viewer["nickname"].value}."))
-
-    return {"embed": embed}
-
-
 def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
     stats1 = StatBox.load(userdata1.stats).scale(userdata1.scale)
     stats2 = StatBox.load(userdata2.stats).scale(userdata2.scale)
@@ -188,14 +188,14 @@ def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSe
         big_viewby_small = big.scale(1)
         multiplier = Decimal(1)
     else:
-        small_viewby_big = small.scale(big["viewscale"].value)
-        big_viewby_small = big.scale(small["viewscale"].value)
+        small_viewby_big = small.scale(big['viewscale'].value)
+        big_viewby_small = big.scale(small['viewscale'].value)
         multiplier = big['height'].value / small['height'].value
 
-    footname = "/".join(set(small['footname'].value, big['footname'].value))
-    hairname = "/".join(set(small['hairname'].value, big['hairname'].value))
+    footname = join_unique([small['footname'].value, big['footname'].value], sep="/")
+    hairname = join_unique([small['hairname'].value, big['hairname'].value], sep="/")
 
-    viewangle = calc_view_angle(small, big)
+    viewangle = calc_view_angle(small['height'].value, big['height'].value)
     lookangle = abs(viewangle)
     lookdirection = "up" if viewangle >= 0 else "down"
 
@@ -307,11 +307,11 @@ def get_compare_simple(userdata1: User, userdata2: User, requesterID: int) -> Em
         big_viewby_small = big.scale(1)
         multiplier = Decimal(1)
     else:
-        small_viewby_big = small.scale(big["viewscale"].value)
-        big_viewby_small = big.scale(small["viewscale"].value)
+        small_viewby_big = small.scale(big['viewscale'].value)
+        big_viewby_small = big.scale(small['viewscale'].value)
         multiplier = big['height'].value / small['height'].value
 
-    viewangle = calc_view_angle(small, big)
+    viewangle = calc_view_angle(small['height'].value, big['height'].value)
     lookangle = abs(viewangle)
     lookdirection = "up" if viewangle >= 0 else "down"
 
@@ -360,8 +360,8 @@ def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | 
         small_viewby_big = small.scale(1)
         big_viewby_small = big.scale(1)
     else:
-        small_viewby_big = small.scale(big["viewscale"].value)
-        big_viewby_small = big.scale(small["viewscale"].value)
+        small_viewby_big = small.scale(big['viewscale'].value)
+        big_viewby_small = big.scale(small['viewscale'].value)
 
     try:
         mapped_key = statmap[key]
@@ -382,27 +382,12 @@ def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | 
     return {"content": msg}
 
 
-def get_stats_bytag(userdata: User, requesterID: int, tag: str) -> EmbedToSend:
-    stats = StatBox.load(userdata.stats).scale(userdata.scale)
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(
-        title=f"Stats for {stats['nickname'].value} tagged `{tag}`",
-        description=f"*Requested by {requestertag}*",
-        color=colors.cyan)
-    embed.set_author(name=f"SizeBot {__version__}")
-    for stat in stats:
-        if tag in stat.tags:
-            embed.add_field(**stat.embed)
-
-    return {"embed": embed}
-
-
 def get_stats(userdata: User, requesterID: int) -> EmbedToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
     avgstats = StatBox.load_average()
-    avgstatsview = avgstats.scale(stats["viewscale"].value)
+    avgstatsview = avgstats.scale(stats['viewscale'].value)
 
-    viewangle = calc_view_angle(stats["height"].value, avgstats['height'].value)
+    viewangle = calc_view_angle(stats['height'].value, avgstats['height'].value)
     avglookdirection = "up" if viewangle >= 0 else "down"
     avglookangle = abs(viewangle)
     requestertag = f"<@!{requesterID}>"
@@ -416,7 +401,22 @@ def get_stats(userdata: User, requesterID: int) -> EmbedToSend:
         if stat.is_shown:
             embed.add_field(**stat.embed)
 
-    embed.set_footer(text=f"An average person would look {avgstatsview["height"].value:,.3mu}, and weigh {avgstatsview["weight"].value:,.3mu} to you. You'd have to look {avglookdirection} {avglookangle:.0f}° to see them.")
+    embed.set_footer(text=f"An average person would look {avgstatsview['height'].value:,.3mu}, and weigh {avgstatsview['weight'].value:,.3mu} to you. You'd have to look {avglookdirection} {avglookangle:.0f}° to see them.")
+
+    return {"embed": embed}
+
+
+def get_stats_bytag(userdata: User, tag: str, requesterID: int) -> EmbedToSend:
+    stats = StatBox.load(userdata.stats).scale(userdata.scale)
+    requestertag = f"<@!{requesterID}>"
+    embed = Embed(
+        title=f"Stats for {stats['nickname'].value} tagged `{tag}`",
+        description=f"*Requested by {requestertag}*",
+        color=colors.cyan)
+    embed.set_author(name=f"SizeBot {__version__}")
+    for stat in stats:
+        if tag in stat.tags:
+            embed.add_field(**stat.embed)
 
     return {"embed": embed}
 
