@@ -117,7 +117,7 @@ def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> Embe
     embed.add_field(name="Foot Length", value=speedcalc(viewer, viewed["footlength"].value, include_relative = True, foot = True), inline=True)  # hardcode height because it's weird
 
     for stat in viewed.stats:
-        if stat.is_shown and stat.value is not None and isinstance(stat.value, SV) and stat.key != "terminalvelocity":
+        if stat.is_shown and stat.is_set and isinstance(stat.value, SV) and stat.key != "terminalvelocity":
             embed.add_field(name = stat.title, value=(speedcalc(viewer, stat.value, include_relative = True, foot = stat.key == "footlength")))
 
     embed.set_footer(text=(f"{viewed['nickname'].value} is {multiplier:,.3}x taller than {viewer['nickname'].value}."))
@@ -201,7 +201,7 @@ def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSe
         f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{small['nickname'].value}** looks to {emojis.comparebigcenter} **{big['nickname'].value}**."), inline=False)
 
     for small_stat, big_stat in zip(small_viewby_big, big_viewby_small):
-        if (small_stat.is_shown or big_stat.is_shown) and (small_stat.body or big_stat.body):
+        if (small_stat.is_shown or big_stat.is_shown) and (small_stat.is_set or big_stat.is_set):
             embed.add_field(**get_compare_field(small, big, small_stat, big_stat))
 
     return {"embed": embed}
@@ -463,6 +463,12 @@ def get_compare_field(small: StatBox, big: StatBox, small_stat: Stat, big_stat: 
 
 def get_compare_body(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> str:
     return (
-        emojis.comparebig + (big_stat.body or f"{small['nickname'].value} doesn't have that stat.") + "\n"
-        + emojis.comparesmall + (small_stat.body or f"{big['nickname'].value} doesn't have that stat.")
+        f"{emojis.comparebig}{get_stat_body(big, big_stat)}\n"
+        f"{emojis.comparesmall}{get_stat_body(small, small_stat)}"
     )
+
+
+def get_stat_body(stats: StatBox, stat: Stat) -> str:
+    if not stat.is_set:
+        return f"{stats['nickname'].value} doesn't have that stat."
+    return stat.body

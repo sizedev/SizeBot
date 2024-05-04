@@ -128,6 +128,7 @@ class StatDef:
         self.tags = tags or []
         self.inline = inline
         self.aliases = aliases or []
+        self.settable = value is not None or userkey is not None
 
     def load_stat(self,
                   sb: StatBox,
@@ -197,6 +198,7 @@ class Stat:
         self.definition = definition
         self.value = value
         self.is_setbyuser = is_setbyuser
+        self.is_set = value is not None or not definition.settable
 
     @property
     def key(self):
@@ -369,6 +371,7 @@ all_stats = [
             title="Scale",
             string=lambda s: format_scale(s['scale'].value),
             body=lambda s: format_scale(s['scale'].value),
+            is_shown=False,
             type=Decimal,
             power=1,
             value=lambda v: 1),
@@ -1016,11 +1019,6 @@ all_stats = [
             string="",
             body=lambda s: "\n".join(s[f].body for f in ["walkperhour", "runperhour", "climbperhour", "crawlperhour", "swimperhour", "driveperhour", "spaceshipperhour"]),
             is_shown=False),
-    StatDef("bases+",
-            title="Character Bases",
-            string="",
-            body=lambda s: f"{s['height'].body} | {s['weight'].body}",
-            z=-1),
     StatDef("pawtoggle",
             title="Paw Toggle",
             string="{nickname}'s paw toggle is {pawtoggle}.",
