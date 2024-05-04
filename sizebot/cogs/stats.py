@@ -480,7 +480,7 @@ class StatsCog(commands.Cog):
             desc = f"To travel from **{userdata.nickname}**'s head to their {engine.plural(userdata.footname).lower()}, it would take sound **{printtime}**."
 
         embed = discord.Embed(title = f"Sound Travel Time in {traveldist:,.3mu}",
-                                    description = desc)
+                              description = desc)
 
         await ctx.send(embed = embed)
 

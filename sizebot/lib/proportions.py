@@ -6,7 +6,7 @@ import logging
 from discord import Embed
 
 from sizebot import __version__
-from sizebot.lib import errors, macrovision, userdb
+from sizebot.lib import macrovision
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.objs import format_close_object_smart
