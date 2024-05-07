@@ -201,7 +201,7 @@ class StatsCog(commands.Cog):
     async def statso(self, ctx, sv1: MemberOrSize, sv2: SV, stat: StatProxy, *, memberOrHeight: MemberOrSize = None):
         """User stat command as if an implied scale.
 
-        Available stats are: #STATS#`
+        Available stats are: #STATS#
         """
 
         if memberOrHeight is None:
@@ -718,7 +718,7 @@ class StatsCog(commands.Cog):
     async def convert(self, ctx, *, whoOrWhat: MemberOrSize | WV = None):
         """Convert from metric to US, or the other way around.
 
-        %ALPHA%
+        #ALPHA#
         """
         # TODO: Replace this with a real conversion command. This is not that.
         if whoOrWhat is None:
