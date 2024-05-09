@@ -116,6 +116,7 @@ class User:
         self.registration_steps_remaining: List[str] = []
         self._macrovision_model: Optional[str] = None
         self._macrovision_view: Optional[str] = None
+        self.allowchangefromothers: Optional[bool] = None
 
     def __str__(self):
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r} ...>")
@@ -136,7 +137,8 @@ class User:
                 f"UNITSYSTEM = {self.unitsystem!r}, SPECIES = {self.species!r}, SOFT_GENDER = {self.soft_gender!r}, "
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
-                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}>")
+                f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}>, "
+                f"ALLOWCHANGEFROMOTHERS = {self.allowchangefromothers!r}")
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
@@ -561,7 +563,8 @@ class User:
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining,
             "macrovision_model": self._macrovision_model,
-            "macrovision_view": self._macrovision_view
+            "macrovision_view": self._macrovision_view,
+            "allowchangefromothers": self.allowchangefromothers
         }
 
     # Create a new object from a python dictionary imported using json
@@ -633,6 +636,7 @@ class User:
         userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
         userdata._macrovision_model = jsondata.get("macrovision_model")
         userdata._macrovision_view = jsondata.get("macrovision_view")
+        userdata.allowchangefromothers = jsondata.get("allowchangefromothers", False)
         return userdata
 
     def __lt__(self, other):

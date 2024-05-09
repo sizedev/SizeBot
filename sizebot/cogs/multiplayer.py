@@ -9,6 +9,7 @@ from sizebot.lib import userdb, nickmanager
 from sizebot.lib.constants import colors
 from sizebot.lib.diff import Diff
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
@@ -139,6 +140,55 @@ class MPCog(commands.Cog):
         )
 
         await ctx.send(embed = e)
+
+    @commands.command(
+        aliases = ["cother", "co"],
+        category = "change",
+        usage = "<user> <change>"
+    )
+    async def changeother(self, ctx, other: discord.Member, *, string: Union[Diff]):
+        """Change someone else's height. The other user must have this functionality enabled.
+        """
+        userdata = userdb.load(other.guild.id, other.id)
+
+        if not userdata.allowchangefromothers:
+            await ctx.send(f"{userdata.nickname} does not allow others to change their size.")
+            return
+
+        style = string.changetype
+        amount = string.amount
+
+        userdata = userdb.load(other.guild.id, other.id)
+        if style == "add":
+            userdata.height += amount
+        elif style == "multiply":
+            userdata.height *= amount
+        elif style == "power":
+            userdata = userdata ** amount
+        else:
+            raise ChangeMethodInvalidException
+        await nickmanager.nick_update(other)
+
+        userdb.save(userdata)
+
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:m} ({userdata.height:u}) tall.")
+
+    @commands.command(
+        category = "multiplayer"
+    )
+    async def toggleallowothers(self, ctx):
+        """Allow other users to change your size.
+
+        NOTE: THIS HAS NO WHITELIST, BLACKLIST, LIMITS, OR OTHERWISE.
+        THIS ALLOWS ANYONE TO CHANGE YOUR SIZE TO ANYTHING.
+        YOU HAVE BEEN WARNED.
+
+        #ALPHA#
+        """
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata.allowchangefromothers = not userdata.allowchangefromothers
+        userdb.save(userdata)
+        await ctx.send(f"Set allowing others to change your size to {userdata.allowchangefromothers}.")
 
 
 async def setup(bot):
