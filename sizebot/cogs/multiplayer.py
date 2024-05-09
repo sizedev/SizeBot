@@ -143,12 +143,11 @@ class MPCog(commands.Cog):
 
     @commands.command(
         aliases = ["cother", "co"],
-        category = "change",
+        category = "multiplayer",
         usage = "<user> <change>"
     )
     async def changeother(self, ctx, other: discord.Member, *, string: Union[Diff]):
-        """Change someone else's height. The other user must have this functionality enabled.
-        """
+        """Change someone else's height. The other user must have this functionality enabled."""
         userdata = userdb.load(other.guild.id, other.id)
 
         if not userdata.allowchangefromothers:
@@ -171,7 +170,28 @@ class MPCog(commands.Cog):
 
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname} is now {userdata.height:m} ({userdata.height:u}) tall.")
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
+
+    @commands.command(
+        aliases = ["sother", "so"],
+        usage = "<height>",
+        category = "multiplayer"
+    )
+    @commands.guild_only()
+    async def setheight(self, ctx, other: discord.Member, *, newheight: SV):
+        """Set someone else's height. The other user must have this functionality enabled."""
+        userdata = userdb.load(other.guild.id, other.author.id)
+
+        if not userdata.allowchangefromothers:
+            await ctx.send(f"{userdata.nickname} does not allow others to change their size.")
+            return
+
+        userdata.height = newheight
+        userdb.save(userdata)
+
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
+
+        await nickmanager.nick_update(other)
 
     @commands.command(
         category = "multiplayer"
