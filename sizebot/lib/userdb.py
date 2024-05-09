@@ -74,7 +74,7 @@ class User:
         "_currentscalestep", "_currentscaletalk", "scaletalklock",
         "currentmovetype", "movestarted", "movestop",
         "registration_steps_remaining", "_macrovision_model", "_macrovision_view",
-        "button", "tra_reports"
+        "button", "tra_reports", "allowchangefromothers"
     ]
 
     def __init__(self):
