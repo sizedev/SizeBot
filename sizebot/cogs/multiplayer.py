@@ -192,9 +192,9 @@ class MPCog(commands.Cog):
         s = f"Set allowing others to change your size to {userdata.allowchangefromothers}."
 
         if userdata.allowchangefromothers:
-            s += f"""{emojis.warning} NOTE: THIS HAS NO WHITELIST, BLACKLIST, LIMITS, OR OTHERWISE.
-                 THIS ALLOWS ANYONE TO CHANGE YOUR SIZE TO ANYTHING.
-                 YOU HAVE BEEN WARNED."""
+            s += f"""\n{emojis.warning} **NOTE**: THIS HAS NO WHITELIST, BLACKLIST, LIMITS, OR OTHERWISE.
+THIS ALLOWS ANYONE TO CHANGE YOUR SIZE TO ANYTHING.
+YOU HAVE BEEN WARNED."""
         await ctx.send(s)
 
 
