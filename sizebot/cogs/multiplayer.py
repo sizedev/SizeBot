@@ -178,7 +178,7 @@ class MPCog(commands.Cog):
         category = "multiplayer"
     )
     @commands.guild_only()
-    async def setheight(self, ctx, other: discord.Member, *, newheight: SV):
+    async def setother(self, ctx, other: discord.Member, *, newheight: SV):
         """Set someone else's height. The other user must have this functionality enabled."""
         userdata = userdb.load(other.guild.id, other.author.id)
 
