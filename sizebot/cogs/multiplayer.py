@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 
 from sizebot.lib import userdb, nickmanager
-from sizebot.lib.constants import colors
+from sizebot.lib.constants import colors, emojis
 from sizebot.lib.diff import Diff
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import ChangeMethodInvalidException
@@ -188,7 +188,14 @@ class MPCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.allowchangefromothers = not userdata.allowchangefromothers
         userdb.save(userdata)
-        await ctx.send(f"Set allowing others to change your size to {userdata.allowchangefromothers}.")
+
+        s = f"Set allowing others to change your size to {userdata.allowchangefromothers}."
+
+        if userdata.allowchangefromothers:
+            s += f"""{emojis.warning} NOTE: THIS HAS NO WHITELIST, BLACKLIST, LIMITS, OR OTHERWISE.
+                 THIS ALLOWS ANYONE TO CHANGE YOUR SIZE TO ANYTHING.
+                 YOU HAVE BEEN WARNED."""
+        await ctx.send(s)
 
 
 async def setup(bot):
