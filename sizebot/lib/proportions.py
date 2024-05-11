@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TypedDict
+from typing import TypedDict
 
 import logging
 
@@ -13,7 +13,6 @@ from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.speed import speedcalc
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import User
-from sizebot.lib.utils import minmax
 from sizebot.lib.stats import Stat, calc_view_angle, statmap, StatBox
 
 logger = logging.getLogger("sizebot")
@@ -36,63 +35,45 @@ class EmbedField(TypedDict):
 
 
 def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
-    _viewer, _viewed = minmax(userdata1, userdata2)
+    small, big, _, _, multiplier = _get_compare_statboxes(userdata1, userdata2)
 
-    # Use the new statbox
-    viewer = StatBox.load(_viewer.stats).scale(_viewer.scale)
-    viewed = StatBox.load(_viewed.stats).scale(_viewed.scale)
-
-    if viewer['height'].value == 0 and viewed['height'].value == 0:
-        multiplier = Decimal(1)
-    else:
-        multiplier = viewed['height'].value / viewer['height'].value
-
-    embed = create_compare_embed(
-        f"Speed/Distance Comparison of {viewed['nickname'].value} and {viewer['nickname'].value}",
+    embed = _create_compare_embed(
+        f"Speed/Distance Comparison of {big['nickname'].value} and {small['nickname'].value}",
         requesterID)
 
-    embed.add_field(name=f"**{viewer["nickname"].value}** Speeds", value=viewer.stats_by_key["simplespeeds+"].body, inline=False)
+    embed.add_field(name=f"**{small["nickname"].value}** Speeds", value=small.stats_by_key["simplespeeds+"].body, inline=False)
 
-    embed.add_field(name="Height", value=speedcalc(viewer, viewed["height"].value, include_relative = True), inline=True)  # hardcode height because it's weird
-    embed.add_field(name="Foot Length", value=speedcalc(viewer, viewed["footlength"].value, include_relative = True, foot = True), inline=True)  # hardcode height because it's weird
+    embed.add_field(name="Height", value=speedcalc(small, big["height"].value, include_relative = True), inline=True)  # hardcode height because it's weird
+    embed.add_field(name="Foot Length", value=speedcalc(small, big["footlength"].value, include_relative = True, foot = True), inline=True)  # hardcode height because it's weird
 
-    for stat in viewed.stats:
+    for stat in big.stats:
         if stat.is_shown and stat.is_set and isinstance(stat.value, SV) and stat.key != "terminalvelocity":
-            embed.add_field(name = stat.title, value=(speedcalc(viewer, stat.value, include_relative = True, foot = stat.key == "footlength")))
+            embed.add_field(name = stat.title, value=(speedcalc(small, stat.value, include_relative = True, foot = stat.key == "footlength")))
 
-    embed.set_footer(text=(f"{viewed['nickname'].value} is {multiplier:,.3}x taller than {viewer['nickname'].value}."))
+    embed.set_footer(text=(f"{big['nickname'].value} is {multiplier:,.3}x taller than {small['nickname'].value}."))
 
     return {"embed": embed}
 
 
 def get_speedcompare_stat(userdata1: User, userdata2: User, key: str) -> EmbedToSend | None:
-    _viewer, _viewed = minmax(userdata1, userdata2)
-
-    # Use the new statbox
-    viewer = StatBox.load(_viewer.stats).scale(_viewer.scale)
-    viewed = StatBox.load(_viewed.stats).scale(_viewed.scale)
-
-    try:
-        mapped_key = statmap[key]
-    except KeyError:
+    small, big, _, _, _ = _get_compare_statboxes(userdata1, userdata2)
+    mapped_key = _get_mapped_stat(key)
+    if mapped_key is None:
         return None
-
-    stat = viewed[mapped_key]
-
-    if stat.value is None:
-        return None
-    elif not isinstance(stat.value, SV):
+    stat = big[mapped_key]
+    if not isinstance(stat.value, SV):
         return None
 
     embed = Embed(
-        title = f"To move the distance of {viewed['nickname'].value}'s {stat.title.lower()}, it would take {viewer['nickname'].value}...",
-        description = speedcalc(viewer, stat.value, speed = True, include_relative = True, foot = mapped_key == "footlength")
+        title = f"To move the distance of {big['nickname'].value}'s {stat.title.lower()}, it would take {small['nickname'].value}...",
+        description = speedcalc(small, stat.value, speed = True, include_relative = True, foot = mapped_key == "footlength")
     )
     return {"embed": embed}
 
 
 def get_speeddistance(userdata: User, distance: SV) -> EmbedToSend | StrToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
+
     distance_viewed = SV(distance * stats['viewscale'].value)
     if stats['height'].value > distance:
         msg = f"To {stats['nickname'].value}, {distance:,.3mu} appears to be **{distance_viewed:,.3mu}.**"
@@ -109,24 +90,16 @@ def get_speeddistance(userdata: User, distance: SV) -> EmbedToSend | StrToSend:
 
 def get_speedtime(userdata: User, time: TV) -> EmbedToSend | StrToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
+
     walkpersecond = SV(stats['walkperhour'].value / 3600)
     distance = SV(walkpersecond * time)
     return get_speeddistance(userdata, distance)
 
 
 def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
-    stats1 = StatBox.load(userdata1.stats).scale(userdata1.scale)
-    stats2 = StatBox.load(userdata2.stats).scale(userdata2.scale)
-    small, big = sorted([stats1, stats2], key=lambda s: s['height'].value)
-    if small['height'].value == 0 and big['height'].value == 0:
-        # TODO: This feels awkward
-        small_viewby_big = small.scale(1)
-        big_viewby_small = big.scale(1)
-    else:
-        small_viewby_big = small.scale(big['viewscale'].value)
-        big_viewby_small = big.scale(small['viewscale'].value)
+    small, big, small_viewby_big, big_viewby_small, _ = _get_compare_statboxes(userdata1, userdata2)
 
-    embed = create_compare_embed(
+    embed = _create_compare_embed(
         f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link}",
         requesterID, small, big)
 
@@ -136,30 +109,16 @@ def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSe
 
     for small_stat, big_stat in zip(small_viewby_big, big_viewby_small):
         if (small_stat.is_shown or big_stat.is_shown) and (small_stat.is_set or big_stat.is_set):
-            embed.add_field(**create_compare_field(small, big, small_stat, big_stat))
+            embed.add_field(**_create_compare_field(small, big, small_stat, big_stat))
 
     return {"embed": embed}
 
 
 def get_compare_simple(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
-    stats1 = StatBox.load(userdata1.stats).scale(userdata1.scale)
-    stats2 = StatBox.load(userdata2.stats).scale(userdata2.scale)
-    small, big = sorted([stats1, stats2], key=lambda s: s['height'].value)
-    if small['height'].value == 0 and big['height'].value == 0:
-        # TODO: This feels awkward
-        small_viewby_big = small.scale(1)
-        big_viewby_small = big.scale(1)
-        multiplier = Decimal(1)
-    else:
-        small_viewby_big = small.scale(big['viewscale'].value)
-        big_viewby_small = big.scale(small['viewscale'].value)
-        multiplier = big['height'].value / small['height'].value
+    small, big, small_viewby_big, big_viewby_small, multiplier = _get_compare_statboxes(userdata1, userdata2)
+    lookangle, lookdirection = _calc_view(small['height'].value, big['height'].value)
 
-    viewangle = calc_view_angle(small['height'].value, big['height'].value)
-    lookangle = abs(viewangle)
-    lookdirection = "up" if viewangle >= 0 else "down"
-
-    embed = create_compare_embed(
+    embed = _create_compare_embed(
         f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link}",
         requesterID, small, big)
 
@@ -187,24 +146,10 @@ def get_compare_simple(userdata1: User, userdata2: User, requesterID: int) -> Em
 
 
 def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: int) -> EmbedToSend:
-    stats1 = StatBox.load(userdata1.stats).scale(userdata1.scale)
-    stats2 = StatBox.load(userdata2.stats).scale(userdata2.scale)
-    small, big = sorted([stats1, stats2], key=lambda s: s['height'].value)
-    if small['height'].value == 0 and big['height'].value == 0:
-        # TODO: This feels awkward
-        small_viewby_big = small.scale(1)
-        big_viewby_small = big.scale(1)
-        multiplier = Decimal(1)
-    else:
-        small_viewby_big = small.scale(big['viewscale'].value)
-        big_viewby_small = big.scale(small['viewscale'].value)
-        multiplier = big['height'].value / small['height'].value
+    small, big, small_viewby_big, big_viewby_small, multiplier = _get_compare_statboxes(userdata1, userdata2)
+    lookangle, lookdirection = _calc_view(small['height'].value, big['height'].value)
 
-    viewangle = calc_view_angle(small['height'].value, big['height'].value)
-    lookangle = abs(viewangle)
-    lookdirection = "up" if viewangle >= 0 else "down"
-
-    embed = create_compare_embed(
+    embed = _create_compare_embed(
         f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link} of stats tagged `{tag}`",
         requesterID, small, big)
 
@@ -215,7 +160,7 @@ def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: i
     # TODO: Zip only works if we can guarantee each statbox has the same stats in the same order.
     for small_stat, big_stat in zip(small_viewby_big, big_viewby_small):
         if tag in small_stat.tags and (small_stat.body or big_stat.body):
-            embed.add_field(**create_compare_field(small, big, small_stat, big_stat))
+            embed.add_field(**_create_compare_field(small, big, small_stat, big_stat))
 
     embed.set_footer(text=(
         f"{small['nickname'].value} would have to look {lookdirection} {lookangle:.0f}° to look at {big['nickname'].value}'s face.\n"
@@ -226,28 +171,14 @@ def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: i
 
 
 def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | None:
-    stats1 = StatBox.load(userdata1.stats).scale(userdata1.scale)
-    stats2 = StatBox.load(userdata2.stats).scale(userdata2.scale)
-    small, big = sorted([stats1, stats2], key=lambda s: s['height'].value)
-    if small['height'].value == 0 and big['height'].value == 0:
-        # TODO: This feels awkward
-        small_viewby_big = small.scale(1)
-        big_viewby_small = big.scale(1)
-    else:
-        small_viewby_big = small.scale(big['viewscale'].value)
-        big_viewby_small = big.scale(small['viewscale'].value)
-
-    try:
-        mapped_key = statmap[key]
-    except KeyError:
+    small, big, small_viewby_big, big_viewby_small, _ = _get_compare_statboxes(userdata1, userdata2)
+    mapped_key = _get_mapped_stat(key)
+    if mapped_key is None:
         return None
-
     small_stat = small_viewby_big[mapped_key]
     big_stat = big_viewby_small[mapped_key]
 
-    body = create_compare_body(small, big, small_stat, big_stat)
-    if body is None:
-        return None
+    body = _create_compare_body(small, big, small_stat, big_stat)
 
     msg = (
         f"Comparing `{key}` between {emojis.comparebigcenter}**{big['nickname'].value}** and **{emojis.comparesmallcenter}{small['nickname'].value}**:"
@@ -258,21 +189,18 @@ def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | 
 
 
 def get_stats(userdata: User, requesterID: int) -> EmbedToSend:
-    stats = StatBox.load(userdata.stats).scale(userdata.scale)
-    avgstats = StatBox.load_average()
-    avgstatsview = avgstats.scale(stats['viewscale'].value)
+    viewer = StatBox.load(userdata.stats).scale(userdata.scale)
+    avg = StatBox.load_average()
+    avg_viewedby_viewer = avg.scale(viewer['viewscale'].value)
+    lookangle, lookdirection = _calc_view(viewer['height'].value, avg['height'].value)
 
-    viewangle = calc_view_angle(stats['height'].value, avgstats['height'].value)
-    avglookdirection = "up" if viewangle >= 0 else "down"
-    avglookangle = abs(viewangle)
+    embed = _create_embed(f"Stats for {viewer['nickname'].value}", requesterID)
 
-    embed = create_embed(f"Stats for {stats['nickname'].value}", requesterID)
-
-    for stat in stats:
+    for stat in viewer:
         if stat.is_shown:
             embed.add_field(**stat.embed)
 
-    embed.set_footer(text=f"An average person would look {avgstatsview['height'].value:,.3mu}, and weigh {avgstatsview['weight'].value:,.3mu} to you. You'd have to look {avglookdirection} {avglookangle:.0f}° to see them.")
+    embed.set_footer(text=f"An average person would look {avg_viewedby_viewer['height'].value:,.3mu}, and weigh {avg_viewedby_viewer['weight'].value:,.3mu} to you. You'd have to look {lookdirection} {lookangle:.0f}° to see them.")
 
     return {"embed": embed}
 
@@ -280,7 +208,7 @@ def get_stats(userdata: User, requesterID: int) -> EmbedToSend:
 def get_stats_bytag(userdata: User, tag: str, requesterID: int) -> EmbedToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
-    embed = create_embed(f"Stats for {stats['nickname'].value} tagged `{tag}`", requesterID)
+    embed = _create_embed(f"Stats for {stats['nickname'].value} tagged `{tag}`", requesterID)
 
     for stat in stats:
         if tag in stat.tags:
@@ -290,12 +218,12 @@ def get_stats_bytag(userdata: User, tag: str, requesterID: int) -> EmbedToSend:
 
 
 def get_stat(userdata: User, key: str) -> StrToSend | None:
-    stats = StatBox.load(userdata.stats).scale(userdata.scale)
-    try:
-        mapped_key = statmap[key]
-    except KeyError:
+    mapped_key = _get_mapped_stat(key)
+    if mapped_key is None:
         return None
+    stats = StatBox.load(userdata.stats).scale(userdata.scale)
     stat = stats[mapped_key]
+
     msg = f"{stat.string}"
     if isinstance(stat.value, (SV, WV)):
         msg += f"\n*That\'s about {format_close_object_smart(stat.value)}.*"
@@ -305,7 +233,7 @@ def get_stat(userdata: User, key: str) -> StrToSend | None:
 def get_basestats(userdata: User, requesterID: int) -> EmbedToSend:
     basestats = StatBox.load(userdata.stats)
 
-    embed = create_embed(f"Base Stats for {basestats['nickname'].value}", requesterID)
+    embed = _create_embed(f"Base Stats for {basestats['nickname'].value}", requesterID)
 
     for stat in basestats:
         if stat.is_shown:
@@ -318,7 +246,7 @@ def get_basestats(userdata: User, requesterID: int) -> EmbedToSend:
 def get_settings(userdata: User, requesterID: int) -> EmbedToSend:
     basestats = StatBox.load(userdata.stats)
 
-    embed = create_embed(f"Settings for {basestats['nickname'].value}", requesterID)
+    embed = _create_embed(f"Settings for {basestats['nickname'].value}", requesterID)
 
     for stat in basestats:
         if stat.definition.userkey is not None:
@@ -337,7 +265,7 @@ def get_settings(userdata: User, requesterID: int) -> EmbedToSend:
 def get_keypoints_embed(userdata: User, requesterID: int) -> EmbedToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
-    embed = create_embed(f"Keypoints for {stats['nickname'].value}", requesterID)
+    embed = _create_embed(f"Keypoints for {stats['nickname'].value}", requesterID)
 
     for stat in stats:
         if "keypoint" in stat.tags:
@@ -347,10 +275,10 @@ def get_keypoints_embed(userdata: User, requesterID: int) -> EmbedToSend:
     return {"embed": embed}
 
 
-def create_compare_embed(title: str, requesterID: int, small: StatBox, big: StatBox):
+def _create_compare_embed(title: str, requesterID: int, small: StatBox, big: StatBox):
     requestertag = f"<@!{requesterID}>"
     if small is not None and big is not None:
-        color = get_compare_color(requesterID, small, big)
+        color = _get_compare_color(requesterID, small, big)
         url = macrovision.get_url_from_statboxes([small, big])
     else:
         color = colors.purple
@@ -363,7 +291,7 @@ def create_compare_embed(title: str, requesterID: int, small: StatBox, big: Stat
     return embed
 
 
-def create_embed(title: str, requesterID: int) -> Embed:
+def _create_embed(title: str, requesterID: int) -> Embed:
     requestertag = f"<@!{requesterID}>"
     embed = Embed(title=title,
                   description=f"*Requested by {requestertag}*")
@@ -371,32 +299,63 @@ def create_embed(title: str, requesterID: int) -> Embed:
     return embed
 
 
-def create_compare_field(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> EmbedField:
+def _create_compare_field(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> EmbedField:
     embedfield = {
         "name": small_stat.title,
-        "value": create_compare_body(small, big, small_stat, big_stat),
+        "value": _create_compare_body(small, big, small_stat, big_stat),
         "inline": small_stat.definition.inline
     }
 
     return embedfield
 
 
-def create_compare_body(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> str:
+def _create_compare_body(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> str:
     return (
-        f"{emojis.comparebig}{create_stat_body(big, big_stat)}\n"
-        f"{emojis.comparesmall}{create_stat_body(small, small_stat)}"
+        f"{emojis.comparebig}{_create_stat_body(big, big_stat)}\n"
+        f"{emojis.comparesmall}{_create_stat_body(small, small_stat)}"
     )
 
 
-def create_stat_body(stats: StatBox, stat: Stat) -> str:
+def _create_stat_body(stats: StatBox, stat: Stat) -> str:
     if not stat.is_set:
         return f"{stats['nickname'].value} doesn't have that stat."
     return stat.body
 
 
-def get_compare_color(requesterID: int, small: StatBox, big: StatBox):
+def _get_compare_color(requesterID: int, small: StatBox, big: StatBox):
     if requesterID == big['id'].value:
         return colors.blue
     if requesterID == small['id'].value:
         return colors.red
     return colors.purple
+
+
+def _get_mapped_stat(key: str) -> str | None:
+    try:
+        mapped_key = statmap[key]
+    except KeyError:
+        return None
+    return mapped_key
+
+
+def _get_compare_statboxes(userdata1: User, userdata2: User) -> tuple[StatBox, StatBox, StatBox, StatBox, Decimal]:
+    stats1 = StatBox.load(userdata1.stats).scale(userdata1.scale)
+    stats2 = StatBox.load(userdata2.stats).scale(userdata2.scale)
+    small, big = sorted([stats1, stats2], key=lambda s: s['height'].value)
+    if small['height'].value == 0 and big['height'].value == 0:
+        # TODO: This feels awkward
+        small_viewby_big = small.scale(1)
+        big_viewby_small = big.scale(1)
+        multiplier = Decimal(1)
+    else:
+        small_viewby_big = small.scale(big['viewscale'].value)
+        big_viewby_small = big.scale(small['viewscale'].value)
+        multiplier = big['height'].value / small['height'].value
+    return small, big, small_viewby_big, big_viewby_small, multiplier
+
+
+def _calc_view(viewer: SV, viewee: SV) -> tuple[Decimal, str]:
+    viewangle = calc_view_angle(viewer, viewee)
+    lookangle = abs(viewangle)
+    lookdirection = "up" if viewangle >= 0 else "down"
+    return lookangle, lookdirection
