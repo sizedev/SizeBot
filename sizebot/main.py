@@ -240,13 +240,13 @@ def main():
 
     @bot.event
     async def on_guild_join(guild):
-        # TODO: Add whitelist.
-        with open(paths.whitelistpath) as f:
-            whitelist = [int(line) for line in f.readlines()]
+        with open(paths.blacklistpath) as f:
+            blacklist = [int(line) for line in f.readlines()]
 
-        if guild.id not in whitelist:
-            ...  # TODO: Send a message? Where?
-            logger.error(f"SizeBot tried to be added to {guild.name}! ({guild.id}), but it wasn't in the whitelist!")
+        if guild.id in blacklist:
+            await guild.owner.send("SizeBot has been banned from this guild.")
+
+            logger.error(f"SizeBot tried to be added to {guild.name}! ({guild.id}), but it was in the blacklist!")
             await guild.leave()
             return
 
