@@ -96,8 +96,8 @@ def get_speedcompare_stat(userdata1: User, userdata2: User, key: str) -> EmbedTo
 
 def get_speeddistance(userdata: User, distance: SV) -> EmbedToSend | StrToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
+    distance_viewed = SV(distance * stats['viewscale'].value)
     if stats['height'].value > distance:
-        distance_viewed = SV(distance * stats['viewscale'].value)
         msg = f"To {stats['nickname'].value}, {distance:,.3mu} appears to be **{distance_viewed:,.3mu}.**"
         return {"content": msg}
     multiplier = distance / stats['height'].value
