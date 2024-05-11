@@ -244,7 +244,7 @@ def main():
             blacklist = [int(line) for line in f.readlines()]
 
         if guild.id in blacklist:
-            await guild.owner.send("SizeBot has been banned from this guild.")
+            await guild.owner.send("SizeBot is not available for this server.")
 
             logger.error(f"SizeBot tried to be added to {guild.name}! ({guild.id}), but it was in the blacklist!")
             await guild.leave()
