@@ -257,6 +257,9 @@ class HelpCog(commands.Cog):
         embed.add_field(name = "Technical Details",
                         value = "Written in Python 3.6, and slowly upgraded to 3.12. Written Visual Studio Code. External libraries used are `discord.py` (rewrite version), `digiformatter` (my personal terminal-formatting library), and various dependencies you can find on the GitHub page.",
                         inline = False)
+        embed.add_field(name = "Server",
+                        value = "Go to this server: https://discord.gg/bbGjN8dTgk for help with the bot!",
+                        inline = False)
         embed.set_footer(text = f"Version {__version__} | {now.strftime('%d %b %Y')}")
         await ctx.send(embed = embed)
 
@@ -383,7 +386,7 @@ class HelpCog(commands.Cog):
                        "You can invite SizeBot to your server now!\n"
                        f"- Use this [link](https://discord.com/oauth2/authorize?client_id={ctx.bot.application_id}&permissions=563365424786496&scope=bot) to invite SizeBot to your server!\n"
                        f"- (Use this [link](https://discord.com/oauth2/authorize?client_id={ctx.bot.application_id}&permissions=0&scope=bot) if you would like to manually manage the bot permissions).\n"
-                       "If you need help, reach out to DigiDuncan (@digiduncan) and use `&help`!")
+                       "If you need help, reach out to DigiDuncan (@digiduncan) and use `&help`! You can also go to this server for additional help: https://discord.gg/bbGjN8dTgk")
 
 
 class HelpCategory:
