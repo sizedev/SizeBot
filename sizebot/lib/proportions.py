@@ -34,6 +34,7 @@ class EmbedField(TypedDict):
     inline: bool
 
 
+# stats ???
 def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
     small, big, _, _, multiplier = _get_compare_statboxes(userdata1, userdata2)
 
@@ -41,13 +42,10 @@ def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> Embe
         f"Speed/Distance Comparison of {big['nickname'].value} and {small['nickname'].value}",
         requesterID)
 
-    embed.add_field(name=f"**{small["nickname"].value}** Speeds", value=small.stats_by_key["simplespeeds+"].body, inline=False)
-
-    embed.add_field(name="Height", value=speedcalc(small, big["height"].value, include_relative = True), inline=True)  # hardcode height because it's weird
-    embed.add_field(name="Foot Length", value=speedcalc(small, big["footlength"].value, include_relative = True, foot = True), inline=True)  # hardcode height because it's weird
+    embed.add_field(name=f"**{small["nickname"].value}** Speeds", value=small["simplespeeds+"].body, inline=False)
 
     for stat in big.stats:
-        if stat.is_shown and stat.is_set and isinstance(stat.value, SV) and stat.key != "terminalvelocity":
+        if "speedcompare" in stat.tags and stat.is_set and stat.value >= small['height'].value:
             embed.add_field(name = stat.title, value=(speedcalc(small, stat.value, include_relative = True, foot = stat.key == "footlength")))
 
     embed.set_footer(text=(f"{big['nickname'].value} is {multiplier:,.3}x taller than {small['nickname'].value}."))
@@ -55,6 +53,7 @@ def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> Embe
     return {"embed": embed}
 
 
+# stat with stat.key=key
 def get_speedcompare_stat(userdata1: User, userdata2: User, key: str) -> EmbedToSend | None:
     small, big, _, _, _ = _get_compare_statboxes(userdata1, userdata2)
     mapped_key = _get_mapped_stat(key)
@@ -71,6 +70,7 @@ def get_speedcompare_stat(userdata1: User, userdata2: User, key: str) -> EmbedTo
     return {"embed": embed}
 
 
+# bunch-o-stats
 def get_speeddistance(userdata: User, distance: SV) -> EmbedToSend | StrToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
@@ -88,6 +88,7 @@ def get_speeddistance(userdata: User, distance: SV) -> EmbedToSend | StrToSend:
     return {"embed": embed}
 
 
+# stats with stat.key=walkperhour
 def get_speedtime(userdata: User, time: TV) -> EmbedToSend | StrToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
@@ -96,6 +97,7 @@ def get_speedtime(userdata: User, time: TV) -> EmbedToSend | StrToSend:
     return get_speeddistance(userdata, distance)
 
 
+# stats ???
 def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
     small, big, small_viewby_big, big_viewby_small, _ = _get_compare_statboxes(userdata1, userdata2)
 
@@ -114,6 +116,7 @@ def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSe
     return {"embed": embed}
 
 
+# stats with stat.key=height or weight
 def get_compare_simple(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSend:
     small, big, small_viewby_big, big_viewby_small, multiplier = _get_compare_statboxes(userdata1, userdata2)
     lookangle, lookdirection = _calc_view(small['height'].value, big['height'].value)
@@ -145,6 +148,7 @@ def get_compare_simple(userdata1: User, userdata2: User, requesterID: int) -> Em
     return {"embed": embed}
 
 
+# stats with stat.tag=tag
 def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: int) -> EmbedToSend:
     small, big, small_viewby_big, big_viewby_small, multiplier = _get_compare_statboxes(userdata1, userdata2)
     lookangle, lookdirection = _calc_view(small['height'].value, big['height'].value)
@@ -170,6 +174,7 @@ def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: i
     return {"embed": embed}
 
 
+# stat with stat.key=key
 def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | None:
     small, big, small_viewby_big, big_viewby_small, _ = _get_compare_statboxes(userdata1, userdata2)
     mapped_key = _get_mapped_stat(key)
@@ -188,6 +193,7 @@ def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | 
     return {"content": msg}
 
 
+# stats with stat.is_shown
 def get_stats(userdata: User, requesterID: int) -> EmbedToSend:
     viewer = StatBox.load(userdata.stats).scale(userdata.scale)
     avg = StatBox.load_average()
@@ -205,6 +211,7 @@ def get_stats(userdata: User, requesterID: int) -> EmbedToSend:
     return {"embed": embed}
 
 
+# stats with stat.tag=tag
 def get_stats_bytag(userdata: User, tag: str, requesterID: int) -> EmbedToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
@@ -217,6 +224,7 @@ def get_stats_bytag(userdata: User, tag: str, requesterID: int) -> EmbedToSend:
     return {"embed": embed}
 
 
+# stat with stat.key=key
 def get_stat(userdata: User, key: str) -> StrToSend | None:
     mapped_key = _get_mapped_stat(key)
     if mapped_key is None:
@@ -230,6 +238,7 @@ def get_stat(userdata: User, key: str) -> StrToSend | None:
     return {"content": msg}
 
 
+# stats with stat.is_shown
 def get_basestats(userdata: User, requesterID: int) -> EmbedToSend:
     basestats = StatBox.load(userdata.stats)
 
@@ -243,6 +252,7 @@ def get_basestats(userdata: User, requesterID: int) -> EmbedToSend:
     return {"embed": embed}
 
 
+# stats with stat.definition.userkey
 def get_settings(userdata: User, requesterID: int) -> EmbedToSend:
     basestats = StatBox.load(userdata.stats)
 
@@ -262,6 +272,7 @@ def get_settings(userdata: User, requesterID: int) -> EmbedToSend:
     return {"embed": embed}
 
 
+# stats with stat.tag="keypoint"
 def get_keypoints_embed(userdata: User, requesterID: int) -> EmbedToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
@@ -275,7 +286,7 @@ def get_keypoints_embed(userdata: User, requesterID: int) -> EmbedToSend:
     return {"embed": embed}
 
 
-def _create_compare_embed(title: str, requesterID: int, small: StatBox, big: StatBox):
+def _create_compare_embed(title: str, requesterID: int, small: StatBox = None, big: StatBox = None):
     requestertag = f"<@!{requesterID}>"
     if small is not None and big is not None:
         color = _get_compare_color(requesterID, small, big)
