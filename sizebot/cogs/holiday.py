@@ -39,69 +39,45 @@ class HolidayCog(commands.Cog):
             now = arrow.now()
 
             # Holiday checks.
-            newnick = conf.name
             newactivityname = conf.activity
 
             if now.month == 1 and now.day == 1:  # New Year's Day
                 logger.info("Happy new year!")
-                newnick += f" {int_to_roman(int(now.year))}"
-                newactivityname = "Happy New Year!"
+                newactivityname = f"Happy New Year {int_to_roman(int(now.year))}!"
             elif now.month == 1 and now.day == 31:
-                newnick += " 🎉"
                 newactivityname = "Happy Birthday, Nichole!"
-            elif now.month == 2 and now.day == 14:  # Valentine's Day (and AWK's birthday)
+            elif now.month == 2 and now.day == 14:  # Valentine's Day (and Aria's birthday)
                 logger.info("Happy Valentine's Day!")
-                newnick += " 💗"
                 newactivityname = "Happy Valentine's Day!"
             elif now.month == 2 and now.day == 25:
-                newnick += " 🍊"
                 newactivityname = "Happy Birthday, Slim!"
             elif now.month == 3 and now.day == 10:  # Digi's birthday
                 logger.info("Happy birthday Digi!")
-                newnick += " 🎉"
                 newactivityname = "Happy Birthday, DigiDuncan!"
             elif now.month == 2 and now.day == 8:  # Natalie's birthday
                 logger.info("Happy birthday Natalie!")
-                newnick += " 🎉"
                 newactivityname = "Happy Birthday, Natalie!"
             elif now.month == 5 and now.day == 5:  # Cinco de Mayo
                 logger.info("Happy Cinco de Mayo!")
-                newnick += " 🇲🇽"
                 newactivityname = "Happy Cinco De Mayo!"
             elif now.month == 6 and now.day == 6:  # Swedish Independence Day
                 logger.info("Happy Swedish Independence Day!")
                 newactivityname = "🇸🇪 AGGA 🇸🇪"
             elif now.month == 7 and now.day == 1:  # Canada Day
                 logger.info("Happy Canada Day!")
-                newnick += " 🍁"
                 newactivityname = "Happy Canada Day!"
             elif now.month == 7 and now.day == 4:  # Fourth of July
                 logger.info("Happy Fourth of July!")
-                newnick += " 🇺🇸"
-            elif now.month == 7 and now.day == 4:  # Fourth of July
-                logger.info("Happy birthday, Tris!")
-                newnick += " 🌹🌌"
-                newactivityname = "Happy birthday, Tris!"
             elif now.month == 10 and now.day == 31:  # Halloween
                 logger.info("Happy Halloween!")
-                newnick = "SpookBot 🎃"
                 newactivityname = "OoOoOoOo"
             elif now.month == 12 and now.day == 25:  # Christmas
                 logger.info("Merry Christmas!")
-                newnick = newnick[0] + "izeSanta 🎄"
                 newactivityname = "Merry Christmas!"
             else:
                 # logger.info("Just another boring non-holiday...")
                 pass
 
-            for guild in self.bot.guilds:
-                if not guild.me.guild_permissions.change_nickname:
-                    logger.info(f"Skipping changing nick in {guild.name} due to missing permissions.")
-                    continue
-                if newnick != guild.me.display_name:
-                    logger.info(f"Updating bot nick to \"{newnick}\" in {guild.name}.")
-                    # PERMISSION: requires change_nickname
-                    await guild.me.edit(nick = newnick)
             if self.bot.activity and newactivityname != self.bot.activity.name:
                 logger.info(f"Updating bot activity to \"{newactivityname}\".")
                 newactivity = discord.Game(name = newactivityname)
