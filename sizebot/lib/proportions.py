@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 import logging
 
@@ -47,13 +47,9 @@ def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> Embe
     else:
         multiplier = viewed['height'].value / viewer['height'].value
 
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(
-        title=f"Speed/Distance Comparison of {viewed['nickname'].value} and {viewer['nickname'].value}",
-        description=f"*Requested by {requestertag}*",
-        color=colors.purple
-    )
-    embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
+    embed = create_compare_embed(
+        f"Speed/Distance Comparison of {viewed['nickname'].value} and {viewer['nickname'].value}",
+        requesterID)
 
     embed.add_field(name=f"**{viewer["nickname"].value}** Speeds", value=viewer.stats_by_key["simplespeeds+"].body, inline=False)
 
@@ -90,7 +86,8 @@ def get_speedcompare_stat(userdata1: User, userdata2: User, key: str) -> EmbedTo
 
     embed = Embed(
         title = f"To move the distance of {viewed['nickname'].value}'s {stat.title.lower()}, it would take {viewer['nickname'].value}...",
-        description = speedcalc(viewer, stat.value, speed = True, include_relative = True, foot = mapped_key == "footlength"))
+        description = speedcalc(viewer, stat.value, speed = True, include_relative = True, foot = mapped_key == "footlength")
+    )
     return {"embed": embed}
 
 
@@ -104,7 +101,8 @@ def get_speeddistance(userdata: User, distance: SV) -> EmbedToSend | StrToSend:
 
     embed = Embed(
         title = f"{distance:,.3mu} to {stats['nickname'].value}",
-        description = speedcalc(stats, distance, speed = True, include_relative = True))
+        description = speedcalc(stats, distance, speed = True, include_relative = True)
+    )
     embed.set_footer(text = f"{distance:,.3mu} is {multiplier:,.3}x larger than {stats['nickname'].value}. It looks to be about {format_close_object_smart(distance_viewed)}."),
     return {"embed": embed}
 
@@ -128,25 +126,17 @@ def get_compare(userdata1: User, userdata2: User, requesterID: int) -> EmbedToSe
         small_viewby_big = small.scale(big['viewscale'].value)
         big_viewby_small = big.scale(small['viewscale'].value)
 
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(
-        title=f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link}",
-        description=f"*Requested by {requestertag}*",
-        color=colors.purple,
-        url = macrovision.get_url_from_statboxes([small, big])
-    )
-    if requesterID == big['id'].value:
-        embed.color = colors.blue
-    if requesterID == small['id'].value:
-        embed.color = colors.red
-    embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
+    embed = create_compare_embed(
+        f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link}",
+        requesterID, small, big)
+
     embed.add_field(value=(
         f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{big['nickname'].value}** looks to {emojis.comparesmallcenter} **{small['nickname'].value}**.\n"
         f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{small['nickname'].value}** looks to {emojis.comparebigcenter} **{big['nickname'].value}**."), inline=False)
 
     for small_stat, big_stat in zip(small_viewby_big, big_viewby_small):
         if (small_stat.is_shown or big_stat.is_shown) and (small_stat.is_set or big_stat.is_set):
-            embed.add_field(**get_compare_field(small, big, small_stat, big_stat))
+            embed.add_field(**create_compare_field(small, big, small_stat, big_stat))
 
     return {"embed": embed}
 
@@ -169,19 +159,10 @@ def get_compare_simple(userdata1: User, userdata2: User, requesterID: int) -> Em
     lookangle = abs(viewangle)
     lookdirection = "up" if viewangle >= 0 else "down"
 
-    requestertag = f"<@!{requesterID}>"
+    embed = create_compare_embed(
+        f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link}",
+        requesterID, small, big)
 
-    embed = Embed(
-        title=f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link}",
-        description=f"*Requested by {requestertag}*",
-        color=colors.purple,
-        url = macrovision.get_url_from_statboxes([small, big])
-    )
-    if requesterID == big['id'].value:
-        embed.color = colors.blue
-    if requesterID == small['id'].value:
-        embed.color = colors.red
-    embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
     embed.add_field(name=f"{emojis.comparebigcenter} **{big['nickname'].value}**", value=(
         f"{emojis.blank}{emojis.blank} **Height:** {big['height'].value:,.3mu}\n"
         f"{emojis.blank}{emojis.blank} **Weight:** {big['weight'].value:,.3mu}\n"), inline=True)
@@ -223,18 +204,10 @@ def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: i
     lookangle = abs(viewangle)
     lookdirection = "up" if viewangle >= 0 else "down"
 
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(
-        title=f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link} of stats tagged `{tag}`",
-        description=f"*Requested by {requestertag}*",
-        color=colors.purple,
-        url = macrovision.get_url_from_statboxes([small, big])
-    )
-    if requesterID == big['id'].value:
-        embed.color = colors.blue
-    if requesterID == small['id'].value:
-        embed.color = colors.red
-    embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
+    embed = create_compare_embed(
+        f"Comparison of {big['nickname'].value} and {small['nickname'].value} {emojis.link} of stats tagged `{tag}`",
+        requesterID, small, big)
+
     embed.add_field(value=(
         f"{emojis.comparebig} represents how {emojis.comparebigcenter} **{big['nickname'].value}** looks to {emojis.comparesmallcenter} **{small['nickname'].value}**.\n"
         f"{emojis.comparesmall} represents how {emojis.comparesmallcenter} **{small['nickname'].value}** looks to {emojis.comparebigcenter} **{big['nickname'].value}**."), inline=False)
@@ -242,7 +215,7 @@ def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: i
     # TODO: Zip only works if we can guarantee each statbox has the same stats in the same order.
     for small_stat, big_stat in zip(small_viewby_big, big_viewby_small):
         if tag in small_stat.tags and (small_stat.body or big_stat.body):
-            embed.add_field(**get_compare_field(small, big, small_stat, big_stat))
+            embed.add_field(**create_compare_field(small, big, small_stat, big_stat))
 
     embed.set_footer(text=(
         f"{small['nickname'].value} would have to look {lookdirection} {lookangle:.0f}° to look at {big['nickname'].value}'s face.\n"
@@ -272,7 +245,7 @@ def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | 
     small_stat = small_viewby_big[mapped_key]
     big_stat = big_viewby_small[mapped_key]
 
-    body = get_compare_body(small, big, small_stat, big_stat)
+    body = create_compare_body(small, big, small_stat, big_stat)
     if body is None:
         return None
 
@@ -292,12 +265,8 @@ def get_stats(userdata: User, requesterID: int) -> EmbedToSend:
     viewangle = calc_view_angle(stats['height'].value, avgstats['height'].value)
     avglookdirection = "up" if viewangle >= 0 else "down"
     avglookangle = abs(viewangle)
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(
-        title=f"Stats for {stats['nickname'].value}",
-        description=f"*Requested by {requestertag}*",
-        color=colors.cyan)
-    embed.set_author(name=f"SizeBot {__version__}")
+
+    embed = create_embed(f"Stats for {stats['nickname'].value}", requesterID)
 
     for stat in stats:
         if stat.is_shown:
@@ -311,12 +280,7 @@ def get_stats(userdata: User, requesterID: int) -> EmbedToSend:
 def get_stats_bytag(userdata: User, tag: str, requesterID: int) -> EmbedToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(
-        title=f"Stats for {stats['nickname'].value} tagged `{tag}`",
-        description=f"*Requested by {requestertag}*",
-        color=colors.cyan)
-    embed.set_author(name=f"SizeBot {__version__}")
+    embed = create_embed(f"Stats for {stats['nickname'].value} tagged `{tag}`", requesterID)
 
     for stat in stats:
         if tag in stat.tags:
@@ -338,14 +302,10 @@ def get_stat(userdata: User, key: str) -> StrToSend | None:
     return {"content": msg}
 
 
-def get_basestats(userdata: User, requesterID: int = None) -> EmbedToSend:
+def get_basestats(userdata: User, requesterID: int) -> EmbedToSend:
     basestats = StatBox.load(userdata.stats)
 
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(title=f"Base Stats for {basestats['nickname'].value}",
-                  description=f"*Requested by {requestertag}*",
-                  color=colors.cyan)
-    embed.set_author(name=f"SizeBot {__version__}")
+    embed = create_embed(f"Base Stats for {basestats['nickname'].value}", requesterID)
 
     for stat in basestats:
         if stat.is_shown:
@@ -355,14 +315,10 @@ def get_basestats(userdata: User, requesterID: int = None) -> EmbedToSend:
     return {"embed": embed}
 
 
-def get_settings(userdata: User, requesterID: int = None) -> EmbedToSend:
+def get_settings(userdata: User, requesterID: int) -> EmbedToSend:
     basestats = StatBox.load(userdata.stats)
 
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(title=f"Settings for {basestats['nickname'].value}",
-                  description=f"*Requested by {requestertag}*",
-                  color=colors.cyan)
-    embed.set_author(name=f"SizeBot {__version__}")
+    embed = create_embed(f"Settings for {basestats['nickname'].value}", requesterID)
 
     for stat in basestats:
         if stat.definition.userkey is not None:
@@ -378,14 +334,10 @@ def get_settings(userdata: User, requesterID: int = None) -> EmbedToSend:
     return {"embed": embed}
 
 
-def get_keypoints_embed(userdata: User, requesterID: int = None) -> EmbedToSend:
+def get_keypoints_embed(userdata: User, requesterID: int) -> EmbedToSend:
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
-    requestertag = f"<@!{requesterID}>"
-    embed = Embed(title=f"Keypoints for {stats['nickname'].value}",
-                  description=f"*Requested by {requestertag}*",
-                  color=colors.cyan)
-    embed.set_author(name=f"SizeBot {__version__}")
+    embed = create_embed(f"Keypoints for {stats['nickname'].value}", requesterID)
 
     for stat in stats:
         if "keypoint" in stat.tags:
@@ -395,24 +347,56 @@ def get_keypoints_embed(userdata: User, requesterID: int = None) -> EmbedToSend:
     return {"embed": embed}
 
 
-def get_compare_field(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> EmbedField:
+def create_compare_embed(title: str, requesterID: int, small: StatBox, big: StatBox):
+    requestertag = f"<@!{requesterID}>"
+    if small is not None and big is not None:
+        color = get_compare_color(requesterID, small, big)
+        url = macrovision.get_url_from_statboxes([small, big])
+    else:
+        color = colors.purple
+        url = None
+    embed = Embed(title=title,
+                  description=f"*Requested by {requestertag}*",
+                  color=color,
+                  url=url)
+    embed.set_author(name=f"SizeBot {__version__}", icon_url=compareicon)
+    return embed
+
+
+def create_embed(title: str, requesterID: int) -> Embed:
+    requestertag = f"<@!{requesterID}>"
+    embed = Embed(title=title,
+                  description=f"*Requested by {requestertag}*")
+    embed.set_author(name=f"SizeBot {__version__}")
+    return embed
+
+
+def create_compare_field(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> EmbedField:
     embedfield = {
         "name": small_stat.title,
-        "value": get_compare_body(small, big, small_stat, big_stat),
+        "value": create_compare_body(small, big, small_stat, big_stat),
         "inline": small_stat.definition.inline
     }
 
     return embedfield
 
 
-def get_compare_body(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> str:
+def create_compare_body(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> str:
     return (
-        f"{emojis.comparebig}{get_stat_body(big, big_stat)}\n"
-        f"{emojis.comparesmall}{get_stat_body(small, small_stat)}"
+        f"{emojis.comparebig}{create_stat_body(big, big_stat)}\n"
+        f"{emojis.comparesmall}{create_stat_body(small, small_stat)}"
     )
 
 
-def get_stat_body(stats: StatBox, stat: Stat) -> str:
+def create_stat_body(stats: StatBox, stat: Stat) -> str:
     if not stat.is_set:
         return f"{stats['nickname'].value} doesn't have that stat."
     return stat.body
+
+
+def get_compare_color(requesterID: int, small: StatBox, big: StatBox):
+    if requesterID == big['id'].value:
+        return colors.blue
+    if requesterID == small['id'].value:
+        return colors.red
+    return colors.purple
