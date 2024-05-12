@@ -157,7 +157,6 @@ class MPCog(commands.Cog):
         style = string.changetype
         amount = string.amount
 
-        userdata = userdb.load(other.guild.id, other.id)
         if style == "add":
             userdata.height += amount
         elif style == "multiply":
@@ -180,7 +179,7 @@ class MPCog(commands.Cog):
     @commands.guild_only()
     async def setother(self, ctx, other: discord.Member, *, newheight: SV):
         """Set someone else's height. The other user must have this functionality enabled."""
-        userdata = userdb.load(other.guild.id, other.author.id)
+        userdata = userdb.load(other.guild.id, other.id)
 
         if not userdata.allowchangefromothers:
             await ctx.send(f"{userdata.nickname} does not allow others to change their size.")
