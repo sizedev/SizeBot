@@ -233,7 +233,7 @@ def get_stat(userdata: User, key: str) -> StrToSend | None:
     stat = stats[mapped_key]
 
     msg = f"{stat.string}"
-    if isinstance(stat.value, (SV, WV)):
+    if isinstance(stat.value, (SV, WV)) and "speed" not in stat.tags:
         msg += f"\n*That\'s about {format_close_object_smart(stat.value)}.*"
     return {"content": msg}
 
