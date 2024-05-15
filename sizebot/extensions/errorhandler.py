@@ -30,6 +30,9 @@ async def setup(bot):
         if isinstance(err, commands.BadMultilineCommand):
             err = errors.MultilineAsNonFirstCommandException()
 
+        if isinstance(err, errors.UserMessedUpException):
+            await ctx.send(f"{emojis.error} {err.formatUserMessage(ctx)}")
+
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
             message = await err.formatMessage(ctx)
