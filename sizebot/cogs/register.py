@@ -30,7 +30,7 @@ async def remove_user_role(member):
     await member.remove_roles(role, reason="Unregistered as SizeBot user")
 
 
-async def show_next_step(ctx, userdata: userdb.User, completed=False):
+async def show_next_step(ctx: commands.Context, userdata: userdb.User, completed=False):
     if completed:
         congrats_message = (
             f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n"

@@ -34,12 +34,16 @@
 # RATE for 10meters
 # RATE -> 10meters
 
+from typing import Literal, Union
+
 import re
+
+from discord.ext import commands
+
 from sizebot.lib.errors import InvalidSizeValue, ParseError, ThisShouldNeverHappenException
 from sizebot.lib.utils import regexbuild, try_or_none
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, TV
-from typing import Literal, Union
 
 add_prefixes = ["+", "add", "plus"]
 subtract_prefixes = ["-", "sub", "subtract", "minus"]
@@ -150,7 +154,7 @@ class Diff:
         return cls(original, changetype, amount)
 
     @classmethod
-    async def convert(cls, ctx, argument):
+    async def convert(cls, ctx: commands.Context, argument):
         return cls.parse(argument)
 
 
@@ -195,7 +199,7 @@ class Rate:
         return cls(original, diff, time)
 
     @classmethod
-    async def convert(cls, ctx, argument):
+    async def convert(cls, ctx: commands.Context, argument):
         return cls.parse(argument)
 
 
@@ -252,7 +256,7 @@ class LimitedRate:
         return cls(original, rate, stop)
 
     @classmethod
-    async def convert(cls, ctx, argument):
+    async def convert(cls, ctx: commands.Context, argument):
         return cls.parse(argument)
 
 

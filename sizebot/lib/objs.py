@@ -6,6 +6,7 @@ import random
 from typing import Literal, Optional
 
 from discord import Embed
+from discord.ext import commands
 
 import sizebot.data.objects
 from sizebot import __version__
@@ -249,7 +250,7 @@ class DigiObject:
         return cls(**objJson)
 
     @classmethod
-    async def convert(cls, ctx, argument):
+    async def convert(cls, ctx: commands.Context, argument):
         obj = cls.find_by_name(argument)
         if obj is None:
             raise errors.InvalidObject(argument)

@@ -9,6 +9,7 @@ from datetime import date, datetime, time, timedelta
 import arrow
 import discord
 from discord import Embed
+from discord.ext import commands
 import PIL
 from PIL import Image, ImageDraw
 
@@ -185,7 +186,7 @@ def buildEvalWrapper(evalStr, addReturn = True):
 
 
 # TODO: CamelCase
-async def runEval(ctx, evalStr):
+async def runEval(ctx: commands.Context, evalStr):
     evalGlobals = getEvalGlobals()
     evalLocals = {}
 

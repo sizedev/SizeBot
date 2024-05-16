@@ -1,5 +1,7 @@
 import re
 
+from discord.ext import commands
+
 from sizebot.lib.diff import Rate as ParseableRate
 from sizebot.lib.errors import InvalidSizeValue, InvalidStat
 from sizebot.lib.shoesize import from_shoe_size
@@ -90,5 +92,5 @@ class FakePlayer(User):
         return player
 
     @classmethod
-    async def convert(cls, ctx, argument):
+    async def convert(cls, ctx: commands.Context, argument):
         return cls.parse(argument)

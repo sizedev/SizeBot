@@ -13,7 +13,7 @@ logger = logging.getLogger("sizebot")
 
 async def setup(bot):
     @bot.event
-    async def on_command_error(ctx, error):
+    async def on_command_error(ctx: commands.Context, error):
         # Get actual error
         err = getattr(error, "original", error)
 

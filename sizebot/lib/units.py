@@ -1,12 +1,15 @@
+from typing import Tuple
+
 import collections
 import importlib.resources as pkg_resources
 import json
 import logging
 import re
 from functools import total_ordering
-from sizebot.lib.loglevels import EGG
-from typing import Tuple
 
+from discord.ext import commands
+
+from sizebot.lib.loglevels import EGG
 import sizebot.data
 import sizebot.data.units
 from sizebot.lib import errors, utils
@@ -401,7 +404,7 @@ class Dimension(Decimal):
         return cls(baseUnit)
 
     @classmethod
-    async def convert(cls, ctx, argument):
+    async def convert(cls, ctx: commands.Context, argument):
         return cls.parse(argument)
 
     @classmethod

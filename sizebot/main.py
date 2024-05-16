@@ -6,6 +6,7 @@ import sys
 from datetime import datetime
 
 import discord
+from discord.ext import commands
 from discord.ext.commands import Bot
 
 from digiformatter import styles, logger as digilogger
@@ -166,12 +167,12 @@ def main():
         logger.error("SizeBot has been reconnected to Discord.")
 
     @bot.event
-    async def on_command(ctx):
+    async def on_command(ctx: commands.Context):
         guild = truncate(ctx.guild.name, 20) if (hasattr(ctx, "guild") and ctx.guild is not None) else "DM"
         logger.log(CMD, f"G {guild}, U {ctx.message.author.name}: {ctx.message.content}")
 
     @bot.event
-    async def on_message(message):
+    async def on_message(message: discord.Message):
         # F*** smart quotes.
         message.content = message.content.replace("“", "\"")
         message.content = message.content.replace("”", "\"")
@@ -192,7 +193,7 @@ def main():
         await monika.on_message(message)
         await active.on_message(message)
 
-    async def on_message_timed(message):
+    async def on_message_timed(message: discord.Message):
         def timeywimey():
             now = arrow.now()
             try:
@@ -230,7 +231,7 @@ def main():
         await message.channel.send(latency)
 
     @bot.event
-    async def on_message_edit(before, after):
+    async def on_message_edit(before: discord.Message, after: discord.Message):
         if before.content == after.content:
             return
         await bot.process_commands(after)
@@ -239,7 +240,7 @@ def main():
         await active.on_message(after)
 
     @bot.event
-    async def on_guild_join(guild):
+    async def on_guild_join(guild: discord.Guild):
         with open(paths.blacklistpath) as f:
             blacklist = [int(line) for line in f.readlines()]
 
@@ -254,7 +255,7 @@ def main():
                     f"You should talk to the owner, {guild.owner}! ({guild.owner.id})")
 
     @bot.event
-    async def on_guild_remove(guild):
+    async def on_guild_remove(guild: discord.Guild):
         logger.warn(f"SizeBot has been removed from {guild.name}! ({guild.id})")
 
     def on_disconnect():

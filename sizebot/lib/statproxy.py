@@ -1,4 +1,7 @@
 import logging
+
+from discord.ext import commands
+
 from sizebot.lib.errors import InvalidStat, InvalidStatTag
 from sizebot.lib.stats import statmap, taglist
 
@@ -36,5 +39,5 @@ class StatProxy:
             return StatProxy(statmap[s], False)
 
     @classmethod
-    async def convert(cls, ctx, argument):
+    async def convert(cls, ctx: commands.Context, argument):
         return cls.parse(argument)
