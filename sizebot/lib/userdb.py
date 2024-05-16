@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Literal, TypedDict, TYPE_CHECKING
 if TYPE_CHECKING:
     from sizebot.lib.fakeplayer import FakePlayer
