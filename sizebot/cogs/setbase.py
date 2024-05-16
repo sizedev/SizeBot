@@ -22,7 +22,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseheight(self, ctx: commands.Context, *, newbaseheight: SV):
+    async def setbaseheight(self, ctx: commands.Context[commands.Bot], *, newbaseheight: SV):
         """Change base height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -45,7 +45,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseweight(self, ctx: commands.Context, *, newbaseweight: WV):
+    async def setbaseweight(self, ctx: commands.Context[commands.Bot], *, newbaseweight: WV):
         """Change base weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -67,7 +67,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbase(self, ctx: commands.Context, arg1: SV | WV, arg2: SV | WV = None):
+    async def setbase(self, ctx: commands.Context[commands.Bot], arg1: SV | WV, arg2: SV | WV = None):
         """Set your base height and weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -106,7 +106,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasefoot(self, ctx: commands.Context, *, newfoot: Decimal | SV):
+    async def setbasefoot(self, ctx: commands.Context[commands.Bot], *, newfoot: Decimal | SV):
         """Set a custom foot length."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -123,7 +123,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseshoe(self, ctx: commands.Context, *, newshoe: str):
+    async def setbaseshoe(self, ctx: commands.Context[commands.Bot], *, newshoe: str):
         """Set a custom base shoe size.
 
         Accepts a US Shoe Size.
@@ -151,7 +151,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasehair(self, ctx: commands.Context, *, newhair):
+    async def setbasehair(self, ctx: commands.Context[commands.Bot], *, newhair):
         """Set a custom base hair length."""
         newhairsv = SV.parse(newhair)
 
@@ -168,7 +168,7 @@ class SetBaseCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resethair(self, ctx: commands.Context):
+    async def resethair(self, ctx: commands.Context[commands.Bot]):
         """Remove custom hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -183,7 +183,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasetail(self, ctx: commands.Context, *, newtail):
+    async def setbasetail(self, ctx: commands.Context[commands.Bot], *, newtail):
         """Set a custom tail length."""
         newtailsv = SV.parse(newtail)
 
@@ -200,7 +200,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseear(self, ctx: commands.Context, *, newear):
+    async def setbaseear(self, ctx: commands.Context[commands.Bot], *, newear):
         """Set a custom ear height."""
         newearsv = SV.parse(newear)
 
@@ -218,7 +218,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasestrength(self, ctx: commands.Context, *, newstrength: WV):
+    async def setbasestrength(self, ctx: commands.Context[commands.Bot], *, newstrength: WV):
         """Set a custom lift/carry strength."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -234,7 +234,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasewalk(self, ctx: commands.Context, *, newwalk: ParseableRate):
+    async def setbasewalk(self, ctx: commands.Context[commands.Bot], *, newwalk: ParseableRate):
         """Set a custom walk speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -250,7 +250,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaserun(self, ctx: commands.Context, *, newrun: ParseableRate):
+    async def setbaserun(self, ctx: commands.Context[commands.Bot], *, newrun: ParseableRate):
         """Set a custom run speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -266,7 +266,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseswim(self, ctx: commands.Context, *, newswim: ParseableRate):
+    async def setbaseswim(self, ctx: commands.Context[commands.Bot], *, newswim: ParseableRate):
         """Set a custom swim speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)

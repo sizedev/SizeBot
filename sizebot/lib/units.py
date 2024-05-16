@@ -430,7 +430,7 @@ class Dimension(Decimal):
         return cls(baseUnit)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument: str) -> Dimension:
+    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> Dimension:
         return cls.parse(argument)
 
     @classmethod

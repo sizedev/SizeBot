@@ -19,7 +19,7 @@ class RollCog(commands.Cog):
         category = "fun"
 
     )
-    async def roll(self, ctx: commands.Context, *, dString):
+    async def roll(self, ctx: commands.Context[commands.Bot], *, dString):
         """Verbose die rolling command.
 
         This command is used to roll some dice.
@@ -51,7 +51,7 @@ class RollCog(commands.Cog):
         usage="<dice>d<sides>[d/k/dl/kh][num]",
         category = "fun"
     )
-    async def r(self, ctx: commands.Context, *, dString):
+    async def r(self, ctx: commands.Context[commands.Bot], *, dString):
         """Simplified die rolling command.
 
         This command is used to roll some dice.

@@ -95,7 +95,7 @@ class HolidayCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    async def secretsanta(self, ctx: commands.Context):
+    async def secretsanta(self, ctx: commands.Context[commands.Bot]):
         now = arrow.now()
         if not (now.month == 12 and (24 <= now.day <= 31)):
             await ctx.send("The Secret Santa event is over! See you next Christmas season!")

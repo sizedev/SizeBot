@@ -41,5 +41,5 @@ class StatProxy:
             return StatProxy(statmap[s], False)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument: str) -> StatProxy:
+    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> StatProxy:
         return cls.parse(argument)

@@ -167,7 +167,7 @@ def main():
         logger.error("SizeBot has been reconnected to Discord.")
 
     @bot.event
-    async def on_command(ctx: commands.Context):
+    async def on_command(ctx: commands.Context[commands.Bot]):
         guild = truncate(ctx.guild.name, 20) if (hasattr(ctx, "guild") and ctx.guild is not None) else "DM"
         logger.log(CMD, f"G {guild}, U {ctx.message.author.name}: {ctx.message.content}")
 

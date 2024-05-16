@@ -87,7 +87,7 @@ class ThisCog(commands.Cog):
         category = "misc"
     )
     @commands.guild_only()
-    async def leaderboard(self, ctx: commands.Context):
+    async def leaderboard(self, ctx: commands.Context[commands.Bot]):
         """See who's the most agreeable!"""
         logger.log(EGG, f"{ctx.message.author.display_name} found the leaderboard!")
         now = datetime.now(tzlocal())

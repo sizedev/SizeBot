@@ -28,7 +28,7 @@ def userdb_load():
 
 
 @pytest.mark.asyncio
-async def test_say_n3(ctx: commands.Context, userdb_load):
+async def test_say_n3(ctx: commands.Context[commands.Bot], userdb_load):
     userdb_load.return_value = MagicMock(height=SV("0.001"), nickname="smollestboi")
     await say.SayCog.say(None, ctx, message="Hello, World!")
     userdb_load.assert_called_with(1, 2)
@@ -37,7 +37,7 @@ async def test_say_n3(ctx: commands.Context, userdb_load):
 
 
 @pytest.mark.asyncio
-async def test_say_n2(ctx: commands.Context, userdb_load):
+async def test_say_n2(ctx: commands.Context[commands.Bot], userdb_load):
     userdb_load.return_value = MagicMock(height=SV("0.008"), nickname="smollerboi")
     await say.SayCog.say(None, ctx, message="Hello, World!")
     userdb_load.assert_called_with(1, 2)
@@ -46,7 +46,7 @@ async def test_say_n2(ctx: commands.Context, userdb_load):
 
 
 @pytest.mark.asyncio
-async def test_say_n1(ctx: commands.Context, userdb_load):
+async def test_say_n1(ctx: commands.Context[commands.Bot], userdb_load):
     userdb_load.return_value = MagicMock(height=SV("0.1"), nickname="smolboi")
     await say.SayCog.say(None, ctx, message="Hello, World!")
     userdb_load.assert_called_with(1, 2)
@@ -55,7 +55,7 @@ async def test_say_n1(ctx: commands.Context, userdb_load):
 
 
 @pytest.mark.asyncio
-async def test_say_p0(ctx: commands.Context, userdb_load):
+async def test_say_p0(ctx: commands.Context[commands.Bot], userdb_load):
     userdb_load.return_value = MagicMock(height=SV("2"), nickname="boi")
     await say.SayCog.say(None, ctx, message="Hello, World!")
     userdb_load.assert_called_with(1, 2)
@@ -64,7 +64,7 @@ async def test_say_p0(ctx: commands.Context, userdb_load):
 
 
 @pytest.mark.asyncio
-async def test_say_p1(ctx: commands.Context, userdb_load):
+async def test_say_p1(ctx: commands.Context[commands.Bot], userdb_load):
     userdb_load.return_value = MagicMock(height=SV("20"), nickname="tolboi")
     await say.SayCog.say(None, ctx, message="Hello, World!")
     userdb_load.assert_called_with(1, 2)
@@ -73,7 +73,7 @@ async def test_say_p1(ctx: commands.Context, userdb_load):
 
 
 @pytest.mark.asyncio
-async def test_say_p2(ctx: commands.Context, userdb_load):
+async def test_say_p2(ctx: commands.Context[commands.Bot], userdb_load):
     userdb_load.return_value = MagicMock(height=SV("200"), nickname="tollerboi")
     await say.SayCog.say(None, ctx, message="Hello, World!")
     userdb_load.assert_called_with(1, 2)
@@ -82,7 +82,7 @@ async def test_say_p2(ctx: commands.Context, userdb_load):
 
 
 @pytest.mark.asyncio
-async def test_say_p3(ctx: commands.Context, userdb_load):
+async def test_say_p3(ctx: commands.Context[commands.Bot], userdb_load):
     userdb_load.return_value = MagicMock(height=SV("2000"), nickname="tollestboi")
     await say.SayCog.say(None, ctx, message="Hello, World!")
     userdb_load.assert_called_with(1, 2)
@@ -91,7 +91,7 @@ async def test_say_p3(ctx: commands.Context, userdb_load):
 
 
 @pytest.mark.asyncio
-async def test_say_default(ctx: commands.Context, userdb_load):
+async def test_say_default(ctx: commands.Context[commands.Bot], userdb_load):
     userdb_load.side_effect = UserNotFoundException(1, 2)
     await say.SayCog.say(None, ctx, message="Hello, World!")
     userdb_load.assert_called_with(1, 2)

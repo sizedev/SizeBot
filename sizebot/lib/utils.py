@@ -317,7 +317,7 @@ def find_one(iterator: Iterator):
     return val
 
 
-async def parse_many(ctx: commands.Context, arg: str, types: list[commands.Converter], default = None) -> Any:
+async def parse_many(ctx: commands.Context[commands.Bot], arg: str, types: list[commands.Converter], default = None) -> Any:
     for t in types:
         try:
             return await t.convert(ctx, arg)

@@ -26,7 +26,7 @@ class KeypadCog(commands.Cog):
         hidden = True,
         category = "fun"
     )
-    async def keypad(self, ctx: commands.Context):
+    async def keypad(self, ctx: commands.Context[commands.Bot]):
         """Test keypad command."""
         author = ctx.author
         defaultmessage = f"**Input:**{emojis.blank}"

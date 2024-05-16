@@ -50,7 +50,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def start(self, ctx: commands.Context, action: str, stop: TV = None):
+    async def start(self, ctx: commands.Context[commands.Bot], action: str, stop: TV = None):
         """Keep moving forward -- Walt Disney
 
         `<type>` can be one of the following: walk, run, climb, crawl, swim
@@ -86,7 +86,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def stop(self, ctx: commands.Context):
+    async def stop(self, ctx: commands.Context[commands.Bot]):
         """Stop a current movement."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         if userdata.currentmovetype is None:
@@ -106,7 +106,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def sofar(self, ctx: commands.Context, *, who = None):
+    async def sofar(self, ctx: commands.Context[commands.Bot], *, who = None):
         """How far have you moved so far? [See help.]
 
         #ALPHA#

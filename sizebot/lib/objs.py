@@ -267,7 +267,7 @@ class DigiObject:
         return cls(**objJson)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument: str) -> DigiObject:
+    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> DigiObject:
         obj = cls.find_by_name(argument)
         if obj is None:
             raise errors.InvalidObject(argument)

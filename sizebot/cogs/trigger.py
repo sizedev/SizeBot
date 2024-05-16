@@ -106,7 +106,7 @@ class TriggerCog(commands.Cog):
     @commands.command(
         category = "trigger"
     )
-    async def triggers(self, ctx: commands.Context):
+    async def triggers(self, ctx: commands.Context[commands.Bot]):
         """List your trigger words."""
         userid = ctx.author.id
         userdata = userdb.load(ctx.guild.id, userid)
@@ -117,7 +117,7 @@ class TriggerCog(commands.Cog):
     @commands.command(
         category = "trigger"
     )
-    async def exporttriggers(self, ctx: commands.Context):
+    async def exporttriggers(self, ctx: commands.Context[commands.Bot]):
         """Export your trigger words."""
         userid = ctx.author.id
         userdata = userdb.load(ctx.guild.id, userid)
@@ -129,7 +129,7 @@ class TriggerCog(commands.Cog):
         usage = "<trigger> <diff>",
         category = "trigger"
     )
-    async def settrigger(self, ctx: commands.Context, trigger, *, diff: Diff):
+    async def settrigger(self, ctx: commands.Context[commands.Bot], trigger, *, diff: Diff):
         """Set a trigger word.
 
         #ALPHA#
@@ -142,7 +142,7 @@ class TriggerCog(commands.Cog):
         category = "trigger",
         aliases = ["resettrigger", "unsettrigger", "removetrigger"]
     )
-    async def cleartrigger(self, ctx: commands.Context, *, trigger):
+    async def cleartrigger(self, ctx: commands.Context[commands.Bot], *, trigger):
         """Remove a trigger word."""
         unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send(f"Removed trigger word {trigger!r}.")
@@ -152,7 +152,7 @@ class TriggerCog(commands.Cog):
         category = "trigger",
         aliases = ["resetalltriggers", "unsetalltriggers", "removealltriggers"]
     )
-    async def clearalltriggers(self, ctx: commands.Context):
+    async def clearalltriggers(self, ctx: commands.Context[commands.Bot]):
         """Remove all your trigger words."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         for trigger in userdata.triggers.keys():

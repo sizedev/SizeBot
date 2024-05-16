@@ -12,7 +12,7 @@ def __init__(self, *args, category=None, multiline=False, **kwargs):
     old_init(self, *args, **kwargs)
 
 
-async def dispatch_error(self, ctx: commands.Context, error):
+async def dispatch_error(self, ctx: commands.Context[commands.Bot], error):
     ctx.command_failed = True
     cog = self.cog
     try:

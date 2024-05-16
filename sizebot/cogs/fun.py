@@ -26,7 +26,7 @@ class FunCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def sbsay(self, ctx: commands.Context, *, message: str):
+    async def sbsay(self, ctx: commands.Context[commands.Bot], *, message: str):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
         await ctx.send(message)
@@ -35,7 +35,7 @@ class FunCog(commands.Cog):
         aliases = ["tra"],
         category = "fun"
     )
-    async def report(self, ctx: commands.Context, *, user: discord.User):
+    async def report(self, ctx: commands.Context[commands.Bot], *, user: discord.User):
         """Report a user to the Tiny Rights Alliance."""
         ud = userdb.load(ctx.guild.id, user.id)
         ud.tra_reports += 1
@@ -47,7 +47,7 @@ class FunCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def sing(self, ctx: commands.Context, *, s: str):
+    async def sing(self, ctx: commands.Context[commands.Bot], *, s: str):
         """Make SizeBot sing a message!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
@@ -58,7 +58,7 @@ class FunCog(commands.Cog):
         hidden = True
     )
     @commands.cooldown(1, 30, commands.BucketType.user)
-    async def digipee(self, ctx: commands.Context):
+    async def digipee(self, ctx: commands.Context[commands.Bot]):
         logger.log(EGG, f"{ctx.author.display_name} thinks Digi needs to pee.")
         with pkg_resources.open_binary(sizebot.data, "digipee.mp3") as f:
             # PERMISSION: requires attach_file
@@ -67,7 +67,7 @@ class FunCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    async def gamemode(self, ctx: commands.Context, *, mode):
+    async def gamemode(self, ctx: commands.Context[commands.Bot], *, mode):
         logger.log(EGG, f"{ctx.author.display_name} set their gamemode to {mode}.")
         await ctx.send(f"Set own gamemode to `{mode.title()} Mode`")
 
@@ -76,12 +76,12 @@ class FunCog(commands.Cog):
         hidden = True
     )
     @commands.cooldown(1, 30, commands.BucketType.user)
-    async def easteregg(self, ctx: commands.Context):
+    async def easteregg(self, ctx: commands.Context[commands.Bot]):
         logger.log(EGG, f"{ctx.author.display_name} thought it was that easy, huh.")
         await ctx.send("No.")
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if message.content.startswith("!digipee"):
             cont = await self.bot.get_context(message)
             await cont.invoke(self.bot.get_command("digipee"))

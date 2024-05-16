@@ -32,7 +32,7 @@ class ObjectsCog(commands.Cog):
         category = "objects",
         usage = "[tag]"
     )
-    async def objs(self, ctx: commands.Context, tag: str = None):
+    async def objs(self, ctx: commands.Context[commands.Bot], tag: str = None):
         """Get a list of the various objects SizeBot accepts."""
         objectunits = []
         for obj in objs.objects:
@@ -58,7 +58,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookslike(self, ctx: commands.Context, *, memberOrHeight: discord.Member | FakePlayer | SV = None):
+    async def lookslike(self, ctx: commands.Context[commands.Bot], *, memberOrHeight: discord.Member | FakePlayer | SV = None):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -80,7 +80,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def objectcompare(self, ctx: commands.Context, *, args: str):
+    async def objectcompare(self, ctx: commands.Context[commands.Bot], *, args: str):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -130,7 +130,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookat(self, ctx: commands.Context, *, what: DigiObject | discord.Member | FakePlayer | SV | str):
+    async def lookat(self, ctx: commands.Context[commands.Bot], *, what: DigiObject | discord.Member | FakePlayer | SV | str):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -232,7 +232,7 @@ class ObjectsCog(commands.Cog):
         usage = "<object>",
         category = "objects"
     )
-    async def objstats(self, ctx: commands.Context, *, what: DigiObject | str):
+    async def objstats(self, ctx: commands.Context[commands.Bot], *, what: DigiObject | str):
         """Get stats about an object.
 
         Example:
@@ -249,7 +249,7 @@ class ObjectsCog(commands.Cog):
         usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx: commands.Context, amount: int | None = None, *, who: discord.Member | FakePlayer | SV = None):
+    async def stackup(self, ctx: commands.Context[commands.Bot], amount: int | None = None, *, who: discord.Member | FakePlayer | SV = None):
         """How do you stack up against objects?
 
         Example:
@@ -281,7 +281,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def food(self, ctx: commands.Context, food: DigiObject | str, *, who: discord.Member | FakePlayer | SV = None):
+    async def food(self, ctx: commands.Context[commands.Bot], food: DigiObject | str, *, who: discord.Member | FakePlayer | SV = None):
         """How much food does a person need to eat?
 
         Takes optional argument of a user to get the food for.
@@ -343,7 +343,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def water(self, ctx: commands.Context, *, who: discord.Member | FakePlayer | SV = None):
+    async def water(self, ctx: commands.Context[commands.Bot], *, who: discord.Member | FakePlayer | SV = None):
         if who is None:
             who = ctx.author
 
@@ -365,7 +365,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def land(self, ctx: commands.Context, land: DigiObject | str, *, who: discord.Member | FakePlayer | SV = None):
+    async def land(self, ctx: commands.Context[commands.Bot], land: DigiObject | str, *, who: discord.Member | FakePlayer | SV = None):
         """Get stats about how you cover land.
         #ACC#
 
@@ -426,7 +426,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def tags(self, ctx: commands.Context):
+    async def tags(self, ctx: commands.Context[commands.Bot]):
         """Get the list of object and stat tags."""
 
         out = "__**Stat Tags**__\n"
@@ -449,7 +449,7 @@ class ObjectsCog(commands.Cog):
         usage = "[object]",
         category = "objects"
     )
-    async def scaled(self, ctx: commands.Context, *, obj: DigiObject):
+    async def scaled(self, ctx: commands.Context[commands.Bot], *, obj: DigiObject):
         userdata = load_or_fake(ctx.author)
         await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} is {obj.get_stats_sentence(userdata.scale, userdata.unitsystem)}")
 

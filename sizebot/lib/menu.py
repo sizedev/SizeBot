@@ -35,7 +35,7 @@ class Menu:
     menu_owner: the Member object that asked for this menu.
     """
 
-    def __init__(self, ctx: commands.Context, options: list[EmojiInputType], *,
+    def __init__(self, ctx: commands.Context[commands.Bot], options: list[EmojiInputType], *,
                  initial_message: str | None = None, initial_embed: Embed | None = None, timeout: float = 60,
                  delete_after: bool = True, allow_any: bool = False, cancel_emoji: EmojiInputType | None):
         self.ctx = ctx

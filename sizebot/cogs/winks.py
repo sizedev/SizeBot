@@ -84,7 +84,7 @@ class WinksCog(commands.Cog):
         hidden = True,
         category = "misc"
     )
-    async def winkcount(self, ctx: commands.Context):
+    async def winkcount(self, ctx: commands.Context[commands.Bot]):
         winkcount = get_winks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
         logger.info(f"Wink count requested by {ctx.author.nickname}! Current count: {winkcount} times!")

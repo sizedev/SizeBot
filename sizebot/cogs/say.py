@@ -266,7 +266,7 @@ class SayCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def say(self, ctx: commands.Context, *, message: str):
+    async def say(self, ctx: commands.Context[commands.Bot], *, message: str):
         """Talk to the world!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
@@ -291,7 +291,7 @@ class SayCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def sayto(self, ctx: commands.Context, memberOrHeight: discord.Member | SV, *, message: str):
+    async def sayto(self, ctx: commands.Context[commands.Bot], memberOrHeight: discord.Member | SV, *, message: str):
         """Talk to someone!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)

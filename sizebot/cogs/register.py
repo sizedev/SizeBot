@@ -30,7 +30,7 @@ async def remove_user_role(member):
     await member.remove_roles(role, reason="Unregistered as SizeBot user")
 
 
-async def show_next_step(ctx: commands.Context, userdata: userdb.User, completed=False):
+async def show_next_step(ctx: commands.Context[commands.Bot], userdata: userdb.User, completed=False):
     if completed:
         congrats_message = (
             f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n"
@@ -63,7 +63,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def register(self, ctx: commands.Context):
+    async def register(self, ctx: commands.Context[commands.Bot]):
         # nick: str
         # currentheight: SV = proportions.defaultheight
         # baseheight: SV = proportions.defaultheight
@@ -148,7 +148,7 @@ class RegisterCog(commands.Cog):
         await show_next_step(ctx, userdata)
 
     @register.error
-    async def register_handler(self, ctx: commands.Context, error):
+    async def register_handler(self, ctx: commands.Context[commands.Bot], error):
         # Check if required argument is missing
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
@@ -163,7 +163,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def advancedregister(self, ctx: commands.Context, nick: str, currentheight: SV = userdb.DEFAULT_HEIGHT, baseheight: SV = userdb.DEFAULT_HEIGHT, baseweight: WV = userdb.DEFAULT_WEIGHT, unitsystem: str = "m", species: str = None):
+    async def advancedregister(self, ctx: commands.Context[commands.Bot], nick: str, currentheight: SV = userdb.DEFAULT_HEIGHT, baseheight: SV = userdb.DEFAULT_HEIGHT, baseweight: WV = userdb.DEFAULT_WEIGHT, unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot, legacy style.
 
         Parameters:
@@ -267,7 +267,7 @@ class RegisterCog(commands.Cog):
             return
 
     @advancedregister.error
-    async def advancedregister_handler(self, ctx: commands.Context, error):
+    async def advancedregister_handler(self, ctx: commands.Context[commands.Bot], error):
         # Check if required argument is missing
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
@@ -280,7 +280,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def unregister(self, ctx: commands.Context):
+    async def unregister(self, ctx: commands.Context[commands.Bot]):
         """Unregister your SizeBot profile."""
         guild = ctx.guild
         user = ctx.author
@@ -334,7 +334,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def copy(self, ctx: commands.Context):
+    async def copy(self, ctx: commands.Context[commands.Bot]):
         """Copy your SizeBot profile from a different guild to this one."""
 
         inputdict = {

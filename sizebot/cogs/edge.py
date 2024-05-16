@@ -1,6 +1,7 @@
 # The "edge" cog allows and  guild owners to set a largest/smallest user for their server.
 # It does this by seeing if they are the largest or smallest user in the guild, and if they aren't setting their height
 # to either 1.1x or 0.9x of the largest or smallest user in the guild, respectively.
+from typing import Any
 
 import logging
 from sizebot.lib.errors import GuildNotFoundException, UserNotFoundException
@@ -17,7 +18,7 @@ logger = logging.getLogger("sizebot")
 
 
 # TODO: CamelCase
-def getUserSizes(g):
+def getUserSizes(g: discord.Guild) -> Any:
     # Find the largest and smallest current users.
     # TODO: Can this be faster?
     # Like, if you sorted the users by size, would that make this faster?
@@ -59,7 +60,7 @@ class EdgeCog(commands.Cog):
         hidden = True
     )
     @is_mod()
-    async def edges(self, ctx: commands.Context):
+    async def edges(self, ctx: commands.Context[commands.Bot]):
         """See who is set to be the smallest and largest users."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         await ctx.send(f"**SERVER-SET SMALLEST AND LARGEST USERS:**\nSmallest: {'*Unset*' if guilddata.small_edge is None else guilddata.small_edge}\nLargest: {'*Unset*' if guilddata.large_edge is None else guilddata.large_edge}")
@@ -71,7 +72,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setsmallest(self, ctx: commands.Context, *, member: discord.Member):
+    async def setsmallest(self, ctx: commands.Context[commands.Bot], *, member: discord.Member):
         """Set the smallest user."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.small_edge = member.id
@@ -86,7 +87,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setlargest(self, ctx: commands.Context, *, member: discord.Member):
+    async def setlargest(self, ctx: commands.Context[commands.Bot], *, member: discord.Member):
         """Set the largest user."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.large_edge = member.id
@@ -100,7 +101,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearsmallest(self, ctx: commands.Context):
+    async def clearsmallest(self, ctx: commands.Context[commands.Bot]):
         """Clear the role of 'smallest user.'"""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.small_edge = None
@@ -114,7 +115,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearlargest(self, ctx: commands.Context):
+    async def clearlargest(self, ctx: commands.Context[commands.Bot]):
         """Clear the role of 'largest user.'"""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.large_edge = None
@@ -127,7 +128,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def edgedebug(self, ctx: commands.Context):
+    async def edgedebug(self, ctx: commands.Context[commands.Bot]):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         usersizes = getUserSizes(ctx.guild)
         guilddata = guilddb.load(ctx.guild.id)
@@ -146,7 +147,7 @@ class EdgeCog(commands.Cog):
         await ctx.send(outstring)
 
     @commands.Cog.listener()
-    async def on_message(self, m):
+    async def on_message(self, m: discord.Message):
         # non-guild messages
         if not isinstance(m.author, discord.Member):
             return

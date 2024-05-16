@@ -188,7 +188,7 @@ def buildEvalWrapper(evalStr: str, addReturn: bool = True) -> tuple[CodeType, st
 
 
 # TODO: CamelCase
-async def runEval(ctx: commands.Context, evalStr: str) -> Any:
+async def runEval(ctx: commands.Context[commands.Bot], evalStr: str) -> Any:
     evalGlobals = getEvalGlobals()
     evalLocals = {}
 

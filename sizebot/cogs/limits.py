@@ -20,7 +20,7 @@ class LimitCog(commands.Cog):
     @commands.command(
         category = "misc"
     )
-    async def limits(self, ctx: commands.Context):
+    async def limits(self, ctx: commands.Context[commands.Bot]):
         """See the guild's current caps."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {'*Unset*' if guilddata.low_limit is None else guilddata.low_limit:,.3mu}\nHigh Limit: {'*Unset*' if guilddata.high_limit is None else guilddata.high_limit:,.3mu}")
@@ -32,7 +32,7 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setlowlimit(self, ctx: commands.Context, *, size: SV):
+    async def setlowlimit(self, ctx: commands.Context[commands.Bot], *, size: SV):
         """Set the low size limit (floor)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.low_limit = size
@@ -47,7 +47,7 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def sethighlimit(self, ctx: commands.Context, *, size: SV):
+    async def sethighlimit(self, ctx: commands.Context[commands.Bot], *, size: SV):
         """Set the high size limit (ceiling)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.high_limit = size
@@ -62,7 +62,7 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearlowlimit(self, ctx: commands.Context):
+    async def clearlowlimit(self, ctx: commands.Context[commands.Bot]):
         """Set the low size limit (floor)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.low_limit = None
@@ -77,7 +77,7 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearhighlimit(self, ctx: commands.Context):
+    async def clearhighlimit(self, ctx: commands.Context[commands.Bot]):
         """Set the high size limit (ceiling)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.high_limit = None

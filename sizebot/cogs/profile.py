@@ -17,7 +17,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def setpicture(self, ctx: commands.Context, *, url):
+    async def setpicture(self, ctx: commands.Context[commands.Bot], *, url):
         """ Set your profile's image. Must be a valid image URL."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.picture_url = url
@@ -31,7 +31,7 @@ class ProfileCog(commands.Cog):
         multiline = True
     )
     @commands.guild_only()
-    async def setdescription(self, ctx: commands.Context, *, desc):
+    async def setdescription(self, ctx: commands.Context[commands.Bot], *, desc):
         """Set your profile description.
 
         Accepts slightly more markdown than usual, see https://leovoel.github.io/embed-visualizer/"""
@@ -45,7 +45,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def resetpicture(self, ctx: commands.Context):
+    async def resetpicture(self, ctx: commands.Context[commands.Bot]):
         """Reset your profile's image."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.picture_url = None
@@ -57,7 +57,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def resetdescription(self, ctx: commands.Context):
+    async def resetdescription(self, ctx: commands.Context[commands.Bot]):
         """Remove your profile description."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.description = None
@@ -70,7 +70,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def profile(self, ctx: commands.Context, member: discord.Member = None):
+    async def profile(self, ctx: commands.Context[commands.Bot], member: discord.Member = None):
         """See the profile of you or another SizeBot user.
 
         #ALPHA#

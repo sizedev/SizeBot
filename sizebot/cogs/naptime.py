@@ -24,7 +24,7 @@ class NaptimeCog(commands.Cog):
         category = "fun"
     )
     @commands.guild_only()
-    async def naptime(self, ctx: commands.Context, *, duration: TV):
+    async def naptime(self, ctx: commands.Context[commands.Bot], *, duration: TV):
         """Go to bed in a set amount of time.
 
         Kicks you from any voice channel you're in after a set amount of time.
@@ -43,7 +43,7 @@ class NaptimeCog(commands.Cog):
     @commands.command(
         category = "fun"
     )
-    async def grump(self, ctx: commands.Context):
+    async def grump(self, ctx: commands.Context[commands.Bot]):
         """Too grumpy for bed time.
 
         Stops a &naptime command.
@@ -60,7 +60,7 @@ class NaptimeCog(commands.Cog):
         category = "mod"
     )
     @commands.is_owner()
-    async def nannies(self, ctx: commands.Context):
+    async def nannies(self, ctx: commands.Context[commands.Bot]):
         """Show me those nannies!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
