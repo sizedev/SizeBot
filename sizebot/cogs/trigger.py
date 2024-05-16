@@ -1,13 +1,14 @@
+from typing import Literal
+
 import logging
 from collections import defaultdict
 from dataclasses import dataclass
-from sizebot.lib.units import SV
-from typing import Literal, Union
 
 import discord
 from discord.ext import commands
-from sizebot.lib.errors import UserNotFoundException
 
+from sizebot.lib.errors import UserNotFoundException
+from sizebot.lib.units import SV
 from sizebot.conf import conf
 from sizebot.lib import userdb, nickmanager
 from sizebot.lib.diff import Diff
@@ -21,7 +22,7 @@ user_triggers = defaultdict(dict)
 class Trigger:
     word: str
     changetype: Literal["Diff", "SV"]
-    amount: Union[Diff, SV]
+    amount: Diff | SV
     private: bool
     samecase: bool
     partial: bool

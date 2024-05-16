@@ -3,7 +3,6 @@ from dataclasses import dataclass
 import json
 import importlib.resources as pkg_resources
 from json.decoder import JSONDecodeError
-from typing import Optional
 import aiohttp
 from aiohttp_requests import requests
 import logging
@@ -64,7 +63,7 @@ async def shorten_url(url):
 class MacrovisionEntity():
     name: str
     model: str
-    view: Optional[str]
+    view: str | None
     height: SV
     x: float = 0
 

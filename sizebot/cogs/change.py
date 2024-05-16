@@ -3,7 +3,6 @@ import logging
 import random
 from sizebot.lib import errors
 from sizebot.lib.digidecimal import Decimal
-from typing import Union
 
 from discord.ext import commands, tasks
 
@@ -36,7 +35,7 @@ class ChangeCog(commands.Cog):
         category = "change",
         usage = "<change> [rate] [stop]"
     )
-    async def change(self, ctx: commands.Context, *, string: Union[LimitedRate, ParseableRate, Diff, str]):
+    async def change(self, ctx: commands.Context, *, string: LimitedRate | ParseableRate | Diff | str):
         """Either change or slow-change your height.
 
         Can be used in essentially the three following ways:

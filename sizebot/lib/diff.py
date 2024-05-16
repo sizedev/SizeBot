@@ -34,7 +34,7 @@
 # RATE for 10meters
 # RATE -> 10meters
 
-from typing import Literal, Union
+from typing import Literal
 
 import re
 
@@ -67,7 +67,7 @@ valid_limited_rate_interfixes = regexbuild(limited_rate_interfixes, capture = Tr
 
 
 class Diff:
-    def __init__(self, original, changetype: Literal["add", "multiply", "power"], amount: Union[SV, Decimal]):
+    def __init__(self, original, changetype: Literal["add", "multiply", "power"], amount: SV | Decimal):
         self.changetype = changetype
         self.amount = amount
         self.original = original

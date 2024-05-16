@@ -1,5 +1,4 @@
 import logging
-import typing
 
 import discord
 from discord.ext import commands
@@ -21,7 +20,7 @@ from sizebot.lib.utils import pretty_time_delta, round_fraction, sentence_join
 
 logger = logging.getLogger("sizebot")
 
-MemberOrSize = typing.Union[discord.Member, FakePlayer, SV]
+MemberOrSize = discord.Member | FakePlayer | SV
 
 
 class StatsCog(commands.Cog):
@@ -33,7 +32,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stats(self, ctx: commands.Context, memberOrHeight: typing.Optional[MemberOrSize] = None):
+    async def stats(self, ctx: commands.Context, memberOrHeight: MemberOrSize | None = None):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
@@ -345,7 +344,7 @@ class StatsCog(commands.Cog):
         usage = "<length> [user]",
         category = "stats"
     )
-    async def distance(self, ctx: commands.Context, goal: typing.Union[discord.Member, FakePlayer, SV, TV],
+    async def distance(self, ctx: commands.Context, goal: discord.Member | FakePlayer | SV | TV,
                        *, member: MemberOrSize = None):
         """How long will it take to walk, run, climb, etc. a distance/time?
 
@@ -682,7 +681,7 @@ class StatsCog(commands.Cog):
         usage = "[user]",
         category = "stats"
     )
-    async def metal(self, ctx: commands.Context, *, who: typing.Union[MemberOrSize, WV] = None):
+    async def metal(self, ctx: commands.Context, *, who: MemberOrSize | WV = None):
         """Get the price of your weight in gold (and other metals!)"""
 
         if who is None:

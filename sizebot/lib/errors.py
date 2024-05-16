@@ -1,7 +1,8 @@
+from typing import Any
+
 import importlib.resources as pkg_resources
 import logging
 import json
-from typing import Any
 
 import sizebot.data
 from sizebot.conf import conf
@@ -288,7 +289,7 @@ class ParseError(DigiException):
 
 class UnfoundStatException(DigiException):
     def __init__(self, s: list[Any]) -> None:
-        self.s = utils.sentence_join(getattr(s, "key", repr(s)) for s in s)
+        self.s = utils.sentence_join(getattr(t, "key", repr(t)) for t in s)
 
     # TODO: CamelCase
     def formatMessage(self):

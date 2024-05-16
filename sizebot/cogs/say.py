@@ -1,6 +1,5 @@
 import re
 import logging
-import typing
 
 import discord
 from discord.ext import commands
@@ -292,7 +291,7 @@ class SayCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def sayto(self, ctx: commands.Context, memberOrHeight: typing.Union[discord.Member, SV], *, message: str):
+    async def sayto(self, ctx: commands.Context, memberOrHeight: discord.Member | SV, *, message: str):
         """Talk to someone!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)

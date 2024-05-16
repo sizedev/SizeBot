@@ -1,5 +1,4 @@
 import logging
-import typing
 
 from discord.ext import commands
 
@@ -68,7 +67,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbase(self, ctx: commands.Context, arg1: typing.Union[SV, WV], arg2: typing.Union[SV, WV] = None):
+    async def setbase(self, ctx: commands.Context, arg1: SV | WV, arg2: SV | WV = None):
         """Set your base height and weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -107,7 +106,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasefoot(self, ctx: commands.Context, *, newfoot: typing.Union[Decimal, SV]):
+    async def setbasefoot(self, ctx: commands.Context, *, newfoot: Decimal | SV):
         """Set a custom foot length."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)

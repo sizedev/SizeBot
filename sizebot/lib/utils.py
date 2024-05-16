@@ -1,15 +1,18 @@
+from typing import Any, Hashable, Sequence, TypeVar
+from collections.abc import Callable, Iterator
+
 import inspect
 import pydoc
 import random
 import re
-from sizebot.lib import errors
 import traceback
-from typing import Dict, Hashable, Optional, Sequence, TypeVar
 from urllib.parse import quote
-from discord.ext import commands
 
 import validator_collection
 
+from discord.ext import commands
+
+from sizebot.lib import errors
 from sizebot.lib.digidecimal import Decimal
 
 re_num = r"\d+\.?\d*"
@@ -229,7 +232,7 @@ def format_error(err) -> str:
     return f"{fullname}{errMessage}"
 
 
-def try_or_none(fn, *args, ignore=(), **kwargs):
+def try_or_none(fn: Callable, *args, ignore=(), **kwargs):
     "Try to run a function. If it throws an error that's in `ignore`, just return `None`."""
     try:
         result = fn(*args, **kwargs)
@@ -260,7 +263,7 @@ class iset(set):
         return super().remove(item)
 
 
-def str_help(topic) -> str:
+def str_help(topic: str) -> str:
     return pydoc.plain(pydoc.render_doc(topic))
 
 
@@ -275,7 +278,7 @@ def minmax(first: T, second: T) -> tuple[T, T]:
     return small, big
 
 
-def remove_code_block(s) -> str:
+def remove_code_block(s: str) -> str:
     re_codeblock = re.compile(r"^\s*```(?:python)?(.*)```\s*$", re.DOTALL)
     s_nocodeblock = re.sub(re_codeblock, r"\1", s)
     if s_nocodeblock != s:
@@ -289,7 +292,7 @@ def remove_code_block(s) -> str:
     return s
 
 
-def int_to_roman(input) -> str:
+def int_to_roman(input: int) -> str:
     """Convert an integer to a Roman numeral."""
 
     if not isinstance(input, type(1)):
@@ -306,7 +309,7 @@ def int_to_roman(input) -> str:
     return ''.join(result)
 
 
-def find_one(iterator):
+def find_one(iterator: Iterator):
     try:
         val = next(iterator)
     except StopIteration:
@@ -314,7 +317,7 @@ def find_one(iterator):
     return val
 
 
-async def parse_many(ctx: commands.Context, arg, types: list, default = None):
+async def parse_many(ctx: commands.Context, arg: str, types: list[commands.Converter], default = None) -> Any:
     for t in types:
         try:
             return await t.convert(ctx, arg)
@@ -333,7 +336,7 @@ def is_url(value: str) -> bool:
         return True
 
 
-def sentence_join(items: list[str], *, joiner: Optional[str] = None, oxford: bool = False) -> str:
+def sentence_join(items: list[str], *, joiner: str | None = None, oxford: bool = False) -> str:
     """Join a list of strings like a sentence.
 
     >>> sentence_join(['red', 'green', 'blue'])
@@ -418,7 +421,7 @@ def truncate(s: str, amount: int) -> str:
 
 
 class AliasMap(dict):
-    def __init__(self, data: Dict[Hashable, Sequence]):
+    def __init__(self, data: dict[Hashable, Sequence]):
         super().__init__()
 
         for k, v in data.items():

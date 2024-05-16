@@ -1,4 +1,5 @@
 from typing import Literal
+
 import re
 
 from sizebot.lib.digidecimal import Decimal

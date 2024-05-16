@@ -1,6 +1,6 @@
 from typing import Tuple
+from collections import Mapping
 
-import collections
 import importlib.resources as pkg_resources
 import json
 import logging
@@ -260,7 +260,7 @@ class FeetAndInchesUnit(Unit):
         return u == self.symbol
 
 
-class UnitRegistry(collections.abc.Mapping):
+class UnitRegistry(Mapping):
     """Unit Registry"""
 
     def __init__(self):

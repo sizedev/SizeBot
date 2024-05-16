@@ -1,7 +1,8 @@
+from typing import Any, Literal
+
 import json
 from math import ceil
 import requests
-from typing import Any, Literal
 
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import ThisShouldNeverHappenException

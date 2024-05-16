@@ -1,9 +1,10 @@
+from typing import Literal
+
 from functools import total_ordering
 import importlib.resources as pkg_resources
 import json
 import math
 import random
-from typing import Literal, Optional
 
 from discord import Embed
 from discord.ext import commands
@@ -70,7 +71,7 @@ class DigiObject:
         return None
 
     @property
-    def area(self) -> Optional[AV]:
+    def area(self) -> AV | None:
         if self.height is not None and self.width is not None:
             return AV(self.height * self.width)
         elif self.length is not None and self.width is not None:
@@ -82,7 +83,7 @@ class DigiObject:
         return None
 
     @property
-    def volume(self) -> Optional[VV]:
+    def volume(self) -> VV | None:
         if self.area is not None:
             if self.depth is not None:
                 return VV(self.area * self.depth)

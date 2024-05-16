@@ -2,7 +2,6 @@ from decimal import Decimal
 import logging
 import math
 import random
-import typing
 
 import discord
 from discord import Embed
@@ -60,7 +59,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookslike(self, ctx: commands.Context, *, memberOrHeight: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def lookslike(self, ctx: commands.Context, *, memberOrHeight: discord.Member | FakePlayer | SV = None):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -132,7 +131,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookat(self, ctx: commands.Context, *, what: typing.Union[DigiObject, discord.Member, FakePlayer, SV, str]):
+    async def lookat(self, ctx: commands.Context, *, what: DigiObject | discord.Member | FakePlayer | SV | str):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -234,7 +233,7 @@ class ObjectsCog(commands.Cog):
         usage = "<object>",
         category = "objects"
     )
-    async def objstats(self, ctx: commands.Context, *, what: typing.Union[DigiObject, str]):
+    async def objstats(self, ctx: commands.Context, *, what: DigiObject | str):
         """Get stats about an object.
 
         Example:
@@ -251,7 +250,7 @@ class ObjectsCog(commands.Cog):
         usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx: commands.Context, amount: typing.Optional[int] = None, *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def stackup(self, ctx: commands.Context, amount: int | None = None, *, who: discord.Member | FakePlayer | SV = None):
         """How do you stack up against objects?
 
         Example:
@@ -283,7 +282,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def food(self, ctx: commands.Context, food: typing.Union[DigiObject, str], *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def food(self, ctx: commands.Context, food: DigiObject | str, *, who: discord.Member | FakePlayer | SV = None):
         """How much food does a person need to eat?
 
         Takes optional argument of a user to get the food for.
@@ -345,7 +344,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def water(self, ctx: commands.Context, *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def water(self, ctx: commands.Context, *, who: discord.Member | FakePlayer | SV = None):
         if who is None:
             who = ctx.author
 
@@ -367,7 +366,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def land(self, ctx: commands.Context, land: typing.Union[DigiObject, str], *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def land(self, ctx: commands.Context, land: DigiObject | str, *, who: discord.Member | FakePlayer | SV = None):
         """Get stats about how you cover land.
         #ACC#
 

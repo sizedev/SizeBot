@@ -1,5 +1,6 @@
-import math
 from typing import Tuple
+
+import math
 
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import TV, WV, SV

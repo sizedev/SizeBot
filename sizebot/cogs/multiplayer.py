@@ -1,6 +1,5 @@
 from copy import copy
 import logging
-from typing import Union
 
 import discord
 from discord.ext import commands
@@ -74,7 +73,7 @@ class MPCog(commands.Cog):
         usage = "<amount> <victim> [thief]",
         category = "multiplayer"
     )
-    async def steal(self, ctx: commands.Context, amount: Union[SV, WV], victim: discord.Member, thief: discord.Member = None):
+    async def steal(self, ctx: commands.Context, amount: SV | WV, victim: discord.Member, thief: discord.Member = None):
         """See what would happen if you stole size from a user.
 
         `amount` can be a height amount or a weight amount.
@@ -146,7 +145,7 @@ class MPCog(commands.Cog):
         category = "multiplayer",
         usage = "<user> <change>"
     )
-    async def changeother(self, ctx: commands.Context, other: discord.Member, *, string: Union[Diff]):
+    async def changeother(self, ctx: commands.Context, other: discord.Member, *, string: Diff):
         """Change someone else's height. The other user must have this functionality enabled."""
         userdata = userdb.load(other.guild.id, other.id)
 

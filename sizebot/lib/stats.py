@@ -1,7 +1,8 @@
 from __future__ import annotations
+from typing import Any, TypeVar
+from collections.abc import Callable
 
 from functools import cached_property
-from typing import Any, Optional, TypeVar, Callable
 import math
 
 from sizebot.lib import errors
@@ -87,7 +88,7 @@ def wrap_type(f: Callable[[Any], T] | None) -> Callable[[Any], T | None]:
             return v
         f = default_func
 
-    def wrapped(v: any) -> T | None:
+    def wrapped(v: Any) -> T | None:
         if v is None:
             return None
         return f(v)
@@ -102,12 +103,12 @@ class StatDef:
                  string: Callable[[StatBox], str] | str,
                  body: Callable[[StatBox], str] | str,
                  is_shown: Callable[[StatBox], bool] | bool = True,
-                 userkey: Optional[str] = None,
-                 value: Optional[Callable[[ValueDict], Any]] = None,
-                 power: Optional[int] = None,
+                 userkey: str | None = None,
+                 value: Callable[[ValueDict], Any] | None = None,
+                 power: int | None = None,
                  requires: list[str] = None,
-                 type: Optional[Callable[[Any], Any]] = None,
-                 z: Optional[int] = None,
+                 type: Callable[[Any], Any] | None = None,
+                 z: int | None = None,
                  tags: list[str] = None,
                  inline: bool = True,
                  aliases: list[str] = None

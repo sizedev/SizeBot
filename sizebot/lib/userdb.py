@@ -1,13 +1,11 @@
-from __future__ import annotations
+from typing import Literal, TypedDict, TYPE_CHECKING
+if TYPE_CHECKING:
+    from sizebot.lib.fakeplayer import FakePlayer
 
 import json
 from copy import copy
 from functools import total_ordering
 import importlib.resources as pkg_resources
-from typing import Dict, List, Literal, Optional, TypedDict, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from sizebot.lib.fakeplayer import FakePlayer
 
 import arrow
 from arrow.arrow import Arrow
@@ -81,42 +79,42 @@ class User:
         self.guildid: int = None
         self.id: int = None
         self.nickname: str = None
-        self._picture_url: Optional[str] = None
-        self.description: Optional[str] = None
-        self._gender: Optional[str] = None
+        self._picture_url: str | None = None
+        self.description: str | None = None
+        self._gender: str | None = None
         self.display: bool = True
         self._height: SV = DEFAULT_HEIGHT
         self._baseheight: SV = DEFAULT_HEIGHT
         self._baseweight: SV = DEFAULT_WEIGHT
-        self._footlength: Optional[SV] = None
+        self._footlength: SV | None = None
         self._pawtoggle: bool = False
         self._furtoggle: bool = False
-        self._hairlength: Optional[SV] = None
-        self._taillength: Optional[SV] = None
-        self._earheight: Optional[SV] = None
-        self._liftstrength: Optional[WV] = None
-        self._walkperhour: Optional[ParseableRate] = None
-        self._runperhour: Optional[ParseableRate] = None
-        self._swimperhour: Optional[ParseableRate] = None
+        self._hairlength: SV | None = None
+        self._taillength: SV | None = None
+        self._earheight: SV | None = None
+        self._liftstrength: WV | None = None
+        self._walkperhour: ParseableRate | None = None
+        self._runperhour: ParseableRate | None = None
+        self._swimperhour: ParseableRate | None = None
         self.incomprehensible: bool = False
-        self._currentscalestep: Optional[Diff] = None
-        self._currentscaletalk: Optional[Diff] = None
+        self._currentscalestep: Diff | None = None
+        self._currentscaletalk: Diff | None = None
         self.scaletalklock: bool = False
-        self.currentmovetype: Optional[MoveTypeStr] = None
-        self.movestarted: Optional[Arrow] = None
-        self.movestop: Optional[TV] = None
-        self.triggers: Dict[str, Diff] = {}
-        self.button: Optional[Diff] = None
+        self.currentmovetype: MoveTypeStr | None = None
+        self.movestarted: Arrow | None = None
+        self.movestop: TV | None = None
+        self.triggers: dict[str, Diff] = {}
+        self.button: Diff | None = None
         self.tra_reports = 0
         self._unitsystem: str = "m"
-        self.species: Optional[str] = None
+        self.species: str | None = None
         self.soft_gender = None
-        self.avatar_url: Optional[str] = None
+        self.avatar_url: str | None = None
         self.lastactive: Arrow = None
-        self.registration_steps_remaining: List[str] = []
-        self._macrovision_model: Optional[str] = None
-        self._macrovision_view: Optional[str] = None
-        self.allowchangefromothers: Optional[bool] = None
+        self.registration_steps_remaining: list[str] = []
+        self._macrovision_model: str | None = None
+        self._macrovision_view: str | None = None
+        self.allowchangefromothers: bool | None = None
 
     def __str__(self):
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r} ...>")
