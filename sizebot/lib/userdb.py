@@ -6,6 +6,7 @@ import json
 from copy import copy
 from functools import total_ordering
 import importlib.resources as pkg_resources
+from pathlib import Path
 
 import arrow
 from arrow.arrow import Arrow
@@ -668,11 +669,11 @@ class User:
         return newuserdata
 
 
-def get_guild_users_path(guildid) -> str:
+def get_guild_users_path(guildid: int) -> Path:
     return paths.guilddbpath / f"{guildid}" / "users"
 
 
-def get_user_path(guildid: int, userid: int) -> str:
+def get_user_path(guildid: int, userid: int) -> Path:
     return get_guild_users_path(guildid) / f"{userid}.json"
 
 
