@@ -18,7 +18,7 @@ logger = logging.getLogger("sizebot")
 
 
 class SetCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -64,7 +64,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resetspecies(self, ctx):
+    async def resetspecies(self, ctx: commands.Context):
         """Remove species."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -228,7 +228,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resetheight(self, ctx):
+    async def resetheight(self, ctx: commands.Context):
         """Reset height/size."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -307,7 +307,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setinf(self, ctx):
+    async def setinf(self, ctx: commands.Context):
         """Change height to infinity."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -325,7 +325,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def set0(self, ctx):
+    async def set0(self, ctx: commands.Context):
         """Change height to a zero."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -405,7 +405,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resetfoot(self, ctx):
+    async def resetfoot(self, ctx: commands.Context):
         """Remove custom foot length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -420,7 +420,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def togglepaw(self, ctx):
+    async def togglepaw(self, ctx: commands.Context):
         """Switch between the word "foot" and "paw" for your stats."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -435,7 +435,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def togglefur(self, ctx):
+    async def togglefur(self, ctx: commands.Context):
         """Switch between the word "hair" and "fur" for your stats."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -484,7 +484,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resettail(self, ctx):
+    async def resettail(self, ctx: commands.Context):
         """Remove custom tail length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -516,7 +516,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resetear(self, ctx):
+    async def resetear(self, ctx: commands.Context):
         """Remove custom ear height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -548,7 +548,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resetstrength(self, ctx):
+    async def resetstrength(self, ctx: commands.Context):
         """Remove custom lift/carry strength."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -580,7 +580,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resetwalk(self, ctx):
+    async def resetwalk(self, ctx: commands.Context):
         """Remove custom walk speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -612,7 +612,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resetrun(self, ctx):
+    async def resetrun(self, ctx: commands.Context):
         """Remove custom run speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -644,7 +644,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resetswim(self, ctx):
+    async def resetswim(self, ctx: commands.Context):
         """Remove custom swim speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -688,7 +688,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resetgender(self, ctx):
+    async def resetgender(self, ctx: commands.Context):
         """Reset gender."""
         guild = ctx.guild
         user = ctx.author
@@ -753,5 +753,5 @@ class SetCog(commands.Cog):
         await ctx.send(f"Cleared {userdata.nickname}'s view.")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(SetCog(bot))

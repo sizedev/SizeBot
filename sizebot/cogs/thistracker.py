@@ -78,7 +78,7 @@ def find_latest_non_this(messages):
 class ThisCog(commands.Cog):
     """This Points!"""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -87,7 +87,7 @@ class ThisCog(commands.Cog):
         category = "misc"
     )
     @commands.guild_only()
-    async def leaderboard(self, ctx):
+    async def leaderboard(self, ctx: commands.Context):
         """See who's the most agreeable!"""
         logger.log(EGG, f"{ctx.message.author.display_name} found the leaderboard!")
         now = datetime.now(tzlocal())
@@ -128,5 +128,5 @@ class ThisCog(commands.Cog):
             tracker.save()
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(ThisCog(bot))

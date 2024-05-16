@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 import re
 
@@ -6,7 +8,7 @@ import numexpr
 from sizebot.lib import errors
 
 
-def evalmath(expression):
+def evalmath(expression: str) -> int:
     return int(numexpr.evaluate(expression, local_dict={}, global_dict={}))
 
 
@@ -15,19 +17,19 @@ class RollArg:
     re_pattern = re.compile(r"(\d+)d(\d+)(?:([dk])(\d+))?")
     re_pattern_all = re.compile(r"(\d+d\d+(?:[dk]\d+)?)")
 
-    def __init__(self, rolls, sides, drop=0):
+    def __init__(self, rolls: int, sides: int, drop: int = 0):
         self.rolls = rolls
         self.sides = sides
         self.drop = drop
 
-    def roll(self):
+    def roll(self) -> RollResult:
         # roll the dice
         rolls = [random.randint(1, self.sides) for _ in range(self.rolls)]
         # get list of lowest dice to drop
         lowest = sorted(rolls)[:self.drop]
         # make lists of used and dropped rolls, in the order they were rolled
-        used = []
-        dropped = []
+        used: list[int] = []
+        dropped: list[int] = []
         for r in rolls:
             if r in lowest:
                 lowest.remove(r)
@@ -37,7 +39,7 @@ class RollArg:
         return RollResult(used, dropped)
 
     @classmethod
-    def parse(cls, s):
+    def parse(cls, s: str) -> RollArg:
         match = cls.re_pattern.match(s)
         if match is None:
             return None
@@ -56,7 +58,7 @@ class RollArg:
 class RollResult:
     __slots__ = ["total", "used", "dropped"]
 
-    def __init__(self, used, dropped):
+    def __init__(self, used: list[int], dropped: list[int]):
         self.total = sum(used)
         self.used = used
         self.dropped = dropped
@@ -70,7 +72,7 @@ class RollResult:
 
 
 class Result:
-    def __init__(self, total, rolls):
+    def __init__(self, total: int, rolls: list[RollResult]):
         self.total = total
         self.rolls = rolls
 
@@ -83,10 +85,10 @@ class Result:
         return output
 
 
-def roll(argstring):
+def roll(argstring: str) -> Result:
     # Split up and categorize parameters
-    argstrings = RollArg.re_pattern_all.split(argstring)
-    rolls = []
+    argstrings: list[str] = RollArg.re_pattern_all.split(argstring)
+    rolls: list[RollResult] = []
     rollexpr = ""
     for s in argstrings:
         rollarg = RollArg.parse(s)

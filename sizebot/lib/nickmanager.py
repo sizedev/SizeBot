@@ -1,5 +1,7 @@
-import discord
 import logging
+
+import discord
+from discord import User, Member
 
 from sizebot.lib import errors, userdb
 
@@ -8,7 +10,7 @@ MAX_NICK_LEN = 32
 logger = logging.getLogger("sizebot")
 
 
-def generate_suffix(sizetag, species=None):
+def generate_suffix(sizetag: str, species: str | None = None) -> str:
     suffix = f" [{sizetag}]"
     if species:
         suffix = f" [{sizetag}, {species}]"
@@ -16,7 +18,7 @@ def generate_suffix(sizetag, species=None):
 
 
 # Generate a valid nickname (if possible)
-def generate_nickname(nick, sizetag, species=None, cropnick=False):
+def generate_nickname(nick: str, sizetag: str, species: str | None = None, cropnick: bool = False) -> str:
     suffix = generate_suffix(sizetag, species)
     newnick = nick + suffix
 
@@ -35,7 +37,7 @@ def generate_nickname(nick, sizetag, species=None, cropnick=False):
 
 # TODO: Deal with not being able to change nicks of roles above the bot.
 # Update users nicknames to include sizetags
-async def nick_update(user):
+async def nick_update(user: User | Member):
     # None
     if user is None:
         # logger.warn("User was None when trying to update nickname!")
@@ -89,7 +91,7 @@ async def nick_update(user):
         raise errors.NoPermissionsException
 
 
-async def nick_reset(user):
+async def nick_reset(user: User | Member):
     """Remove sizetag from user's nickname"""
     # webhooks
     if user.discriminator == "0000":

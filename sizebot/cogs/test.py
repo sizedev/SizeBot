@@ -6,7 +6,7 @@ from sizebot.lib.statproxy import StatProxy
 class TestCog(commands.Cog):
     """Test commands."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -19,5 +19,5 @@ class TestCog(commands.Cog):
             await ctx.send(f"You input **\"{stat}\"**. That's not a stat or a tag.")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(TestCog(bot))

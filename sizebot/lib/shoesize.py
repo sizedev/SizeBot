@@ -6,7 +6,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV
 
 
-def to_shoe_size(footlength: SV, gender: Literal["m", "f"]):
+def to_shoe_size(footlength: SV, gender: Literal["m", "f"]) -> str:
     women = gender == "f"
     # Inch in meters
     inch = Decimal("0.0254")

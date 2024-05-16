@@ -22,7 +22,7 @@ gifts = [x.strip() for x in gifts]
 class HolidayCog(commands.Cog):
     """Do stuff on holidays."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.holidayTask.start()
 
@@ -95,7 +95,7 @@ class HolidayCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    async def secretsanta(self, ctx):
+    async def secretsanta(self, ctx: commands.Context):
         now = arrow.now()
         if not (now.month == 12 and (24 <= now.day <= 31)):
             await ctx.send("The Secret Santa event is over! See you next Christmas season!")
@@ -111,5 +111,5 @@ class HolidayCog(commands.Cog):
         alreadyclaimed.add(userid)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(HolidayCog(bot))

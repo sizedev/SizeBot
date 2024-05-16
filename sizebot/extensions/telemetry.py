@@ -1,9 +1,10 @@
 import discord
+from discord.ext import commands
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     @bot.listen
-    def on_command(ctx):
+    def on_command(ctx: commands.Context):
         member = ctx.author
         isMember = isinstance(member, discord.Member)
         if not isMember:

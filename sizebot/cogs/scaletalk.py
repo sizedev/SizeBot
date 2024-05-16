@@ -19,7 +19,7 @@ re_char = r"(.*)(?:[/:]|\s*per\s*)(\d+)?"
 
 
 class ScaleTypeCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -84,7 +84,7 @@ class ScaleTypeCog(commands.Cog):
                    "cleartypescale", "unsettypescale", "resetscaletype", "clearscaletype", "unsetscaletype",
                    "resettypescale"]
     )
-    async def resettalkscale(self, ctx):
+    async def resettalkscale(self, ctx: commands.Context):
         """Clear your talk-scale amount."""
 
         guildid = ctx.guild.id
@@ -126,5 +126,5 @@ class ScaleTypeCog(commands.Cog):
         userdb.save(userdata)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(ScaleTypeCog(bot))

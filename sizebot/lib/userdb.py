@@ -664,11 +664,11 @@ class User:
         return newuserdata
 
 
-def get_guild_users_path(guildid):
+def get_guild_users_path(guildid) -> str:
     return paths.guilddbpath / f"{guildid}" / "users"
 
 
-def get_user_path(guildid, userid):
+def get_user_path(guildid: int, userid: int) -> str:
     return get_guild_users_path(guildid) / f"{userid}.json"
 
 
@@ -684,7 +684,7 @@ def save(userdata: User):
         json.dump(jsondata, f, indent = 4)
 
 
-def load(guildid, userid, *, member=None, allow_unreg=False) -> User:
+def load(guildid: int, userid: int, *, member=None, allow_unreg=False) -> User:
     path = get_user_path(guildid, userid)
     try:
         with open(path, "r") as f:
@@ -703,12 +703,12 @@ def load(guildid, userid, *, member=None, allow_unreg=False) -> User:
     return user
 
 
-def delete(guildid, userid):
+def delete(guildid: int, userid: int):
     path = get_user_path(guildid, userid)
     path.unlink(missing_ok = True)
 
 
-def exists(guildid, userid, *, allow_unreg=False):
+def exists(guildid: int, userid: int, *, allow_unreg=False):
     exists = True
     try:
         load(guildid, userid, allow_unreg=allow_unreg)
@@ -729,7 +729,7 @@ def count_users():
     return usercount
 
 
-def list_users(*, guildid = None, userid = None):
+def list_users(*, guildid: int | None = None, userid: int | None = None) -> list[tuple[int, int]]:
     guildid = int(guildid) if guildid else "*"
     userid = int(userid) if userid else "*"
     userfiles = paths.guilddbpath.glob(f"{guildid}/users/{userid}.json")

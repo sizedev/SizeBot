@@ -28,11 +28,11 @@ class Trigger:
     partial: bool
 
 
-def set_cached_trigger(guildid, authorid, trigger, diff):
+def set_cached_trigger(guildid: int, authorid: int, trigger, diff):
     user_triggers[trigger][guildid, authorid] = diff
 
 
-def unset_cached_trigger(guildid, authorid, trigger):
+def unset_cached_trigger(guildid: int, authorid: int, trigger):
     if (guildid, authorid) not in user_triggers[trigger]:
         return
     del user_triggers[trigger][guildid, authorid]
@@ -40,14 +40,14 @@ def unset_cached_trigger(guildid, authorid, trigger):
         del user_triggers[trigger]
 
 
-def set_trigger(guildid, authorid, trigger, diff):
+def set_trigger(guildid: int, authorid: int, trigger, diff):
     set_cached_trigger(guildid, authorid, trigger, diff)
     userdata = userdb.load(guildid, authorid)
     userdata.triggers[trigger] = diff
     userdb.save(userdata)
 
 
-def unset_trigger(guildid, authorid, trigger):
+def unset_trigger(guildid: int, authorid: int, trigger):
     unset_cached_trigger(guildid, authorid, trigger)
     userdata = userdb.load(guildid, authorid)
     if trigger in userdata.triggers:
@@ -58,7 +58,7 @@ def unset_trigger(guildid, authorid, trigger):
 class TriggerCog(commands.Cog):
     """Commands to create or clear triggers."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         for guildid, userid in userdb.list_users():
             try:
@@ -106,7 +106,7 @@ class TriggerCog(commands.Cog):
     @commands.command(
         category = "trigger"
     )
-    async def triggers(self, ctx):
+    async def triggers(self, ctx: commands.Context):
         """List your trigger words."""
         userid = ctx.author.id
         userdata = userdb.load(ctx.guild.id, userid)
@@ -117,7 +117,7 @@ class TriggerCog(commands.Cog):
     @commands.command(
         category = "trigger"
     )
-    async def exporttriggers(self, ctx):
+    async def exporttriggers(self, ctx: commands.Context):
         """Export your trigger words."""
         userid = ctx.author.id
         userdata = userdb.load(ctx.guild.id, userid)
@@ -152,7 +152,7 @@ class TriggerCog(commands.Cog):
         category = "trigger",
         aliases = ["resetalltriggers", "unsetalltriggers", "removealltriggers"]
     )
-    async def clearalltriggers(self, ctx):
+    async def clearalltriggers(self, ctx: commands.Context):
         """Remove all your trigger words."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         for trigger in userdata.triggers.keys():
@@ -160,5 +160,5 @@ class TriggerCog(commands.Cog):
         await ctx.send("Removed all trigger words.")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(TriggerCog(bot))

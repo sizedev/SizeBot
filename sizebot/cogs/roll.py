@@ -10,7 +10,7 @@ logger = logging.getLogger("sizebot")
 class RollCog(commands.Cog):
     """Commands for dice rolling."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -64,5 +64,5 @@ class RollCog(commands.Cog):
         await ctx.send(f"{ctx.author.display_name} rolled `{dString}` = **{result.total}**")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(RollCog(bot))

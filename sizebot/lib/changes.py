@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 import json
 import logging
 import time
+
+from discord.ext import commands
 
 from sizebot.lib import userdb, paths, nickmanager
 from sizebot.lib.digidecimal import Decimal
@@ -10,11 +14,21 @@ from sizebot.lib.utils import pretty_time_delta
 logger = logging.getLogger("sizebot")
 
 
-_active_changes = {}
+_active_changes: dict[tuple[int, int], Change] = {}
 
 
 class Change:
-    def __init__(self, userid, guildid, *, addPerSec=0, mulPerSec=1, powPerSec=1, stopSV=None, stopTV=None, startTime=None, lastRan=None):
+    def __init__(self,
+                 userid: int,
+                 guildid: int,
+                 *,
+                 addPerSec: SV = 0,
+                 mulPerSec: Decimal = 1,
+                 powPerSec: Decimal = 1,
+                 stopSV: SV = None,
+                 stopTV: TV = None,
+                 startTime: Decimal = None,
+                 lastRan: Decimal = None):
         self.userid = userid
         self.guildid = guildid
         self.addPerSec = addPerSec and SV(addPerSec)
@@ -25,7 +39,7 @@ class Change:
         self.startTime = startTime and Decimal(startTime)
         self.lastRan = lastRan and Decimal(lastRan)
 
-    async def apply(self, bot):
+    async def apply(self, bot: commands.Bot) -> bool:
         running = True
         now = Decimal(time.time())
         if self.endtime is not None and self.endtime <= now:
@@ -72,7 +86,7 @@ class Change:
         return running
 
     @property
-    def endtime(self):
+    def endtime(self) -> Decimal:
         if self.stopTV is None:
             return None
         return self.startTime + self.stopTV
@@ -100,20 +114,20 @@ class Change:
         }
 
 
-def start(userid, guildid, *, addPerSec=0, mulPerSec=1, stopSV=None, stopTV=None):
+def start(userid: int, guildid: int, *, addPerSec: SV = 0, mulPerSec: Decimal = 1, stopSV: SV = None, stopTV: TV = None):
     """Start a new change task"""
     startTime = lastRan = time.time()
     change = Change(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV, startTime=startTime, lastRan=lastRan)
     _activate(change)
 
 
-def stop(userid, guildid):
+def stop(userid: int, guildid: int) -> Change:
     """Stop a running change task"""
     change = _deactivate(userid, guildid)
     return change
 
 
-async def apply(bot):
+async def apply(bot: commands.Bot):
     """Apply slow growth changes"""
     global _active_changes
     runningChanges = {}
@@ -128,13 +142,13 @@ async def apply(bot):
     save_to_file()
 
 
-def _activate(change):
+def _activate(change: Change):
     """Activate a new change task"""
     _active_changes[change.userid, change.guildid] = change
     save_to_file()
 
 
-def _deactivate(userid, guildid):
+def _deactivate(userid: int, guildid: int) -> Change | None:
     """Deactivate a running change task"""
     change = _active_changes.pop((userid, guildid), None)
     save_to_file()
@@ -160,5 +174,5 @@ def save_to_file():
         json.dump(changesJson, f)
 
 
-def format_summary():
+def format_summary() -> str:
     return "\n".join(str(c) for c in _active_changes.values())

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from sizebot.lib.units import SV
 
@@ -29,7 +29,7 @@ class TelemetryMessage:
         with filepath.open("a") as f:
             f.write(stringified + "\n")
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return asdict(self)
 
 
@@ -50,7 +50,7 @@ class SizeViewed(TelemetryMessage):
     size: SV
     filename = Path("size_viewed.ndjson")
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {"size": str(self.size)}
 
 
@@ -60,7 +60,7 @@ class RegisterStarted(TelemetryMessage):
     userid: int
     filename = Path("register_started.ndjson")
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "guildid": str(self.guildid),
             "userid": str(self.userid)
@@ -73,7 +73,7 @@ class AdvancedRegisterUsed(TelemetryMessage):
     userid: int
     filename = Path("advanced_register_used.ndjson")
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "guildid": str(self.guildid),
             "userid": str(self.userid)
@@ -86,7 +86,7 @@ class ProfileCopied(TelemetryMessage):
     userid: int
     filename = Path("profile_copied.ndjson")
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "guildid": str(self.guildid),
             "userid": str(self.userid)
@@ -101,7 +101,7 @@ class RegisterStepCompleted(TelemetryMessage):
     completed: bool = False
     filename = Path("register_step_completed.ndjson")
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "guildid": str(self.guildid),
             "userid": str(self.userid),
@@ -116,7 +116,7 @@ class Unregistered(TelemetryMessage):
     userid: int
     filename = Path("register_completed.ndjson")
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "guildid": str(self.guildid),
             "userid": str(self.userid)

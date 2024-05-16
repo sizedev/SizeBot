@@ -1,14 +1,18 @@
+from __future__ import annotations
+from typing import Any
+
 import importlib.resources as pkg_resources
 import json
 
 from discord import Embed
 
 import sizebot.data
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, WV
 from sizebot.lib.userdb import User
 from sizebot.lib.utils import int_to_roman
 
-pokemon: list["Pokemon"] = []
+pokemon: list[Pokemon] = []
 
 
 class Pokemon:
@@ -27,7 +31,7 @@ class Pokemon:
         self.flavor_text = flavor_text
         self.sprite = sprite
 
-    def stats_embed(self, multiplier = 1):
+    def stats_embed(self, multiplier: Decimal = 1) -> Embed:
         h = SV(self.height * multiplier)
         w = WV(self.weight * (multiplier ** 3))
         e = Embed()
@@ -42,7 +46,7 @@ class Pokemon:
 
         return e
 
-    def comp_embed(self, user: User):
+    def comp_embed(self, user: User) -> Embed:
         h = SV(self.height * user.viewscale)
         w = WV(self.weight * (user.viewscale ** 3))
         e = Embed()
@@ -54,19 +58,19 @@ class Pokemon:
 
         return e
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         if isinstance(other, str):
             lowerName = other.lower()
             return lowerName == self.name.lower()
         elif isinstance(other, Pokemon):
             return self.name == other.name
 
-    def __lt__(self, other):
+    def __lt__(self, other: Any) -> bool:
         if isinstance(other, Pokemon):
             return self.natdex < other.natdex
 
     @classmethod
-    def fromJSON(cls, obj_json):
+    def fromJSON(cls, obj_json: Any) -> Pokemon:
         c = cls(**obj_json)
         c.height = SV(c.height)
         c.weight = WV(c.weight)

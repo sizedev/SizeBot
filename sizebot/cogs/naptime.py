@@ -11,7 +11,7 @@ logger = logging.getLogger("sizebot")
 class NaptimeCog(commands.Cog):
     """Commands for napping."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.nannyTask.start()
 
@@ -43,7 +43,7 @@ class NaptimeCog(commands.Cog):
     @commands.command(
         category = "fun"
     )
-    async def grump(self, ctx):
+    async def grump(self, ctx: commands.Context):
         """Too grumpy for bed time.
 
         Stops a &naptime command.
@@ -60,7 +60,7 @@ class NaptimeCog(commands.Cog):
         category = "mod"
     )
     @commands.is_owner()
-    async def nannies(self, ctx):
+    async def nannies(self, ctx: commands.Context):
         """Show me those nannies!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
@@ -83,5 +83,5 @@ class NaptimeCog(commands.Cog):
             logger.error(e)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(NaptimeCog(bot))

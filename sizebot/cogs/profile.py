@@ -8,7 +8,7 @@ from sizebot.lib import userdb
 class ProfileCog(commands.Cog):
     """Profile commands."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -45,7 +45,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def resetpicture(self, ctx):
+    async def resetpicture(self, ctx: commands.Context):
         """Reset your profile's image."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.picture_url = None
@@ -57,7 +57,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def resetdescription(self, ctx):
+    async def resetdescription(self, ctx: commands.Context):
         """Remove your profile description."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.description = None
@@ -87,5 +87,5 @@ class ProfileCog(commands.Cog):
         await ctx.send(embed = profileembed)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(ProfileCog(bot))

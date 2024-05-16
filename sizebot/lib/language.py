@@ -5,7 +5,7 @@ import toml
 
 import sizebot.data
 
-engine = None
+engine: inflect.engine = None
 
 ing = {
     "walk": "walking",
@@ -27,17 +27,17 @@ ed = {
 def load():
     global engine
     engine = inflect.engine()
-    plurals = toml.loads(pkg_resources.read_text(sizebot.data, "plurals.ini"))
+    plurals: dict[str, dict[str, str]] = toml.loads(pkg_resources.read_text(sizebot.data, "plurals.ini"))
     for s, p in plurals["plurals"].items():
         engine.defnoun(s, p)
 
 
-def get_plural(noun):
+def get_plural(noun: str) -> str:
     overrides = {}
     if noun in overrides:
         return overrides[noun]
     return engine.plural_noun(noun)
 
 
-def get_indefinite_article(noun):
+def get_indefinite_article(noun: str) -> str:
     return engine.a(noun)

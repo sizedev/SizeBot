@@ -1,13 +1,15 @@
+from collections.abc import Callable
+
 import functools
 
 import arrow
 
 
-timedfuncs = []
+timedfuncs: list[Callable] = []
 
 
-def timethis(name):
-    def wrapper(fn):
+def timethis(name: str):
+    def wrapper(fn: Callable):
         fn.name = name
 
         @functools.wraps

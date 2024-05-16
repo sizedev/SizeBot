@@ -1,23 +1,29 @@
+from __future__ import annotations
+from typing import Any
+
 import json
 import logging
 import time
 
+from discord.ext import commands
+
 from sizebot.lib import paths
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.units import TV
 
 logger = logging.getLogger("sizebot")
 
 
-_active_nannies = {}
+_active_nannies: dict[int, Nanny] = {}
 
 
 class Nanny:
-    def __init__(self, userid, guildid, endtime):
+    def __init__(self, userid: int, guildid: int, endtime: Decimal):
         self.userid = userid
         self.guildid = guildid
         self.endtime = Decimal(endtime)
 
-    async def check(self, bot):
+    async def check(self, bot: commands.Bot) -> bool:
         if time.time() < self.endtime:
             return True
         guild = await bot.fetch_guild(self.guildid)
@@ -29,7 +35,7 @@ class Nanny:
         await member.move_to(None, reason="Naptime!")
         return False
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "userid": self.userid,
             "guildid": self.guildid,
@@ -37,20 +43,20 @@ class Nanny:
         }
 
 
-def start(userid, guildid, durationTV):
+def start(userid: int, guildid: int, durationTV: TV):
     """Start a new naptime nanny"""
     endtime = Decimal(time.time()) + durationTV
     nanny = Nanny(userid, guildid, endtime)
     _activate(nanny)
 
 
-def stop(userid):
+def stop(userid: int) -> Nanny:
     """Stop a waiting naptime nanny"""
     nanny = _deactivate(userid)
     return nanny
 
 
-async def check(bot):
+async def check(bot: commands.Bot):
     """Have the nannies check their watches"""
     global _active_nannies
     runningNannies = {}
@@ -65,13 +71,13 @@ async def check(bot):
     save_to_file()
 
 
-def _activate(nanny):
+def _activate(nanny: Nanny):
     """Activate a new naptime nanny"""
     _active_nannies[nanny.userid] = nanny
     save_to_file()
 
 
-def _deactivate(userid):
+def _deactivate(userid: int) -> Nanny:
     """Deactivate a waiting naptime nanny"""
     nanny = _active_nannies.pop(userid, None)
     save_to_file()
@@ -97,5 +103,5 @@ def save_to_file():
         json.dump(nanniesJSON, f)
 
 
-def format_summary():
+def format_summary() -> str:
     return "\n".join(str(n) for n in _active_nannies.values())

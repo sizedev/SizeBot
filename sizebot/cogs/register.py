@@ -55,7 +55,7 @@ async def show_next_step(ctx: commands.Context, userdata: userdb.User, completed
 
 
 class RegisterCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -63,7 +63,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def register(self, ctx):
+    async def register(self, ctx: commands.Context):
         # nick: str
         # currentheight: SV = proportions.defaultheight
         # baseheight: SV = proportions.defaultheight
@@ -280,7 +280,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def unregister(self, ctx):
+    async def unregister(self, ctx: commands.Context):
         """Unregister your SizeBot profile."""
         guild = ctx.guild
         user = ctx.author
@@ -334,7 +334,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def copy(self, ctx):
+    async def copy(self, ctx: commands.Context):
         """Copy your SizeBot profile from a different guild to this one."""
 
         inputdict = {
@@ -418,5 +418,5 @@ class RegisterCog(commands.Cog):
         await ctx.send(f"Successfully copied profile from *{self.bot.get_guild(int(chosenguildid)).name}* to here!")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(RegisterCog(bot))

@@ -4,6 +4,8 @@ import importlib.resources as pkg_resources
 import logging
 import json
 
+from discord.ext import commands
+
 import sizebot.data
 from sizebot.conf import conf
 from sizebot.lib import utils
@@ -17,11 +19,11 @@ class DigiException(Exception):
     level = logging.WARNING
 
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return None
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return None
 
     def __repr__(self):
@@ -35,11 +37,11 @@ class DigiContextException(Exception):
     level = logging.WARNING
 
     # TODO: CamelCase
-    async def formatMessage(self, ctx):
+    async def formatMessage(self, ctx: commands.Context) -> str:
         return None
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx):
+    async def formatUserMessage(self, ctx: commands.Context) -> str:
         return None
 
     def __repr__(self):
@@ -50,13 +52,13 @@ class DigiContextException(Exception):
 
 
 class UserNotFoundException(DigiContextException):
-    def __init__(self, guildid, userid, unreg=False):
+    def __init__(self, guildid: int, userid: int, unreg: bool = False):
         self.guildid = guildid
         self.userid = userid
         self.unreg = unreg
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx):
+    async def formatUserMessage(self, ctx: commands.Context):
         user = await ctx.guild.fetch_member(self.userid)
         usernick = user.display_name
         returnstr = f"Sorry, {usernick} isn't registered with SizeBot."
@@ -68,7 +70,7 @@ class UserNotFoundException(DigiContextException):
 
 
 class GuildNotFoundException(DigiException):
-    def __init__(self, guildid):
+    def __init__(self, guildid: int):
         self.guildid = guildid
 
     # TODO: CamelCase
@@ -104,11 +106,11 @@ class ValueIsOneException(DigiException):
 
 
 class ChangeMethodInvalidException(DigiContextException):
-    def __init__(self, changemethod):
+    def __init__(self, changemethod: str):
         self.changemethod = changemethod
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx):
+    async def formatUserMessage(self, ctx: commands.Context):
         usernick = ctx.author.display_name
         return f"Sorry, {usernick}! {self.changemethod} is not a valid change method."
 
@@ -130,7 +132,7 @@ class NoPermissionsException(DigiException):
 
 
 class InvalidUnitSystemException(DigiException):
-    def __init__(self, unitsystem):
+    def __init__(self, unitsystem: str):
         self.unitsystem = unitsystem
 
     # TODO: CamelCase
@@ -139,7 +141,7 @@ class InvalidUnitSystemException(DigiException):
 
 
 class InvalidSizeValue(DigiException):
-    def __init__(self, sizevalue, kind):
+    def __init__(self, sizevalue: str, kind: str):
         self.sizevalue = sizevalue
         self.kind = kind
 
@@ -149,7 +151,7 @@ class InvalidSizeValue(DigiException):
 
 
 class InvalidStat(DigiException):
-    def __init__(self, value):
+    def __init__(self, value: str):
         self.value = value
 
     # TODO: CamelCase
@@ -158,17 +160,16 @@ class InvalidStat(DigiException):
 
 
 class InvalidStatTag(DigiException):
-    def __init__(self, value):
+    def __init__(self, value: str):
         self.value = value
 
-    # TODO: CamelCase
     # TODO: CamelCase
     def formatUserMessage(self):
         return f"{self.value!r} is an unrecognized stat tag."
 
 
 class InvalidObject(DigiException):
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
     # TODO: CamelCase
@@ -177,7 +178,7 @@ class InvalidObject(DigiException):
 
 
 class InvalidMacrovisionModelException(DigiException):
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
     # TODO: CamelCase
@@ -190,7 +191,7 @@ class InvalidMacrovisionModelException(DigiException):
 
 
 class InvalidMacrovisionViewException(DigiException):
-    def __init__(self, model, view):
+    def __init__(self, model: str, view: str):
         self.model = model
         self.view = view
 
@@ -207,7 +208,7 @@ class InvalidMacrovisionViewException(DigiException):
 
 
 class InvalidRollException(DigiException):
-    def __init__(self, dString):
+    def __init__(self, dString: str):
         self.dString = dString
 
     # TODO: CamelCase
@@ -217,51 +218,51 @@ class InvalidRollException(DigiException):
 
 class AdminPermissionException(DigiContextException):
     # TODO: CamelCase
-    async def formatMessage(self, ctx):
+    async def formatMessage(self, ctx: commands.Context):
         usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command."
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx):
+    async def formatUserMessage(self, ctx: commands.Context):
         usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command. This incident will be reported."
 
 
 class MultilineAsNonFirstCommandException(DigiContextException):
     # TODO: CamelCase
-    async def formatMessage(self, ctx):
+    async def formatMessage(self, ctx: commands.Context):
         usernick = ctx.author.display_name
         return f"{usernick} tried to run a multi-line command in the middle of a sequence."
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx):
+    async def formatUserMessage(self, ctx: commands.Context):
         return "You are unable to run a command that takes a multi-line argument in the middle of a batch command sequence. Please try running these commands seperately."
 
 
 class ArgumentException(DigiContextException):
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx):
+    async def formatUserMessage(self, ctx: commands.Context):
         return f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.signature}`."
 
 
 class UserMessedUpException(DigiContextException):
-    def __init__(self, custommessage):
+    def __init__(self, custommessage: str):
         self.custommessage = custommessage
 
     # TODO: CamelCase
-    async def formatMessage(self, ctx):
+    async def formatMessage(self, ctx: commands.Context):
         usernick = ctx.author.display_name
         return usernick + ": " + self.custommessage
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx):
+    async def formatUserMessage(self, ctx: commands.Context):
         return self.custommessage
 
 
 class ThisShouldNeverHappenException(DigiException):
     level = logging.CRITICAL
 
-    def __init__(self, custommessage):
+    def __init__(self, custommessage: str):
         self.custommessage = custommessage
 
     # TODO: CamelCase
@@ -274,7 +275,7 @@ class ThisShouldNeverHappenException(DigiException):
 
 
 class ParseError(DigiException):
-    def __init__(self, s, t):
+    def __init__(self, s: str, t: str):
         self.s = s
         self.t = t
 
@@ -288,7 +289,7 @@ class ParseError(DigiException):
 
 
 class UnfoundStatException(DigiException):
-    def __init__(self, s: list[Any]) -> None:
+    def __init__(self, s: list[Any]):
         self.s = utils.sentence_join(getattr(t, "key", repr(t)) for t in s)
 
     # TODO: CamelCase

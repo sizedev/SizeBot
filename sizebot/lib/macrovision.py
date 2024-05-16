@@ -1,3 +1,5 @@
+from typing import Any
+
 import base64
 from dataclasses import dataclass
 import json
@@ -20,12 +22,12 @@ logger = logging.getLogger("sizebot")
 model_heights = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 
-def get_model_scale(model, view, height_in_meters):
+def get_model_scale(model: str, view: str, height_in_meters: SV) -> Decimal:
     normal_height = Decimal(model_heights[model][view])
     return height_in_meters / normal_height
 
 
-def get_entity_json(name, model, view, height, x):
+def get_entity_json(name: str, model: str, view: str, height: SV, x: float) -> Any:
     scale = get_model_scale(model, view, height)
     return {
         "name": model,
@@ -39,7 +41,7 @@ def get_entity_json(name, model, view, height, x):
     }
 
 
-async def shorten_url(url):
+async def shorten_url(url: str) -> str:
     if not conf.cuttly_key:
         return url
     try:

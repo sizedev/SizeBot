@@ -99,7 +99,7 @@ def quake_stats_embed(userdata: userdb.User, scale_rad = 1) -> discord.Embed:
 class QuakeCog(commands.Cog):
     """Quake commands."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -202,5 +202,5 @@ class QuakeCog(commands.Cog):
         await ctx.send(return_string)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(QuakeCog(bot))

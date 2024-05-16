@@ -1,7 +1,8 @@
 import discord
+from discord.ext import commands
 
 
-def den_guild_ban(ctx):
+def den_guild_ban(ctx: commands.Context):
     member = ctx.author
     isMember = isinstance(member, discord.Member)
     if not isMember:
@@ -10,5 +11,5 @@ def den_guild_ban(ctx):
     return not is_guild_banned
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     bot.add_check(den_guild_ban)

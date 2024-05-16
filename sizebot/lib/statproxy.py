@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 from discord.ext import commands
@@ -23,8 +25,8 @@ class StatProxy:
         return self.__repr__()
 
     @classmethod
-    def parse(cls, s: str):
-        tag = False
+    def parse(cls, s: str) -> StatProxy:
+        tag: bool = False
         if s.startswith("#"):
             tag = True
             s = s.removeprefix("#")
@@ -39,5 +41,5 @@ class StatProxy:
             return StatProxy(statmap[s], False)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument):
+    async def convert(cls, ctx: commands.Context, argument: str) -> StatProxy:
         return cls.parse(argument)

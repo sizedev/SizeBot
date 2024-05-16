@@ -25,7 +25,7 @@ logger = logging.getLogger("sizebot")
 
 
 class ObjectsCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -427,7 +427,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def tags(self, ctx):
+    async def tags(self, ctx: commands.Context):
         """Get the list of object and stat tags."""
 
         out = "__**Stat Tags**__\n"
@@ -455,5 +455,5 @@ class ObjectsCog(commands.Cog):
         await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} is {obj.get_stats_sentence(userdata.scale, userdata.unitsystem)}")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(ObjectsCog(bot))

@@ -10,7 +10,7 @@ logger = logging.getLogger("sizebot")
 
 
 class AdminCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -18,7 +18,7 @@ class AdminCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def halt(self, ctx):
+    async def halt(self, ctx: commands.Context):
         """RIP SizeBot."""
         logger.critical(f"Help, {ctx.author.display_name} is closing me!")
         await ctx.send("Stopping SizeBot. ☠️")
@@ -50,5 +50,5 @@ class AdminCog(commands.Cog):
         await self.bot.process_commands(new_message)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(AdminCog(bot))

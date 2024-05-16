@@ -1,3 +1,6 @@
+from __future__ import annotations
+from typing import Any
+
 import decimal
 import logging
 import math
@@ -377,7 +380,7 @@ class DecimalSpec:
     \Z
     """, re.VERBOSE)
 
-    def __init__(self, formatDict):
+    def __init__(self, formatDict: dict[str, Any]):
         self.align = formatDict["align"]
         self.fill = formatDict["fill"]
         self.sign = formatDict["sign"]
@@ -390,7 +393,7 @@ class DecimalSpec:
         self.accuracy = formatDict["accuracy"]
 
     @classmethod
-    def parse(cls, spec):
+    def parse(cls, spec: str) -> DecimalSpec:
         m = cls.formatSpecRe.match(spec)
         if m is None:
             raise ValueError("Invalid format specifier: " + spec)
@@ -429,7 +432,7 @@ def round_decimal(d, accuracy = 0):
     return d.quantize(places)
 
 
-def round_fraction(number, denominator):
+def round_fraction(number: Decimal, denominator: Decimal) -> Decimal:
     rounded = round(number * denominator) / denominator
     return rounded
 

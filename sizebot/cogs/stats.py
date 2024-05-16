@@ -24,7 +24,7 @@ MemberOrSize = discord.Member | FakePlayer | SV
 
 
 class StatsCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -556,7 +556,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def lineup(self, ctx):
+    async def lineup(self, ctx: commands.Context):
         """Lineup a bunch of people for comparison."""
         # TODO: Oh god this sucks, and doesn't support raw heights because of it
         if not ctx.message.mentions:
@@ -765,5 +765,5 @@ class StatsCog(commands.Cog):
         await ctx.send(**tosend)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(StatsCog(bot))

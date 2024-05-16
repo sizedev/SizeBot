@@ -258,7 +258,7 @@ def ratio_to_diff(ratio):
 class SayCog(commands.Cog):
     """Talk to me, boss."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -319,5 +319,5 @@ class SayCog(commands.Cog):
         await ctx.send(f"{nick} {verb} to {othernick}: \n> {m}")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(SayCog(bot))

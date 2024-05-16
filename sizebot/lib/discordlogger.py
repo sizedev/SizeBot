@@ -1,6 +1,8 @@
 import asyncio
 import logging
 
+import discord
+
 from sizebot.lib.utils import chunk_msg
 
 
@@ -10,7 +12,7 @@ class AsyncHandler(logging.Handler):
         asyncio.create_task(self.__loop())
         super().__init__(*args, **kwargs)
 
-    def emit(self, record):
+    def emit(self, record: logging.LogRecord):
         self.__queue.put_nowait(record)
 
     def asyncemit(self, record):
@@ -26,11 +28,11 @@ class AsyncHandler(logging.Handler):
 
 
 class DiscordHandler(AsyncHandler):
-    def __init__(self, channel):
+    def __init__(self, channel: discord.TextChannel):
         super().__init__()
         self.__channel = channel
 
-    async def asyncemit(self, record):
+    async def asyncemit(self, record: logging.LogRecord):
         message = record.getMessage().replace("```", r"\`\`\`")
 
         for m in chunk_msg(message):

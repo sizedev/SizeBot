@@ -66,7 +66,7 @@ class Movement:
         return f"{self.emoji} {self.pretty_time_to_travel}, {self.pretty_steps_to_travel}\n{self.pretty_speed}"
 
 
-def speedcalc(traveller: StatBox, dist: SV, *, speed = False, foot = False, include_relative = False):
+def speedcalc(traveller: StatBox, dist: SV, *, speed: bool = False, foot: bool = False, include_relative: bool = False) -> str:
     movements = [
         Movement("walk",      dist, stats=traveller, showspeed=speed, steps="steps", always_active=True),
         Movement("run",       dist, stats=traveller, showspeed=speed, steps="strides"),

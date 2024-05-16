@@ -1,3 +1,6 @@
+from __future__ import annotations
+from typing import Any
+
 import toml
 
 from sizebot.lib import paths
@@ -13,14 +16,20 @@ class ConfigError(Exception):
 
 
 class ConfigField:
-    def __init__(self, var, path, *, type=lambda v: v, default=SENTINEL, initdefault=SENTINEL):
+    def __init__(self,
+                 var: str,
+                 path: str,
+                 *,
+                 type: callable[[Any], Any] = lambda v: v,
+                 default: Any = SENTINEL,
+                 initdefault: Any = SENTINEL):
         self.var = var
         self.path = path
         self.default = default
         self.initdefault = initdefault
         self.type = type
 
-    def load(self, config, configDict):
+    def load(self, config: Config, configDict: PathDict):
         if self.default is not SENTINEL:
             val = configDict.get(self.path, SENTINEL)
             if val is SENTINEL:
@@ -31,15 +40,16 @@ class ConfigField:
         else:
             config[self.var] = self.type(configDict[self.path])
 
-    def init(self, configDict):
+    def init(self, configDict: PathDict):
         if self.initdefault is not SENTINEL:
             configDict[self.path] = self.initdefault
 
 
 class Config(AttrDict):
-    def __init__(self, fields):
+    def __init__(self, fields: list[ConfigField]):
         super().__init__()
         # This avoids an infinite recursion issue with __getattr__()
+        self._fields: list[ConfigField]
         super(AttrDict, self).__setattr__("_fields", fields)
 
     def load(self):

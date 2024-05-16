@@ -14,13 +14,13 @@ logger = logging.getLogger("sizebot")
 class LimitCog(commands.Cog):
     """Commands to create or clear edge users."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
         category = "misc"
     )
-    async def limits(self, ctx):
+    async def limits(self, ctx: commands.Context):
         """See the guild's current caps."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {'*Unset*' if guilddata.low_limit is None else guilddata.low_limit:,.3mu}\nHigh Limit: {'*Unset*' if guilddata.high_limit is None else guilddata.high_limit:,.3mu}")
@@ -62,7 +62,7 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearlowlimit(self, ctx):
+    async def clearlowlimit(self, ctx: commands.Context):
         """Set the low size limit (floor)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.low_limit = None
@@ -77,7 +77,7 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearhighlimit(self, ctx):
+    async def clearhighlimit(self, ctx: commands.Context):
         """Set the high size limit (ceiling)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.high_limit = None
@@ -116,5 +116,5 @@ class LimitCog(commands.Cog):
             await nickmanager.nick_update(m.author)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(LimitCog(bot))

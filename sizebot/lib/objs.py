@@ -1,4 +1,5 @@
-from typing import Literal
+from __future__ import annotations
+from typing import Literal, Any
 
 from functools import total_ordering
 import importlib.resources as pkg_resources
@@ -18,17 +19,32 @@ from sizebot.lib.language import get_plural, get_indefinite_article
 from sizebot.lib.units import AV, SV, VV, WV, Unit, SystemUnit
 from sizebot.lib.utils import sentence_join
 
-objects: list["DigiObject"] = []
-food: list["DigiObject"] = []
-land: list["DigiObject"] = []
+objects: list[DigiObject] = []
+food: list[DigiObject] = []
+land: list[DigiObject] = []
 tags: dict[str, int] = {}
+
+Dimension = Literal["h", "l", "d", "w", "t", "p"]
 
 
 @total_ordering
 class DigiObject:
-    def __init__(self, name, dimension, aliases=[], tags=[], symbol = None, height = None, length = None,
-                 width = None, diameter = None, depth = None, thickness = None, calories = None, price = None,
-                 weight = None, note = None):
+    def __init__(self,
+                 name: str,
+                 dimension: Dimension,
+                 aliases: list[str] = [],
+                 tags: list[str] = [],
+                 symbol: str | None = None,
+                 height: SV | None = None,
+                 length: SV | None = None,
+                 width: SV | None = None,
+                 diameter: SV | None = None,
+                 depth: SV | None = None,
+                 thickness: SV | None = None,
+                 calories: SV | None = None,
+                 price: Decimal | None = None,
+                 weight: WV | None = None,
+                 note: str | None = None):
 
         self.name = name
         self.dimension = dimension
@@ -102,7 +118,7 @@ class DigiObject:
                              names=self.aliases, symbol = self.symbol))
             WV.add_system_unit("o", SystemUnit(self.name))
 
-    def get_stats(self, multiplier = 1):
+    def get_stats(self, multiplier: Decimal = 1) -> str:
         returnstr = ""
         if self.height:
             returnstr += f"{emojis.blank}**{SV(self.height * multiplier):,.3mu}** tall\n"
@@ -125,7 +141,7 @@ class DigiObject:
             returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
         return returnstr
 
-    def get_stats_sentence(self, multiplier = 1, system: Literal["m", "u"] = "m"):
+    def get_stats_sentence(self, multiplier: Decimal = 1, system: Literal["m", "u"] = "m") -> str:
         statsstrings = []
         if self.height:
             statsstrings.append(f"**{SV(self.height * multiplier):,.3{system}}** tall")
@@ -150,7 +166,7 @@ class DigiObject:
 
         return returnstr
 
-    def get_stats_embed(self, multiplier = 1):
+    def get_stats_embed(self, multiplier: Decimal = 1) -> Embed:
         embed = Embed()
         embed.set_author(name = f"SizeBot {__version__}")
 
@@ -193,33 +209,33 @@ class DigiObject:
 
         return embed
 
-    def stats(self):
+    def stats(self) -> str:
         return f"{self.article.capitalize()} {self.name} is...\n" + self.get_stats()
 
-    def statsembed(self):
+    def statsembed(self) -> Embed:
         embed = self.get_stats_embed()
         embed.title = self.name
         embed.description = f"*{self.note}*" if self.note else None
         return embed
 
-    def relativestats(self, userdata: userdb.User):
+    def relativestats(self, userdata: userdb.User) -> str:
         return (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
                 f"To {userdata.nickname}, {self.article} {self.name} looks...\n") \
             + self.get_stats(userdata.viewscale)
 
-    def relativestatssentence(self, userdata: userdb.User):
+    def relativestatssentence(self, userdata: userdb.User) -> str:
         return (f"{userdata.nickname} is {userdata.height:,.3{userdata.unitsystem}} tall."
                 f" To them, {self.article} {self.name} looks ") \
             + self.get_stats_sentence(userdata.viewscale, userdata.unitsystem)
 
-    def relativestatsembed(self, userdata: userdb.User):
+    def relativestatsembed(self, userdata: userdb.User) -> Embed:
         embed = self.get_stats_embed(userdata.viewscale)
         embed.title = self.name + " *[relative]*"
         embed.description = (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
                              f"To {userdata.nickname}, {self.article} {self.name} looks...\n")
         return embed
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         if isinstance(other, str):
             lowerName = other.lower()
             return lowerName == self.name.lower() \
@@ -229,13 +245,13 @@ class DigiObject:
             return (self.name, self.unitlength) == (other.name, other.unitlength)
         return super().__eq__(other)
 
-    def __lt__(self, other):
+    def __lt__(self, other: Any) -> bool:
         if isinstance(other, DigiObject):
             return self.unitlength < other.unitlength
         return self.unitlength < other
 
     @classmethod
-    def find_by_name(cls, name: str):
+    def find_by_name(cls, name: str) -> DigiObject | None:
         lowerName = name.lower()
         for o in objects:
             if o == lowerName:
@@ -247,11 +263,11 @@ class DigiObject:
         return None
 
     @classmethod
-    def from_JSON(cls, objJson):
+    def from_JSON(cls, objJson) -> DigiObject:
         return cls(**objJson)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument):
+    async def convert(cls, ctx: commands.Context, argument: str) -> DigiObject:
         obj = cls.find_by_name(argument)
         if obj is None:
             raise errors.InvalidObject(argument)
@@ -264,7 +280,7 @@ class DigiObject:
         return str(self)
 
 
-def load_obj_file(filename):
+def load_obj_file(filename: str):
     try:
         fileJson = json.loads(pkg_resources.read_text(sizebot.data.objects, filename))
     except FileNotFoundError:
@@ -272,7 +288,7 @@ def load_obj_file(filename):
     load_obj_JSON(fileJson)
 
 
-def load_obj_JSON(fileJson):
+def load_obj_JSON(fileJson: Any):
     for objJson in fileJson:
         objects.append(DigiObject.from_JSON(objJson))
 

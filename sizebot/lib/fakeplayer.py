@@ -92,5 +92,5 @@ class FakePlayer(User):
         return player
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument):
+    async def convert(cls, ctx: commands.Context, argument: str):
         return cls.parse(argument)

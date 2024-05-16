@@ -22,7 +22,7 @@ def page_not_found(e):
 
 
 @app.route("/user/<int:guildid>/<int:userid>", methods=["GET"])
-def user(guildid, userid):
+def user(guildid: int, userid: int):
     try:
         u = userdb.load(guildid, userid)
     except UserNotFoundException:

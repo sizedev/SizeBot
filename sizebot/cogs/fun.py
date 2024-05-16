@@ -18,7 +18,7 @@ logger = logging.getLogger("sizebot")
 class FunCog(commands.Cog):
     """Commands for non-size stuff."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -58,7 +58,7 @@ class FunCog(commands.Cog):
         hidden = True
     )
     @commands.cooldown(1, 30, commands.BucketType.user)
-    async def digipee(self, ctx):
+    async def digipee(self, ctx: commands.Context):
         logger.log(EGG, f"{ctx.author.display_name} thinks Digi needs to pee.")
         with pkg_resources.open_binary(sizebot.data, "digipee.mp3") as f:
             # PERMISSION: requires attach_file
@@ -76,7 +76,7 @@ class FunCog(commands.Cog):
         hidden = True
     )
     @commands.cooldown(1, 30, commands.BucketType.user)
-    async def easteregg(self, ctx):
+    async def easteregg(self, ctx: commands.Context):
         logger.log(EGG, f"{ctx.author.display_name} thought it was that easy, huh.")
         await ctx.send("No.")
 
@@ -87,5 +87,5 @@ class FunCog(commands.Cog):
             await cont.invoke(self.bot.get_command("digipee"))
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(FunCog(bot))

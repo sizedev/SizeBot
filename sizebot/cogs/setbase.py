@@ -14,7 +14,7 @@ logger = logging.getLogger("sizebot")
 
 
 class SetBaseCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -168,7 +168,7 @@ class SetBaseCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def resethair(self, ctx):
+    async def resethair(self, ctx: commands.Context):
         """Remove custom hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -278,5 +278,5 @@ class SetBaseCog(commands.Cog):
         await show_next_step(ctx, userdata)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(SetBaseCog(bot))

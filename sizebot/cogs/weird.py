@@ -23,7 +23,7 @@ coloricon = "https://cdn.discordapp.com/attachments/650460192009617433/676205298
 class WeirdCog(commands.Cog):
     """Commands for non-size stuff."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -156,5 +156,5 @@ class WeirdCog(commands.Cog):
             await ctx.send("Math failed.")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(WeirdCog(bot))

@@ -1,3 +1,6 @@
+from __future__ import annotations
+from typing import Any
+
 import json
 
 from sizebot.lib import errors, paths
@@ -8,28 +11,32 @@ class Guild:
     # __slots__ declares to python what attributes to expect.
     __slots__ = ["id", "small_edge", "large_edge", "_high_limit", "_low_limit"]
 
-    def __init__(self):
-        self.id = None
-        self.small_edge = None
-        self.large_edge = None
-        self._high_limit = None
-        self._low_limit = None
+    def __init__(self, id: int):
+        self.id = id
+        self.small_edge: int | None = None
+        self.large_edge: int | None = None
+        self._high_limit: SV | None = None
+        self._low_limit: SV | None = None
 
     @property
-    def high_limit(self):
+    def high_limit(self) -> SV | None:
         return self._high_limit
 
     @high_limit.setter
-    def high_limit(self, value):
-        self._high_limit = None if value is None else SV(max(0, SV(value)))
+    def high_limit(self, value: SV | None):
+        if value is not None:
+            value = SV(max(0, SV(value)))
+        self._high_limit = value
 
     @property
-    def low_limit(self):
+    def low_limit(self) -> SV | None:
         return self._low_limit
 
     @low_limit.setter
-    def low_limit(self, value):
-        self._low_limit = None if value is None else SV(max(0, SV(value)))
+    def low_limit(self, value: SV | None):
+        if value is not None:
+            value = SV(max(0, SV(value)))
+        self._low_limit = value
 
     def __str__(self):
         return (f"<Guild ID = {self.id!r}, "
@@ -40,7 +47,7 @@ class Guild:
         return str(self)
 
     # Return an python dictionary for json exporting
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "id":         self.id,
             "small_edge": None if self.small_edge is None else self.small_edge,
@@ -51,9 +58,8 @@ class Guild:
 
     # Create a new object from a python dictionary imported using json
     @classmethod
-    def fromJSON(cls, jsondata):
-        guilddata = Guild()
-        guilddata.id = jsondata["id"]
+    def fromJSON(cls, jsondata: Any) -> Guild:
+        guilddata = Guild(jsondata["id"])
         guilddata.small_edge = jsondata.get("small_edge")
         guilddata.large_edge = jsondata.get("large_edge")
         guilddata.high_limit = jsondata.get("high_limit")
@@ -61,15 +67,15 @@ class Guild:
         return guilddata
 
 
-def get_guild_path(guildid):
+def get_guild_path(guildid: int) -> str:
     return paths.guilddbpath / f"{guildid}"
 
 
-def get_guild_data_path(guildid):
+def get_guild_data_path(guildid: int) -> str:
     return get_guild_path(guildid) / "guild.json"
 
 
-def save(guilddata):
+def save(guilddata: Guild):
     guildid = guilddata.id
     if guildid is None:
         raise errors.CannotSaveWithoutIDException
@@ -80,7 +86,7 @@ def save(guilddata):
         json.dump(jsondata, f, indent = 4)
 
 
-def load(guildid):
+def load(guildid: int) -> Guild:
     path = get_guild_data_path(guildid)
     try:
         with open(path, "r") as f:
@@ -93,21 +99,20 @@ def load(guildid):
     return guild
 
 
-def load_or_create(guildid):
+def load_or_create(guildid: int) -> Guild:
     try:
         guilddata = load(guildid)
     except errors.GuildNotFoundException:
-        guilddata = Guild()
-        guilddata.id = guildid
+        guilddata = Guild(guildid)
     return guilddata
 
 
-def delete(guildid):
+def delete(guildid: int):
     path = get_guild_path(guildid)
     path.unlink(missing_ok = True)
 
 
-def exists(guildid):
+def exists(guildid: int) -> bool:
     exists = True
     try:
         load(guildid)

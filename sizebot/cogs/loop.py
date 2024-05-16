@@ -42,7 +42,7 @@ def calc_move_dist(userdata: userdb.User):
 
 
 class LoopCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -86,7 +86,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def stop(self, ctx):
+    async def stop(self, ctx: commands.Context):
         """Stop a current movement."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         if userdata.currentmovetype is None:
@@ -132,5 +132,5 @@ class LoopCog(commands.Cog):
         await ctx.send(out)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(LoopCog(bot))

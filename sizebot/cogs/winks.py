@@ -62,7 +62,7 @@ async def say_milestone(channel, winkcount):
 class WinksCog(commands.Cog):
     """Yukio wink count."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.Cog.listener()
@@ -84,11 +84,11 @@ class WinksCog(commands.Cog):
         hidden = True,
         category = "misc"
     )
-    async def winkcount(self, ctx):
+    async def winkcount(self, ctx: commands.Context):
         winkcount = get_winks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
         logger.info(f"Wink count requested by {ctx.author.nickname}! Current count: {winkcount} times!")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(WinksCog(bot))

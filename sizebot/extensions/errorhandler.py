@@ -11,7 +11,7 @@ from sizebot.lib.utils import pretty_time_delta
 logger = logging.getLogger("sizebot")
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     @bot.event
     async def on_command_error(ctx: commands.Context, error):
         # Get actual error

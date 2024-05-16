@@ -1,3 +1,6 @@
+from types import CodeType
+from typing import Any
+
 import builtins
 import inspect
 import io
@@ -30,7 +33,7 @@ from sizebot.lib.units import Rate, Mult, SV, TV, WV
 logger = logging.getLogger("sizebot")
 
 
-def eformat(name, value):
+def eformat(name: str, value: Any) -> str:
     if value is None:
         emojiType = "❓"
     elif callable(value):
@@ -71,7 +74,7 @@ def eformat(name, value):
     return f"{emojiType} {name}"
 
 
-def edir(o):
+def edir(o: Any) -> Embed:
     """send embed of an object's attributes, with type notation"""
     e = Embed(title=utils.get_fullname(o))
     attrs = [eformat(n, v) for n, v in utils.ddir(o).items()]
@@ -100,7 +103,7 @@ def cachedCopy(fn):
 
 # TODO: CamelCase
 @cachedCopy
-def getEvalGlobals():
+def getEvalGlobals() -> dict[str, Any]:
     """Construct a globals dict for eval"""
     # Create a dict of builtins, excluding any in the blacklist
     blacklist = [
@@ -166,7 +169,7 @@ def getEvalGlobals():
 
 
 # TODO: CamelCase
-def buildEvalWrapper(evalStr, addReturn = True):
+def buildEvalWrapper(evalStr: str, addReturn: bool = True) -> tuple[CodeType, str]:
     """Build a wrapping async function that lets the eval command run multiple lines, and return the result of the last line"""
     evalLines = evalStr.rstrip().split("\n")
     if evalLines[-1].startswith(" "):
@@ -186,7 +189,7 @@ def buildEvalWrapper(evalStr, addReturn = True):
 
 
 # TODO: CamelCase
-async def runEval(ctx: commands.Context, evalStr):
+async def runEval(ctx: commands.Context, evalStr: str) -> Any:
     evalGlobals = getEvalGlobals()
     evalLocals = {}
 

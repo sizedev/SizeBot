@@ -18,7 +18,7 @@ logger = logging.getLogger("sizebot")
 
 
 class ChangeCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         changes.load_from_file()
 
@@ -88,7 +88,7 @@ class ChangeCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def changes(self, ctx):
+    async def changes(self, ctx: commands.Context):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
 
@@ -104,7 +104,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def stopchange(self, ctx):
+    async def stopchange(self, ctx: commands.Context):
         """Stop a currently active slow change."""
         userid = ctx.author.id
         guildid = ctx.guild.id
@@ -122,7 +122,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def eatme(self, ctx):
+    async def eatme(self, ctx: commands.Context):
         """Eat me!
 
         Increases your height by a random amount between 2x and 20x."""
@@ -147,7 +147,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def drinkme(self, ctx):
+    async def drinkme(self, ctx: commands.Context):
         """Drink me!
 
         Decreases your height by a random amount between 2x and 20x."""
@@ -171,7 +171,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def pushme(self, ctx):
+    async def pushme(self, ctx: commands.Context):
         """Push me!
 
         Increases or decreases your height by a random amount between 2x and 20x."""
@@ -302,5 +302,5 @@ def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
     userdb.save(userdata)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(ChangeCog(bot))

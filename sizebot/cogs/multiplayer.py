@@ -17,7 +17,7 @@ logger = logging.getLogger("sizebot")
 class MPCog(commands.Cog):
     """Commands to create or clear triggers."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -62,7 +62,7 @@ class MPCog(commands.Cog):
         category = "multiplayer",
         aliases = ["resetbutton", "unsetbutton", "removebutton"]
     )
-    async def clearbutton(self, ctx):
+    async def clearbutton(self, ctx: commands.Context):
         """Remove your push button."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.button = None
@@ -194,7 +194,7 @@ class MPCog(commands.Cog):
     @commands.command(
         category = "multiplayer"
     )
-    async def toggleallowothers(self, ctx):
+    async def toggleallowothers(self, ctx: commands.Context):
         """Allow other users to change your size.
 
         NOTE: THIS HAS NO WHITELIST, BLACKLIST, LIMITS, OR OTHERWISE.
@@ -216,5 +216,5 @@ YOU HAVE BEEN WARNED."""
         await ctx.send(s)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(MPCog(bot))

@@ -34,7 +34,8 @@
 # RATE for 10meters
 # RATE -> 10meters
 
-from typing import Literal
+from __future__ import annotations
+from typing import Literal, Any
 
 import re
 
@@ -67,13 +68,13 @@ valid_limited_rate_interfixes = regexbuild(limited_rate_interfixes, capture = Tr
 
 
 class Diff:
-    def __init__(self, original, changetype: Literal["add", "multiply", "power"], amount: SV | Decimal):
+    def __init__(self, original: str, changetype: Literal["add", "multiply", "power"], amount: SV | Decimal):
         self.changetype = changetype
         self.amount = amount
         self.original = original
 
     @classmethod
-    def parse(cls, s):
+    def parse(cls, s: str) -> Diff:
         prefixmatch = valid_prefixes + r"\s*(.*)"
         suffixmatch = r"(.*)\s*" + valid_suffixes
 
@@ -120,7 +121,7 @@ class Diff:
 
         return cls(s, ct, v)
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "changetype": self.changetype,
             "amount":     str(self.amount),
@@ -128,8 +129,8 @@ class Diff:
         }
 
     def __str__(self):
-        operator = ""
-        amount = ""
+        operator: str = ""
+        amount: str = ""
         if self.changetype == "add":
             operator = "-" if self.amount < 0 else "+"
         elif self.changetype == "multiply":
@@ -143,7 +144,7 @@ class Diff:
         return f"<{self.__class__.__name__} {self}>"
 
     @classmethod
-    def fromJSON(cls, jsondata):
+    def fromJSON(cls, jsondata: Any) -> Diff:
         changetype = jsondata["changetype"]
         if changetype == "add":
             amount = SV(jsondata["amount"])
@@ -154,18 +155,18 @@ class Diff:
         return cls(original, changetype, amount)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument):
+    async def convert(cls, ctx: commands.Context, argument: str) -> Diff:
         return cls.parse(argument)
 
 
 class Rate:
-    def __init__(self, original, diff, time):
+    def __init__(self, original: str, diff: Diff, time: TV):
         self.diff = diff
         self.time = time
         self.original = original
 
     @classmethod
-    def parse(cls, s):
+    def parse(cls, s: str) -> Rate:
         d = None
         t = None
 
@@ -179,9 +180,9 @@ class Rate:
         d = Diff.parse(m.group(1))
         t = TV.parse(m.group(3))
 
-        return Rate(s, d, t)
+        return cls(s, d, t)
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "diff":     self.diff.toJSON(),
             "time":     str(self.time),
@@ -192,28 +193,25 @@ class Rate:
         return f"{self.diff} per {format(self.time)}"
 
     @classmethod
-    def fromJSON(cls, jsondata):
+    def fromJSON(cls, jsondata: Any) -> Rate:
         diff = Diff.fromJSON(jsondata["diff"])
         time = TV(jsondata["time"])
         original = jsondata["original"]
         return cls(original, diff, time)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument):
+    async def convert(cls, ctx: commands.Context, argument: str) -> Rate:
         return cls.parse(argument)
 
 
 class LimitedRate:
-    def __init__(self, original, rate, stop):
+    def __init__(self, original: str, rate: Rate, stop: SV | TV):
         self.rate = rate
         self.stop = stop
         self.original = original
 
     @classmethod
-    def parse(cls, s):
-        r = None
-        st = None
-
+    def parse(cls, s: str) -> LimitedRate:
         match = r"(.*)\s*" + valid_limited_rate_interfixes + r"\s*(.*)"
         m = re.match(match, s)
         if not m:
@@ -226,9 +224,9 @@ class LimitedRate:
         if st is None:
             raise ParseError(s, "LimitedRate")
 
-        return LimitedRate(s, r, st)
+        return cls(s, r, st)
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         stoptype = "SV" if isinstance(self.stop, SV) else "TV"
         return {
             "rate": self.rate,
@@ -242,10 +240,10 @@ class LimitedRate:
         return f"{self.rate} {joiner} {format(self.stop)}"
 
     @classmethod
-    def fromJSON(cls, jsondata):
+    def fromJSON(cls, jsondata: Any) -> LimitedRate:
         rate = Rate.fromJSON(jsondata["rate"])
-        original = jsondata["original"]
-        stoptype = jsondata["stoptype"]
+        original: str = jsondata["original"]
+        stoptype: str = jsondata["stoptype"]
         if stoptype == "SV":
             stop = SV(jsondata["stop"])
         elif stoptype == "TV":
@@ -256,11 +254,11 @@ class LimitedRate:
         return cls(original, rate, stop)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument):
+    async def convert(cls, ctx: commands.Context, argument: str) -> LimitedRate:
         return cls.parse(argument)
 
 
-def parse_change(s):
+def parse_change(s: str) -> LimitedRate | Rate | Diff:
     r = None
     try:
         r = LimitedRate.parse(s)

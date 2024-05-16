@@ -1,6 +1,7 @@
 from typing import Literal, get_args
 
 from discord import Embed
+
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.proportions import EmbedToSend
 from sizebot.lib.stats import StatBox

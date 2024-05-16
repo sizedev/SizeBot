@@ -89,7 +89,7 @@ def get_steps(start_inc: SV, diff: Diff, goal: SV):
 
 
 class ScaleWalkCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(
@@ -228,7 +228,7 @@ class ScaleWalkCog(commands.Cog):
                    "clearwalkscale", "unsetwalkscale", "resetscalewalk", "clearscalewalk", "unsetscalewalk",
                    "resetwalkscale"]
     )
-    async def resetstepscale(self, ctx):
+    async def resetstepscale(self, ctx: commands.Context):
         """Clear your step-scale amount, for use with `&step`."""
 
         guildid = ctx.guild.id
@@ -290,5 +290,5 @@ class ScaleWalkCog(commands.Cog):
         userdb.save(userdata)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(ScaleWalkCog(bot))

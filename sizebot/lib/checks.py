@@ -2,7 +2,7 @@ from discord.ext import commands
 
 
 def is_mod():
-    async def predicate(ctx):
+    async def predicate(ctx: commands.Context) -> bool:
         author = ctx.author
         modness = False
         if await ctx.bot.is_owner(author):

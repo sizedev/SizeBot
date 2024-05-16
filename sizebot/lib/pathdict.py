@@ -1,3 +1,5 @@
+from typing import Any
+
 import re
 
 RE_COMPONENT = re.compile(r'\[\d+\]|[^\[\].]+')
@@ -10,7 +12,7 @@ class BadPathException(Exception):
     pass
 
 
-def parse_component(component):
+def parse_component(component: str) -> int | str:
     index_match = RE_INDEX.match(component)
     if index_match:
         return int(index_match[1])
@@ -21,7 +23,7 @@ def parse_component(component):
 
 
 # TODO: CamelCase
-def buildPath(components):
+def buildPath(components: list[int | str]) -> str:
     path = ""
     for c in components:
         if isinstance(c, int):
@@ -36,7 +38,7 @@ def buildPath(components):
 
 
 # TODO: CamelCase
-def parsePath(path):
+def parsePath(path: str) -> list[int | str]:
     components = [parse_component(c) for c in RE_COMPONENT.findall(path)]
     if path != buildPath(components):
         raise BadPathException
@@ -47,7 +49,7 @@ class PathDict:
     def __init__(self, data={}):
         self._values = data
 
-    def __getitem__(self, path):
+    def __getitem__(self, path: str) -> Any:
         """value = PathDict[path]"""
         branch = self._values
         try:
@@ -65,7 +67,7 @@ class PathDict:
 
         return branch
 
-    def __setitem__(self, path, value):
+    def __setitem__(self, path: str, value: Any):
         """PathDict[path] = value"""
         branch = self._values
         components = parsePath(path)
@@ -79,7 +81,7 @@ class PathDict:
                 branch = branch[c]
         branch[last] = value
 
-    def get(self, path, default=None):
+    def get(self, path: str, default: Any = None) -> Any:
         """value = PathDict.get(path, default)"""
         try:
             return self[path]
@@ -87,7 +89,7 @@ class PathDict:
             return default
 
     # TODO: CamelCase
-    def toDict(self):
+    def toDict(self) -> dict[str, Any]:
         return self._values
 
     def __str__(self):

@@ -1,5 +1,6 @@
-from typing import Tuple
-from collections import Mapping
+from __future__ import annotations
+from typing import Any, cast
+from collections.abc import Mapping
 
 import importlib.resources as pkg_resources
 import json
@@ -51,7 +52,7 @@ class Rate():
     re_rate = re.compile(f"(?P<prefix>{addSubPrefixes})? *(?P<multOrSv>.*) *({rateDividers}) *(?P<tv>{re_opnum_unit}) *(({stopDividers}) *(?P<stop>{re_opnum_unit}))?")
 
     @classmethod
-    def parse(cls, s):
+    def parse(cls, s: str) -> tuple[Decimal, Decimal, SV | None, TV | None]:
         match = cls.re_rate.match(s)
         if match is None:
             raise errors.InvalidSizeValue(s, "rate")
@@ -106,7 +107,7 @@ class Mult():
     re_mult = re.compile(f"(?P<prefix>{prefixes})? *(?P<multValue>{utils.re_num}) *(?P<suffix>{suffixes})?")
 
     @classmethod
-    def parse(cls, s):
+    def parse(cls, s: str) -> Decimal:
         match = cls.re_mult.match(s)
         if match is None:
             raise errors.InvalidSizeValue(s, "multiplier")
@@ -128,7 +129,14 @@ class Unit():
 
     hidden = False
 
-    def __init__(self, factor=1, symbol=None, name=None, namePlural=None, symbols=[], names=[], fractional=False):
+    def __init__(self,
+                 factor: Decimal = 1,
+                 symbol: str | None = None,
+                 name: str | None = None,
+                 namePlural: str | None = None,
+                 symbols: list[str] = [],
+                 names: list[str] = [],
+                 fractional: bool = False):
         self.fractional = fractional
         self.factor = Decimal(factor)
 
@@ -146,7 +154,7 @@ class Unit():
         if namePlural is not None:
             self.names.add(namePlural.strip())
 
-    def format(self, value, spec="", preferName=False):
+    def format(self, value: Decimal, spec: str = "", preferName: bool = False) -> str:
         if value.is_infinite():
             if preferName:
                 return value.sign + "infinity"
@@ -185,16 +193,16 @@ class Unit():
 
         return formatted
 
-    def to_base_unit(self, v):
+    def to_base_unit(self, v: Decimal) -> Decimal:
         return v * self.factor
 
-    def is_unit(self, u):
+    def is_unit(self, u: str) -> bool:
         if isinstance(u, str):
             u = u.strip()
         return isinstance(u, str) and (u in self.names or u in self.symbols)
 
     @property
-    def id(self):
+    def id(self) -> str:
         return self.symbol or self.name or self.namePlural
 
     def __str__(self):
@@ -216,10 +224,10 @@ class Unit():
 class FixedUnit(Unit):
     """Unit that only formats to a single symbol"""
 
-    def format(self, value, spec="", preferName=False):
+    def format(self, value: Decimal, spec: str = "", preferName: bool = False) -> str:
         return self.symbol
 
-    def to_base_unit(self, v):
+    def to_base_unit(self, v: Decimal) -> Decimal:
         return self.factor
 
 
@@ -233,7 +241,7 @@ class FeetAndInchesUnit(Unit):
         self.factor = foot
         self.symbol = ("'", "\"")
 
-    def format(self, value, spec="", preferName=False):
+    def format(self, value: Decimal, spec: str = "", preferName: bool = False) -> str:
         feetSpec = DecimalSpec.parse(spec)
         feetSpec.precision = "0"
 
@@ -253,10 +261,10 @@ class FeetAndInchesUnit(Unit):
         formatted = f"{feetval:{feetSpec}}'{inchval:{inchSpec}}\""
         return formatted
 
-    def to_base_unit(self, v):
+    def to_base_unit(self, v: Decimal) -> None:
         return None
 
-    def is_unit(self, u):
+    def is_unit(self, u: str) -> bool:
         return u == self.symbol
 
 
@@ -264,9 +272,9 @@ class UnitRegistry(Mapping):
     """Unit Registry"""
 
     def __init__(self):
-        self._units = []
+        self._units: list[Unit] = []
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Unit:
         try:
             return next(unit for unit in self._units if unit.is_unit(key))
         except StopIteration:
@@ -281,20 +289,20 @@ class UnitRegistry(Mapping):
     def __len__(self):
         return len(self._units)
 
-    def add_unit(self, unit):
+    def add_unit(self, unit: Unit):
         self._units.append(unit)
 
 
 class SystemRegistry():
     """System Registry"""
 
-    def __init__(self, dimension):
+    def __init__(self, dimension: Dimension):
         self.dimension = dimension
-        self._systemunits = []
-        self.isSorted = False
+        self._systemunits: list[SystemUnit] = []
+        self.isSorted: bool = False
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
-    def get_best_unit(self, value):
+    def get_best_unit(self, value: Decimal) -> Unit:
         if not self.isSorted:
             self._systemunits.sort()
         value = abs(value)
@@ -307,7 +315,7 @@ class SystemRegistry():
         return self._systemunits[-1].unit
 
     # Try to find the best fitting unit, picking the largest unit if all units are too small
-    def get_good_unit(self, value, options = 6):
+    def get_good_unit(self, value: Decimal, options: Decimal = 6) -> Unit:
         if not self.isSorted:
             self._systemunits.sort()
         systemunit = get_random_close_unit(value, self._systemunits, options)
@@ -315,7 +323,7 @@ class SystemRegistry():
             return self.get_best_unit(value)
         return systemunit.unit
 
-    def add_system_unit(self, systemunit):
+    def add_system_unit(self, systemunit: SystemUnit):
         self.isSorted = False
         self._systemunits.append(systemunit)
         systemunit.load(self.dimension._units)
@@ -324,24 +332,24 @@ class SystemRegistry():
 class SystemUnit():
     """System Units"""
 
-    def __init__(self, unit, trigger=None, rel_trigger=None):
+    def __init__(self, unit: str, trigger: Decimal | None = None, rel_trigger: Decimal | None = None):
         if trigger is not None and rel_trigger is not None:
             raise ValueError
 
         self.unitname = unit
         self._trigger = trigger and Decimal(trigger)
         self._rel_trigger = rel_trigger and Decimal(rel_trigger)
-        self.unit = None
+        self.unit: Unit = None
 
-    def load(self, units):
+    def load(self, units: UnitRegistry):
         self.unit = units[self.unitname]
 
     @property
-    def factor(self):
+    def factor(self) -> Decimal:
         return self.unit.factor
 
     @property
-    def trigger(self):
+    def trigger(self) -> Decimal:
         if self._rel_trigger is not None:
             return self.unit.factor * self._rel_trigger
         if self._trigger is not None:
@@ -357,11 +365,12 @@ class SystemUnit():
 
 class Dimension(Decimal):
     """Dimension"""
+    _units: UnitRegistry
+    _systems: dict[str, SystemRegistry]
 
-    def __format__(self, spec):
+    def __format__(self, spec: str) -> str:
         value = Decimal(self)
         dSpec = DecimalSpec.parse(spec)
-
         systems = dSpec.type or ""
 
         if systems and all(s.casefold() in self._systems.keys() for s in systems):
@@ -387,50 +396,43 @@ class Dimension(Decimal):
         return formatted
 
     @classmethod
-    def parse(cls, s):
-        value, unitStr = cls.get_quantity_pair(s)
+    def parse(cls, s: str) -> Dimension:
+        valueStr, unitStr = cls.get_quantity_pair(s)
         kinds = {"SV": "size", "WV": "weight", "TV": "time"}
         kind = kinds.get(cls.__name__, cls.__name__)
-        if value is None and unitStr is None:
+        if valueStr is None and unitStr is None:
             raise errors.InvalidSizeValue(s, kind)
-        if value is None:
-            value = Decimal(1)
-        else:
-            value = Decimal(value)
-        unit = cls._units.get(unitStr, None)
+        if valueStr is None:
+            valueStr = "1"
+        value = Decimal(valueStr)
+        unit = cast(Unit | None, cls._units.get(unitStr, None))
         if unit is None:
             raise errors.InvalidSizeValue(s, kind)
         baseUnit = unit.to_base_unit(value)
         return cls(baseUnit)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context, argument):
+    async def convert(cls, ctx: commands.Context, argument: str) -> Dimension:
         return cls.parse(argument)
 
     @classmethod
-    def get_quantity_pair(cls, s) -> Tuple:
+    def get_quantity_pair(cls, s) -> tuple[str | None, str | None]:
         raise NotImplementedError
 
-    def to_best_unit(self, sysname, *args, **kwargs):
+    def to_best_unit(self, sysname: str, *args, **kwargs) -> str:
         value = Decimal(self)
         system = self._systems[sysname]
         unit = system.get_best_unit(value)
         return unit.format(value, *args, **kwargs)
 
-    def to_good_unit(self, sysname, options = 6, *args, **kwargs):
+    def to_good_unit(self, sysname: str, options: Decimal = 6, *args, **kwargs) -> str:
         value = Decimal(self)
         system = self._systems[sysname]
         unit = system.get_good_unit(value, options)
         return unit.format(value, *args, **kwargs)
 
-    def to_unit(self, sysname, unitname, *args, **kwargs):
-        value = Decimal(self)
-        system = self._systems[sysname]
-        unit = system[unitname]
-        return unit.format(value, *args, **kwargs)
-
     @classmethod
-    def load_from_file(cls, filename):
+    def load_from_file(cls, filename: str):
         try:
             fileJson = json.loads(pkg_resources.read_text(sizebot.data.units, filename))
         except FileNotFoundError:
@@ -439,7 +441,7 @@ class Dimension(Decimal):
         cls.load_from_JSON(fileJson)
 
     @classmethod
-    def load_from_JSON(cls, json):
+    def load_from_JSON(cls, json: Any):
         for u in json["units"]:
             cls.add_unit_from_JSON(**u)
         for systemname, systemunits in json["systems"].items():
@@ -452,21 +454,22 @@ class Dimension(Decimal):
         cls.add_unit(unit)
 
     @classmethod
-    def add_unit(cls, unit):
-        cls._units.add_unit(unit)
+    def add_unit(cls, unit: Unit):
+        _units = cast(UnitRegistry, cls._units)
+        _units.add_unit(unit)
 
     @classmethod
-    def add_system_unit_from_JSON(cls, systemname, **kwargs):
+    def add_system_unit_from_JSON(cls, systemname: str, **kwargs):
         systemunit = SystemUnit(**kwargs)
         cls.add_system_unit(systemname, systemunit)
 
     @classmethod
-    def add_system_unit(cls, systemname, systemunit):
+    def add_system_unit(cls, systemname: str, systemunit: SystemUnit):
         system = cls.get_or_add_system(systemname)
         system.add_system_unit(systemunit)
 
     @classmethod
-    def get_or_add_system(cls, systemname):
+    def get_or_add_system(cls, systemname: str) -> SystemRegistry:
         system = cls._systems.get(systemname)
         if system is None:
             system = SystemRegistry(cls)
@@ -484,7 +487,7 @@ class SV(Dimension):
     _infinity = Decimal("8.79848e53")
 
     @classmethod
-    def get_quantity_pair(cls, s):
+    def get_quantity_pair(cls, s: str) -> tuple[str | None, str | None]:
         s = utils.remove_brackets(s)
         s = cls.is_feet_and_inches_and_if_so_fix_it(s)
         # TODO: These are temporary patches.
@@ -510,7 +513,7 @@ class SV(Dimension):
         return value, unit
 
     @staticmethod
-    def is_feet_and_inches_and_if_so_fix_it(value):
+    def is_feet_and_inches_and_if_so_fix_it(value: str) -> str:
         regex = r"^(?P<feet>\d+\.?\d*)(ft|foot|feet|')(?P<inch>\d+\.?\d*)(in|\")?"
         m = re.match(regex, value, flags = re.I)
         if not m:
@@ -535,7 +538,7 @@ class WV(Dimension):
     _infinity = Decimal("1e1000")
 
     @classmethod
-    def get_quantity_pair(cls, s):
+    def get_quantity_pair(cls, s: str) -> tuple[str | None, str | None]:
         s = utils.remove_brackets(s)
         # TODO: These are temporary patches.
         # Comma patch
@@ -564,7 +567,7 @@ class TV(Dimension):
     _systems = {}
 
     @classmethod
-    def get_quantity_pair(cls, s):
+    def get_quantity_pair(cls, s: str) -> tuple[str | None, str | None]:
         s = utils.remove_brackets(s)
         # . patch
         if s.startswith("."):
@@ -598,7 +601,7 @@ class VV(Dimension):
         raise NotImplementedError
 
 
-def load_json_file(filename):
+def load_json_file(filename: str) -> Any | None:
     try:
         units_JSON = json.loads(pkg_resources.read_text(sizebot.data, filename))
     except FileNotFoundError:
