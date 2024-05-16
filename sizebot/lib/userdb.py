@@ -1,9 +1,7 @@
 from __future__ import annotations
+from typing import Literal, TypedDict
 
-from typing import Literal, TypedDict, TYPE_CHECKING
-if TYPE_CHECKING:
-    from sizebot.lib.fakeplayer import FakePlayer
-
+import re
 import json
 from copy import copy
 from functools import total_ordering
@@ -13,6 +11,7 @@ import arrow
 from arrow.arrow import Arrow
 
 import discord
+from discord.ext import commands
 
 import sizebot.data
 from sizebot.lib import errors, paths
@@ -20,6 +19,9 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, Rate as ParseableRate
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.utils import is_url, truncate
+from sizebot.lib.errors import InvalidSizeValue, InvalidStat
+from sizebot.lib.shoesize import from_shoe_size
+from sizebot.lib.utils import AliasMap, parse_scale, truthy
 
 # Defaults
 DEFAULT_HEIGHT = SV("1.754")            # meters
@@ -751,3 +753,88 @@ def load_or_fake(memberOrSV: discord.Member | FakePlayer | SV, nickname = None, 
             nickname = f"a {userdata.height:,.3mu} tall person"
         userdata.nickname = nickname
         return userdata
+
+
+class FakePlayer(User):
+    """Generates a fake User based on a dumb string with complex syntax no one will use but me."""
+    KEYMAP = AliasMap({
+        "nickname": ("nick", "name"),
+        "height": (),
+        "baseheight": (),
+        "baseweight": (),
+        "footlength": ("foot", "basefoot"),
+        "shoesize": ("shoe", "baseshoe"),
+        "hairlength": ("hair", "basehair"),
+        "taillength": ("tail", "basetail"),
+        "earheight": ("ear", "baseear"),
+        "pawtoggle": ("paw"),
+        "furtoggle": ("fur"),
+        "liftstrength": ("lift", "carry"),
+        "walkperhour": ("walk"),
+        "runperhour": ("run"),
+        "swimperhour": ("swim"),
+        "gender": (),
+        "scale": ()
+    })
+
+    UNITMAP = {
+        "nickname": str,
+        "height": SV,
+        "baseheight": SV,
+        "baseweight": WV,
+        "footlength": SV,
+        "shoesize": str,
+        "hairlength": SV,
+        "taillength": SV,
+        "earheight": SV,
+        "pawtoggle": bool,
+        "furtoggle": bool,
+        "liftstrength": WV,
+        "walkperhour": ParseableRate,
+        "runperhour": ParseableRate,
+        "swimperhour": ParseableRate,
+        "gender": str,
+        "scale": str
+    }
+
+    @classmethod
+    def parse(cls, s: str):
+        re_full_string = r"\$(\w+=[^;$]+;?)+"
+        match = re.match(re_full_string, s)
+        if match is None:
+            raise InvalidSizeValue(s, "FakePlayer")
+
+        player = FakePlayer()
+
+        s = s.removeprefix("$")
+        for group in s.split(";"):
+            re_component = r"(\w+)=([^;$]+);?"
+            componentmatch = re.match(re_component, group)
+            key = componentmatch.group(1)
+            val = componentmatch.group(2)
+            if key not in cls.KEYMAP:
+                raise InvalidStat(key)
+
+            collapsed_key = cls.KEYMAP[key]
+            unit = cls.UNITMAP[collapsed_key]
+
+            if collapsed_key == "scale":
+                player.scale = parse_scale(val)
+            elif collapsed_key == "shoesize":
+                player.footlength = from_shoe_size(val)
+            elif unit == bool:
+                setattr(player, collapsed_key, truthy(val))
+            elif unit == str:
+                setattr(player, collapsed_key, val)
+            elif unit in (SV, WV, ParseableRate):
+                val = unit.parse(val)
+                setattr(player, collapsed_key, val)
+
+        if player.nickname is None:
+            player.nickname = f"a {player.height:,.3mu} tall person"
+
+        return player
+
+    @classmethod
+    async def convert(cls, ctx: commands.Context, argument: str):
+        return cls.parse(argument)
