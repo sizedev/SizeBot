@@ -28,7 +28,7 @@ class AdminCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def dump(self, ctx, *, user: discord.Member = None):
+    async def dump(self, ctx: commands.Context, *, user: discord.Member = None):
         """Dump a user's data."""
         if user is None:
             user = ctx.author
@@ -39,7 +39,7 @@ class AdminCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def sudo(self, ctx, victim: discord.Member, *, command):
+    async def sudo(self, ctx: commands.Context, victim: discord.Member, *, command):
         """Take control."""
         logger.warn(f"{ctx.author.display_name} made {victim.display_name} run {command}.")
         new_message = copy(ctx.message)

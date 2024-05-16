@@ -128,7 +128,7 @@ class TriggerCog(commands.Cog):
         usage = "<trigger> <diff>",
         category = "trigger"
     )
-    async def settrigger(self, ctx, trigger, *, diff: Diff):
+    async def settrigger(self, ctx: commands.Context, trigger, *, diff: Diff):
         """Set a trigger word.
 
         #ALPHA#
@@ -141,7 +141,7 @@ class TriggerCog(commands.Cog):
         category = "trigger",
         aliases = ["resettrigger", "unsettrigger", "removetrigger"]
     )
-    async def cleartrigger(self, ctx, *, trigger):
+    async def cleartrigger(self, ctx: commands.Context, *, trigger):
         """Remove a trigger word."""
         unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send(f"Removed trigger word {trigger!r}.")

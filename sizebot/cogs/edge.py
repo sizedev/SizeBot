@@ -71,7 +71,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setsmallest(self, ctx, *, member: discord.Member):
+    async def setsmallest(self, ctx: commands.Context, *, member: discord.Member):
         """Set the smallest user."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.small_edge = member.id
@@ -86,7 +86,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setlargest(self, ctx, *, member: discord.Member):
+    async def setlargest(self, ctx: commands.Context, *, member: discord.Member):
         """Set the largest user."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.large_edge = member.id

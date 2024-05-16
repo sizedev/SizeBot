@@ -21,7 +21,7 @@ class EvalCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def eval(self, ctx, *, evalStr):
+    async def eval(self, ctx: commands.Context, *, evalStr):
         """Evaluate a Python expression."""
         evalStr = utils.remove_code_block(evalStr)
 
@@ -56,7 +56,7 @@ class EvalCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def evil(self, ctx, *, evalStr):
+    async def evil(self, ctx: commands.Context, *, evalStr):
         """Evaluate a Python expression, but evilly."""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay = 0)

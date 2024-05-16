@@ -143,7 +143,7 @@ class HelpCog(commands.Cog):
         cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
         await self.send_category_help(ctx, selectedcategory, cat_cmds)
 
-    async def send_category_help(self, ctx, category, cmds):
+    async def send_category_help(self, ctx: commands.Context, category, cmds):
         # Prepare the embed for the category
         embed = Embed(title=f"{category.name} Help [SizeBot {__version__}]")
         embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar)
@@ -175,7 +175,7 @@ class HelpCog(commands.Cog):
         await reactionmenu.message.delete()
         await self.send_summary_help(ctx)
 
-    async def send_command_help(self, ctx, cmd):
+    async def send_command_help(self, ctx: commands.Context, cmd):
         """Sends help for a command.
 
         Help
@@ -222,7 +222,7 @@ class HelpCog(commands.Cog):
         category = "help"
     )
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def help(self, ctx, cmdName: str = None):
+    async def help(self, ctx: commands.Context, cmdName: str = None):
         """[cmd.help[0]]
 
         [cmd.help[2]]
@@ -283,7 +283,7 @@ class HelpCog(commands.Cog):
         multiline = True
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def bug(self, ctx, *, message: str):
+    async def bug(self, ctx: commands.Context, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
         await post_report("Bug report", ctx.message, message)
@@ -295,7 +295,7 @@ class HelpCog(commands.Cog):
         multiline = True
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def suggest(self, ctx, *, message: str):
+    async def suggest(self, ctx: commands.Context, *, message: str):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         await post_report("Feature request", ctx.message, message)
@@ -310,7 +310,7 @@ class HelpCog(commands.Cog):
         multiline = True
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def suggestobject(self, ctx, *, message: str):
+    async def suggestobject(self, ctx: commands.Context, *, message: str):
         """Suggest an object for SizeBot! (See help.)
 
         Suggest an object to be part of the lineup for commands like &natstats, &objcompare, and future fun!
@@ -327,7 +327,7 @@ class HelpCog(commands.Cog):
         category = "help"
     )
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def ping(self, ctx, subcommand: str = ""):
+    async def ping(self, ctx: commands.Context, subcommand: str = ""):
         """Pong!
 
         Check SizeBot's current latency.
@@ -348,7 +348,7 @@ class HelpCog(commands.Cog):
         hidden = True
     )
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def pong(self, ctx, subcommand: str = ""):
+    async def pong(self, ctx: commands.Context, subcommand: str = ""):
         """Ping!"""
         waitMsg = await ctx.send(emojis.loading)
 

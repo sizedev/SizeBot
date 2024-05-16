@@ -49,7 +49,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def start(self, ctx, action: str, stop: TV = None):
+    async def start(self, ctx: commands.Context, action: str, stop: TV = None):
         """Keep moving forward -- Walt Disney
 
         `<type>` can be one of the following: walk, run, climb, crawl, swim
@@ -105,7 +105,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def sofar(self, ctx, *, who = None):
+    async def sofar(self, ctx: commands.Context, *, who = None):
         """How far have you moved so far? [See help.]
 
         #ALPHA#

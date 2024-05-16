@@ -32,7 +32,7 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setlowlimit(self, ctx, *, size: SV):
+    async def setlowlimit(self, ctx: commands.Context, *, size: SV):
         """Set the low size limit (floor)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.low_limit = size
@@ -47,7 +47,7 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def sethighlimit(self, ctx, *, size: SV):
+    async def sethighlimit(self, ctx: commands.Context, *, size: SV):
         """Set the high size limit (ceiling)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.high_limit = size

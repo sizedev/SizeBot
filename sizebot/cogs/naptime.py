@@ -24,7 +24,7 @@ class NaptimeCog(commands.Cog):
         category = "fun"
     )
     @commands.guild_only()
-    async def naptime(self, ctx, *, duration: TV):
+    async def naptime(self, ctx: commands.Context, *, duration: TV):
         """Go to bed in a set amount of time.
 
         Kicks you from any voice channel you're in after a set amount of time.

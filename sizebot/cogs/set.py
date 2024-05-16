@@ -28,7 +28,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setnick(self, ctx, *, newnick):
+    async def setnick(self, ctx: commands.Context, *, newnick: str):
         """Change nickname."""
         # TODO: Disable and hide this command on servers where bot does not have MANAGE_NICKNAMES permission
         # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
@@ -48,7 +48,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setspecies(self, ctx, *, newtag):
+    async def setspecies(self, ctx: commands.Context, *, newtag: str):
         """Change species."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -82,7 +82,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setdisplay(self, ctx, newdisp: bool):
+    async def setdisplay(self, ctx: commands.Context, newdisp: bool):
         """Set display mode."""
         # TODO: Disable and hide this command on servers where bot does not have MANAGE_NICKNAMES permission
         # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
@@ -106,7 +106,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setsystem(self, ctx, newsys):
+    async def setsystem(self, ctx: commands.Context, newsys: str):
         """Set measurement system. (M or U.)"""
         newsys = newsys.lower()
         systemmap = AliasMap({
@@ -137,7 +137,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setheight(self, ctx, *, newheight: SV):
+    async def setheight(self, ctx: commands.Context, *, newheight: SV):
         """Change height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -155,7 +155,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setscale(self, ctx, *, newscale):
+    async def setscale(self, ctx: commands.Context, *, newscale):
         """Change height by scale."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -182,7 +182,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setso(self, ctx, sv1: typing.Union[discord.Member, FakePlayer, SV], sv2: SV):
+    async def setso(self, ctx: commands.Context, sv1: typing.Union[discord.Member, FakePlayer, SV], sv2: SV):
         """Change height by scale."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -201,7 +201,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def copyheight(self, ctx, user: discord.Member, *, newscale = 1):
+    async def copyheight(self, ctx: commands.Context, user: discord.Member, *, newscale = 1):
         """Be the size of another user, modified by a factor.
 
         Examples:
@@ -247,7 +247,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setrandomheight(self, ctx, minheight: SV, maxheight: SV):
+    async def setrandomheight(self, ctx: commands.Context, minheight: SV, maxheight: SV):
         """Change height to a random value.
 
         Sets your height to a height between `minheight` and `maxheight`.
@@ -276,7 +276,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setrandomscale(self, ctx, minscale: str, maxscale: str):
+    async def setrandomscale(self, ctx: commands.Context, minscale: str, maxscale: str):
         """Change scale to a random value."""
 
         try:
@@ -343,7 +343,7 @@ class SetCog(commands.Cog):
         usage = "<weight>",
         category = "set"
     )
-    async def setweight(self, ctx, *, newweight: WV):
+    async def setweight(self, ctx: commands.Context, *, newweight: WV):
         """Set your current weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -360,7 +360,7 @@ class SetCog(commands.Cog):
         usage = "<foot>",
         category = "set"
     )
-    async def setfoot(self, ctx, *, newfoot):
+    async def setfoot(self, ctx: commands.Context, *, newfoot):
         """Set your current foot length."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -377,7 +377,7 @@ class SetCog(commands.Cog):
         usage = "<shoe>",
         category = "set"
     )
-    async def setshoe(self, ctx, *, newshoe):
+    async def setshoe(self, ctx: commands.Context, *, newshoe):
         """Set your current shoe size.
 
         Accepts a US Shoe Size.
@@ -450,7 +450,7 @@ class SetCog(commands.Cog):
         usage = "<hair>",
         category = "set"
     )
-    async def sethair(self, ctx, *, newhair):
+    async def sethair(self, ctx: commands.Context, *, newhair):
         """Set your current hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -467,7 +467,7 @@ class SetCog(commands.Cog):
         usage = "<tail>",
         category = "set"
     )
-    async def settail(self, ctx, *, newtail):
+    async def settail(self, ctx: commands.Context, *, newtail):
         """Set your current tail length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -499,7 +499,7 @@ class SetCog(commands.Cog):
         usage = "<ear>",
         category = "set"
     )
-    async def setear(self, ctx, *, newear):
+    async def setear(self, ctx: commands.Context, *, newear):
         """Set your current ear heightear."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -532,7 +532,7 @@ class SetCog(commands.Cog):
         usage = "<weight>",
         category = "set"
     )
-    async def setstrength(self, ctx, *, newstrength):
+    async def setstrength(self, ctx: commands.Context, *, newstrength):
         """Set your current lift/carry strength."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -563,7 +563,7 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setwalk(self, ctx, *, newwalk: ParseableRate):
+    async def setwalk(self, ctx: commands.Context, *, newwalk: ParseableRate):
         """Set your current walk speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -595,7 +595,7 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setrun(self, ctx, *, newrun: ParseableRate):
+    async def setrun(self, ctx: commands.Context, *, newrun: ParseableRate):
         """Set your current run speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -627,7 +627,7 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setswim(self, ctx, *, newswim: ParseableRate):
+    async def setswim(self, ctx: commands.Context, *, newswim: ParseableRate):
         """Set your current swim speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -660,7 +660,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setgender(self, ctx, gender):
+    async def setgender(self, ctx: commands.Context, gender):
         """Set gender."""
         guild = ctx.guild
         user = ctx.author
@@ -709,7 +709,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     @commands.is_owner()
-    async def setmodel(self, ctx, user: discord.Member, *, model):
+    async def setmodel(self, ctx: commands.Context, user: discord.Member, *, model):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_model = model
         userdb.save(userdata)
@@ -722,7 +722,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     @commands.is_owner()
-    async def clearmodel(self, ctx, *, user: discord.Member):
+    async def clearmodel(self, ctx: commands.Context, *, user: discord.Member):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_model = None
         userdb.save(userdata)
@@ -734,7 +734,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     @commands.is_owner()
-    async def setview(self, ctx, user: discord.Member, *, view):
+    async def setview(self, ctx: commands.Context, user: discord.Member, *, view):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_view = view
         userdb.save(userdata)
@@ -747,7 +747,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     @commands.is_owner()
-    async def clearview(self, ctx, *, user: discord.Member):
+    async def clearview(self, ctx: commands.Context, *, user: discord.Member):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_view = None
         userdb.save(userdata)

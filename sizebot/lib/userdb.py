@@ -19,7 +19,7 @@ from sizebot.lib import errors, paths
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, Rate as ParseableRate
 from sizebot.lib.units import SV, TV, WV
-from sizebot.lib.utils import isURL, truncate
+from sizebot.lib.utils import is_url, truncate
 
 # Defaults
 DEFAULT_HEIGHT = SV("1.754")            # meters
@@ -147,7 +147,7 @@ class User:
 
     @picture_url.setter
     def picture_url(self, value):
-        if not isURL(value):
+        if not is_url(value):
             raise ValueError(f"{value} is not a valid URL.")
         self._picture_url = value
 

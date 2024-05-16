@@ -148,7 +148,7 @@ class RegisterCog(commands.Cog):
         await show_next_step(ctx, userdata)
 
     @register.error
-    async def register_handler(self, ctx, error):
+    async def register_handler(self, ctx: commands.Context, error):
         # Check if required argument is missing
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
@@ -163,7 +163,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def advancedregister(self, ctx, nick: str, currentheight: SV = userdb.DEFAULT_HEIGHT, baseheight: SV = userdb.DEFAULT_HEIGHT, baseweight: WV = userdb.DEFAULT_WEIGHT, unitsystem: str = "m", species: str = None):
+    async def advancedregister(self, ctx: commands.Context, nick: str, currentheight: SV = userdb.DEFAULT_HEIGHT, baseheight: SV = userdb.DEFAULT_HEIGHT, baseweight: WV = userdb.DEFAULT_WEIGHT, unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot, legacy style.
 
         Parameters:
@@ -267,7 +267,7 @@ class RegisterCog(commands.Cog):
             return
 
     @advancedregister.error
-    async def advancedregister_handler(self, ctx, error):
+    async def advancedregister_handler(self, ctx: commands.Context, error):
         # Check if required argument is missing
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(

@@ -1,5 +1,6 @@
 from discord.ext.commands import Command, Cog
 from discord.ext.commands.core import wrap_callback
+from discord.ext import commands
 
 old_init = Command.__init__
 old_short_doc = Command.short_doc
@@ -11,7 +12,7 @@ def __init__(self, *args, category=None, multiline=False, **kwargs):
     old_init(self, *args, **kwargs)
 
 
-async def dispatch_error(self, ctx, error):
+async def dispatch_error(self, ctx: commands.Context, error):
     ctx.command_failed = True
     cog = self.cog
     try:

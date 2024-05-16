@@ -96,7 +96,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
-    async def scalewalk(self, ctx, change: Diff, dist: SV, flag = None):
+    async def scalewalk(self, ctx: commands.Context, change: Diff, dist: SV, flag = None):
         """Walk a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
@@ -148,7 +148,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
-    async def scalerun(self, ctx, change: Diff, dist: SV, flag = None):
+    async def scalerun(self, ctx: commands.Context, change: Diff, dist: SV, flag = None):
         """Run a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
@@ -201,7 +201,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step>"
     )
-    async def setstepscale(self, ctx, *, change: Diff):
+    async def setstepscale(self, ctx: commands.Context, *, change: Diff):
         """Set the amount you scale per step, for use with `&step`.
 
         Sets the amount that you scale for each `&step` you take.
@@ -242,7 +242,7 @@ class ScaleWalkCog(commands.Cog):
     @commands.command(
         category = "scalestep",
     )
-    async def step(self, ctx, steps = None):
+    async def step(self, ctx: commands.Context, steps = None):
         """Step a certain number of times, scaling by the amount set in `&setscalestep`.
 
         Scales you the amount that you would change depending on the scale factor you

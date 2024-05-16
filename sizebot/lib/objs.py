@@ -14,7 +14,7 @@ from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import get_plural, get_indefinite_article
 from sizebot.lib.units import AV, SV, VV, WV, Unit, SystemUnit
-from sizebot.lib.utils import removeprefix, sentence_join
+from sizebot.lib.utils import sentence_join
 
 objects: list["DigiObject"] = []
 food: list["DigiObject"] = []
@@ -233,12 +233,12 @@ class DigiObject:
         return self.unitlength < other
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, name: str):
         lowerName = name.lower()
         for o in objects:
             if o == lowerName:
                 return o
-        lowerName = removeprefix(lowerName, "random").strip()
+        lowerName = lowerName.removeprefix("random").strip()
         tagged = [o for o in objects if lowerName in o.tags]
         if tagged:
             return random.choice(tagged)

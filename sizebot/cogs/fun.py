@@ -26,7 +26,7 @@ class FunCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def sbsay(self, ctx, *, message: str):
+    async def sbsay(self, ctx: commands.Context, *, message: str):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
         await ctx.send(message)
@@ -35,7 +35,7 @@ class FunCog(commands.Cog):
         aliases = ["tra"],
         category = "fun"
     )
-    async def report(self, ctx, *, user: discord.User):
+    async def report(self, ctx: commands.Context, *, user: discord.User):
         """Report a user to the Tiny Rights Alliance."""
         ud = userdb.load(ctx.guild.id, user.id)
         ud.tra_reports += 1
@@ -47,7 +47,7 @@ class FunCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def sing(self, ctx, *, s: str):
+    async def sing(self, ctx: commands.Context, *, s: str):
         """Make SizeBot sing a message!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
@@ -67,7 +67,7 @@ class FunCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    async def gamemode(self, ctx, *, mode):
+    async def gamemode(self, ctx: commands.Context, *, mode):
         logger.log(EGG, f"{ctx.author.display_name} set their gamemode to {mode}.")
         await ctx.send(f"Set own gamemode to `{mode.title()} Mode`")
 

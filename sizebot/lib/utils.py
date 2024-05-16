@@ -4,8 +4,9 @@ import random
 import re
 from sizebot.lib import errors
 import traceback
-from typing import Dict, Hashable, Sequence, TypeVar
+from typing import Dict, Hashable, Optional, Sequence, TypeVar
 from urllib.parse import quote
+from discord.ext import commands
 
 import validator_collection
 
@@ -313,7 +314,7 @@ def find_one(iterator):
     return val
 
 
-async def parse_many(ctx, arg, types: list, default = None):
+async def parse_many(ctx: commands.Context, arg, types: list, default = None):
     for t in types:
         try:
             return await t.convert(ctx, arg)
@@ -323,7 +324,7 @@ async def parse_many(ctx, arg, types: list, default = None):
 
 
 # TODO: CamelCase
-def isURL(value) -> bool:
+def is_url(value: str) -> bool:
     """Returns True when given either a valid URL, or `None`."""
     try:
         return validator_collection.url(value)
@@ -332,7 +333,7 @@ def isURL(value) -> bool:
         return True
 
 
-def sentence_join(items, *, joiner=None, oxford=False) -> str:
+def sentence_join(items: list[str], *, joiner: Optional[str] = None, oxford: bool = False) -> str:
     """Join a list of strings like a sentence.
 
     >>> sentence_join(['red', 'green', 'blue'])
@@ -362,24 +363,7 @@ def sentence_join(items, *, joiner=None, oxford=False) -> str:
     return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
 
 
-# TODO: Deprecated, use Python 3.9's methods
-def removeprefix(self: str, prefix: str, /) -> str:
-    if self.startswith(prefix):
-        return self[len(prefix):]
-    else:
-        return self[:]
-
-
-# TODO: Deprecated, use Python 3.9's methods
-def removesuffix(self: str, suffix: str, /) -> str:
-    # suffix='' should not call self[:-0].
-    if suffix and self.endswith(suffix):
-        return self[:-len(suffix)]
-    else:
-        return self[:]
-
-
-def glitch_string(in_string: str, *, charset = None) -> str:
+def glitch_string(in_string: str, *, charset: str = None) -> str:
     words = []
     if charset is not None:
         for word in in_string.split(" "):
@@ -398,7 +382,7 @@ def glitch_string(in_string: str, *, charset = None) -> str:
     return " ".join(words)
 
 
-def regexbuild(li: list, capture = False) -> str:
+def regexbuild(li: list[str | list[str]], capture: bool = False) -> str:
     """
     regexbuild(["a", "b", "c"])
     >>> "a|b|c"
@@ -421,12 +405,12 @@ def regexbuild(li: list, capture = False) -> str:
     return returnstring
 
 
-def url_safe(s) -> str:
+def url_safe(s: str) -> str:
     """Makes a string URL safe, and replaces spaces with hyphens."""
     return quote(s, safe=" ").replace(" ", "-")
 
 
-def truncate(s, amount) -> str:
+def truncate(s: str, amount: int) -> str:
     """Return a string that is no longer than the amount specified."""
     if len(s) > amount:
         return s[:amount - 3] + "..."
@@ -472,7 +456,7 @@ class AliasMap(dict):
 RE_SCI_EXP = re.compile(r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)")
 
 
-def replace_sciexp(m: re.Match):
+def replace_sciexp(m: re.Match) -> str:
     prefix = m.group(1)
     mid = m.group(2)
     suffix = m.group(3)
@@ -482,11 +466,11 @@ def replace_sciexp(m: re.Match):
         return str(Decimal(prefix) ** Decimal(suffix))
 
 
-def replace_all_sciexp(newscale: str):
+def replace_all_sciexp(newscale: str) -> str:
     return RE_SCI_EXP.sub(replace_sciexp, newscale)
 
 
-def parse_scale(scalestr: str):
+def parse_scale(scalestr: str) -> Decimal:
     re_scale_emoji = r"<:sb([\d\.eE]+)_?([\d\.eE]+)?:\d+>"
     if match := re.match(re_scale_emoji, scalestr):
         if match.group(2):
@@ -511,7 +495,7 @@ def parse_scale(scalestr: str):
     return scale
 
 
-def randrange_log(minval, maxval, precision=26):
+def randrange_log(minval: Decimal, maxval: Decimal, precision: int = 26) -> Decimal:
     """Generate a logarithmically scaled random number."""
     minval = Decimal(minval)
     maxval = Decimal(maxval)
@@ -536,12 +520,12 @@ def randrange_log(minval, maxval, precision=26):
     return newval
 
 
-def round_fraction(number, denominator):
+def round_fraction(number: Decimal, denominator: int) -> Decimal:
     rounded = round(number * denominator) / denominator
     return rounded
 
 
-def fix_zeroes(d):
+def fix_zeroes(d: Decimal) -> Decimal:
     """Reset the precision of a Decimal to avoid values that use exponents like '1e3' and values with trailing zeroes like '100.000'
 
     fixZeroes(Decimal('1e3')) -> Decimal('100')
@@ -556,13 +540,14 @@ def fix_zeroes(d):
     return d.normalize() + 0
 
 
-def truthy(s: str):
+def truthy(s: str) -> bool | None:
     """https://discordpy.readthedocs.io/en/stable/ext/commands/commands.html#bool"""
     lowered = s.lower()
     if lowered in ('yes', 'y', 'true', 't', '1', 'enable', 'on'):
         return True
     elif lowered in ('no', 'n', 'false', 'f', '0', 'disable', 'off'):
         return False
+    return None
 
 
 def join_unique(items: list[str], *, sep: str) -> str:

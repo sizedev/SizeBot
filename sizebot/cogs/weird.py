@@ -31,7 +31,7 @@ class WeirdCog(commands.Cog):
         usage = "[hex/rgb/hsv/hsl/cymk] <colorcode>",
         category = "fun"
     )
-    async def color(self, ctx, arg1: str, *, arg2: str = None):
+    async def color(self, ctx: commands.Context, arg1: str, *, arg2: str = None):
         """Get info about a color."""
         outmessage = await ctx.send(emojis.loading)
 
@@ -138,7 +138,7 @@ class WeirdCog(commands.Cog):
         usage = "<latex...>",
         category = "fun"
     )
-    async def math(self, ctx, *, equation):
+    async def math(self, ctx: commands.Context, *, equation):
         """Render a LaTeX string as an image."""
         full_url = R"https://latex.codecogs.com/png.latex?" + quote(R"\inline&space;\huge&space;{\color{White}&space;") + quote(equation) + "}"
 

@@ -21,7 +21,7 @@ class PokemonCog(commands.Cog):
         aliases = ["dex"],
         category = "objects"
     )
-    async def pokedex(self, ctx, pkmn: typing.Union[int, str] = None):
+    async def pokedex(self, ctx: commands.Context, pkmn: typing.Union[int, str] = None):
         """Pokemaaaaaaaaans"""
         if isinstance(pkmn, str):
             p = next((m for m in pokemon if m.name.lower() == pkmn.lower()), None)
@@ -40,7 +40,7 @@ class PokemonCog(commands.Cog):
         aliases = ["pokecompare", "pokecomp", "lookatpoke"],
         category = "objects"
     )
-    async def lookatpokemon(self, ctx, pkmn: typing.Union[int, str] = None, *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def lookatpokemon(self, ctx: commands.Context, pkmn: typing.Union[int, str] = None, *, who: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Pokemaaaaaaaaans"""
         if who is None:
             who = ctx.author

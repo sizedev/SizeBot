@@ -27,7 +27,7 @@ class ScaleTypeCog(commands.Cog):
         category = "scalestep",
         usage = "<change per characters>"
     )
-    async def settalkscale(self, ctx, *, change: str):
+    async def settalkscale(self, ctx: commands.Context, *, change: str):
         """Set the amount you scale per character.
 
         Sets the amount that you scale for each character you type.

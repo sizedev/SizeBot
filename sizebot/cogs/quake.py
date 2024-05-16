@@ -105,7 +105,7 @@ class QuakeCog(commands.Cog):
         aliases = ["quake"],
         usage = "[type] [user/height]",
         category = "stats")
-    async def earthquake(self, ctx, quake_type: typing.Optional[QuakeType] = "step", user: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def earthquake(self, ctx: commands.Context, quake_type: typing.Optional[QuakeType] = "step", user: typing.Union[discord.Member, FakePlayer, SV] = None):
         """See what quakes would be caused by your steps.\n#ACC#"""
         if user is None:
             user = ctx.author
@@ -117,7 +117,7 @@ class QuakeCog(commands.Cog):
         aliases = ["quakestats"],
         usage = "[user/height]",
         category = "stats")
-    async def earthquakestats(self, ctx, user: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def earthquakestats(self, ctx: commands.Context, user: typing.Union[discord.Member, FakePlayer, SV] = None):
         """See what quakes would be caused by your steps.\n#ACC#"""
         if user is None:
             user = ctx.author
@@ -129,7 +129,7 @@ class QuakeCog(commands.Cog):
         aliases = ["quakecomp"],
         usage = "[user] [type]",
         category = "stats")
-    async def quakecompare(self, ctx, user: typing.Union[discord.Member, FakePlayer, SV], quake_type: typing.Optional[QuakeType] = "step"):
+    async def quakecompare(self, ctx: commands.Context, user: typing.Union[discord.Member, FakePlayer, SV], quake_type: typing.Optional[QuakeType] = "step"):
         """See what quakes would be caused by someone else's steps.\n#ACC#"""
         self_user = load_or_fake(ctx.author)
         userdata = load_or_fake(user)
@@ -143,7 +143,7 @@ class QuakeCog(commands.Cog):
         aliases = [],
         usage = "<dist> [user/height]",
         category = "stats")
-    async def quakewalk(self, ctx, dist: SV, user: typing.Union[discord.Member, FakePlayer, SV] = None):
+    async def quakewalk(self, ctx: commands.Context, dist: SV, user: typing.Union[discord.Member, FakePlayer, SV] = None):
         """Walk a distance and cause some quakes.\n#ACC#"""
         if user is None:
             user = ctx.author
@@ -175,7 +175,7 @@ class QuakeCog(commands.Cog):
         aliases = [],
         usage = "<string>",
         category = "stats")
-    async def quaketype(self, ctx, s: str):
+    async def quaketype(self, ctx: commands.Context, s: str):
         """Type a sentence and cause some quakes.\n#ACC#"""
         guildid = ctx.guild.id
         userid = ctx.author.id

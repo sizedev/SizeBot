@@ -36,7 +36,7 @@ class ChangeCog(commands.Cog):
         category = "change",
         usage = "<change> [rate] [stop]"
     )
-    async def change(self, ctx, *, string: Union[LimitedRate, ParseableRate, Diff, str]):
+    async def change(self, ctx: commands.Context, *, string: Union[LimitedRate, ParseableRate, Diff, str]):
         """Either change or slow-change your height.
 
         Can be used in essentially the three following ways:
@@ -186,7 +186,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def outgrow(self, ctx, *, obj: DigiObject = None):
+    async def outgrow(self, ctx: commands.Context, *, obj: DigiObject = None):
         """Outgrows the next object in the object database, or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -213,7 +213,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def outshrink(self, ctx, *, obj: DigiObject = None):
+    async def outshrink(self, ctx: commands.Context, *, obj: DigiObject = None):
         """Outshrinks the next object in the object database or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id

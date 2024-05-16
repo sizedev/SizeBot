@@ -13,7 +13,7 @@ class TestCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    async def test(self, ctx, stat: Union[StatProxy, str]):
+    async def test(self, ctx: commands.Context, stat: Union[StatProxy, str]):
         if isinstance(stat, StatProxy):
             await ctx.send(f"You input **\"{stat.name}\"**\nIt's a **{'tag' if stat.tag else 'stat'}.**")
         else:
