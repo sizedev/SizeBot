@@ -1,6 +1,5 @@
-from typing import TYPE_CHECKING, Any
-if TYPE_CHECKING:
-    from sizebot.lib.units import SV
+from typing import Any
+from sizebot.lib.units import SV
 
 from dataclasses import dataclass, asdict
 from pathlib import Path
