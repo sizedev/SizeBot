@@ -12,12 +12,11 @@ from sizebot import __version__
 from sizebot.lib import objs, proportions, userdb, utils
 from sizebot.lib.constants import emojis
 from sizebot.lib.errors import InvalidSizeValue
-from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects, tags, format_close_object_smart
 from sizebot.lib.stats import StatBox, taglist
 from sizebot.lib.units import SV, WV, AV
-from sizebot.lib.userdb import load_or_fake, DEFAULT_HEIGHT as AVERAGE_HEIGHT
+from sizebot.lib.userdb import load_or_fake, DEFAULT_HEIGHT as AVERAGE_HEIGHT, FakePlayer
 from sizebot.lib.utils import parse_many, pretty_time_delta, sentence_join
 
 

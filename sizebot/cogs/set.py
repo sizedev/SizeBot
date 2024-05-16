@@ -5,14 +5,13 @@ from discord.ext import commands
 
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, userdb, nickmanager
-from sizebot.lib.diff import Diff
-from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.diff import Diff, Rate as ParseableRate
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, parse_scale, randrange_log
+from sizebot.lib.userdb import FakePlayer
 
 logger = logging.getLogger("sizebot")
 

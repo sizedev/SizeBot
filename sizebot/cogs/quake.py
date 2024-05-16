@@ -4,14 +4,13 @@ from decimal import Decimal
 from discord import Embed
 import discord
 from discord.ext import commands
-from sizebot.lib import userdb
 
+from sizebot.lib import userdb
 from sizebot.lib.constants import colors, emojis
-from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.quake import breath_joules, heartbeat_joules, joules_to_mag, jump_joules, mag_to_name, mag_to_radius, poke_joules, step_joules, stomp_joules, type_joules
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV
-from sizebot.lib.userdb import load_or_fake
+from sizebot.lib.userdb import load_or_fake, FakePlayer
 from sizebot.lib.errors import UserMessedUpException
 
 EARTH_RAD = Decimal(10_018_570)

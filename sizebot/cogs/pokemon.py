@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from sizebot.lib import userdb
-from sizebot.lib.fakeplayer import FakePlayer
+from sizebot.lib.userdb import FakePlayer
 from sizebot.lib.pokemon import pokemon
 from sizebot.lib.units import SV
 

@@ -7,7 +7,6 @@ from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.freefall import freefall
 from sizebot.lib.language import engine
 from sizebot.lib.metal import metal_value, nugget_value
@@ -15,7 +14,7 @@ from sizebot.lib.neuron import get_neuron_embed
 from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.statproxy import StatProxy
 from sizebot.lib.units import SV, TV, WV
-from sizebot.lib.userdb import load_or_fake
+from sizebot.lib.userdb import load_or_fake, FakePlayer
 from sizebot.lib.utils import pretty_time_delta, round_fraction, sentence_join
 
 logger = logging.getLogger("sizebot")
