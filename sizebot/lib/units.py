@@ -7,6 +7,7 @@ import json
 import logging
 import re
 from functools import total_ordering
+import random
 
 from discord.ext import commands
 
@@ -14,8 +15,7 @@ from sizebot.lib.loglevels import EGG
 import sizebot.data
 import sizebot.data.units
 from sizebot.lib import errors, utils
-from sizebot.lib.digidecimal import Decimal, DecimalSpec
-from sizebot.lib.picker import get_random_close_unit
+from sizebot.lib.digidecimal import Decimal, DecimalSpec, round_fraction
 
 
 __all__ = ["Rate", "Mult", "SV", "WV", "TV", "AV", "VV"]
@@ -318,7 +318,7 @@ class SystemRegistry():
     def get_good_unit(self, value: Decimal, options: Decimal = 6) -> Unit:
         if not self.isSorted:
             self._systemunits.sort()
-        systemunit = get_random_close_unit(value, self._systemunits, options)
+        systemunit = self._get_random_close_unit(value, options)
         if systemunit is None:
             return self.get_best_unit(value)
         return systemunit.unit
@@ -327,6 +327,24 @@ class SystemRegistry():
         self.isSorted = False
         self._systemunits.append(systemunit)
         systemunit.load(self.dimension._units)
+
+    def _is_good(self, n: Decimal) -> bool:
+        r = round_fraction(n, 4)
+        if r == 0:
+            return False
+        creditRating = abs(n - r) / r
+        return creditRating < 0.075
+
+    def _get_close_units_with_limit(self, val: Decimal, limit: Decimal) -> list[SystemUnit]:
+        return [u for u in self._systemunits if 1 <= round_fraction(val / u.factor, 4) <= limit and self._is_good(val / u.factor)]
+
+    def _get_random_close_unit(self, val: Decimal, options: Decimal = 6) -> SystemUnit:
+        closeUnits = self._get_close_units_with_limit(val, options)
+        if not closeUnits:
+            closeUnits = self._get_close_units_with_limit(val, 10)
+        if not closeUnits:
+            return None
+        return random.choice(closeUnits)
 
 
 class SystemUnit():
