@@ -396,7 +396,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def distancestat(self, ctx: commands.Context[commands.Bot], stat, memberOrHeight: MemberOrSize = None,
+    async def distancestat(self, ctx: commands.Context[commands.Bot], stat: str, memberOrHeight: MemberOrSize = None,
                            *, memberOrHeight2: MemberOrSize = None):
         """Find how long it would take to travel across a certain distance on a person.
 

@@ -1,5 +1,5 @@
-from typing import Any, Hashable, Sequence, TypeVar
-from collections.abc import Callable, Iterator
+from typing import Any, Generator, Hashable, Sequence, TypeVar
+from collections.abc import Callable, Iterable, Iterator
 
 import inspect
 import pydoc
@@ -28,12 +28,12 @@ glitch_template = ("V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUgLyBZb3Uga25vdyB0aGUgcnVs
 current_glitch_index = 0
 
 
-def clamp(minVal, val, maxVal):
+def clamp(minVal: Decimal, val: Decimal, maxVal: Decimal) -> Decimal:
     """Clamp a `val` to be no lower than `minVal`, and no higher than `maxVal`."""
     return max(minVal, min(maxVal, val))
 
 
-def pretty_time_delta(totalSeconds, millisecondAccuracy = False, roundeventually = False) -> str:
+def pretty_time_delta(totalSeconds: Decimal, millisecondAccuracy: bool = False, roundeventually: bool = False) -> str:
     """Get a human readable string representing an amount of time passed."""
     MILLISECONDS_PER_YEAR = 86400 * 365 * 1000
     MILLISECONDS_PER_DAY = 86400 * 1000
@@ -90,7 +90,7 @@ def pretty_time_delta(totalSeconds, millisecondAccuracy = False, roundeventually
     return s
 
 
-def try_int(val):
+def try_int(val: Any) -> Any:
     """Try to cast `val` to an `int`, if it can't, just return `val`."""
     try:
         val = int(val)
@@ -99,7 +99,7 @@ def try_int(val):
     return val
 
 
-def has_path(root, path):
+def has_path(root: Any, path: str) -> bool:
     """Get a value using a path in nested dicts/lists."""
     """utils.getPath(myDict, "path.to.value", default=100)"""
     branch = root
@@ -113,7 +113,7 @@ def has_path(root, path):
     return True
 
 
-def get_path(root, path, default=None):
+def get_path(root: Any, path: str, default: Any = None) -> Any:
     """Get a value using a path in nested dicts/lists."""
     """utils.getPath(myDict, "path.to.value", default=100)"""
     branch = root
@@ -127,13 +127,13 @@ def get_path(root, path, default=None):
     return branch
 
 
-def chunk_list(lst, chunklen):
+def chunk_list(lst: list, chunklen: int):
     while lst:
         yield lst[:chunklen]
         lst = lst[chunklen:]
 
 
-def chunk_str(s, chunklen, prefix="", suffix=""):
+def chunk_str(s: str, chunklen: int, prefix: str = "", suffix: str = "") -> Generator[str, None, str]:
     """chunk_str(3, "ABCDEFG") --> ['ABC', 'DEF', 'G']"""
     innerlen = chunklen - len(prefix) - len(suffix)
     if innerlen <= 0:
@@ -148,14 +148,14 @@ def chunk_str(s, chunklen, prefix="", suffix=""):
         yield prefix + chunk + suffix
 
 
-def chunk_msg(m) -> list:
+def chunk_msg(m: str) -> list:
     p = "```\n"
     if m.startswith("Traceback") or m.startswith("eval error") or m.startswith("Executing eval"):
         p = "```python\n"
     return chunk_str(m, chunklen=2000, prefix=p, suffix="\n```")
 
 
-def chunk_lines(s, chunklen):
+def chunk_lines(s: str, chunklen: int):
     """Split a string into groups of lines that don't go over the chunklen. Individual lines longer the chunklen will be split"""
     lines = s.split("\n")
 
@@ -175,17 +175,17 @@ def chunk_lines(s, chunklen):
         yield "\n".join(linesout)
 
 
-def remove_brackets(s) -> str:
+def remove_brackets(s: str) -> str:
     """Remove all [] and <>s from a string."""
     s = re.sub(r"[\[\]<>]", "", s)
     return s
 
 
-def format_traceback(err) -> str:
+def format_traceback(err: BaseException) -> str:
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
 
 
-def pformat(name, value) -> str:
+def pformat(name: str, value: Any) -> str:
     if value is None:
         return f"{name}?"
     if callable(value):
@@ -199,18 +199,18 @@ def pformat(name, value) -> str:
     return name
 
 
-def pdir(o):
+def pdir(o: Any) -> list:
     """return a list of an object's attributes, with type notation."""
     return [pformat(n, v) for n, v in ddir(o).items()]
 
 
-def ddir(o):
+def ddir(o: Any) -> dict:
     """return a dictionary of an object's attributes."""
     return {n: v for n, v in inspect.getmembers(o) if not n.startswith("_")}
     # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
 
 
-def get_fullname(o):
+def get_fullname(o: object) -> str:
     moduleName = o.__class__.__module__
     if moduleName == "builtins":
         moduleName = ""
@@ -222,7 +222,7 @@ def get_fullname(o):
     return fullname
 
 
-def format_error(err) -> str:
+def format_error(err: Exception) -> str:
     fullname = get_fullname(err)
 
     errMessage = str(err)
@@ -232,7 +232,7 @@ def format_error(err) -> str:
     return f"{fullname}{errMessage}"
 
 
-def try_or_none(fn: Callable, *args, ignore=(), **kwargs):
+def try_or_none(fn: Callable, *args, ignore: list = (), **kwargs) -> Any:
     "Try to run a function. If it throws an error that's in `ignore`, just return `None`."""
     try:
         result = fn(*args, **kwargs)
@@ -242,25 +242,25 @@ def try_or_none(fn: Callable, *args, ignore=(), **kwargs):
 
 
 class iset(set):
-    def __init__(self, iterable):
+    def __init__(self, iterable: Iterable):
         iterable = (i.casefold() for i in iterable)
         super().__init__(iterable)
 
-    def add(self, item):
+    def add(self, item: str):
         item = item.casefold()
-        return super().add(item)
+        super().add(item)
 
-    def __contains__(self, item):
+    def __contains__(self, item: str) -> bool:
         item = item.casefold()
         return super().__contains__(item)
 
-    def discard(self, item):
+    def discard(self, item: str):
         item = item.casefold()
-        return super().discard(item)
+        super().discard(item)
 
-    def remove(self, item):
+    def remove(self, item: str):
         item = item.casefold()
-        return super().remove(item)
+        super().remove(item)
 
 
 def str_help(topic: str) -> str:
@@ -309,7 +309,7 @@ def int_to_roman(input: int) -> str:
     return ''.join(result)
 
 
-def find_one(iterator: Iterator):
+def find_one(iterator: Iterator) -> Any | None:
     try:
         val = next(iterator)
     except StopIteration:
@@ -317,7 +317,7 @@ def find_one(iterator: Iterator):
     return val
 
 
-async def parse_many(ctx: commands.Context[commands.Bot], arg: str, types: list[commands.Converter], default = None) -> Any:
+async def parse_many(ctx: commands.Context[commands.Bot], arg: str, types: list[commands.Converter], default: Any = None) -> Any:
     for t in types:
         try:
             return await t.convert(ctx, arg)
@@ -427,7 +427,7 @@ class AliasMap(dict):
         for k, v in data.items():
             self[k] = v
 
-    def __setitem__(self, k, v):
+    def __setitem__(self, k: Hashable, v: Sequence):
         if not isinstance(k, Hashable):
             raise ValueError("{k!r} is not hashable and can't be used as a key.")
         if not isinstance(v, Sequence):
@@ -438,7 +438,7 @@ class AliasMap(dict):
             super().__setitem__(i, k)
         super().__setitem__(k, k)
 
-    def __str__(self):
+    def __str__(self) -> str:
         swapped = {}
         for v in self.values():
             swapped[v] = []

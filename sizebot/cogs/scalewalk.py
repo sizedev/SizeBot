@@ -17,7 +17,7 @@ from sizebot.lib.utils import try_int
 logger = logging.getLogger("sizebot")
 
 
-def get_dist(start_inc: SV, diff: Diff, steps: int):
+def get_dist(start_inc: SV, diff: Diff, steps: int) -> SV:
     if diff.changetype == "add":
         current_pos = (start_inc * steps) + (diff.amount * ((steps - 1) * steps) / 2)
         return SV(current_pos)
@@ -28,7 +28,7 @@ def get_dist(start_inc: SV, diff: Diff, steps: int):
         raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
 
 
-def get_steps(start_inc: SV, diff: Diff, goal: SV):
+def get_steps(start_inc: SV, diff: Diff, goal: SV) -> tuple[Decimal, SV, Decimal]:
     """Return the number of steps it would take to reach `goal` from 0,
     first by increasing by `start_inc`, then by `start_inc` operator(`diff.changetype`) `diff.amount`,
     repeating this process until `goal` is reached.
@@ -42,7 +42,7 @@ def get_steps(start_inc: SV, diff: Diff, goal: SV):
         steps = math.ceil(goal / start_inc)
         # Calculate how far user got after those steps
         # current_pos = start_inc * steps
-        return (Decimal(steps), start_inc, 1)
+        return (Decimal(steps), start_inc, Decimal(1))
     elif diff.changetype == "add":
         if diff.amount < 0:
             # Calculate max distance travelled, if each step is getting shorter
@@ -96,7 +96,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
-    async def scalewalk(self, ctx: commands.Context[commands.Bot], change: Diff, dist: SV, flag = None):
+    async def scalewalk(self, ctx: commands.Context[commands.Bot], change: Diff, dist: SV, flag: str | None = None):
         """Walk a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
@@ -148,7 +148,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
-    async def scalerun(self, ctx: commands.Context[commands.Bot], change: Diff, dist: SV, flag = None):
+    async def scalerun(self, ctx: commands.Context[commands.Bot], change: Diff, dist: SV, flag: str | None = None):
         """Run a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
@@ -242,7 +242,7 @@ class ScaleWalkCog(commands.Cog):
     @commands.command(
         category = "scalestep",
     )
-    async def step(self, ctx: commands.Context[commands.Bot], steps = None):
+    async def step(self, ctx: commands.Context[commands.Bot], steps: int | None = None):
         """Step a certain number of times, scaling by the amount set in `&setscalestep`.
 
         Scales you the amount that you would change depending on the scale factor you

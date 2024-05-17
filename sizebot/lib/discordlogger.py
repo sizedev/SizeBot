@@ -8,14 +8,14 @@ from sizebot.lib.utils import chunk_msg
 
 class AsyncHandler(logging.Handler):
     def __init__(self, *args, **kwargs):
-        self.__queue = asyncio.Queue()
+        self.__queue: asyncio.Queue[logging.LogRecord] = asyncio.Queue()
         asyncio.create_task(self.__loop())
         super().__init__(*args, **kwargs)
 
     def emit(self, record: logging.LogRecord):
         self.__queue.put_nowait(record)
 
-    def asyncemit(self, record):
+    def asyncemit(self, record: logging.LogRecord):
         raise NotImplementedError
 
     async def __loop(self):

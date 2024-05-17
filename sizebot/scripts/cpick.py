@@ -1,3 +1,6 @@
+from __future__ import annotations
+from collections.abc import Callable
+
 from colored import colors, style, fg, bg, attr
 import os
 from getch import getch
@@ -14,7 +17,7 @@ colorlist = [(n, v) for v, n in enumerate(colors.names)]
 colorlist.insert(0, ("None", None))
 
 
-def draw(indexes, sel):
+def draw(indexes: list[Index], sel: int):
     code = "".join(i.code for i in indexes)
     names = "/".join(i.codename for i in indexes)
 
@@ -31,33 +34,33 @@ def draw(indexes, sel):
 
 
 class Index:
-    def __init__(self, name, options, mapper, val=0):
+    def __init__(self, name: str, options: list[tuple[str, int]], mapper: Callable[[int], str], val: int = 0):
         self.name = name
         self.options = options
         self.mapper = mapper
         self.index = val
 
-    def jump(self, jumpAmt):
+    def jump(self, jumpAmt: int):
         self.index = min(max(0, self.index + jumpAmt), len(self.options) - 1)
 
     @property
-    def val(self):
+    def val(self) -> int:
         name, val = self.options[self.index]
         return val
 
     @property
-    def code(self):
+    def code(self) -> str:
         if self.val is not None:
             return self.mapper(self.val)
         else:
             return ""
 
     @property
-    def codename(self):
+    def codename(self) -> str:
         name, val = self.options[self.index]
         return name
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name:>5}: {str(self.val):>4} {self.code:>3}{self.codename}{style.RESET}"
 
 

@@ -38,12 +38,12 @@ class Guild:
             value = SV(max(0, SV(value)))
         self._low_limit = value
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (f"<Guild ID = {self.id!r}, "
                 f"SMALL_EDGE = {self.small_edge!r}, LARGE_EDGE = {self.large_edge!r}, "
                 f"LOW_LIMIT = {self.low_limit!r}, HIGH_LIMIT = {self.high_limit!r}>")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
 
     # Return an python dictionary for json exporting

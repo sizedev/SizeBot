@@ -67,7 +67,7 @@ class FunCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    async def gamemode(self, ctx: commands.Context[commands.Bot], *, mode):
+    async def gamemode(self, ctx: commands.Context[commands.Bot], *, mode: str):
         logger.log(EGG, f"{ctx.author.display_name} set their gamemode to {mode}.")
         await ctx.send(f"Set own gamemode to `{mode.title()} Mode`")
 

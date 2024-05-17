@@ -1,5 +1,9 @@
+from typing import Any
+from collections.abc import Iterable
+
 from copy import copy
 
+import discord
 from discord.ext.commands.bot import BotBase
 from discord.ext import commands
 
@@ -12,14 +16,14 @@ class BadMultilineCommand(commands.errors.CommandError):
     pass
 
 
-def find_one(iterable):
+def find_one(iterable: Iterable) -> Any:
     try:
         return next(iterable)
     except StopIteration:
         return None
 
 
-async def process_commands(self, message):
+async def process_commands(self: BotBase, message: discord.Message):
     if message.author.bot:
         return
 
@@ -69,7 +73,7 @@ async def process_commands(self, message):
         await self.invoke(ctx)
 
 
-def dispatch(self, event_name, *args, **kwargs):
+def dispatch(self: BotBase, event_name: str, *args, **kwargs):
     global first_ready
     old_dispatch(self, event_name, *args, **kwargs)
     if event_name == "ready":

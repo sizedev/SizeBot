@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-def den_guild_ban(ctx: commands.Context[commands.Bot]):
+def den_guild_ban(ctx: commands.Context[commands.Bot]) -> bool:
     member = ctx.author
     isMember = isinstance(member, discord.Member)
     if not isMember:

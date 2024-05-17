@@ -1,9 +1,9 @@
-from typing import TypeVar
+from typing import Generic, TypeVar
 
 T = TypeVar("T")
 
 
-class AttrDict[T]:
+class AttrDict(Generic[T]):
     __slots__ = ["_values"]
 
     def __init__(self, data: dict[str, T] = {}):

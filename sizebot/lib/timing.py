@@ -1,3 +1,4 @@
+from typing import Any
 from collections.abc import Callable
 
 import functools
@@ -8,12 +9,12 @@ import arrow
 timedfuncs: list[Callable] = []
 
 
-def timethis(name: str):
-    def wrapper(fn: Callable):
+def timethis(name: str) -> Callable:
+    def wrapper(fn: Callable) -> Callable:
         fn.name = name
 
         @functools.wraps
-        def wrapped(*args, **kwargs):
+        def wrapped(*args, **kwargs) -> Any:
             fn.start = arrow.now()
             res = fn(args, **kwargs)
             fn.end = arrow.now()

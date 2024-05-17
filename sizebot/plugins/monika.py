@@ -3,13 +3,15 @@ import random
 import importlib.resources as pkg_resources
 import logging
 
+import discord
+
 import sizebot.data
 
 logger = logging.getLogger("sizebot")
 monikalines = pkg_resources.read_text(sizebot.data, "monikalines.txt").splitlines()
 
 
-async def on_message(m):
+async def on_message(m: discord.Message):
     """Monika easter eggs."""
     if m.author.bot:
         return

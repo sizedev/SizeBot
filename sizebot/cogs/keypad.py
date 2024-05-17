@@ -1,5 +1,6 @@
 import asyncio
 
+import discord
 from discord.ext import commands
 
 from sizebot.lib.constants import emojis
@@ -33,7 +34,7 @@ class KeypadCog(commands.Cog):
 
         outputmsg = await ctx.send(defaultmessage)
 
-        def check(reaction, reacter):
+        def check(reaction: discord.Reaction, reacter: discord.Member | discord.User) -> bool:
             return reaction.message.id == outputmsg.id \
                 and reacter.id == author.id \
                 and (str(reaction.emoji) in inputdict.keys()

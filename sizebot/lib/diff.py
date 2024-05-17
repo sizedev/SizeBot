@@ -128,7 +128,7 @@ class Diff:
             "original":   self.original
         }
 
-    def __str__(self):
+    def __str__(self) -> str:
         operator: str = ""
         amount: str = ""
         if self.changetype == "add":
@@ -189,7 +189,7 @@ class Rate:
             "original": self.original
         }
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.diff} per {format(self.time)}"
 
     @classmethod
@@ -235,7 +235,7 @@ class LimitedRate:
             "stoptype": stoptype
         }
 
-    def __str__(self):
+    def __str__(self) -> str:
         joiner = "for" if isinstance(self.stop, TV) else "until"
         return f"{self.rate} {joiner} {format(self.stop)}"
 

@@ -285,7 +285,7 @@ def get_keypoints_embed(userdata: User, requesterID: int) -> EmbedToSend:
     return {"embed": embed}
 
 
-def _create_compare_embed(title: str, requesterID: int, small: StatBox = None, big: StatBox = None):
+def _create_compare_embed(title: str, requesterID: int, small: StatBox = None, big: StatBox = None) -> Embed:
     requestertag = f"<@!{requesterID}>"
     if small is not None and big is not None:
         color = _get_compare_color(requesterID, small, big)
@@ -332,7 +332,7 @@ def _create_stat_body(stats: StatBox, stat: Stat) -> str:
     return stat.body
 
 
-def _get_compare_color(requesterID: int, small: StatBox, big: StatBox):
+def _get_compare_color(requesterID: int, small: StatBox, big: StatBox) -> str:
     if requesterID == big['id'].value:
         return colors.blue
     if requesterID == small['id'].value:

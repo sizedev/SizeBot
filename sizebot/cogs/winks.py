@@ -2,6 +2,7 @@ import logging
 import re
 from datetime import datetime, timedelta
 
+import discord
 from discord.ext import commands
 
 from sizebot.lib import utils, paths
@@ -14,7 +15,7 @@ starttime = datetime(2019, 9, 15)
 milestones = [1000, 2500, 4200, 5000, 6000, 6666, 6969, 7500, 9001, 10000, 25000, 42000, 50000, 69000, 75000, 100000]
 
 
-def get_winks():
+def get_winks() -> int:
     try:
         with open(paths.winkpath, "r") as f:
             winkcount = int(f.read())
@@ -23,7 +24,7 @@ def get_winks():
     return winkcount
 
 
-def add_winks(count = 1):
+def add_winks(count: int = 1) -> int:
     winkcount = get_winks()
     winkcount += count
     with open(paths.winkpath, "w") as winkfile:
@@ -31,11 +32,11 @@ def add_winks(count = 1):
     return winkcount
 
 
-def count_winks(s):
+def count_winks(s: str) -> int:
     return len(winkPattern.findall(s))
 
 
-async def say_milestone(channel, winkcount):
+async def say_milestone(channel: discord.TextChannel, winkcount: int):
     now = datetime.today()
     timesince = now - starttime
     prettytimesince = utils.pretty_time_delta(timesince.total_seconds())
@@ -66,7 +67,7 @@ class WinksCog(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if message.author.id != ids.yukio:
             return
 

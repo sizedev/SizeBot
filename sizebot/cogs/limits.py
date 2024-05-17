@@ -86,7 +86,7 @@ class LimitCog(commands.Cog):
         logger.info(f"Cleared high size cap in guild {ctx.guild.id}.")
 
     @commands.Cog.listener()
-    async def on_message(self, m):
+    async def on_message(self, m: discord.Message):
         # non-guild messages
         if not isinstance(m.author, discord.Member):
             return

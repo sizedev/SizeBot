@@ -11,7 +11,7 @@ from sizebot.lib.errors import DigiException
 
 class TooManyMenuOptionsException(DigiException):
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return "Too many options for this reaction menu. (limit is 20.)"
 
 
@@ -46,6 +46,7 @@ class Menu:
         self.delete_after = delete_after
         self.allow_any = allow_any
         self.cancel_emoji = cancel_emoji
+        self.message = cast(Message, None)
 
         if len(self.options) + int(bool(self.cancel_emoji)) > 20:
             raise TooManyMenuOptionsException
@@ -54,21 +55,21 @@ class Menu:
     def menu_owner(self) -> User | Member:
         return self.ctx.author
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.ctx=} | {self.initial_message=} | {self.options=} | {self.timeout=} | {self.delete_after=} | {self.allow_any=} | {self.cancel_emoji=}"
 
     async def run(self) -> EmojiInputType | None:
-        message = cast(Message, await self.ctx.send(self.initial_message, embed = self.initial_embed))
+        self.message = cast(Message, await self.ctx.send(self.initial_message, embed = self.initial_embed))
 
         # Add all the reactions we need.
         for option in self.options:
-            await message.add_reaction(option)
+            await self.message.add_reaction(option)
         if self.cancel_emoji:
-            await message.add_reaction(self.cancel_emoji)
+            await self.message.add_reaction(self.cancel_emoji)
 
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
         def check(reaction: Reaction, reacter: Member | User) -> bool:
-            return reaction.message.id == message.id \
+            return reaction.message.id == self.message.id \
                 and (self.allow_any or reacter.id == self.menu_owner.id) \
                 and (
                     str(reaction.emoji) == self.cancel_emoji
@@ -84,8 +85,8 @@ class Menu:
             pass
 
         if self.delete_after:
-            await message.delete()
-            message = None
+            await self.message.delete()
+            self.message = None
 
         if reaction is None or reaction.emoji == self.cancel_emoji:
             # User took too long to respond
@@ -96,9 +97,9 @@ class Menu:
             answer = reaction.emoji
 
         # Let's wrap things up.
-        if message:
+        if self.message:
             # PERMISSION: requires manage_messages
-            await message.clear_reactions()
+            await self.message.clear_reactions()
         return answer
 
     @classmethod

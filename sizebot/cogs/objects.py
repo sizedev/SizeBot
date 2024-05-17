@@ -171,7 +171,7 @@ class ObjectsCog(commands.Cog):
             height = SV(what * userdata.viewscale)
             s = (f"{userdata.nickname} is {userdata.height:,.1{userdata.unitsystem}} tall."
                  f" To them, {what:,.1mu} looks like **{height:,.1mu}**."
-                 f" That's about **{height.to_best_unit('o', preferName=True, spec=".1")}**.")
+                 f" That's about **{height.to_best_unit('o', preferName=True, spec='.1')}**.")
             await ctx.send(s)
             return
 

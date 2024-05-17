@@ -28,11 +28,11 @@ class Trigger:
     partial: bool
 
 
-def set_cached_trigger(guildid: int, authorid: int, trigger, diff):
+def set_cached_trigger(guildid: int, authorid: int, trigger: str, diff: Diff):
     user_triggers[trigger][guildid, authorid] = diff
 
 
-def unset_cached_trigger(guildid: int, authorid: int, trigger):
+def unset_cached_trigger(guildid: int, authorid: int, trigger: str):
     if (guildid, authorid) not in user_triggers[trigger]:
         return
     del user_triggers[trigger][guildid, authorid]
@@ -40,14 +40,14 @@ def unset_cached_trigger(guildid: int, authorid: int, trigger):
         del user_triggers[trigger]
 
 
-def set_trigger(guildid: int, authorid: int, trigger, diff):
+def set_trigger(guildid: int, authorid: int, trigger: str, diff: Diff):
     set_cached_trigger(guildid, authorid, trigger, diff)
     userdata = userdb.load(guildid, authorid)
     userdata.triggers[trigger] = diff
     userdb.save(userdata)
 
 
-def unset_trigger(guildid: int, authorid: int, trigger):
+def unset_trigger(guildid: int, authorid: int, trigger: str):
     unset_cached_trigger(guildid, authorid, trigger)
     userdata = userdb.load(guildid, authorid)
     if trigger in userdata.triggers:
@@ -69,7 +69,7 @@ class TriggerCog(commands.Cog):
                 user_triggers[trigger][guildid, userid] = diff
 
     @commands.Cog.listener()
-    async def on_message(self, m):
+    async def on_message(self, m: discord.Message):
         # non-guild messages
         if not isinstance(m.author, discord.Member):
             return
@@ -129,7 +129,7 @@ class TriggerCog(commands.Cog):
         usage = "<trigger> <diff>",
         category = "trigger"
     )
-    async def settrigger(self, ctx: commands.Context[commands.Bot], trigger, *, diff: Diff):
+    async def settrigger(self, ctx: commands.Context[commands.Bot], trigger: str, *, diff: Diff):
         """Set a trigger word.
 
         #ALPHA#
@@ -142,7 +142,7 @@ class TriggerCog(commands.Cog):
         category = "trigger",
         aliases = ["resettrigger", "unsettrigger", "removetrigger"]
     )
-    async def cleartrigger(self, ctx: commands.Context[commands.Bot], *, trigger):
+    async def cleartrigger(self, ctx: commands.Context[commands.Bot], *, trigger: str):
         """Remove a trigger word."""
         unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send(f"Removed trigger word {trigger!r}.")

@@ -76,7 +76,7 @@ class Pokemon:
         c.weight = WV(c.weight)
         return c
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def __repr__(self) -> str:

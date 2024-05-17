@@ -3,7 +3,7 @@ import os
 import logging
 import pytz
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import discord
 from discord.ext import commands
@@ -194,14 +194,12 @@ def main():
         await active.on_message(message)
 
     async def on_message_timed(message: discord.Message):
-        def timeywimey():
+        def timeywimey() -> timedelta:
             now = arrow.now()
-            try:
-                if timeywimey.prev is None:
-                    timeywimey.prev = now
-            except AttributeError:
+            if getattr(timeywimey, "prev", None) is None:
                 timeywimey.prev = now
-            diff = now - timeywimey.prev
+            prev: arrow.Arrow = timeywimey.prev
+            diff = now - prev
             timeywimey.prev = now
             return diff
 

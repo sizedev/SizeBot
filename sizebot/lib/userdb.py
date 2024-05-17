@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Literal, TypedDict
+from typing import Literal, TypedDict, Any
 
 import re
 import json
@@ -37,7 +37,7 @@ modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 MoveTypeStr = Literal["walk", "run", "climb", "crawl", "swim"]
 
 
-def str_or_none(v):
+def str_or_none(v: Any) -> str | None:
     if v is None:
         return None
     return str(v)
@@ -113,7 +113,7 @@ class User:
         self.tra_reports = 0
         self._unitsystem: str = "m"
         self.species: str | None = None
-        self.soft_gender = None
+        self.soft_gender: str | None = None
         self.avatar_url: str | None = None
         self.lastactive: Arrow = None
         self.registration_steps_remaining: list[str] = []
@@ -121,10 +121,10 @@ class User:
         self._macrovision_view: str | None = None
         self.allowchangefromothers: bool | None = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r} ...>")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         desc = None if self.description is None else truncate(self.description, 50)
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r}, PICTURE_URL = {self.picture_url!r}, "
                 f"DESCRIPTION = {desc}, DISPLAY = {self.display!r}, "
@@ -145,21 +145,21 @@ class User:
 
     # Setters/getters to automatically force numeric values to be stored as Decimal
     @property
-    def picture_url(self):
+    def picture_url(self) -> str | None:
         return self._picture_url
 
     @picture_url.setter
-    def picture_url(self, value):
+    def picture_url(self, value: str | None):
         if not is_url(value):
             raise ValueError(f"{value} is not a valid URL.")
         self._picture_url = value
 
     @property
-    def auto_picture_url(self):
+    def auto_picture_url(self) -> str | None:
         return self.picture_url or self.avatar_url
 
     @property
-    def is_active(self):
+    def is_active(self) -> bool:
         now = arrow.now()
         weekago = now.shift(weeks = -1)
         lastactive = self.lastactive
@@ -168,68 +168,68 @@ class User:
         return lastactive > weekago
 
     @property
-    def height(self):
+    def height(self) -> SV:
         return self._height
 
     @height.setter
-    def height(self, value):
+    def height(self, value: SV):
         value = SV(value)
         if value < BASICALLY_ZERO:
             value = SV(0)
         self._height = value
 
     @property
-    def baseheight(self):
+    def baseheight(self) -> SV:
         return self._baseheight
 
     @baseheight.setter
-    def baseheight(self, value):
+    def baseheight(self, value: SV):
         value = SV(value)
         if value < BASICALLY_ZERO:
             value = SV(0)
         self._baseheight = value
 
     @property
-    def footlength(self):
+    def footlength(self) -> SV | None:
         return self._footlength
 
     @footlength.setter
-    def footlength(self, value):
+    def footlength(self, value: SV | None):
         if value is None or SV(value) < BASICALLY_ZERO:
             self._footlength = None
             return
         self._footlength = SV(value)
 
     @property
-    def pawtoggle(self):
+    def pawtoggle(self) -> bool:
         return self._pawtoggle
 
     @pawtoggle.setter
-    def pawtoggle(self, value):
+    def pawtoggle(self, value: bool):
         self._pawtoggle = bool(value)
 
     @property
-    def furtoggle(self):
+    def furtoggle(self) -> bool:
         return self._furtoggle
 
     @furtoggle.setter
-    def furtoggle(self, value):
+    def furtoggle(self, value: bool):
         self._furtoggle = bool(value)
 
     @property
-    def footname(self):
+    def footname(self) -> str:
         return "Paw" if self.pawtoggle else "Foot"
 
     @property
-    def hairname(self):
+    def hairname(self) -> str:
         return "Fur" if self.furtoggle else "Hair"
 
     @property
-    def hairlength(self):
+    def hairlength(self) -> SV | None:
         return self._hairlength
 
     @hairlength.setter
-    def hairlength(self, value):
+    def hairlength(self, value: SV | None):
         if value is None:
             self._hairlength = None
             return
@@ -239,33 +239,33 @@ class User:
         self._hairlength = value
 
     @property
-    def taillength(self):
+    def taillength(self) -> SV | None:
         return self._taillength
 
     @taillength.setter
-    def taillength(self, value):
+    def taillength(self, value: SV | None):
         if value is None or SV(value) <= BASICALLY_ZERO:
             self._taillength = None
             return
         self._taillength = SV(value)
 
     @property
-    def earheight(self):
+    def earheight(self) -> SV | None:
         return self._earheight
 
     @earheight.setter
-    def earheight(self, value):
+    def earheight(self, value: SV | None):
         if value is None or SV(value) <= BASICALLY_ZERO:
             self._earheight = None
             return
         self._earheight = SV(value)
 
     @property
-    def liftstrength(self):
+    def liftstrength(self) -> SV | None:
         return self._liftstrength
 
     @liftstrength.setter
-    def liftstrength(self, value):
+    def liftstrength(self, value: WV | None):
         if value is None:
             self._liftstrength = None
             return
@@ -275,11 +275,11 @@ class User:
         self._liftstrength = value
 
     @property
-    def walkperhour(self):
+    def walkperhour(self) -> ParseableRate | None:
         return self._walkperhour
 
     @walkperhour.setter
-    def walkperhour(self, value):
+    def walkperhour(self, value: ParseableRate | None):
         if value is None:
             self._walkperhour = None
             return
@@ -299,11 +299,11 @@ class User:
         self._walkperhour = value
 
     @property
-    def runperhour(self):
+    def runperhour(self) -> ParseableRate | None:
         return self._runperhour
 
     @runperhour.setter
-    def runperhour(self, value):
+    def runperhour(self, value: ParseableRate | None):
         if value is None:
             self._runperhour = None
             return
@@ -323,19 +323,19 @@ class User:
         self._runperhour = value
 
     @property
-    def climbperhour(self):  # Essentially temp, since we're fixing this in BetterStats
+    def climbperhour(self) -> SV:  # Essentially temp, since we're fixing this in BetterStats
         return SV(Decimal(4828) * self.scale)
 
     @property
-    def crawlperhour(self):  # Essentially temp, since we're fixing this in BetterStats
+    def crawlperhour(self) -> SV:  # Essentially temp, since we're fixing this in BetterStats
         return SV(Decimal(2556) * self.scale)
 
     @property
-    def swimperhour(self):
+    def swimperhour(self) -> ParseableRate | None:
         return self._swimperhour
 
     @swimperhour.setter
-    def swimperhour(self, value):
+    def swimperhour(self, value: ParseableRate | None):
         if value is None:
             self._swimperhour = None
             return
@@ -355,11 +355,11 @@ class User:
         self._swimperhour = value
 
     @property
-    def currentscalestep(self):
+    def currentscalestep(self) -> Diff | None:
         return self._currentscalestep
 
     @currentscalestep.setter
-    def currentscalestep(self, value):
+    def currentscalestep(self, value: Diff | None):
         if value is None:
             self._currentscalestep = None
             return
@@ -370,11 +370,11 @@ class User:
         self._currentscalestep = value
 
     @property
-    def currentscaletalk(self):
+    def currentscaletalk(self) -> Diff | None:
         return self._currentscaletalk
 
     @currentscaletalk.setter
-    def currentscaletalk(self, value):
+    def currentscaletalk(self, value: Diff | None):
         if value is None:
             self._currentscaletalk = None
             return
@@ -385,11 +385,11 @@ class User:
         self._currentscaletalk = value
 
     @property
-    def gender(self):
+    def gender(self) -> str:
         return self._gender
 
     @gender.setter
-    def gender(self, value):
+    def gender(self, value: str):
         if value is None:
             self._gender = None
             return
@@ -399,57 +399,57 @@ class User:
         self._gender = value
 
     @property
-    def autogender(self):
+    def autogender(self) -> str:
         return self.gender or self.soft_gender or "m"
 
     @property
-    def baseweight(self):
+    def baseweight(self) -> SV:
         return self._baseweight
 
     @baseweight.setter
-    def baseweight(self, value):
+    def baseweight(self, value: WV):
         value = WV(value)
         if value < 0:
             value = WV(0)
         self._baseweight = value
 
     @property
-    def weight(self):
+    def weight(self) -> WV:
         return WV(self.baseweight * (self.scale ** 3))
 
     @weight.setter
-    def weight(self, value):
+    def weight(self, value: WV):
         self.baseweight = value * (self.viewscale ** 3)
 
     # Check that unitsystem is valid and lowercase
     @property
-    def unitsystem(self):
+    def unitsystem(self) -> str:
         return self._unitsystem
 
     @unitsystem.setter
-    def unitsystem(self, value):
+    def unitsystem(self, value: str):
         value = value.lower()
         if value not in ["m", "u", "o"]:
             raise ValueError(f"Invalid unitsystem: '{value}'")
         self._unitsystem = value
 
     @property
-    def viewscale(self):
+    def viewscale(self) -> Decimal:
         """How scaled up the world looks to this user"""
         return self.baseheight / self.height
 
     @viewscale.setter
-    def viewscale(self, viewscale):
+    def viewscale(self, viewscale: Decimal):
         """Scale the user height to match the view scale"""
         self.height = SV(self.baseheight / viewscale)
 
     @property
-    def scale(self):
+    def scale(self) -> Decimal:
         """How scaled up the user looks to the world"""
         return self.height / self.baseheight
 
     @scale.setter
-    def scale(self, scale):
+    def scale(self, scale: Decimal):
         """Scale the user height to match the scale"""
         self.height = SV(self.baseheight * scale)
 
@@ -478,7 +478,7 @@ class User:
         }
 
     @property
-    def tag(self):
+    def tag(self) -> str:
         if self.id is not None:
             tag = f"<@!{self.id}>"
         else:
@@ -486,10 +486,10 @@ class User:
         return tag
 
     @property
-    def registered(self):
+    def registered(self) -> bool:
         return len(self.registration_steps_remaining) == 0
 
-    def complete_step(self, step):
+    def complete_step(self, step: str) -> bool:
         was_completed = self.registered
         try:
             self.registration_steps_remaining.remove(step)
@@ -500,19 +500,19 @@ class User:
         return just_completed
 
     @property
-    def macrovision_model(self):
+    def macrovision_model(self) -> str:
         if self._macrovision_model is not None:
             return self._macrovision_model
         return "Human"
 
     @macrovision_model.setter
-    def macrovision_model(self, value):
+    def macrovision_model(self, value: str):
         if value not in modelJSON.keys():
             raise errors.InvalidMacrovisionModelException(value)
         self._macrovision_model = value
 
     @property
-    def macrovision_view(self):
+    def macrovision_view(self) -> str:
         if self._macrovision_view is not None:
             return self._macrovision_view
         human_views = {
@@ -523,13 +523,13 @@ class User:
         return human_views[self.autogender]
 
     @macrovision_view.setter
-    def macrovision_view(self, value):
+    def macrovision_view(self, value: str):
         if value not in modelJSON[self.macrovision_model].keys():
             raise errors.InvalidMacrovisionViewException(self.macrovision_model, value)
         self._macrovision_view = value
 
     # Return an python dictionary for json exporting
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "guildid":          str(self.guildid),
             "id":               str(self.id),
@@ -572,7 +572,7 @@ class User:
 
     # Create a new object from a python dictionary imported using json
     @classmethod
-    def fromJSON(cls, jsondata: dict):
+    def fromJSON(cls, jsondata: dict) -> User:
         userdata = User()
         userdata.guildid = jsondata.get("guildid", 350429009730994199)  # Default to Size Matters.
         userdata.id = int(jsondata["id"])
@@ -642,28 +642,28 @@ class User:
         userdata.allowchangefromothers = jsondata.get("allowchangefromothers", False)
         return userdata
 
-    def __lt__(self, other):
+    def __lt__(self, other: User) -> bool:
         return self.height < other.height
 
-    def __eq__(self, other):
+    def __eq__(self, other: User) -> bool:
         return self.height == other.height
 
-    def __add__(self, other):
+    def __add__(self, other: SV) -> User:
         newuserdata = copy(self)
         newuserdata.height = self.height + other
         return newuserdata
 
-    def __mul__(self, other):
+    def __mul__(self, other: Decimal) -> User:
         newuserdata = copy(self)
         newuserdata.scale = Decimal(self.scale) * other
         return newuserdata
 
-    def __div__(self, other):
+    def __div__(self, other: Decimal) -> User:
         newuserdata = copy(self)
         newuserdata.scale = Decimal(self.scale) / other
         return newuserdata
 
-    def __pow__(self, other):
+    def __pow__(self, other: Decimal) -> User:
         newuserdata = copy(self)
         newuserdata.scale = Decimal(self.scale) ** other
         return newuserdata
@@ -689,7 +689,7 @@ def save(userdata: User):
         json.dump(jsondata, f, indent = 4)
 
 
-def load(guildid: int, userid: int, *, member=None, allow_unreg=False) -> User:
+def load(guildid: int, userid: int, *, member: discord.Member = None, allow_unreg: bool = False) -> User:
     path = get_user_path(guildid, userid)
     try:
         with open(path, "r") as f:
@@ -713,7 +713,7 @@ def delete(guildid: int, userid: int):
     path.unlink(missing_ok = True)
 
 
-def exists(guildid: int, userid: int, *, allow_unreg=False):
+def exists(guildid: int, userid: int, *, allow_unreg: bool = False) -> bool:
     exists = True
     try:
         load(guildid, userid, allow_unreg=allow_unreg)
@@ -722,13 +722,13 @@ def exists(guildid: int, userid: int, *, allow_unreg=False):
     return exists
 
 
-def count_profiles():
+def count_profiles() -> int:
     users = list_users()
     usercount = len(list(users))
     return usercount
 
 
-def count_users():
+def count_users() -> int:
     users = list_users()
     usercount = len(set(u for g, u in users))
     return usercount
@@ -742,7 +742,7 @@ def list_users(*, guildid: int | None = None, userid: int | None = None) -> list
     return users
 
 
-def load_or_fake(memberOrSV: discord.Member | FakePlayer | SV, nickname = None, *, allow_unreg=False) -> User:
+def load_or_fake(memberOrSV: discord.Member | FakePlayer | SV, nickname: str | None = None, *, allow_unreg: bool = False) -> User:
     if isinstance(memberOrSV, discord.Member):
         return load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
     if type(memberOrSV).__name__ == "FakePlayer":  # can't use isinstance, circular import
@@ -799,7 +799,7 @@ class FakePlayer(User):
     }
 
     @classmethod
-    def parse(cls, s: str):
+    def parse(cls, s: str) -> FakePlayer:
         re_full_string = r"\$(\w+=[^;$]+;?)+"
         match = re.match(re_full_string, s)
         if match is None:
@@ -837,5 +837,5 @@ class FakePlayer(User):
         return player
 
     @classmethod
-    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str):
+    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> FakePlayer:
         return cls.parse(argument)

@@ -4,39 +4,39 @@ import logging
 
 import arrow
 
+import discord
 from discord.ext import commands
 
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV, TV
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.digidecimal import Decimal
 import sizebot.lib.language as lang
 from sizebot.lib.utils import pretty_time_delta
+from sizebot.lib.userdb import MoveTypeStr
 
 logger = logging.getLogger("sizebot")
 
 
-def calc_move_dist(userdata: userdb.User):
-    movetype = userdata.currentmovetype
-    starttime = userdata.movestarted
-    stoptime = userdata.movestop
+def calc_move_dist(userdata: userdb.User) -> tuple[TV, SV]:
+    movetype: MoveTypeStr = userdata.currentmovetype
+    starttime: arrow.Arrow = userdata.movestarted
+    stoptime: TV | None = userdata.movestop
 
     now = arrow.now()
     timeelapsed = now - starttime
-    elapsed_seconds = timeelapsed.total_seconds()
-    stopped = stoptime is not None and elapsed_seconds >= stoptime
-    if stopped:
+    elapsed_seconds = TV(timeelapsed.total_seconds())
+    if stoptime is not None and elapsed_seconds >= stoptime:
         elapsed_seconds = stoptime
 
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
     try:
-        speed = stats[f"{movetype}perhour"]
+        speed: SV = stats[f"{movetype}perhour"].value
     except KeyError:
         raise ValueError(f"{movetype}perhour is not a valid stat.")
 
     persecond = SV(speed / 60 / 60)
-    distance = SV(Decimal(elapsed_seconds) * persecond)
+    distance = SV(elapsed_seconds * persecond)
 
     return elapsed_seconds, distance
 
@@ -106,7 +106,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def sofar(self, ctx: commands.Context[commands.Bot], *, who = None):
+    async def sofar(self, ctx: commands.Context[commands.Bot], *, who: discord.Member | None = None):
         """How far have you moved so far? [See help.]
 
         #ALPHA#

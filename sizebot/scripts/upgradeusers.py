@@ -21,7 +21,7 @@ class BadLegacyUser(Exception):
 
 
 # TODO: CamelCase
-def loadLegacy(path):
+def loadLegacy(path: Path) -> userdb.User:
     """Load a user from the old file format"""
     with open(path, "r", encoding = "utf-8") as f:
         # Make array of lines from file.
@@ -52,7 +52,7 @@ def loadLegacy(path):
     return userdata
 
 
-def upgradeusers(path):
+def upgradeusers(path: Path):
     print(f"Looking for user files in {path}")
     filepaths = list(path.glob("*.txt"))
     print(f"Found {len(filepaths)} users")

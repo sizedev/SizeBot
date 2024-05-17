@@ -96,7 +96,7 @@ class ScaleTypeCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s scale per character is now cleared.")
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if not isinstance(message.author, discord.Member):
             return
         guildid = message.author.guild.id

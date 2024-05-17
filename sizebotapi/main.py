@@ -17,12 +17,12 @@ app = flask.Flask(__name__)
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(e: Exception | int) -> tuple[str, int]:
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
 
 @app.route("/user/<int:guildid>/<int:userid>", methods=["GET"])
-def user(guildid: int, userid: int):
+def user(guildid: int, userid: int) -> str:
     try:
         u = userdb.load(guildid, userid)
     except UserNotFoundException:
@@ -32,7 +32,7 @@ def user(guildid: int, userid: int):
 
 
 @app.route("/unit/SV/parse", methods=["GET"])
-def SV_parse():
+def SV_parse() -> str:
     s = request.args.get("s")
     try:
         val = SV.parse(s)
@@ -42,7 +42,7 @@ def SV_parse():
 
 
 @app.route("/unit/SV/format", methods=["GET"])
-def SV_format():
+def SV_format() -> str:
     value = Decimal(request.args.get("value"))
     system = request.args.get("system")
     try:
@@ -53,7 +53,7 @@ def SV_format():
 
 
 @app.route("/unit/WV/parse", methods=["GET"])
-def WV_parse():
+def WV_parse() -> str:
     s = request.args.get("s")
     try:
         val = WV.parse(s)
@@ -63,7 +63,7 @@ def WV_parse():
 
 
 @app.route("/unit/WV/format", methods=["GET"])
-def WV_format():
+def WV_format() -> str:
     value = Decimal(request.args.get("value"))
     system = request.args.get("system")
     try:
@@ -74,7 +74,7 @@ def WV_format():
 
 
 @app.route("/unit/TV/parse", methods=["GET"])
-def TV_parse():
+def TV_parse() -> str:
     s = request.args.get("s")
     try:
         val = TV.parse(s)
@@ -84,7 +84,7 @@ def TV_parse():
 
 
 @app.route("/unit/TV/format", methods=["GET"])
-def TV_format():
+def TV_format() -> str:
     value = Decimal(request.args.get("value"))
     system = request.args.get("system", "m")
     try:
@@ -95,7 +95,7 @@ def TV_format():
 
 
 @app.route("/unit/Diff/parse", methods=["GET"])
-def Diff_parse():
+def Diff_parse() -> str:
     s = request.args.get("s")
     try:
         val = Diff.parse(s)
@@ -105,7 +105,7 @@ def Diff_parse():
 
 
 @app.route("/unit/Rate/parse", methods=["GET"])
-def Rate_parse():
+def Rate_parse() -> str:
     s = request.args.get("s")
     try:
         val = Rate.parse(s)
@@ -115,7 +115,7 @@ def Rate_parse():
 
 
 @app.route("/unit/LimitedRate/parse", methods=["GET"])
-def LimitedRate_parse():
+def LimitedRate_parse() -> str:
     s = request.args.get("s")
     try:
         val = LimitedRate.parse(s)

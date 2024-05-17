@@ -7,7 +7,7 @@ class _Getch:
         except ImportError:
             self.impl = _GetchUnix()
 
-    def __call__(self):
+    def __call__(self) -> str:
         ch = self.impl()
         return ch
 
@@ -17,7 +17,7 @@ class _GetchUnix:
         import tty  # noqa
         import sys  # noqa
 
-    def __call__(self):
+    def __call__(self) -> str:
         import sys
         import tty
         import termios
@@ -51,7 +51,7 @@ class _GetchWindows:
     def __init__(self):
         import msvcrt  # noqa
 
-    def __call__(self):
+    def __call__(self) -> str:
         import msvcrt
         # https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
         sequences = {

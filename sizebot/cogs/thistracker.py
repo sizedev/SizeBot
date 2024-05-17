@@ -1,3 +1,6 @@
+from __future__ import annotations
+from typing import Any
+
 import json
 import logging
 from datetime import datetime
@@ -15,15 +18,14 @@ logger = logging.getLogger("sizebot")
 
 
 class ThisTracker():
-    def __init__(self, points=None):
+    def __init__(self, points: dict[str, int] | None = None):
         if points is None:
             points = {}
-        else:
-            # Convert keys to integers
-            points = {int(k): v for k, v in points.items()}
-        self.points = points
+        # Convert keys to integers
+        intpoints = {int(k): v for k, v in points.items()}
+        self.points = intpoints
 
-    def increment_points(self, id):
+    def increment_points(self, id: int):
         count = self.points.get(id, 0)
         self.points[id] = count + 1
 
@@ -33,14 +35,14 @@ class ThisTracker():
         with open(paths.thispath, "w") as f:
             json.dump(jsondata, f, indent = 4)
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         """Return a python dictionary for json exporting"""
         return {
             "points": self.points,
         }
 
     @classmethod
-    def load(cls):
+    def load(cls) -> ThisTracker:
         try:
             with open(paths.thispath, "r") as f:
                 jsondata = json.load(f)
@@ -49,12 +51,12 @@ class ThisTracker():
         return ThisTracker.fromJSON(jsondata)
 
     @classmethod
-    def fromJSON(cls, jsondata):
+    def fromJSON(cls, jsondata: Any) -> ThisTracker:
         points = jsondata["points"]
         return ThisTracker(points)
 
 
-def is_agreement_emoji(emoji):
+def is_agreement_emoji(emoji: str) -> bool:
     unicodeagreements = ["🔼", "⬆️", "⤴️", "☝️", "👆"]
     if isinstance(emoji, (discord.Emoji, discord.PartialEmoji)):
         if "this" in emoji.name.lower():
@@ -62,14 +64,15 @@ def is_agreement_emoji(emoji):
     else:
         if emoji in unicodeagreements:
             return True
+    return False
 
 
-def is_agreement_message(message):
+def is_agreement_message(message: str) -> bool:
     textagreements = ["this", "^", "agree"]
     return is_agreement_emoji(message) or message.lower() in textagreements or message.startswith("^")
 
 
-def find_latest_non_this(messages):
+def find_latest_non_this(messages: list[discord.Message]) -> discord.Message:
     for message in messages:
         if not is_agreement_message(message.content):
             return message
@@ -104,7 +107,7 @@ class ThisCog(commands.Cog):
         await ctx.send(embed = embed)
 
     @commands.Cog.listener()
-    async def on_message(self, m):
+    async def on_message(self, m: discord.Message):
         if m.author.bot:
             return
         if is_agreement_message(m.content):
@@ -117,14 +120,14 @@ class ThisCog(commands.Cog):
             tracker.save()
 
     @commands.Cog.listener()
-    async def on_reaction_add(self, r, u):
-        if r.message.author.bot:
+    async def on_reaction_add(self, reaction: discord.Reaction, reacter: discord.Member | discord.User):
+        if reaction.message.author.bot:
             return
-        if r.message.author.id == u.id:
+        if reaction.message.author.id == reacter.id:
             return
-        if is_agreement_emoji(r.emoji):
+        if is_agreement_emoji(reaction.emoji):
             tracker = ThisTracker.load()
-            tracker.increment_points(r.message.author.id)
+            tracker.increment_points(reaction.message.author.id)
             tracker.save()
 
 

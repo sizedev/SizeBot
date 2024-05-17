@@ -208,7 +208,7 @@ verbs = {
 }
 
 
-def resize_text(text, diff):
+def resize_text(text: str, diff: int) -> str:
     """Resizes text to show the relative difference between sizes
     """
     if diff == -3:
@@ -227,7 +227,7 @@ def resize_text(text, diff):
         return text.translate(giant_letters)
 
 
-def ratio_to_diff(ratio):
+def ratio_to_diff(ratio: Decimal) -> int:
     """Adjust a string to be quiet or loud, and assign it a verb.
     Ratios:
     * ratio < 1/1000: "whispers", convert all letters to periods.

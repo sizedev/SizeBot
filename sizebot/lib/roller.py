@@ -63,7 +63,7 @@ class RollResult:
         self.used = used
         self.dropped = dropped
 
-    def __str__(self):
+    def __str__(self) -> str:
         output = (f"    Total: {self.total}\n"
                   f"    Used: {self.used}\n")
         if len(self.dropped) > 0:
@@ -76,7 +76,7 @@ class Result:
         self.total = total
         self.rolls = rolls
 
-    def __str__(self):
+    def __str__(self) -> str:
         output = (f"Total: {self.total}\n"
                   f"Rolls:\n")
         for i, r in enumerate(self.rolls):

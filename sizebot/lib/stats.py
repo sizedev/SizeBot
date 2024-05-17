@@ -36,7 +36,7 @@ IS_LARGE = 1.0
 IS_VERY_LARGE = 10.0
 
 
-def format_scale(scale: Decimal):
+def format_scale(scale: Decimal) -> str:
     reversescale = 1 / scale
 
     if reversescale > 10:
@@ -84,7 +84,7 @@ T = TypeVar("T")
 
 def wrap_type(f: Callable[[Any], T] | None) -> Callable[[Any], T | None]:
     if f is None:
-        def default_func(v):
+        def default_func(v: Any) -> Any:
             return v
         f = default_func
 
@@ -202,15 +202,15 @@ class Stat:
         self.is_set = value is not None or not definition.settable
 
     @property
-    def key(self):
+    def key(self) -> str:
         return self.definition.key
 
     @property
-    def orderkey(self):
+    def orderkey(self) -> tuple[int, int]:
         return self.definition.orderkey
 
     @property
-    def tags(self):
+    def tags(self) -> list[str]:
         return self.definition.tags
 
     @cached_property
@@ -218,11 +218,11 @@ class Stat:
         return self.definition.get_is_shown(self.sb)
 
     @cached_property
-    def title(self):
+    def title(self) -> str:
         return self.definition.get_title(self.sb)
 
     @cached_property
-    def body(self):
+    def body(self) -> str:
         return self.definition.get_body(self.sb)
 
     @cached_property
@@ -239,7 +239,7 @@ class Stat:
             "inline": self.definition.inline
         }
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.title}: {self.value}"
 
 
@@ -286,7 +286,7 @@ class StatBox:
         values: dict[str, Any] = {}
         sb = StatBox()
 
-        def _process(sdef: StatDef):
+        def _process(sdef: StatDef) -> Stat | None:
             result = sdef.load_stat(sb, values, userstats=userstats)
             if result is not None:
                 values[result.key] = result.value
@@ -317,7 +317,7 @@ class StatBox:
         values: dict[str, Any] = {}
         sb = StatBox()
 
-        def _process(s: Stat):
+        def _process(s: Stat) -> Stat | None:
             result = s.definition.scale_stat(sb, values, scale=scale_value, old_value=s.value, is_setbyuser=s.is_setbyuser)
             if result is not None:
                 values[result.key] = result.value
@@ -330,11 +330,11 @@ class StatBox:
         for k in self.stats:
             yield k
 
-    def __getitem__(self, k: str):
+    def __getitem__(self, k: str) -> Stat:
         return self.stats_by_key[k]
 
 
-def bool_to_icon(value):
+def bool_to_icon(value: bool) -> str:
     CHK_Y = "✅"
     CHK_N = "❎"
     if value:

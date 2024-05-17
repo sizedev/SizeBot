@@ -153,7 +153,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setscale(self, ctx: commands.Context[commands.Bot], *, newscale):
+    async def setscale(self, ctx: commands.Context[commands.Bot], *, newscale: str):
         """Change height by scale."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -199,7 +199,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def copyheight(self, ctx: commands.Context[commands.Bot], user: discord.Member, *, newscale = 1):
+    async def copyheight(self, ctx: commands.Context[commands.Bot], user: discord.Member, *, newscale: str = "1"):
         """Be the size of another user, modified by a factor.
 
         Examples:
@@ -358,7 +358,7 @@ class SetCog(commands.Cog):
         usage = "<foot>",
         category = "set"
     )
-    async def setfoot(self, ctx: commands.Context[commands.Bot], *, newfoot):
+    async def setfoot(self, ctx: commands.Context[commands.Bot], *, newfoot: str):
         """Set your current foot length."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -375,7 +375,7 @@ class SetCog(commands.Cog):
         usage = "<shoe>",
         category = "set"
     )
-    async def setshoe(self, ctx: commands.Context[commands.Bot], *, newshoe):
+    async def setshoe(self, ctx: commands.Context[commands.Bot], *, newshoe: str):
         """Set your current shoe size.
 
         Accepts a US Shoe Size.
@@ -448,7 +448,7 @@ class SetCog(commands.Cog):
         usage = "<hair>",
         category = "set"
     )
-    async def sethair(self, ctx: commands.Context[commands.Bot], *, newhair):
+    async def sethair(self, ctx: commands.Context[commands.Bot], *, newhair: str):
         """Set your current hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -465,7 +465,7 @@ class SetCog(commands.Cog):
         usage = "<tail>",
         category = "set"
     )
-    async def settail(self, ctx: commands.Context[commands.Bot], *, newtail):
+    async def settail(self, ctx: commands.Context[commands.Bot], *, newtail: str):
         """Set your current tail length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -497,7 +497,7 @@ class SetCog(commands.Cog):
         usage = "<ear>",
         category = "set"
     )
-    async def setear(self, ctx: commands.Context[commands.Bot], *, newear):
+    async def setear(self, ctx: commands.Context[commands.Bot], *, newear: str):
         """Set your current ear heightear."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -530,7 +530,7 @@ class SetCog(commands.Cog):
         usage = "<weight>",
         category = "set"
     )
-    async def setstrength(self, ctx: commands.Context[commands.Bot], *, newstrength):
+    async def setstrength(self, ctx: commands.Context[commands.Bot], *, newstrength: str):
         """Set your current lift/carry strength."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -658,7 +658,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setgender(self, ctx: commands.Context[commands.Bot], gender):
+    async def setgender(self, ctx: commands.Context[commands.Bot], gender: str):
         """Set gender."""
         guild = ctx.guild
         user = ctx.author
@@ -707,7 +707,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     @commands.is_owner()
-    async def setmodel(self, ctx: commands.Context[commands.Bot], user: discord.Member, *, model):
+    async def setmodel(self, ctx: commands.Context[commands.Bot], user: discord.Member, *, model: str):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_model = model
         userdb.save(userdata)
@@ -732,7 +732,7 @@ class SetCog(commands.Cog):
     )
     @commands.guild_only()
     @commands.is_owner()
-    async def setview(self, ctx: commands.Context[commands.Bot], user: discord.Member, *, view):
+    async def setview(self, ctx: commands.Context[commands.Bot], user: discord.Member, *, view: str):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_view = view
         userdb.save(userdata)

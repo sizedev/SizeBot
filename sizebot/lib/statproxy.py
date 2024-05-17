@@ -18,10 +18,10 @@ class StatProxy:
         self.name = name
         self.tag = tag
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<StatProxy {'#' if self.tag else ''}{self.name}>"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.__repr__()
 
     @classmethod

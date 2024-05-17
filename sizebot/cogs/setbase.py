@@ -151,7 +151,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasehair(self, ctx: commands.Context[commands.Bot], *, newhair):
+    async def setbasehair(self, ctx: commands.Context[commands.Bot], *, newhair: str):
         """Set a custom base hair length."""
         newhairsv = SV.parse(newhair)
 
@@ -183,7 +183,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasetail(self, ctx: commands.Context[commands.Bot], *, newtail):
+    async def setbasetail(self, ctx: commands.Context[commands.Bot], *, newtail: str):
         """Set a custom tail length."""
         newtailsv = SV.parse(newtail)
 
@@ -200,7 +200,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseear(self, ctx: commands.Context[commands.Bot], *, newear):
+    async def setbaseear(self, ctx: commands.Context[commands.Bot], *, newear: str):
         """Set a custom ear height."""
         newearsv = SV.parse(newear)
 

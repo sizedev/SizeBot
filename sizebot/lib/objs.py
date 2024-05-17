@@ -263,7 +263,7 @@ class DigiObject:
         return None
 
     @classmethod
-    def from_JSON(cls, objJson) -> DigiObject:
+    def from_JSON(cls, objJson: Any) -> DigiObject:
         return cls(**objJson)
 
     @classmethod
@@ -273,7 +273,7 @@ class DigiObject:
             raise errors.InvalidObject(argument)
         return obj
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def __repr__(self) -> str:

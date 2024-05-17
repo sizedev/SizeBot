@@ -1,5 +1,6 @@
 from types import CodeType
 from typing import Any
+from collections.abc import Callable
 
 import builtins
 import inspect
@@ -84,12 +85,12 @@ def edir(o: Any) -> Embed:
 
 
 # TODO: CamelCase
-def cachedCopy(fn):
+def cachedCopy(fn: Callable) -> Callable:
     """Decorator that calls the wrapper function the first time it's called, and returns copies of the cached result on all later calls"""
     isCached = False
     r = None
 
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> Any:
         nonlocal isCached
         nonlocal r
         if not isCached:

@@ -1,6 +1,7 @@
 import asyncio
 import logging
 
+import discord
 from discord.utils import get
 from discord.ext import commands
 
@@ -12,7 +13,7 @@ from sizebot.lib.units import SV, WV
 logger = logging.getLogger("sizebot")
 
 
-async def add_user_role(member):
+async def add_user_role(member: discord.Member | discord.User):
     role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
@@ -21,7 +22,7 @@ async def add_user_role(member):
     await member.add_roles(role, reason="Registered as SizeBot user")
 
 
-async def remove_user_role(member):
+async def remove_user_role(member: discord.Member | discord.User):
     role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
@@ -30,7 +31,7 @@ async def remove_user_role(member):
     await member.remove_roles(role, reason="Unregistered as SizeBot user")
 
 
-async def show_next_step(ctx: commands.Context[commands.Bot], userdata: userdb.User, completed=False):
+async def show_next_step(ctx: commands.Context[commands.Bot], userdata: userdb.User, completed: bool = False):
     if completed:
         congrats_message = (
             f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n"
@@ -100,7 +101,7 @@ class RegisterCog(commands.Cog):
             await sentMsg.add_reaction(emojis.cancel)
 
             # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
-            def check(reaction, reacter):
+            def check(reaction: discord.Reaction, reacter: discord.Member | discord.User) -> bool:
                 return reaction.message.id == sentMsg.id \
                     and reacter.id == ctx.author.id \
                     and (
@@ -148,7 +149,7 @@ class RegisterCog(commands.Cog):
         await show_next_step(ctx, userdata)
 
     @register.error
-    async def register_handler(self, ctx: commands.Context[commands.Bot], error):
+    async def register_handler(self, ctx: commands.Context[commands.Bot], error: commands.CommandError):
         # Check if required argument is missing
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
@@ -207,7 +208,7 @@ class RegisterCog(commands.Cog):
             await sentMsg.add_reaction(emojis.cancel)
 
             # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
-            def check(reaction, reacter):
+            def check(reaction: discord.Reaction, reacter: discord.Member | discord.User) -> bool:
                 return reaction.message.id == sentMsg.id \
                     and reacter.id == ctx.author.id \
                     and (
@@ -267,7 +268,7 @@ class RegisterCog(commands.Cog):
             return
 
     @advancedregister.error
-    async def advancedregister_handler(self, ctx: commands.Context[commands.Bot], error):
+    async def advancedregister_handler(self, ctx: commands.Context[commands.Bot], error: commands.CommandError):
         # Check if required argument is missing
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
@@ -298,7 +299,7 @@ class RegisterCog(commands.Cog):
         await sentMsg.add_reaction(emojis.cancel)
 
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
-        def check(reaction, reacter):
+        def check(reaction: discord.Reaction, reacter: discord.Member | discord.User) -> bool:
             return reaction.message.id == sentMsg.id \
                 and reacter.id == user.id \
                 and (
@@ -384,7 +385,7 @@ class RegisterCog(commands.Cog):
         await outmsg.edit(content = outstring)
 
         # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
-        def check(reaction, reacter):
+        def check(reaction: discord.Reaction, reacter: discord.Member | discord.User) -> bool:
             return reaction.message.id == outmsg.id \
                 and reacter.id == ctx.author.id \
                 and (

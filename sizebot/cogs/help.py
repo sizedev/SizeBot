@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import aiohttp
 import logging
 import math
@@ -53,13 +55,13 @@ async def post_report(report_type: str, message: discord.Message, report_text: s
         )
 
 
-def get_cat_cmds(commands):
+def get_cat_cmds(commands: list[commands.Command]) -> dict[str, list[commands.Command]]:
     # Get all non-hidden commands, sorted by name
     commands = (c for c in commands if not c.hidden)
     commands = sorted(commands, key=lambda c: c.name)
 
     # Divide commands into categories
-    commands_by_cat = {cat.cid: [] for cat in categories}
+    commands_by_cat: dict[str, list[commands.Command]] = {cat.cid: [] for cat in categories}
 
     for c in commands:
         cmd_category = c.category or "misc"
@@ -144,7 +146,7 @@ class HelpCog(commands.Cog):
         cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
         await self.send_category_help(ctx, selectedcategory, cat_cmds)
 
-    async def send_category_help(self, ctx: commands.Context[commands.Bot], category, cmds):
+    async def send_category_help(self, ctx: commands.Context[commands.Bot], category: HelpCategory, cmds: list[commands.Command]):
         # Prepare the embed for the category
         embed = Embed(title=f"{category.name} Help [SizeBot {__version__}]")
         embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar)
@@ -176,7 +178,7 @@ class HelpCog(commands.Cog):
         await reactionmenu.message.delete()
         await self.send_summary_help(ctx)
 
-    async def send_command_help(self, ctx: commands.Context[commands.Bot], cmd):
+    async def send_command_help(self, ctx: commands.Context[commands.Bot], cmd: commands.Command):
         """Sends help for a command.
 
         Help

@@ -1,3 +1,5 @@
+from typing import Any
+
 import json
 import base64
 
@@ -11,7 +13,7 @@ from sizebot.lib.units import SV
 units.init()
 
 
-def json_to_base64(j):
+def json_to_base64(j: Any) -> str:
     json_string = json.dumps(j)
     json_bytes = json_string.encode("utf-8")
     base64_bytes = base64.b64encode(json_bytes)

@@ -62,7 +62,7 @@ class Movement:
         return f"*{emojis['blank']}{self.perhour:,.3mu} per hour*" if self.showspeed else ""
 
     @property
-    def string(self):
+    def string(self) -> str:
         return f"{self.emoji} {self.pretty_time_to_travel}, {self.pretty_steps_to_travel}\n{self.pretty_speed}"
 
 

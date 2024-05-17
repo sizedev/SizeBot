@@ -17,7 +17,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def setpicture(self, ctx: commands.Context[commands.Bot], *, url):
+    async def setpicture(self, ctx: commands.Context[commands.Bot], *, url: str):
         """ Set your profile's image. Must be a valid image URL."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.picture_url = url
@@ -31,7 +31,7 @@ class ProfileCog(commands.Cog):
         multiline = True
     )
     @commands.guild_only()
-    async def setdescription(self, ctx: commands.Context[commands.Bot], *, desc):
+    async def setdescription(self, ctx: commands.Context[commands.Bot], *, desc: str):
         """Set your profile description.
 
         Accepts slightly more markdown than usual, see https://leovoel.github.io/embed-visualizer/"""

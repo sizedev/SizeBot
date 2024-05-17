@@ -46,7 +46,7 @@ def parsePath(path: str) -> list[int | str]:
 
 
 class PathDict:
-    def __init__(self, data={}):
+    def __init__(self, data: Any = {}):
         self._values = data
 
     def __getitem__(self, path: str) -> Any:
@@ -92,8 +92,8 @@ class PathDict:
     def toDict(self) -> dict[str, Any]:
         return self._values
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self._values)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return repr(self._values)

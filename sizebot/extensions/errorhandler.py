@@ -2,6 +2,7 @@ import logging
 import sys
 from decimal import InvalidOperation
 
+import discord
 from discord.ext import commands
 
 from sizebot.lib import errors, utils
@@ -13,7 +14,7 @@ logger = logging.getLogger("sizebot")
 
 async def setup(bot: commands.Bot):
     @bot.event
-    async def on_command_error(ctx: commands.Context[commands.Bot], error):
+    async def on_command_error(ctx: commands.Context[commands.Bot], error: commands.CommandError):
         # Get actual error
         err = getattr(error, "original", error)
 
@@ -74,7 +75,7 @@ async def setup(bot: commands.Bot):
             logger.error(utils.format_traceback(error))
 
     @bot.event
-    async def on_error(event, *args, **kwargs):
+    async def on_error(event: discord.DiscordException, *args, **kwargs):
         _, error, _ = sys.exc_info()
         # Get actual error
         err = getattr(error, "original", error)

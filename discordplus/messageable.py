@@ -1,3 +1,5 @@
+from typing import AsyncIterator, Any
+
 from discord.abc import Messageable
 import discord
 
@@ -5,7 +7,7 @@ old_history = Messageable.history
 
 
 # TODO: CamelCase
-def wrapSnowflake(name, kwargs):
+def wrapSnowflake(name: str, kwargs: dict[str, Any]):
     if name not in kwargs:
         return
     value = kwargs[name]
@@ -13,7 +15,7 @@ def wrapSnowflake(name, kwargs):
         kwargs[name] = discord.Snowflake(value)
 
 
-def history(self, **kwargs):
+def history(self: Messageable, **kwargs) -> AsyncIterator[discord.Message]:
     wrapSnowflake("before", kwargs)
     wrapSnowflake("after", kwargs)
     wrapSnowflake("around", kwargs)

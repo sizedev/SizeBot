@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Any
 
 import json
 import logging
@@ -91,7 +92,7 @@ class Change:
             return None
         return self.startTime + self.stopTV
 
-    def __str__(self):
+    def __str__(self) -> str:
         out = f"G: {self.guildid}| U: {self.userid}\n    "
         out += f"ADD/S: {self.addPerSec:.10}, MUL/S:{self.mulPerSec}"
         if self.stopSV is not None:
@@ -100,7 +101,7 @@ class Change:
             out += f", stop after {pretty_time_delta(Decimal(self.stopTV))}"
         return out
 
-    def toJSON(self):
+    def toJSON(self) -> Any:
         return {
             "userid": self.userid,
             "guildid": self.guildid,

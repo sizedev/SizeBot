@@ -1,10 +1,12 @@
+from collections.abc import Callable
+
 from packaging import version
 
 import sizebot
 from sizebot.conf import conf
 
 
-def is_released(v):
+def is_released(v: str) -> bool:
     if v is None:
         return False
     if conf.environment == "development":
@@ -17,8 +19,8 @@ def is_released(v):
     return version.parse(bot_v) >= version.parse(v)
 
 
-def release_on(release_version):
-    def wrapper(fn):
+def release_on(release_version: str) -> Callable:
+    def wrapper(fn: Callable) -> Callable | None:
         active = is_released(release_version)
         if not active:
             return None

@@ -26,10 +26,10 @@ class DigiException(Exception):
     def formatUserMessage(self) -> str:
         return None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return utils.get_fullname(self)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.formatMessage() or self.formatUserMessage() or repr(self)
 
 
@@ -44,10 +44,10 @@ class DigiContextException(Exception):
     async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         return None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return utils.get_fullname(self)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return repr(self)
 
 
@@ -58,7 +58,7 @@ class UserNotFoundException(DigiContextException):
         self.unreg = unreg
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]):
+    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         user = await ctx.guild.fetch_member(self.userid)
         usernick = user.display_name
         returnstr = f"Sorry, {usernick} isn't registered with SizeBot."
@@ -74,17 +74,17 @@ class GuildNotFoundException(DigiException):
         self.guildid = guildid
 
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return f"Guild {self.guildid} not found."
 
 
 class ValueIsZeroException(DigiException):
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return "Value zero received when unexpected."
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return (
             "Nice try.\n"
             "You can't change by a value of zero.")
@@ -92,11 +92,11 @@ class ValueIsZeroException(DigiException):
 
 class ValueIsOneException(DigiException):
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return "Value one received when unexpected."
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return (
             "Nice try.\n"
             "You can't change by a value of one.\n"
@@ -110,7 +110,7 @@ class ChangeMethodInvalidException(DigiContextException):
         self.changemethod = changemethod
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]):
+    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         usernick = ctx.author.display_name
         return f"Sorry, {usernick}! {self.changemethod} is not a valid change method."
 
@@ -119,7 +119,7 @@ class CannotSaveWithoutIDException(DigiException):
     level = logging.CRITICAL
 
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return "Tried to save a user without an ID."
 
 
@@ -127,7 +127,7 @@ class NoPermissionsException(DigiException):
     level = logging.ERROR
 
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return "SizeBot does not have the permssions to perform this action."
 
 
@@ -136,7 +136,7 @@ class InvalidUnitSystemException(DigiException):
         self.unitsystem = unitsystem
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"{self.unitsystem!r} is an unrecognized unit system."
 
 
@@ -146,7 +146,7 @@ class InvalidSizeValue(DigiException):
         self.kind = kind
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"{self.sizevalue!r} is an unrecognized {self.kind} value."
 
 
@@ -155,7 +155,7 @@ class InvalidStat(DigiException):
         self.value = value
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"{self.value!r} is an unrecognized stat."
 
 
@@ -164,7 +164,7 @@ class InvalidStatTag(DigiException):
         self.value = value
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"{self.value!r} is an unrecognized stat tag."
 
 
@@ -173,7 +173,7 @@ class InvalidObject(DigiException):
         self.name = name
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"{self.name!r} is an unrecognized object."
 
 
@@ -182,11 +182,11 @@ class InvalidMacrovisionModelException(DigiException):
         self.name = name
 
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return f"{self.name!r} is an unrecognized Macrovision model."
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"{self.name!r} is an unrecognized Macrovision model."
 
 
@@ -199,11 +199,11 @@ class InvalidMacrovisionViewException(DigiException):
             raise InvalidMacrovisionModelException(self.model)
 
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return f"{self.view!r} is an unrecognized view for the Macrovision model {self.model!r}."
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"{self.view!r} is an unrecognized view for the Macrovision model {self.model!r}."
 
 
@@ -212,36 +212,36 @@ class InvalidRollException(DigiException):
         self.dString = dString
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"Invalid roll string `{self.dString}`."
 
 
 class AdminPermissionException(DigiContextException):
     # TODO: CamelCase
-    async def formatMessage(self, ctx: commands.Context[commands.Bot]):
+    async def formatMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command."
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]):
+    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command. This incident will be reported."
 
 
 class MultilineAsNonFirstCommandException(DigiContextException):
     # TODO: CamelCase
-    async def formatMessage(self, ctx: commands.Context[commands.Bot]):
+    async def formatMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         usernick = ctx.author.display_name
         return f"{usernick} tried to run a multi-line command in the middle of a sequence."
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]):
+    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         return "You are unable to run a command that takes a multi-line argument in the middle of a batch command sequence. Please try running these commands seperately."
 
 
 class ArgumentException(DigiContextException):
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]):
+    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         return f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.signature}`."
 
 
@@ -250,12 +250,12 @@ class UserMessedUpException(DigiContextException):
         self.custommessage = custommessage
 
     # TODO: CamelCase
-    async def formatMessage(self, ctx: commands.Context[commands.Bot]):
+    async def formatMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         usernick = ctx.author.display_name
         return usernick + ": " + self.custommessage
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]):
+    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
         return self.custommessage
 
 
@@ -266,11 +266,11 @@ class ThisShouldNeverHappenException(DigiException):
         self.custommessage = custommessage
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return "This should never happen. Something very wrong has occured."
 
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return self.custommessage
 
 
@@ -280,11 +280,11 @@ class ParseError(DigiException):
         self.t = t
 
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return f"Could not parse {self.s} into a {self.t}."
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"Could not parse {self.s} into a {self.t}."
 
 
@@ -293,9 +293,9 @@ class UnfoundStatException(DigiException):
         self.s = utils.sentence_join(getattr(t, "key", repr(t)) for t in s)
 
     # TODO: CamelCase
-    def formatMessage(self):
+    def formatMessage(self) -> str:
         return f"Could not calculate the {self.s} stat(s)."
 
     # TODO: CamelCase
-    def formatUserMessage(self):
+    def formatUserMessage(self) -> str:
         return f"Could not calculate the {self.s} stat(s)."

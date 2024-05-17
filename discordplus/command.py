@@ -6,13 +6,13 @@ old_init = Command.__init__
 old_short_doc = Command.short_doc
 
 
-def __init__(self, *args, category=None, multiline=False, **kwargs):
+def __init__(self: Command, *args, category: str | None = None, multiline: bool = False, **kwargs):
     self.category = category
     self.multiline = multiline
     old_init(self, *args, **kwargs)
 
 
-async def dispatch_error(self, ctx: commands.Context[commands.Bot], error):
+async def dispatch_error(self: Command, ctx: commands.Context[commands.Bot], error: commands.CommandError):
     ctx.command_failed = True
     cog = self.cog
     try:
@@ -49,12 +49,12 @@ async def dispatch_error(self, ctx: commands.Context[commands.Bot], error):
 
 
 @property
-def short_doc(self):
+def short_doc(self: Command) -> str:
     return old_short_doc.fget(self) or "-"
 
 
 @property
-def alias_string(self):
+def alias_string(self: Command) -> str:
     aliases = ""
     if self.aliases:
         aliases = "*(" + ", ".join(self.aliases) + ")*"
@@ -62,7 +62,7 @@ def alias_string(self):
 
 
 @property
-def name_string(self):
+def name_string(self: Command) -> str:
     return f"**{self.name}**"
 
 

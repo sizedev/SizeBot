@@ -1,4 +1,4 @@
-from discord import Member
+from discord import Member, Role
 
 # List of roles that map to each gender
 gender_roles = {
@@ -35,20 +35,20 @@ pronoun_to_gender = {
 
 
 @property
-def rolelist(self):
+def rolelist(self: Member) -> list[str]:
     return [role.name for role in self.roles]
 
 
-def get_genders(roles):
-    genders = []
+def get_genders(roles: list[Role]) -> list[str]:
+    genders: list[str] = []
     for gender, roles_list in gender_roles.items():
         if any(role.name.lower() in roles_list for role in roles):
             genders.append(gender)
     return genders
 
 
-def get_pronouns(roles):
-    pronouns = []
+def get_pronouns(roles: list[Role]) -> list[str]:
+    pronouns: list[str] = []
     for pronoun, roles_list in pronoun_roles.items():
         if any(role.name.lower() in roles_list for role in roles):
             pronouns.append(pronoun)
@@ -56,7 +56,7 @@ def get_pronouns(roles):
 
 
 @property
-def gender(self):
+def gender(self: Member) -> str | None:
     genders = get_genders(self.roles)
 
     # One gender found
@@ -86,7 +86,7 @@ def gender(self):
 
 
 @property
-def pronouns(self):
+def pronouns(self: Member) -> str | None:
     pronouns = get_pronouns(self.roles)
 
     # One pronoun found

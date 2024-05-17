@@ -8,7 +8,7 @@ from sizebot.lib import errors, userdb
 logger = logging.getLogger("sizebot")
 
 
-async def on_message(m):
+async def on_message(m: discord.Message):
     """Is this user active?"""
     if m.author.bot:
         return

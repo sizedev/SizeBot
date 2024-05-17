@@ -1,6 +1,6 @@
 from __future__ import annotations
-from typing import Any, cast
-from collections.abc import Mapping
+from typing import Any, Type, cast, TypeVar
+from collections.abc import Iterator, Mapping
 
 import importlib.resources as pkg_resources
 import json
@@ -205,7 +205,7 @@ class Unit():
     def id(self) -> str:
         return self.symbol or self.name or self.namePlural
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.name is not None and self.symbol is not None:
             return f"{self.name.strip()} ({self.symbol.strip()})"
         if self.name is not None:
@@ -214,10 +214,10 @@ class Unit():
             return self.symbol.strip()
         return "?"
 
-    def __lt__(self, other):
+    def __lt__(self, other: SystemUnit) -> bool:
         return self.factor < other.factor
 
-    def __eq__(self, other):
+    def __eq__(self, other: SystemUnit) -> bool:
         return self.factor == other.factor
 
 
@@ -280,13 +280,13 @@ class UnitRegistry(Mapping):
         except StopIteration:
             raise KeyError(key)
 
-    def __contains__(self, name):
+    def __contains__(self, name: str) -> bool:
         return self[name] is not None
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Unit]:
         return iter(unit for unit in self._units if not unit.hidden)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._units)
 
     def add_unit(self, unit: Unit):
@@ -374,11 +374,14 @@ class SystemUnit():
             return self._trigger
         return self.factor
 
-    def __lt__(self, other):
+    def __lt__(self, other: SystemUnit) -> bool:
         return self.trigger < other.trigger
 
-    def __eq__(self, other):
+    def __eq__(self, other: SystemUnit) -> bool:
         return self.factor == other.factor
+
+
+DimType = TypeVar("DimType", bound="Dimension")
 
 
 class Dimension(Decimal):
@@ -414,7 +417,7 @@ class Dimension(Decimal):
         return formatted
 
     @classmethod
-    def parse(cls, s: str) -> Dimension:
+    def parse(cls: Type[DimType], s: str) -> DimType:
         valueStr, unitStr = cls.get_quantity_pair(s)
         kinds = {"SV": "size", "WV": "weight", "TV": "time"}
         kind = kinds.get(cls.__name__, cls.__name__)
@@ -430,11 +433,11 @@ class Dimension(Decimal):
         return cls(baseUnit)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> Dimension:
+    async def convert(cls: Type[DimType], ctx: commands.Context[commands.Bot], argument: str) -> DimType:
         return cls.parse(argument)
 
     @classmethod
-    def get_quantity_pair(cls, s) -> tuple[str | None, str | None]:
+    def get_quantity_pair(cls, s: str) -> tuple[str | None, str | None]:
         raise NotImplementedError
 
     def to_best_unit(self, sysname: str, *args, **kwargs) -> str:
@@ -494,7 +497,7 @@ class Dimension(Decimal):
             cls._systems[systemname] = system
         return system
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{type(self).__name__}('{self}')"
 
 

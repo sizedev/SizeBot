@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 
-def is_mod():
+def is_mod() -> bool:
     async def predicate(ctx: commands.Context[commands.Bot]) -> bool:
         author = ctx.author
         modness = False
