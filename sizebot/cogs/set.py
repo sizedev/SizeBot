@@ -1,11 +1,12 @@
 import logging
+from typing import Annotated
 
 import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, userdb, nickmanager
-from sizebot.lib.diff import Diff, Rate
+from sizebot.lib.diff import Rate
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
@@ -32,7 +33,6 @@ class SetCog(commands.Cog):
         # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
         # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, and the user is an admin, let them know they may need to fix permissions
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.nickname = newnick
         userdb.save(userdata)
 
@@ -46,11 +46,10 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setspecies(self, ctx: commands.Context[commands.Bot], *, newtag: str):
+    async def setspecies(self, ctx: commands.Context[commands.Bot], *, newspecies: str):
         """Change species."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.species = newtag
+        userdata.species = newspecies
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s species is now a {userdata.species}.")
@@ -66,7 +65,6 @@ class SetCog(commands.Cog):
     async def resetspecies(self, ctx: commands.Context[commands.Bot]):
         """Remove species."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.species = None
         userdb.save(userdata)
 
@@ -90,7 +88,6 @@ class SetCog(commands.Cog):
             return
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.display = newdisp
         userdb.save(userdata)
 
@@ -119,7 +116,6 @@ class SetCog(commands.Cog):
         newsys = systemmap[newsys]
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.unitsystem = newsys
         completed_registration = userdata.complete_step("setsystem")
         userdb.save(userdata)
@@ -138,7 +134,6 @@ class SetCog(commands.Cog):
     async def setheight(self, ctx: commands.Context[commands.Bot], *, newheight: SV):
         """Change height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.height = newheight
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
@@ -153,20 +148,16 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setscale(self, ctx: commands.Context[commands.Bot], *, newscale: str):
+    async def setscale(self, ctx: commands.Context[commands.Bot], *, newscale: Annotated[Decimal, parse_scale] | str):
         """Change height by scale."""
-        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         if newscale == "banana":
             await ctx.send("Bananas are already the default scale for all things. 🍌")
             logger.log(EGG, "Bananas used for scale.")
+            return
 
-        try:
-            scale = parse_scale(newscale)
-        except errors.UserMessedUpException:
-            raise
-
-        userdata.height = userdata.baseheight * scale
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+        userdata.height = userdata.baseheight * newscale
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
@@ -183,7 +174,6 @@ class SetCog(commands.Cog):
     async def setso(self, ctx: commands.Context[commands.Bot], sv1: discord.Member | FakePlayer | SV, sv2: SV):
         """Change height by scale."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         sv1 = userdb.load_or_fake(sv1).height  # This feels like a hack. Is this awful?
         userdata.scale = sv1 / sv2
         userdb.save(userdata)
@@ -199,28 +189,23 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def copyheight(self, ctx: commands.Context[commands.Bot], user: discord.Member, *, newscale: str = "1"):
+    async def copyheight(self, ctx: commands.Context[commands.Bot], from_user: discord.Member, *, newscale: Annotated[Decimal, parse_scale] = Decimal(1)):
         """Be the size of another user, modified by a factor.
 
         Examples:
         `&copyheight @User`
         `&copyheight @User 10`
         """
-        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        otheruser = userdb.load(ctx.guild.id, user.id)
+        to_userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+        from_userdata = userdb.load(ctx.guild.id, from_user.id)
+        to_userdata.height = from_userdata.height * newscale
+        completed_registration = to_userdata.complete_step("setheight")
+        userdb.save(to_userdata)
 
-        userdata.height = otheruser.height
-
-        scale = parse_scale(newscale)
-
-        userdata.height = userdata.height * scale
-        completed_registration = userdata.complete_step("setheight")
-        userdb.save(userdata)
-
-        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
+        await ctx.send(f"{to_userdata.nickname} is now {to_userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await show_next_step(ctx, userdata, completed=completed_registration)
+        await show_next_step(ctx, to_userdata, completed=completed_registration)
 
     @commands.command(
         aliases = ["resetsize", "reset", "resetscale"],
@@ -274,24 +259,16 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setrandomscale(self, ctx: commands.Context[commands.Bot], minscale: str, maxscale: str):
+    async def setrandomscale(self, ctx: commands.Context[commands.Bot], minscale: Annotated[Decimal, parse_scale], maxscale: Annotated[Decimal, parse_scale]):
         """Change scale to a random value."""
-
-        try:
-            minscale = parse_scale(minscale)
-            maxscale = parse_scale(maxscale)
-        except errors.UserMessedUpException:
-            raise
-
         if minscale < 0:
-            minscale = 0
+            minscale = Decimal(0)
         if maxscale < 0:
-            maxscale = 0
+            minscale = Decimal(0)
 
         newscale = Decimal(randrange_log(float(minscale), float(maxscale)))
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.scale = newscale
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
@@ -344,7 +321,6 @@ class SetCog(commands.Cog):
     async def setweight(self, ctx: commands.Context[commands.Bot], *, newweight: WV):
         """Set your current weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.weight = newweight
         completed_registration = userdata.complete_step("setweight")
         userdb.save(userdata)
@@ -360,7 +336,6 @@ class SetCog(commands.Cog):
     )
     async def setfoot(self, ctx: commands.Context[commands.Bot], *, newfoot: SV):
         """Set your current foot length."""
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.footlength = SV(newfoot * userdata.viewscale)
         userdb.save(userdata)
@@ -386,12 +361,8 @@ class SetCog(commands.Cog):
         `&setshoe 10W`
         `&setshoe 12C`
         """
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        newfoot = from_shoe_size(newshoe)
-
-        userdata.footlength = SV(newfoot * userdata.viewscale)
+        userdata.footlength = SV(from_shoe_size(newshoe) * userdata.viewscale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({to_shoe_size(userdata.footlength, 'm')}), "
@@ -450,10 +421,7 @@ class SetCog(commands.Cog):
     async def sethair(self, ctx: commands.Context[commands.Bot], *, newhair: SV):
         """Set your current hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        newhairsv = SV(newhair * userdata.viewscale)
-
-        userdata.hairlength = newhairsv
+        userdata.hairlength = SV(newhair * userdata.viewscale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base hair length is now {userdata.hairlength:mu} long, "
@@ -467,10 +435,7 @@ class SetCog(commands.Cog):
     async def settail(self, ctx: commands.Context[commands.Bot], *, newtail: SV):
         """Set your current tail length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        newtailsv = SV(newtail * userdata.viewscale)
-
-        userdata.taillength = newtailsv
+        userdata.taillength = SV(newtail * userdata.viewscale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base tail length is now {userdata.taillength:mu} long, "
@@ -499,10 +464,7 @@ class SetCog(commands.Cog):
     async def setear(self, ctx: commands.Context[commands.Bot], *, newear: SV):
         """Set your current ear heightear."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        newearsv = SV(newear * userdata.viewscale)
-
-        userdata.earheight = newearsv
+        userdata.earheight = SV(newear * userdata.viewscale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base ear height is now {userdata.earheight:mu} long, "
@@ -531,9 +493,7 @@ class SetCog(commands.Cog):
     )
     async def setstrength(self, ctx: commands.Context[commands.Bot], *, newstrength: WV):
         """Set your current lift/carry strength."""
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.liftstrength = WV(newstrength * (userdata.viewscale ** 3))
         userdb.save(userdata)
 
@@ -562,7 +522,6 @@ class SetCog(commands.Cog):
     )
     async def setwalk(self, ctx: commands.Context[commands.Bot], *, newwalk: Rate):
         """Set your current walk speed."""
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.walkperhour = newwalk * userdata.viewscale
         userdb.save(userdata)
@@ -591,7 +550,6 @@ class SetCog(commands.Cog):
     )
     async def setrun(self, ctx: commands.Context[commands.Bot], *, newrun: Rate):
         """Set your current run speed."""
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.runperhour = newrun * userdata.viewscale
         userdb.save(userdata)
@@ -620,7 +578,6 @@ class SetCog(commands.Cog):
     )
     async def setswim(self, ctx: commands.Context[commands.Bot], *, newswim: Rate):
         """Set your current swim speed."""
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.swimperhour = newswim * userdata.viewscale
         userdb.save(userdata)

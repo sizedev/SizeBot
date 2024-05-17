@@ -1,4 +1,4 @@
-from typing import Any, Generator, Hashable, Sequence, TypeVar
+from typing import Annotated, Any, Generator, Hashable, Sequence, TypeVar
 from collections.abc import Callable, Iterable, Iterator
 
 import inspect
@@ -473,28 +473,27 @@ def replace_all_sciexp(newscale: str) -> str:
     return RE_SCI_EXP.sub(replace_sciexp, newscale)
 
 
-def parse_scale(scalestr: str) -> Decimal:
+def parse_scale(s: str) -> Decimal:
     re_scale_emoji = r"<:sb([\d\.eE]+)_?([\d\.eE]+)?:\d+>"
-    if match := re.match(re_scale_emoji, scalestr):
+    if match := re.match(re_scale_emoji, s):
         if match.group(2):
             num, denom = match.group(1, 2)
             scale = Decimal(f"{num}/{denom}")
         else:
             scale = Decimal(match.group(1))
     else:
-        newscale = replace_all_sciexp(scalestr)
+        newscale = replace_all_sciexp(s)
         re_scale = r"x?([^:/]+)[:/]?([^:/]*)?x?"
         if m := re.match(re_scale, newscale):
             multiplier = m.group(1)
             factor = m.group(2) if m.group(2) else 1
         else:
-            raise errors.UserMessedUpException(f"{scalestr} is not a valid scale factor.")
+            raise errors.UserMessedUpException(f"{s} is not a valid scale factor.")
 
         try:
             scale = Decimal(multiplier) / Decimal(factor)
         except Exception:
-            raise errors.UserMessedUpException(f"{scalestr} is not a valid scale factor.")
-
+            raise errors.UserMessedUpException(f"{s} is not a valid scale factor.")
     return scale
 
 
