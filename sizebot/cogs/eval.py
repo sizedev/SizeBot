@@ -7,6 +7,7 @@ from discord.ext import commands
 from sizebot.lib import utils
 from sizebot.lib.constants import emojis
 from sizebot.lib.eval import runEval
+from sizebot.lib.types import BotContext
 
 
 logger = logging.getLogger("sizebot")
@@ -21,7 +22,7 @@ class EvalCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def eval(self, ctx: commands.Context[commands.Bot], *, evalStr: str):
+    async def eval(self, ctx: BotContext, *, evalStr: str):
         """Evaluate a Python expression."""
         evalStr = utils.remove_code_block(evalStr)
 
@@ -56,7 +57,7 @@ class EvalCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def evil(self, ctx: commands.Context[commands.Bot], *, evalStr: str):
+    async def evil(self, ctx: BotContext, *, evalStr: str):
         """Evaluate a Python expression, but evilly."""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay = 0)

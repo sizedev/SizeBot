@@ -12,6 +12,7 @@ from sizebot.lib.units import SV
 from sizebot.conf import conf
 from sizebot.lib import userdb, nickmanager
 from sizebot.lib.diff import Diff
+from sizebot.lib.types import BotContext
 
 logger = logging.getLogger("sizebot")
 
@@ -106,7 +107,7 @@ class TriggerCog(commands.Cog):
     @commands.command(
         category = "trigger"
     )
-    async def triggers(self, ctx: commands.Context[commands.Bot]):
+    async def triggers(self, ctx: BotContext):
         """List your trigger words."""
         userid = ctx.author.id
         userdata = userdb.load(ctx.guild.id, userid)
@@ -117,7 +118,7 @@ class TriggerCog(commands.Cog):
     @commands.command(
         category = "trigger"
     )
-    async def exporttriggers(self, ctx: commands.Context[commands.Bot]):
+    async def exporttriggers(self, ctx: BotContext):
         """Export your trigger words."""
         userid = ctx.author.id
         userdata = userdb.load(ctx.guild.id, userid)
@@ -129,7 +130,7 @@ class TriggerCog(commands.Cog):
         usage = "<trigger> <diff>",
         category = "trigger"
     )
-    async def settrigger(self, ctx: commands.Context[commands.Bot], trigger: str, *, diff: Diff):
+    async def settrigger(self, ctx: BotContext, trigger: str, *, diff: Diff):
         """Set a trigger word.
 
         #ALPHA#
@@ -142,7 +143,7 @@ class TriggerCog(commands.Cog):
         category = "trigger",
         aliases = ["resettrigger", "unsettrigger", "removetrigger"]
     )
-    async def cleartrigger(self, ctx: commands.Context[commands.Bot], *, trigger: str):
+    async def cleartrigger(self, ctx: BotContext, *, trigger: str):
         """Remove a trigger word."""
         unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send(f"Removed trigger word {trigger!r}.")
@@ -152,7 +153,7 @@ class TriggerCog(commands.Cog):
         category = "trigger",
         aliases = ["resetalltriggers", "unsetalltriggers", "removealltriggers"]
     )
-    async def clearalltriggers(self, ctx: commands.Context[commands.Bot]):
+    async def clearalltriggers(self, ctx: BotContext):
         """Remove all your trigger words."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         for trigger in userdata.triggers.keys():

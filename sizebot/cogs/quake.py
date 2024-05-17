@@ -9,6 +9,7 @@ from sizebot.lib import userdb
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.quake import breath_joules, heartbeat_joules, joules_to_mag, jump_joules, mag_to_name, mag_to_radius, poke_joules, step_joules, stomp_joules, type_joules
 from sizebot.lib.stats import StatBox
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
 from sizebot.lib.userdb import load_or_fake, FakePlayer
 from sizebot.lib.errors import UserMessedUpException
@@ -105,7 +106,7 @@ class QuakeCog(commands.Cog):
         aliases = ["quake"],
         usage = "[type] [user/height]",
         category = "stats")
-    async def earthquake(self, ctx: commands.Context[commands.Bot], quake_type: QuakeType | None = "step", user: discord.Member | FakePlayer | SV = None):
+    async def earthquake(self, ctx: BotContext, quake_type: QuakeType | None = "step", user: discord.Member | FakePlayer | SV = None):
         """See what quakes would be caused by your steps.\n#ACC#"""
         if user is None:
             user = ctx.author
@@ -117,7 +118,7 @@ class QuakeCog(commands.Cog):
         aliases = ["quakestats"],
         usage = "[user/height]",
         category = "stats")
-    async def earthquakestats(self, ctx: commands.Context[commands.Bot], user: discord.Member | FakePlayer | SV = None):
+    async def earthquakestats(self, ctx: BotContext, user: discord.Member | FakePlayer | SV = None):
         """See what quakes would be caused by your steps.\n#ACC#"""
         if user is None:
             user = ctx.author
@@ -129,7 +130,7 @@ class QuakeCog(commands.Cog):
         aliases = ["quakecomp"],
         usage = "[user] [type]",
         category = "stats")
-    async def quakecompare(self, ctx: commands.Context[commands.Bot], user: discord.Member | FakePlayer | SV, quake_type: QuakeType | None = "step"):
+    async def quakecompare(self, ctx: BotContext, user: discord.Member | FakePlayer | SV, quake_type: QuakeType | None = "step"):
         """See what quakes would be caused by someone else's steps.\n#ACC#"""
         self_user = load_or_fake(ctx.author)
         userdata = load_or_fake(user)
@@ -143,7 +144,7 @@ class QuakeCog(commands.Cog):
         aliases = [],
         usage = "<dist> [user/height]",
         category = "stats")
-    async def quakewalk(self, ctx: commands.Context[commands.Bot], dist: SV, user: discord.Member | FakePlayer | SV = None):
+    async def quakewalk(self, ctx: BotContext, dist: SV, user: discord.Member | FakePlayer | SV = None):
         """Walk a distance and cause some quakes.\n#ACC#"""
         if user is None:
             user = ctx.author
@@ -175,7 +176,7 @@ class QuakeCog(commands.Cog):
         aliases = [],
         usage = "<string>",
         category = "stats")
-    async def quaketype(self, ctx: commands.Context[commands.Bot], s: str):
+    async def quaketype(self, ctx: BotContext, s: str):
         """Type a sentence and cause some quakes.\n#ACC#"""
         guildid = ctx.guild.id
         userid = ctx.author.id

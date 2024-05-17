@@ -10,6 +10,7 @@ from sizebot.lib import userdb
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpException, UserNotFoundException, ValueIsZeroException
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
 
 
@@ -27,7 +28,7 @@ class ScaleTypeCog(commands.Cog):
         category = "scalestep",
         usage = "<change per characters>"
     )
-    async def settalkscale(self, ctx: commands.Context[commands.Bot], *, change: str):
+    async def settalkscale(self, ctx: BotContext, *, change: str):
         """Set the amount you scale per character.
 
         Sets the amount that you scale for each character you type.
@@ -84,7 +85,7 @@ class ScaleTypeCog(commands.Cog):
                    "cleartypescale", "unsettypescale", "resetscaletype", "clearscaletype", "unsetscaletype",
                    "resettypescale"]
     )
-    async def resettalkscale(self, ctx: commands.Context[commands.Bot]):
+    async def resettalkscale(self, ctx: BotContext):
         """Clear your talk-scale amount."""
 
         guildid = ctx.guild.id

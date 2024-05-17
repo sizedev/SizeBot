@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Generator, Hashable, Sequence, TypeVar
+from typing import Any, Generator, Hashable, Sequence, TypeVar
 from collections.abc import Callable, Iterable, Iterator
 
 import inspect
@@ -14,6 +14,7 @@ from discord.ext import commands
 
 from sizebot.lib import errors
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.types import BotContext
 
 re_num = r"\d+\.?\d*"
 
@@ -317,7 +318,7 @@ def find_one(iterator: Iterator) -> Any | None:
     return val
 
 
-async def parse_many(ctx: commands.Context[commands.Bot], arg: str, types: list[commands.Converter], default: Any = None) -> Any:
+async def parse_many(ctx: BotContext, arg: str, types: list[commands.Converter], default: Any = None) -> Any:
     for t in types:
         try:
             return await t.convert(ctx, arg)

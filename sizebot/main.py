@@ -6,7 +6,6 @@ import sys
 from datetime import datetime, timedelta
 
 import discord
-from discord.ext import commands
 from discord.ext.commands import Bot
 
 from digiformatter import styles, logger as digilogger
@@ -18,6 +17,7 @@ from sizebot.conf import conf
 from sizebot.lib import language, objs, paths, pokemon, status, units, utils, nickmanager
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
+from sizebot.lib.types import BotContext
 from sizebot.lib.utils import truncate
 from sizebot.plugins import active, monika
 
@@ -167,7 +167,7 @@ def main():
         logger.error("SizeBot has been reconnected to Discord.")
 
     @bot.event
-    async def on_command(ctx: commands.Context[commands.Bot]):
+    async def on_command(ctx: BotContext):
         guild = truncate(ctx.guild.name, 20) if (hasattr(ctx, "guild") and ctx.guild is not None) else "DM"
         logger.log(CMD, f"G {guild}, U {ctx.message.author.name}: {ctx.message.content}")
 

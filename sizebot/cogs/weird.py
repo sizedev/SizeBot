@@ -11,6 +11,7 @@ from discord.ext import commands
 
 from sizebot import __version__
 from sizebot.lib.constants import emojis
+from sizebot.lib.types import BotContext
 
 
 re_hex = re.compile(r"#?((?:[0-9A-Fa-f]{3}){1,2})")
@@ -31,7 +32,7 @@ class WeirdCog(commands.Cog):
         usage = "[hex/rgb/hsv/hsl/cymk] <colorcode>",
         category = "fun"
     )
-    async def color(self, ctx: commands.Context[commands.Bot], arg1: str, *, arg2: str = None):
+    async def color(self, ctx: BotContext, arg1: str, *, arg2: str = None):
         """Get info about a color."""
         outmessage = await ctx.send(emojis.loading)
 
@@ -138,7 +139,7 @@ class WeirdCog(commands.Cog):
         usage = "<latex...>",
         category = "fun"
     )
-    async def math(self, ctx: commands.Context[commands.Bot], *, equation: str):
+    async def math(self, ctx: BotContext, *, equation: str):
         """Render a LaTeX string as an image."""
         full_url = R"https://latex.codecogs.com/png.latex?" + quote(R"\inline&space;\huge&space;{\color{White}&space;") + quote(equation) + "}"
 

@@ -1,8 +1,10 @@
 from discord.ext import commands
 
+from sizebot.lib.types import BotContext
+
 
 # Ignore Tupperboxes being mistaken for commands.
-def ignore_tupperbox(ctx: commands.Context[commands.Bot]) -> bool:
+def ignore_tupperbox(ctx: BotContext) -> bool:
     return not (ctx.message.content.startswith(ctx.prefix) and ctx.message.content.endswith(ctx.prefix))
 
 

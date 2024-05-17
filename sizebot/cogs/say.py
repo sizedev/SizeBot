@@ -7,6 +7,7 @@ from discord.ext import commands
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
 from sizebot.lib.errors import UserNotFoundException
 
@@ -266,7 +267,7 @@ class SayCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def say(self, ctx: commands.Context[commands.Bot], *, message: str):
+    async def say(self, ctx: BotContext, *, message: str):
         """Talk to the world!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
@@ -291,7 +292,7 @@ class SayCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def sayto(self, ctx: commands.Context[commands.Bot], memberOrHeight: discord.Member | SV, *, message: str):
+    async def sayto(self, ctx: BotContext, memberOrHeight: discord.Member | SV, *, message: str):
         """Talk to someone!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)

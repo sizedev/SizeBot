@@ -1,6 +1,7 @@
 from discord.ext import commands
 
 from sizebot.lib.statproxy import StatProxy
+from sizebot.lib.types import BotContext
 
 
 class TestCog(commands.Cog):
@@ -12,7 +13,7 @@ class TestCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    async def test(self, ctx: commands.Context[commands.Bot], stat: StatProxy | str):
+    async def test(self, ctx: BotContext, stat: StatProxy | str):
         if isinstance(stat, StatProxy):
             await ctx.send(f"You input **\"{stat.name}\"**\nIt's a **{'tag' if stat.tag else 'stat'}.**")
         else:

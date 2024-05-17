@@ -17,6 +17,7 @@ from sizebot.lib import checks, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.menu import Menu
 from sizebot.lib.stats import statmap
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
@@ -79,7 +80,7 @@ class HelpCog(commands.Cog):
     @commands.command(
         category = "help"
     )
-    async def units(self, ctx: commands.Context[commands.Bot]):
+    async def units(self, ctx: BotContext):
         """Get a list of the various units SizeBot accepts."""
         heightobjectunits = [su.unit for su in SV._systems["o"]._systemunits]
         weightobjectunits = [su.unit for su in WV._systems["o"]._systemunits]
@@ -97,7 +98,7 @@ class HelpCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    async def send_summary_help(self, ctx: commands.Context[commands.Bot]):
+    async def send_summary_help(self, ctx: BotContext):
         """Sends help summary.
 
         Help
@@ -146,7 +147,7 @@ class HelpCog(commands.Cog):
         cat_cmds = commands_by_cat.get(selectedcategory.cid, [])
         await self.send_category_help(ctx, selectedcategory, cat_cmds)
 
-    async def send_category_help(self, ctx: commands.Context[commands.Bot], category: HelpCategory, cmds: list[commands.Command]):
+    async def send_category_help(self, ctx: BotContext, category: HelpCategory, cmds: list[commands.Command]):
         # Prepare the embed for the category
         embed = Embed(title=f"{category.name} Help [SizeBot {__version__}]")
         embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar)
@@ -178,7 +179,7 @@ class HelpCog(commands.Cog):
         await reactionmenu.message.delete()
         await self.send_summary_help(ctx)
 
-    async def send_command_help(self, ctx: commands.Context[commands.Bot], cmd: commands.Command):
+    async def send_command_help(self, ctx: BotContext, cmd: commands.Command):
         """Sends help for a command.
 
         Help
@@ -225,7 +226,7 @@ class HelpCog(commands.Cog):
         category = "help"
     )
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def help(self, ctx: commands.Context[commands.Bot], cmdName: str = None):
+    async def help(self, ctx: BotContext, cmdName: str = None):
         """[cmd.help[0]]
 
         [cmd.help[2]]
@@ -246,7 +247,7 @@ class HelpCog(commands.Cog):
     @commands.command(
         category = "help"
     )
-    async def about(self, ctx: commands.Context[commands.Bot]):
+    async def about(self, ctx: BotContext):
         """Get the credits and some facts about SizeBot."""
         now = datetime.now()
         embed = Embed(title = "SizeBot3½", description = "Credits", color = colors.cyan)
@@ -270,7 +271,7 @@ class HelpCog(commands.Cog):
         aliases = ["fund"],
         category = "help"
     )
-    async def donate(self, ctx: commands.Context[commands.Bot]):
+    async def donate(self, ctx: BotContext):
         """Give some monetary love to your favorite bot developer!"""
         await ctx.send(
             f"<@{ctx.author.id}>\n"
@@ -286,7 +287,7 @@ class HelpCog(commands.Cog):
         multiline = True
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def bug(self, ctx: commands.Context[commands.Bot], *, message: str):
+    async def bug(self, ctx: BotContext, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
         await post_report("Bug report", ctx.message, message)
@@ -298,7 +299,7 @@ class HelpCog(commands.Cog):
         multiline = True
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def suggest(self, ctx: commands.Context[commands.Bot], *, message: str):
+    async def suggest(self, ctx: BotContext, *, message: str):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
         await post_report("Feature request", ctx.message, message)
@@ -313,7 +314,7 @@ class HelpCog(commands.Cog):
         multiline = True
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def suggestobject(self, ctx: commands.Context[commands.Bot], *, message: str):
+    async def suggestobject(self, ctx: BotContext, *, message: str):
         """Suggest an object for SizeBot! (See help.)
 
         Suggest an object to be part of the lineup for commands like &natstats, &objcompare, and future fun!
@@ -330,7 +331,7 @@ class HelpCog(commands.Cog):
         category = "help"
     )
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def ping(self, ctx: commands.Context[commands.Bot], subcommand: str = ""):
+    async def ping(self, ctx: BotContext, subcommand: str = ""):
         """Pong!
 
         Check SizeBot's current latency.
@@ -351,7 +352,7 @@ class HelpCog(commands.Cog):
         hidden = True
     )
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def pong(self, ctx: commands.Context[commands.Bot], subcommand: str = ""):
+    async def pong(self, ctx: BotContext, subcommand: str = ""):
         """Ping!"""
         waitMsg = await ctx.send(emojis.loading)
 
@@ -365,7 +366,7 @@ class HelpCog(commands.Cog):
     @commands.command(
         category = "help"
     )
-    async def changelog(self, ctx: commands.Context[commands.Bot]):
+    async def changelog(self, ctx: BotContext):
         """See what's new in the latest SizeBot!"""
         current_version = version.parse(__version__)
 
@@ -376,14 +377,14 @@ class HelpCog(commands.Cog):
         hidden = True
     )
     @checks.is_mod()
-    async def usercount(self, ctx: commands.Context[commands.Bot]):
+    async def usercount(self, ctx: BotContext):
         """How many users are registered?"""
         await ctx.send(f"There are **{userdb.count_users()}** users of SizeBot3½, with **{userdb.count_profiles()}** profiles created, <@!{ctx.message.author.id}>.")
 
     @commands.command(
         category = "help"
     )
-    async def invite(self, ctx: commands.Context[commands.Bot]):
+    async def invite(self, ctx: BotContext):
         """Request an invite for SizeBot!"""
         await ctx.send("## Thank you for the interest in the bot!\n"
                        "You can invite SizeBot to your server now!\n"

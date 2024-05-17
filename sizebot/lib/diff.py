@@ -39,11 +39,10 @@ from typing import Literal, Any
 
 import re
 
-from discord.ext import commands
-
 from sizebot.lib.errors import InvalidSizeValue, ParseError, ThisShouldNeverHappenException
 from sizebot.lib.utils import regexbuild, try_or_none
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, TV
 
 add_prefixes = ["+", "add", "plus"]
@@ -156,7 +155,7 @@ class Diff:
         return cls(changetype, amount)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> Diff:
+    async def convert(cls, ctx: BotContext, argument: str) -> Diff:
         return cls.parse(argument)
 
 
@@ -222,7 +221,7 @@ class Rate:
         return cls(diff, time)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> Rate:
+    async def convert(cls, ctx: BotContext, argument: str) -> Rate:
         return cls.parse(argument)
 
 
@@ -294,7 +293,7 @@ class LimitedRate:
         return cls(rate, stop)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> LimitedRate:
+    async def convert(cls, ctx: BotContext, argument: str) -> LimitedRate:
         return cls.parse(argument)
 
 

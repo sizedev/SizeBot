@@ -3,6 +3,7 @@ import logging
 from discord.ext import commands
 
 from sizebot.lib import roller
+from sizebot.lib.types import BotContext
 
 logger = logging.getLogger("sizebot")
 
@@ -19,7 +20,7 @@ class RollCog(commands.Cog):
         category = "fun"
 
     )
-    async def roll(self, ctx: commands.Context[commands.Bot], *, dString: str):
+    async def roll(self, ctx: BotContext, *, dString: str):
         """Verbose die rolling command.
 
         This command is used to roll some dice.
@@ -51,7 +52,7 @@ class RollCog(commands.Cog):
         usage="<dice>d<sides>[d/k/dl/kh][num]",
         category = "fun"
     )
-    async def r(self, ctx: commands.Context[commands.Bot], *, dString: str):
+    async def r(self, ctx: BotContext, *, dString: str):
         """Simplified die rolling command.
 
         This command is used to roll some dice.

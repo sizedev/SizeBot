@@ -7,6 +7,7 @@ from discord.ext import commands
 
 from sizebot.lib import utils, paths
 from sizebot.lib.constants import ids
+from sizebot.lib.types import BotContext
 
 logger = logging.getLogger("sizebot")
 
@@ -85,7 +86,7 @@ class WinksCog(commands.Cog):
         hidden = True,
         category = "misc"
     )
-    async def winkcount(self, ctx: commands.Context[commands.Bot]):
+    async def winkcount(self, ctx: BotContext):
         winkcount = get_winks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
         logger.info(f"Wink count requested by {ctx.author.nickname}! Current count: {winkcount} times!")

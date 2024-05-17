@@ -11,6 +11,7 @@ from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, DigiContextException, ValueIsZeroException
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.stats import StatBox
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
 from sizebot.lib.utils import try_int
 
@@ -96,7 +97,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
-    async def scalewalk(self, ctx: commands.Context[commands.Bot], change: Diff, dist: SV, flag: str | None = None):
+    async def scalewalk(self, ctx: BotContext, change: Diff, dist: SV, flag: str | None = None):
         """Walk a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
@@ -148,7 +149,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
-    async def scalerun(self, ctx: commands.Context[commands.Bot], change: Diff, dist: SV, flag: str | None = None):
+    async def scalerun(self, ctx: BotContext, change: Diff, dist: SV, flag: str | None = None):
         """Run a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
 
@@ -201,7 +202,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step>"
     )
-    async def setstepscale(self, ctx: commands.Context[commands.Bot], *, change: Diff):
+    async def setstepscale(self, ctx: BotContext, *, change: Diff):
         """Set the amount you scale per step, for use with `&step`.
 
         Sets the amount that you scale for each `&step` you take.
@@ -228,7 +229,7 @@ class ScaleWalkCog(commands.Cog):
                    "clearwalkscale", "unsetwalkscale", "resetscalewalk", "clearscalewalk", "unsetscalewalk",
                    "resetwalkscale"]
     )
-    async def resetstepscale(self, ctx: commands.Context[commands.Bot]):
+    async def resetstepscale(self, ctx: BotContext):
         """Clear your step-scale amount, for use with `&step`."""
 
         guildid = ctx.guild.id
@@ -242,7 +243,7 @@ class ScaleWalkCog(commands.Cog):
     @commands.command(
         category = "scalestep",
     )
-    async def step(self, ctx: commands.Context[commands.Bot], steps: int | None = None):
+    async def step(self, ctx: BotContext, steps: int | None = None):
         """Step a certain number of times, scaling by the amount set in `&setscalestep`.
 
         Scales you the amount that you would change depending on the scale factor you

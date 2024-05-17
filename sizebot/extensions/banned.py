@@ -1,8 +1,10 @@
 import discord
 from discord.ext import commands
 
+from sizebot.lib.types import BotContext
 
-def den_guild_ban(ctx: commands.Context[commands.Bot]) -> bool:
+
+def den_guild_ban(ctx: BotContext) -> bool:
     member = ctx.author
     isMember = isinstance(member, discord.Member)
     if not isMember:

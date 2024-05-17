@@ -12,17 +12,16 @@ import arrow
 from arrow.arrow import Arrow
 
 import discord
-from discord.ext import commands
 
 import sizebot.data
 from sizebot.lib import errors, paths
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, Rate
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, TV, WV
-from sizebot.lib.utils import is_url, truncate
+from sizebot.lib.utils import AliasMap, parse_scale, truthy, is_url, truncate
 from sizebot.lib.errors import InvalidSizeValue, InvalidStat
 from sizebot.lib.shoesize import from_shoe_size
-from sizebot.lib.utils import AliasMap, parse_scale, truthy
 
 # Defaults
 DEFAULT_HEIGHT = SV("1.754")            # meters
@@ -839,5 +838,5 @@ class FakePlayer(User):
         return player
 
     @classmethod
-    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> FakePlayer:
+    async def convert(cls, ctx: BotContext, argument: str) -> FakePlayer:
         return cls.parse(argument)

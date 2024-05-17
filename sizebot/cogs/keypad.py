@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 
 from sizebot.lib.constants import emojis
+from sizebot.lib.types import BotContext
 
 inputdict = {
     "1️⃣": "1",
@@ -27,7 +28,7 @@ class KeypadCog(commands.Cog):
         hidden = True,
         category = "fun"
     )
-    async def keypad(self, ctx: commands.Context[commands.Bot]):
+    async def keypad(self, ctx: BotContext):
         """Test keypad command."""
         author = ctx.author
         defaultmessage = f"**Input:**{emojis.blank}"

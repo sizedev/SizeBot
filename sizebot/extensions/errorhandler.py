@@ -7,6 +7,7 @@ from discord.ext import commands
 
 from sizebot.lib import errors, utils
 from sizebot.lib.constants import emojis
+from sizebot.lib.types import BotContext
 from sizebot.lib.utils import pretty_time_delta
 
 logger = logging.getLogger("sizebot")
@@ -14,7 +15,7 @@ logger = logging.getLogger("sizebot")
 
 async def setup(bot: commands.Bot):
     @bot.event
-    async def on_command_error(ctx: commands.Context[commands.Bot], error: commands.CommandError):
+    async def on_command_error(ctx: BotContext, error: commands.CommandError):
         # Get actual error
         err = getattr(error, "original", error)
 

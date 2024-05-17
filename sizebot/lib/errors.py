@@ -4,11 +4,10 @@ import importlib.resources as pkg_resources
 import logging
 import json
 
-from discord.ext import commands
-
 import sizebot.data
 from sizebot.conf import conf
 from sizebot.lib import utils
+from sizebot.lib.types import BotContext
 
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
@@ -37,11 +36,11 @@ class DigiContextException(Exception):
     level = logging.WARNING
 
     # TODO: CamelCase
-    async def formatMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatMessage(self, ctx: BotContext) -> str:
         return None
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatUserMessage(self, ctx: BotContext) -> str:
         return None
 
     def __repr__(self) -> str:
@@ -58,7 +57,7 @@ class UserNotFoundException(DigiContextException):
         self.unreg = unreg
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatUserMessage(self, ctx: BotContext) -> str:
         user = await ctx.guild.fetch_member(self.userid)
         usernick = user.display_name
         returnstr = f"Sorry, {usernick} isn't registered with SizeBot."
@@ -110,7 +109,7 @@ class ChangeMethodInvalidException(DigiContextException):
         self.changemethod = changemethod
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatUserMessage(self, ctx: BotContext) -> str:
         usernick = ctx.author.display_name
         return f"Sorry, {usernick}! {self.changemethod} is not a valid change method."
 
@@ -218,30 +217,30 @@ class InvalidRollException(DigiException):
 
 class AdminPermissionException(DigiContextException):
     # TODO: CamelCase
-    async def formatMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatMessage(self, ctx: BotContext) -> str:
         usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command."
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatUserMessage(self, ctx: BotContext) -> str:
         usernick = ctx.author.display_name
         return f"{usernick} tried to run an admin command. This incident will be reported."
 
 
 class MultilineAsNonFirstCommandException(DigiContextException):
     # TODO: CamelCase
-    async def formatMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatMessage(self, ctx: BotContext) -> str:
         usernick = ctx.author.display_name
         return f"{usernick} tried to run a multi-line command in the middle of a sequence."
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatUserMessage(self, ctx: BotContext) -> str:
         return "You are unable to run a command that takes a multi-line argument in the middle of a batch command sequence. Please try running these commands seperately."
 
 
 class ArgumentException(DigiContextException):
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatUserMessage(self, ctx: BotContext) -> str:
         return f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.signature}`."
 
 
@@ -250,12 +249,12 @@ class UserMessedUpException(DigiContextException):
         self.custommessage = custommessage
 
     # TODO: CamelCase
-    async def formatMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatMessage(self, ctx: BotContext) -> str:
         usernick = ctx.author.display_name
         return usernick + ": " + self.custommessage
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: commands.Context[commands.Bot]) -> str:
+    async def formatUserMessage(self, ctx: BotContext) -> str:
         return self.custommessage
 
 

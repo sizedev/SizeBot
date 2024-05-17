@@ -9,6 +9,7 @@ import sizebot.data
 from sizebot.lib import userdb
 from sizebot.lib.constants import ids
 from sizebot.lib.loglevels import EGG
+from sizebot.lib.types import BotContext
 
 tasks = {}
 
@@ -26,7 +27,7 @@ class FunCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def sbsay(self, ctx: commands.Context[commands.Bot], *, message: str):
+    async def sbsay(self, ctx: BotContext, *, message: str):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
         await ctx.send(message)
@@ -35,7 +36,7 @@ class FunCog(commands.Cog):
         aliases = ["tra"],
         category = "fun"
     )
-    async def report(self, ctx: commands.Context[commands.Bot], *, user: discord.User):
+    async def report(self, ctx: BotContext, *, user: discord.User):
         """Report a user to the Tiny Rights Alliance."""
         ud = userdb.load(ctx.guild.id, user.id)
         ud.tra_reports += 1
@@ -47,7 +48,7 @@ class FunCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def sing(self, ctx: commands.Context[commands.Bot], *, s: str):
+    async def sing(self, ctx: BotContext, *, s: str):
         """Make SizeBot sing a message!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
@@ -58,7 +59,7 @@ class FunCog(commands.Cog):
         hidden = True
     )
     @commands.cooldown(1, 30, commands.BucketType.user)
-    async def digipee(self, ctx: commands.Context[commands.Bot]):
+    async def digipee(self, ctx: BotContext):
         logger.log(EGG, f"{ctx.author.display_name} thinks Digi needs to pee.")
         with pkg_resources.open_binary(sizebot.data, "digipee.mp3") as f:
             # PERMISSION: requires attach_file
@@ -67,7 +68,7 @@ class FunCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    async def gamemode(self, ctx: commands.Context[commands.Bot], *, mode: str):
+    async def gamemode(self, ctx: BotContext, *, mode: str):
         logger.log(EGG, f"{ctx.author.display_name} set their gamemode to {mode}.")
         await ctx.send(f"Set own gamemode to `{mode.title()} Mode`")
 
@@ -76,7 +77,7 @@ class FunCog(commands.Cog):
         hidden = True
     )
     @commands.cooldown(1, 30, commands.BucketType.user)
-    async def easteregg(self, ctx: commands.Context[commands.Bot]):
+    async def easteregg(self, ctx: BotContext):
         logger.log(EGG, f"{ctx.author.display_name} thought it was that easy, huh.")
         await ctx.send("No.")
 

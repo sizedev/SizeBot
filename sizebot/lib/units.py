@@ -9,13 +9,12 @@ import re
 from functools import total_ordering
 import random
 
-from discord.ext import commands
-
 from sizebot.lib.loglevels import EGG
 import sizebot.data
 import sizebot.data.units
 from sizebot.lib import errors, utils
 from sizebot.lib.digidecimal import Decimal, DecimalSpec, round_fraction
+from sizebot.lib.types import BotContext
 
 
 __all__ = ["Mult", "SV", "WV", "TV", "AV", "VV"]
@@ -374,7 +373,7 @@ class Dimension(Decimal):
         return cls(baseUnit)
 
     @classmethod
-    async def convert(cls: Type[DimType], ctx: commands.Context[commands.Bot], argument: str) -> DimType:
+    async def convert(cls: Type[DimType], ctx: BotContext, argument: str) -> DimType:
         return cls.parse(argument)
 
     @classmethod

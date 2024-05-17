@@ -11,6 +11,7 @@ from sizebot.lib import changes, userdb, nickmanager
 from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.objs import DigiObject, objects
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
@@ -34,7 +35,7 @@ class ChangeCog(commands.Cog):
         category = "change",
         usage = "<change> [rate] [stop]"
     )
-    async def change(self, ctx: commands.Context[commands.Bot], *, arg: LimitedRate | Rate | Diff | str):
+    async def change(self, ctx: BotContext, *, arg: LimitedRate | Rate | Diff | str):
         """Either change or slow-change your height.
 
         Can be used in essentially the three following ways:
@@ -85,7 +86,7 @@ class ChangeCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def changes(self, ctx: commands.Context[commands.Bot]):
+    async def changes(self, ctx: BotContext):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
 
@@ -101,7 +102,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def stopchange(self, ctx: commands.Context[commands.Bot]):
+    async def stopchange(self, ctx: BotContext):
         """Stop a currently active slow change."""
         userid = ctx.author.id
         guildid = ctx.guild.id
@@ -119,7 +120,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def eatme(self, ctx: commands.Context[commands.Bot]):
+    async def eatme(self, ctx: BotContext):
         """Eat me!
 
         Increases your height by a random amount between 2x and 20x."""
@@ -144,7 +145,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def drinkme(self, ctx: commands.Context[commands.Bot]):
+    async def drinkme(self, ctx: BotContext):
         """Drink me!
 
         Decreases your height by a random amount between 2x and 20x."""
@@ -168,7 +169,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def pushme(self, ctx: commands.Context[commands.Bot]):
+    async def pushme(self, ctx: BotContext):
         """Push me!
 
         Increases or decreases your height by a random amount between 2x and 20x."""
@@ -182,7 +183,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def outgrow(self, ctx: commands.Context[commands.Bot], *, obj: DigiObject = None):
+    async def outgrow(self, ctx: BotContext, *, obj: DigiObject = None):
         """Outgrows the next object in the object database, or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -209,7 +210,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def outshrink(self, ctx: commands.Context[commands.Bot], *, obj: DigiObject = None):
+    async def outshrink(self, ctx: BotContext, *, obj: DigiObject = None):
         """Outshrinks the next object in the object database or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id

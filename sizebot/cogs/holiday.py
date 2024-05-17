@@ -9,6 +9,7 @@ from discord.utils import sleep_until
 
 import sizebot.data
 from sizebot.conf import conf
+from sizebot.lib.types import BotContext
 from sizebot.lib.utils import int_to_roman, format_traceback
 
 logger = logging.getLogger("sizebot")
@@ -95,7 +96,7 @@ class HolidayCog(commands.Cog):
     @commands.command(
         hidden = True
     )
-    async def secretsanta(self, ctx: commands.Context[commands.Bot]):
+    async def secretsanta(self, ctx: BotContext):
         now = arrow.now()
         if not (now.month == 12 and (24 <= now.day <= 31)):
             await ctx.send("The Secret Santa event is over! See you next Christmas season!")

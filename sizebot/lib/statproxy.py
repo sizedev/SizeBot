@@ -2,10 +2,9 @@ from __future__ import annotations
 
 import logging
 
-from discord.ext import commands
-
 from sizebot.lib.errors import InvalidStat, InvalidStatTag
 from sizebot.lib.stats import statmap, taglist
+from sizebot.lib.types import BotContext
 
 re_full_string = r"\$(\w+=[^;$]+;?)+"
 re_component = r"(\w+)=([^;$]+);?"
@@ -41,5 +40,5 @@ class StatProxy:
             return StatProxy(statmap[s], False)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> StatProxy:
+    async def convert(cls, ctx: BotContext, argument: str) -> StatProxy:
         return cls.parse(argument)

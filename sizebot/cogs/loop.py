@@ -11,9 +11,10 @@ from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV, TV
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
-import sizebot.lib.language as lang
+from sizebot.lib.types import BotContext
 from sizebot.lib.utils import pretty_time_delta
 from sizebot.lib.userdb import MoveTypeStr
+import sizebot.lib.language as lang
 
 logger = logging.getLogger("sizebot")
 
@@ -50,7 +51,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def start(self, ctx: commands.Context[commands.Bot], action: str, stop: TV = None):
+    async def start(self, ctx: BotContext, action: str, stop: TV = None):
         """Keep moving forward -- Walt Disney
 
         `<type>` can be one of the following: walk, run, climb, crawl, swim
@@ -86,7 +87,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def stop(self, ctx: commands.Context[commands.Bot]):
+    async def stop(self, ctx: BotContext):
         """Stop a current movement."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         if userdata.currentmovetype is None:
@@ -106,7 +107,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def sofar(self, ctx: commands.Context[commands.Bot], *, who: discord.Member | None = None):
+    async def sofar(self, ctx: BotContext, *, who: discord.Member | None = None):
         """How far have you moved so far? [See help.]
 
         #ALPHA#

@@ -1,8 +1,10 @@
 from discord.ext import commands
 
+from sizebot.lib.types import BotContext
+
 
 def is_mod() -> bool:
-    async def predicate(ctx: commands.Context[commands.Bot]) -> bool:
+    async def predicate(ctx: BotContext) -> bool:
         author = ctx.author
         modness = False
         if await ctx.bot.is_owner(author):

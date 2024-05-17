@@ -5,9 +5,10 @@ import discord
 from discord.ext import commands
 
 from sizebot.lib import userdb
-from sizebot.lib.userdb import FakePlayer
 from sizebot.lib.pokemon import pokemon
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
+from sizebot.lib.userdb import FakePlayer
 
 logger = logging.getLogger("sizebot")
 
@@ -20,7 +21,7 @@ class PokemonCog(commands.Cog):
         aliases = ["dex"],
         category = "objects"
     )
-    async def pokedex(self, ctx: commands.Context[commands.Bot], pkmn: int | str = None):
+    async def pokedex(self, ctx: BotContext, pkmn: int | str = None):
         """Pokemaaaaaaaaans"""
         if isinstance(pkmn, str):
             p = next((m for m in pokemon if m.name.lower() == pkmn.lower()), None)
@@ -39,7 +40,7 @@ class PokemonCog(commands.Cog):
         aliases = ["pokecompare", "pokecomp", "lookatpoke"],
         category = "objects"
     )
-    async def lookatpokemon(self, ctx: commands.Context[commands.Bot], pkmn: int | str = None, *, who: discord.Member | FakePlayer | SV = None):
+    async def lookatpokemon(self, ctx: BotContext, pkmn: int | str = None, *, who: discord.Member | FakePlayer | SV = None):
         """Pokemaaaaaaaaans"""
         if who is None:
             who = ctx.author

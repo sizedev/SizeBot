@@ -12,6 +12,7 @@ from discord.ext import commands
 from sizebot.lib import guilddb, userdb, nickmanager
 from sizebot.lib.checks import is_mod
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
@@ -60,7 +61,7 @@ class EdgeCog(commands.Cog):
         hidden = True
     )
     @is_mod()
-    async def edges(self, ctx: commands.Context[commands.Bot]):
+    async def edges(self, ctx: BotContext):
         """See who is set to be the smallest and largest users."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         await ctx.send(f"**SERVER-SET SMALLEST AND LARGEST USERS:**\nSmallest: {'*Unset*' if guilddata.small_edge is None else guilddata.small_edge}\nLargest: {'*Unset*' if guilddata.large_edge is None else guilddata.large_edge}")
@@ -72,7 +73,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setsmallest(self, ctx: commands.Context[commands.Bot], *, member: discord.Member):
+    async def setsmallest(self, ctx: BotContext, *, member: discord.Member):
         """Set the smallest user."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.small_edge = member.id
@@ -87,7 +88,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setlargest(self, ctx: commands.Context[commands.Bot], *, member: discord.Member):
+    async def setlargest(self, ctx: BotContext, *, member: discord.Member):
         """Set the largest user."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.large_edge = member.id
@@ -101,7 +102,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearsmallest(self, ctx: commands.Context[commands.Bot]):
+    async def clearsmallest(self, ctx: BotContext):
         """Clear the role of 'smallest user.'"""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.small_edge = None
@@ -115,7 +116,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearlargest(self, ctx: commands.Context[commands.Bot]):
+    async def clearlargest(self, ctx: BotContext):
         """Clear the role of 'largest user.'"""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.large_edge = None
@@ -128,7 +129,7 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def edgedebug(self, ctx: commands.Context[commands.Bot]):
+    async def edgedebug(self, ctx: BotContext):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         usersizes = getUserSizes(ctx.guild)
         guilddata = guilddb.load(ctx.guild.id)

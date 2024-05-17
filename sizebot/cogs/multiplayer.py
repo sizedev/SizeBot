@@ -9,6 +9,7 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.diff import Diff
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import ChangeMethodInvalidException
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
 
 logger = logging.getLogger("sizebot")
@@ -24,7 +25,7 @@ class MPCog(commands.Cog):
         aliases = ["pb"],
         category = "multiplayer"
     )
-    async def pushbutton(self, ctx: commands.Context[commands.Bot], user: discord.Member):
+    async def pushbutton(self, ctx: BotContext, user: discord.Member):
         """Push someone's button!
 
         If a user has a button set (with `&setbutton`,) changes that user by their set amount.
@@ -48,7 +49,7 @@ class MPCog(commands.Cog):
         usage = "<diff>",
         category = "multiplayer"
     )
-    async def setbutton(self, ctx: commands.Context[commands.Bot], *, diff: Diff):
+    async def setbutton(self, ctx: BotContext, *, diff: Diff):
         """Set up a button for others to push!
 
         Set a change amount, and when others run `&pushbutton` on you, you'll change by that amount.
@@ -62,7 +63,7 @@ class MPCog(commands.Cog):
         category = "multiplayer",
         aliases = ["resetbutton", "unsetbutton", "removebutton"]
     )
-    async def clearbutton(self, ctx: commands.Context[commands.Bot]):
+    async def clearbutton(self, ctx: BotContext):
         """Remove your push button."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         userdata.button = None
@@ -73,7 +74,7 @@ class MPCog(commands.Cog):
         usage = "<amount> <victim> [thief]",
         category = "multiplayer"
     )
-    async def steal(self, ctx: commands.Context[commands.Bot], amount: SV | WV, victim: discord.Member, thief: discord.Member = None):
+    async def steal(self, ctx: BotContext, amount: SV | WV, victim: discord.Member, thief: discord.Member = None):
         """See what would happen if you stole size from a user.
 
         `amount` can be a height amount or a weight amount.
@@ -145,7 +146,7 @@ class MPCog(commands.Cog):
         category = "multiplayer",
         usage = "<user> <change>"
     )
-    async def changeother(self, ctx: commands.Context[commands.Bot], other: discord.Member, *, string: Diff):
+    async def changeother(self, ctx: BotContext, other: discord.Member, *, string: Diff):
         """Change someone else's height. The other user must have this functionality enabled."""
         userdata = userdb.load(other.guild.id, other.id)
 
@@ -176,7 +177,7 @@ class MPCog(commands.Cog):
         category = "multiplayer"
     )
     @commands.guild_only()
-    async def setother(self, ctx: commands.Context[commands.Bot], other: discord.Member, *, newheight: SV):
+    async def setother(self, ctx: BotContext, other: discord.Member, *, newheight: SV):
         """Set someone else's height. The other user must have this functionality enabled."""
         userdata = userdb.load(other.guild.id, other.id)
 
@@ -194,7 +195,7 @@ class MPCog(commands.Cog):
     @commands.command(
         category = "multiplayer"
     )
-    async def toggleallowothers(self, ctx: commands.Context[commands.Bot]):
+    async def toggleallowothers(self, ctx: BotContext):
         """Allow other users to change your size.
 
         NOTE: THIS HAS NO WHITELIST, BLACKLIST, LIMITS, OR OTHERWISE.

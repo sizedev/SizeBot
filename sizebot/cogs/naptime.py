@@ -3,6 +3,7 @@ import logging
 from discord.ext import commands, tasks
 
 from sizebot.lib import naps
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import TV
 
 logger = logging.getLogger("sizebot")
@@ -24,7 +25,7 @@ class NaptimeCog(commands.Cog):
         category = "fun"
     )
     @commands.guild_only()
-    async def naptime(self, ctx: commands.Context[commands.Bot], *, duration: TV):
+    async def naptime(self, ctx: BotContext, *, duration: TV):
         """Go to bed in a set amount of time.
 
         Kicks you from any voice channel you're in after a set amount of time.
@@ -43,7 +44,7 @@ class NaptimeCog(commands.Cog):
     @commands.command(
         category = "fun"
     )
-    async def grump(self, ctx: commands.Context[commands.Bot]):
+    async def grump(self, ctx: BotContext):
         """Too grumpy for bed time.
 
         Stops a &naptime command.
@@ -60,7 +61,7 @@ class NaptimeCog(commands.Cog):
         category = "mod"
     )
     @commands.is_owner()
-    async def nannies(self, ctx: commands.Context[commands.Bot]):
+    async def nannies(self, ctx: BotContext):
         """Show me those nannies!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)

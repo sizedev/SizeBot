@@ -2,6 +2,8 @@ from discord.ext.commands import Command, Cog
 from discord.ext.commands.core import wrap_callback
 from discord.ext import commands
 
+from sizebot.lib.types import BotContext
+
 old_init = Command.__init__
 old_short_doc = Command.short_doc
 
@@ -12,7 +14,7 @@ def __init__(self: Command, *args, category: str | None = None, multiline: bool 
     old_init(self, *args, **kwargs)
 
 
-async def dispatch_error(self: Command, ctx: commands.Context[commands.Bot], error: commands.CommandError):
+async def dispatch_error(self: Command, ctx: BotContext, error: commands.CommandError):
     ctx.command_failed = True
     cog = self.cog
     try:

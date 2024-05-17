@@ -8,7 +8,6 @@ import math
 import random
 
 from discord import Embed
-from discord.ext import commands
 
 import sizebot.data.objects
 from sizebot import __version__
@@ -16,6 +15,7 @@ from sizebot.lib import errors, userdb
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import get_plural, get_indefinite_article
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import AV, SV, VV, WV, Unit, SystemUnit
 from sizebot.lib.utils import sentence_join
 
@@ -267,7 +267,7 @@ class DigiObject:
         return cls(**objJson)
 
     @classmethod
-    async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> DigiObject:
+    async def convert(cls, ctx: BotContext, argument: str) -> DigiObject:
         obj = cls.find_by_name(argument)
         if obj is None:
             raise errors.InvalidObject(argument)

@@ -3,6 +3,7 @@ from discord import Embed
 from discord.ext import commands
 
 from sizebot.lib import userdb
+from sizebot.lib.types import BotContext
 
 
 class ProfileCog(commands.Cog):
@@ -17,7 +18,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def setpicture(self, ctx: commands.Context[commands.Bot], *, url: str):
+    async def setpicture(self, ctx: BotContext, *, url: str):
         """ Set your profile's image. Must be a valid image URL."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.picture_url = url
@@ -31,7 +32,7 @@ class ProfileCog(commands.Cog):
         multiline = True
     )
     @commands.guild_only()
-    async def setdescription(self, ctx: commands.Context[commands.Bot], *, desc: str):
+    async def setdescription(self, ctx: BotContext, *, desc: str):
         """Set your profile description.
 
         Accepts slightly more markdown than usual, see https://leovoel.github.io/embed-visualizer/"""
@@ -45,7 +46,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def resetpicture(self, ctx: commands.Context[commands.Bot]):
+    async def resetpicture(self, ctx: BotContext):
         """Reset your profile's image."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.picture_url = None
@@ -57,7 +58,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def resetdescription(self, ctx: commands.Context[commands.Bot]):
+    async def resetdescription(self, ctx: BotContext):
         """Remove your profile description."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.description = None
@@ -70,7 +71,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def profile(self, ctx: commands.Context[commands.Bot], member: discord.Member = None):
+    async def profile(self, ctx: BotContext, member: discord.Member = None):
         """See the profile of you or another SizeBot user.
 
         #ALPHA#

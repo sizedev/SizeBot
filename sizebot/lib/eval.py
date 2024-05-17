@@ -13,7 +13,6 @@ from datetime import date, datetime, time, timedelta
 import arrow
 import discord
 from discord import Embed
-from discord.ext import commands
 import PIL
 from PIL import Image, ImageDraw
 
@@ -26,6 +25,7 @@ from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.loglevels import BANNER, EGG, LOGIN
 from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.roller import evalmath, roll
+from sizebot.lib.types import BotContext
 from sizebot.lib.units import Mult, SV, TV, WV
 from sizebot.lib.userdb import FakePlayer
 
@@ -189,7 +189,7 @@ def buildEvalWrapper(evalStr: str, addReturn: bool = True) -> tuple[CodeType, st
 
 
 # TODO: CamelCase
-async def runEval(ctx: commands.Context[commands.Bot], evalStr: str) -> Any:
+async def runEval(ctx: BotContext, evalStr: str) -> Any:
     evalGlobals = getEvalGlobals()
     evalLocals = {}
 
