@@ -11,7 +11,7 @@ from sizebot.lib.shoesize import from_shoe_size
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import parse_scale, truthy
-from sizebot.lib.stats import statmap
+from sizebot.lib.stats import HOUR, statmap
 
 T = TypeVar("T")
 
@@ -36,9 +36,9 @@ fakestats_list: list[FakePlayerStat] = [
     FakePlayerStat("pawtoggle", truthy),
     FakePlayerStat("furtoggle", truthy),
     FakePlayerStat("liftstrength", WV.parse),
-    FakePlayerStat("walkperhour", lambda s: Rate.parse(s).addPerSec),
-    FakePlayerStat("runperhour", lambda s: Rate.parse(s).addPerSec),
-    FakePlayerStat("swimperhour", lambda s: Rate.parse(s).addPerSec),
+    FakePlayerStat("walkperhour", lambda s: Rate.parse(s).addPerSec * HOUR),
+    FakePlayerStat("runperhour", lambda s: Rate.parse(s).addPerSec * HOUR),
+    FakePlayerStat("swimperhour", lambda s: Rate.parse(s).addPerSec * HOUR),
     FakePlayerStat("gender", str),
     FakePlayerStat("scale", parse_scale)
 ]

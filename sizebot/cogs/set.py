@@ -6,14 +6,14 @@ from discord.ext import commands
 
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, userdb, nickmanager
-from sizebot.lib.diff import Rate
+from sizebot.lib.diff import LinearRate, Rate
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
+from sizebot.lib.stats import HOUR
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, parse_scale, randrange_log
-from sizebot.lib.fakeplayer import FakePlayer
 
 logger = logging.getLogger("sizebot")
 
@@ -172,10 +172,11 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setso(self, ctx: BotContext, sv1: discord.Member | FakePlayer | SV, sv2: SV):
+    async def setso(self, ctx: BotContext, sv1: discord.Member | SV, sv2: SV):
         """Change height by scale."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        sv1 = userdb.load_or_fake(sv1).height  # This feels like a hack. Is this awful?
+        if isinstance(sv1, discord.Member):
+            sv1 = userdb.load(sv1.guild.id, ctx.author.id).height  # This feels like a hack. Is this awful?
         userdata.scale = sv1 / sv2
         userdb.save(userdata)
 
@@ -565,10 +566,10 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setswim(self, ctx: BotContext, *, newswim: Rate):
+    async def setswim(self, ctx: BotContext, *, newswim: LinearRate):
         """Set your current swim speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.swimperhour = newswim / userdata.scale
+        userdata.swimperhour = SV(newswim.addPerSec * HOUR / userdata.scale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.  (Current speed is {newswim:mu})")

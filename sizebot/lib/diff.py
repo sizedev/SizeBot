@@ -225,6 +225,18 @@ class Rate:
         return cls.parse(argument)
 
 
+# Positive Linear Change per Time
+class LinearRate(Rate):
+    @classmethod
+    async def convert(cls, ctx: BotContext, argument: str) -> Rate:
+        rate = cls.parse(argument)
+        if rate.diff.changetype != "add":
+            raise ValueError("Invalid rate for speed parsing.")
+        if rate.diff.amount < 0:
+            raise ValueError("Speed can not go backwards!")
+        return rate
+
+
 # Change per Time, with End
 class LimitedRate:
     def __init__(self, rate: Rate, stop: SV | TV):

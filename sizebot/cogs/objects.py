@@ -2,6 +2,7 @@ from decimal import Decimal
 import logging
 import math
 import random
+from typing import get_args
 
 import discord
 from discord import Embed
@@ -17,7 +18,7 @@ from sizebot.lib.objs import DigiObject, objects, tags, format_close_object_smar
 from sizebot.lib.stats import StatBox, taglist, AVERAGE_HEIGHT
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV, AV
-from sizebot.lib.userdb import load_or_fake
+from sizebot.lib.userdb import load_or_fake, MemberOrFake, MemberOrFakeOrSize
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.utils import parse_many, pretty_time_delta, sentence_join
 
@@ -60,7 +61,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookslike(self, ctx: BotContext, *, memberOrHeight: discord.Member | FakePlayer | SV = None):
+    async def lookslike(self, ctx: BotContext, *, memberOrHeight: MemberOrFakeOrSize = None):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -132,7 +133,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookat(self, ctx: BotContext, *, what: DigiObject | discord.Member | FakePlayer | SV | str):
+    async def lookat(self, ctx: BotContext, *, what: DigiObject | MemberOrFake | SV | str):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -164,7 +165,7 @@ class ObjectsCog(commands.Cog):
             return
 
         # Member comparisons are just height comparisons
-        if isinstance(what, (discord.Member, FakePlayer)):
+        if isinstance(what, get_args(MemberOrFake)):
             compdata = load_or_fake(what)
             what = compdata.height
 
@@ -192,8 +193,8 @@ class ObjectsCog(commands.Cog):
             logger.log(EGG, logmsg)
             return
 
-        average_data = load_or_fake(FakePlayer(nickname="an average person", height=AVERAGE_HEIGHT))
-        choc_data = load_or_fake(FakePlayer(nickname="Chocolate [Stuffed Beaver]", height=SV.parse("11in")))
+        average_data = userdb.User.from_fake(FakePlayer(nickname="an average person", height=AVERAGE_HEIGHT))
+        choc_data = userdb.User.from_fake(FakePlayer(nickname="Chocolate [Stuffed Beaver]", height=SV.parse("11in")))
         choc_data.baseweight = WV.parse("4.8oz")
         choc_data.footlength = SV.parse("2.75in")
         choc_data.taillength = SV.parse("12cm")
@@ -251,7 +252,7 @@ class ObjectsCog(commands.Cog):
         usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx: BotContext, amount: int | None = None, *, who: discord.Member | FakePlayer | SV = None):
+    async def stackup(self, ctx: BotContext, amount: int | None = None, *, who: MemberOrFakeOrSize = None):
         """How do you stack up against objects?
 
         Example:
@@ -283,7 +284,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def food(self, ctx: BotContext, food: DigiObject | str, *, who: discord.Member | FakePlayer | SV = None):
+    async def food(self, ctx: BotContext, food: DigiObject | str, *, who: MemberOrFakeOrSize = None):
         """How much food does a person need to eat?
 
         Takes optional argument of a user to get the food for.
@@ -345,7 +346,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def water(self, ctx: BotContext, *, who: discord.Member | FakePlayer | SV = None):
+    async def water(self, ctx: BotContext, *, who: MemberOrFakeOrSize = None):
         if who is None:
             who = ctx.author
 
@@ -367,7 +368,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def land(self, ctx: BotContext, land: DigiObject | str, *, who: discord.Member | FakePlayer | SV = None):
+    async def land(self, ctx: BotContext, land: DigiObject | str, *, who: MemberOrFakeOrSize = None):
         """Get stats about how you cover land.
         #ACC#
 

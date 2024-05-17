@@ -19,13 +19,16 @@ from sizebot.lib.diff import Diff, Rate
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.utils import is_url, truncate
-from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT, PlayerStats
+from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT, HOUR, PlayerStats
 
 BASICALLY_ZERO = Decimal("1E-27")
 
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 MoveTypeStr = Literal["walk", "run", "climb", "crawl", "swim"]
+
+MemberOrFake = discord.Member | FakePlayer
+MemberOrFakeOrSize = MemberOrFake | SV
 
 
 def str_or_none(v: Any) -> str | None:
@@ -259,7 +262,7 @@ class User:
                 raise ValueError("Invalid rate for speed parsing.")
             if value.diff.amount < 0:
                 raise ValueError("Speed can not go backwards!")
-            value = value.diff.amount / value.time * Decimal("3600")
+            value = value.diff.amount / value.time * HOUR
 
         value = SV(value)
 
@@ -283,7 +286,7 @@ class User:
                 raise ValueError("Invalid rate for speed parsing.")
             if value.diff.amount < 0:
                 raise ValueError("Speed can not go backwards!")
-            value = value.diff.amount / value.time * Decimal("3600")
+            value = value.diff.amount / value.time * HOUR
 
         value = SV(value)
 
@@ -305,22 +308,10 @@ class User:
         return self._swimperhour
 
     @swimperhour.setter
-    def swimperhour(self, value: SV | Rate | None):
+    def swimperhour(self, value: SV | None):
         if value is None:
             self._swimperhour = None
             return
-
-        if isinstance(value, Rate):
-            if value.diff.changetype != "add":
-                raise ValueError("Invalid rate for speed parsing.")
-            if value.diff.amount < 0:
-                raise ValueError("Speed can not go backwards!")
-            value = value.diff.amount / value.time * Decimal("3600")
-
-        value = SV(value)
-
-        if value < 0:
-            value = SV(0)
 
         self._swimperhour = value
 
@@ -723,7 +714,7 @@ def list_users(*, guildid: int | None = None, userid: int | None = None) -> list
     return users
 
 
-def load_or_fake(arg: discord.Member | FakePlayer | SV, *, allow_unreg: bool = False) -> User:
+def load_or_fake(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> User:
     if isinstance(arg, discord.Member):
         return load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
     elif isinstance(arg, FakePlayer):

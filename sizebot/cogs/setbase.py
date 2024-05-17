@@ -5,9 +5,10 @@ from discord.ext import commands
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import emojis
-from sizebot.lib.diff import Rate
+from sizebot.lib.diff import LinearRate, Rate
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
+from sizebot.lib.stats import HOUR
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
 
@@ -267,12 +268,12 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseswim(self, ctx: BotContext, *, newswim: Rate):
+    async def setbaseswim(self, ctx: BotContext, *, newswim: LinearRate):
         """Set a custom swim speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.swimperhour = newswim
+        userdata.swimperhour = SV(newswim.addPerSec * HOUR)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s swim is now {userdata.swimperhour:mu} per hour.")

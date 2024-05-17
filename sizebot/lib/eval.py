@@ -27,7 +27,6 @@ from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.roller import evalmath, roll
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import Mult, SV, TV, WV
-from sizebot.lib.fakeplayer import FakePlayer
 
 
 logger = logging.getLogger("sizebot")
@@ -133,7 +132,7 @@ def getEvalGlobals() -> dict[str, Any]:
         "logger": logger,
         "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
         "Diff": Diff, "Rate": Rate, "LimitedRate": LimitedRate,
-        "DigiObject": DigiObject, "FakePlayer": FakePlayer,
+        "DigiObject": DigiObject,
         "objects": objects,
         "tags": tags,
         "utils": utils,
