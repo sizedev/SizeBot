@@ -17,7 +17,7 @@ from discord.ext import commands
 import sizebot.data
 from sizebot.lib import errors, paths
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.diff import Diff, Rate as ParseableRate
+from sizebot.lib.diff import Diff, Rate
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.utils import is_url, truncate
 from sizebot.lib.errors import InvalidSizeValue, InvalidStat
@@ -98,9 +98,9 @@ class User:
         self._taillength: SV | None = None
         self._earheight: SV | None = None
         self._liftstrength: WV | None = None
-        self._walkperhour: ParseableRate | None = None
-        self._runperhour: ParseableRate | None = None
-        self._swimperhour: ParseableRate | None = None
+        self._walkperhour: Rate | None = None
+        self._runperhour: Rate | None = None
+        self._swimperhour: Rate | None = None
         self.incomprehensible: bool = False
         self._currentscalestep: Diff | None = None
         self._currentscaletalk: Diff | None = None
@@ -275,16 +275,16 @@ class User:
         self._liftstrength = value
 
     @property
-    def walkperhour(self) -> ParseableRate | None:
+    def walkperhour(self) -> Rate | None:
         return self._walkperhour
 
     @walkperhour.setter
-    def walkperhour(self, value: ParseableRate | None):
+    def walkperhour(self, value: Rate | None):
         if value is None:
             self._walkperhour = None
             return
 
-        if isinstance(value, ParseableRate):
+        if isinstance(value, Rate):
             if value.diff.changetype != "add":
                 raise ValueError("Invalid rate for speed parsing.")
             if value.diff.amount < 0:
@@ -299,16 +299,16 @@ class User:
         self._walkperhour = value
 
     @property
-    def runperhour(self) -> ParseableRate | None:
+    def runperhour(self) -> Rate | None:
         return self._runperhour
 
     @runperhour.setter
-    def runperhour(self, value: ParseableRate | None):
+    def runperhour(self, value: Rate | None):
         if value is None:
             self._runperhour = None
             return
 
-        if isinstance(value, ParseableRate):
+        if isinstance(value, Rate):
             if value.diff.changetype != "add":
                 raise ValueError("Invalid rate for speed parsing.")
             if value.diff.amount < 0:
@@ -331,16 +331,16 @@ class User:
         return SV(Decimal(2556) * self.scale)
 
     @property
-    def swimperhour(self) -> ParseableRate | None:
+    def swimperhour(self) -> Rate | None:
         return self._swimperhour
 
     @swimperhour.setter
-    def swimperhour(self, value: ParseableRate | None):
+    def swimperhour(self, value: Rate | None):
         if value is None:
             self._swimperhour = None
             return
 
-        if isinstance(value, ParseableRate):
+        if isinstance(value, Rate):
             if value.diff.changetype != "add":
                 raise ValueError("Invalid rate for speed parsing.")
             if value.diff.amount < 0:
@@ -791,9 +791,9 @@ class FakePlayer(User):
         "pawtoggle": bool,
         "furtoggle": bool,
         "liftstrength": WV,
-        "walkperhour": ParseableRate,
-        "runperhour": ParseableRate,
-        "swimperhour": ParseableRate,
+        "walkperhour": Rate,
+        "runperhour": Rate,
+        "swimperhour": Rate,
         "gender": str,
         "scale": str
     }
@@ -827,7 +827,7 @@ class FakePlayer(User):
                 setattr(player, collapsed_key, truthy(val))
             elif unit == str:
                 setattr(player, collapsed_key, val)
-            elif unit in (SV, WV, ParseableRate):
+            elif unit in (SV, WV, Rate):
                 val = unit.parse(val)
                 setattr(player, collapsed_key, val)
 

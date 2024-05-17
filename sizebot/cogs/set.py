@@ -5,7 +5,7 @@ from discord.ext import commands
 
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, userdb, nickmanager
-from sizebot.lib.diff import Diff, Rate as ParseableRate
+from sizebot.lib.diff import Diff, Rate
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
@@ -561,14 +561,13 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setwalk(self, ctx: commands.Context[commands.Bot], *, newwalk: ParseableRate):
+    async def setwalk(self, ctx: commands.Context[commands.Bot], *, newwalk: Rate):
         """Set your current walk speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.walkperhour = ParseableRate(f"{newwalk.diff.amount * userdata.viewscale}/{newwalk.time}",
-                                             Diff(f"{newwalk.diff.amount * userdata.viewscale}", "add", newwalk.diff.amount * userdata.viewscale),
-                                             newwalk.time)
+        userdata.walkperhour = Rate(Diff("add", newwalk.diff.amount * userdata.viewscale), newwalk.time)
+
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base walk speed is now {userdata.walkperhour:mu} per hour. (Current speed is {newwalk:mu})")
@@ -593,17 +592,17 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setrun(self, ctx: commands.Context[commands.Bot], *, newrun: ParseableRate):
+    async def setrun(self, ctx: commands.Context[commands.Bot], *, newrun: Rate):
         """Set your current run speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.runperhour = ParseableRate(f"{newrun.diff.amount * userdata.viewscale}/{newrun.time}",
-                                            Diff(f"{newrun.diff.amount * userdata.viewscale}", "add", newrun.diff.amount * userdata.viewscale),
-                                            newrun.time)
+        newrun_scaled = Rate(Diff("add", newrun.diff.amount * userdata.viewscale), newrun.time)
+
+        userdata.runperhour = newrun_scaled
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour.  (Current speed is {newrun:mu})")
+        await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour. (Current speed is {newrun:mu})")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -625,14 +624,13 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setswim(self, ctx: commands.Context[commands.Bot], *, newswim: ParseableRate):
+    async def setswim(self, ctx: commands.Context[commands.Bot], *, newswim: Rate):
         """Set your current swim speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.swimperhour = ParseableRate(f"{newswim.diff.amount * userdata.viewscale}/{newswim.time}",
-                                             Diff(f"{newswim.diff.amount * userdata.viewscale}", "add", newswim.diff.amount * userdata.viewscale),
-                                             newswim.time)
+        userdata.swimperhour = Rate(Diff("add", newswim.diff.amount * userdata.viewscale), newswim.time)
+
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.  (Current speed is {newswim:mu})")

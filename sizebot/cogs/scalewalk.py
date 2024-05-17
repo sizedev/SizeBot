@@ -220,7 +220,7 @@ class ScaleWalkCog(commands.Cog):
         if change.amount == 0:
             raise ValueIsZeroException
         userdb.save(userdata)
-        await ctx.send(f"{userdata.nickname}'s scale per step is now set to {change.original}.")
+        await ctx.send(f"{userdata.nickname}'s scale per step is now set to {change}.")
 
     @commands.command(
         category = "scalestep",

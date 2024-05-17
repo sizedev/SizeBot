@@ -43,7 +43,7 @@ from sizebot.lib import userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.objs import objects
-from sizebot.lib.units import Rate, Mult, SV, WV, TV
+from sizebot.lib.units import Mult, SV, WV, TV
 ```
 
 ## Errors

@@ -67,65 +67,64 @@ limited_rate_interfixes = ["until", "for", "->", "-->"]
 valid_limited_rate_interfixes = regexbuild(limited_rate_interfixes, capture = True)
 
 
+# Change
 class Diff:
-    def __init__(self, original: str, changetype: Literal["add", "multiply", "power"], amount: SV | Decimal):
+    def __init__(self, changetype: Literal["add", "multiply", "power"], amount: SV | Decimal):
         self.changetype = changetype
         self.amount = amount
-        self.original = original
 
     @classmethod
     def parse(cls, s: str) -> Diff:
         prefixmatch = valid_prefixes + r"\s*(.*)"
         suffixmatch = r"(.*)\s*" + valid_suffixes
 
-        ct = None
-        v = None
+        changetype = None
+        amount = None
 
         if m := re.match(prefixmatch, s):
             prefix = m.group(1)
             value = m.group(2)
 
             if prefix in add_prefixes:
-                ct = "add"
-                v = SV.parse(value)
+                changetype = "add"
+                amount = SV.parse(value)
             elif prefix in subtract_prefixes:
-                ct = "add"
-                v = SV.parse(value) * -1
+                changetype = "add"
+                amount = SV.parse(value) * -1
             elif prefix in multiply_prefixes:
-                ct = "multiply"
-                v = Decimal(value)
+                changetype = "multiply"
+                amount = Decimal(value)
             elif prefix in divide_prefixes:
-                ct = "multiply"
-                v = Decimal(1) / Decimal(value)
+                changetype = "multiply"
+                amount = Decimal(1) / Decimal(value)
             elif prefix in percent_prefixes:
-                ct = "multiply"
-                v = Decimal(value) / Decimal(100)
+                changetype = "multiply"
+                amount = Decimal(value) / Decimal(100)
             elif prefix in power_prefixes:
-                ct = "power"
-                v = Decimal(value)
+                changetype = "power"
+                amount = Decimal(value)
 
         elif m := re.match(suffixmatch, s):
             value = m.group(1)
             suffix = m.group(2)
 
             if suffix in multiply_suffixes:
-                ct = "multiply"
-                v = Decimal(value)
+                changetype = "multiply"
+                amount = Decimal(value)
             elif suffix in percent_suffixes:
-                ct = "multiply"
-                v = Decimal(value) / Decimal(100)
+                changetype = "multiply"
+                amount = Decimal(value) / Decimal(100)
 
         else:
-            ct = "add"
-            v = SV.parse(s)
+            changetype = "add"
+            amount = SV.parse(s)
 
-        return cls(s, ct, v)
+        return cls(changetype, amount)
 
     def toJSON(self) -> Any:
         return {
             "changetype": self.changetype,
-            "amount":     str(self.amount),
-            "original":   self.original
+            "amount":     str(self.amount)
         }
 
     def __str__(self) -> str:
@@ -150,25 +149,44 @@ class Diff:
             amount = SV(jsondata["amount"])
         else:
             amount = Decimal(jsondata["amount"])
-        original = jsondata["original"]
 
-        return cls(original, changetype, amount)
+        return cls(changetype, amount)
 
     @classmethod
     async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> Diff:
         return cls.parse(argument)
 
 
+# Change per Time
 class Rate:
-    def __init__(self, original: str, diff: Diff, time: TV):
+    def __init__(self, diff: Diff, time: TV):
         self.diff = diff
         self.time = time
-        self.original = original
+
+    @property
+    def addPerSec(self) -> SV | None:
+        if self.diff.changetype != "add":
+            return None
+        return SV(self.diff.amount / self.time)
+
+    @property
+    def mulPerSec(self) -> Decimal | None:
+        if self.diff.changetype != "mul":
+            return None
+        return Decimal(self.diff.amount / self.time)
+
+    @property
+    def stopSV(self) -> SV | None:
+        return None
+
+    @property
+    def stopTV(self) -> TV | None:
+        return None
 
     @classmethod
     def parse(cls, s: str) -> Rate:
-        d = None
-        t = None
+        diff = None
+        time = None
 
         # speed hack
         s = s.replace("mph", "mi/hr").replace("kph", "km/hr")
@@ -177,16 +195,15 @@ class Rate:
         m = re.match(match, s)
         if not m:
             raise ParseError(s, "Rate")
-        d = Diff.parse(m.group(1))
-        t = TV.parse(m.group(3))
+        diff = Diff.parse(m.group(1))
+        time = TV.parse(m.group(3))
 
-        return cls(s, d, t)
+        return cls(diff, time)
 
     def toJSON(self) -> Any:
         return {
-            "diff":     self.diff.toJSON(),
-            "time":     str(self.time),
-            "original": self.original
+            "diff": self.diff.toJSON(),
+            "time": str(self.time)
         }
 
     def __str__(self) -> str:
@@ -196,19 +213,38 @@ class Rate:
     def fromJSON(cls, jsondata: Any) -> Rate:
         diff = Diff.fromJSON(jsondata["diff"])
         time = TV(jsondata["time"])
-        original = jsondata["original"]
-        return cls(original, diff, time)
+        return cls(diff, time)
 
     @classmethod
     async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> Rate:
         return cls.parse(argument)
 
 
+# Change per Time, with End
 class LimitedRate:
-    def __init__(self, original: str, rate: Rate, stop: SV | TV):
+    def __init__(self, rate: Rate, stop: SV | TV):
         self.rate = rate
         self.stop = stop
-        self.original = original
+
+    @property
+    def addPerSec(self) -> SV | None:
+        return self.rate.addPerSec
+
+    @property
+    def mulPerSec(self) -> Decimal | None:
+        return self.rate.mulPerSec
+
+    @property
+    def stopSV(self) -> SV | None:
+        if not isinstance(self.stop, SV):
+            return None
+        return self.stop
+
+    @property
+    def stopTV(self) -> TV | None:
+        if not isinstance(self.stop, TV):
+            return None
+        return self.stop
 
     @classmethod
     def parse(cls, s: str) -> LimitedRate:
@@ -217,21 +253,20 @@ class LimitedRate:
         if not m:
             raise ParseError(s, "LimitedRate")
 
-        r = Rate.parse(m.group(1))
+        rate = Rate.parse(m.group(1))
 
-        st = try_or_none(SV.parse, m.group(3), (InvalidSizeValue,)) or try_or_none(TV.parse, m.group(3), (InvalidSizeValue,))
+        stop = try_or_none(SV.parse, m.group(3), (InvalidSizeValue,)) or try_or_none(TV.parse, m.group(3), (InvalidSizeValue,))
 
-        if st is None:
+        if stop is None:
             raise ParseError(s, "LimitedRate")
 
-        return cls(s, r, st)
+        return cls(rate, stop)
 
     def toJSON(self) -> Any:
         stoptype = "SV" if isinstance(self.stop, SV) else "TV"
         return {
             "rate": self.rate,
             "stop": self.stop,
-            "original": self.original,
             "stoptype": stoptype
         }
 
@@ -242,7 +277,6 @@ class LimitedRate:
     @classmethod
     def fromJSON(cls, jsondata: Any) -> LimitedRate:
         rate = Rate.fromJSON(jsondata["rate"])
-        original: str = jsondata["original"]
         stoptype: str = jsondata["stoptype"]
         if stoptype == "SV":
             stop = SV(jsondata["stop"])
@@ -251,7 +285,7 @@ class LimitedRate:
         else:
             raise ThisShouldNeverHappenException
 
-        return cls(original, rate, stop)
+        return cls(rate, stop)
 
     @classmethod
     async def convert(cls, ctx: commands.Context[commands.Bot], argument: str) -> LimitedRate:

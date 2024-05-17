@@ -18,7 +18,7 @@ from sizebot.lib import errors, utils
 from sizebot.lib.digidecimal import Decimal, DecimalSpec, round_fraction
 
 
-__all__ = ["Rate", "Mult", "SV", "WV", "TV", "AV", "VV"]
+__all__ = ["Mult", "SV", "WV", "TV", "AV", "VV"]
 
 logger = logging.getLogger("sizebot")
 
@@ -37,65 +37,6 @@ formatSpecRe = re.compile(r"""\A
 (?P<fractional>%)?
 \Z
 """, re.VERBOSE)
-
-
-class Rate():
-    """Rate"""
-    re_num_unit = f"{utils.re_num} *[A-Za-z]+"
-    re_opnum_unit = f"({utils.re_num})? *[A-Za-z]+"
-
-    rateDividers = "|".join(re.escape(d) for d in ("/", "per", "every"))
-    stopDividers = "|".join(re.escape(d) for d in ("until", "for", "->"))
-    addPrefixes = ["+", "plus", "add"]
-    subPrefixes = ["-", "minus", "subtract", "sub"]
-    addSubPrefixes = "|".join(re.escape(d) for d in addPrefixes + subPrefixes)
-    re_rate = re.compile(f"(?P<prefix>{addSubPrefixes})? *(?P<multOrSv>.*) *({rateDividers}) *(?P<tv>{re_opnum_unit}) *(({stopDividers}) *(?P<stop>{re_opnum_unit}))?")
-
-    @classmethod
-    def parse(cls, s: str) -> tuple[Decimal, Decimal, SV | None, TV | None]:
-        match = cls.re_rate.match(s)
-        if match is None:
-            raise errors.InvalidSizeValue(s, "rate")
-        prefix = match.group("prefix")
-        multOrSvStr = match.group("multOrSv")
-        tvStr = match.group("tv")
-        stopStr = match.group("stop")
-
-        isSub = prefix in cls.subPrefixes
-
-        valueSV = utils.try_or_none(SV.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
-        valueMult = None
-        if valueSV is None:
-            valueMult = utils.try_or_none(Mult.parse, multOrSvStr, ignore=errors.InvalidSizeValue)
-        if valueSV is None and valueMult is None:
-            raise errors.InvalidSizeValue(s, "size")
-        if valueSV and isSub:
-            valueSV = -valueSV
-
-        valueTV = utils.try_or_none(TV.parse, tvStr, ignore=errors.InvalidSizeValue)
-        if valueTV is None:
-            raise errors.InvalidSizeValue(s, "time")
-
-        stopSV = None
-        stopTV = None
-        if stopStr is not None:
-            stopSV = utils.try_or_none(SV.parse, stopStr, ignore=errors.InvalidSizeValue)
-            if stopSV is None:
-                stopTV = utils.try_or_none(TV.parse, stopStr, ignore=errors.InvalidSizeValue)
-            if stopSV is None and stopTV is None:
-                raise errors.InvalidSizeValue(s, "stop")
-
-        if valueSV is not None:
-            addPerSec = valueSV / valueTV
-        else:
-            addPerSec = 0
-
-        if valueMult is not None:
-            mulPerSec = valueMult ** (1 / valueTV)
-        else:
-            mulPerSec = 1
-
-        return Decimal(addPerSec), Decimal(mulPerSec), stopSV, stopTV
 
 
 class Mult():

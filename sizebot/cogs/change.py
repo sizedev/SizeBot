@@ -8,11 +8,10 @@ from discord.ext import commands, tasks
 
 import sizebot.data
 from sizebot.lib import changes, userdb, nickmanager
-from sizebot.lib.diff import Diff, LimitedRate
-from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.objs import DigiObject, objects
-from sizebot.lib.units import SV, Rate
+from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
 
@@ -35,7 +34,7 @@ class ChangeCog(commands.Cog):
         category = "change",
         usage = "<change> [rate] [stop]"
     )
-    async def change(self, ctx: commands.Context[commands.Bot], *, string: LimitedRate | ParseableRate | Diff | str):
+    async def change(self, ctx: commands.Context[commands.Bot], *, arg: LimitedRate | Rate | Diff | str):
         """Either change or slow-change your height.
 
         Can be used in essentially the three following ways:
@@ -53,9 +52,9 @@ class ChangeCog(commands.Cog):
         guildid = ctx.guild.id
         userid = ctx.author.id
 
-        if isinstance(string, Diff):
-            style = string.changetype
-            amount = string.amount
+        if isinstance(arg, Diff):
+            style = arg.changetype
+            amount = arg.amount
 
             userdata = userdb.load(guildid, userid)
             if style == "add":
@@ -72,16 +71,14 @@ class ChangeCog(commands.Cog):
 
             await ctx.send(f"{userdata.nickname} is now {userdata.height:m} ({userdata.height:u}) tall.")
 
-        elif isinstance(string, ParseableRate) or isinstance(string, LimitedRate):
-            addPerSec, mulPerSec, stopSV, stopTV = Rate.parse(string.original)
-
+        elif isinstance(arg, Rate) or isinstance(arg, LimitedRate):
             userdata = userdb.load(guildid, userid)  # Load this data but don't use it as an ad-hoc user test.
 
-            changes.start(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV)
+            changes.start(userid, guildid, addPerSec=arg.addPerSec, mulPerSec=arg.mulPerSec, stopSV=arg.stopSV, stopTV=arg.stopTV)
 
-            await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{string.original}`.")
+            await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{str(arg)}`.")
 
-        elif string == "stop":
+        elif arg == "stop":
             await ctx.invoke(self.bot.get_command("stopchange"), query="")
 
     @commands.command(

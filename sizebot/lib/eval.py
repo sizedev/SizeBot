@@ -22,11 +22,11 @@ from sizebot.cogs import thistracker
 from sizebot.lib import errors, guilddb, proportions, userdb, utils
 from sizebot.lib.constants import emojis, ids
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.diff import Diff, LimitedRate, Rate as ParseableRate
+from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.loglevels import BANNER, EGG, LOGIN
 from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.roller import evalmath, roll
-from sizebot.lib.units import Rate, Mult, SV, TV, WV
+from sizebot.lib.units import Mult, SV, TV, WV
 from sizebot.lib.userdb import FakePlayer
 
 
@@ -131,8 +131,8 @@ def getEvalGlobals() -> dict[str, Any]:
         "discord": discord,
         "logging": logging,
         "logger": logger,
-        "Rate": Rate, "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
-        "Diff": Diff, "ParseableRate": ParseableRate, "LimitedRate": LimitedRate,
+        "Mult": Mult, "SV": SV, "WV": WV, "TV": TV,
+        "Diff": Diff, "Rate": Rate, "LimitedRate": LimitedRate,
         "DigiObject": DigiObject, "FakePlayer": FakePlayer,
         "objects": objects,
         "tags": tags,

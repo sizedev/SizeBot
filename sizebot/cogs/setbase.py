@@ -5,7 +5,7 @@ from discord.ext import commands
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import emojis
-from sizebot.lib.diff import Rate as ParseableRate
+from sizebot.lib.diff import Rate
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.units import SV, WV
@@ -234,7 +234,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasewalk(self, ctx: commands.Context[commands.Bot], *, newwalk: ParseableRate):
+    async def setbasewalk(self, ctx: commands.Context[commands.Bot], *, newwalk: Rate):
         """Set a custom walk speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -250,7 +250,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaserun(self, ctx: commands.Context[commands.Bot], *, newrun: ParseableRate):
+    async def setbaserun(self, ctx: commands.Context[commands.Bot], *, newrun: Rate):
         """Set a custom run speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -266,7 +266,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseswim(self, ctx: commands.Context[commands.Bot], *, newswim: ParseableRate):
+    async def setbaseswim(self, ctx: commands.Context[commands.Bot], *, newswim: Rate):
         """Set a custom swim speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
