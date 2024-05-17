@@ -15,7 +15,8 @@ from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.statproxy import StatProxy
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, TV, WV
-from sizebot.lib.userdb import load_or_fake, FakePlayer
+from sizebot.lib.userdb import load_or_fake
+from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.utils import pretty_time_delta, round_fraction, sentence_join
 
 logger = logging.getLogger("sizebot")
@@ -46,7 +47,7 @@ class StatsCog(commands.Cog):
             memberOrHeight = ctx.author
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
+        userdata = load_or_fake(memberOrHeight, allow_unreg=same_user)
 
         tosend = proportions.get_stats(userdata, ctx.author.id)
         await ctx.send(**tosend)
@@ -68,7 +69,7 @@ class StatsCog(commands.Cog):
         scale_factor = sv1 / sv2
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
+        userdata = load_or_fake(memberOrHeight, allow_unreg=same_user)
         userdata.scale = scale_factor
 
         tosend = proportions.get_stats(userdata, ctx.author.id)
@@ -178,7 +179,7 @@ class StatsCog(commands.Cog):
             memberOrHeight = ctx.author
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
+        userdata = load_or_fake(memberOrHeight, allow_unreg=same_user)
 
         if stat.tag:
             tosend = proportions.get_stats_bytag(userdata, stat.name, ctx.author.id)
@@ -207,7 +208,7 @@ class StatsCog(commands.Cog):
             memberOrHeight = ctx.author
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
-        userdata = load_or_fake(memberOrHeight, allow_unreg = same_user)
+        userdata = load_or_fake(memberOrHeight, allow_unreg=same_user)
         sv1 = load_or_fake(sv1).height  # This feels like a hack. Is this awful?
         scale_factor = sv1 / sv2
         userdata.scale = scale_factor

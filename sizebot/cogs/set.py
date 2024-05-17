@@ -13,7 +13,7 @@ from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import AliasMap, parse_scale, randrange_log
-from sizebot.lib.userdb import FakePlayer
+from sizebot.lib.fakeplayer import FakePlayer
 
 logger = logging.getLogger("sizebot")
 
@@ -630,6 +630,7 @@ class SetCog(commands.Cog):
         await ctx.send(f"{userdata.nickname}'s gender is now reset.")
         await show_next_step(ctx, userdata)
 
+    # Admin Commands
     @commands.command(
         category = "mod",
         hidden = True

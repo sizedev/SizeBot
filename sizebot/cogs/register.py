@@ -10,6 +10,7 @@ from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import ids, emojis
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
+from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT
 
 logger = logging.getLogger("sizebot")
 
@@ -165,7 +166,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def advancedregister(self, ctx: BotContext, nick: str, currentheight: SV = userdb.DEFAULT_HEIGHT, baseheight: SV = userdb.DEFAULT_HEIGHT, baseweight: WV = userdb.DEFAULT_WEIGHT, unitsystem: str = "m", species: str = None):
+    async def advancedregister(self, ctx: BotContext, nick: str, currentheight: SV = AVERAGE_HEIGHT, baseheight: SV = AVERAGE_HEIGHT, baseweight: WV = AVERAGE_WEIGHT, unitsystem: str = "m", species: str = None):
         """Registers a user for SizeBot, legacy style.
 
         Parameters:

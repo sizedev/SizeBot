@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, TypeVar
+from typing import Any, Literal, TypeVar, TypedDict
 from collections.abc import Callable
 
 from functools import cached_property
@@ -9,10 +9,13 @@ from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, TV, WV, AV
-from sizebot.lib.userdb import PlayerStats, DEFAULT_HEIGHT as AVERAGE_HEIGHT, DEFAULT_WEIGHT as AVERAGE_WEIGHT, DEFAULT_LIFT_STRENGTH, FALL_LIMIT
 from sizebot.lib.shoesize import to_shoe_size
 from sizebot.lib.surface import can_walk_on_water
 
+AVERAGE_HEIGHT = SV("1.754")            # meters
+AVERAGE_WEIGHT = WV("66760")            # grams
+DEFAULT_LIFT_STRENGTH = WV("18143.7")   # grams
+FALL_LIMIT = SV("7.73")                 # meters/second
 DEFAULT_THREAD_THICKNESS = SV("0.001016")
 AVERAGE_BREATHEPERHOUR = SV(720)
 AVERAGE_WALKPERHOUR = SV(5630)
@@ -34,6 +37,28 @@ AIR_DENSITY = Decimal("1.204")  # kg/m3
 
 IS_LARGE = 1.0
 IS_VERY_LARGE = 10.0
+
+Gender = Literal["m", "f", "x"]
+
+
+class PlayerStats(TypedDict):
+    height: str
+    weight: str
+    footlength: str | None      # TODO: This is actually basefootlength (footlength at scale=1)
+    pawtoggle: bool
+    furtoggle: bool
+    hairlength: str | None      # TODO: This is actually basehairlength (hairlength at scale=1)
+    taillength: str | None      # TODO: This is actually basetaillength (taillength at scale=1)
+    earheight: str | None       # TODO: This is actually baseearheight (earheight at scale=1)
+    liftstrength: str | None    # TODO: This is actually baseliftstrength (liftstrength at scale=1)
+    walkperhour: str | None     # TODO: This is actually basewalkperhour (walkperhour at scale=1)
+    swimperhour: str | None     # TODO: This is actually baseswimperhour (swimperhour at scale=1)
+    runperhour: str | None      # TODO: This is actually baserunperhour (runperhour at scale=1)
+    gender: Gender | None
+    nickname: str
+    id: str
+    macrovision_model: str | None
+    macrovision_view: str | None
 
 
 def format_scale(scale: Decimal) -> str:
@@ -367,7 +392,8 @@ all_stats = [
             is_shown=False,
             type=str,
             power=0,
-            userkey="nickname"),
+            userkey="nickname",
+            aliases=["nick", "name"]),
     StatDef("scale",
             title="Scale",
             string=lambda s: format_scale(s['scale'].value),

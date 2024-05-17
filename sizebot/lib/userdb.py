@@ -1,7 +1,6 @@
 from __future__ import annotations
-from typing import Literal, TypedDict, Any
+from typing import Literal, Any
 
-import re
 import json
 from copy import copy
 from functools import total_ordering
@@ -17,17 +16,10 @@ import sizebot.data
 from sizebot.lib import errors, paths
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, Rate
-from sizebot.lib.types import BotContext
+from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.units import SV, TV, WV
-from sizebot.lib.utils import AliasMap, parse_scale, truthy, is_url, truncate
-from sizebot.lib.errors import InvalidSizeValue, InvalidStat
-from sizebot.lib.shoesize import from_shoe_size
-
-# Defaults
-DEFAULT_HEIGHT = SV("1.754")            # meters
-DEFAULT_WEIGHT = WV("66760")            # grams
-FALL_LIMIT = SV("7.73")                 # meters/second
-DEFAULT_LIFT_STRENGTH = WV("18143.7")   # grams
+from sizebot.lib.utils import is_url, truncate
+from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT, PlayerStats
 
 BASICALLY_ZERO = Decimal("1E-27")
 
@@ -40,29 +32,6 @@ def str_or_none(v: Any) -> str | None:
     if v is None:
         return None
     return str(v)
-
-
-Gender = Literal["m", "f", "x"]
-
-
-class PlayerStats(TypedDict):
-    height: str
-    weight: str
-    footlength: str | None      # TODO: This is actually basefootlength (footlength at scale=1)
-    pawtoggle: bool
-    furtoggle: bool
-    hairlength: str | None      # TODO: This is actually basehairlength (hairlength at scale=1)
-    taillength: str | None      # TODO: This is actually basetaillength (taillength at scale=1)
-    earheight: str | None       # TODO: This is actually baseearheight (earheight at scale=1)
-    liftstrength: str | None    # TODO: This is actually baseliftstrength (liftstrength at scale=1)
-    walkperhour: str | None     # TODO: This is actually basewalkperhour (walkperhour at scale=1)
-    swimperhour: str | None     # TODO: This is actually baseswimperhour (swimperhour at scale=1)
-    runperhour: str | None      # TODO: This is actually baserunperhour (runperhour at scale=1)
-    gender: Gender | None
-    nickname: str
-    id: str
-    macrovision_model: str | None
-    macrovision_view: str | None
 
 
 @total_ordering
@@ -87,9 +56,9 @@ class User:
         self.description: str | None = None
         self._gender: str | None = None
         self.display: bool = True
-        self._height: SV = DEFAULT_HEIGHT
-        self._baseheight: SV = DEFAULT_HEIGHT
-        self._baseweight: SV = DEFAULT_WEIGHT
+        self._height: SV = AVERAGE_HEIGHT
+        self._baseheight: SV = AVERAGE_HEIGHT
+        self._baseweight: SV = AVERAGE_WEIGHT
         self._footlength: SV | None = None
         self._pawtoggle: bool = False
         self._furtoggle: bool = False
@@ -97,7 +66,7 @@ class User:
         self._taillength: SV | None = None
         self._earheight: SV | None = None
         self._liftstrength: WV | None = None
-        self._walkperhour: Rate | None = None
+        self._walkperhour: SV | None = None
         self._runperhour: Rate | None = None
         self._swimperhour: Rate | None = None
         self.incomprehensible: bool = False
@@ -276,11 +245,11 @@ class User:
         self._liftstrength = value
 
     @property
-    def walkperhour(self) -> Rate | None:
+    def walkperhour(self) -> SV | Rate | None:
         return self._walkperhour
 
     @walkperhour.setter
-    def walkperhour(self, value: Rate | None):
+    def walkperhour(self, value: SV | Rate | None):
         if value is None:
             self._walkperhour = None
             return
@@ -300,11 +269,11 @@ class User:
         self._walkperhour = value
 
     @property
-    def runperhour(self) -> Rate | None:
+    def runperhour(self) -> SV | None:
         return self._runperhour
 
     @runperhour.setter
-    def runperhour(self, value: Rate | None):
+    def runperhour(self, value: SV | Rate | None):
         if value is None:
             self._runperhour = None
             return
@@ -332,11 +301,11 @@ class User:
         return SV(Decimal(2556) * self.scale)
 
     @property
-    def swimperhour(self) -> Rate | None:
+    def swimperhour(self) -> SV | None:
         return self._swimperhour
 
     @swimperhour.setter
-    def swimperhour(self, value: Rate | None):
+    def swimperhour(self, value: SV | Rate | None):
         if value is None:
             self._swimperhour = None
             return
@@ -669,6 +638,17 @@ class User:
         newuserdata.scale = Decimal(self.scale) ** other
         return newuserdata
 
+    @classmethod
+    def from_fake(cls, fake: FakePlayer) -> User:
+        userdata = User()
+        for k, v in fake.statvalues:
+            setattr(userdata, k, v)
+        return userdata
+
+    @classmethod
+    def from_height(cls, height: SV) -> User:
+        return User.from_fake(FakePlayer(height=height))
+
 
 def get_guild_users_path(guildid: int) -> Path:
     return paths.guilddbpath / f"{guildid}" / "users"
@@ -743,100 +723,10 @@ def list_users(*, guildid: int | None = None, userid: int | None = None) -> list
     return users
 
 
-def load_or_fake(memberOrSV: discord.Member | FakePlayer | SV, nickname: str | None = None, *, allow_unreg: bool = False) -> User:
-    if isinstance(memberOrSV, discord.Member):
-        return load(memberOrSV.guild.id, memberOrSV.id, member=memberOrSV, allow_unreg=allow_unreg)
-    if type(memberOrSV).__name__ == "FakePlayer":  # can't use isinstance, circular import
-        return memberOrSV
-    else:
-        userdata = User()
-        userdata.height = memberOrSV
-        if nickname is None:
-            nickname = f"a {userdata.height:,.3mu} tall person"
-        userdata.nickname = nickname
-        return userdata
-
-
-class FakePlayer(User):
-    """Generates a fake User based on a dumb string with complex syntax no one will use but me."""
-    KEYMAP = AliasMap({
-        "nickname": ("nick", "name"),
-        "height": (),
-        "baseheight": (),
-        "baseweight": (),
-        "footlength": ("foot", "basefoot"),
-        "shoesize": ("shoe", "baseshoe"),
-        "hairlength": ("hair", "basehair"),
-        "taillength": ("tail", "basetail"),
-        "earheight": ("ear", "baseear"),
-        "pawtoggle": ("paw"),
-        "furtoggle": ("fur"),
-        "liftstrength": ("lift", "carry"),
-        "walkperhour": ("walk"),
-        "runperhour": ("run"),
-        "swimperhour": ("swim"),
-        "gender": (),
-        "scale": ()
-    })
-
-    UNITMAP = {
-        "nickname": str,
-        "height": SV,
-        "baseheight": SV,
-        "baseweight": WV,
-        "footlength": SV,
-        "shoesize": str,
-        "hairlength": SV,
-        "taillength": SV,
-        "earheight": SV,
-        "pawtoggle": bool,
-        "furtoggle": bool,
-        "liftstrength": WV,
-        "walkperhour": Rate,
-        "runperhour": Rate,
-        "swimperhour": Rate,
-        "gender": str,
-        "scale": str
-    }
-
-    @classmethod
-    def parse(cls, s: str) -> FakePlayer:
-        re_full_string = r"\$(\w+=[^;$]+;?)+"
-        match = re.match(re_full_string, s)
-        if match is None:
-            raise InvalidSizeValue(s, "FakePlayer")
-
-        player = FakePlayer()
-
-        s = s.removeprefix("$")
-        for group in s.split(";"):
-            re_component = r"(\w+)=([^;$]+);?"
-            componentmatch = re.match(re_component, group)
-            key = componentmatch.group(1)
-            val = componentmatch.group(2)
-            if key not in cls.KEYMAP:
-                raise InvalidStat(key)
-
-            collapsed_key = cls.KEYMAP[key]
-            unit = cls.UNITMAP[collapsed_key]
-
-            if collapsed_key == "scale":
-                player.scale = parse_scale(val)
-            elif collapsed_key == "shoesize":
-                player.footlength = from_shoe_size(val)
-            elif unit == bool:
-                setattr(player, collapsed_key, truthy(val))
-            elif unit == str:
-                setattr(player, collapsed_key, val)
-            elif unit in (SV, WV, Rate):
-                val = unit.parse(val)
-                setattr(player, collapsed_key, val)
-
-        if player.nickname is None:
-            player.nickname = f"a {player.height:,.3mu} tall person"
-
-        return player
-
-    @classmethod
-    async def convert(cls, ctx: BotContext, argument: str) -> FakePlayer:
-        return cls.parse(argument)
+def load_or_fake(arg: discord.Member | FakePlayer | SV, *, allow_unreg: bool = False) -> User:
+    if isinstance(arg, discord.Member):
+        return load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
+    elif isinstance(arg, FakePlayer):
+        return User.from_fake(arg)
+    elif isinstance(arg, SV):
+        return User.from_height(arg)

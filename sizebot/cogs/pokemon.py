@@ -8,7 +8,7 @@ from sizebot.lib import userdb
 from sizebot.lib.pokemon import pokemon
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
-from sizebot.lib.userdb import FakePlayer
+from sizebot.lib.fakeplayer import FakePlayer
 
 logger = logging.getLogger("sizebot")
 

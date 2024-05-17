@@ -11,7 +11,8 @@ from sizebot.lib.quake import breath_joules, heartbeat_joules, joules_to_mag, ju
 from sizebot.lib.stats import StatBox
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
-from sizebot.lib.userdb import load_or_fake, FakePlayer
+from sizebot.lib.userdb import load_or_fake
+from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.errors import UserMessedUpException
 
 EARTH_RAD = Decimal(10_018_570)

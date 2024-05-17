@@ -10,6 +10,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
 from sizebot.lib.errors import UserNotFoundException
+from sizebot.lib.stats import AVERAGE_HEIGHT
 
 
 logger = logging.getLogger("sizebot")
@@ -277,10 +278,10 @@ class SayCog(commands.Cog):
             height = user.height
             nick = user.nickname
         except UserNotFoundException:
-            height = userdb.DEFAULT_HEIGHT
+            height = AVERAGE_HEIGHT
             nick = ctx.author.display_name
 
-        ratio = height / userdb.DEFAULT_HEIGHT
+        ratio = height / AVERAGE_HEIGHT
 
         diff = ratio_to_diff(ratio)
         m = resize_text(message, diff)
@@ -309,7 +310,7 @@ class SayCog(commands.Cog):
             height = user.height
             nick = user.nickname
         except UserNotFoundException:
-            height = userdb.DEFAULT_HEIGHT
+            height = AVERAGE_HEIGHT
             nick = ctx.author.display_name
 
         ratio = height / otherheight
