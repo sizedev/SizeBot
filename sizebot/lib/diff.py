@@ -139,6 +139,9 @@ class Diff:
         amount = format(self.amount, ",.3mu") if self.changetype == "add" else format(self.amount, ".10")
         return f"{operator}{amount}"
 
+    def __mul__(self, other: Decimal) -> Diff:
+        return Diff(self.changetype, self.amount * other)
+
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} {self}>"
 
@@ -208,6 +211,9 @@ class Rate:
 
     def __str__(self) -> str:
         return f"{self.diff} per {format(self.time)}"
+
+    def __mul__(self, other: Decimal) -> Rate:
+        return Rate(self.diff * other, self.time)
 
     @classmethod
     def fromJSON(cls, jsondata: Any) -> Rate:

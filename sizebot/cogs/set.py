@@ -564,9 +564,7 @@ class SetCog(commands.Cog):
         """Set your current walk speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.walkperhour = Rate(Diff("add", newwalk.diff.amount * userdata.viewscale), newwalk.time)
-
+        userdata.walkperhour = newwalk * userdata.viewscale
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base walk speed is now {userdata.walkperhour:mu} per hour. (Current speed is {newwalk:mu})")
@@ -595,10 +593,7 @@ class SetCog(commands.Cog):
         """Set your current run speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        newrun_scaled = Rate(Diff("add", newrun.diff.amount * userdata.viewscale), newrun.time)
-
-        userdata.runperhour = newrun_scaled
+        userdata.runperhour = newrun * userdata.viewscale
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour. (Current speed is {newrun:mu})")
@@ -627,9 +622,7 @@ class SetCog(commands.Cog):
         """Set your current swim speed."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.swimperhour = Rate(Diff("add", newswim.diff.amount * userdata.viewscale), newswim.time)
-
+        userdata.swimperhour = newswim * userdata.viewscale
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.  (Current speed is {newswim:mu})")
