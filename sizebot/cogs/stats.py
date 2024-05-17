@@ -15,7 +15,7 @@ from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.statproxy import StatProxy
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, TV, WV
-from sizebot.lib.userdb import load_or_fake, MemberOrFakeOrSize
+from sizebot.lib.userdb import load_or_fake, MemberOrFakeOrSize, load_or_fake_height
 from sizebot.lib.utils import pretty_time_delta, round_fraction, sentence_join
 
 logger = logging.getLogger("sizebot")
@@ -62,7 +62,7 @@ class StatsCog(commands.Cog):
         if memberOrHeight is None:
             memberOrHeight = ctx.author
 
-        sv1 = load_or_fake(sv1).height  # This feels like a hack. Is this awful?
+        sv1 = load_or_fake_height(sv1)  # This feels like a hack. Is this awful?
         scale_factor = sv1 / sv2
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
@@ -206,7 +206,7 @@ class StatsCog(commands.Cog):
 
         same_user = isinstance(memberOrHeight, discord.Member) and memberOrHeight.id == ctx.author.id
         userdata = load_or_fake(memberOrHeight, allow_unreg=same_user)
-        sv1 = load_or_fake(sv1).height  # This feels like a hack. Is this awful?
+        sv1 = load_or_fake_height(sv1)  # This feels like a hack. Is this awful?
         scale_factor = sv1 / sv2
         userdata.scale = scale_factor
 
@@ -357,7 +357,7 @@ class StatsCog(commands.Cog):
         userdata = load_or_fake(member)
 
         if not isinstance(goal, (SV, TV)):
-            goal = load_or_fake(goal).height
+            goal = load_or_fake_height(goal)
 
         if isinstance(goal, SV):
             tosend = proportions.get_speeddistance(userdata, goal)
@@ -688,8 +688,7 @@ class StatsCog(commands.Cog):
         if isinstance(who, WV):
             weight = who
         else:
-            userdata = load_or_fake(who)
-            weight = userdata.weight
+            weight = load_or_fake_weight(who).weight
 
         gold_dollars = metal_value("gold", weight)
         silver_dollars = metal_value("silver", weight)
@@ -724,7 +723,7 @@ class StatsCog(commands.Cog):
         if isinstance(whoOrWhat, (SV, WV)):
             value = whoOrWhat
         else:
-            value = load_or_fake(whoOrWhat).height
+            value = load_or_fake_height(whoOrWhat)
 
         await ctx.send(f"{value:,.3mu}")
 

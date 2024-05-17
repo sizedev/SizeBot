@@ -721,3 +721,23 @@ def load_or_fake(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> User:
         return User.from_fake(arg)
     elif isinstance(arg, SV):
         return User.from_height(arg)
+
+
+def load_or_fake_height(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> SV:
+    if isinstance(arg, discord.Member):
+        user = load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
+        return user.height
+    elif isinstance(arg, FakePlayer):
+        return User.from_fake(arg).height
+    elif isinstance(arg, SV):
+        return arg
+
+
+def load_or_fake_weight(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> WV:
+    if isinstance(arg, discord.Member):
+        user = load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
+        return user.weight
+    elif isinstance(arg, FakePlayer):
+        return User.from_fake(arg).weight
+    elif isinstance(arg, WV):
+        return arg
