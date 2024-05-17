@@ -358,12 +358,11 @@ class SetCog(commands.Cog):
         usage = "<foot>",
         category = "set"
     )
-    async def setfoot(self, ctx: commands.Context[commands.Bot], *, newfoot: str):
+    async def setfoot(self, ctx: commands.Context[commands.Bot], *, newfoot: SV):
         """Set your current foot length."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.footlength = SV(SV.parse(newfoot) * userdata.viewscale)
+        userdata.footlength = SV(newfoot * userdata.viewscale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({to_shoe_size(userdata.footlength, 'm')}), "
@@ -448,11 +447,11 @@ class SetCog(commands.Cog):
         usage = "<hair>",
         category = "set"
     )
-    async def sethair(self, ctx: commands.Context[commands.Bot], *, newhair: str):
+    async def sethair(self, ctx: commands.Context[commands.Bot], *, newhair: SV):
         """Set your current hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        newhairsv = SV(SV.parse(newhair) * userdata.viewscale)
+        newhairsv = SV(newhair * userdata.viewscale)
 
         userdata.hairlength = newhairsv
         userdb.save(userdata)
@@ -465,11 +464,11 @@ class SetCog(commands.Cog):
         usage = "<tail>",
         category = "set"
     )
-    async def settail(self, ctx: commands.Context[commands.Bot], *, newtail: str):
+    async def settail(self, ctx: commands.Context[commands.Bot], *, newtail: SV):
         """Set your current tail length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        newtailsv = SV(SV.parse(newtail) * userdata.viewscale)
+        newtailsv = SV(newtail * userdata.viewscale)
 
         userdata.taillength = newtailsv
         userdb.save(userdata)
@@ -497,11 +496,11 @@ class SetCog(commands.Cog):
         usage = "<ear>",
         category = "set"
     )
-    async def setear(self, ctx: commands.Context[commands.Bot], *, newear: str):
+    async def setear(self, ctx: commands.Context[commands.Bot], *, newear: SV):
         """Set your current ear heightear."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        newearsv = SV(SV.parse(newear) * userdata.viewscale)
+        newearsv = SV(newear * userdata.viewscale)
 
         userdata.earheight = newearsv
         userdb.save(userdata)
@@ -530,12 +529,12 @@ class SetCog(commands.Cog):
         usage = "<weight>",
         category = "set"
     )
-    async def setstrength(self, ctx: commands.Context[commands.Bot], *, newstrength: str):
+    async def setstrength(self, ctx: commands.Context[commands.Bot], *, newstrength: WV):
         """Set your current lift/carry strength."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.liftstrength = WV(WV.parse(newstrength) * (userdata.viewscale ** 3))
+        userdata.liftstrength = WV(newstrength * (userdata.viewscale ** 3))
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base lift strength is now {WV(userdata.liftstrength):mu}, "
