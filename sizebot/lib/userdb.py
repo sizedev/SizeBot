@@ -49,16 +49,16 @@ Gender = Literal["m", "f", "x"]
 class PlayerStats(TypedDict):
     height: str
     weight: str
-    footlength: str | None
+    footlength: str | None      # TODO: This is actually basefootlength (footlength at scale=1)
     pawtoggle: bool
     furtoggle: bool
-    hairlength: str | None
-    taillength: str | None
-    earheight: str | None
-    liftstrength: str | None
-    walkperhour: str | None
-    swimperhour: str | None
-    runperhour: str | None
+    hairlength: str | None      # TODO: This is actually basehairlength (hairlength at scale=1)
+    taillength: str | None      # TODO: This is actually basetaillength (taillength at scale=1)
+    earheight: str | None       # TODO: This is actually baseearheight (earheight at scale=1)
+    liftstrength: str | None    # TODO: This is actually baseliftstrength (liftstrength at scale=1)
+    walkperhour: str | None     # TODO: This is actually basewalkperhour (walkperhour at scale=1)
+    swimperhour: str | None     # TODO: This is actually baseswimperhour (swimperhour at scale=1)
+    runperhour: str | None      # TODO: This is actually baserunperhour (runperhour at scale=1)
     gender: Gender | None
     nickname: str
     id: str
@@ -191,6 +191,7 @@ class User:
 
     @property
     def footlength(self) -> SV | None:
+        """Base foot length"""
         return self._footlength
 
     @footlength.setter
@@ -226,6 +227,7 @@ class User:
 
     @property
     def hairlength(self) -> SV | None:
+        """Base hair length"""
         return self._hairlength
 
     @hairlength.setter

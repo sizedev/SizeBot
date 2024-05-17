@@ -196,16 +196,16 @@ class SetCog(commands.Cog):
         `&copyheight @User`
         `&copyheight @User 10`
         """
-        to_userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         from_userdata = userdb.load(ctx.guild.id, from_user.id)
-        to_userdata.height = from_userdata.height * newscale
-        completed_registration = to_userdata.complete_step("setheight")
-        userdb.save(to_userdata)
+        userdata.height = from_userdata.height * newscale
+        completed_registration = userdata.complete_step("setheight")
+        userdb.save(userdata)
 
-        await ctx.send(f"{to_userdata.nickname} is now {to_userdata.height:mu} tall.")
+        await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(ctx.author)
-        await show_next_step(ctx, to_userdata, completed=completed_registration)
+        await show_next_step(ctx, userdata, completed=completed_registration)
 
     @commands.command(
         aliases = ["resetsize", "reset", "resetscale"],
@@ -215,7 +215,6 @@ class SetCog(commands.Cog):
     async def resetheight(self, ctx: commands.Context[commands.Bot]):
         """Reset height/size."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.height = userdata.baseheight
         userdb.save(userdata)
 
@@ -244,7 +243,6 @@ class SetCog(commands.Cog):
         newheightSV = randrange_log(minheight, maxheight)
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.height = newheightSV
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
@@ -286,7 +284,6 @@ class SetCog(commands.Cog):
     async def setinf(self, ctx: commands.Context[commands.Bot]):
         """Change height to infinity."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.height = SV("infinity")
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
@@ -304,7 +301,6 @@ class SetCog(commands.Cog):
     async def set0(self, ctx: commands.Context[commands.Bot]):
         """Change height to a zero."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.height = 0
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
@@ -337,7 +333,7 @@ class SetCog(commands.Cog):
     async def setfoot(self, ctx: commands.Context[commands.Bot], *, newfoot: SV):
         """Set your current foot length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.footlength = SV(newfoot * userdata.viewscale)
+        userdata.footlength = SV(newfoot / userdata.scale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({to_shoe_size(userdata.footlength, 'm')}), "
@@ -362,7 +358,7 @@ class SetCog(commands.Cog):
         `&setshoe 12C`
         """
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.footlength = SV(from_shoe_size(newshoe) * userdata.viewscale)
+        userdata.footlength = SV(from_shoe_size(newshoe) / userdata.scale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({to_shoe_size(userdata.footlength, 'm')}), "
@@ -377,7 +373,6 @@ class SetCog(commands.Cog):
     async def resetfoot(self, ctx: commands.Context[commands.Bot]):
         """Remove custom foot length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.footlength = None
         userdb.save(userdata)
 
@@ -392,7 +387,6 @@ class SetCog(commands.Cog):
     async def togglepaw(self, ctx: commands.Context[commands.Bot]):
         """Switch between the word "foot" and "paw" for your stats."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.pawtoggle = not userdata.pawtoggle
         userdb.save(userdata)
 
@@ -407,7 +401,6 @@ class SetCog(commands.Cog):
     async def togglefur(self, ctx: commands.Context[commands.Bot]):
         """Switch between the word "hair" and "fur" for your stats."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.furtoggle = not userdata.furtoggle
         userdb.save(userdata)
 
@@ -421,7 +414,7 @@ class SetCog(commands.Cog):
     async def sethair(self, ctx: commands.Context[commands.Bot], *, newhair: SV):
         """Set your current hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.hairlength = SV(newhair * userdata.viewscale)
+        userdata.hairlength = SV(newhair / userdata.scale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base hair length is now {userdata.hairlength:mu} long, "
@@ -435,7 +428,7 @@ class SetCog(commands.Cog):
     async def settail(self, ctx: commands.Context[commands.Bot], *, newtail: SV):
         """Set your current tail length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.taillength = SV(newtail * userdata.viewscale)
+        userdata.taillength = SV(newtail / userdata.scale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base tail length is now {userdata.taillength:mu} long, "
@@ -450,7 +443,6 @@ class SetCog(commands.Cog):
     async def resettail(self, ctx: commands.Context[commands.Bot]):
         """Remove custom tail length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.taillength = None
         userdb.save(userdata)
 
@@ -464,7 +456,7 @@ class SetCog(commands.Cog):
     async def setear(self, ctx: commands.Context[commands.Bot], *, newear: SV):
         """Set your current ear heightear."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.earheight = SV(newear * userdata.viewscale)
+        userdata.earheight = SV(newear / userdata.scale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base ear height is now {userdata.earheight:mu} long, "
@@ -479,7 +471,6 @@ class SetCog(commands.Cog):
     async def resetear(self, ctx: commands.Context[commands.Bot]):
         """Remove custom ear height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.earheight = None
         userdb.save(userdata)
 
@@ -494,7 +485,7 @@ class SetCog(commands.Cog):
     async def setstrength(self, ctx: commands.Context[commands.Bot], *, newstrength: WV):
         """Set your current lift/carry strength."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.liftstrength = WV(newstrength * (userdata.viewscale ** 3))
+        userdata.liftstrength = WV(newstrength / (userdata.scale ** 3))
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base lift strength is now {WV(userdata.liftstrength):mu}, "
@@ -509,7 +500,6 @@ class SetCog(commands.Cog):
     async def resetstrength(self, ctx: commands.Context[commands.Bot]):
         """Remove custom lift/carry strength."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.liftstrength = None
         userdb.save(userdata)
 
@@ -523,7 +513,7 @@ class SetCog(commands.Cog):
     async def setwalk(self, ctx: commands.Context[commands.Bot], *, newwalk: Rate):
         """Set your current walk speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.walkperhour = newwalk * userdata.viewscale
+        userdata.walkperhour = newwalk / userdata.scale
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base walk speed is now {userdata.walkperhour:mu} per hour. (Current speed is {newwalk:mu})")
@@ -537,7 +527,6 @@ class SetCog(commands.Cog):
     async def resetwalk(self, ctx: commands.Context[commands.Bot]):
         """Remove custom walk speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.walkperhour = None
         userdb.save(userdata)
 
@@ -551,7 +540,7 @@ class SetCog(commands.Cog):
     async def setrun(self, ctx: commands.Context[commands.Bot], *, newrun: Rate):
         """Set your current run speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.runperhour = newrun * userdata.viewscale
+        userdata.runperhour = newrun / userdata.scale
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour. (Current speed is {newrun:mu})")
@@ -565,7 +554,6 @@ class SetCog(commands.Cog):
     async def resetrun(self, ctx: commands.Context[commands.Bot]):
         """Remove custom run speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.runperhour = None
         userdb.save(userdata)
 
@@ -579,7 +567,7 @@ class SetCog(commands.Cog):
     async def setswim(self, ctx: commands.Context[commands.Bot], *, newswim: Rate):
         """Set your current swim speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.swimperhour = newswim * userdata.viewscale
+        userdata.swimperhour = newswim / userdata.scale
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.  (Current speed is {newswim:mu})")
@@ -593,7 +581,6 @@ class SetCog(commands.Cog):
     async def resetswim(self, ctx: commands.Context[commands.Bot]):
         """Remove custom swim speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
         userdata.swimperhour = None
         userdb.save(userdata)
 
@@ -607,9 +594,6 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def setgender(self, ctx: commands.Context[commands.Bot], gender: str):
         """Set gender."""
-        guild = ctx.guild
-        user = ctx.author
-
         gendermap = AliasMap({
             "m": ("male", "man", "boy"),
             "f": ("female", "woman", "girl"),
@@ -620,11 +604,11 @@ class SetCog(commands.Cog):
         except KeyError:
             raise errors.ArgumentException
 
-        userdata = userdb.load(guild.id, user.id, allow_unreg=True)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.gender = gender
         userdb.save(userdata)
 
-        await nickmanager.nick_update(user)
+        await nickmanager.nick_update(ctx.author)
 
         await ctx.send(f"{userdata.nickname}'s gender is now set to {userdata.gender}.")
         await show_next_step(ctx, userdata)
@@ -636,14 +620,11 @@ class SetCog(commands.Cog):
     @commands.guild_only()
     async def resetgender(self, ctx: commands.Context[commands.Bot]):
         """Reset gender."""
-        guild = ctx.guild
-        user = ctx.author
-
-        userdata = userdb.load(guild.id, user.id, allow_unreg=True)
+        userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.gender = None
         userdb.save(userdata)
 
-        await nickmanager.nick_update(user)
+        await nickmanager.nick_update(ctx.author)
 
         await ctx.send(f"{userdata.nickname}'s gender is now reset.")
         await show_next_step(ctx, userdata)
@@ -658,6 +639,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_model = model
         userdb.save(userdata)
+
         await ctx.send(f"{userdata.nickname}'s model is now {model}.")
 
     @commands.command(
@@ -671,6 +653,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_model = None
         userdb.save(userdata)
+
         await ctx.send(f"Cleared {userdata.nickname}'s model.")
 
     @commands.command(
@@ -683,6 +666,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_view = view
         userdb.save(userdata)
+
         await ctx.send(f"{userdata.nickname}'s view is now {view}.")
 
     @commands.command(
@@ -696,6 +680,7 @@ class SetCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, user.id)
         userdata.macrovision_view = None
         userdb.save(userdata)
+
         await ctx.send(f"Cleared {userdata.nickname}'s view.")
 
 
