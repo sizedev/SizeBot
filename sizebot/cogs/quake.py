@@ -176,7 +176,7 @@ class QuakeCog(commands.Cog):
         aliases = [],
         usage = "<string>",
         category = "stats")
-    async def quaketype(self, ctx: BotContext, s: str):
+    async def quaketype(self, ctx: BotContext, *, s: str):
         """Type a sentence and cause some quakes.\n#ACC#"""
         guildid = ctx.guild.id
         userid = ctx.author.id
