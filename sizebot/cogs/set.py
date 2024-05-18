@@ -149,7 +149,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setscale(self, ctx: BotContext, *, newscale: Annotated[Decimal, parse_scale] | str):
+    async def setscale(self, ctx: BotContext, *, newscale: Annotated[Decimal, parse_scale] | Literal["banana"]):
         """Change height by scale."""
 
         if newscale == "banana":
