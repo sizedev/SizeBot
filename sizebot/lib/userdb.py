@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Literal, Any
+from collections.abc import Callable
+from typing import Literal, Any, TypeVar, cast, get_args
 
 import json
 from copy import copy
@@ -28,6 +29,7 @@ BASICALLY_ZERO = Decimal("1E-27")
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 MoveTypeStr = Literal["walk", "run", "climb", "crawl", "swim"]
+MOVETYPES = get_args(MoveTypeStr)
 
 MemberOrFake = discord.Member | FakePlayer
 MemberOrFakeOrSize = MemberOrFake | SV
@@ -46,7 +48,7 @@ class User:
         "guildid", "id", "nickname", "lastactive", "picture_url", "description", "gender", "display",
         "_height", "baseheight", "baseweight", "footlength", "pawtoggle", "furtoggle",
         "hairlength", "taillength", "earheight", "liftstrength", "triggers", "unitsystem", "species", "soft_gender",
-        "avatar_url", "walkperhour", "runperhour", "swimperhour", "incomprehensible",
+        "avatar_url", "walkperhour", "runperhour", "swimperhour",
         "currentscalestep", "currentscaletalk", "scaletalklock",
         "currentmovetype", "movestarted", "movestop",
         "registration_steps_remaining", "_macrovision_model", "_macrovision_view",
@@ -74,7 +76,6 @@ class User:
         self.walkperhour: SV | None = None
         self.runperhour: SV | None = None
         self.swimperhour: SV | None = None
-        self.incomprehensible: bool = False
         self.currentscalestep: Diff | None = None
         self.currentscaletalk: Diff | None = None
         self.scaletalklock: bool = False
@@ -92,7 +93,7 @@ class User:
         self.registration_steps_remaining: list[str] = []
         self._macrovision_model: str | None = None
         self._macrovision_view: str | None = None
-        self.allowchangefromothers: bool | None = None
+        self.allowchangefromothers: bool = False
 
     def __str__(self) -> str:
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r} ...>")
@@ -272,7 +273,6 @@ class User:
             "walkperhour":      None if self.walkperhour is None else str(self.walkperhour),
             "runperhour":       None if self.runperhour is None else str(self.runperhour),
             "swimperhour":      None if self.swimperhour is None else str(self.swimperhour),
-            "incomprehensible": False,
             "currentscalestep": None if self.currentscalestep is None else self.currentscalestep.toJSON(),
             "currentscaletalk": None if self.currentscaletalk is None else self.currentscaletalk.toJSON(),
             "scaletalklock":    self.scaletalklock,
@@ -292,74 +292,45 @@ class User:
 
     # Create a new object from a python dictionary imported using json
     @classmethod
-    def fromJSON(cls, jsondata: dict) -> User:
+    def fromJSON(cls, jsondata: dict[str, Any]) -> User:
+        jsondata = migrate_json(jsondata)
         userdata = User()
-        userdata.guildid = jsondata.get("guildid", 350429009730994199)  # Default to Size Matters.
+        userdata.guildid = int(jsondata["guildid"])
         userdata.id = int(jsondata["id"])
-        userdata.nickname = jsondata["nickname"]
-        lastactive = jsondata.get("lastactive")
-        if lastactive is not None:
-            lastactive = arrow.get(lastactive)
-        userdata.lastactive = lastactive
-        userdata.picture_url = jsondata.get("picture_url")
-        userdata.description = jsondata.get("description")
-        userdata.gender = jsondata.get("gender")
-        userdata.display = jsondata["display"]
-        userdata.height = jsondata["height"]
-        userdata.baseheight = jsondata["baseheight"]
-        userdata.baseweight = jsondata["baseweight"]
-        userdata.footlength = jsondata.get("footlength")
-        userdata.pawtoggle = jsondata.get("pawtoggle", False)
-        userdata.furtoggle = jsondata.get("furtoggle", False)
-        userdata.hairlength = jsondata.get("hairlength")
-        userdata.taillength = jsondata.get("taillength")
-        userdata.earheight = jsondata.get("earheight")
-        userdata.liftstrength = jsondata.get("liftstrength")
-        userdata.walkperhour = jsondata.get("walkperhour")
-        userdata.runperhour = jsondata.get("runperhour")
-        userdata.swimperhour = jsondata.get("swimperhour")
-        userdata.incomprehensible = False
-        currentscalestep = jsondata.get("currentscalestep")
-        if currentscalestep is not None:
-            currentscalestep = Diff.fromJSON(currentscalestep)
-        userdata.currentscalestep = currentscalestep
-        currentscaletalk = jsondata.get("currentscaletalk")
-        if currentscaletalk is not None:
-            currentscaletalk = Diff.fromJSON(currentscaletalk)
-        userdata.currentscaletalk = currentscaletalk
-        userdata.scaletalklock = jsondata.get("scaletalklock")
-        userdata.currentmovetype = jsondata.get("currentmovetype")
-
-        movestarted = jsondata.get("movestarted")
-        if movestarted is not None:
-            movestarted = arrow.get(movestarted)
-        userdata.movestarted = movestarted
-
-        movestop = jsondata.get("movestop")
-        if movestop is not None:
-            movestop = TV(movestop)
-        userdata.movestop = movestop
-
-        triggers = jsondata.get("triggers")
-        if triggers is not None:
-            triggers = {k: Diff.fromJSON(v) for k, v in triggers.items()}
-        else:
-            triggers = {}
-        userdata.triggers = triggers
-
-        button = jsondata.get("button")
-        if button is not None:
-            button = Diff.fromJSON(button)
-        userdata.button = button
-        userdata.tra_reports = jsondata.get("tra_reports", 0)
-        if userdata.tra_reports is None:
-            userdata.tra_reports = 0
-        userdata.unitsystem = jsondata["unitsystem"]
-        userdata.species = jsondata["species"]
-        userdata.registration_steps_remaining = jsondata.get("registration_steps_remaining", [])
-        userdata._macrovision_model = jsondata.get("macrovision_model")
-        userdata._macrovision_view = jsondata.get("macrovision_view")
-        userdata.allowchangefromothers = jsondata.get("allowchangefromothers", False)
+        userdata.nickname = cast(str, jsondata["nickname"])
+        userdata.lastactive = optional_parse(arrow.get, jsondata["lastactive"])
+        userdata.picture_url = cast(str, jsondata["picture_url"])
+        userdata.description = cast(str, jsondata["description"])
+        userdata.gender = cast(Gender | None, jsondata["gender"])
+        userdata.display = cast(str, jsondata["display"])
+        userdata.height = SV(jsondata["height"])
+        userdata.baseheight = SV(jsondata["baseheight"])
+        userdata.baseweight = WV(jsondata["baseweight"])
+        userdata.footlength = optional_parse(SV, jsondata["footlength"])
+        userdata.pawtoggle = cast(bool, jsondata["pawtoggle"])
+        userdata.furtoggle = cast(bool, jsondata["furtoggle"])
+        userdata.hairlength = optional_parse(SV, jsondata["hairlength"])
+        userdata.taillength = optional_parse(SV, jsondata["taillength"])
+        userdata.earheight = optional_parse(SV, jsondata["earheight"])
+        userdata.liftstrength = optional_parse(WV, jsondata["liftstrength"])
+        userdata.walkperhour = optional_parse(SV, jsondata["walkperhour"])
+        userdata.runperhour = optional_parse(SV, jsondata["runperhour"])
+        userdata.swimperhour = optional_parse(SV, jsondata["swimperhour"])
+        userdata.currentscalestep = optional_parse(Diff.fromJSON, jsondata["currentscalestep"])
+        userdata.currentscaletalk = optional_parse(Diff.fromJSON, jsondata["currentscaletalk"])
+        userdata.scaletalklock = cast(bool, jsondata["scaletalklock"])
+        userdata.currentmovetype = cast(MoveTypeStr | None, jsondata["currentmovetype"])
+        userdata.movestarted = optional_parse(arrow.get, jsondata["movestarted"])
+        userdata.movestop = optional_parse(TV, jsondata["movestop"])
+        userdata.triggers = {k: Diff.fromJSON(v) for k, v in cast(dict[str, str], jsondata["triggers"]).items()}
+        userdata.button = optional_parse(Diff.fromJSON, jsondata["button"])
+        userdata.tra_reports = cast(int, jsondata["tra_reports"])
+        userdata.unitsystem = cast(UnitSystem, jsondata["unitsystem"])
+        userdata.species = cast(str, jsondata["species"])
+        userdata.registration_steps_remaining = cast(list[str], jsondata["registration_steps_remaining"])
+        userdata._macrovision_model = cast(str | None, jsondata["macrovision_model"])
+        userdata._macrovision_view = cast(str | None, jsondata["macrovision_view"])
+        userdata.allowchangefromothers = cast(bool | None, jsondata["allowchangefromothers"])
         return userdata
 
     def __lt__(self, other: User) -> bool:
@@ -500,3 +471,20 @@ def load_or_fake_weight(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -
         return User.from_fake(arg).weight
     elif isinstance(arg, WV):
         return arg
+
+
+T = TypeVar("T")
+
+
+def optional_parse(parser: Callable[[str], T], val: str | None) -> T | None:
+    if val is None:
+        return None
+    return parser(val)
+
+
+def migrate_json(jsondata: dict[str, Any]) -> dict[str, Any]:
+    if "allowchangefromothers" not in jsondata:
+        jsondata["allowchangefromothers"] = False
+    if "tra_reports" not in jsondata:
+        jsondata["tra_reports"] = 0
+    return jsondata

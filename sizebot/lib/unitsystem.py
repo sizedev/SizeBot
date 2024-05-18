@@ -6,8 +6,8 @@ UnitSystem = Literal["m", "u"]
 UNITSYSTEMS = get_args(UnitSystem)
 
 systems = {
-    "m": ("b", "e", "metric", "british", "europe", "european"),
-    "u": ("i", "c", "a", "us", "imperial", "customary", "american")
+    "m": ("m", "b", "e", "metric", "british", "europe", "european"),
+    "u": ("u", "i", "c", "a", "us", "imperial", "customary", "american")
 }
 systemmap = {alias: g for g, aliases in systems.items() for alias in aliases}
 

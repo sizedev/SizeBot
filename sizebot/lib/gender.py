@@ -6,9 +6,8 @@ Gender = Literal["m", "f"]
 GENDERS = get_args(Gender)
 
 genders = {
-    "m": ("male", "man", "boy"),
-    "f": ("female", "woman", "girl"),
-    None: ("none", "x", "nb")
+    "m": ("m", "male", "man", "boy"),
+    "f": ("f", "female", "woman", "girl")
 }
 gendermap = {alias: g for g, aliases in genders.items() for alias in aliases}
 
