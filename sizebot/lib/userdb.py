@@ -487,4 +487,13 @@ def migrate_json(jsondata: dict[str, Any]) -> dict[str, Any]:
         jsondata["allowchangefromothers"] = False
     if "tra_reports" not in jsondata:
         jsondata["tra_reports"] = 0
+    if "scaletalklock" not in jsondata:
+        jsondata["scaletalklock"] = False
+    if "movestarted" not in jsondata:
+        jsondata["movestarted"] = 0.0
+    if "triggers" not in jsondata:
+        jsondata["triggers"] = {}
+    for settable in ["walkperhour", "runperhour", "swimperhour", "currentscaletalk", "currentscalestep",
+                     "currentmovetype", "movestop", "button"]:
+        jsondata[settable] = None
     return jsondata
