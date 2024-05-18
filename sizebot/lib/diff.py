@@ -141,6 +141,9 @@ class Diff:
     def __mul__(self, other: Decimal) -> Diff:
         return Diff(self.changetype, self.amount * other)
 
+    def __div__(self, other: Decimal) -> Diff:
+        return Diff(self.changetype, self.amount / other)
+
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} {self}>"
 
@@ -175,7 +178,7 @@ class Rate:
     def mulPerSec(self) -> Decimal | None:
         if self.diff.changetype != "mul":
             return None
-        return Decimal(self.diff.amount / self.time)
+        return Decimal(self.diff.amount ** (1 / self.time))
 
     @property
     def stopSV(self) -> SV | None:
@@ -213,6 +216,9 @@ class Rate:
 
     def __mul__(self, other: Decimal) -> Rate:
         return Rate(self.diff * other, self.time)
+
+    def __div__(self, other: Decimal) -> Rate:
+        return Rate(self.diff / other, self.time)
 
     @classmethod
     def fromJSON(cls, jsondata: Any) -> Rate:
