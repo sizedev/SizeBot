@@ -194,10 +194,13 @@ class ObjectsCog(commands.Cog):
             return
 
         average_data = userdb.User.from_fake(FakePlayer(nickname="an average person", height=AVERAGE_HEIGHT))
-        choc_data = userdb.User.from_fake(FakePlayer(nickname="Chocolate [Stuffed Beaver]", height=SV.parse("11in")))
-        choc_data.baseweight = WV.parse("4.8oz")
-        choc_data.footlength = SV.parse("2.75in")
-        choc_data.taillength = SV.parse("12cm")
+        choc_data = userdb.User.from_fake(FakePlayer(
+            nickname="Chocolate [Stuffed Beaver]",
+            height=SV.parse("11in"),
+            baseweight=WV.parse("4.8oz"),
+            footlength=SV.parse("2.75in"),
+            taillength=SV.parse("12cm")
+        ))
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         # Comparison command

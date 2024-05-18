@@ -570,6 +570,20 @@ def load_json_file(filename: str) -> Any | None:
     return units_JSON
 
 
+def pos_SV(s: str) -> SV:
+    value = SV.parse(s)
+    if value < 0:
+        raise errors.InvalidSizeValue(s, "SV")
+    return value
+
+
+def pos_WV(s: str) -> WV:
+    value = WV.parse(s)
+    if value < 0:
+        raise errors.InvalidSizeValue(s, "WV")
+    return value
+
+
 def init():
     SV.load_from_file("sv.json")
     SV.add_unit(FeetAndInchesUnit())

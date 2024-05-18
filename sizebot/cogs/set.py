@@ -13,7 +13,8 @@ from sizebot.lib.loglevels import EGG
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.stats import HOUR
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV, WV
+from sizebot.lib.units import SV, WV, pos_SV, pos_WV
+from sizebot.lib.unitsystem import UnitSystem, parse_unitsystem
 from sizebot.lib.utils import AliasMap, parse_scale, randrange_log
 
 logger = logging.getLogger("sizebot")
@@ -103,26 +104,14 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setsystem(self, ctx: BotContext, newsys: str):
+    async def setsystem(self, ctx: BotContext, newsys: Annotated[UnitSystem, parse_unitsystem]):
         """Set measurement system. (M or U.)"""
-        newsys = newsys.lower()
-        systemmap = AliasMap({
-            "m": ("b", "e", "metric", "british", "europe", "european"),
-            "u": ("i", "c", "a", "us", "imperial", "customary", "american")
-        })
-
-        if newsys not in systemmap:
-            await ctx.send(f"Please enter `{ctx.prefix}{ctx.invoked_with} {ctx.command.usage}`.")
-            return
-
-        newsys = systemmap[newsys]
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.unitsystem = newsys
         completed_registration = userdata.complete_step("setsystem")
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s system is now set to {userdata.unitsystem}.")
+        await ctx.send(f"{userdata.nickname}'s system is now set to {newsys}.")
 
         await nickmanager.nick_update(ctx.author)
         await show_next_step(ctx, userdata, completed=completed_registration)
@@ -320,11 +309,13 @@ class SetCog(commands.Cog):
     async def setweight(self, ctx: BotContext, *, newweight: WV):
         """Set your current weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.weight = newweight
+        currweight = newweight
+        baseweight = currweight / (userdata.scale ** 3)
+        userdata.baseweight = baseweight
         completed_registration = userdata.complete_step("setweight")
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s weight is now {userdata.weight:mu}")
+        await ctx.send(f"{userdata.nickname}'s weight is now {currweight:mu}")
 
         await nickmanager.nick_update(ctx.author)
         await show_next_step(ctx, userdata, completed=completed_registration)
@@ -333,14 +324,16 @@ class SetCog(commands.Cog):
         usage = "<foot>",
         category = "set"
     )
-    async def setfoot(self, ctx: BotContext, *, newfoot: SV):
+    async def setfoot(self, ctx: BotContext, *, newfoot: Annotated[SV, pos_SV]):
         """Set your current foot length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.footlength = SV(newfoot / userdata.scale)
+        currfoot = newfoot
+        basefoot = SV(currfoot / userdata.scale)
+        userdata.footlength = basefoot
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({to_shoe_size(userdata.footlength, 'm')}), "
-                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {to_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {basefoot:mu} long ({to_shoe_size(basefoot, 'm')}), "
+                       f"or {currfoot:mu} currently. {to_shoe_size(currfoot, 'm')}")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -361,11 +354,13 @@ class SetCog(commands.Cog):
         `&setshoe 12C`
         """
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.footlength = SV(from_shoe_size(newshoe) / userdata.scale)
+        currfoot = from_shoe_size(newshoe)
+        basefoot = SV(currfoot / userdata.scale)
+        userdata.footlength = basefoot
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base foot length is now {userdata.footlength:mu} long ({to_shoe_size(userdata.footlength, 'm')}), "
-                       f"or {(SV(userdata.footlength * userdata.scale)):mu} currently. {to_shoe_size(SV(userdata.footlength * userdata.scale), 'm')}")
+        await ctx.send(f"{userdata.nickname}'s base foot length is now {basefoot:mu} long ({to_shoe_size(basefoot, 'm')}), "
+                       f"or {currfoot:mu} currently. {to_shoe_size(SV(currfoot), 'm')}")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -414,7 +409,7 @@ class SetCog(commands.Cog):
         usage = "<hair>",
         category = "set"
     )
-    async def sethair(self, ctx: BotContext, *, newhair: SV):
+    async def sethair(self, ctx: BotContext, *, newhair: Annotated[SV, pos_SV]):
         """Set your current hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.hairlength = SV(newhair / userdata.scale)
@@ -428,7 +423,7 @@ class SetCog(commands.Cog):
         usage = "<tail>",
         category = "set"
     )
-    async def settail(self, ctx: BotContext, *, newtail: SV):
+    async def settail(self, ctx: BotContext, *, newtail: Annotated[SV, pos_SV]):
         """Set your current tail length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.taillength = SV(newtail / userdata.scale)
@@ -456,14 +451,16 @@ class SetCog(commands.Cog):
         usage = "<ear>",
         category = "set"
     )
-    async def setear(self, ctx: BotContext, *, newear: SV):
+    async def setear(self, ctx: BotContext, *, newear: Annotated[SV, pos_SV]):
         """Set your current ear heightear."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.earheight = SV(newear / userdata.scale)
+        currear = newear
+        baseear = SV(currear / userdata.scale)
+        userdata.earheight = baseear
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base ear height is now {userdata.earheight:mu} long, "
-                       f"or {SV(userdata.earheight):mu} currently.")
+        await ctx.send(f"{userdata.nickname}'s base ear height is now {baseear:mu} long, "
+                       f"or {currear:mu} currently.")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -485,14 +482,16 @@ class SetCog(commands.Cog):
         usage = "<weight>",
         category = "set"
     )
-    async def setstrength(self, ctx: BotContext, *, newstrength: WV):
+    async def setstrength(self, ctx: BotContext, *, newstrength: Annotated[WV, pos_WV]):
         """Set your current lift/carry strength."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.liftstrength = WV(newstrength / (userdata.scale ** 3))
+        currstrength = newstrength
+        basestrength = WV(currstrength / (userdata.scale ** 3))
+        userdata.liftstrength = basestrength
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base lift strength is now {WV(userdata.liftstrength):mu}, "
-                       f"or {WV(userdata.liftstrength):mu} currently.")
+        await ctx.send(f"{userdata.nickname}'s base lift strength is now {basestrength:mu}, "
+                       f"or {currstrength:mu} currently.")
         await show_next_step(ctx, userdata)
 
     @commands.command(

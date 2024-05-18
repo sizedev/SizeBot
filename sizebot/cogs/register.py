@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from typing import Annotated
 
 import discord
 from discord.utils import get
@@ -11,6 +12,7 @@ from sizebot.lib.constants import ids, emojis
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
 from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT
+from sizebot.lib.unitsystem import UnitSystem, parse_unitsystem
 
 logger = logging.getLogger("sizebot")
 
@@ -157,125 +159,6 @@ class RegisterCog(commands.Cog):
             await ctx.send(
                 "Not enough variables for `register`.\n"
                 f"See `{conf.prefix}help register`.")
-            return
-        raise error
-
-    @commands.command(
-        aliases = ["advancedsignup", "advregister", "advsignup", "oldregister"],
-        usage = "<nick> <currentheight> <baseheight> <baseweight> <system: M/U> [species]",
-        category = "setup"
-    )
-    @commands.guild_only()
-    async def advancedregister(self, ctx: BotContext, nick: str, currentheight: SV = AVERAGE_HEIGHT, baseheight: SV = AVERAGE_HEIGHT, baseweight: WV = AVERAGE_WEIGHT, unitsystem: str = "m", species: str = None):
-        """Registers a user for SizeBot, legacy style.
-
-        Parameters:
-        • `nick`: Your nickname. This will be the first thing displayed in your nickname. For a nickname with spaces, this must be wrapped in quotes.
-        • `currentheight`: Self-explnatory.
-        • `baseheight`: The default height of your character. It is recommended that this is a vaugely reasonable, human-like value, for instance your IRL height, except in rare circumnstances (for instance, if your character is a cat, or an orc, etc.)
-        • `baseweight`: The default weight of your character. All the recommendations for baseheight apply here.
-        • `unitsystem`: The unit system your size tag, and basic versions of your stats, will be displayed in by default. Accepts `M` for Metric, and `U` or `I` for U.S./Imperial.
-        • `species`: Optional, a string to be appened after your size in your sizetag. Appears in the format `<nick> [<size>, <species>]`. If `species` is to contain a space, wrap it in quotes.
-
-        Measurement parameters can accept a wide variety of units, as listed in `&units`.
-
-        This command is deprecated. It may not be up to date, might break, and is definitely clunky to use. Just don't.
-
-        Examples:
-        `&advancedregister DigiDuncan 0.5in 5'7 120lb U`
-        `&advancedregister Surge 11ft 5'8 140lb U Raichu`
-        `&advancedregister "Speck Boi" 0.1mm 190cm 120kg M`
-        """
-        readable = f"CH {currentheight}, BH {baseheight}, BW {baseweight}"
-        logger.warn(f"New user attempt! Nickname: {nick}")
-        logger.warn("OH GOD THEY'RE USING THE OLD REGISTER COMMAND")
-        logger.info(readable)
-
-        # Already registered
-        if userdb.exists(ctx.guild.id, ctx.author.id):
-            await ctx.send("Sorry! You already registered with SizeBot.\n"
-                           "To unregister, use the `&unregister` command.")
-            logger.warn(f"User already registered on user registration: {ctx.author}.")
-            return
-
-        guilds = [self.bot.get_guild(g) for g, _ in userdb.list_users(userid=ctx.author.id)]
-        guilds = [g for g in guilds if g is not None]
-        guilds_names = [g.name for g in guilds]
-        if guilds_names != []:
-            guildsstring = "\n".join(guilds_names)
-            sentMsg = await ctx.send(f"You are already registered with SizeBot in these servers:\n{guildsstring}\n"
-                                     f"You can copy a profile from one of these guilds to this one using `{ctx.prefix}copy.`\n"
-                                     "Proceed with registration anyway?")
-            await sentMsg.add_reaction(emojis.check)
-            await sentMsg.add_reaction(emojis.cancel)
-
-            # Wait for requesting user to react to sent message with emojis.check or emojis.cancel
-            def check(reaction: discord.Reaction, reacter: discord.Member | discord.User) -> bool:
-                return reaction.message.id == sentMsg.id \
-                    and reacter.id == ctx.author.id \
-                    and (
-                        str(reaction.emoji) == emojis.check
-                        or str(reaction.emoji) == emojis.cancel
-                    )
-
-            reaction = None
-            try:
-                reaction, ctx.author = await self.bot.wait_for("reaction_add", timeout=60.0, check=check)
-            except asyncio.TimeoutError:
-                # User took too long to respond
-                await sentMsg.delete()
-
-            # if the reaction isn't the right one, stop.
-            if reaction.emoji != emojis.check:
-                return
-
-        # Invalid size value
-        if (currentheight <= 0 or baseheight <= 0 or baseweight <= 0):
-            logger.warn("Invalid size value.")
-            await ctx.send("All values must be an integer greater than zero.")
-            return
-
-        # Invalid unit value
-        if unitsystem.lower() not in ["m", "u", "i"]:
-            logger.warn(f"unitsystem was {unitsystem}, must be M or U/I.")
-            await ctx.send("Unitsystem must be `M` or `U`/`I`.")
-            raise errors.InvalidUnitSystemException
-
-        # I system is really U.
-        if unitsystem.lower() == "i":
-            unitsystem = "u"
-
-        userdata = userdb.User()
-        userdata.guildid = ctx.guild.id
-        userdata.id = ctx.author.id
-        userdata.nickname = nick
-        userdata.display = True
-        userdata.height = currentheight
-        userdata.baseheight = baseheight
-        userdata.baseweight = baseweight
-        userdata.unitsystem = unitsystem
-        userdata.species = species
-
-        userdb.save(userdata)
-
-        await add_user_role(ctx.author)
-
-        logger.warn(f"Made a new user: {ctx.author}!")
-        logger.info(userdata)
-        await ctx.send(f"Registered <@{ctx.author.id}> in guild {ctx.guild.name}. {userdata}.")
-
-        # user has display == "y" and is server owner
-        if userdata.display and userdata.id == ctx.author.guild.owner.id:
-            await ctx.send("I can't update a server owner's nick. You'll have to manage it manually.")
-            return
-
-    @advancedregister.error
-    async def advancedregister_handler(self, ctx: BotContext, error: commands.CommandError):
-        # Check if required argument is missing
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(
-                "Not enough variables for `advancedregister`.\n"
-                f"See `{conf.prefix}help advancedregister`.")
             return
         raise error
 

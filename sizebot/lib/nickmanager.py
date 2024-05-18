@@ -4,6 +4,7 @@ import discord
 from discord import User, Member
 
 from sizebot.lib import errors, userdb
+from sizebot.lib.unitsystem import UNITSYSTEMS
 
 MAX_NICK_LEN = 32
 
@@ -74,7 +75,7 @@ async def nick_update(user: User | Member):
     species = userdata.species
 
     sizetag = ""
-    if userdata.unitsystem in ["m", "u", "o"]:
+    if userdata.unitsystem in UNITSYSTEMS:
         sizetag = format(height, f",{userdata.unitsystem}%")
 
     newnick = (

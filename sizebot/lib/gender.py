@@ -14,8 +14,7 @@ gendermap = {alias: g for g, aliases in genders.items() for alias in aliases}
 
 
 def parse_gender(s: str) -> Gender:
-    try:
-        gender = gendermap[s.lower()]
-    except KeyError:
+    gender = gendermap.get(s.lower(), None)
+    if gender not in GENDERS:
         raise errors.ArgumentException
     return gender

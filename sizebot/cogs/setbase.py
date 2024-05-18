@@ -1,4 +1,5 @@
 import logging
+from typing import Annotated
 
 from discord.ext import commands
 
@@ -10,7 +11,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.stats import HOUR
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV, WV
+from sizebot.lib.units import SV, WV, pos_SV, pos_WV
 
 logger = logging.getLogger("sizebot")
 
@@ -24,7 +25,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseheight(self, ctx: BotContext, *, newbaseheight: SV):
+    async def setbaseheight(self, ctx: BotContext, *, newbaseheight: Annotated[SV, pos_SV]):
         """Change base height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -47,15 +48,15 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseweight(self, ctx: BotContext, *, newbaseweight: WV):
+    async def setbaseweight(self, ctx: BotContext, *, newweight: Annotated[WV, pos_WV]):
         """Change base weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
         if "setbaseweight" in userdata.registration_steps_remaining:
-            if not (WV.parse("10lb") < newbaseweight < WV.parse("1000lb")):
+            if not (WV.parse("10lb") < newweight < WV.parse("1000lb")):
                 await ctx.send(f"{emojis.warning} **WARNING:** Your base weight should probably be something more human-scale. This makes comparison math work out much nicer. If this was intended, you can ignore this warning, but it is ***highly recommended*** that you have a base weight similar to that of a normal human being.")
 
-        userdata.baseweight = newbaseweight
+        userdata.baseweight = newweight
         completed_registration = userdata.complete_step("setbaseweight")
         userdb.save(userdata)
 
@@ -69,7 +70,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbase(self, ctx: BotContext, arg1: SV | WV, arg2: SV | WV = None):
+    async def setbase(self, ctx: BotContext, arg1: Annotated[SV, pos_SV] | Annotated[WV, pos_WV], arg2: Annotated[SV, pos_SV] | Annotated[WV, pos_WV] = None):
         """Set your base height and weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -108,15 +109,14 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasefoot(self, ctx: BotContext, *, newfoot: Decimal | SV):
+    async def setbasefoot(self, ctx: BotContext, *, newfoot: Annotated[SV, pos_SV]):
         """Set a custom foot length."""
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.footlength = newfoot
+        basefoot = newfoot
+        userdata.footlength = basefoot
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({to_shoe_size(userdata.footlength, 'm')})")
+        await ctx.send(f"{userdata.nickname}'s foot is now {basefoot:mu} long. ({to_shoe_size(basefoot, 'm')})")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -137,15 +137,12 @@ class SetBaseCog(commands.Cog):
         `&setbaseshoe 10W`
         `&setbaseshoe 12C`
         """
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        newfoot = from_shoe_size(newshoe)
-
-        userdata.footlength = newfoot
+        basefoot = from_shoe_size(newshoe)
+        userdata.footlength = basefoot
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s foot is now {userdata.footlength:mu} long. ({to_shoe_size(userdata.footlength, 'm')})")
+        await ctx.send(f"{userdata.nickname}'s base foot is now {basefoot:mu} long. ({to_shoe_size(basefoot, 'm')})")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -153,13 +150,10 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasehair(self, ctx: BotContext, *, newhair: str):
+    async def setbasehair(self, ctx: BotContext, *, newhair: Annotated[SV, pos_SV]):
         """Set a custom base hair length."""
-        newhairsv = SV.parse(newhair)
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.hairlength = newhairsv
+        userdata.hairlength = newhair
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s hair is now {userdata.hairlength:mu} long.")
@@ -202,16 +196,13 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseear(self, ctx: BotContext, *, newear: str):
+    async def setbaseear(self, ctx: BotContext, *, newear: Annotated[SV, pos_SV]):
         """Set a custom ear height."""
-        newearsv = SV.parse(newear)
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.earheight = newearsv
+        userdata.earheight = newear
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s ear is now {userdata.earheight:mu} long.")
+        await ctx.send(f"{userdata.nickname}'s ear is now {newear:mu} long.")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -220,15 +211,15 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasestrength(self, ctx: BotContext, *, newstrength: WV):
+    async def setbasestrength(self, ctx: BotContext, *, newstrength: Annotated[WV, pos_WV]):
         """Set a custom lift/carry strength."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.liftstrength = newstrength
+        basestrength = newstrength
+        userdata.liftstrength = basestrength
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s strength is now {WV(userdata.liftstrength):mu}.")
+        await ctx.send(f"{userdata.nickname}'s strength is now {basestrength:mu}.")
         await show_next_step(ctx, userdata)
 
     @commands.command(

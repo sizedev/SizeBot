@@ -15,12 +15,13 @@ import discord
 import sizebot.data
 from sizebot.lib import errors, paths
 from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.diff import Diff, Rate
+from sizebot.lib.diff import Diff
 from sizebot.lib.fakeplayer import FakePlayer
-from sizebot.lib.gender import GENDERS, Gender
+from sizebot.lib.gender import Gender
 from sizebot.lib.units import SV, TV, WV
-from sizebot.lib.utils import is_url, truncate
-from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT, HOUR, PlayerStats
+from sizebot.lib.unitsystem import UnitSystem
+from sizebot.lib.utils import truncate
+from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT, PlayerStats
 
 BASICALLY_ZERO = Decimal("1E-27")
 
@@ -42,11 +43,11 @@ def str_or_none(v: Any) -> str | None:
 class User:
     # __slots__ declares to python what attributes to expect.
     __slots__ = [
-        "guildid", "id", "nickname", "lastactive", "_picture_url", "description", "_gender", "display",
-        "_height", "_baseheight", "_baseweight", "_footlength", "_pawtoggle", "_furtoggle",
-        "_hairlength", "_taillength", "_earheight", "_liftstrength", "triggers", "_unitsystem", "species", "soft_gender",
+        "guildid", "id", "nickname", "lastactive", "picture_url", "description", "gender", "display",
+        "_height", "baseheight", "baseweight", "footlength", "pawtoggle", "furtoggle",
+        "hairlength", "taillength", "earheight", "liftstrength", "triggers", "unitsystem", "species", "soft_gender",
         "avatar_url", "walkperhour", "runperhour", "swimperhour", "incomprehensible",
-        "_currentscalestep", "_currentscaletalk", "scaletalklock",
+        "currentscalestep", "currentscaletalk", "scaletalklock",
         "currentmovetype", "movestarted", "movestop",
         "registration_steps_remaining", "_macrovision_model", "_macrovision_view",
         "button", "tra_reports", "allowchangefromothers"
@@ -56,26 +57,26 @@ class User:
         self.guildid: int = None
         self.id: int = None
         self.nickname: str = None
-        self._picture_url: str | None = None
+        self.picture_url: str | None = None
         self.description: str | None = None
-        self._gender: Gender | None = None
+        self.gender: Gender | None = None
         self.display: bool = True
         self._height: SV = AVERAGE_HEIGHT
-        self._baseheight: SV = AVERAGE_HEIGHT
-        self._baseweight: SV = AVERAGE_WEIGHT
-        self._footlength: SV | None = None
-        self._pawtoggle: bool = False
-        self._furtoggle: bool = False
-        self._hairlength: SV | None = None
-        self._taillength: SV | None = None
-        self._earheight: SV | None = None
-        self._liftstrength: WV | None = None
+        self.baseheight: SV = AVERAGE_HEIGHT
+        self.baseweight: SV = AVERAGE_WEIGHT
+        self.footlength: SV | None = None
+        self.pawtoggle: bool = False
+        self.furtoggle: bool = False
+        self.hairlength: SV | None = None
+        self.taillength: SV | None = None
+        self.earheight: SV | None = None
+        self.liftstrength: WV | None = None
         self.walkperhour: SV | None = None
         self.runperhour: SV | None = None
         self.swimperhour: SV | None = None
         self.incomprehensible: bool = False
-        self._currentscalestep: Diff | None = None
-        self._currentscaletalk: Diff | None = None
+        self.currentscalestep: Diff | None = None
+        self.currentscaletalk: Diff | None = None
         self.scaletalklock: bool = False
         self.currentmovetype: MoveTypeStr | None = None
         self.movestarted: Arrow | None = None
@@ -83,7 +84,7 @@ class User:
         self.triggers: dict[str, Diff] = {}
         self.button: Diff | None = None
         self.tra_reports = 0
-        self._unitsystem: str = "m"
+        self.unitsystem: UnitSystem = "m"
         self.species: str | None = None
         self.soft_gender: str | None = None
         self.avatar_url: str | None = None
@@ -115,17 +116,6 @@ class User:
                 f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}>, "
                 f"ALLOWCHANGEFROMOTHERS = {self.allowchangefromothers!r}")
 
-    # Setters/getters to automatically force numeric values to be stored as Decimal
-    @property
-    def picture_url(self) -> str | None:
-        return self._picture_url
-
-    @picture_url.setter
-    def picture_url(self, value: str | None):
-        if not is_url(value):
-            raise ValueError(f"{value} is not a valid URL.")
-        self._picture_url = value
-
     @property
     def auto_picture_url(self) -> str | None:
         return self.picture_url or self.avatar_url
@@ -151,190 +141,27 @@ class User:
         self._height = value
 
     @property
-    def baseheight(self) -> SV:
-        return self._baseheight
-
-    @baseheight.setter
-    def baseheight(self, value: SV):
-        value = SV(value)
-        if value < BASICALLY_ZERO:
-            value = SV(0)
-        self._baseheight = value
-
-    @property
-    def footlength(self) -> SV | None:
-        """Base foot length"""
-        return self._footlength
-
-    @footlength.setter
-    def footlength(self, value: SV | None):
-        if value is None or SV(value) < BASICALLY_ZERO:
-            self._footlength = None
-            return
-        self._footlength = SV(value)
-
-    @property
-    def pawtoggle(self) -> bool:
-        return self._pawtoggle
-
-    @pawtoggle.setter
-    def pawtoggle(self, value: bool):
-        self._pawtoggle = bool(value)
-
-    @property
-    def furtoggle(self) -> bool:
-        return self._furtoggle
-
-    @furtoggle.setter
-    def furtoggle(self, value: bool):
-        self._furtoggle = bool(value)
-
-    @property
     def footname(self) -> str:
+        # TODO: Replace with stats
         return "Paw" if self.pawtoggle else "Foot"
 
     @property
     def hairname(self) -> str:
+        # TODO: Replace with stats
         return "Fur" if self.furtoggle else "Hair"
-
-    @property
-    def hairlength(self) -> SV | None:
-        """Base hair length"""
-        return self._hairlength
-
-    @hairlength.setter
-    def hairlength(self, value: SV | None):
-        if value is None:
-            self._hairlength = None
-            return
-        value = SV(value)
-        if value < BASICALLY_ZERO:
-            value = SV(0)
-        self._hairlength = value
-
-    @property
-    def taillength(self) -> SV | None:
-        return self._taillength
-
-    @taillength.setter
-    def taillength(self, value: SV | None):
-        if value is None or SV(value) <= BASICALLY_ZERO:
-            self._taillength = None
-            return
-        self._taillength = SV(value)
-
-    @property
-    def earheight(self) -> SV | None:
-        return self._earheight
-
-    @earheight.setter
-    def earheight(self, value: SV | None):
-        if value is None or SV(value) <= BASICALLY_ZERO:
-            self._earheight = None
-            return
-        self._earheight = SV(value)
-
-    @property
-    def liftstrength(self) -> SV | None:
-        return self._liftstrength
-
-    @liftstrength.setter
-    def liftstrength(self, value: WV | None):
-        if value is None:
-            self._liftstrength = None
-            return
-        value = WV(value)
-        if value < 0:
-            value = WV(0)
-        self._liftstrength = value
-
-    @property
-    def currentscalestep(self) -> Diff | None:
-        return self._currentscalestep
-
-    @currentscalestep.setter
-    def currentscalestep(self, value: Diff | None):
-        if value is None:
-            self._currentscalestep = None
-            return
-
-        if not isinstance(value, Diff):
-            raise ValueError("Input was not a Diff.")
-
-        self._currentscalestep = value
-
-    @property
-    def currentscaletalk(self) -> Diff | None:
-        return self._currentscaletalk
-
-    @currentscaletalk.setter
-    def currentscaletalk(self, value: Diff | None):
-        if value is None:
-            self._currentscaletalk = None
-            return
-
-        if not isinstance(value, Diff):
-            raise ValueError("Input was not a Diff.")
-
-        self._currentscaletalk = value
-
-    @property
-    def gender(self) -> Gender | None:
-        return self._gender
-
-    @gender.setter
-    def gender(self, value: Gender | None):
-        if value is None:
-            self._gender = None
-            return
-        if value not in GENDERS:
-            raise ValueError(f"Unrecognized gender: '{value}'")
-        self._gender = value
 
     @property
     def autogender(self) -> str:
         return self.gender or self.soft_gender or "m"
 
     @property
-    def baseweight(self) -> SV:
-        return self._baseweight
-
-    @baseweight.setter
-    def baseweight(self, value: WV):
-        value = WV(value)
-        if value < 0:
-            value = WV(0)
-        self._baseweight = value
-
-    @property
     def weight(self) -> WV:
         return WV(self.baseweight * (self.scale ** 3))
-
-    @weight.setter
-    def weight(self, value: WV):
-        self.baseweight = value * (self.viewscale ** 3)
-
-    # Check that unitsystem is valid and lowercase
-    @property
-    def unitsystem(self) -> str:
-        return self._unitsystem
-
-    @unitsystem.setter
-    def unitsystem(self, value: str):
-        value = value.lower()
-        if value not in ["m", "u", "o"]:
-            raise ValueError(f"Invalid unitsystem: '{value}'")
-        self._unitsystem = value
 
     @property
     def viewscale(self) -> Decimal:
         """How scaled up the world looks to this user"""
-        return self.baseheight / self.height
-
-    @viewscale.setter
-    def viewscale(self, viewscale: Decimal):
-        """Scale the user height to match the view scale"""
-        self.height = SV(self.baseheight / viewscale)
+        return 1 / self.scale
 
     @property
     def scale(self) -> Decimal:
@@ -551,7 +378,7 @@ class User:
         newuserdata.scale = Decimal(self.scale) * other
         return newuserdata
 
-    def __div__(self, other: Decimal) -> User:
+    def __truediv__(self, other: Decimal) -> User:
         newuserdata = copy(self)
         newuserdata.scale = Decimal(self.scale) / other
         return newuserdata
