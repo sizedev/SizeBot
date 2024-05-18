@@ -17,6 +17,7 @@ from sizebot.lib import errors, paths
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, Rate
 from sizebot.lib.fakeplayer import FakePlayer
+from sizebot.lib.gender import GENDERS, Gender
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.utils import is_url, truncate
 from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT, HOUR, PlayerStats
@@ -57,7 +58,7 @@ class User:
         self.nickname: str = None
         self._picture_url: str | None = None
         self.description: str | None = None
-        self._gender: str | None = None
+        self._gender: Gender | None = None
         self.display: bool = True
         self._height: SV = AVERAGE_HEIGHT
         self._baseheight: SV = AVERAGE_HEIGHT
@@ -346,16 +347,15 @@ class User:
         self._currentscaletalk = value
 
     @property
-    def gender(self) -> str:
+    def gender(self) -> Gender | None:
         return self._gender
 
     @gender.setter
-    def gender(self, value: str):
+    def gender(self, value: Gender | None):
         if value is None:
             self._gender = None
             return
-        value = value.lower()
-        if value not in ["m", "f"]:
+        if value not in GENDERS:
             raise ValueError(f"Unrecognized gender: '{value}'")
         self._gender = value
 

@@ -1,13 +1,14 @@
 import logging
-from typing import Annotated
+from typing import Annotated, Literal
 
 import discord
 from discord.ext import commands
 
 from sizebot.cogs.register import show_next_step
-from sizebot.lib import errors, userdb, nickmanager
+from sizebot.lib import userdb, nickmanager
 from sizebot.lib.diff import LinearRate, Rate
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.gender import Gender, parse_gender
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.stats import HOUR
@@ -594,18 +595,7 @@ class SetCog(commands.Cog):
         category = "set"
     )
     @commands.guild_only()
-    async def setgender(self, ctx: BotContext, gender: str):
-        """Set gender."""
-        gendermap = AliasMap({
-            "m": ("male", "man", "boy"),
-            "f": ("female", "woman", "girl"),
-            None: ("none", "x", "nb")
-        })
-        try:
-            gender = gendermap[gender.lower()]
-        except KeyError:
-            raise errors.ArgumentException
-
+    async def setgender(self, ctx: BotContext, gender: Annotated[Gender, parse_gender]):
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.gender = gender
         userdb.save(userdata)

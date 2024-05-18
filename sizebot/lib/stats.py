@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, Literal, TypeVar, TypedDict
+from typing import Any, TypeVar, TypedDict
 from collections.abc import Callable
 
 from functools import cached_property
@@ -8,6 +8,7 @@ import math
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.gender import Gender
 from sizebot.lib.units import SV, TV, WV, AV
 from sizebot.lib.shoesize import to_shoe_size
 from sizebot.lib.surface import can_walk_on_water
@@ -38,8 +39,6 @@ HOUR = Decimal("3600")
 
 IS_LARGE = 1.0
 IS_VERY_LARGE = 10.0
-
-Gender = Literal["m", "f", "x"]
 
 
 class PlayerStats(TypedDict):
