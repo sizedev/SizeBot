@@ -52,7 +52,7 @@ def parse_keyvalues(s: str) -> dict[str, Any]:
     m = re.match(re_full, s)
     if m is None:
         raise InvalidSizeValue(s, "FakePlayer")
-    full = m.groups(1)
+    full = m.group(1)
     allkeyvalues = [parse_keyvalue(kv_str) for kv_str in full.split(";")]
     keyvalues = {k: v for k, v in allkeyvalues if v is not None}
     return keyvalues
