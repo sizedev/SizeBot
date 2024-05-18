@@ -40,8 +40,9 @@ def unset_cached_trigger(guildid, authorid, trigger):
 
 
 def set_trigger(guildid, authorid, trigger, diff):
-    set_cached_trigger(guildid, authorid, trigger, diff)
     userdata = userdb.load(guildid, authorid)
+    # Only set the cache _after_ we've check if the user is registered
+    set_cached_trigger(guildid, authorid, trigger, diff)
     userdata.triggers[trigger] = diff
     userdb.save(userdata)
 
