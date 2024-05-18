@@ -632,7 +632,7 @@ class User:
     @classmethod
     def from_fake(cls, fake: FakePlayer) -> User:
         userdata = User()
-        for k, v in fake.statvalues:
+        for k, v in fake.statvalues.items():
             setattr(userdata, k, v)
         return userdata
 
