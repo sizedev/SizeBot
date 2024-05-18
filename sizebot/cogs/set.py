@@ -513,10 +513,10 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setwalk(self, ctx: BotContext, *, newwalk: Rate):
+    async def setwalk(self, ctx: BotContext, *, newwalk: LinearRate):
         """Set your current walk speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.walkperhour = newwalk / userdata.scale
+        userdata.walkperhour = SV(newwalk.addPerSec * HOUR / userdata.scale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base walk speed is now {userdata.walkperhour:mu} per hour. (Current speed is {newwalk:mu})")
@@ -540,10 +540,10 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setrun(self, ctx: BotContext, *, newrun: Rate):
+    async def setrun(self, ctx: BotContext, *, newrun: LinearRate):
         """Set your current run speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.runperhour = newrun / userdata.scale
+        userdata.runperhour = SV(newrun.addPerSec * HOUR / userdata.scale)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour. (Current speed is {newrun:mu})")
@@ -573,7 +573,7 @@ class SetCog(commands.Cog):
         userdata.swimperhour = SV(newswim.addPerSec * HOUR / userdata.scale)
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour.  (Current speed is {newswim:mu})")
+        await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour. (Current speed is {newswim:mu})")
         await show_next_step(ctx, userdata)
 
     @commands.command(

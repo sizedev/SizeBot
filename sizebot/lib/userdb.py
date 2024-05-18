@@ -45,7 +45,7 @@ class User:
         "guildid", "id", "nickname", "lastactive", "_picture_url", "description", "_gender", "display",
         "_height", "_baseheight", "_baseweight", "_footlength", "_pawtoggle", "_furtoggle",
         "_hairlength", "_taillength", "_earheight", "_liftstrength", "triggers", "_unitsystem", "species", "soft_gender",
-        "avatar_url", "_walkperhour", "_runperhour", "_swimperhour", "incomprehensible",
+        "avatar_url", "walkperhour", "runperhour", "swimperhour", "incomprehensible",
         "_currentscalestep", "_currentscaletalk", "scaletalklock",
         "currentmovetype", "movestarted", "movestop",
         "registration_steps_remaining", "_macrovision_model", "_macrovision_view",
@@ -70,9 +70,9 @@ class User:
         self._taillength: SV | None = None
         self._earheight: SV | None = None
         self._liftstrength: WV | None = None
-        self._walkperhour: SV | None = None
-        self._runperhour: Rate | None = None
-        self._swimperhour: Rate | None = None
+        self.walkperhour: SV | None = None
+        self.runperhour: SV | None = None
+        self.swimperhour: SV | None = None
         self.incomprehensible: bool = False
         self._currentscalestep: Diff | None = None
         self._currentscaletalk: Diff | None = None
@@ -247,74 +247,6 @@ class User:
         if value < 0:
             value = WV(0)
         self._liftstrength = value
-
-    @property
-    def walkperhour(self) -> SV | Rate | None:
-        return self._walkperhour
-
-    @walkperhour.setter
-    def walkperhour(self, value: SV | Rate | None):
-        if value is None:
-            self._walkperhour = None
-            return
-
-        if isinstance(value, Rate):
-            if value.diff.changetype != "add":
-                raise ValueError("Invalid rate for speed parsing.")
-            if value.diff.amount < 0:
-                raise ValueError("Speed can not go backwards!")
-            value = value.diff.amount / value.time * HOUR
-
-        value = SV(value)
-
-        if value < 0:
-            value = SV(0)
-
-        self._walkperhour = value
-
-    @property
-    def runperhour(self) -> SV | None:
-        return self._runperhour
-
-    @runperhour.setter
-    def runperhour(self, value: SV | Rate | None):
-        if value is None:
-            self._runperhour = None
-            return
-
-        if isinstance(value, Rate):
-            if value.diff.changetype != "add":
-                raise ValueError("Invalid rate for speed parsing.")
-            if value.diff.amount < 0:
-                raise ValueError("Speed can not go backwards!")
-            value = value.diff.amount / value.time * HOUR
-
-        value = SV(value)
-
-        if value < 0:
-            value = SV(0)
-
-        self._runperhour = value
-
-    @property
-    def climbperhour(self) -> SV:  # Essentially temp, since we're fixing this in BetterStats
-        return SV(Decimal(4828) * self.scale)
-
-    @property
-    def crawlperhour(self) -> SV:  # Essentially temp, since we're fixing this in BetterStats
-        return SV(Decimal(2556) * self.scale)
-
-    @property
-    def swimperhour(self) -> SV | None:
-        return self._swimperhour
-
-    @swimperhour.setter
-    def swimperhour(self, value: SV | None):
-        if value is None:
-            self._swimperhour = None
-            return
-
-        self._swimperhour = value
 
     @property
     def currentscalestep(self) -> Diff | None:

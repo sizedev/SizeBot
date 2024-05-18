@@ -236,12 +236,10 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasewalk(self, ctx: BotContext, *, newwalk: Rate):
+    async def setbasewalk(self, ctx: BotContext, *, newwalk: LinearRate):
         """Set a custom walk speed."""
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.walkperhour = newwalk
+        userdata.walkperhour = SV(newwalk.addPerSec * HOUR)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s walk is now {userdata.walkperhour:mu} per hour.")
@@ -252,12 +250,10 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaserun(self, ctx: BotContext, *, newrun: Rate):
+    async def setbaserun(self, ctx: BotContext, *, newrun: LinearRate):
         """Set a custom run speed."""
-
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-
-        userdata.runperhour = newrun
+        userdata.runperhour = SV(newrun.addPerSec * HOUR)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s run is now {userdata.runperhour:mu} per hour.")
