@@ -513,13 +513,15 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setwalk(self, ctx: BotContext, *, newwalk: LinearRate):
+    async def setwalk(self, ctx: BotContext, *, newspeed: LinearRate):
         """Set your current walk speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.walkperhour = SV(newwalk.addPerSec * HOUR / userdata.scale)
+        currspeed = SV(newspeed.addPerSec * HOUR)
+        basespeed = SV(currspeed / userdata.scale)
+        userdata.walkperhour = basespeed
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base walk speed is now {userdata.walkperhour:mu} per hour. (Current speed is {newwalk:mu})")
+        await ctx.send(f"{userdata.nickname}'s base walk speed is now {basespeed:mu} per hour. (Current speed is {currspeed:mu} per hour)")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -540,13 +542,15 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setrun(self, ctx: BotContext, *, newrun: LinearRate):
+    async def setrun(self, ctx: BotContext, *, newspeed: LinearRate):
         """Set your current run speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.runperhour = SV(newrun.addPerSec * HOUR / userdata.scale)
+        currspeed = SV(newspeed.addPerSec * HOUR)
+        basespeed = SV(currspeed / userdata.scale)
+        userdata.runperhour = basespeed
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base run speed is now {userdata.runperhour:mu} per hour. (Current speed is {newrun:mu})")
+        await ctx.send(f"{userdata.nickname}'s base run speed is now {basespeed:mu} per hour. (Current speed is {currspeed:mu} per hour)")
         await show_next_step(ctx, userdata)
 
     @commands.command(
@@ -567,13 +571,15 @@ class SetCog(commands.Cog):
         usage = "<length>",
         category = "set"
     )
-    async def setswim(self, ctx: BotContext, *, newswim: LinearRate):
+    async def setswim(self, ctx: BotContext, *, newspeed: LinearRate):
         """Set your current swim speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.swimperhour = SV(newswim.addPerSec * HOUR / userdata.scale)
+        currspeed = SV(newspeed.addPerSec * HOUR)
+        basespeed = SV(currspeed / userdata.scale)
+        userdata.swimperhour = basespeed
         userdb.save(userdata)
 
-        await ctx.send(f"{userdata.nickname}'s base swim speed is now {userdata.swimperhour:mu} per hour. (Current speed is {newswim:mu})")
+        await ctx.send(f"{userdata.nickname}'s base swim speed is now {basespeed:mu} per hour. (Current speed is {currspeed:mu} per hour)")
         await show_next_step(ctx, userdata)
 
     @commands.command(
