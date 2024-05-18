@@ -139,10 +139,14 @@ class Diff:
         return f"{operator}{amount}"
 
     def __mul__(self, other: Decimal) -> Diff:
-        return Diff(self.changetype, self.amount * other)
+        if isinstance(other, Decimal):
+            return Diff(self.changetype, self.amount * other)
+        return NotImplemented
 
-    def __div__(self, other: Decimal) -> Diff:
-        return Diff(self.changetype, self.amount / other)
+    def __truediv__(self, other: Decimal) -> Diff:
+        if isinstance(other, Decimal):
+            return Diff(self.changetype, self.amount / other)
+        return NotImplemented
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} {self}>"
@@ -215,10 +219,14 @@ class Rate:
         return f"{self.diff} per {format(self.time)}"
 
     def __mul__(self, other: Decimal) -> Rate:
-        return Rate(self.diff * other, self.time)
+        if isinstance(other, Decimal):
+            return Rate(self.diff * other, self.time)
+        return NotImplemented
 
-    def __div__(self, other: Decimal) -> Rate:
-        return Rate(self.diff / other, self.time)
+    def __truediv__(self, other: Decimal) -> Rate:
+        if isinstance(other, Decimal):
+            return Rate(self.diff / other, self.time)
+        return NotImplemented
 
     @classmethod
     def fromJSON(cls, jsondata: Any) -> Rate:
