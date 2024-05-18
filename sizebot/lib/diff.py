@@ -245,9 +245,11 @@ class LinearRate(Rate):
     async def convert(cls, ctx: BotContext, argument: str) -> Rate:
         rate = cls.parse(argument)
         if rate.diff.changetype != "add":
-            raise ValueError("Invalid rate for speed parsing.")
+            raise InvalidSizeValue(argument, "Rate")
+            # raise ValueError("Invalid rate for speed parsing.")
         if rate.diff.amount < 0:
-            raise ValueError("Speed can not go backwards!")
+            raise InvalidSizeValue(argument, "Rate")
+            # raise ValueError("Speed can not go backwards!")
         return rate
 
 
