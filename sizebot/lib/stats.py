@@ -430,7 +430,7 @@ all_stats = [
             value=lambda v: v["scale"] ** 3),
     StatDef("height",
             title="Height",
-            string="{nickname}'s current height is **{height:,.3mu}**, or {scale} scale.",
+            string=lambda s: f"{s['nickname'].value}'s current height is **{s['height'].value:,.3mu}**, or {s['scale'].string} scale.",
             body="{height:,.3mu}",
             is_shown=False,
             power=1,
