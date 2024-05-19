@@ -95,7 +95,7 @@ class DigiObject:
         elif self.diameter:
             r = self.diameter / 2
             r2 = r ** 2
-            return AV(math.pi * r2)
+            return AV(Decimal(math.pi) * r2)
         return None
 
     @property
