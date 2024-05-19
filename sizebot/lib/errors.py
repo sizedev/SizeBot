@@ -10,6 +10,7 @@ from sizebot.lib import utils
 from sizebot.lib.types import BotContext
 
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
+logger = logging.getLogger("sizebot")
 
 
 # error.message will be printed when you do print(error)
@@ -126,7 +127,7 @@ class NoPermissionsException(DigiException):
     level = logging.ERROR
 
     # TODO: CamelCase
-    def formatMessage(self) -> str:
+    def formatUserMessage(self) -> str:
         return "SizeBot does not have the permssions to perform this action."
 
 
