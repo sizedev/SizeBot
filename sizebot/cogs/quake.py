@@ -134,7 +134,7 @@ class QuakeCog(commands.Cog):
         """See what quakes would be caused by someone else's steps.\n#ACC#"""
         self_user = load_or_fake(ctx.author)
         userdata = load_or_fake(user)
-        userdata.scale *= userdata.viewscale
+        userdata.scale *= self_user.viewscale
         e = quake_embed(userdata, quake_type, scale_rad = userdata.viewscale)
         e.title = e.title + f" as seen by {self_user.nickname}"
         e.description = f"To {self_user.nickname}, " + e.description
@@ -176,7 +176,7 @@ class QuakeCog(commands.Cog):
         aliases = [],
         usage = "<string>",
         category = "stats")
-    async def quaketype(self, ctx: BotContext, s: str):
+    async def quaketype(self, ctx: BotContext, *, s: str):
         """Type a sentence and cause some quakes.\n#ACC#"""
         guildid = ctx.guild.id
         userid = ctx.author.id
