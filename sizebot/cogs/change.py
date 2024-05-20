@@ -5,7 +5,7 @@ from typing import cast
 from sizebot.lib import errors, utils
 from sizebot.lib.digidecimal import Decimal
 
-from discord import Member, User, Guild
+from discord import Member
 from discord.ext import commands, tasks
 
 import sizebot.data
@@ -75,7 +75,7 @@ class ChangeCog(commands.Cog):
             changes.start(userid, guildid, addPerSec=arg.addPerSec, mulPerSec=arg.mulPerSec, stopSV=arg.stopSV, stopTV=arg.stopTV)
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{str(arg)}`.")
         elif arg == "stop":
-            await ctx.send(**stop_changes(ctx.author, ctx.guild))
+            await ctx.send(**stop_changes(ctx.author))
 
     @commands.command(
         hidden = True
@@ -99,7 +99,7 @@ class ChangeCog(commands.Cog):
     @commands.guild_only()
     async def stopchange(self, ctx: BotContext):
         """Stop a currently active slow change."""
-        await ctx.send(**stop_changes(ctx.author, ctx.guild))
+        await ctx.send(**stop_changes(ctx.author))
 
     @commands.command(
         aliases = ["eat"],

@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import userdb, nickmanager
-from sizebot.lib.diff import LinearRate, Rate
+from sizebot.lib.diff import LinearRate
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.gender import Gender, parse_gender
 from sizebot.lib.loglevels import EGG
@@ -15,7 +15,7 @@ from sizebot.lib.stats import HOUR
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV, pos_SV, pos_WV
 from sizebot.lib.unitsystem import UnitSystem, parse_unitsystem
-from sizebot.lib.utils import AliasMap, parse_scale, randrange_log
+from sizebot.lib.utils import parse_scale, randrange_log
 
 logger = logging.getLogger("sizebot")
 

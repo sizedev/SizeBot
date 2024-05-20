@@ -6,8 +6,7 @@ from discord.ext import commands
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import emojis
-from sizebot.lib.diff import LinearRate, Rate
-from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.diff import LinearRate
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.stats import HOUR
 from sizebot.lib.types import BotContext

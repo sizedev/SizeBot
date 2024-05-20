@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from typing import Annotated
 
 import discord
 from discord.utils import get
@@ -10,9 +9,6 @@ from sizebot.conf import conf
 from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import ids, emojis
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV, WV
-from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT
-from sizebot.lib.unitsystem import UnitSystem, parse_unitsystem
 
 logger = logging.getLogger("sizebot")
 
