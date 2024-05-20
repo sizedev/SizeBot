@@ -316,7 +316,7 @@ class LimitedRate:
         elif stoptype == "TV":
             stop = TV(jsondata["stop"])
         else:
-            raise ThisShouldNeverHappenException
+            raise ThisShouldNeverHappenException(f"Bad stoptype: {stoptype}")
 
         return cls(rate, stop)
 

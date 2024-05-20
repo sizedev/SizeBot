@@ -55,17 +55,17 @@ class User:
         "button", "tra_reports", "allowchangefromothers"
     ]
 
-    def __init__(self):
-        self.guildid: int = None
-        self.id: int = None
-        self.nickname: str = None
+    def __init__(self, guildid: int, id: int, nickname: str):
+        self.guildid: int = guildid
+        self.id: int = id
+        self.nickname: str = nickname
         self.picture_url: str | None = None
         self.description: str | None = None
         self.gender: Gender | None = None
         self.display: bool = True
         self._height: SV = AVERAGE_HEIGHT
         self.baseheight: SV = AVERAGE_HEIGHT
-        self.baseweight: SV = AVERAGE_WEIGHT
+        self.baseweight: WV = AVERAGE_WEIGHT
         self.footlength: SV | None = None
         self.pawtoggle: bool = False
         self.furtoggle: bool = False
@@ -89,7 +89,7 @@ class User:
         self.species: str | None = None
         self.soft_gender: str | None = None
         self.avatar_url: str | None = None
-        self.lastactive: Arrow = None
+        self.lastactive: Arrow | None = None
         self.registration_steps_remaining: list[str] = []
         self._macrovision_model: str | None = None
         self._macrovision_view: str | None = None
@@ -294,15 +294,12 @@ class User:
     @classmethod
     def fromJSON(cls, jsondata: dict[str, Any]) -> User:
         jsondata = migrate_json(jsondata)
-        userdata = User()
-        userdata.guildid = int(jsondata["guildid"])
-        userdata.id = int(jsondata["id"])
-        userdata.nickname = cast(str, jsondata["nickname"])
+        userdata = User(int(jsondata["guildid"]), int(jsondata["id"]), cast(str, jsondata["nickname"]))
         userdata.lastactive = optional_parse(arrow.get, jsondata["lastactive"])
         userdata.picture_url = cast(str, jsondata["picture_url"])
         userdata.description = cast(str, jsondata["description"])
         userdata.gender = cast(Gender | None, jsondata["gender"])
-        userdata.display = cast(str, jsondata["display"])
+        userdata.display = cast(bool, jsondata["display"])
         userdata.height = SV(jsondata["height"])
         userdata.baseheight = SV(jsondata["baseheight"])
         userdata.baseweight = WV(jsondata["baseweight"])
@@ -330,7 +327,7 @@ class User:
         userdata.registration_steps_remaining = cast(list[str], jsondata["registration_steps_remaining"])
         userdata._macrovision_model = cast(str | None, jsondata["macrovision_model"])
         userdata._macrovision_view = cast(str | None, jsondata["macrovision_view"])
-        userdata.allowchangefromothers = cast(bool | None, jsondata["allowchangefromothers"])
+        userdata.allowchangefromothers = cast(bool, jsondata["allowchangefromothers"])
         return userdata
 
     def __lt__(self, other: User) -> bool:
@@ -361,7 +358,7 @@ class User:
 
     @classmethod
     def from_fake(cls, fake: FakePlayer) -> User:
-        userdata = User()
+        userdata = User(0, 0, "")
         for k, v in fake.statvalues.items():
             setattr(userdata, k, v)
         return userdata
@@ -391,7 +388,7 @@ def save(userdata: User):
         json.dump(jsondata, f, indent = 4)
 
 
-def load(guildid: int, userid: int, *, member: discord.Member = None, allow_unreg: bool = False) -> User:
+def load(guildid: int, userid: int, *, member: discord.Member | None = None, allow_unreg: bool = False) -> User:
     path = get_user_path(guildid, userid)
     try:
         with open(path, "r") as f:
@@ -444,7 +441,7 @@ def list_users(*, guildid: int | None = None, userid: int | None = None) -> list
     return users
 
 
-def load_or_fake(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> User:
+def load_or_fake(arg: MemberOrFake | SV, *, allow_unreg: bool = False) -> User:
     if isinstance(arg, discord.Member):
         return load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
     elif isinstance(arg, FakePlayer):
@@ -453,7 +450,7 @@ def load_or_fake(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> User:
         return User.from_height(arg)
 
 
-def load_or_fake_height(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> SV:
+def load_or_fake_height(arg: MemberOrFake | SV, *, allow_unreg: bool = False) -> SV:
     if isinstance(arg, discord.Member):
         user = load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
         return user.height
@@ -463,7 +460,7 @@ def load_or_fake_height(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -
         return arg
 
 
-def load_or_fake_weight(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> WV:
+def load_or_fake_weight(arg: MemberOrFake | WV, *, allow_unreg: bool = False) -> WV:
     if isinstance(arg, discord.Member):
         user = load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
         return user.weight

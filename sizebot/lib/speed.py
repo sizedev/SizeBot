@@ -9,7 +9,7 @@ from sizebot.lib.utils import pretty_time_delta
 
 
 class Movement:
-    def __init__(self, key: str, dist: SV, *, stats: StatBox, showspeed: bool, steps: str = None, always_active: bool = False):
+    def __init__(self, key: str, dist: SV, *, stats: StatBox, showspeed: bool, steps: str | None = None, always_active: bool = False):
         self.key = key
         self.stepname = steps
         self.always_active = always_active
@@ -23,9 +23,9 @@ class Movement:
         return self.stats[perhourkey].value
 
     @property
-    def steplength(self) -> SV:
+    def steplength(self) -> SV | None:
         if not self.stepname:
-            return
+            return None
         steplengthkey = f"{self.key}steplength"
         return self.stats[steplengthkey].value
 
@@ -34,9 +34,9 @@ class Movement:
         return (self.dist / self.perhour) * 60 * 60
 
     @property
-    def steps_to_travel(self) -> int:
+    def steps_to_travel(self) -> int | None:
         if not self.stepname:
-            return
+            return None
         return math.ceil(self.dist / self.steplength)
 
     @property

@@ -205,7 +205,7 @@ class DigiObject:
                             value = f"**{WV(self.weight * (multiplier ** 3)):,.3mu}**")
 
         if self.image:
-            embed.set_image(self.image)
+            embed.set_image(url=self.image)
 
         return embed
 

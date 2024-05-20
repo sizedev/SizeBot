@@ -29,7 +29,7 @@ class AdminCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def dump(self, ctx: BotContext, *, user: discord.Member = None):
+    async def dump(self, ctx: BotContext, *, user: discord.Member | None = None):
         """Dump a user's data."""
         if user is None:
             user = ctx.author

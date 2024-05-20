@@ -120,10 +120,7 @@ class RegisterCog(commands.Cog):
             if reaction.emoji != emojis.check:
                 return
 
-        userdata = userdb.User()
-        userdata.guildid = ctx.guild.id
-        userdata.id = ctx.author.id
-        userdata.nickname = ctx.author.display_name
+        userdata = userdb.User(ctx.guild.id, ctx.author.id, ctx.author.display_name)
         userdata.display = False
         if ctx.me.guild_permissions.manage_nicknames:
             userdata.display = True
@@ -288,7 +285,7 @@ class RegisterCog(commands.Cog):
 
         if reaction.emoji not in inputdict.keys():
             await outmsg.delete()
-            raise errors.ThisShouldNeverHappenException
+            raise errors.ThisShouldNeverHappenException(f"Bad emoji reaction {reaction.emoji}")
 
         chosen = inputdict[reaction.emoji] - 1
         chosenguildid = guilds_ids[chosen]

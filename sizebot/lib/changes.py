@@ -27,10 +27,10 @@ class Change:
                  addPerSec: SV = 0,
                  mulPerSec: Decimal = 1,
                  powPerSec: Decimal = 1,
-                 stopSV: SV = None,
-                 stopTV: TV = None,
-                 startTime: Decimal = None,
-                 lastRan: Decimal = None):
+                 stopSV: SV | None = None,
+                 stopTV: TV | None = None,
+                 startTime: Decimal | None = None,
+                 lastRan: Decimal | None = None):
         self.userid = userid
         self.guildid = guildid
         self.addPerSec = addPerSec and SV(addPerSec)
@@ -88,7 +88,7 @@ class Change:
         return running
 
     @property
-    def endtime(self) -> Decimal:
+    def endtime(self) -> Decimal | None:
         if self.stopTV is None:
             return None
         return self.startTime + self.stopTV
@@ -116,14 +116,14 @@ class Change:
         }
 
 
-def start(userid: int, guildid: int, *, addPerSec: SV = 0, mulPerSec: Decimal = 1, stopSV: SV = None, stopTV: TV = None):
+def start(userid: int, guildid: int, *, addPerSec: SV = 0, mulPerSec: Decimal = 1, stopSV: SV | None = None, stopTV: TV | None = None):
     """Start a new change task"""
     startTime = lastRan = time.time()
     change = Change(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV, startTime=startTime, lastRan=lastRan)
     _activate(change)
 
 
-def stop(userid: int, guildid: int) -> Change:
+def stop(userid: int, guildid: int) -> Change | None:
     """Stop a running change task"""
     change = _deactivate(userid, guildid)
     return change

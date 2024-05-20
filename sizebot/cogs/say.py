@@ -227,6 +227,7 @@ def resize_text(text: str, diff: int) -> str:
         return f"**{text.translate(small_caps)}**"
     elif diff == 3:
         return text.translate(giant_letters)
+    raise ValueError
 
 
 def ratio_to_diff(ratio: Decimal) -> int:

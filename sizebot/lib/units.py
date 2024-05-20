@@ -278,7 +278,7 @@ class SystemRegistry():
     def _get_close_units_with_limit(self, val: Decimal, limit: Decimal) -> list[SystemUnit]:
         return [u for u in self._systemunits if 1 <= round_fraction(val / u.factor, 4) <= limit and self._is_good(val / u.factor)]
 
-    def _get_random_close_unit(self, val: Decimal, options: Decimal = 6) -> SystemUnit:
+    def _get_random_close_unit(self, val: Decimal, options: Decimal = 6) -> SystemUnit | None:
         closeUnits = self._get_close_units_with_limit(val, options)
         if not closeUnits:
             closeUnits = self._get_close_units_with_limit(val, 10)

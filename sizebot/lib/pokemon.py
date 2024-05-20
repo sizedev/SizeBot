@@ -16,9 +16,9 @@ pokemon: list[Pokemon] = []
 
 
 class Pokemon:
-    def __init__(self, name: str, natdex: int = None, generation: int = None, region: str = None,
-                 height: SV = None, weight: WV = None, types: list[str] = [], color: int = None,
-                 flavor_text: str = None, sprite: str = None) -> None:
+    def __init__(self, name: str, natdex: int | None = None, generation: int | None = None, region: str | None = None,
+                 height: SV | None = None, weight: WV | None = None, types: list[str] = [], color: int | None = None,
+                 flavor_text: str | None = None, sprite: str | None = None) -> None:
         self.name = name
         self.natdex = natdex
         self.generation = generation
@@ -64,10 +64,12 @@ class Pokemon:
             return lowerName == self.name.lower()
         elif isinstance(other, Pokemon):
             return self.name == other.name
+        return False
 
     def __lt__(self, other: Any) -> bool:
         if isinstance(other, Pokemon):
             return self.natdex < other.natdex
+        return False
 
     @classmethod
     def fromJSON(cls, obj_json: Any) -> Pokemon:

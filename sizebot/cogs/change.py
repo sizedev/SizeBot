@@ -67,7 +67,7 @@ class ChangeCog(commands.Cog):
             elif style == "power":
                 userdata.scale = userdata.scale ** cast(Decimal, amount)
             else:
-                raise ChangeMethodInvalidException
+                raise ChangeMethodInvalidException(style)
             await nickmanager.nick_update(ctx.author)
             userdb.save(userdata)
             await ctx.send(f"{userdata.nickname} is now {userdata.height:m} ({userdata.height:u}) tall.")
@@ -169,7 +169,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def outgrow(self, ctx: BotContext, *, obj: DigiObject = None):
+    async def outgrow(self, ctx: BotContext, *, obj: DigiObject | None = None):
         """Outgrows the next object in the object database, or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -196,7 +196,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def outshrink(self, ctx: BotContext, *, obj: DigiObject = None):
+    async def outshrink(self, ctx: BotContext, *, obj: DigiObject | None = None):
         """Outshrinks the next object in the object database or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id

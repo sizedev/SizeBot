@@ -14,7 +14,7 @@ from sizebot.lib import objs, proportions, userdb, utils
 from sizebot.lib.constants import emojis
 from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.objs import DigiObject, objects, tags, format_close_object_smart
+from sizebot.lib.objs import DigiObject, objects, tags as obj_tags, format_close_object_smart
 from sizebot.lib.stats import StatBox, taglist, AVERAGE_HEIGHT
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV, AV
@@ -35,7 +35,7 @@ class ObjectsCog(commands.Cog):
         category = "objects",
         usage = "[tag]"
     )
-    async def objs(self, ctx: BotContext, tag: str = None):
+    async def objs(self, ctx: BotContext, tag: str | None = None):
         """Get a list of the various objects SizeBot accepts."""
         objectunits = []
         for obj in objs.objects:
@@ -61,7 +61,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookslike(self, ctx: BotContext, *, memberOrHeight: MemberOrFakeOrSize = None):
+    async def lookslike(self, ctx: BotContext, *, memberOrHeight: MemberOrFakeOrSize | None = None):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -255,7 +255,7 @@ class ObjectsCog(commands.Cog):
         usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx: BotContext, amount: int | None = None, *, who: MemberOrFakeOrSize = None):
+    async def stackup(self, ctx: BotContext, amount: int | None = None, *, who: MemberOrFakeOrSize | None = None):
         """How do you stack up against objects?
 
         Example:
@@ -287,7 +287,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def food(self, ctx: BotContext, food: DigiObject | str, *, who: MemberOrFakeOrSize = None):
+    async def food(self, ctx: BotContext, food: DigiObject | str, *, who: MemberOrFakeOrSize | None = None):
         """How much food does a person need to eat?
 
         Takes optional argument of a user to get the food for.
@@ -349,7 +349,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def water(self, ctx: BotContext, *, who: MemberOrFakeOrSize = None):
+    async def water(self, ctx: BotContext, *, who: MemberOrFakeOrSize | None = None):
         if who is None:
             who = ctx.author
 
@@ -371,7 +371,7 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def land(self, ctx: BotContext, land: DigiObject | str, *, who: MemberOrFakeOrSize = None):
+    async def land(self, ctx: BotContext, land: DigiObject | str, *, who: MemberOrFakeOrSize | None = None):
         """Get stats about how you cover land.
         #ACC#
 
@@ -442,12 +442,14 @@ class ObjectsCog(commands.Cog):
 
         out += "\n\n__**Object Tags**__\n"
 
-        for tag in sorted(tags, key=tags.get, reverse=True):
-            if tags[tag] <= 1:
+        out_obj_tags: list[str] = []
+        sorted_obj_tags = sorted(obj_tags.items(), key=lambda i: i[1], reverse=True)
+        for tag, count in sorted_obj_tags:
+            if count <= 1:
                 break
-            out += f"`{tag}` ({tags[tag]}), "
+            out_obj_tags.append(f"`{tag}` ({count})")
 
-        out = out.removesuffix(", ")
+        out = (", ").join(out_obj_tags)
 
         await ctx.send(out)
 

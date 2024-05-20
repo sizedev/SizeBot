@@ -5,15 +5,15 @@ from sizebot.lib import errors
 Gender = Literal["m", "f"]
 GENDERS = get_args(Gender)
 
-genders = {
-    "m": ("m", "male", "man", "boy"),
-    "f": ("f", "female", "woman", "girl")
+genders: dict[Gender, list[str]] = {
+    "m": ["m", "male", "man", "boy"],
+    "f": ["f", "female", "woman", "girl"]
 }
-gendermap = {alias: g for g, aliases in genders.items() for alias in aliases}
+gendermap: dict[str, Gender] = {alias: key for key, aliases in genders.items() for alias in aliases}
 
 
 def parse_gender(s: str) -> Gender:
     gender = gendermap.get(s.lower(), None)
-    if gender not in GENDERS:
+    if gender is None or gender not in GENDERS:
         raise errors.ArgumentException
     return gender

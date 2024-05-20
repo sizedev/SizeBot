@@ -1,4 +1,5 @@
 from __future__ import annotations
+from pathlib import Path
 from typing import Any
 
 import json
@@ -67,11 +68,11 @@ class Guild:
         return guilddata
 
 
-def get_guild_path(guildid: int) -> str:
+def get_guild_path(guildid: int) -> Path:
     return paths.guilddbpath / f"{guildid}"
 
 
-def get_guild_data_path(guildid: int) -> str:
+def get_guild_data_path(guildid: int) -> Path:
     return get_guild_path(guildid) / "guild.json"
 
 

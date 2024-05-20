@@ -69,7 +69,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbase(self, ctx: BotContext, arg1: Annotated[SV, pos_SV] | Annotated[WV, pos_WV], arg2: Annotated[SV, pos_SV] | Annotated[WV, pos_WV] = None):
+    async def setbase(self, ctx: BotContext, arg1: Annotated[SV, pos_SV] | Annotated[WV, pos_WV], arg2: Annotated[SV, pos_SV] | Annotated[WV, pos_WV] | None = None):
         """Set your base height and weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 

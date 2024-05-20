@@ -50,7 +50,7 @@ def start(userid: int, guildid: int, durationTV: TV):
     _activate(nanny)
 
 
-def stop(userid: int) -> Nanny:
+def stop(userid: int) -> Nanny | None:
     """Stop a waiting naptime nanny"""
     nanny = _deactivate(userid)
     return nanny
@@ -78,7 +78,7 @@ def _activate(nanny: Nanny):
     save_to_file()
 
 
-def _deactivate(userid: int) -> Nanny:
+def _deactivate(userid: int) -> Nanny | None:
     """Deactivate a waiting naptime nanny"""
     nanny = _active_nannies.pop(userid, None)
     save_to_file()

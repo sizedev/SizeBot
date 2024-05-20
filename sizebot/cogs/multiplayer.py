@@ -74,7 +74,7 @@ class MPCog(commands.Cog):
         usage = "<amount> <victim> [thief]",
         category = "multiplayer"
     )
-    async def steal(self, ctx: BotContext, amount: SV | WV, victim: discord.Member, thief: discord.Member = None):
+    async def steal(self, ctx: BotContext, amount: SV | WV, victim: discord.Member, thief: discord.Member | None = None):
         """See what would happen if you stole size from a user.
 
         `amount` can be a height amount or a weight amount.
@@ -164,7 +164,7 @@ class MPCog(commands.Cog):
         elif style == "power":
             userdata = userdata ** amount
         else:
-            raise ChangeMethodInvalidException
+            raise ChangeMethodInvalidException(style)
         await nickmanager.nick_update(other)
 
         userdb.save(userdata)

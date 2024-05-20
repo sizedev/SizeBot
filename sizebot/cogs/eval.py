@@ -68,7 +68,7 @@ class EvalCog(commands.Cog):
 
         async with ctx.typing():
             try:
-                await runEval(ctx, evalStr, returnValue = False)
+                await runEval(ctx, evalStr)
             except Exception as err:
                 logger.error("eval error:\n" + utils.format_traceback(err))
                 await ctx.author.send(emojis.warning + f" ` {utils.format_error(err)} `")

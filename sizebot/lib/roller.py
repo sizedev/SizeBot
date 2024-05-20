@@ -39,7 +39,7 @@ class RollArg:
         return RollResult(used, dropped)
 
     @classmethod
-    def parse(cls, s: str) -> RollArg:
+    def parse(cls, s: str) -> RollArg | None:
         match = cls.re_pattern.match(s)
         if match is None:
             return None

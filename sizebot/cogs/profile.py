@@ -80,7 +80,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def profile(self, ctx: BotContext, member: discord.Member = None):
+    async def profile(self, ctx: BotContext, member: discord.Member | None = None):
         """See the profile of you or another SizeBot user.
 
         #ALPHA#

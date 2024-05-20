@@ -13,6 +13,7 @@ from datetime import date, datetime, time, timedelta
 import arrow
 import discord
 from discord import Embed
+from discord.ext import commands
 import PIL
 from PIL import Image, ImageDraw
 
@@ -56,9 +57,9 @@ def eformat(name: str, value: Any) -> str:
         emojiType = "👥"
     elif isinstance(value, discord.user.User):
         emojiType = "👤"
-    elif isinstance(value, discord.ext.commands.Bot):
+    elif isinstance(value, commands.Bot):
         emojiType = "🤖"
-    elif isinstance(value, discord.ext.commands.cog.Cog):
+    elif isinstance(value, commands.cog.Cog):
         emojiType = "⚙️"
     elif isinstance(value, SV):
         emojiType = "🇸"

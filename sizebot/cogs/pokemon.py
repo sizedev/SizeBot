@@ -19,7 +19,7 @@ class PokemonCog(commands.Cog):
         aliases = ["dex"],
         category = "objects"
     )
-    async def pokedex(self, ctx: BotContext, pkmn: int | str = None):
+    async def pokedex(self, ctx: BotContext, pkmn: int | str | None = None):
         """Pokemaaaaaaaaans"""
         if isinstance(pkmn, str):
             p = next((m for m in pokemon if m.name.lower() == pkmn.lower()), None)
@@ -38,7 +38,7 @@ class PokemonCog(commands.Cog):
         aliases = ["pokecompare", "pokecomp", "lookatpoke"],
         category = "objects"
     )
-    async def lookatpokemon(self, ctx: BotContext, pkmn: int | str = None, *, who: MemberOrFakeOrSize = None):
+    async def lookatpokemon(self, ctx: BotContext, pkmn: int | str | None = None, *, who: MemberOrFakeOrSize | None = None):
         """Pokemaaaaaaaaans"""
         if who is None:
             who = ctx.author

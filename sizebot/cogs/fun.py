@@ -1,5 +1,7 @@
 import importlib.resources as pkg_resources
+import io
 import logging
+from typing import cast
 
 import discord
 from discord import File
@@ -63,6 +65,8 @@ class FunCog(commands.Cog):
         logger.log(EGG, f"{ctx.author.display_name} thinks Digi needs to pee.")
         with pkg_resources.open_binary(sizebot.data, "digipee.mp3") as f:
             # PERMISSION: requires attach_file
+            # Need to do a type cast because discord.File() has bad type parameters
+            f = cast(io.BufferedIOBase, f)
             await ctx.send(f"<@{ids.digiduncan}> also has to pee.", file = File(f, "digipee.mp3"))
 
     @commands.command(

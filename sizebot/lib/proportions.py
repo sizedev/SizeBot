@@ -68,7 +68,7 @@ def get_speeddistance(userdata: User, distance: SV) -> EmbedToSend | StrToSend:
         title = f"{distance:,.3mu} to {stats['nickname'].value}",
         description = speedcalc(stats, distance, speed = True, include_relative = True)
     )
-    embed.set_footer(text = f"{distance:,.3mu} is {multiplier:,.3}x larger than {stats['nickname'].value}. It looks to be about {format_close_object_smart(distance_viewed)}."),
+    embed.set_footer(text = f"{distance:,.3mu} is {multiplier:,.3}x larger than {stats['nickname'].value}. It looks to be about {format_close_object_smart(distance_viewed)}.")
     return {"embed": embed}
 
 
@@ -270,7 +270,7 @@ def get_keypoints_embed(userdata: User, requesterID: int) -> EmbedToSend:
     return {"embed": embed}
 
 
-def _create_compare_embed(title: str, requesterID: int, small: StatBox = None, big: StatBox = None) -> Embed:
+def _create_compare_embed(title: str, requesterID: int, small: StatBox | None = None, big: StatBox | None = None) -> Embed:
     requestertag = f"<@!{requesterID}>"
     if small is not None and big is not None:
         color = _get_compare_color(requesterID, small, big)
@@ -295,7 +295,7 @@ def _create_embed(title: str, requesterID: int) -> Embed:
 
 
 def _create_compare_field(small: StatBox, big: StatBox, small_stat: Stat, big_stat: Stat) -> EmbedField:
-    embedfield = {
+    embedfield: EmbedField = {
         "name": small_stat.title,
         "value": _create_compare_body(small, big, small_stat, big_stat),
         "inline": small_stat.definition.inline

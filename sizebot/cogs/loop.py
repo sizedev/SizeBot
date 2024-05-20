@@ -13,16 +13,15 @@ from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
 from sizebot.lib.types import BotContext
 from sizebot.lib.utils import pretty_time_delta
-from sizebot.lib.userdb import MoveTypeStr
 import sizebot.lib.language as lang
 
 logger = logging.getLogger("sizebot")
 
 
 def calc_move_dist(userdata: userdb.User) -> tuple[TV, SV]:
-    movetype: MoveTypeStr = userdata.currentmovetype
-    starttime: arrow.Arrow = userdata.movestarted
-    stoptime: TV | None = userdata.movestop
+    movetype = userdata.currentmovetype
+    starttime = userdata.movestarted
+    stoptime = userdata.movestop
 
     now = arrow.now()
     timeelapsed = now - starttime
@@ -51,7 +50,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def start(self, ctx: BotContext, action: str, stop: TV = None):
+    async def start(self, ctx: BotContext, action: str, stop: TV | None = None):
         """Keep moving forward -- Walt Disney
 
         `<type>` can be one of the following: walk, run, climb, crawl, swim

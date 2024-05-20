@@ -56,15 +56,15 @@ async def post_report(report_type: str, message: discord.Message, report_text: s
         )
 
 
-def get_cat_cmds(commands: list[commands.Command]) -> dict[str, list[commands.Command]]:
+def get_cat_cmds(commands: set[commands.Command]) -> dict[str, list[commands.Command]]:
     # Get all non-hidden commands, sorted by name
-    commands = (c for c in commands if not c.hidden)
-    commands = sorted(commands, key=lambda c: c.name)
+    commands_unsorted = (c for c in commands if not c.hidden)
+    commands_sorted = sorted(commands_unsorted, key=lambda c: c.name)
 
     # Divide commands into categories
     commands_by_cat: dict[str, list[commands.Command]] = {cat.cid: [] for cat in categories}
 
-    for c in commands:
+    for c in commands_sorted:
         cmd_category = c.category or "misc"
         if cmd_category not in commands_by_cat:
             logger.warn(f"Command category {cmd_category!r} does not exist.")

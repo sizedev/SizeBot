@@ -106,7 +106,7 @@ class QuakeCog(commands.Cog):
         aliases = ["quake"],
         usage = "[type] [user/height]",
         category = "stats")
-    async def earthquake(self, ctx: BotContext, quake_type: QuakeType | None = "step", user: MemberOrFakeOrSize = None):
+    async def earthquake(self, ctx: BotContext, quake_type: QuakeType | None = "step", user: MemberOrFakeOrSize | None = None):
         """See what quakes would be caused by your steps.\n#ACC#"""
         if user is None:
             user = ctx.author
@@ -118,7 +118,7 @@ class QuakeCog(commands.Cog):
         aliases = ["quakestats"],
         usage = "[user/height]",
         category = "stats")
-    async def earthquakestats(self, ctx: BotContext, user: MemberOrFakeOrSize = None):
+    async def earthquakestats(self, ctx: BotContext, user: MemberOrFakeOrSize | None = None):
         """See what quakes would be caused by your steps.\n#ACC#"""
         if user is None:
             user = ctx.author
@@ -144,7 +144,7 @@ class QuakeCog(commands.Cog):
         aliases = [],
         usage = "<dist> [user/height]",
         category = "stats")
-    async def quakewalk(self, ctx: BotContext, dist: SV, user: MemberOrFakeOrSize = None):
+    async def quakewalk(self, ctx: BotContext, dist: SV, user: MemberOrFakeOrSize | None = None):
         """Walk a distance and cause some quakes.\n#ACC#"""
         if user is None:
             user = ctx.author

@@ -232,7 +232,7 @@ class SetCog(commands.Cog):
         if maxheight < 0:
             maxheight = SV(0)
 
-        newheightSV = randrange_log(minheight, maxheight)
+        newheightSV = SV(randrange_log(minheight, maxheight))
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.height = newheightSV
@@ -293,7 +293,7 @@ class SetCog(commands.Cog):
     async def set0(self, ctx: BotContext):
         """Change height to a zero."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.height = 0
+        userdata.height = SV(0)
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)
 

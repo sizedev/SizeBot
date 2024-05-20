@@ -1,4 +1,4 @@
-from typing import Any, Generator, Hashable, Sequence, TypeVar
+from typing import Any, Hashable, Sequence, TypeVar
 from collections.abc import Callable, Iterable, Iterator
 
 import inspect
@@ -134,14 +134,11 @@ def chunk_list(lst: list, chunklen: int):
         lst = lst[chunklen:]
 
 
-def chunk_str(s: str, chunklen: int, prefix: str = "", suffix: str = "") -> Generator[str, None, str]:
+def chunk_str(s: str, chunklen: int, prefix: str = "", suffix: str = "") -> Iterable[str]:
     """chunk_str(3, "ABCDEFG") --> ['ABC', 'DEF', 'G']"""
     innerlen = chunklen - len(prefix) - len(suffix)
     if innerlen <= 0:
         raise ValueError("Cannot fit prefix and suffix within chunklen")
-
-    if not s:
-        return prefix + s + suffix
 
     while len(s) > 0:
         chunk = s[:innerlen]
@@ -153,7 +150,7 @@ def chunk_msg(m: str) -> list:
     p = "```\n"
     if m.startswith("Traceback") or m.startswith("eval error") or m.startswith("Executing eval"):
         p = "```python\n"
-    return chunk_str(m, chunklen=2000, prefix=p, suffix="\n```")
+    return list(chunk_str(m, chunklen=2000, prefix=p, suffix="\n```"))
 
 
 def chunk_lines(s: str, chunklen: int):
@@ -233,7 +230,7 @@ def format_error(err: Exception) -> str:
     return f"{fullname}{errMessage}"
 
 
-def try_or_none(fn: Callable, *args, ignore: list = (), **kwargs) -> Any:
+def try_or_none(fn: Callable, *args, ignore: tuple = (), **kwargs) -> Any:
     "Try to run a function. If it throws an error that's in `ignore`, just return `None`."""
     try:
         result = fn(*args, **kwargs)
@@ -367,7 +364,7 @@ def sentence_join(items: list[str], *, joiner: str | None = None, oxford: bool =
     return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
 
 
-def glitch_string(in_string: str, *, charset: str = None) -> str:
+def glitch_string(in_string: str, *, charset: str | None = None) -> str:
     words = []
     if charset is not None:
         for word in in_string.split(" "):
@@ -386,7 +383,7 @@ def glitch_string(in_string: str, *, charset: str = None) -> str:
     return " ".join(words)
 
 
-def regexbuild(li: list[str | list[str]], capture: bool = False) -> str:
+def regexbuild(li: list[str] | list[list[str]], capture: bool = False) -> str:
     """
     regexbuild(["a", "b", "c"])
     >>> "a|b|c"

@@ -1,12 +1,13 @@
 from typing import TypedDict
 
+from discord import Embed
 from discord.ext import commands
 
 BotContext = commands.Context[commands.Bot]
 
 
 class EmbedToSend(TypedDict):
-    embed: str
+    embed: Embed
 
 
 class StrToSend(TypedDict):

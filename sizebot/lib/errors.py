@@ -19,11 +19,11 @@ class DigiException(Exception):
     level = logging.WARNING
 
     # TODO: CamelCase
-    def formatMessage(self) -> str:
+    def formatMessage(self) -> str | None:
         return None
 
     # TODO: CamelCase
-    def formatUserMessage(self) -> str:
+    def formatUserMessage(self) -> str | None:
         return None
 
     def __repr__(self) -> str:
@@ -37,11 +37,11 @@ class DigiContextException(Exception):
     level = logging.WARNING
 
     # TODO: CamelCase
-    async def formatMessage(self, ctx: BotContext) -> str:
+    async def formatMessage(self, ctx: BotContext) -> str | None:
         return None
 
     # TODO: CamelCase
-    async def formatUserMessage(self, ctx: BotContext) -> str:
+    async def formatUserMessage(self, ctx: BotContext) -> str | None:
         return None
 
     def __repr__(self) -> str:

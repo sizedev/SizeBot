@@ -86,16 +86,16 @@ def wrap_str(f: str | Callable[[StatBox], str]) -> Callable[[StatBox], str]:
         return f
 
 
-def wrap_bool(f: bool | Callable[[ValueDict], bool]) -> Callable[[ValueDict], bool]:
+def wrap_bool(f: bool | Callable[[StatBox], bool]) -> Callable[[StatBox], bool]:
     if isinstance(f, bool):
-        def wrapped(values: ValueDict) -> bool:
+        def wrapped(sb: StatBox) -> bool:
             return f
         return wrapped
     else:
         return f
 
 
-def grouped_z(z: int) -> tuple[int, int]:
+def grouped_z(z: int | None) -> tuple[int, int]:
     if z is None:
         return (1, 0)
     elif z < 0:
@@ -131,12 +131,12 @@ class StatDef:
                  userkey: str | None = None,
                  value: Callable[[ValueDict], Any] | None = None,
                  power: int | None = None,
-                 requires: list[str] = None,
+                 requires: list[str] | None = None,
                  type: Callable[[Any], Any] | None = None,
                  z: int | None = None,
-                 tags: list[str] = None,
+                 tags: list[str] | None = None,
                  inline: bool = True,
-                 aliases: list[str] = None
+                 aliases: list[str] | None = None
                  ):
         if userkey is not None and power is None:
             raise Exception(f'StatDef("{key}") with userkey must have power set')
@@ -209,7 +209,7 @@ class StatDef:
             else:
                 # Scale by the power
                 value = old_value * (scale ** self.power)
-        else:
+        elif self.get_value is not None:
             # calculate from value()
             if any(r not in values for r in self.requires):
                 return
@@ -334,7 +334,12 @@ class StatBox:
             "taillength": None,
             "earheight": None,
             "macrovision_model": None,
-            "macrovision_view": None
+            "macrovision_view": None,
+            "footlength": None,
+            "liftstrength": None,
+            "walkperhour": None,
+            "runperhour": None,
+            "swimperhour": None
         }
         return cls.load(average_userdata)
 

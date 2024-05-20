@@ -32,7 +32,7 @@ class WeirdCog(commands.Cog):
         usage = "[hex/rgb/hsv/hsl/cymk] <colorcode>",
         category = "fun"
     )
-    async def color(self, ctx: BotContext, arg1: str, *, arg2: str = None):
+    async def color(self, ctx: BotContext, arg1: str, *, arg2: str | None = None):
         """Get info about a color."""
         outmessage = await ctx.send(emojis.loading)
 
