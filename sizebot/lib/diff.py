@@ -173,15 +173,15 @@ class Rate:
         self.time = time
 
     @property
-    def addPerSec(self) -> SV | None:
+    def addPerSec(self) -> SV:
         if self.diff.changetype != "add":
-            return None
+            return 0
         return SV(self.diff.amount / self.time)
 
     @property
-    def mulPerSec(self) -> Decimal | None:
+    def mulPerSec(self) -> Decimal:
         if self.diff.changetype != "mul":
-            return None
+            return 1
         return Decimal(self.diff.amount ** (1 / self.time))
 
     @property
@@ -260,11 +260,11 @@ class LimitedRate:
         self.stop = stop
 
     @property
-    def addPerSec(self) -> SV | None:
+    def addPerSec(self) -> SV:
         return self.rate.addPerSec
 
     @property
-    def mulPerSec(self) -> Decimal | None:
+    def mulPerSec(self) -> Decimal:
         return self.rate.mulPerSec
 
     @property
