@@ -54,7 +54,7 @@ class ChangeCog(commands.Cog):
         """
         guildid = ctx.guild.id
         userid = ctx.author.id
-        userdata = userdb.exists(guildid, userid)  # Load this data but don't use it as an ad-hoc user test.
+        userdata = userdb.load(guildid, userid)  # Load this data but don't use it as an ad-hoc user test.
 
         if isinstance(arg, Diff):
             style = arg.changetype
