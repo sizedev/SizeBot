@@ -2,7 +2,7 @@ import importlib.resources as pkg_resources
 import logging
 import random
 from typing import cast
-from sizebot.lib import errors
+from sizebot.lib import errors, utils
 from sizebot.lib.digidecimal import Decimal
 
 from discord import Member, User, Guild
@@ -227,7 +227,8 @@ class ChangeCog(commands.Cog):
         try:
             await changes.apply(self.bot)
         except Exception as e:
-            logger.error(e)
+            logger.error("Ignoring exception in changeTask")
+            logger.error(utils.format_traceback(e))
 
 
 def change_user(guildid: int, userid: int, changestyle: str, amount: SV):

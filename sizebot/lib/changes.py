@@ -8,6 +8,7 @@ import time
 from discord.ext import commands
 
 from sizebot.lib import userdb, paths, nickmanager
+from sizebot.lib import utils
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, TV
 from sizebot.lib.utils import pretty_time_delta
@@ -138,7 +139,8 @@ async def apply(bot: commands.Bot):
             if running:
                 runningChanges[key] = change
         except Exception as e:
-            logger.error(e)
+            logger.error("Ignoring exception in changes.apply")
+            logger.error(utils.format_traceback(e))
     _active_changes = runningChanges
     save_to_file()
 

@@ -2,7 +2,7 @@ import logging
 
 from discord.ext import commands, tasks
 
-from sizebot.lib import naps
+from sizebot.lib import naps, utils
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import TV
 
@@ -81,7 +81,8 @@ class NaptimeCog(commands.Cog):
         try:
             await naps.check(self.bot)
         except Exception as e:
-            logger.error(e)
+            logger.error("Ignoring exception in nannyTask")
+            logger.error(utils.format_traceback(e))
 
 
 async def setup(bot: commands.Bot):

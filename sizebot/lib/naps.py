@@ -7,7 +7,7 @@ import time
 
 from discord.ext import commands
 
-from sizebot.lib import paths
+from sizebot.lib import paths, utils
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import TV
 
@@ -66,7 +66,8 @@ async def check(bot: commands.Bot):
             if running:
                 runningNannies[userid] = nanny
         except Exception as e:
-            logger.error(e)
+            logger.error("Ignoring exception in naps.check")
+            logger.error(utils.format_traceback(e))
     _active_nannies = runningNannies
     save_to_file()
 
