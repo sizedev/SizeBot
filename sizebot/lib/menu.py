@@ -97,7 +97,7 @@ class Menu:
             answer = reaction.emoji
 
         # Let's wrap things up.
-        if self.message:
+        if self.message and self.message.guild.me.guild_permissions.manage_messages:
             # PERMISSION: requires manage_messages
             await self.message.clear_reactions()
         return answer
