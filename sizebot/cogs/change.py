@@ -1,9 +1,11 @@
 import importlib.resources as pkg_resources
 import logging
 import random
+from typing import cast
 from sizebot.lib import errors
 from sizebot.lib.digidecimal import Decimal
 
+from discord import Member, User, Guild
 from discord.ext import commands, tasks
 
 import sizebot.data
@@ -11,7 +13,7 @@ from sizebot.lib import changes, userdb, nickmanager
 from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.objs import DigiObject, objects
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import BotContext, StrToSend
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
@@ -52,35 +54,28 @@ class ChangeCog(commands.Cog):
         """
         guildid = ctx.guild.id
         userid = ctx.author.id
+        userdata = userdb.exists(guildid, userid)  # Load this data but don't use it as an ad-hoc user test.
 
         if isinstance(arg, Diff):
             style = arg.changetype
             amount = arg.amount
 
-            userdata = userdb.load(guildid, userid)
             if style == "add":
-                userdata.height += amount
+                userdata.height = userdata.height + cast(SV, amount)
             elif style == "multiply":
-                userdata.height *= amount
+                userdata.height = userdata.height * cast(Decimal, amount)
             elif style == "power":
-                userdata = userdata ** amount
+                userdata.scale = userdata.scale ** cast(Decimal, amount)
             else:
                 raise ChangeMethodInvalidException
             await nickmanager.nick_update(ctx.author)
-
             userdb.save(userdata)
-
             await ctx.send(f"{userdata.nickname} is now {userdata.height:m} ({userdata.height:u}) tall.")
-
         elif isinstance(arg, Rate) or isinstance(arg, LimitedRate):
-            userdata = userdb.load(guildid, userid)  # Load this data but don't use it as an ad-hoc user test.
-
             changes.start(userid, guildid, addPerSec=arg.addPerSec, mulPerSec=arg.mulPerSec, stopSV=arg.stopSV, stopTV=arg.stopTV)
-
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{str(arg)}`.")
-
         elif arg == "stop":
-            await ctx.invoke(self.bot.get_command("stopchange"), query="")
+            await ctx.send(**stop_changes(ctx.author, ctx.guild))
 
     @commands.command(
         hidden = True
@@ -104,16 +99,7 @@ class ChangeCog(commands.Cog):
     @commands.guild_only()
     async def stopchange(self, ctx: BotContext):
         """Stop a currently active slow change."""
-        userid = ctx.author.id
-        guildid = ctx.guild.id
-
-        deleted = changes.stop(userid, guildid)
-
-        if deleted is None:
-            await ctx.send("You can't stop slow-changing, as you don't have a task active!")
-            logger.warn(f"User {ctx.author.id} ({ctx.author.display_name}) tried to stop slow-changing, but there didn't have a task active.")
-        else:
-            await ctx.send(f"{ctx.author.display_name} has stopped slow-changing.")
+        await ctx.send(**stop_changes(ctx.author, ctx.guild))
 
     @commands.command(
         aliases = ["eat"],
@@ -302,3 +288,10 @@ def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(ChangeCog(bot))
+
+
+def stop_changes(user: Member) -> StrToSend:
+    deleted = changes.stop(user.id, user.guild.id)
+    if deleted is None:
+        return {"content": "You can't stop slow-changing, as you don't have a task active!"}
+    return {"content": f"{user.display_name} has stopped slow-changing."}

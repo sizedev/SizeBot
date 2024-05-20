@@ -1,5 +1,3 @@
-from typing import TypedDict
-
 import logging
 
 from discord import Embed
@@ -10,6 +8,7 @@ from sizebot.lib.constants import colors, emojis
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.speed import speedcalc
+from sizebot.lib.types import EmbedField, EmbedToSend, StrToSend
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import User
 from sizebot.lib.stats import Stat, calc_view_angle, statmap, StatBox
@@ -17,20 +16,6 @@ from sizebot.lib.stats import Stat, calc_view_angle, statmap, StatBox
 logger = logging.getLogger("sizebot")
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
-
-
-class EmbedToSend(TypedDict):
-    embed: str
-
-
-class StrToSend(TypedDict):
-    content: str
-
-
-class EmbedField(TypedDict):
-    name: str
-    value: str
-    inline: bool
 
 
 # stats ???
