@@ -36,11 +36,11 @@ class MPCog(commands.Cog):
             return
         diff = userdata.button
         if diff.changetype == "multiply":
-            userdata.height *= diff.amount
+            userdata.height = SV(userdata.height * diff.amount)
         elif diff.changetype == "add":
-            userdata.height += diff.amount
+            userdata.height = SV(userdata.height + diff.amount)
         elif diff.changetype == "power":
-            userdata = userdata ** diff.amount
+            userdata.scale = userdata.scale ** diff.amount
         userdb.save(userdata)
         await nickmanager.nick_update(user)
         await ctx.send(f"You pushed {userdata.nickname}'s button! They are now **{userdata.height:,.3mu}** tall.")
@@ -164,7 +164,7 @@ class MPCog(commands.Cog):
         elif style == "power":
             userdata = userdata ** amount
         else:
-            raise ChangeMethodInvalidException
+            raise ChangeMethodInvalidException(style)
         await nickmanager.nick_update(other)
 
         userdb.save(userdata)

@@ -295,16 +295,6 @@ def test_neg__abs__():
     assert result == posinf
 
 
-def test_pos__invert__():
-    result = ~posinf
-    assert result == neginf
-
-
-def test_neg__invert__():
-    result = ~neginf
-    assert result == posinf
-
-
 def test_pos__round__():
     result = round(posinf)
     assert result == posinf

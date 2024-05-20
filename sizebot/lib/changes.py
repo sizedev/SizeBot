@@ -116,7 +116,7 @@ class Change:
         }
 
 
-def start(userid: int, guildid: int, *, addPerSec: SV = 0, mulPerSec: Decimal = 1, stopSV: SV = None, stopTV: TV = None):
+def start(userid: int, guildid: int, *, addPerSec: SV = 0, mulPerSec: Decimal = 1, stopSV: SV | None = None, stopTV: TV | None = None):
     """Start a new change task"""
     startTime = lastRan = time.time()
     change = Change(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV, startTime=startTime, lastRan=lastRan)

@@ -1,7 +1,7 @@
 import importlib.resources as pkg_resources
 import logging
 import random
-from typing import cast
+from typing import Literal, cast
 from sizebot.lib import errors, utils
 from sizebot.lib.digidecimal import Decimal
 
@@ -12,6 +12,7 @@ import sizebot.data
 from sizebot.lib import changes, userdb, nickmanager
 from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.errors import ChangeMethodInvalidException
+from sizebot.lib.guilddb import Guild
 from sizebot.lib.objs import DigiObject, objects
 from sizebot.lib.types import BotContext, StrToSend
 from sizebot.lib.units import SV
@@ -52,7 +53,7 @@ class ChangeCog(commands.Cog):
         `&change -1in/min until 1ft`
         `&change -1mm/sec for 1hr`
         """
-        guildid = ctx.guild.id
+        guildid = cast(Guild, ctx.guild).id
         userid = ctx.author.id
         userdata = userdb.load(guildid, userid)  # Load this data but don't use it as an ad-hoc user test.
 
@@ -61,13 +62,13 @@ class ChangeCog(commands.Cog):
             amount = arg.amount
 
             if style == "add":
-                userdata.height = userdata.height + cast(SV, amount)
+                userdata.height = SV(userdata.height + cast(SV, amount))
             elif style == "multiply":
-                userdata.height = userdata.height * cast(Decimal, amount)
+                userdata.height = SV(userdata.height * cast(Decimal, amount))
             elif style == "power":
                 userdata.scale = userdata.scale ** cast(Decimal, amount)
             else:
-                raise ChangeMethodInvalidException
+                raise ChangeMethodInvalidException(style)
             await nickmanager.nick_update(ctx.author)
             userdb.save(userdata)
             await ctx.send(f"{userdata.nickname} is now {userdata.height:m} ({userdata.height:u}) tall.")
@@ -113,10 +114,10 @@ class ChangeCog(commands.Cog):
         guildid = ctx.guild.id
         userid = ctx.author.id
 
-        userdata = userdb.load(guildid, userid)
-        randmult = round(random.randint(2, 20), 1)
-        change_user(guildid, userid, "multiply", randmult)
+        randmult = Decimal(round(random.randint(2, 20), 1))
+        change_user_mult(guildid, userid, randmult)
         await nickmanager.nick_update(ctx.author)
+
         userdata = userdb.load(guildid, userid)
 
         lines = pkg_resources.read_text(sizebot.data, "eatme.txt").splitlines()
@@ -138,10 +139,10 @@ class ChangeCog(commands.Cog):
         guildid = ctx.guild.id
         userid = ctx.author.id
 
-        userdata = userdb.load(guildid, userid)
-        randmult = round(random.randint(2, 20), 1)
-        change_user(guildid, ctx.author.id, "divide", randmult)
+        randmult = Decimal(round(random.randint(2, 20), 1))
+        change_user_div(guildid, userid, randmult)
         await nickmanager.nick_update(ctx.author)
+
         userdata = userdb.load(guildid, userid)
 
         lines = pkg_resources.read_text(sizebot.data, "drinkme.txt").splitlines()
@@ -231,59 +232,76 @@ class ChangeCog(commands.Cog):
             logger.error(utils.format_traceback(e))
 
 
-def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
-    changestyle = changestyle.lower()
-    if changestyle in ["add", "+", "a", "plus"]:
-        changestyle = "add"
-    if changestyle in ["subtract", "sub", "-", "minus"]:
-        changestyle = "subtract"
-    if changestyle in ["power", "exp", "pow", "exponent", "^", "**"]:
-        changestyle = "power"
-    if changestyle in ["multiply", "mult", "m", "x", "times", "*"]:
-        changestyle = "multiply"
-    if changestyle in ["divide", "d", "/", "div"]:
-        changestyle = "divide"
-    if changestyle in ["percent", "per", "perc", "%"]:
-        changestyle = "percent"
+ChangeStyles = Literal["add", "subtract", "multiply", "divide", "power", "percent"]
 
-    if changestyle not in ["add", "subtract", "multiply", "divide", "power", "percent"]:
+
+def change_user(guildid: int, userid: int, changestyle: str, amount: SV | Decimal):
+    mapper = utils.AliasMapper[ChangeStyles]({
+        "add": ["add", "+", "a", "plus"],
+        "subtract": ["subtract", "sub", "-", "minus"],
+        "power": ["power", "exp", "pow", "exponent", "^", "**"],
+        "multiply": ["multiply", "mult", "m", "x", "times", "*"],
+        "divide": ["divide", "d", "/", "div"],
+        "percent": ["percent", "per", "perc", "%"],
+    })
+
+    if changestyle not in mapper:
         raise errors.ChangeMethodInvalidException(changestyle)
-
-    amountSV = None
-    amountVal = None
-    newamount = None
-
-    if changestyle in ["add", "subtract"]:
-        amountSV = SV.parse(amount)
-    elif changestyle in ["multiply", "divide", "power"]:
-        amountVal = Decimal(amount)
-        if amountVal == 1:
-            raise errors.ValueIsOneException
-        if amountVal == 0:
-            raise errors.ValueIsZeroException
-    elif changestyle in ["percent"]:
-        amountVal = Decimal(amount)
-        if amountVal == 0:
-            raise errors.ValueIsZeroException
+    changestyle = mapper[changestyle]
 
     userdata = userdb.load(guildid, userid)
-
     if changestyle == "add":
-        newamount = userdata.height + amountSV
+        change_user_add(guildid, userid, cast(SV, amount))
     elif changestyle == "subtract":
-        newamount = userdata.height - amountSV
+        change_user_sub(guildid, userid, cast(SV, amount))
     elif changestyle == "multiply":
-        newamount = userdata.height * amountVal
+        change_user_mult(guildid, userid, cast(Decimal, amount))
     elif changestyle == "divide":
-        newamount = userdata.height / amountVal
+        change_user_div(guildid, userid, cast(Decimal, amount))
     elif changestyle == "power":
-        userdata = userdata ** amountVal
-    elif changestyle == "percent":
-        newamount = userdata.height * (amountVal / 100)
+        change_user_power(guildid, userid, cast(Decimal, amount))
+    elif changestyle == "perc":
+        change_user_perc(guildid, userid, cast(Decimal, amount))
 
-    if changestyle != "power":
-        userdata.height = newamount
+    userdb.save(userdata)
 
+
+def change_user_add(guildid: int, userid: int, amount: SV):
+    userdata = userdb.load(guildid, userid)
+    userdata.height = SV(userdata.height + amount)
+    userdb.save(userdata)
+
+
+def change_user_sub(guildid: int, userid: int, amount: SV):
+    change_user_add(guildid, userid, SV(-amount))
+
+
+def change_user_mult(guildid: int, userid: int, amount: Decimal):
+    userdata = userdb.load(guildid, userid)
+    if amount == 1:
+        raise errors.ValueIsOneException
+    if amount == 0:
+        raise errors.ValueIsZeroException
+    userdata.height = SV(userdata.height * amount)
+    userdb.save(userdata)
+
+
+def change_user_div(guildid: int, userid: int, amount: Decimal):
+    change_user_mult(guildid, userid, Decimal(1) / amount)
+
+
+def change_user_power(guildid: int, userid: int, amount: Decimal):
+    userdata = userdb.load(guildid, userid)
+    userdata.scale = userdata.scale ** amount
+    userdb.save(userdata)
+
+
+def change_user_perc(guildid: int, userid: int, amount: Decimal):
+    userdata = userdb.load(guildid, userid)
+    if amount == 0:
+        raise errors.ValueIsZeroException
+    amount_perc = amount / 100
+    userdata.height = SV(userdata.height * amount_perc)
     userdb.save(userdata)
 
 

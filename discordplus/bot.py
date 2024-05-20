@@ -1,5 +1,5 @@
-from typing import Any
-from collections.abc import Iterable
+from typing import TypeVar
+from collections.abc import Iterator
 
 from copy import copy
 
@@ -16,7 +16,10 @@ class BadMultilineCommand(commands.errors.CommandError):
     pass
 
 
-def find_one(iterable: Iterable) -> Any:
+T = TypeVar("T")
+
+
+def find_one(iterable: Iterator[T]) -> T | None:
     try:
         return next(iterable)
     except StopIteration:
@@ -33,12 +36,12 @@ async def process_commands(self: BotBase, message: discord.Message):
 
     # No command found, invoke will handle it
     if not ctx.command:
-        await self.invoke(ctx)
+        await self.invoke(ctx)  # type: ignore
         return
 
     # One multiline command (command string starts with a multiline command)
     if ctx.command.multiline:
-        await self.invoke(ctx)
+        await self.invoke(ctx)  # type: ignore
         return
 
     # Multiple commands (first command is not multiline)

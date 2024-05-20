@@ -1,4 +1,4 @@
-from typing import Any, Generator, Hashable, Sequence, TypeVar
+from typing import Any, Generator, Generic, Hashable, Literal, Sequence, TypeVar
 from collections.abc import Callable, Iterable, Iterator
 
 import inspect
@@ -421,40 +421,29 @@ def truncate(s: str, amount: int) -> str:
     return s
 
 
-class AliasMap(dict):
-    def __init__(self, data: dict[Hashable, Sequence]):
-        super().__init__()
+T = TypeVar("T", bound=str)
+AliasList = dict[T, list[str]]
+AliasMap = dict[str, T]
 
-        for k, v in data.items():
-            self[k] = v
 
-    def __setitem__(self, k: Hashable, v: Sequence):
-        if not isinstance(k, Hashable):
-            raise ValueError("{k!r} is not hashable and can't be used as a key.")
-        if not isinstance(v, Sequence):
-            raise ValueError("{v!r} is not a sequence and can't be used as a value.")
-        if isinstance(v, str):
-            v = [v]
-        for i in v:
-            super().__setitem__(i, k)
-        super().__setitem__(k, k)
+class AliasMapper(Generic[T]):
+    def __init__(self, aliases: AliasList[T]):
+        self._map = map_aliases(aliases)
 
-    def __str__(self) -> str:
-        swapped = {}
-        for v in self.values():
-            swapped[v] = []
-        for k, v in self.items():
-            swapped[v].append(k)
+    def __getitem__(self, key: str) -> T:
+        return self._map[key.lower()]
 
-        aliasstrings = []
-        for k, v in swapped.items():
-            s = k
-            for vv in v:
-                if vv != k:
-                    s += f"/{vv}"
-            aliasstrings.append(s)
+    def __contains__(self, key: str) -> bool:
+        return key.lower() in self._map
 
-        return sentence_join(aliasstrings, oxford = True)
+
+def map_aliases[T: str](alias_dict: AliasList[T]) -> AliasMap[T]:
+    aliasmap: AliasMap[T] = {}
+    for key, aliases in alias_dict:
+        aliasmap[key.lower()] = key.lower()
+        for alias in aliases:
+            aliasmap[alias.lower()] = key.lower()
+    return aliasmap
 
 
 RE_SCI_EXP = re.compile(r"(\d+\.?\d*)(\*\*|\^|[Ee][\+\-]?)(\d+\.?\d*)")
