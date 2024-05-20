@@ -14,7 +14,6 @@ def get_data_dir() -> Path:
 datadir = get_data_dir()
 winkpath = datadir / "winkcount.txt"
 guilddbpath = datadir / "guilds"
-telemetrypath = datadir / "telemetry"
 thispath = datadir / "thistracker.json"
 changespath = datadir / "changes.json"
 naptimepath = datadir / "naptime.json"
