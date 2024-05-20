@@ -242,11 +242,6 @@ class UserMessedUpException(DigiContextException):
         self.custommessage = custommessage
 
     # TODO: CamelCase
-    async def formatMessage(self, ctx: BotContext) -> str:
-        usernick = ctx.author.display_name
-        return usernick + ": " + self.custommessage
-
-    # TODO: CamelCase
     async def formatUserMessage(self, ctx: BotContext) -> str:
         return self.custommessage
 
