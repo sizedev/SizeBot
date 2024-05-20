@@ -1,26 +1,21 @@
-import logging
-
-import discord
 from discord import User, Member
 
 from sizebot.lib import errors, userdb
-from sizebot.lib.unitsystem import UNITSYSTEMS
 
 MAX_NICK_LEN = 32
 
-logger = logging.getLogger("sizebot")
 
-
-def generate_suffix(sizetag: str, species: str | None = None) -> str:
+def _generate_suffix(sizetag: str, species: str | None = None) -> str:
+    """Generate a nickname suffix"""
     suffix = f" [{sizetag}]"
     if species:
         suffix = f" [{sizetag}, {species}]"
     return suffix
 
 
-# Generate a valid nickname (if possible)
-def generate_nickname(nick: str, sizetag: str, species: str | None = None, cropnick: bool = False) -> str:
-    suffix = generate_suffix(sizetag, species)
+def _generate_nickname(nick: str, sizetag: str, species: str | None = None, cropnick: bool = False) -> str | None:
+    """Generate a valid nickname (if possible)"""
+    suffix = _generate_suffix(sizetag, species)
     newnick = nick + suffix
 
     if cropnick and len(newnick) > MAX_NICK_LEN:
@@ -36,27 +31,35 @@ def generate_nickname(nick: str, sizetag: str, species: str | None = None, cropn
     return newnick
 
 
-# TODO: Deal with not being able to change nicks of roles above the bot.
-# Update users nicknames to include sizetags
-async def nick_update(user: User | Member):
-    # None
+def _can_edit_nick(user: User | Member) -> bool:
+    """Determine if the bot is able to edit this user's nickname"""
+    # Don't try updating nick when user is None
     if user is None:
-        # logger.warn("User was None when trying to update nickname!")
-        return
-    # webhooks
+        return False
+    # Don't try updating nicks of webhooks
     if user.discriminator == "0000":
-        return
-    # non-guild messages
-    if not isinstance(user, discord.Member):
-        return
-    # bots
+        return False
+    # Don't trying updating nicks outside of a guild
+    if not isinstance(user, Member):
+        return False
+    # Don't try updating nicks of bots
     if user.bot:
-        return
-    # guild owner
+        return False
+    # Don't try updating nicks of guild owners
     if user.id == user.guild.owner_id:
-        return
+        return False
     # Don't try updating nicks on servers where Manage Nicknames permission is missing
     if not user.guild.me.guild_permissions.manage_nicknames:
+        return False
+    # Don't try updating nicks with roles higher than the bot roles
+    if not user.guild.me.top_role.position > user.top_role.position:
+        return False
+    return True
+
+
+async def nick_update(user: User | Member):
+    """Update users nicknames to include sizetags"""
+    if not _can_edit_nick(user):
         return
 
     try:
@@ -68,43 +71,21 @@ async def nick_update(user: User | Member):
     if not userdata.display:
         return
 
-    height = userdata.height
-    if height is None:
-        height = userdata.baseheight
-    nick = userdata.nickname[:MAX_NICK_LEN]
-    species = userdata.species
-
-    sizetag = ""
-    if userdata.unitsystem in UNITSYSTEMS:
-        sizetag = format(height, f",{userdata.unitsystem}%")
+    sizetag = format(userdata.height, f",{userdata.unitsystem}%")
 
     newnick = (
-        generate_nickname(nick, sizetag, species)
-        or generate_nickname(nick, sizetag)
-        or generate_nickname(nick, sizetag, cropnick=True)
-        or nick
+        _generate_nickname(userdata.nickname, sizetag, userdata.species)
+        or _generate_nickname(userdata.nickname, sizetag)
+        or _generate_nickname(userdata.nickname, sizetag, cropnick=True)
+        or userdata.nickname[:MAX_NICK_LEN]
     )
 
-    try:
-        # PERMISSION: requires manage_nicknames
-        await user.edit(nick = newnick)
-    except discord.Forbidden:
-        raise errors.NoPermissionsException
+    await user.edit(nick = newnick)
 
 
 async def nick_reset(user: User | Member):
     """Remove sizetag from user's nickname"""
-    # webhooks
-    if user.discriminator == "0000":
-        return
-    # non-guild messages
-    if not isinstance(user, discord.Member):
-        return
-    # bots
-    if user.bot:
-        return
-    # guild owner
-    if user.id == user.guild.owner_id:
+    if not _can_edit_nick(user):
         return
 
     userdata = userdb.load(user.guild.id, user.id, allow_unreg=True)
@@ -113,8 +94,4 @@ async def nick_reset(user: User | Member):
     if not userdata.display:
         return
 
-    try:
-        # PERMISSION: requires manage_nicknames
-        await user.edit(nick = userdata.nickname)
-    except discord.Forbidden:
-        raise errors.NoPermissionsException
+    await user.edit(nick = userdata.nickname)

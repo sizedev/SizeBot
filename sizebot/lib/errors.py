@@ -123,14 +123,6 @@ class CannotSaveWithoutIDException(DigiException):
         return "Tried to save a user without an ID."
 
 
-class NoPermissionsException(DigiException):
-    level = logging.ERROR
-
-    # TODO: CamelCase
-    def formatUserMessage(self) -> str:
-        return "SizeBot does not have the permssions to perform this action."
-
-
 class InvalidUnitSystemException(DigiException):
     def __init__(self, unitsystem: str):
         self.unitsystem = unitsystem
