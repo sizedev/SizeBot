@@ -1,6 +1,5 @@
 from typing import get_args, Any
 
-from decimal import Decimal
 import logging
 import math
 import random
@@ -18,6 +17,7 @@ from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiObject, objects, tags as obj_tags, format_close_object_smart
 from sizebot.lib.stats import StatBox, taglist, AVERAGE_HEIGHT
 from sizebot.lib.types import BotContext
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake, MemberOrFake, MemberOrFakeOrSize
 from sizebot.lib.fakeplayer import FakePlayer
@@ -27,7 +27,7 @@ from sizebot.lib.utils import pretty_time_delta, sentence_join
 logger = logging.getLogger("sizebot")
 
 
-async def parse_many(ctx: BotContext, arg: str, types: list[commands.Converter], default: Any = None) -> Any:
+async def _parse_many(ctx: BotContext, arg: str, types: list[commands.Converter], default: Any = None) -> Any:
     for t in types:
         try:
             return await t.convert(ctx, arg)
@@ -112,11 +112,11 @@ class ObjectsCog(commands.Cog):
 
         mc = MemberConverter()
 
-        what = await parse_many(ctx, what, [DigiObject, mc, SV])
-        who = await parse_many(ctx, who, [mc, SV])
+        what = await _parse_many(ctx, what, [DigiObject, mc, SV])
+        who = await _parse_many(ctx, who, [mc, SV])
 
         if who is None:
-            what = await parse_many(ctx, args, [DigiObject, mc, SV])
+            what = await _parse_many(ctx, args, [DigiObject, mc, SV])
             who = ctx.author
 
         userdata = load_or_fake(who)
