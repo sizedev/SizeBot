@@ -1,4 +1,3 @@
-import logging
 import re
 from copy import copy
 from sizebot.lib.utils import try_int
@@ -12,11 +11,6 @@ from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpException, UserNotFoundException, ValueIsZeroException
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV
-
-
-logger = logging.getLogger("sizebot")
-
-re_char = r"(.*)(?:[/:]|\s*per\s*)(\d+)?"
 
 
 class ScaleTypeCog(commands.Cog):
@@ -45,6 +39,7 @@ class ScaleTypeCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
 
         chars = None  # fix unbound error
+        re_char = r"(.*)(?:[/:]|\s*per\s*)(\d+)?"
         if match := re.fullmatch(re_char, change):
             diff = Diff.parse(match.group(1))
             if match.group(2):
