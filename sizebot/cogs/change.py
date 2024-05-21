@@ -19,6 +19,69 @@ from sizebot.lib.units import SV
 logger = logging.getLogger("sizebot")
 
 
+def _change_user(guildid: int, userid: int, changestyle: str, amount: SV):
+    changestyle = changestyle.lower()
+    if changestyle in ["add", "+", "a", "plus"]:
+        changestyle = "add"
+    if changestyle in ["subtract", "sub", "-", "minus"]:
+        changestyle = "subtract"
+    if changestyle in ["power", "exp", "pow", "exponent", "^", "**"]:
+        changestyle = "power"
+    if changestyle in ["multiply", "mult", "m", "x", "times", "*"]:
+        changestyle = "multiply"
+    if changestyle in ["divide", "d", "/", "div"]:
+        changestyle = "divide"
+    if changestyle in ["percent", "per", "perc", "%"]:
+        changestyle = "percent"
+
+    if changestyle not in ["add", "subtract", "multiply", "divide", "power", "percent"]:
+        raise errors.ChangeMethodInvalidException(changestyle)
+
+    amountSV = None
+    amountVal = None
+    newamount = None
+
+    if changestyle in ["add", "subtract"]:
+        amountSV = SV.parse(amount)
+    elif changestyle in ["multiply", "divide", "power"]:
+        amountVal = Decimal(amount)
+        if amountVal == 1:
+            raise errors.ValueIsOneException
+        if amountVal == 0:
+            raise errors.ValueIsZeroException
+    elif changestyle in ["percent"]:
+        amountVal = Decimal(amount)
+        if amountVal == 0:
+            raise errors.ValueIsZeroException
+
+    userdata = userdb.load(guildid, userid)
+
+    if changestyle == "add":
+        newamount = userdata.height + amountSV
+    elif changestyle == "subtract":
+        newamount = userdata.height - amountSV
+    elif changestyle == "multiply":
+        newamount = userdata.height * amountVal
+    elif changestyle == "divide":
+        newamount = userdata.height / amountVal
+    elif changestyle == "power":
+        userdata = userdata ** amountVal
+    elif changestyle == "percent":
+        newamount = userdata.height * (amountVal / 100)
+
+    if changestyle != "power":
+        userdata.height = newamount
+
+    userdb.save(userdata)
+
+
+def _stop_changes(user: Member) -> StrToSend:
+    deleted = changes.stop(user.id, user.guild.id)
+    if deleted is None:
+        return {"content": "You can't stop slow-changing, as you don't have a task active!"}
+    return {"content": f"{user.display_name} has stopped slow-changing."}
+
+
 class ChangeCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -27,10 +90,10 @@ class ChangeCog(commands.Cog):
     @commands.Cog.listener()
     async def on_first_ready(self):
         # Don't start the change tasks until the bot is properly connected
-        self.changeTask.start()
+        self.change_task.start()
 
     def cog_unload(self):
-        self.changeTask.cancel()
+        self.change_task.cancel()
 
     @commands.command(
         aliases = ["c"],
@@ -75,7 +138,7 @@ class ChangeCog(commands.Cog):
             changes.start(userid, guildid, addPerSec=arg.addPerSec, mulPerSec=arg.mulPerSec, stopSV=arg.stopSV, stopTV=arg.stopTV)
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{str(arg)}`.")
         elif arg == "stop":
-            await ctx.send(**stop_changes(ctx.author))
+            await ctx.send(**_stop_changes(ctx.author))
 
     @commands.command(
         hidden = True
@@ -99,7 +162,7 @@ class ChangeCog(commands.Cog):
     @commands.guild_only()
     async def stopchange(self, ctx: BotContext):
         """Stop a currently active slow change."""
-        await ctx.send(**stop_changes(ctx.author))
+        await ctx.send(**_stop_changes(ctx.author))
 
     @commands.command(
         aliases = ["eat"],
@@ -115,7 +178,7 @@ class ChangeCog(commands.Cog):
 
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
-        change_user(guildid, userid, "multiply", randmult)
+        _change_user(guildid, userid, "multiply", randmult)
         await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
@@ -140,7 +203,7 @@ class ChangeCog(commands.Cog):
 
         userdata = userdb.load(guildid, userid)
         randmult = round(random.randint(2, 20), 1)
-        change_user(guildid, ctx.author.id, "divide", randmult)
+        _change_user(guildid, ctx.author.id, "divide", randmult)
         await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
@@ -220,79 +283,15 @@ class ChangeCog(commands.Cog):
 
         await ctx.send(f"You outshrunk {obj.article} **{obj.name}** *({obj.unitlength:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
 
-    # TODO: CamelCase
     @tasks.loop(seconds=6)
-    async def changeTask(self):
+    async def change_task(self):
         """Slow growth task"""
         try:
             await changes.apply(self.bot)
         except Exception as e:
-            logger.error("Ignoring exception in changeTask")
+            logger.error("Ignoring exception in change_task")
             logger.error(utils.format_traceback(e))
-
-
-def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
-    changestyle = changestyle.lower()
-    if changestyle in ["add", "+", "a", "plus"]:
-        changestyle = "add"
-    if changestyle in ["subtract", "sub", "-", "minus"]:
-        changestyle = "subtract"
-    if changestyle in ["power", "exp", "pow", "exponent", "^", "**"]:
-        changestyle = "power"
-    if changestyle in ["multiply", "mult", "m", "x", "times", "*"]:
-        changestyle = "multiply"
-    if changestyle in ["divide", "d", "/", "div"]:
-        changestyle = "divide"
-    if changestyle in ["percent", "per", "perc", "%"]:
-        changestyle = "percent"
-
-    if changestyle not in ["add", "subtract", "multiply", "divide", "power", "percent"]:
-        raise errors.ChangeMethodInvalidException(changestyle)
-
-    amountSV = None
-    amountVal = None
-    newamount = None
-
-    if changestyle in ["add", "subtract"]:
-        amountSV = SV.parse(amount)
-    elif changestyle in ["multiply", "divide", "power"]:
-        amountVal = Decimal(amount)
-        if amountVal == 1:
-            raise errors.ValueIsOneException
-        if amountVal == 0:
-            raise errors.ValueIsZeroException
-    elif changestyle in ["percent"]:
-        amountVal = Decimal(amount)
-        if amountVal == 0:
-            raise errors.ValueIsZeroException
-
-    userdata = userdb.load(guildid, userid)
-
-    if changestyle == "add":
-        newamount = userdata.height + amountSV
-    elif changestyle == "subtract":
-        newamount = userdata.height - amountSV
-    elif changestyle == "multiply":
-        newamount = userdata.height * amountVal
-    elif changestyle == "divide":
-        newamount = userdata.height / amountVal
-    elif changestyle == "power":
-        userdata = userdata ** amountVal
-    elif changestyle == "percent":
-        newamount = userdata.height * (amountVal / 100)
-
-    if changestyle != "power":
-        userdata.height = newamount
-
-    userdb.save(userdata)
 
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(ChangeCog(bot))
-
-
-def stop_changes(user: Member) -> StrToSend:
-    deleted = changes.stop(user.id, user.guild.id)
-    if deleted is None:
-        return {"content": "You can't stop slow-changing, as you don't have a task active!"}
-    return {"content": f"{user.display_name} has stopped slow-changing."}
