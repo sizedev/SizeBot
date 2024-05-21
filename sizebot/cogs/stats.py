@@ -1,5 +1,3 @@
-import logging
-
 import discord
 from discord.ext import commands
 
@@ -17,8 +15,6 @@ from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import load_or_fake, MemberOrFakeOrSize, load_or_fake_height, load_or_fake_weight
 from sizebot.lib.utils import pretty_time_delta, round_fraction, sentence_join
-
-logger = logging.getLogger("sizebot")
 
 
 class StatsCog(commands.Cog):
