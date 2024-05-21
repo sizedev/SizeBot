@@ -11,12 +11,12 @@ from sizebot.lib.types import BotContext
 
 logger = logging.getLogger("sizebot")
 
-winkPattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
-starttime = datetime(2019, 9, 15)
-milestones = [1000, 2500, 4200, 5000, 6000, 6666, 6969, 7500, 9001, 10000, 25000, 42000, 50000, 69000, 75000, 100000]
+_wink_pattern = re.compile(r"(; *\)|:wink:|😉)")  # Only compile regex once, to improve performance
+_starttime = datetime(2019, 9, 15)
+_milestones = [1000, 2500, 4200, 5000, 6000, 6666, 6969, 7500, 9001, 10000, 25000, 42000, 50000, 69000, 75000, 100000]
 
 
-def get_winks() -> int:
+def _get_winks() -> int:
     try:
         with open(paths.winkpath, "r") as f:
             winkcount = int(f.read())
@@ -25,21 +25,21 @@ def get_winks() -> int:
     return winkcount
 
 
-def add_winks(count: int = 1) -> int:
-    winkcount = get_winks()
+def _add_winks(count: int = 1) -> int:
+    winkcount = _get_winks()
     winkcount += count
     with open(paths.winkpath, "w") as winkfile:
         winkfile.write(str(winkcount))
     return winkcount
 
 
-def count_winks(s: str) -> int:
-    return len(winkPattern.findall(s))
+def _count_winks(s: str) -> int:
+    return len(_wink_pattern.findall(s))
 
 
-async def say_milestone(channel: discord.TextChannel, winkcount: int):
+async def _say_milestone(channel: discord.TextChannel, winkcount: int):
     now = datetime.today()
-    timesince = now - starttime
+    timesince = now - _starttime
     prettytimesince = utils.pretty_time_delta(timesince.total_seconds())
     timeperwink = timesince / winkcount
     prettytimeperwink = utils.pretty_time_delta(timeperwink.total_seconds())
@@ -72,22 +72,22 @@ class WinksCog(commands.Cog):
         if message.author.id != ids.yukio:
             return
 
-        winksSeen = count_winks(message.content)
+        winksSeen = _count_winks(message.content)
         if winksSeen == 0:
             return
 
-        winkcount = add_winks(winksSeen)
+        winkcount = _add_winks(winksSeen)
         if winkcount % 100 == 0:
             logger.info(f"Yukio has winked {winkcount} times!")
-        if winkcount in milestones:
-            await say_milestone(message.channel, winkcount)
+        if winkcount in _milestones:
+            await _say_milestone(message.channel, winkcount)
 
     @commands.command(
         hidden = True,
         category = "misc"
     )
     async def winkcount(self, ctx: BotContext):
-        winkcount = get_winks()
+        winkcount = _get_winks()
         await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
         logger.info(f"Wink count requested by {ctx.author.nickname}! Current count: {winkcount} times!")
 
