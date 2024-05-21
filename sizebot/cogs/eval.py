@@ -25,7 +25,7 @@ class EvalCog(commands.Cog):
     @commands.is_owner()
     async def eval(self, ctx: BotContext, *, evalStr: str):
         """Evaluate a Python expression."""
-        evalStr = remove_code_block(evalStr)
+        evalStr = _remove_code_block(evalStr)
 
         logger.info(f"{ctx.author.display_name} tried to eval {evalStr!r}.")
 
@@ -39,7 +39,7 @@ class EvalCog(commands.Cog):
                 result = await run_eval(ctx, evalStr)
             except Exception as err:
                 logger.error("eval error:\n" + utils.format_traceback(err))
-                await ctx.send(emojis.warning + f" ` {format_error(err)} `")
+                await ctx.send(emojis.warning + f" ` {_format_error(err)} `")
                 return
             finally:
                 # Remove wait message when done
@@ -63,7 +63,7 @@ class EvalCog(commands.Cog):
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay = 0)
 
-        evalStr = remove_code_block(evalStr)
+        evalStr = _remove_code_block(evalStr)
 
         logger.info(f"{ctx.author.display_name} tried to quietly eval {evalStr!r}.")
 
@@ -72,10 +72,10 @@ class EvalCog(commands.Cog):
                 await run_eval(ctx, evalStr)
             except Exception as err:
                 logger.error("eval error:\n" + utils.format_traceback(err))
-                await ctx.author.send(emojis.warning + f" ` {format_error(err)} `")
+                await ctx.author.send(emojis.warning + f" ` {_format_error(err)} `")
 
 
-def remove_code_block(s: str) -> str:
+def _remove_code_block(s: str) -> str:
     re_codeblock = re.compile(r"^\s*```(?:python)?(.*)```\s*$", re.DOTALL)
     s_nocodeblock = re.sub(re_codeblock, r"\1", s)
     if s_nocodeblock != s:
@@ -89,7 +89,7 @@ def remove_code_block(s: str) -> str:
     return s
 
 
-def format_error(err: Exception) -> str:
+def _format_error(err: Exception) -> str:
     fullname = utils.get_fullname(err)
 
     errMessage = str(err)
