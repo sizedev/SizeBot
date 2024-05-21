@@ -14,10 +14,14 @@ from sizebot.lib.utils import int_to_roman, format_traceback
 
 logger = logging.getLogger("sizebot")
 
-alreadyclaimed = set()
+_alreadyclaimed = set()
 
-gifts = pkg_resources.read_text(sizebot.data, "gifts.txt").splitlines()
-gifts = [x.strip() for x in gifts]
+
+def _load_gifts() -> list[str]:
+    return [x.strip() for x in pkg_resources.read_text(sizebot.data, "gifts.txt").splitlines()]
+
+
+_gifts = _load_gifts()
 
 
 class HolidayCog(commands.Cog):
@@ -102,14 +106,14 @@ class HolidayCog(commands.Cog):
             await ctx.send("The Secret Santa event is over! See you next Christmas season!")
             return
         userid = ctx.message.author.id
-        usergift = gifts[(userid + now.year) % len(gifts)]
+        usergift = _gifts[(userid + now.year) % len(_gifts)]
         output = f"<@{userid}> opened up their Secret Santa gift...\n"
         output += f"It was... {usergift}"
-        if userid in alreadyclaimed:
+        if userid in _alreadyclaimed:
             output += "\n*Opening the gift again doesn't change what's inside it!*"
         await ctx.send(output)
         logger.info(f"{ctx.message.author.nick} ({ctx.message.author.id}) opened their gift!")
-        alreadyclaimed.add(userid)
+        _alreadyclaimed.add(userid)
 
 
 async def setup(bot: commands.Bot):
