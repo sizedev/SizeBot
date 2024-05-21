@@ -1,4 +1,3 @@
-import logging
 from typing import Annotated
 
 from discord.ext import commands
@@ -11,8 +10,6 @@ from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.stats import HOUR
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV, pos_SV, pos_WV
-
-logger = logging.getLogger("sizebot")
 
 
 class SetBaseCog(commands.Cog):
