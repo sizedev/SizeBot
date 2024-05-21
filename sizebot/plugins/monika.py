@@ -8,7 +8,8 @@ import discord
 import sizebot.data
 
 logger = logging.getLogger("sizebot")
-monikalines = pkg_resources.read_text(sizebot.data, "monikalines.txt").splitlines()
+
+_monikalines = pkg_resources.read_text(sizebot.data, "monikalines.txt").splitlines()
 
 
 async def on_message(m: discord.Message):
@@ -20,5 +21,5 @@ async def on_message(m: discord.Message):
     logger.debug("Monika detected.")
     if random.randrange(6) == 1:
         logger.info("Monika triggered.")
-        line = random.choice(monikalines)
+        line = random.choice(_monikalines)
         await m.channel.send(line, delete_after = 7)

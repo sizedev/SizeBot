@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-import logging
-
 from sizebot.lib.errors import InvalidStat, InvalidStatTag
 from sizebot.lib.stats import get_mapped_stat, taglist
 from sizebot.lib.types import BotContext
 
 re_full_string = r"\$(\w+=[^;$]+;?)+"
 re_component = r"(\w+)=([^;$]+);?"
-
-logger = logging.getLogger("sizebot")
 
 
 class StatProxy:

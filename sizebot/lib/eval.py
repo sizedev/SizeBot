@@ -105,7 +105,6 @@ def get_eval_globals() -> dict[str, Any]:
         "Image": Image,
         "ImageDraw": ImageDraw,
         "io": io,
-        "logger": logger,
         "errors": errors,
         "arrow": arrow,
         "roll": roll,

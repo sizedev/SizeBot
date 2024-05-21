@@ -4,7 +4,6 @@ import base64
 from dataclasses import dataclass
 import json
 import importlib.resources as pkg_resources
-import logging
 
 import sizebot.data
 from sizebot.lib.digidecimal import Decimal
@@ -12,8 +11,6 @@ from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV
 from sizebot.lib.userdb import User
 from sizebot.lib.utils import url_safe
-
-logger = logging.getLogger("sizebot")
 
 _model_heights = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 

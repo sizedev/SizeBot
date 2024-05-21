@@ -1,11 +1,7 @@
-import logging
-
 import arrow
 
 import discord
 from sizebot.lib import errors, userdb
-
-logger = logging.getLogger("sizebot")
 
 
 async def on_message(m: discord.Message):

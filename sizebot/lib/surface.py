@@ -1,10 +1,7 @@
-import logging
 from sizebot.lib.units import SV, WV
 
 GRAVITY = 980.7  # cm/s^2
 WATER_SURFACE_TENSION = 72.8  # dy/cm
-
-logger = logging.getLogger("sizebot")
 
 # WV = grams
 # SV = meters

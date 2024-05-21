@@ -1,5 +1,3 @@
-import logging
-
 from discord import Embed
 
 from sizebot import __version__
@@ -12,8 +10,6 @@ from sizebot.lib.types import EmbedField, EmbedToSend, StrToSend
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import User
 from sizebot.lib.stats import Stat, calc_view_angle, get_mapped_stat, StatBox
-
-logger = logging.getLogger("sizebot")
 
 compareicon = "https://media.discordapp.net/attachments/650460192009617433/665022187916492815/Compare.png"
 
