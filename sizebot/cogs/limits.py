@@ -1,9 +1,9 @@
 import logging
-from sizebot.lib.errors import GuildNotFoundException, UserNotFoundException
 
 import discord
 from discord.ext import commands
 
+from sizebot.lib.errors import GuildNotFoundException, UserNotFoundException
 from sizebot.lib import guilddb, userdb, nickmanager
 from sizebot.lib.checks import is_mod
 from sizebot.lib.types import BotContext
