@@ -1,4 +1,5 @@
 from typing import Annotated
+
 import discord
 from discord import Embed
 from discord.ext import commands
@@ -9,7 +10,7 @@ from sizebot.lib.types import BotContext
 from sizebot.lib.utils import is_url
 
 
-def parse_url(s: str) -> str:
+def _parse_url(s: str) -> str:
     if not is_url(s):
         raise InvalidSizeValue(f"{s} is not a valid URL.")
     return s
@@ -27,7 +28,7 @@ class ProfileCog(commands.Cog):
         category = "profile"
     )
     @commands.guild_only()
-    async def setpicture(self, ctx: BotContext, *, url: Annotated[str, parse_url]):
+    async def setpicture(self, ctx: BotContext, *, url: Annotated[str, _parse_url]):
         """ Set your profile's image. Must be a valid image URL."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.picture_url = url
