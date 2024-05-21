@@ -24,14 +24,14 @@ food: list[DigiObject] = []
 land: list[DigiObject] = []
 tags: dict[str, int] = {}
 
-Dimension = Literal["h", "l", "d", "w", "t", "p"]
+DimensionKey = Literal["h", "l", "d", "w", "t", "p"]
 
 
 @total_ordering
 class DigiObject:
     def __init__(self,
                  name: str,
-                 dimension: Dimension,
+                 dimension: DimensionKey,
                  aliases: list[str] = [],
                  tags: list[str] = [],
                  symbol: str | None = None,
@@ -280,42 +280,20 @@ class DigiObject:
         return str(self)
 
 
-def load_obj_file(filename: str):
+def _load_obj_file(filename: str):
     try:
         fileJson = json.loads(pkg_resources.read_text(sizebot.data.objects, filename))
     except FileNotFoundError:
         fileJson = None
-    load_obj_JSON(fileJson)
+    _load_obj_JSON(fileJson)
 
 
-def load_obj_JSON(fileJson: Any):
+def _load_obj_JSON(fileJson: Any):
     for objJson in fileJson:
         objects.append(DigiObject.from_JSON(objJson))
 
 
-def init():
-    global objects, food, land, tags
-
-    for filename in pkg_resources.contents(sizebot.data.objects):
-        if filename.endswith(".json"):
-            load_obj_file(filename)
-
-    objects.sort()
-    for o in objects:
-        o.add_to_units()
-
-    # cached values
-    food = [o for o in objects if "food" in o.tags]
-    land = [o for o in objects if "land" in o.tags]
-    for o in objects:
-        for tag in o._tags:
-            if tag not in tags:
-                tags[tag] = 1
-            else:
-                tags[tag] += 1
-
-
-def get_close_object_smart(val: SV | WV) -> DigiObject:
+def _get_close_object_smart(val: SV | WV) -> DigiObject:
     """This is a "smart" algorithm meant for use in &lookslike and &keypoints.
 
     Tries to get a single object for comparison, prioritizing integer closeness.
@@ -373,6 +351,28 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
 def format_close_object_smart(val: SV | WV) -> str:
     weight = isinstance(val, WV)
-    obj = get_close_object_smart(val)
+    obj = _get_close_object_smart(val)
     ans = round(val / obj.unitlength, 1) if not weight else round(val / obj.weight, 1)
     return f"{ans:.1f} {obj.name_plural if ans != 1 else obj.name}"
+
+
+def init():
+    global objects, food, land, tags
+
+    for filename in pkg_resources.contents(sizebot.data.objects):
+        if filename.endswith(".json"):
+            _load_obj_file(filename)
+
+    objects.sort()
+    for o in objects:
+        o.add_to_units()
+
+    # cached values
+    food = [o for o in objects if "food" in o.tags]
+    land = [o for o in objects if "land" in o.tags]
+    for o in objects:
+        for tag in o._tags:
+            if tag not in tags:
+                tags[tag] = 1
+            else:
+                tags[tag] += 1
