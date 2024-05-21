@@ -1,4 +1,3 @@
-import logging
 import random
 
 from discord.ext import commands
@@ -7,8 +6,6 @@ from sizebot.lib import userdb
 from sizebot.lib.pokemon import pokemon
 from sizebot.lib.types import BotContext
 from sizebot.lib.userdb import MemberOrFakeOrSize
-
-logger = logging.getLogger("sizebot")
 
 
 class PokemonCog(commands.Cog):
