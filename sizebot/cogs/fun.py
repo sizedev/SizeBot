@@ -13,14 +13,11 @@ from sizebot.lib.constants import ids
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.types import BotContext
 
-tasks = {}
-
 logger = logging.getLogger("sizebot")
 
 
 class FunCog(commands.Cog):
     """Commands for non-size stuff."""
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
