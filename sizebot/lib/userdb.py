@@ -14,11 +14,12 @@ from arrow.arrow import Arrow
 import discord
 
 import sizebot.data
-from sizebot.lib import errors, paths
+from sizebot.lib import errors, macrovision, paths
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.gender import Gender
+from sizebot.lib.speed import MoveType
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.unitsystem import UnitSystem
 from sizebot.lib.utils import truncate
@@ -26,16 +27,12 @@ from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT, PlayerStats
 
 BASICALLY_ZERO = Decimal("1E-27")
 
-modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
-
-MoveTypeStr = Literal["walk", "run", "climb", "crawl", "swim"]
-MOVETYPES = get_args(MoveTypeStr)
 
 MemberOrFake = discord.Member | FakePlayer
 MemberOrFakeOrSize = MemberOrFake | SV
 
 
-def str_or_none(v: Any) -> str | None:
+def _str_or_none(v: Any) -> str | None:
     if v is None:
         return None
     return str(v)
@@ -79,7 +76,7 @@ class User:
         self.currentscalestep: Diff | None = None
         self.currentscaletalk: Diff | None = None
         self.scaletalklock: bool = False
-        self.currentmovetype: MoveTypeStr | None = None
+        self.currentmovetype: MoveType | None = None
         self.movestarted: Arrow | None = None
         self.movestop: TV | None = None
         self.triggers: dict[str, Diff] = {}
@@ -178,24 +175,24 @@ class User:
     def stats(self) -> PlayerStats:
         """A bit of a patchwork solution for transitioning to BetterStats."""
         return {
-            "height": str_or_none(self.baseheight),
-            "weight": str_or_none(self.baseweight),
-            "footlength": str_or_none(self.footlength),
+            "height": _str_or_none(self.baseheight),
+            "weight": _str_or_none(self.baseweight),
+            "footlength": _str_or_none(self.footlength),
             "pawtoggle": self.pawtoggle,
             "furtoggle": self.furtoggle,
-            "hairlength": str_or_none(self.hairlength),
-            "taillength": str_or_none(self.taillength),
-            "earheight": str_or_none(self.earheight),
-            "liftstrength": str_or_none(self.liftstrength),
-            "walkperhour": str_or_none(self.walkperhour),
-            "swimperhour": str_or_none(self.swimperhour),
-            "runperhour": str_or_none(self.runperhour),
-            "gender": str_or_none(self.gender),     # TODO: Should this be autogender?
-            "scale": str_or_none(self.scale),
-            "nickname": str_or_none(self.nickname),
-            "id": str_or_none(self.id),
-            "macrovision_model": str_or_none(self.macrovision_model),
-            "macrovision_view": str_or_none(self.macrovision_view)
+            "hairlength": _str_or_none(self.hairlength),
+            "taillength": _str_or_none(self.taillength),
+            "earheight": _str_or_none(self.earheight),
+            "liftstrength": _str_or_none(self.liftstrength),
+            "walkperhour": _str_or_none(self.walkperhour),
+            "swimperhour": _str_or_none(self.swimperhour),
+            "runperhour": _str_or_none(self.runperhour),
+            "gender": _str_or_none(self.gender),     # TODO: Should this be autogender?
+            "scale": _str_or_none(self.scale),
+            "nickname": _str_or_none(self.nickname),
+            "id": _str_or_none(self.id),
+            "macrovision_model": _str_or_none(self.macrovision_model),
+            "macrovision_view": _str_or_none(self.macrovision_view)
         }
 
     @property
@@ -228,7 +225,7 @@ class User:
 
     @macrovision_model.setter
     def macrovision_model(self, value: str):
-        if value not in modelJSON.keys():
+        if not macrovision.is_model(self.macrovision_model):
             raise errors.InvalidMacrovisionModelException(value)
         self._macrovision_model = value
 
@@ -245,7 +242,7 @@ class User:
 
     @macrovision_view.setter
     def macrovision_view(self, value: str):
-        if value not in modelJSON[self.macrovision_model].keys():
+        if not macrovision.is_modelview(self.macrovision_model, value):
             raise errors.InvalidMacrovisionViewException(self.macrovision_model, value)
         self._macrovision_view = value
 
@@ -293,9 +290,9 @@ class User:
     # Create a new object from a python dictionary imported using json
     @classmethod
     def fromJSON(cls, jsondata: dict[str, Any]) -> User:
-        jsondata = migrate_json(jsondata)
+        jsondata = _migrate_json(jsondata)
         userdata = User(int(jsondata["guildid"]), int(jsondata["id"]), cast(str, jsondata["nickname"]))
-        userdata.lastactive = optional_parse(arrow.get, jsondata["lastactive"])
+        userdata.lastactive = _optional_parse(arrow.get, jsondata["lastactive"])
         userdata.picture_url = cast(str, jsondata["picture_url"])
         userdata.description = cast(str, jsondata["description"])
         userdata.gender = cast(Gender | None, jsondata["gender"])
@@ -303,24 +300,24 @@ class User:
         userdata.height = SV(jsondata["height"])
         userdata.baseheight = SV(jsondata["baseheight"])
         userdata.baseweight = WV(jsondata["baseweight"])
-        userdata.footlength = optional_parse(SV, jsondata["footlength"])
+        userdata.footlength = _optional_parse(SV, jsondata["footlength"])
         userdata.pawtoggle = cast(bool, jsondata["pawtoggle"])
         userdata.furtoggle = cast(bool, jsondata["furtoggle"])
-        userdata.hairlength = optional_parse(SV, jsondata["hairlength"])
-        userdata.taillength = optional_parse(SV, jsondata["taillength"])
-        userdata.earheight = optional_parse(SV, jsondata["earheight"])
-        userdata.liftstrength = optional_parse(WV, jsondata["liftstrength"])
-        userdata.walkperhour = optional_parse(SV, jsondata["walkperhour"])
-        userdata.runperhour = optional_parse(SV, jsondata["runperhour"])
-        userdata.swimperhour = optional_parse(SV, jsondata["swimperhour"])
-        userdata.currentscalestep = optional_parse(Diff.fromJSON, jsondata["currentscalestep"])
-        userdata.currentscaletalk = optional_parse(Diff.fromJSON, jsondata["currentscaletalk"])
+        userdata.hairlength = _optional_parse(SV, jsondata["hairlength"])
+        userdata.taillength = _optional_parse(SV, jsondata["taillength"])
+        userdata.earheight = _optional_parse(SV, jsondata["earheight"])
+        userdata.liftstrength = _optional_parse(WV, jsondata["liftstrength"])
+        userdata.walkperhour = _optional_parse(SV, jsondata["walkperhour"])
+        userdata.runperhour = _optional_parse(SV, jsondata["runperhour"])
+        userdata.swimperhour = _optional_parse(SV, jsondata["swimperhour"])
+        userdata.currentscalestep = _optional_parse(Diff.fromJSON, jsondata["currentscalestep"])
+        userdata.currentscaletalk = _optional_parse(Diff.fromJSON, jsondata["currentscaletalk"])
         userdata.scaletalklock = cast(bool, jsondata["scaletalklock"])
-        userdata.currentmovetype = cast(MoveTypeStr | None, jsondata["currentmovetype"])
-        userdata.movestarted = optional_parse(arrow.get, jsondata["movestarted"])
-        userdata.movestop = optional_parse(TV, jsondata["movestop"])
+        userdata.currentmovetype = cast(MoveType | None, jsondata["currentmovetype"])
+        userdata.movestarted = _optional_parse(arrow.get, jsondata["movestarted"])
+        userdata.movestop = _optional_parse(TV, jsondata["movestop"])
         userdata.triggers = {k: Diff.fromJSON(v) for k, v in cast(dict[str, str], jsondata["triggers"]).items()}
-        userdata.button = optional_parse(Diff.fromJSON, jsondata["button"])
+        userdata.button = _optional_parse(Diff.fromJSON, jsondata["button"])
         userdata.tra_reports = cast(int, jsondata["tra_reports"])
         userdata.unitsystem = cast(UnitSystem, jsondata["unitsystem"])
         userdata.species = cast(str, jsondata["species"])
@@ -368,12 +365,12 @@ class User:
         return User.from_fake(FakePlayer(height=height))
 
 
-def get_guild_users_path(guildid: int) -> Path:
+def _get_guild_users_path(guildid: int) -> Path:
     return paths.guilddbpath / f"{guildid}" / "users"
 
 
-def get_user_path(guildid: int, userid: int) -> Path:
-    return get_guild_users_path(guildid) / f"{userid}.json"
+def _get_user_path(guildid: int, userid: int) -> Path:
+    return _get_guild_users_path(guildid) / f"{userid}.json"
 
 
 def save(userdata: User):
@@ -381,7 +378,7 @@ def save(userdata: User):
     userid = userdata.id
     if guildid is None or userid is None:
         raise errors.CannotSaveWithoutIDException
-    path = get_user_path(guildid, userid)
+    path = _get_user_path(guildid, userid)
     path.parent.mkdir(exist_ok = True, parents = True)
     jsondata = userdata.toJSON()
     with open(path, "w") as f:
@@ -389,7 +386,7 @@ def save(userdata: User):
 
 
 def load(guildid: int, userid: int, *, member: discord.Member | None = None, allow_unreg: bool = False) -> User:
-    path = get_user_path(guildid, userid)
+    path = _get_user_path(guildid, userid)
     try:
         with open(path, "r") as f:
             jsondata = json.load(f)
@@ -408,7 +405,7 @@ def load(guildid: int, userid: int, *, member: discord.Member | None = None, all
 
 
 def delete(guildid: int, userid: int):
-    path = get_user_path(guildid, userid)
+    path = _get_user_path(guildid, userid)
     path.unlink(missing_ok = True)
 
 
@@ -473,13 +470,13 @@ def load_or_fake_weight(arg: MemberOrFake | WV, *, allow_unreg: bool = False) ->
 T = TypeVar("T")
 
 
-def optional_parse(parser: Callable[[str], T], val: str | None) -> T | None:
+def _optional_parse(parser: Callable[[str], T], val: str | None) -> T | None:
     if val is None:
         return None
     return parser(val)
 
 
-def migrate_json(jsondata: dict[str, Any]) -> dict[str, Any]:
+def _migrate_json(jsondata: dict[str, Any]) -> dict[str, Any]:
     if "allowchangefromothers" not in jsondata:
         jsondata["allowchangefromothers"] = False
     if "tra_reports" not in jsondata:

@@ -11,6 +11,7 @@ import logging
 
 import sizebot.data
 from sizebot.conf import conf
+from sizebot.lib import errors
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV
@@ -132,3 +133,11 @@ def get_url(entities: list[MacrovisionEntity]) -> str:
     base64_string = base64_bytes.decode("ascii")
     url = f"https://macrovision.crux.sexy/?scene={base64_string}"
     return url
+
+
+def is_model(model: str) -> bool:
+    return model in model_heights
+
+
+def is_modelview(model: str, view: str) -> bool:
+    return model in model_heights and view in model_heights[model]

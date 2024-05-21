@@ -1,3 +1,5 @@
+from typing import get_args, Literal
+
 import math
 
 from sizebot.lib.constants import emojis
@@ -6,6 +8,9 @@ from sizebot.lib.shoesize import to_shoe_size
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV
 from sizebot.lib.utils import pretty_time_delta
+
+MoveType = Literal["walk", "run", "climb", "crawl", "swim"]
+MOVETYPES = get_args(MoveType)
 
 
 class Movement:

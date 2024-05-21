@@ -1,4 +1,5 @@
 from typing import cast
+from sizebot.lib.types import BotContext
 
 import logging
 
@@ -7,11 +8,11 @@ import arrow
 import discord
 from discord.ext import commands
 
+from sizebot.lib.speed import MoveType
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV, TV
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.types import BotContext
 from sizebot.lib.utils import pretty_time_delta
 import sizebot.lib.language as lang
 
@@ -63,7 +64,7 @@ class LoopCog(commands.Cog):
             return
 
         # Fix typing now that we've checked it
-        action = cast(userdb.MoveTypeStr, action)
+        action = cast(MoveType, action)
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
