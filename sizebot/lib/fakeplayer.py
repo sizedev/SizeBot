@@ -25,7 +25,7 @@ class FakePlayerStat(Generic[T]):
         self.saveas = saveas or name
 
 
-fakestats_list: list[FakePlayerStat] = [
+_fakestats_list: list[FakePlayerStat] = [
     FakePlayerStat("nickname", str),
     FakePlayerStat("height", SV.parse),
     FakePlayerStat("baseheight", SV.parse),
@@ -45,22 +45,22 @@ fakestats_list: list[FakePlayerStat] = [
     FakePlayerStat("scale", parse_scale)
 ]
 
-fakestats = {stat.name: stat for stat in fakestats_list}
+_fakestats = {stat.name: stat for stat in _fakestats_list}
 
 
-def parse_keyvalues(s: str) -> dict[str, Any]:
+def _parse_keyvalues(s: str) -> dict[str, Any]:
     # $key=value;key=value;key=value...
     re_full = r"\$((?:\w+=[^;$=]+;?)+)"
     m = re.match(re_full, s)
     if m is None:
         raise InvalidSizeValue(s, "FakePlayer")
     full = m.group(1)
-    allkeyvalues = [parse_keyvalue(kv_str) for kv_str in full.split(";")]
+    allkeyvalues = [_parse_keyvalue(kv_str) for kv_str in full.split(";")]
     keyvalues = {k: v for k, v in allkeyvalues if v is not None}
     return keyvalues
 
 
-def parse_keyvalue(kv_str: str) -> tuple[str, Any]:
+def _parse_keyvalue(kv_str: str) -> tuple[str, Any]:
     # key=value
     re_keyvalue = r"(\w+)=([^;$=]+)"
     m = re.match(re_keyvalue, kv_str)
@@ -70,9 +70,9 @@ def parse_keyvalue(kv_str: str) -> tuple[str, Any]:
     # Special exception for shoesize where we _actually_ set footlength
     if key != "shoesize":
         key = get_mapped_stat(key)
-    if key not in fakestats:
+    if key not in _fakestats:
         raise InvalidStat(key)
-    stat = fakestats[key]
+    stat = _fakestats[key]
     savekey = stat.saveas
     val = stat.parse(val_str)
     return savekey, val
@@ -140,7 +140,7 @@ class FakePlayer:
     @classmethod
     def parse(cls, s: str) -> FakePlayer:
         # $key=value;key=value;key=value...
-        keyvalues = parse_keyvalues(s)
+        keyvalues = _parse_keyvalues(s)
         player = FakePlayer(**keyvalues)
         return player
 
