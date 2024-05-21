@@ -6,7 +6,7 @@ from discord.ext import commands
 from sizebot.lib.constants import emojis
 from sizebot.lib.types import BotContext
 
-inputdict = {
+_inputdict = {
     "1️⃣": "1",
     "2️⃣": "2",
     "3️⃣": "3",
@@ -38,10 +38,10 @@ class KeypadCog(commands.Cog):
         def check(reaction: discord.Reaction, reacter: discord.Member | discord.User) -> bool:
             return reaction.message.id == outputmsg.id \
                 and reacter.id == author.id \
-                and (str(reaction.emoji) in inputdict.keys()
+                and (str(reaction.emoji) in _inputdict.keys()
                      or str(reaction.emoji) == emojis.cancel)
 
-        for emoji in inputdict.keys():
+        for emoji in _inputdict.keys():
             await outputmsg.add_reaction(emoji)
         await outputmsg.add_reaction(emojis.cancel)
 
@@ -55,8 +55,8 @@ class KeypadCog(commands.Cog):
                 listening = False
                 break
 
-            if str(reaction.emoji) in inputdict.keys():
-                await outputmsg.edit(content = outputmsg.content + inputdict[str(reaction.emoji)])
+            if str(reaction.emoji) in _inputdict.keys():
+                await outputmsg.edit(content = outputmsg.content + _inputdict[str(reaction.emoji)])
                 # PERMISSION: requires manage_messages
                 await reaction.remove(user)
             if str(reaction.emoji) == emojis.cancel:
