@@ -1,7 +1,7 @@
 import pydoc
 from types import CodeType
 from typing import Any
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 
 import builtins
 import inspect
