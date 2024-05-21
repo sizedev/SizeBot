@@ -19,7 +19,7 @@ Dollars = float
 Metal = Literal["gold", "silver", "platinum", "palladium"]
 
 
-def get_json_response(url: str) -> Any:
+def _get_json_response(url: str) -> Any:
     r = requests.get(url)
     try:
         j = json.loads(r.text)
@@ -42,7 +42,7 @@ def metal_value(metal: Metal, weight: WV) -> Dollars:
     else:
         raise ThisShouldNeverHappenException(f"Metal type {metal} unrecognized.")
 
-    j = get_json_response(url)
+    j = _get_json_response(url)
 
     PRICE_PER_OZ = Decimal(j[0]["spreadProfilePrices"][0]["ask"])
     PRICE_PER_G = PRICE_PER_OZ / G_PER_OZ
