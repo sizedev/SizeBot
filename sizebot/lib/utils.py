@@ -280,7 +280,7 @@ class AliasMapper(Generic[T]):
 def map_aliases[T: str](alias_dict: AliasList[T], *, unique: bool = True) -> AliasMap[T]:
     aliasmap: AliasMap[T] = {}
 
-    for key, aliases in alias_dict:
+    for key, aliases in alias_dict.items():
         k = key.lower()
         if unique and k in aliasmap:
             raise ValueError(f"Duplicate key: {k}")
