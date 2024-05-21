@@ -4,13 +4,9 @@ import base64
 from dataclasses import dataclass
 import json
 import importlib.resources as pkg_resources
-from json.decoder import JSONDecodeError
-import aiohttp
-from aiohttp_requests import requests
 import logging
 
 import sizebot.data
-from sizebot.conf import conf
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV

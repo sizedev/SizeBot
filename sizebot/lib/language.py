@@ -1,43 +1,41 @@
 import importlib.resources as pkg_resources
+from typing import Literal
 
+import pyinflect
 import inflect
 import toml
 
 import sizebot.data
 
-engine: inflect.engine = None
+InflectionForm = Literal["VBD", "VBG"]
 
-ing = {
-    "walk": "walking",
-    "run": "running",
-    "climb": "climbing",
-    "crawl": "crawling",
-    "swim": "swimming"
-}
-
-ed = {
-    "walk": "walked",
-    "run": "ran",
-    "climb": "climbed",
-    "crawl": "crawled",
-    "swim": "swam"
-}
+engine: inflect.engine = inflect.engine()
 
 
-def load():
-    global engine
-    engine = inflect.engine()
-    plurals: dict[str, dict[str, str]] = toml.loads(pkg_resources.read_text(sizebot.data, "plurals.ini"))
-    for s, p in plurals["plurals"].items():
-        engine.defnoun(s, p)
+def _get_infection(word: str, form: InflectionForm) -> str | None:
+    inf = pyinflect.getInflection(word, form)
+    if inf is None:
+        return None
+    return inf[0]
+
+
+def get_verb_present(verb: str) -> str | None:
+    return _get_infection(verb, "VBG")
+
+
+def get_verb_past(verb: str) -> str | None:
+    return _get_infection(verb, "VBD")
 
 
 def get_plural(noun: str) -> str:
-    overrides = {}
-    if noun in overrides:
-        return overrides[noun]
     return engine.plural_noun(noun)
 
 
 def get_indefinite_article(noun: str) -> str:
     return engine.a(noun)
+
+
+def load():
+    plurals: dict[str, dict[str, str]] = toml.loads(pkg_resources.read_text(sizebot.data, "plurals.ini"))
+    for s, p in plurals["plurals"].items():
+        engine.defnoun(s, p)

@@ -30,6 +30,7 @@ ndjson = "==0.3.1"
 packaging = "==24.0"
 sizeroyale = "==1.0.5"
 numexpr = "==2.9.0"
+pyinflect = "==0.5.1"
 
 [dev-packages]
 pytest = "==8.1.1"
