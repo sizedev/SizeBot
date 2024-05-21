@@ -1,19 +1,19 @@
 from typing import Literal, get_args
 
 from sizebot.lib import errors
+from sizebot.lib.utils import AliasMapper
 
 Gender = Literal["m", "f"]
 GENDERS = get_args(Gender)
 
-genders: dict[Gender, list[str]] = {
-    "m": ["m", "male", "man", "boy"],
-    "f": ["f", "female", "woman", "girl"]
-}
-gendermap: dict[str, Gender] = {alias: key for key, aliases in genders.items() for alias in aliases}
+gendermap = AliasMapper[Gender]({
+    "m": ["male", "man", "boy"],
+    "f": ["female", "woman", "girl"]
+})
 
 
 def parse_gender(s: str) -> Gender:
-    gender = gendermap.get(s.lower(), None)
-    if gender is None or gender not in GENDERS:
+    if s not in gendermap:
         raise errors.ArgumentException
+    gender = gendermap[s]
     return gender

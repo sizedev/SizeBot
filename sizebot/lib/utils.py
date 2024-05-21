@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Generic, TypeVar
 from collections.abc import Iterable
 
 import random
@@ -259,3 +259,28 @@ def randrange_log(minval: Decimal, maxval: Decimal, precision: int = 26) -> Deci
 def round_fraction(number: Decimal, denominator: int) -> Decimal:
     rounded = round(number * denominator) / denominator
     return rounded
+
+
+T = TypeVar("T", bound=str)
+AliasList = dict[T, Iterable[str]]
+AliasMap = dict[str, T]
+
+
+class AliasMapper(Generic[T]):
+    def __init__(self, aliases: AliasList[T]):
+        self._map = map_aliases(aliases)
+
+    def __getitem__(self, key: str) -> T:
+        return self._map[key.lower()]
+
+    def __contains__(self, key: str) -> bool:
+        return key.lower() in self._map
+
+
+def map_aliases[T: str](alias_dict: AliasList[T]) -> AliasMap[T]:
+    aliasmap: AliasMap[T] = {}
+    for key, aliases in alias_dict:
+        aliasmap[key.lower()] = key.lower()
+        for alias in aliases:
+            aliasmap[alias.lower()] = key.lower()
+    return aliasmap
