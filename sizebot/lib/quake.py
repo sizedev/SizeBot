@@ -71,20 +71,20 @@ def mag_to_name(mag: float) -> str:
     return r.title() + b
 
 
-def scale_to_joules(user: User, g: float, factor: float) -> Decimal:
+def _scale_to_joules(user: User, g: float, factor: float) -> Decimal:
     return (Decimal(user.weight / 1000) / 2) * (Decimal(g) * Decimal(user.scale)) * Decimal(factor)
 
 
 def step_joules(user: User) -> Decimal:
-    return scale_to_joules(user, G, STEP_FACTOR)
+    return _scale_to_joules(user, G, STEP_FACTOR)
 
 
 def stomp_joules(user: User) -> Decimal:
-    return scale_to_joules(user, STOMP_G, STOMP_FACTOR)
+    return _scale_to_joules(user, STOMP_G, STOMP_FACTOR)
 
 
 def jump_joules(user: User) -> Decimal:
-    return scale_to_joules(user, G, JUMP_FACTOR)
+    return _scale_to_joules(user, G, JUMP_FACTOR)
 
 
 def breath_joules(user: User) -> Decimal:
