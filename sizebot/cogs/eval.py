@@ -7,7 +7,7 @@ from discord.ext import commands
 
 from sizebot.lib import utils
 from sizebot.lib.constants import emojis
-from sizebot.lib.eval import runEval
+from sizebot.lib.eval import run_eval
 from sizebot.lib.types import BotContext
 
 
@@ -36,7 +36,7 @@ class EvalCog(commands.Cog):
 
         async with ctx.typing():
             try:
-                result = await runEval(ctx, evalStr)
+                result = await run_eval(ctx, evalStr)
             except Exception as err:
                 logger.error("eval error:\n" + utils.format_traceback(err))
                 await ctx.send(emojis.warning + f" ` {format_error(err)} `")
@@ -69,7 +69,7 @@ class EvalCog(commands.Cog):
 
         async with ctx.typing():
             try:
-                await runEval(ctx, evalStr)
+                await run_eval(ctx, evalStr)
             except Exception as err:
                 logger.error("eval error:\n" + utils.format_traceback(err))
                 await ctx.author.send(emojis.warning + f" ` {format_error(err)} `")
