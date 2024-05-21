@@ -1,11 +1,11 @@
 from typing import Literal, NamedTuple
 
-from decimal import Decimal
 
 from discord import Embed
 import discord
 from discord.ext import commands
 
+from sizebot.lib.digidecimal import Decimal
 from sizebot.lib import userdb
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.quake import breath_joules, heartbeat_joules, joules_to_mag, jump_joules, mag_to_name, mag_to_radius, poke_joules, step_joules, stomp_joules, type_joules
