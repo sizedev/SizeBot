@@ -1,11 +1,7 @@
-import logging
-
 from discord.ext import commands
 
 from sizebot.lib import roller
 from sizebot.lib.types import BotContext
-
-logger = logging.getLogger("sizebot")
 
 
 class RollCog(commands.Cog):
