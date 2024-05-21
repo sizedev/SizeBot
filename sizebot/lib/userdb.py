@@ -1,11 +1,10 @@
 from __future__ import annotations
 from collections.abc import Callable
-from typing import Literal, Any, TypeVar, cast, get_args
+from typing import Any, TypeVar, cast
 
 import json
 from copy import copy
 from functools import total_ordering
-import importlib.resources as pkg_resources
 from pathlib import Path
 
 import arrow
@@ -13,7 +12,6 @@ from arrow.arrow import Arrow
 
 import discord
 
-import sizebot.data
 from sizebot.lib import errors, macrovision, paths
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
