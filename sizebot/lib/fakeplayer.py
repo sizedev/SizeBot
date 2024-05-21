@@ -4,13 +4,15 @@ from collections.abc import Callable
 
 import re
 
+from discord.ext.commands.converter import _convert_to_bool as truthy
+
 from sizebot.lib.diff import Rate
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import InvalidSizeValue, InvalidStat
 from sizebot.lib.shoesize import from_shoe_size
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
-from sizebot.lib.utils import parse_scale, truthy
+from sizebot.lib.utils import parse_scale
 from sizebot.lib.stats import HOUR, statmap
 
 T = TypeVar("T")

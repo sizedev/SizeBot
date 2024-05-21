@@ -1,5 +1,5 @@
-from sizebot.lib.utils import round_fraction, fix_zeroes
-from sizebot.lib.digidecimal import Decimal, RawDecimal
+from sizebot.lib.utils import round_fraction
+from sizebot.lib.digidecimal import Decimal
 
 
 def test_makeSureDecimalStillWorks():
@@ -35,15 +35,3 @@ def test_toQuarters_125():
 def test_toQuarters_noFraction():
     result = format(Decimal("2.01"), "%4")
     assert result == "2"
-
-
-def test_trimZeros():
-    result = fix_zeroes(RawDecimal("100.00"))
-    result = str(result)
-    assert result == "100"
-
-
-def test_trimZeros_E():
-    result = fix_zeroes(RawDecimal("1E2"))
-    result = str(result)
-    assert result == "100"

@@ -1,6 +1,7 @@
+import pydoc
 from types import CodeType
 from typing import Any
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 
 import builtins
 import inspect
@@ -77,7 +78,7 @@ def eformat(name: str, value: Any) -> str:
 def edir(o: Any) -> Embed:
     """send embed of an object's attributes, with type notation"""
     e = Embed(title=utils.get_fullname(o))
-    attrs = [eformat(n, v) for n, v in utils.ddir(o).items()]
+    attrs = [eformat(n, v) for n, v in ddir(o).items()]
     pageLen = math.ceil(len(attrs) / 3)
     for page in utils.chunk_list(attrs, pageLen):
         e.add_field(value="\n".join(page))
@@ -126,7 +127,7 @@ def getEvalGlobals() -> dict[str, Any]:
     evalGlobals = {
         "__builtins__": evalBuiltins,
         "inspect": inspect,
-        "help": utils.str_help,
+        "help": str_help,
         "Decimal": Decimal,
         "discord": discord,
         "logging": logging,
@@ -137,7 +138,7 @@ def getEvalGlobals() -> dict[str, Any]:
         "objects": objects,
         "tags": tags,
         "utils": utils,
-        "pdir": utils.pdir,
+        "pdir": pdir,
         "userdb": userdb,
         "thistracker": thistracker,
         "edir": edir,
@@ -145,7 +146,7 @@ def getEvalGlobals() -> dict[str, Any]:
         "emojis": emojis,
         "itertools": itertools,
         "conf": conf,
-        "findOne": utils.find_one,
+        "findOne": find_one,
         "datetime": datetime,
         "date": date,
         "time": time,
@@ -208,3 +209,39 @@ async def runEval(ctx: BotContext, evalStr: str) -> Any:
     evalFn = evalLocals["__ex"]
 
     return await evalFn()
+
+
+def pformat(name: str, value: Any) -> str:
+    if value is None:
+        return f"{name}?"
+    if callable(value):
+        return f"{name}()"
+    if isinstance(value, (list, tuple)):
+        return f"{name}[]"
+    if isinstance(value, set):
+        return f"{name}{{}}"
+    if isinstance(value, dict):
+        return f"{name}{{:}}"
+    return name
+
+
+def pdir(o: Any) -> list:
+    """return a list of an object's attributes, with type notation."""
+    return [pformat(n, v) for n, v in ddir(o).items()]
+
+
+def ddir(o: Any) -> dict:
+    """return a dictionary of an object's attributes."""
+    return {n: v for n, v in inspect.getmembers(o) if not n.startswith("_")}
+
+
+def find_one(iterator: Iterator) -> Any | None:
+    try:
+        val = next(iterator)
+    except StopIteration:
+        val = None
+    return val
+
+
+def str_help(topic: str) -> str:
+    return pydoc.plain(pydoc.render_doc(topic))

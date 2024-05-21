@@ -88,11 +88,11 @@ class Unit():
         if symbol is not None:
             self.symbols.add(symbol.strip())
 
-        self.names = utils.iset(n.strip() for n in names)  # case insensitive names
+        self.names = {n.strip().lower() for n in names}  # case insensitive names
         if name is not None:
-            self.names.add(name.strip())
+            self.names.add(name.strip().lower())
         if namePlural is not None:
-            self.names.add(namePlural.strip())
+            self.names.add(namePlural.strip().lower())
 
     def format(self, value: Decimal, spec: str = "", preferName: bool = False) -> str:
         if value.is_infinite():
@@ -139,7 +139,7 @@ class Unit():
     def is_unit(self, u: str) -> bool:
         if isinstance(u, str):
             u = u.strip()
-        return isinstance(u, str) and (u in self.names or u in self.symbols)
+        return isinstance(u, str) and (u.lower() in self.names or u in self.symbols)
 
     @property
     def id(self) -> str:
@@ -449,7 +449,7 @@ class SV(Dimension):
 
     @classmethod
     def get_quantity_pair(cls, s: str) -> tuple[str | None, str | None]:
-        s = utils.remove_brackets(s)
+        s = remove_brackets(s)
         s = cls.is_feet_and_inches_and_if_so_fix_it(s)
         # TODO: These are temporary patches.
         # Comma patch
@@ -500,7 +500,7 @@ class WV(Dimension):
 
     @classmethod
     def get_quantity_pair(cls, s: str) -> tuple[str | None, str | None]:
-        s = utils.remove_brackets(s)
+        s = remove_brackets(s)
         # TODO: These are temporary patches.
         # Comma patch
         s = s.replace(",", "")
@@ -529,7 +529,7 @@ class TV(Dimension):
 
     @classmethod
     def get_quantity_pair(cls, s: str) -> tuple[str | None, str | None]:
-        s = utils.remove_brackets(s)
+        s = remove_brackets(s)
         # . patch
         if s.startswith("."):
             s = "0" + s
@@ -582,6 +582,12 @@ def pos_WV(s: str) -> WV:
     if value < 0:
         raise errors.InvalidSizeValue(s, "WV")
     return value
+
+
+def remove_brackets(s: str) -> str:
+    """Remove all [] and <>s from a string."""
+    s = re.sub(r"[\[\]<>]", "", s)
+    return s
 
 
 def init():

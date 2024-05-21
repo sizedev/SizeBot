@@ -1,8 +1,9 @@
+from typing import get_args, Any
+
 from decimal import Decimal
 import logging
 import math
 import random
-from typing import get_args
 
 import discord
 from discord import Embed
@@ -20,10 +21,19 @@ from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake, MemberOrFake, MemberOrFakeOrSize
 from sizebot.lib.fakeplayer import FakePlayer
-from sizebot.lib.utils import parse_many, pretty_time_delta, sentence_join
+from sizebot.lib.utils import pretty_time_delta, sentence_join
 
 
 logger = logging.getLogger("sizebot")
+
+
+async def parse_many(ctx: BotContext, arg: str, types: list[commands.Converter], default: Any = None) -> Any:
+    for t in types:
+        try:
+            return await t.convert(ctx, arg)
+        except Exception:
+            pass
+    return default
 
 
 class ObjectsCog(commands.Cog):

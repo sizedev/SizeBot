@@ -40,10 +40,33 @@ from typing import Literal, Any
 import re
 
 from sizebot.lib.errors import InvalidSizeValue, ParseError, ThisShouldNeverHappenException
-from sizebot.lib.utils import regexbuild, try_or_none
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, TV
+
+
+def regexbuild(li: list[str] | list[list[str]], capture: bool = False) -> str:
+    """
+    regexbuild(["a", "b", "c"])
+    >>> "a|b|c"
+    regexbuild(["a", "b", "c"], capture = True)
+    >>> "(a|b|c)"
+    regexbuild([["a", "b", "c"], ["x", "y", "zzz"]])
+    >>> "zzz|a|b|c|x|y"
+    """
+    escaped = []
+    for i in li:
+        if isinstance(i, list):
+            for ii in i:
+                escaped.append(re.escape(ii))
+        else:
+            escaped.append(re.escape(i))
+    escaped.sort(reverse = True)
+    returnstring = "|".join(escaped)
+    if capture:
+        returnstring = f"({returnstring})"
+    return returnstring
+
 
 add_prefixes = ["+", "add", "plus"]
 subtract_prefixes = ["-", "sub", "subtract", "minus"]
@@ -288,10 +311,13 @@ class LimitedRate:
 
         rate = Rate.parse(m.group(1))
 
-        stop = try_or_none(SV.parse, m.group(3), (InvalidSizeValue,)) or try_or_none(TV.parse, m.group(3), (InvalidSizeValue,))
-
-        if stop is None:
-            raise ParseError(s, "LimitedRate")
+        try:
+            stop = SV.parse(m.group(3))
+        except InvalidSizeValue:
+            try:
+                stop = TV.parse(m.group(3))
+            except InvalidSizeValue:
+                raise ParseError(s, "LimitedRate")
 
         return cls(rate, stop)
 
