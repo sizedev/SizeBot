@@ -8,7 +8,7 @@ import numexpr
 from sizebot.lib import errors
 
 
-def evalmath(expression: str) -> int:
+def _evalmath(expression: str) -> int:
     return int(numexpr.evaluate(expression, local_dict={}, global_dict={}))
 
 
@@ -99,7 +99,7 @@ def roll(argstring: str) -> Result:
         rollexpr += str(s)
 
     try:
-        total = evalmath(rollexpr)
+        total = _evalmath(rollexpr)
     except Exception:
         raise errors.InvalidRollException(argstring)
 

@@ -26,7 +26,7 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.loglevels import BANNER, EGG, LOGIN
 from sizebot.lib.objs import DigiObject, objects, tags
-from sizebot.lib.roller import evalmath, roll
+from sizebot.lib.roller import _evalmath, roll
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import Mult, SV, TV, WV
 
@@ -163,7 +163,7 @@ def getEvalGlobals() -> dict[str, Any]:
         "errors": errors,
         "arrow": arrow,
         "roll": roll,
-        "evalmath": evalmath
+        "_evalmath": _evalmath
     }
 
     return evalGlobals
