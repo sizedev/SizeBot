@@ -14,11 +14,11 @@ from sizebot.lib.constants import emojis
 from sizebot.lib.types import BotContext
 
 
-re_hex = re.compile(r"#?((?:[0-9A-Fa-f]{3}){1,2})")
-re_digits = re.compile(r"\d+")
-re_percent = re.compile(r"\d+%?")
-re_dividers = re.compile(r"[\s,]+")
-coloricon = "https://cdn.discordapp.com/attachments/650460192009617433/676205298674958366/spinning-beachball-of-death-mac.png"
+_re_hex = re.compile(r"#?((?:[0-9A-Fa-f]{3}){1,2})")
+_re_digits = re.compile(r"\d+")
+_re_percent = re.compile(r"\d+%?")
+_re_dividers = re.compile(r"[\s,]+")
+_coloricon = "https://cdn.discordapp.com/attachments/650460192009617433/676205298674958366/spinning-beachball-of-death-mac.png"
 
 
 class WeirdCog(commands.Cog):
@@ -47,13 +47,13 @@ class WeirdCog(commands.Cog):
             colortype = arg1.lower()
             colorvalue = arg2
 
-        colorvalues = re_dividers.split(colorvalue)
+        colorvalues = _re_dividers.split(colorvalue)
 
         # Make the color value we're putting into the URL be formatted in a way it likes,
         # and also catch any malformed arguments.
         if colortype == "hex":
             # HEX
-            match_hex = re_hex.match(colorvalue)
+            match_hex = _re_hex.match(colorvalue)
             if not match_hex:
                 await outmessage.edit(content = f"`{colorvalue}` is not an accepted hex color.")
                 return
@@ -64,7 +64,7 @@ class WeirdCog(commands.Cog):
                 await outmessage.edit(content = f"A {colortype} color can only have 3 parts.")
                 return
             for value in colorvalues:
-                if not re_digits.match(value):
+                if not _re_digits.match(value):
                     await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
                     return
             colorvalueout = ",".join(colorvalues)
@@ -73,11 +73,11 @@ class WeirdCog(commands.Cog):
             if len(colorvalues) != 3:
                 await outmessage.edit(content = f"A {colortype} color can only have 3 parts.")
                 return
-            if not re_digits.match(colorvalues[0]):
+            if not _re_digits.match(colorvalues[0]):
                 await outmessage.edit(content = f"{colorvalue} is not a valid color part for a {colortype}-type color.")
                 return
             for value in colorvalues[1:]:
-                if not re_percent.match(value):
+                if not _re_percent.match(value):
                     await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
                     return
             colorvalueout = ",".join(colorvalues)
@@ -88,7 +88,7 @@ class WeirdCog(commands.Cog):
                 await outmessage.edit(content = f"A {colortype} color can only have between 3 and 4 parts.")
                 return
             for value in colorvalues:
-                if not re_percent.match(value):
+                if not _re_percent.match(value):
                     await outmessage.edit(content = f"{value} is not a valid color part for a {colortype}-type color.")
                     return
             colorvalueout = ",".join(colorvalues)
@@ -122,7 +122,7 @@ class WeirdCog(commands.Cog):
                             description="",
                             color=hexvalue,
                             url=colorscheme)
-        embed.set_author(name=f"SizeBot {__version__} [{ctx.prefix}color]", icon_url=coloricon)
+        embed.set_author(name=f"SizeBot {__version__} [{ctx.prefix}color]", icon_url=_coloricon)
         embed.add_field(name="Hex Value", value = printhex, inline = True)
         embed.add_field(name="RGB Value", value = colorrgb, inline = True)
         embed.add_field(name="HSL Value", value = colorhsl, inline = True)
