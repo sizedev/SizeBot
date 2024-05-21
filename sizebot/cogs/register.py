@@ -13,7 +13,7 @@ from sizebot.lib.types import BotContext
 logger = logging.getLogger("sizebot")
 
 
-async def add_user_role(member: discord.Member | discord.User):
+async def _add_user_role(member: discord.Member | discord.User):
     role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
@@ -22,7 +22,7 @@ async def add_user_role(member: discord.Member | discord.User):
     await member.add_roles(role, reason="Registered as SizeBot user")
 
 
-async def remove_user_role(member: discord.Member | discord.User):
+async def _remove_user_role(member: discord.Member | discord.User):
     role = get(member.guild.roles, id=ids.sizebotuserrole)
     if role is None:
         # logger.warn(f"Sizebot user role {ids.sizebotuserrole} not found in guild {member.guild.id}")
@@ -133,7 +133,7 @@ class RegisterCog(commands.Cog):
 
         userdb.save(userdata)
 
-        await add_user_role(ctx.author)
+        await _add_user_role(ctx.author)
 
         logger.warn(f"Started registration for a new user: {ctx.author} in guild {ctx.guild.name}!")
         logger.info(userdata)
@@ -204,7 +204,7 @@ class RegisterCog(commands.Cog):
         # delete the user file
         userdb.delete(guild.id, user.id)
         # remove the user role
-        await remove_user_role(user)
+        await _remove_user_role(user)
 
         logger.warn(f"User {user.id} successfully unregistered.")
         await ctx.send(f"Unregistered {user.name}.")
