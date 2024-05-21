@@ -12,7 +12,7 @@ class BadPathException(Exception):
     pass
 
 
-def parse_component(component: str) -> int | str:
+def _parse_component(component: str) -> int | str:
     index_match = RE_INDEX.match(component)
     if index_match:
         return int(index_match[1])
@@ -22,8 +22,7 @@ def parse_component(component: str) -> int | str:
         raise BadPathException
 
 
-# TODO: CamelCase
-def buildPath(components: list[int | str]) -> str:
+def _build_path(components: list[int | str]) -> str:
     path = ""
     for c in components:
         if isinstance(c, int):
@@ -37,10 +36,9 @@ def buildPath(components: list[int | str]) -> str:
     return path
 
 
-# TODO: CamelCase
-def parsePath(path: str) -> list[int | str]:
-    components = [parse_component(c) for c in RE_COMPONENT.findall(path)]
-    if path != buildPath(components):
+def _parse_path(path: str) -> list[int | str]:
+    components = [_parse_component(c) for c in RE_COMPONENT.findall(path)]
+    if path != _build_path(components):
         raise BadPathException
     return components
 
@@ -53,7 +51,7 @@ class PathDict:
         """value = PathDict[path]"""
         branch = self._values
         try:
-            components = parsePath(path)
+            components = _parse_path(path)
         except BadPathException:
             raise BadPathException(f"Bad Path: {path}")
 
@@ -70,7 +68,7 @@ class PathDict:
     def __setitem__(self, path: str, value: Any):
         """PathDict[path] = value"""
         branch = self._values
-        components = parsePath(path)
+        components = _parse_path(path)
         last = components.pop()
 
         for c in components:
@@ -97,3 +95,17 @@ class PathDict:
 
     def __repr__(self) -> str:
         return repr(self._values)
+
+
+SENTINEL = object()
+
+
+def get_by_path(data: dict, path: str, default: Any = SENTINEL) -> Any:
+    if default is SENTINEL:
+        return PathDict(data)[path]
+    else:
+        return PathDict(data).get(path, default)
+
+
+def set_by_path(data: dict, path: str, value: Any):
+    PathDict(data)[path] = value

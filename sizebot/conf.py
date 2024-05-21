@@ -1,11 +1,12 @@
 from __future__ import annotations
 from typing import Any
+from collections.abc import Callable
 
 import toml
 
 from sizebot.lib import paths
 from sizebot.lib.attrdict import AttrDict
-from sizebot.lib.pathdict import PathDict
+from sizebot.lib.pathdict import get_by_path, set_by_path
 
 
 SENTINEL = object()
@@ -20,7 +21,7 @@ class ConfigField:
                  var: str,
                  path: str,
                  *,
-                 type: callable[[Any], Any] = lambda v: v,
+                 type: Callable[[Any], Any] = lambda v: v,
                  default: Any = SENTINEL,
                  initdefault: Any = SENTINEL):
         self.var = var
@@ -29,20 +30,20 @@ class ConfigField:
         self.initdefault = initdefault
         self.type = type
 
-    def load(self, config: Config, configDict: PathDict):
+    def load(self, config: Config, configDict: dict):
         if self.default is not SENTINEL:
-            val = configDict.get(self.path, SENTINEL)
+            val = get_by_path(configDict, self.path, SENTINEL)
             if val is SENTINEL:
                 val = self.default
             else:
                 val = self.type(val)
             config[self.var] = val
         else:
-            config[self.var] = self.type(configDict[self.path])
+            config[self.var] = get_by_path(configDict, self.path)
 
-    def init(self, configDict: PathDict):
+    def init(self, configDict: dict):
         if self.initdefault is not SENTINEL:
-            configDict[self.path] = self.initdefault
+            set_by_path(configDict, self.path, self.initdefault)
 
 
 class Config(AttrDict):
@@ -54,7 +55,7 @@ class Config(AttrDict):
 
     def load(self):
         try:
-            configDict = PathDict(toml.load(paths.confpath))
+            configDict = toml.load(paths.confpath)
         except FileNotFoundError as e:
             raise ConfigError(f"Configuration file not found: {e.filename}")
 
@@ -69,11 +70,11 @@ class Config(AttrDict):
             raise FileExistsError(f"Configuration file already exists: {paths.confpath}")
         paths.confpath.parent.mkdir(parents=True, exist_ok=True)
 
-        configDict = PathDict()
+        configDict = {}
         for f in self._fields:
             f.init(configDict)
         with open(paths.confpath, "w") as f:
-            toml.dump(configDict.toDict(), f)
+            toml.dump(configDict, f)
 
 
 conf = Config([
