@@ -18,7 +18,7 @@ from sizebot.lib.utils import try_int
 logger = logging.getLogger("sizebot")
 
 
-def get_dist(start_inc: SV, diff: Diff, steps: int) -> SV:
+def _get_dist(start_inc: SV, diff: Diff, steps: int) -> SV:
     if diff.changetype == "add":
         current_pos = (start_inc * steps) + (diff.amount * ((steps - 1) * steps) / 2)
         return SV(current_pos)
@@ -29,7 +29,7 @@ def get_dist(start_inc: SV, diff: Diff, steps: int) -> SV:
         raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
 
 
-def get_steps(start_inc: SV, diff: Diff, goal: SV) -> tuple[Decimal, SV, Decimal]:
+def _get_steps(start_inc: SV, diff: Diff, goal: SV) -> tuple[Decimal, SV, Decimal]:
     """Return the number of steps it would take to reach `goal` from 0,
     first by increasing by `start_inc`, then by `start_inc` operator(`diff.changetype`) `diff.amount`,
     repeating this process until `goal` is reached.
@@ -111,7 +111,7 @@ class ScaleWalkCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
-        stepcount, final_inc, final_ratio = get_steps(stats['walksteplength'].value, change, dist)
+        stepcount, final_inc, final_ratio = _get_steps(stats['walksteplength'].value, change, dist)
 
         finalheight = SV(userdata.height / final_ratio)
 
@@ -163,7 +163,7 @@ class ScaleWalkCog(commands.Cog):
         userdata = userdb.load(guildid, userid)
         stats = StatBox.load(userdata.stats).scale(userdata.scale)
 
-        stepcount, final_inc, final_ratio = get_steps(stats['runsteplength'].value, change, dist)
+        stepcount, final_inc, final_ratio = _get_steps(stats['runsteplength'].value, change, dist)
 
         finalheight = SV(userdata.height / final_ratio)
 
@@ -285,7 +285,7 @@ class ScaleWalkCog(commands.Cog):
             raise ChangeMethodInvalidException("This change type is not yet supported for scale-walking.")
 
         stats = StatBox.load(userdata.stats).scale(userdata.scale)
-        dist_travelled = get_dist(stats['walksteplength'].value, userdata.currentscalestep, (steps + 1))
+        dist_travelled = _get_dist(stats['walksteplength'].value, userdata.currentscalestep, (steps + 1))
         await ctx.send(f"You walked {dist_travelled:,.3mu} in {steps} {'step' if steps == 1 else 'steps'}.")
 
         userdb.save(userdata)
