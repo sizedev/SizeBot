@@ -3,7 +3,6 @@ from __future__ import annotations
 import aiohttp
 import logging
 import math
-
 from datetime import datetime
 from packaging import version
 
@@ -39,12 +38,12 @@ logger = logging.getLogger("sizebot")
 #     If True, the default help command does not show this in the help output.
 # aliases = []
 
-alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
-accuracy_warning = f"{emojis.warning} **This command may not be entirely accurate.** It makes assumptions and guesses that have a decent amount of wiggle room, even because the information isn't known or because the calculations are meant to be for fiction only. Don't take these results at face value!"
-stats_string = utils.sentence_join([f"`{s.key}`" for s in all_stats])
+_alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
+_accuracy_warning = f"{emojis.warning} **This command may not be entirely accurate.** It makes assumptions and guesses that have a decent amount of wiggle room, even because the information isn't known or because the calculations are meant to be for fiction only. Don't take these results at face value!"
+_stats_string = utils.sentence_join([f"`{s.key}`" for s in all_stats])
 
 
-async def post_report(report_type: str, message: discord.Message, report_text: str):
+async def _post_report(report_type: str, message: discord.Message, report_text: str):
     async with aiohttp.ClientSession() as session:
         webhook = Webhook.from_url(conf.bugwebhookurl, session = session)
         guild_name = "DM" if not message.channel.guild else message.channel.guild.name
@@ -56,13 +55,13 @@ async def post_report(report_type: str, message: discord.Message, report_text: s
         )
 
 
-def get_cat_cmds(commands: set[commands.Command]) -> dict[str, list[commands.Command]]:
+def _get_cat_cmds(commands: set[commands.Command]) -> dict[str, list[commands.Command]]:
     # Get all non-hidden commands, sorted by name
     commands_unsorted = (c for c in commands if not c.hidden)
     commands_sorted = sorted(commands_unsorted, key=lambda c: c.name)
 
     # Divide commands into categories
-    commands_by_cat: dict[str, list[commands.Command]] = {cat.cid: [] for cat in categories}
+    commands_by_cat: dict[str, list[commands.Command]] = {cat.cid: [] for cat in _categories}
 
     for c in commands_sorted:
         cmd_category = c.category or "misc"
@@ -111,14 +110,14 @@ class HelpCog(commands.Cog):
         """
 
         # Get commands grouped by category
-        commands_by_cat = get_cat_cmds(ctx.bot.commands)
+        commands_by_cat = _get_cat_cmds(ctx.bot.commands)
 
         embed = Embed(title=f"Help [SizeBot {__version__}]")
         embed.set_footer(text = "Select an emoji to see details about a category.")
         embed.set_author(name = f"requested by {ctx.author.name}", icon_url = ctx.author.avatar)
 
         # Add each category to a field
-        for cat in categories:
+        for cat in _categories:
             cat_cmds = commands_by_cat.get(cat.cid, [])
             if not cat_cmds:
                 # logger.warn(f"Command category {cat.cid!r} is empty.")
@@ -127,7 +126,7 @@ class HelpCog(commands.Cog):
             embed.add_field(value=field_text, inline=False)
 
         # Display the embed with a reaction menu
-        categoryoptions = {cat.emoji: cat for cat in categories if commands_by_cat.get(cat.cid, [])}
+        categoryoptions = {cat.emoji: cat for cat in _categories if commands_by_cat.get(cat.cid, [])}
 
         reactionmenu, answer = await Menu.display(
             ctx,
@@ -207,7 +206,7 @@ class HelpCog(commands.Cog):
             description += ":rotating_light: **THIS COMMAND IS FOR SERVER MODS ONLY** :rotating_light:\n"
         if "guild_only" in repr(cmd.checks):
             description += "*This command can only be run in a server, and not in DMs.*\n"
-        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", stats_string).replace("#ALPHA#", alpha_warning).replace("#ACC#", accuracy_warning)
+        description += "\n\n".join(descriptionParts).replace("&", ctx.prefix).replace("#STATS#", _stats_string).replace("#ALPHA#", _alpha_warning).replace("#ACC#", _accuracy_warning)
 
         embed = Embed(
             title=signature,
@@ -290,7 +289,7 @@ class HelpCog(commands.Cog):
     async def bug(self, ctx: BotContext, *, message: str):
         """Tell the devs there's an issue with SizeBot."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a bug report.")
-        await post_report("Bug report", ctx.message, message)
+        await _post_report("Bug report", ctx.message, message)
         await ctx.send("Bug report sent.")
 
     @commands.command(
@@ -302,7 +301,7 @@ class HelpCog(commands.Cog):
     async def suggest(self, ctx: BotContext, *, message: str):
         """Suggest a feature for SizeBot!"""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent a feature request.")
-        await post_report("Feature request", ctx.message, message)
+        await _post_report("Feature request", ctx.message, message)
         await ctx.send("Feature request sent.")
         if any(nonoword in message for nonoword in ["weiner", "wiener", "penis", "dick", "boob", "vagina", "pussy", "breast", "cock", "nsfw"]):
             await ctx.send("<:LEWD:625464094157439010>")
@@ -323,7 +322,7 @@ class HelpCog(commands.Cog):
         to make sure each object is a fun and exciting entry to pull up.
         Also include alternate names for the object, if it has them."""
         logger.warn(f"{ctx.author.id} ({ctx.author.name}) sent an object request.")
-        await post_report("Object request", ctx.message, message)
+        await _post_report("Object request", ctx.message, message)
         await ctx.send("Object suggestion sent.")
 
     @commands.command(
@@ -402,7 +401,7 @@ class HelpCategory:
 
 
 # Do not add more than 19 of these!
-categories = [
+_categories = [
     HelpCategory("help", "Help Commands", "Commands that help you.", "❓"),
     HelpCategory("setup", "Setup Commands", "Commands for setting up your SizeBot account.", "🧱"),
     HelpCategory("set", "Set Commands", "Commands for setting various stats.", "🖍️"),
