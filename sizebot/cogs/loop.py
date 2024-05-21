@@ -1,13 +1,11 @@
 from typing import cast
-from sizebot.lib.types import BotContext
-
-import logging
 
 import arrow
 
 import discord
 from discord.ext import commands
 
+from sizebot.lib.types import BotContext
 from sizebot.lib.speed import MoveType
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV, TV
@@ -16,10 +14,8 @@ from sizebot.lib.constants import emojis
 from sizebot.lib.utils import pretty_time_delta
 import sizebot.lib.language as lang
 
-logger = logging.getLogger("sizebot")
 
-
-def calc_move_dist(userdata: userdb.User) -> tuple[TV, SV]:
+def _calc_move_dist(userdata: userdb.User) -> tuple[TV, SV]:
     movetype = userdata.currentmovetype
     starttime = userdata.movestarted
     stoptime = userdata.movestop
@@ -69,7 +65,7 @@ class LoopCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
 
         if userdata.currentmovetype:
-            t, distance = calc_move_dist(userdata)
+            t, distance = _calc_move_dist(userdata)
             nicetime = pretty_time_delta(t)
             await ctx.send(
                 f"{emojis.warning} You're already {lang.get_verb_present(userdata.currentmovetype)}.\n"
@@ -94,7 +90,7 @@ class LoopCog(commands.Cog):
             await ctx.send("You aren't currently moving!")
             return
 
-        t, distance = calc_move_dist(userdata)
+        t, distance = _calc_move_dist(userdata)
         nicetime = pretty_time_delta(t)
         await ctx.send(f"You stopped {lang.get_verb_present(userdata.currentmovetype)}. You {lang.get_verb_past(userdata.currentmovetype)} **{distance:,.3mu}** in **{nicetime}**!")
 
@@ -124,7 +120,7 @@ class LoopCog(commands.Cog):
                 await ctx.send(f"{userdata.nickname} isn't moving!")
             return
 
-        elapsed_seconds, distance = calc_move_dist(userdata)
+        elapsed_seconds, distance = _calc_move_dist(userdata)
         nicetime = pretty_time_delta(elapsed_seconds)
 
         out = (f"{userdata.nickname} has been {lang.get_verb_present(userdata.currentmovetype)} for **{nicetime}**.\n"
