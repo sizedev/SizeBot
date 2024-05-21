@@ -33,24 +33,24 @@ async def setup(bot: commands.Bot):
             err = errors.MultilineAsNonFirstCommandException()
 
         if isinstance(err, errors.UserMessedUpException):
-            await ctx.send(f"{emojis.error} {err.formatUserMessage(ctx)}")
+            await ctx.send(f"{emojis.error} {err.format_user_message(ctx)}")
 
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
-            message = await err.formatMessage(ctx)
+            message = await err.format_message(ctx)
             if message is not None:
                 logger.log(err.level, message)
                 logger.error(utils.format_traceback(error))
-            userMessage = await err.formatUserMessage(ctx)
+            userMessage = await err.format_user_message(ctx)
             if userMessage is not None:
                 await ctx.send(f"{emojis.warning} {userMessage}")
         elif isinstance(err, errors.DigiException):
             # DigiException handling
-            message = err.formatMessage()
+            message = err.format_message()
             if message is not None:
                 logger.log(err.level, message)
                 logger.error(utils.format_traceback(error))
-            userMessage = err.formatUserMessage()
+            userMessage = err.format_user_message()
             if userMessage is not None:
                 await ctx.send(f"{emojis.warning} {userMessage}")
         elif isinstance(err, commands.errors.MissingRequiredArgument):
@@ -82,7 +82,7 @@ async def setup(bot: commands.Bot):
         err = getattr(error, "original", error)
         # DigiException handling
         if isinstance(err, errors.DigiException):
-            message = err.formatMessage()
+            message = err.format_message()
             if message is not None:
                 logger.log(err.level, message)
                 logger.error(utils.format_traceback(error))
