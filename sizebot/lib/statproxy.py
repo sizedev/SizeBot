@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 
 from sizebot.lib.errors import InvalidStat, InvalidStatTag
-from sizebot.lib.stats import statmap, taglist
+from sizebot.lib.stats import get_mapped_stat, taglist
 from sizebot.lib.types import BotContext
 
 re_full_string = r"\$(\w+=[^;$]+;?)+"
@@ -35,9 +35,10 @@ class StatProxy:
                 raise InvalidStatTag(s)
             return StatProxy(s, True)
         else:
-            if s not in statmap.keys():
+            mapped = get_mapped_stat(s)
+            if mapped is None:
                 raise InvalidStat(s)
-            return StatProxy(statmap[s], False)
+            return StatProxy(mapped, False)
 
     @classmethod
     async def convert(cls, ctx: BotContext, argument: str) -> StatProxy:

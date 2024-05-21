@@ -11,7 +11,7 @@ from sizebot.lib.speed import speedcalc
 from sizebot.lib.types import EmbedField, EmbedToSend, StrToSend
 from sizebot.lib.units import SV, TV, WV
 from sizebot.lib.userdb import User
-from sizebot.lib.stats import Stat, calc_view_angle, statmap, StatBox
+from sizebot.lib.stats import Stat, calc_view_angle, get_mapped_stat, StatBox
 
 logger = logging.getLogger("sizebot")
 
@@ -40,7 +40,7 @@ def get_speedcompare(userdata1: User, userdata2: User, requesterID: int) -> Embe
 # stat with stat.key=key
 def get_speedcompare_stat(userdata1: User, userdata2: User, key: str) -> EmbedToSend | None:
     small, big, _, _, _ = _get_compare_statboxes(userdata1, userdata2)
-    mapped_key = _get_mapped_stat(key)
+    mapped_key = get_mapped_stat(key)
     if mapped_key is None:
         return None
     stat = big[mapped_key]
@@ -161,7 +161,7 @@ def get_compare_bytag(userdata1: User, userdata2: User, tag: str, requesterID: i
 # stat with stat.key=key
 def get_compare_stat(userdata1: User, userdata2: User, key: str) -> StrToSend | None:
     small, big, small_viewby_big, big_viewby_small, _ = _get_compare_statboxes(userdata1, userdata2)
-    mapped_key = _get_mapped_stat(key)
+    mapped_key = get_mapped_stat(key)
     if mapped_key is None:
         return None
     small_stat = small_viewby_big[mapped_key]
@@ -210,7 +210,7 @@ def get_stats_bytag(userdata: User, tag: str, requesterID: int) -> EmbedToSend:
 
 # stat with stat.key=key
 def get_stat(userdata: User, key: str) -> StrToSend | None:
-    mapped_key = _get_mapped_stat(key)
+    mapped_key = get_mapped_stat(key)
     if mapped_key is None:
         return None
     stats = StatBox.load(userdata.stats).scale(userdata.scale)
@@ -323,14 +323,6 @@ def _get_compare_color(requesterID: int, small: StatBox, big: StatBox) -> str:
     if requesterID == small['id'].value:
         return colors.red
     return colors.purple
-
-
-def _get_mapped_stat(key: str) -> str | None:
-    try:
-        mapped_key = statmap[key]
-    except KeyError:
-        return None
-    return mapped_key
 
 
 def _get_compare_statboxes(userdata1: User, userdata2: User) -> tuple[StatBox, StatBox, StatBox, StatBox, Decimal]:

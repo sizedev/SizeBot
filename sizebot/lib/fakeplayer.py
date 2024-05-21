@@ -13,7 +13,7 @@ from sizebot.lib.shoesize import from_shoe_size
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
 from sizebot.lib.utils import parse_scale
-from sizebot.lib.stats import HOUR, statmap
+from sizebot.lib.stats import HOUR, get_mapped_stat
 
 T = TypeVar("T")
 
@@ -69,7 +69,7 @@ def parse_keyvalue(kv_str: str) -> tuple[str, Any]:
     key, val_str = m.groups()
     # Special exception for shoesize where we _actually_ set footlength
     if key != "shoesize":
-        key = statmap.get(key, None)
+        key = get_mapped_stat(key)
     if key not in fakestats:
         raise InvalidStat(key)
     stat = fakestats[key]

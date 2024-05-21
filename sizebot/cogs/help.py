@@ -16,7 +16,7 @@ from sizebot.conf import conf
 from sizebot.lib import checks, userdb, utils
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.menu import Menu
-from sizebot.lib.stats import statmap
+from sizebot.lib.stats import all_stats
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
 
@@ -41,7 +41,7 @@ logger = logging.getLogger("sizebot")
 
 alpha_warning = f"{emojis.warning} **This command is in ALPHA.** It may break, be borked, change randomly, be removed randomly, or be deprecated at any time. Proceed with caution."
 accuracy_warning = f"{emojis.warning} **This command may not be entirely accurate.** It makes assumptions and guesses that have a decent amount of wiggle room, even because the information isn't known or because the calculations are meant to be for fiction only. Don't take these results at face value!"
-stats_string = utils.sentence_join([f"`{v}`" for v in statmap.keys()])
+stats_string = utils.sentence_join([f"`{s.key}`" for s in all_stats])
 
 
 async def post_report(report_type: str, message: discord.Message, report_text: str):

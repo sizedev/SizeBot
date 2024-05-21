@@ -267,8 +267,8 @@ AliasMap = dict[str, T]
 
 
 class AliasMapper(Generic[T]):
-    def __init__(self, aliases: AliasList[T]):
-        self._map = map_aliases(aliases)
+    def __init__(self, aliases: AliasList[T], *, unique: bool = True):
+        self._map = map_aliases(aliases, unique=unique)
 
     def __getitem__(self, key: str) -> T:
         return self._map[key.lower()]
@@ -277,10 +277,19 @@ class AliasMapper(Generic[T]):
         return key.lower() in self._map
 
 
-def map_aliases[T: str](alias_dict: AliasList[T]) -> AliasMap[T]:
+def map_aliases[T: str](alias_dict: AliasList[T], *, unique: bool = True) -> AliasMap[T]:
     aliasmap: AliasMap[T] = {}
+
     for key, aliases in alias_dict:
-        aliasmap[key.lower()] = key.lower()
+        k = key.lower()
+        if unique and k in aliasmap:
+            raise ValueError(f"Duplicate key: {k}")
+        aliasmap[k] = k
+
         for alias in aliases:
-            aliasmap[alias.lower()] = key.lower()
+            a = alias.lower()
+            if unique and a in aliasmap:
+                raise ValueError(f"Duplicate key: {a}")
+            aliasmap[a] = k
+
     return aliasmap

@@ -12,6 +12,7 @@ from sizebot.lib.gender import Gender
 from sizebot.lib.units import SV, TV, WV, AV
 from sizebot.lib.shoesize import to_shoe_size
 from sizebot.lib.surface import can_walk_on_water
+from sizebot.lib.utils import AliasMapper
 
 AVERAGE_HEIGHT = SV("1.754")            # meters
 AVERAGE_WEIGHT = WV("66760")            # grams
@@ -61,7 +62,7 @@ class PlayerStats(TypedDict):
     macrovision_view: str | None
 
 
-def format_scale(scale: Decimal) -> str:
+def _format_scale(scale: Decimal) -> str:
     reversescale = 1 / scale
 
     if reversescale > 10:
@@ -77,7 +78,7 @@ def format_scale(scale: Decimal) -> str:
 ValueDict = dict[str, Any]
 
 
-def wrap_str(f: str | Callable[[StatBox], str]) -> Callable[[StatBox], str]:
+def _wrap_str(f: str | Callable[[StatBox], str]) -> Callable[[StatBox], str]:
     if isinstance(f, str):
         def wrapped(sb: StatBox) -> str:
             return f.format(**sb.values)
@@ -86,7 +87,7 @@ def wrap_str(f: str | Callable[[StatBox], str]) -> Callable[[StatBox], str]:
         return f
 
 
-def wrap_bool(f: bool | Callable[[StatBox], bool]) -> Callable[[StatBox], bool]:
+def _wrap_bool(f: bool | Callable[[StatBox], bool]) -> Callable[[StatBox], bool]:
     if isinstance(f, bool):
         def wrapped(sb: StatBox) -> bool:
             return f
@@ -95,7 +96,7 @@ def wrap_bool(f: bool | Callable[[StatBox], bool]) -> Callable[[StatBox], bool]:
         return f
 
 
-def grouped_z(z: int | None) -> tuple[int, int]:
+def _grouped_z(z: int | None) -> tuple[int, int]:
     if z is None:
         return (1, 0)
     elif z < 0:
@@ -104,10 +105,7 @@ def grouped_z(z: int | None) -> tuple[int, int]:
         return (0, z)
 
 
-T = TypeVar("T")
-
-
-def wrap_type(f: Callable[[Any], T] | None) -> Callable[[Any], T | None]:
+def _wrap_type[T](f: Callable[[Any], T] | None) -> Callable[[Any], T | None]:
     if f is None:
         def default_func(v: Any) -> Any:
             return v
@@ -141,16 +139,16 @@ class StatDef:
         if userkey is not None and power is None:
             raise Exception(f'StatDef("{key}") with userkey must have power set')
         self.key = key
-        self.get_title = wrap_str(title)
-        self.get_body = wrap_str(body)
-        self.get_string = wrap_str(string)
-        self.get_is_shown = wrap_bool(is_shown)
+        self.get_title = _wrap_str(title)
+        self.get_body = _wrap_str(body)
+        self.get_string = _wrap_str(string)
+        self.get_is_shown = _wrap_bool(is_shown)
         self.userkey = userkey
         self.get_value = value
         self.requires = requires or []
         self.power = power
-        self.type = wrap_type(type)
-        self.orderkey = grouped_z(z)
+        self.type = _wrap_type(type)
+        self.orderkey = _grouped_z(z)
         self.tags = tags or []
         self.inline = inline
         self.aliases = aliases or []
@@ -272,7 +270,7 @@ IN = TypeVar('IN')
 OUT = TypeVar('OUT')
 
 
-def process_queue(source: list[IN], _process: Callable[[IN], None | OUT]) -> list[OUT]:
+def _process_queue(source: list[IN], _process: Callable[[IN], None | OUT]) -> list[OUT]:
     queued: list[Any] = source.copy()
     processing: list[Any] = []
     processed: list[Any] = []
@@ -316,7 +314,7 @@ class StatBox:
             if result is not None:
                 values[result.key] = result.value
             return result
-        stats = process_queue(all_stats, _process)
+        stats = _process_queue(all_stats, _process)
         sb.set_stats(stats)
         return sb
 
@@ -352,7 +350,7 @@ class StatBox:
             if result is not None:
                 values[result.key] = result.value
             return result
-        stats = process_queue(self.stats, _process)
+        stats = _process_queue(self.stats, _process)
         sb.set_stats(stats)
         return sb
 
@@ -362,15 +360,6 @@ class StatBox:
 
     def __getitem__(self, k: str) -> Stat:
         return self.stats_by_key[k]
-
-
-def bool_to_icon(value: bool) -> str:
-    CHK_Y = "✅"
-    CHK_N = "❎"
-    if value:
-        return CHK_Y
-    else:
-        return CHK_N
 
 
 all_stats = [
@@ -401,24 +390,24 @@ all_stats = [
             aliases=["nick", "name"]),
     StatDef("scale",
             title="Scale",
-            string=lambda s: format_scale(s['scale'].value),
-            body=lambda s: format_scale(s['scale'].value),
+            string=lambda s: _format_scale(s['scale'].value),
+            body=lambda s: _format_scale(s['scale'].value),
             is_shown=False,
             type=Decimal,
             power=1,
             value=lambda v: 1),
     StatDef("viewscale",
             title="Viewscale",
-            string=lambda s: format_scale(s['viewscale'].value),
-            body=lambda s: format_scale(s['viewscale'].value),
+            string=lambda s: _format_scale(s['viewscale'].value),
+            body=lambda s: _format_scale(s['viewscale'].value),
             is_shown=False,
             requires=["scale"],
             type=Decimal,
             value=lambda v: 1 / v["scale"]),
     StatDef("squarescale",
             title="Square Scale",
-            string=lambda s: format_scale(s['squarescale'].value),
-            body=lambda s: format_scale(s['squarescale'].value),
+            string=lambda s: _format_scale(s['squarescale'].value),
+            body=lambda s: _format_scale(s['squarescale'].value),
             is_shown=False,
             requires=["scale"],
             power=2,
@@ -426,8 +415,8 @@ all_stats = [
             value=lambda v: v["scale"] ** 2),
     StatDef("cubescale",
             title="Cube Scale",
-            string=lambda s: format_scale(s['cubescale'].value),
-            body=lambda s: format_scale(s['cubescale'].value),
+            string=lambda s: _format_scale(s['cubescale'].value),
+            body=lambda s: _format_scale(s['cubescale'].value),
             is_shown=False,
             requires=["scale"],
             power=3,
@@ -790,7 +779,7 @@ all_stats = [
             is_shown=False,
             requires=["height"],
             type=SV,
-            value=lambda v: calcHorizon(v["height"]),
+            value=lambda v: _calc_horizon(v["height"]),
             aliases=["horizon"]),
     StatDef("dragcoefficient",
             title="Drag Coefficient",
@@ -812,15 +801,15 @@ all_stats = [
     StatDef("fallproof",
             title="Fallproof",
             string=lambda s: f"""{s['nickname'].value} {'is' if s['fallproof'].value else "isn't"} fallproof.""",
-            body=lambda s: bool_to_icon(s['fallproof'].value),
+            body=lambda s: _bool_to_icon(s['fallproof'].value),
             is_shown=False,
             requires=["terminalvelocity"],
             type=bool,
             value=lambda v: v["terminalvelocity"] < FALL_LIMIT),
     StatDef("fallprooficon",
             title="Fallproof Icon",
-            string=lambda s: bool_to_icon(s['fallproof']),
-            body=lambda s: bool_to_icon(s['fallproof'].value),
+            string=lambda s: _bool_to_icon(s['fallproof']),
+            body=lambda s: _bool_to_icon(s['fallproof'].value),
             is_shown=False,
             requires=["fallproof"],
             type=str,
@@ -919,7 +908,7 @@ all_stats = [
             is_shown=lambda s: s["scale"].value < 1,
             requires=["height"],
             type=str,
-            value=lambda v: calcVisibility(v["height"]),
+            value=lambda v: _calc_visibility(v["height"]),
             aliases=["visible", "see"]),
     StatDef("eyeheight",
             title="Eye Height",
@@ -1059,7 +1048,7 @@ all_stats = [
     StatDef("pawtoggle",
             title="Paw Toggle",
             string="{nickname}'s paw toggle is {pawtoggle}.",
-            body=lambda s: bool_to_icon(s['pawtoggle'].value),
+            body=lambda s: _bool_to_icon(s['pawtoggle'].value),
             is_shown=False,
             type=bool,
             power=0,
@@ -1067,7 +1056,7 @@ all_stats = [
     StatDef("furtoggle",
             title="Fur Toggle",
             string="{nickname}'s fur toggle is {furtoggle}.",
-            body=lambda s: bool_to_icon(s['furtoggle'].value),
+            body=lambda s: _bool_to_icon(s['furtoggle'].value),
             is_shown=False,
             type=bool,
             power=0,
@@ -1089,7 +1078,7 @@ all_stats = [
     StatDef("walkonwater",
             title="Can Walk On Water",
             string=lambda s: f"""{s['nickname'].value} {'can' if s['walkonwater'].value else "can't"} walk on water.""",
-            body=lambda s: bool_to_icon(s['walkonwater'].value),
+            body=lambda s: _bool_to_icon(s['walkonwater'].value),
             requires=["weight", "footlength", "footwidth"],
             type=bool,
             is_shown=False,
@@ -1133,33 +1122,23 @@ all_stats = [
 ]
 
 
-def generate_statmap() -> dict[str, str]:
-    statmap = {}
-    # Load all keys
+def _generate_taglist() -> list[str]:
+    tags = set()
     for stat in all_stats:
-        if stat.key in statmap:
-            raise Exception(f"Duplicate key: {stat.key}")
-        statmap[stat.key] = stat.key
-    # Load all aliases
-    for stat in all_stats:
-        for alias in stat.aliases:
-            if alias in statmap:
-                raise Exception(f"Duplicate alias: {alias}")
-            statmap[alias] = stat.key
-    return statmap
+        tags.update(stat.tags)
+    return sorted(tags)
 
 
-def generate_taglist() -> list[str]:
-    tags = []
-    for stat in all_stats:
-        if stat.tags:
-            tags.extend(stat.tags)
-    tags = list(set(tags))
-    return tags
+_statmap = AliasMapper({s.key: s.aliases for s in all_stats})
+taglist = _generate_taglist()
 
 
-statmap = generate_statmap()
-taglist = generate_taglist()
+def get_mapped_stat(key: str) -> str | None:
+    try:
+        mapped_key = _statmap[key]
+    except KeyError:
+        return None
+    return mapped_key
 
 
 def calc_view_angle(viewer: SV, viewee: SV) -> Decimal:
@@ -1175,14 +1154,12 @@ def calc_view_angle(viewer: SV, viewee: SV) -> Decimal:
     return viewangle
 
 
-# TODO: CamelCase
-def calcHorizon(height: SV) -> SV:
+def _calc_horizon(height: SV) -> SV:
     EARTH_RADIUS = 6378137
     return SV(math.sqrt((EARTH_RADIUS + height) ** 2 - EARTH_RADIUS ** 2))
 
 
-# TODO: CamelCase
-def calcVisibility(height: SV) -> str:
+def _calc_visibility(height: SV) -> str:
     if height < SV(0.000001):
         visibility = "magic"
     elif height < SV(0.00005):
@@ -1192,3 +1169,12 @@ def calcVisibility(height: SV) -> str:
     else:
         visibility = "only the naked eye"
     return visibility
+
+
+def _bool_to_icon(value: bool) -> str:
+    CHK_Y = "✅"
+    CHK_N = "❎"
+    if value:
+        return CHK_Y
+    else:
+        return CHK_N

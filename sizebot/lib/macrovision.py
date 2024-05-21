@@ -11,7 +11,6 @@ import logging
 
 import sizebot.data
 from sizebot.conf import conf
-from sizebot.lib import errors
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV
