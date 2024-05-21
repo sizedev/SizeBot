@@ -7,7 +7,7 @@ from discord.ext import commands
 
 from sizebot.lib import utils
 from sizebot.lib.constants import emojis
-from sizebot.lib.eval import run_eval
+from sizebot.lib.eval import run_eval, get_fullname
 from sizebot.lib.types import BotContext
 
 
@@ -90,13 +90,14 @@ def _remove_code_block(s: str) -> str:
 
 
 def _format_error(err: Exception) -> str:
-    fullname = utils.get_fullname(err)
+    fullname = get_fullname(err)
 
     errMessage = str(err)
     if errMessage:
         errMessage = f": {errMessage}"
 
     return f"{fullname}{errMessage}"
+
 
 
 async def setup(bot: commands.Bot):

@@ -110,18 +110,6 @@ def format_traceback(err: BaseException) -> str:
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
 
 
-def get_fullname(o: object) -> str:
-    moduleName = o.__class__.__module__
-    if moduleName == "builtins":
-        moduleName = ""
-    if moduleName:
-        moduleName = f"{moduleName}."
-
-    className = o.__class__.__name__
-    fullname = f"{moduleName}{className}"
-    return fullname
-
-
 def int_to_roman(input: int) -> str:
     """Convert an integer to a Roman numeral."""
 

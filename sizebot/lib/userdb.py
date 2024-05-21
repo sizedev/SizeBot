@@ -241,6 +241,8 @@ class User:
     @macrovision_view.setter
     def macrovision_view(self, value: str):
         if not macrovision.is_modelview(self.macrovision_model, value):
+            if not macrovision.is_model(self.macrovision_model):
+                raise errors.InvalidMacrovisionModelException(self.macrovision_model)
             raise errors.InvalidMacrovisionViewException(self.macrovision_model, value)
         self._macrovision_view = value
 

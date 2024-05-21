@@ -1,10 +1,52 @@
 from typing import Any
+from collections.abc import Iterable
 
 import logging
 
 from sizebot.conf import conf
-from sizebot.lib import macrovision, utils
 from sizebot.lib.types import BotContext
+
+
+def _get_fullname(o: object) -> str:
+    moduleName = o.__class__.__module__
+    if moduleName == "builtins":
+        moduleName = ""
+    if moduleName:
+        moduleName = f"{moduleName}."
+
+    className = o.__class__.__name__
+    fullname = f"{moduleName}{className}"
+    return fullname
+
+
+def _sentence_join(items: Iterable[str], *, joiner: str | None = None, oxford: bool = False) -> str:
+    """Join a list of strings like a sentence.
+
+    >>> sentence_join(['red', 'green', 'blue'])
+    'red, green and blue'
+
+    Optionally, a different joiner can be provided.
+
+    >>> sentence_join(['micro', 'tiny', 'normal', 'amazon', 'giantess'], joiner='or')
+    'micro, tiny, normal, amazon or giantess'
+    """
+    # Do this in case we received something like a generator, that needs to be wrapped in a list
+    items = list(items)
+
+    if len(items) == 1:
+        return items[0]
+
+    if not items:
+        return ""
+
+    if joiner is None:
+        joiner = "and"
+
+    ox = ""
+    if oxford:
+        ox = ","
+
+    return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
 
 
 # error.format_message will be printed when you do print(error)
@@ -19,7 +61,7 @@ class DigiException(Exception):
         return None
 
     def __repr__(self) -> str:
-        return utils.get_fullname(self)
+        return _get_fullname(self)
 
     def __str__(self) -> str:
         return self.format_message() or self.format_user_message() or repr(self)
@@ -35,7 +77,7 @@ class DigiContextException(Exception):
         return None
 
     def __repr__(self) -> str:
-        return utils.get_fullname(self)
+        return _get_fullname(self)
 
     def __str__(self) -> str:
         return repr(self)
@@ -154,9 +196,6 @@ class InvalidMacrovisionViewException(DigiException):
         self.model = model
         self.view = view
 
-        if not macrovision.is_model(model):
-            raise InvalidMacrovisionModelException(self.model)
-
     def format_message(self) -> str:
         return f"{self.view!r} is an unrecognized view for the Macrovision model {self.model!r}."
 
@@ -231,7 +270,7 @@ class ParseError(DigiException):
 
 class UnfoundStatException(DigiException):
     def __init__(self, s: list[Any]):
-        self.s = utils.sentence_join(getattr(t, "key", repr(t)) for t in s)
+        self.s = _sentence_join(getattr(t, "key", repr(t)) for t in s)
 
     def format_message(self) -> str:
         return f"Could not calculate the {self.s} stat(s)."

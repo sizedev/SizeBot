@@ -197,7 +197,7 @@ def _eformat(name: str, value: Any) -> str:
 
 def edir(o: Any) -> Embed:
     """send embed of an object's attributes, with type notation"""
-    e = Embed(title=utils.get_fullname(o))
+    e = Embed(title=get_fullname(o))
     attrs = [_eformat(n, v) for n, v in _ddir(o).items()]
     pageLen = math.ceil(len(attrs) / 3)
     for page in utils.chunk_list(attrs, pageLen):
@@ -231,3 +231,15 @@ def _ddir(o: Any) -> dict:
 
 def str_help(topic: str) -> str:
     return pydoc.plain(pydoc.render_doc(topic))
+
+
+def get_fullname(o: object) -> str:
+    moduleName = o.__class__.__module__
+    if moduleName == "builtins":
+        moduleName = ""
+    if moduleName:
+        moduleName = f"{moduleName}."
+
+    className = o.__class__.__name__
+    fullname = f"{moduleName}{className}"
+    return fullname
