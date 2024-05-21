@@ -1,4 +1,7 @@
-from typing import Any
+from typing import Any, TYPE_CHECKING
+if TYPE_CHECKING:
+    from sizebot.lib.userdb import User
+
 
 import base64
 from dataclasses import dataclass
@@ -9,7 +12,6 @@ import sizebot.data
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV
-from sizebot.lib.userdb import User
 from sizebot.lib.utils import url_safe
 
 _model_heights = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
