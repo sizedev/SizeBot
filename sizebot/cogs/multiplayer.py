@@ -1,5 +1,4 @@
 from copy import copy
-import logging
 
 import discord
 from discord.ext import commands
@@ -11,8 +10,6 @@ from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, WV
-
-logger = logging.getLogger("sizebot")
 
 
 class MPCog(commands.Cog):
