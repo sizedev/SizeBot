@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any
+from typing import Any, TypedDict
 
 import importlib.resources as pkg_resources
 import json
@@ -15,10 +15,32 @@ from sizebot.lib.utils import int_to_roman
 pokemon: list[Pokemon] = []
 
 
+class PokemonJSON(TypedDict):
+    name: str
+    natdex: int
+    generation: int
+    region: str
+    types: list[str]
+    height: float
+    weight: int
+    color: int
+    flavor_text: str
+    sprite: str
+
+
 class Pokemon:
-    def __init__(self, name: str, natdex: int | None = None, generation: int | None = None, region: str | None = None,
-                 height: SV | None = None, weight: WV | None = None, types: list[str] = [], color: int | None = None,
-                 flavor_text: str | None = None, sprite: str | None = None) -> None:
+    def __init__(
+            self,
+            name: str,
+            natdex: int,
+            generation: int,
+            region: str,
+            height: SV,
+            weight: WV,
+            types: list[str],
+            color: int,
+            flavor_text: str,
+            sprite: str):
         self.name = name
         self.natdex = natdex
         self.generation = generation
@@ -31,7 +53,7 @@ class Pokemon:
         self.flavor_text = flavor_text
         self.sprite = sprite
 
-    def stats_embed(self, multiplier: Decimal = 1) -> Embed:
+    def stats_embed(self, multiplier: Decimal = Decimal(1)) -> Embed:
         h = SV(self.height * multiplier)
         w = WV(self.weight * (multiplier ** 3))
         e = Embed()
@@ -72,11 +94,19 @@ class Pokemon:
         return False
 
     @classmethod
-    def fromJSON(cls, obj_json: Any) -> Pokemon:
-        c = cls(**obj_json)
-        c.height = SV(c.height)
-        c.weight = WV(c.weight)
-        return c
+    def fromJSON(cls, data: PokemonJSON) -> Pokemon:
+        return cls(
+            data["name"],
+            data["natdex"],
+            data["generation"],
+            data["region"],
+            SV(data["height"]),
+            WV(data["weight"]),
+            data["types"],
+            data["color"],
+            data["flavor_text"],
+            data["sprite"]
+        )
 
     def __str__(self) -> str:
         return self.name
@@ -89,5 +119,5 @@ def init():
     global pokemon
 
     pokefile = pkg_resources.read_text(sizebot.data, "pokemon.json")
-    p = json.loads(pokefile)
+    p: list[PokemonJSON] = json.loads(pokefile)
     pokemon = [Pokemon.fromJSON(j) for j in p]
