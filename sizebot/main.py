@@ -49,7 +49,6 @@ initial_cogs = [
     "limits",
     "loop",
     "multiplayer",
-    "naptime",
     "objects",
     "pokemon",
     "profile",
