@@ -10,7 +10,6 @@ from sizebot.lib.types import BotContext
 
 
 class TooManyMenuOptionsException(DigiException):
-    # TODO: CamelCase
     def format_message(self) -> str:
         return "Too many options for this reaction menu. (limit is 20.)"
 
