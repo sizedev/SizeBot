@@ -1,5 +1,4 @@
 import re
-import logging
 
 import discord
 from discord.ext import commands
@@ -13,9 +12,7 @@ from sizebot.lib.errors import UserNotFoundException
 from sizebot.lib.stats import AVERAGE_HEIGHT
 
 
-logger = logging.getLogger("sizebot")
-
-smol_letters = str.maketrans({
+_smol_letters = str.maketrans({
     '0': '⁰',
     '1': '¹',
     '2': '²',
@@ -82,7 +79,7 @@ smol_letters = str.maketrans({
     'Z': 'ᶻ'
 })
 
-small_caps = str.maketrans({
+_small_caps = str.maketrans({
     'a': 'ᴀ',
     'b': 'ʙ',
     'c': 'ᴄ',
@@ -111,7 +108,7 @@ small_caps = str.maketrans({
     'z': 'ᴢ'
 })
 
-giant_letters = str.maketrans({
+_giant_letters = str.maketrans({
     'a': ' :regional_indicator_a:',
     'b': ' :regional_indicator_b:',
     'c': ' :regional_indicator_c:',
@@ -199,7 +196,7 @@ giant_letters = str.maketrans({
     ' ': emojis.blank
 })
 
-verbs = {
+_verbs = {
     -3: "whispers",
     -2: "squeaks",
     -1: "murmurs",
@@ -210,27 +207,27 @@ verbs = {
 }
 
 
-def resize_text(text: str, diff: int) -> str:
+def _resize_text(text: str, diff: int) -> str:
     """Resizes text to show the relative difference between sizes
     """
     if diff == -3:
         return re.sub(r"[^\s\n]", ".", text)
     elif diff == -2:
-        return text.lower().translate(smol_letters)
+        return text.lower().translate(_smol_letters)
     elif diff == -1:
-        return text.translate(smol_letters)
+        return text.translate(_smol_letters)
     elif diff == 0:
         return text
     elif diff == 1:
         return f"**{text}**"
     elif diff == 2:
-        return f"**{text.translate(small_caps)}**"
+        return f"**{text.translate(_small_caps)}**"
     elif diff == 3:
-        return text.translate(giant_letters)
+        return text.translate(_giant_letters)
     raise ValueError
 
 
-def ratio_to_diff(ratio: Decimal) -> int:
+def _ratio_to_diff(ratio: Decimal) -> int:
     """Adjust a string to be quiet or loud, and assign it a verb.
     Ratios:
     * ratio < 1/1000: "whispers", convert all letters to periods.
@@ -284,9 +281,9 @@ class SayCog(commands.Cog):
 
         ratio = height / AVERAGE_HEIGHT
 
-        diff = ratio_to_diff(ratio)
-        m = resize_text(message, diff)
-        verb = verbs[diff]
+        diff = _ratio_to_diff(ratio)
+        m = _resize_text(message, diff)
+        verb = _verbs[diff]
         await ctx.send(f"{nick} {verb}: \n> {m}")
 
     @commands.command(
@@ -316,9 +313,9 @@ class SayCog(commands.Cog):
 
         ratio = height / otherheight
 
-        diff = ratio_to_diff(ratio)
-        m = resize_text(message, diff)
-        verb = verbs[diff]
+        diff = _ratio_to_diff(ratio)
+        m = _resize_text(message, diff)
+        verb = _verbs[diff]
         await ctx.send(f"{nick} {verb} to {othernick}: \n> {m}")
 
 
