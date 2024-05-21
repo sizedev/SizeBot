@@ -3,6 +3,8 @@ try:
 except ImportError:
     daemon = None
 
+# Used on linux to report bot status to systemd
+
 
 def ready():
     if not daemon:
