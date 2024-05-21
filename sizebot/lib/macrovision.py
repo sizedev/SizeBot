@@ -19,16 +19,16 @@ from sizebot.lib.utils import url_safe
 
 logger = logging.getLogger("sizebot")
 
-model_heights = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
+_model_heights = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 
-def get_model_scale(model: str, view: str, height_in_meters: SV) -> Decimal:
-    normal_height = Decimal(model_heights[model][view])
+def _get_model_scale(model: str, view: str, height_in_meters: SV) -> Decimal:
+    normal_height = Decimal(_model_heights[model][view])
     return height_in_meters / normal_height
 
 
-def get_entity_json(name: str, model: str, view: str, height: SV, x: float) -> Any:
-    scale = get_model_scale(model, view, height)
+def _get_entity_json(name: str, model: str, view: str, height: SV, x: float) -> Any:
+    scale = _get_model_scale(model, view, height)
     return {
         "name": model,
         "customName": name,
@@ -41,26 +41,6 @@ def get_entity_json(name: str, model: str, view: str, height: SV, x: float) -> A
     }
 
 
-async def shorten_url(url: str) -> str:
-    if not conf.cuttly_key:
-        return url
-    try:
-        r = await requests.get(f"https://cutt.ly/api/api.php?key={conf.cuttly_key}&short={url}", raise_for_status=True)
-    except aiohttp.ClientResponseError as e:
-        logger.error(f"Unable to shorten url: Status {e.status}")
-        return url
-    try:
-        cuttly_response = await r.json(content_type="text/html")
-    except (aiohttp.ContentTypeError):
-        logger.error(f"Unable to shorten url: Cannot parse JSON, bad content type: {r.content_type}")
-        return url
-    except (JSONDecodeError):
-        logger.error("Unable to shorten url: Cannot parse JSON")
-        return url
-    short_url = cuttly_response["url"]["shortLink"]
-    return short_url
-
-
 @dataclass
 class MacrovisionEntity():
     name: str
@@ -70,7 +50,7 @@ class MacrovisionEntity():
     x: float = 0
 
 
-def user_to_entity(u: User) -> MacrovisionEntity:
+def _user_to_entity(u: User) -> MacrovisionEntity:
     return MacrovisionEntity(
         name=u.nickname,
         model=u.macrovision_model,
@@ -79,7 +59,7 @@ def user_to_entity(u: User) -> MacrovisionEntity:
     )
 
 
-def statbox_to_entity(s: StatBox) -> MacrovisionEntity:
+def _statbox_to_entity(s: StatBox) -> MacrovisionEntity:
     return MacrovisionEntity(
         name=s['nickname'].value,
         model=s['macrovision_model'].value,
@@ -89,11 +69,11 @@ def statbox_to_entity(s: StatBox) -> MacrovisionEntity:
 
 
 def get_url_from_users(users: list[User]) -> str:
-    return get_url([user_to_entity(u) for u in users])
+    return get_url([_user_to_entity(u) for u in users])
 
 
 def get_url_from_statboxes(statboxes: list[StatBox]) -> str:
-    return get_url([statbox_to_entity(s) for s in statboxes])
+    return get_url([_statbox_to_entity(s) for s in statboxes])
 
 
 def get_url(entities: list[MacrovisionEntity]) -> str:
@@ -114,7 +94,7 @@ def get_url(entities: list[MacrovisionEntity]) -> str:
         p.x = x_offset
         x_offset += p.height / 4
 
-    entities_json = [get_entity_json(e.name, e.model, e.view, e.height, e.x) for e in entities]
+    entities_json = [_get_entity_json(e.name, e.model, e.view, e.height, e.x) for e in entities]
 
     url_json = {
         "entities": entities_json,
@@ -135,8 +115,8 @@ def get_url(entities: list[MacrovisionEntity]) -> str:
 
 
 def is_model(model: str) -> bool:
-    return model in model_heights
+    return model in _model_heights
 
 
 def is_modelview(model: str, view: str) -> bool:
-    return model in model_heights and view in model_heights[model]
+    return model in _model_heights and view in _model_heights[model]
