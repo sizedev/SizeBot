@@ -1,6 +1,5 @@
 from typing import Literal
 
-import logging
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -14,9 +13,7 @@ from sizebot.lib import userdb, nickmanager
 from sizebot.lib.diff import Diff
 from sizebot.lib.types import BotContext
 
-logger = logging.getLogger("sizebot")
-
-user_triggers = defaultdict(dict)
+_user_triggers = defaultdict(dict)
 
 
 @dataclass
@@ -29,28 +26,28 @@ class Trigger:
     partial: bool
 
 
-def set_cached_trigger(guildid: int, authorid: int, trigger: str, diff: Diff):
-    user_triggers[trigger][guildid, authorid] = diff
+def _set_cached_trigger(guildid: int, authorid: int, trigger: str, diff: Diff):
+    _user_triggers[trigger][guildid, authorid] = diff
 
 
-def unset_cached_trigger(guildid: int, authorid: int, trigger: str):
-    if (guildid, authorid) not in user_triggers[trigger]:
+def _unset_cached_trigger(guildid: int, authorid: int, trigger: str):
+    if (guildid, authorid) not in _user_triggers[trigger]:
         return
-    del user_triggers[trigger][guildid, authorid]
-    if not user_triggers[trigger]:
-        del user_triggers[trigger]
+    del _user_triggers[trigger][guildid, authorid]
+    if not _user_triggers[trigger]:
+        del _user_triggers[trigger]
 
 
-def set_trigger(guildid: int, authorid: int, trigger: str, diff: Diff):
+def _set_trigger(guildid: int, authorid: int, trigger: str, diff: Diff):
     userdata = userdb.load(guildid, authorid)
     # Only set the cache _after_ we've check if the user is registered
-    set_cached_trigger(guildid, authorid, trigger, diff)
+    _set_cached_trigger(guildid, authorid, trigger, diff)
     userdata.triggers[trigger] = diff
     userdb.save(userdata)
 
 
-def unset_trigger(guildid: int, authorid: int, trigger: str):
-    unset_cached_trigger(guildid, authorid, trigger)
+def _unset_trigger(guildid: int, authorid: int, trigger: str):
+    _unset_cached_trigger(guildid, authorid, trigger)
     userdata = userdb.load(guildid, authorid)
     if trigger in userdata.triggers:
         del userdata.triggers[trigger]
@@ -59,7 +56,6 @@ def unset_trigger(guildid: int, authorid: int, trigger: str):
 
 class TriggerCog(commands.Cog):
     """Commands to create or clear triggers."""
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         for guildid, userid in userdb.list_users():
@@ -68,7 +64,7 @@ class TriggerCog(commands.Cog):
             except UserNotFoundException:
                 continue
             for trigger, diff in userdata.triggers.items():
-                user_triggers[trigger][guildid, userid] = diff
+                _user_triggers[trigger][guildid, userid] = diff
 
     @commands.Cog.listener()
     async def on_message(self, m: discord.Message):
@@ -84,7 +80,7 @@ class TriggerCog(commands.Cog):
 
         # Collect list of triggered users
         users_to_update = defaultdict(list)
-        for keyword, users in user_triggers.items():
+        for keyword, users in _user_triggers.items():
             if keyword in m.content:
                 for (guildid, userid), diff in users.items():
                     # Guild-safe check
@@ -136,7 +132,7 @@ class TriggerCog(commands.Cog):
 
         #ALPHA#
         """
-        set_trigger(ctx.guild.id, ctx.author.id, trigger, diff)
+        _set_trigger(ctx.guild.id, ctx.author.id, trigger, diff)
         await ctx.send(f"Set trigger word {trigger!r} to scale {diff}.")
 
     @commands.command(
@@ -146,7 +142,7 @@ class TriggerCog(commands.Cog):
     )
     async def cleartrigger(self, ctx: BotContext, *, trigger: str):
         """Remove a trigger word."""
-        unset_trigger(ctx.guild.id, ctx.author.id, trigger)
+        _unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send(f"Removed trigger word {trigger!r}.")
 
     @commands.command(
@@ -158,7 +154,7 @@ class TriggerCog(commands.Cog):
         """Remove all your trigger words."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         for trigger in userdata.triggers.keys():
-            unset_trigger(ctx.guild.id, ctx.author.id, trigger)
+            _unset_trigger(ctx.guild.id, ctx.author.id, trigger)
         await ctx.send("Removed all trigger words.")
 
 
