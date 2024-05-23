@@ -60,7 +60,7 @@ class Decimal():
     infinity = RawDecimal("infinity")
     _infinity = RawDecimal("1e1000")
 
-    def __init__(self, value: Decimal):
+    def __init__(self, value: Decimal | str | int | float):
         # initialize from Decimal
         rawvalue = unwrapDecimal(value)
         if isinstance(rawvalue, str):

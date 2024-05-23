@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Any
+from queue import Empty, Queue
+from typing import Iterator, TypedDict, cast
 
 import json
 import logging
@@ -16,7 +17,30 @@ from sizebot.lib.utils import pretty_time_delta
 logger = logging.getLogger("sizebot")
 
 
-_active_changes: dict[tuple[int, int], Change] = {}
+def iter_queue[T](q: Queue[T]) -> Iterator[T]:
+    while True:
+        try:
+            yield q.get(False)
+        except Empty:
+            break
+
+
+ChangeKey = tuple[int, int]
+_active_changes: dict[ChangeKey, Change] = {}
+_changes_to_stop: Queue[ChangeKey] = Queue()
+_changes_to_start: Queue[Change] = Queue()
+
+
+class ChangeJSON(TypedDict):
+    userid: int
+    guildid: int
+    addPerSec: str
+    mulPerSec: str
+    powPerSec: str
+    stopSV: str | None
+    stopTV: str | None
+    startTime: str
+    lastRan: str
 
 
 class Change:
@@ -24,22 +48,22 @@ class Change:
                  userid: int,
                  guildid: int,
                  *,
-                 addPerSec: SV = 0,
-                 mulPerSec: Decimal = 1,
-                 powPerSec: Decimal = 1,
-                 stopSV: SV = None,
-                 stopTV: TV = None,
-                 startTime: Decimal = None,
-                 lastRan: Decimal = None):
+                 addPerSec: SV = SV(0),
+                 mulPerSec: Decimal = Decimal(1),
+                 powPerSec: Decimal = Decimal(1),
+                 stopSV: SV | None = None,
+                 stopTV: TV | None = None,
+                 startTime: Decimal,
+                 lastRan: Decimal):
         self.userid = userid
         self.guildid = guildid
-        self.addPerSec = addPerSec and SV(addPerSec)
-        self.mulPerSec = mulPerSec and Decimal(mulPerSec)
-        self.powPerSec = powPerSec and Decimal(powPerSec)
-        self.stopSV = stopSV and SV(stopSV)
-        self.stopTV = stopTV and TV(stopTV)
-        self.startTime = startTime and Decimal(startTime)
-        self.lastRan = lastRan and Decimal(lastRan)
+        self.addPerSec = addPerSec
+        self.mulPerSec = mulPerSec
+        self.powPerSec = powPerSec
+        self.stopSV = stopSV
+        self.stopTV = stopTV
+        self.startTime = startTime
+        self.lastRan = lastRan
 
     async def apply(self, bot: commands.Bot) -> bool:
         running = True
@@ -47,13 +71,13 @@ class Change:
         if self.endtime is not None and self.endtime <= now:
             now = self.endtime
             running = False
-        seconds = now - self.lastRan
+        seconds = cast(Decimal, now - self.lastRan)
         self.lastRan = now
-        addPerTick = self.addPerSec * seconds
-        mulPerTick = self.mulPerSec ** seconds
-        powPerTick = self.powPerSec ** seconds
+        addPerTick = cast(SV, self.addPerSec * seconds)
+        mulPerTick = cast(Decimal, self.mulPerSec ** seconds)
+        powPerTick = cast(Decimal, self.powPerSec ** seconds)
         userdata = userdb.load(self.guildid, self.userid)
-        newheight = ((userdata.height ** powPerTick) * mulPerTick) + addPerTick
+        newheight = cast(SV, ((userdata.height ** powPerTick) * mulPerTick) + addPerTick)
 
         if newheight < userdata.height:
             direction = "down"
@@ -73,7 +97,9 @@ class Change:
             running = False
 
         # if we've moved past 0 or SV.infinity, cancel the change
-        if newheight <= 0 or newheight == SV.infinity:
+        if newheight < SV(0):
+            newheight = SV(0)
+        if newheight == SV(0) or newheight == SV.infinity:
             running = False
 
         # if we're not changing height anymore, cancel the change
@@ -83,15 +109,21 @@ class Change:
         userdata.height = newheight
         userdb.save(userdata)
         guild = bot.get_guild(self.guildid)
+        if guild is None:
+            logger.info(f"Unrecognized user found in Change: guildid={self.guildid} userid={self.userid}")
+            return running
         member = guild.get_member(self.userid)
+        if member is None:
+            logger.info(f"Unrecognized user found in Change: guildid={self.guildid} userid={self.userid}")
+            return running
         await nickmanager.nick_update(member)
         return running
 
     @property
-    def endtime(self) -> Decimal:
+    def endtime(self) -> Decimal | None:
         if self.stopTV is None:
             return None
-        return self.startTime + self.stopTV
+        return cast(Decimal, self.startTime + self.stopTV)
 
     def __str__(self) -> str:
         out = f"G: {self.guildid}| U: {self.userid}\n    "
@@ -102,37 +134,56 @@ class Change:
             out += f", stop after {pretty_time_delta(Decimal(self.stopTV))}"
         return out
 
-    def toJSON(self) -> Any:
+    @classmethod
+    def fromJSON(cls, data: ChangeJSON) -> Change:
+        return Change(
+            data["userid"],
+            data["guildid"],
+            addPerSec=SV(data["addPerSec"]),
+            mulPerSec=Decimal(data["mulPerSec"]),
+            powPerSec=Decimal(data["powPerSec"]),
+            stopSV=SV(data["stopSV"]) if data["stopSV"] is not None else None,
+            stopTV=TV(data["stopTV"]) if data["stopTV"] is not None else None,
+            startTime=Decimal(data["startTime"]),
+            lastRan=Decimal(data["lastRan"])
+        )
+
+    def toJSON(self) -> ChangeJSON:
         return {
             "userid": self.userid,
             "guildid": self.guildid,
-            "addPerSec": None if self.addPerSec is None else str(self.addPerSec),
-            "mulPerSec": None if self.mulPerSec is None else str(self.mulPerSec),
-            "powPerSec": None if self.powPerSec is None else str(self.powPerSec),
+            "addPerSec": str(self.addPerSec),
+            "mulPerSec": str(self.mulPerSec),
+            "powPerSec": str(self.powPerSec),
             "stopSV": None if self.stopSV is None else str(self.stopSV),
             "stopTV": None if self.stopTV is None else str(self.stopTV),
-            "startTime": None if self.startTime is None else str(self.startTime),
-            "lastRan": None if self.lastRan is None else str(self.lastRan)
+            "startTime": str(self.startTime),
+            "lastRan": str(self.lastRan)
         }
 
 
-def start(userid: int, guildid: int, *, addPerSec: SV = 0, mulPerSec: Decimal = 1, stopSV: SV = None, stopTV: TV = None):
+def start(userid: int, guildid: int, *, addPerSec: SV = SV(0), mulPerSec: Decimal = Decimal(1), stopSV: SV | None = None, stopTV: TV | None = None):
     """Start a new change task"""
-    startTime = lastRan = time.time()
+    startTime = lastRan = Decimal(time.time())
     change = Change(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV, startTime=startTime, lastRan=lastRan)
-    _activate(change)
+    _changes_to_start.put(change)
 
 
-def stop(userid: int, guildid: int) -> Change:
+def stop(userid: int, guildid: int) -> Change | None:
     """Stop a running change task"""
-    change = _deactivate(userid, guildid)
-    return change
+    key = (userid, guildid)
+    _changes_to_stop.put(key)
+    return _active_changes.get(key, None)
 
 
 async def apply(bot: commands.Bot):
     """Apply slow growth changes"""
     global _active_changes
     runningChanges = {}
+    for key in iter_queue(_changes_to_stop):
+        _active_changes.pop(key, None)
+    for change in iter_queue(_changes_to_start):
+        _active_changes[change.userid, change.guildid] = change
     for key, change in _active_changes.items():
         try:
             running = await change.apply(bot)
@@ -145,29 +196,16 @@ async def apply(bot: commands.Bot):
     save_to_file()
 
 
-def _activate(change: Change):
-    """Activate a new change task"""
-    _active_changes[change.userid, change.guildid] = change
-    save_to_file()
-
-
-def _deactivate(userid: int, guildid: int) -> Change | None:
-    """Deactivate a running change task"""
-    change = _active_changes.pop((userid, guildid), None)
-    save_to_file()
-    return change
-
-
 def load_from_file():
     """Load all change tasks from a file"""
     try:
         with open(paths.changespath, "r") as f:
-            changesJSON = json.load(f)
+            changesJSON: list[ChangeJSON] = json.load(f)
     except FileNotFoundError:
         changesJSON = []
     for changeJSON in changesJSON:
-        change = Change(**changeJSON)
-        _activate(change)
+        change = Change.fromJSON(changeJSON)
+        _changes_to_start.put(change)
 
 
 def save_to_file():
