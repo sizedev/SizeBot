@@ -110,12 +110,12 @@ class Change:
         userdb.save(userdata)
         guild = bot.get_guild(self.guildid)
         if guild is None:
-            logger.info(f"Unrecognized user found in Change: guildid={self.guildid} userid={self.userid}")
-            return running
+            logger.info(f"Unrecognized guild found in Change: guildid={self.guildid} userid={self.userid}")
+            return False
         member = guild.get_member(self.userid)
         if member is None:
             logger.info(f"Unrecognized user found in Change: guildid={self.guildid} userid={self.userid}")
-            return running
+            return False
         await nickmanager.nick_update(member)
         return running
 
