@@ -97,6 +97,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
+    @commands.guild_only()
     async def scalewalk(self, ctx: BotContext, change: Diff, dist: SV, flag: str | None = None):
         """Walk a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
@@ -149,6 +150,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step> <distance> [apply]"
     )
+    @commands.guild_only()
     async def scalerun(self, ctx: BotContext, change: Diff, dist: SV, flag: str | None = None):
         """Run a certain distance, scaling by an amount each step you take.
         Accepts addition or subtraction of a certain height, or multiplication/division of a factor.
@@ -202,6 +204,7 @@ class ScaleWalkCog(commands.Cog):
         category = "scalestep",
         usage = "<change per step>"
     )
+    @commands.guild_only()
     async def setstepscale(self, ctx: BotContext, *, change: Diff):
         """Set the amount you scale per step, for use with `&step`.
 
@@ -229,6 +232,7 @@ class ScaleWalkCog(commands.Cog):
                    "clearwalkscale", "unsetwalkscale", "resetscalewalk", "clearscalewalk", "unsetscalewalk",
                    "resetwalkscale"]
     )
+    @commands.guild_only()
     async def resetstepscale(self, ctx: BotContext):
         """Clear your step-scale amount, for use with `&step`."""
 
@@ -243,6 +247,7 @@ class ScaleWalkCog(commands.Cog):
     @commands.command(
         category = "scalestep",
     )
+    @commands.guild_only()
     async def step(self, ctx: BotContext, steps: int | None = None):
         """Step a certain number of times, scaling by the amount set in `&setscalestep`.
 
