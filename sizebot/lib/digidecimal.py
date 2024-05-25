@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any
+from typing import Any, cast
 from collections.abc import Callable
 
 import decimal
@@ -42,14 +42,7 @@ def values(fn: Callable) -> Callable:
 
 
 # TODO: CamelCase
-def clampInf(value: RawDecimal, limit: RawDecimal) -> RawDecimal:
-    if limit and abs(value) >= limit:
-        value = RawDecimal("infinity") * int(math.copysign(1, value))
-    return value
-
-
-# TODO: CamelCase
-def unwrapDecimal(value: Decimal) -> RawDecimal:
+def unwrapDecimal(value: Decimal | RawDecimal | str | int | float) -> RawDecimal | str | int | float:
     if isinstance(value, Decimal):
         value = value._rawvalue
     return value
@@ -60,20 +53,31 @@ class Decimal():
     infinity = RawDecimal("infinity")
     _infinity = RawDecimal("1e1000")
 
-    def __init__(self, value: Decimal | str | int | float):
-        # initialize from Decimal
-        rawvalue = unwrapDecimal(value)
-        if isinstance(rawvalue, str):
-            if rawvalue == "∞":
-                rawvalue = "infinity"
-            elif rawvalue == "-∞":
-                rawvalue = "-infinity"
+    def __init__(self, value: Decimal | RawDecimal | str | int | float):
+        self._rawvalue: RawDecimal
+        if isinstance(value, RawDecimal):
+            rawvalue = value
+        elif isinstance(value, Decimal):
+            rawvalue = value._rawvalue
+        elif isinstance(value, str):
+            if value == "∞":
+                value = "infinity"
+            elif value == "-∞":
+                value = "-infinity"
             # initialize from fraction string
-            values = rawvalue.split("/")
+            values = value.split("/")
             if len(values) == 2:
                 numberator, denominator = values
-                rawvalue = unwrapDecimal(Decimal(numberator) / Decimal(denominator))
-        self._rawvalue = clampInf(RawDecimal(rawvalue), unwrapDecimal(self._infinity))
+                calcvalue = cast(Decimal, Decimal(numberator) / Decimal(denominator))
+                rawvalue = calcvalue._rawvalue
+            else:
+                rawvalue = RawDecimal(value)
+        else:
+            rawvalue = RawDecimal(value)
+        # initialize from Decimal
+        if abs(rawvalue) >= self._infinity:
+            rawvalue = RawDecimal("infinity") * int(math.copysign(1, rawvalue))
+        self._rawvalue = rawvalue
 
     def __format__(self, spec: str) -> str:
         if self.is_infinite():
@@ -285,9 +289,8 @@ class Decimal():
     def __ror__(self, other: Any) -> Decimal:
         return Decimal.__or__(other, self)
 
-    @values
-    def __neg__(value) -> Decimal:
-        return Decimal(-value)
+    def __neg__(self: Decimal) -> Decimal:
+        return Decimal(-self._rawvalue)
 
     @values
     def __pos__(value) -> Decimal:

@@ -35,12 +35,12 @@
 # RATE -> 10meters
 
 from __future__ import annotations
-from typing import Literal, Any
+from typing import Literal, TypedDict, cast
 
 import re
 
 from sizebot.lib.errors import InvalidSizeValue, ParseError, ThisShouldNeverHappenException
-from sizebot.lib.utils import regexbuild, try_or_none
+from sizebot.lib.utils import regexbuild
 from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.types import BotContext
 from sizebot.lib.units import SV, TV
@@ -65,94 +65,111 @@ limited_rate_interfixes = ["until", "for", "->", "-->"]
 
 valid_limited_rate_interfixes = regexbuild(limited_rate_interfixes, capture = True)
 
+ChangeType = Literal["add", "multiply", "power"]
+
+
+class DiffJSON(TypedDict):
+    changetype: ChangeType
+    amount: str
+
+
+class RateJSON(TypedDict):
+    diff: DiffJSON
+    time: str
+
+
+class LimitedRateJSON(TypedDict):
+    rate: RateJSON
+    stop: str
+    stoptype: Literal["TV", "SV"]
+
 
 # Change
 class Diff:
-    def __init__(self, changetype: Literal["add", "multiply", "power"], amount: SV | Decimal):
-        self.changetype = changetype
-        self.amount = amount
+    def __init__(self, changetype: ChangeType, amount: SV | Decimal):
+        self.changetype: ChangeType = changetype
+        self.amount: SV | Decimal = amount
 
     @classmethod
     def parse(cls, s: str) -> Diff:
         prefixmatch = valid_prefixes + r"\s*(.*)"
         suffixmatch = r"(.*)\s*" + valid_suffixes
 
-        changetype = None
-        amount = None
+        changetype: ChangeType | None = None
+        amount: SV | Decimal | None = None
 
         if m := re.match(prefixmatch, s):
-            prefix = m.group(1)
-            value = m.group(2)
-
+            prefix: str = m.group(1)
+            value: str = m.group(2)
             if prefix in add_prefixes:
                 changetype = "add"
                 amount = SV.parse(value)
             elif prefix in subtract_prefixes:
                 changetype = "add"
-                amount = SV.parse(value) * -1
+                amount = SV(-SV.parse(value))
             elif prefix in multiply_prefixes:
                 changetype = "multiply"
                 amount = Decimal(value)
             elif prefix in divide_prefixes:
                 changetype = "multiply"
-                amount = Decimal(1) / Decimal(value)
+                amount = cast(Decimal, Decimal(1) / Decimal(value))
             elif prefix in percent_prefixes:
                 changetype = "multiply"
-                amount = Decimal(value) / Decimal(100)
+                amount = cast(Decimal, Decimal(value) / Decimal(100))
             elif prefix in power_prefixes:
                 changetype = "power"
                 amount = Decimal(value)
-
         elif m := re.match(suffixmatch, s):
-            value = m.group(1)
-            suffix = m.group(2)
-
+            value: str = m.group(1)
+            suffix: str = m.group(2)
             if suffix in multiply_suffixes:
                 changetype = "multiply"
                 amount = Decimal(value)
             elif suffix in percent_suffixes:
                 changetype = "multiply"
-                amount = Decimal(value) / Decimal(100)
-
+                amount = cast(Decimal, Decimal(value) / Decimal(100))
         else:
             changetype = "add"
             amount = SV.parse(s)
 
+        if changetype is None or amount is None:
+            raise ParseError(s, "Diff")
+
         return cls(changetype, amount)
 
-    def toJSON(self) -> Any:
+    def toJSON(self) -> DiffJSON:
         return {
             "changetype": self.changetype,
             "amount":     str(self.amount)
         }
 
     def __str__(self) -> str:
-        operator: str = ""
-        amount: str = ""
         if self.changetype == "add":
             operator = "-" if self.amount < 0 else "+"
         elif self.changetype == "multiply":
             operator = "/" if self.amount < 0 else "x"
         elif self.changetype == "power":
             operator = "^"
+        else:
+            raise ValueError(f"Unrecognized changetype: {self.changetype}")
         amount = format(self.amount, ",.3mu") if self.changetype == "add" else format(self.amount, ".10")
         return f"{operator}{amount}"
 
     def __mul__(self, other: Decimal) -> Diff:
-        if isinstance(other, Decimal):
-            return Diff(self.changetype, self.amount * other)
-        return NotImplemented
+        if not isinstance(other, Decimal):
+            return NotImplemented
+        return Diff(self.changetype, cast(SV | Decimal, self.amount * other))
 
     def __truediv__(self, other: Decimal) -> Diff:
-        if isinstance(other, Decimal):
-            return Diff(self.changetype, self.amount / other)
-        return NotImplemented
+        if not isinstance(other, Decimal):
+            return NotImplemented
+        return Diff(self.changetype, cast(SV | Decimal, self.amount / other))
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} {self}>"
 
     @classmethod
-    def fromJSON(cls, jsondata: Any) -> Diff:
+    def fromJSON(cls, jsondata: DiffJSON) -> Diff:
         changetype = jsondata["changetype"]
         if changetype == "add":
             amount = SV(jsondata["amount"])
@@ -175,14 +192,14 @@ class Rate:
     @property
     def addPerSec(self) -> SV:
         if self.diff.changetype != "add":
-            return 0
-        return SV(self.diff.amount / self.time)
+            return SV(0)
+        return SV(cast(SV, self.diff.amount / self.time))
 
     @property
     def mulPerSec(self) -> Decimal:
-        if self.diff.changetype != "mul":
-            return 1
-        return Decimal(self.diff.amount ** (1 / self.time))
+        if self.diff.changetype != "multiply":
+            return Decimal(1)
+        return Decimal(cast(Decimal, self.diff.amount ** (1 / self.time)))
 
     @property
     def stopSV(self) -> SV | None:
@@ -209,27 +226,27 @@ class Rate:
 
         return cls(diff, time)
 
-    def toJSON(self) -> Any:
+    def toJSON(self) -> RateJSON:
         return {
             "diff": self.diff.toJSON(),
             "time": str(self.time)
         }
 
     def __str__(self) -> str:
-        return f"{self.diff} per {format(self.time)}"
+        return f"{self.diff} per {self.time}"
 
     def __mul__(self, other: Decimal) -> Rate:
-        if isinstance(other, Decimal):
-            return Rate(self.diff * other, self.time)
-        return NotImplemented
+        if not isinstance(other, Decimal):
+            return NotImplemented
+        return Rate(self.diff * other, self.time)
 
     def __truediv__(self, other: Decimal) -> Rate:
-        if isinstance(other, Decimal):
-            return Rate(self.diff / other, self.time)
-        return NotImplemented
+        if not isinstance(other, Decimal):
+            return NotImplemented
+        return Rate(self.diff / other, self.time)
 
     @classmethod
-    def fromJSON(cls, jsondata: Any) -> Rate:
+    def fromJSON(cls, jsondata: RateJSON) -> Rate:
         diff = Diff.fromJSON(jsondata["diff"])
         time = TV(jsondata["time"])
         return cls(diff, time)
@@ -288,53 +305,41 @@ class LimitedRate:
 
         rate = Rate.parse(m.group(1))
 
-        stop = try_or_none(SV.parse, m.group(3), (InvalidSizeValue,)) or try_or_none(TV.parse, m.group(3), (InvalidSizeValue,))
-
-        if stop is None:
-            raise ParseError(s, "LimitedRate")
+        try:
+            stop = SV.parse(m.group(3))
+        except InvalidSizeValue:
+            try:
+                stop = TV.parse(m.group(3))
+            except InvalidSizeValue:
+                raise ParseError(s, "LimitedRate")
 
         return cls(rate, stop)
 
-    def toJSON(self) -> Any:
+    def toJSON(self) -> LimitedRateJSON:
         stoptype = "SV" if isinstance(self.stop, SV) else "TV"
         return {
-            "rate": self.rate,
-            "stop": self.stop,
+            "rate": self.rate.toJSON(),
+            "stop": str(self.stop),
             "stoptype": stoptype
         }
 
     def __str__(self) -> str:
         joiner = "for" if isinstance(self.stop, TV) else "until"
-        return f"{self.rate} {joiner} {format(self.stop)}"
+        return f"{self.rate} {joiner} {self.stop}"
 
     @classmethod
-    def fromJSON(cls, jsondata: Any) -> LimitedRate:
+    def fromJSON(cls, jsondata: LimitedRateJSON) -> LimitedRate:
         rate = Rate.fromJSON(jsondata["rate"])
-        stoptype: str = jsondata["stoptype"]
+        stoptype = jsondata["stoptype"]
         if stoptype == "SV":
             stop = SV(jsondata["stop"])
         elif stoptype == "TV":
             stop = TV(jsondata["stop"])
         else:
-            raise ThisShouldNeverHappenException
+            raise ThisShouldNeverHappenException("")
 
         return cls(rate, stop)
 
     @classmethod
     async def convert(cls, ctx: BotContext, argument: str) -> LimitedRate:
         return cls.parse(argument)
-
-
-def parse_change(s: str) -> LimitedRate | Rate | Diff:
-    r = None
-    try:
-        r = LimitedRate.parse(s)
-    except Exception:
-        try:
-            r = Rate.parse(s)
-        except Exception:
-            try:
-                r = Diff.parse(s)
-            except Exception:
-                raise ParseError(s, "Diff")
-    return r

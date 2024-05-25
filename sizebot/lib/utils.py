@@ -386,7 +386,7 @@ def glitch_string(in_string: str, *, charset: str = None) -> str:
     return " ".join(words)
 
 
-def regexbuild(li: list[str | list[str]], capture: bool = False) -> str:
+def regexbuild(li: list[str] | list[list[str]], capture: bool = False) -> str:
     """
     regexbuild(["a", "b", "c"])
     >>> "a|b|c"
@@ -395,7 +395,7 @@ def regexbuild(li: list[str | list[str]], capture: bool = False) -> str:
     regexbuild([["a", "b", "c"], ["x", "y", "zzz"]])
     >>> "zzz|a|b|c|x|y"
     """
-    escaped = []
+    escaped: list[str] = []
     for i in li:
         if isinstance(i, list):
             for ii in i:
