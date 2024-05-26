@@ -1,4 +1,4 @@
-from typing import Any, Generator, Hashable, Sequence, TypeVar
+from typing import Any, Generator, Hashable, Sequence, TypeVar, cast
 from collections.abc import Callable, Iterable, Iterator
 
 import inspect
@@ -502,7 +502,7 @@ def randrange_log(minval: Decimal, maxval: Decimal, precision: int = 26) -> Deci
     """Generate a logarithmically scaled random number."""
     minval = Decimal(minval)
     maxval = Decimal(maxval)
-    prec = Decimal(10) ** precision
+    prec = cast(Decimal, Decimal(10) ** precision)
 
     # Swap values if provided in the wrong order.
     if minval > maxval:
@@ -511,14 +511,14 @@ def randrange_log(minval: Decimal, maxval: Decimal, precision: int = 26) -> Deci
     minlog = minval.log10()
     maxlog = maxval.log10()
 
-    minintlog = (minlog * prec).to_integral_value()
-    maxintlog = (maxlog * prec).to_integral_value()
+    minintlog = int(cast(Decimal, minlog * prec).to_integral_value())
+    maxintlog = int(cast(Decimal, maxlog * prec).to_integral_value())
 
-    newintlog = Decimal(random.randint(minintlog, maxintlog))
+    newintlog = random.randint(minintlog, maxintlog)
 
     newlog = newintlog / prec
 
-    newval = 10 ** newlog
+    newval = cast(Decimal, 10 ** newlog)
 
     return newval
 

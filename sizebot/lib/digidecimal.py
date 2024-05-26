@@ -1,18 +1,20 @@
 from __future__ import annotations
-from typing import Any, cast
+from typing import Any, Literal, cast
 from collections.abc import Callable
 
 import decimal
 import logging
 import math
 import re
-from decimal import Decimal as RawDecimal
+from decimal import ROUND_HALF_UP, Decimal as RawDecimal
 from decimal import ROUND_DOWN
 from functools import total_ordering
 
 __all__ = ["Decimal"]
 
 logger = logging.getLogger("sizebot")
+
+Rounding = Literal["ROUND_CEILING", "ROUND_DOWN", "ROUND_FLOOR", "ROUND_HALF_DOWN", "ROUND_HALF_EVEN", "ROUND_HALF_UP", "ROUND_UP", "ROUND_05UP"]
 
 
 # local copy of utils.minmax to prevent circular import
@@ -359,12 +361,11 @@ class Decimal():
     def sign(value) -> str:
         return "-" if value.is_signed() else ""
 
-    def to_integral_value(self, *args, **kwargs) -> Decimal:
-        return Decimal(self._rawvalue.to_integral_value(*args, **kwargs))
+    def to_integral_value(self, rounding: Rounding | None = None) -> Decimal:
+        return Decimal(self._rawvalue.to_integral_value(rounding))
 
-    @values
-    def log10(value) -> Decimal:
-        return Decimal(value.log10())
+    def log10(self) -> Decimal:
+        return Decimal(self._rawvalue.log10())
 
 
 class DecimalSpec:
