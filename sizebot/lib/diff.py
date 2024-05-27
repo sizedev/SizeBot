@@ -190,23 +190,23 @@ class Rate:
         self.time = time
 
     @property
-    def addPerSec(self) -> SV:
+    def add_per_sec(self) -> SV:
         if self.diff.changetype != "add":
             return SV(0)
         return SV(cast(SV, self.diff.amount / self.time))
 
     @property
-    def mulPerSec(self) -> Decimal:
+    def mul_per_sec(self) -> Decimal:
         if self.diff.changetype != "multiply":
             return Decimal(1)
         return Decimal(cast(Decimal, self.diff.amount ** (1 / self.time)))
 
     @property
-    def stopSV(self) -> SV | None:
+    def stop_sv(self) -> SV | None:
         return None
 
     @property
-    def stopTV(self) -> TV | None:
+    def stop_tv(self) -> TV | None:
         return None
 
     @classmethod
@@ -277,21 +277,21 @@ class LimitedRate:
         self.stop = stop
 
     @property
-    def addPerSec(self) -> SV:
-        return self.rate.addPerSec
+    def add_per_sec(self) -> SV:
+        return self.rate.add_per_sec
 
     @property
-    def mulPerSec(self) -> Decimal:
-        return self.rate.mulPerSec
+    def mul_per_sec(self) -> Decimal:
+        return self.rate.mul_per_sec
 
     @property
-    def stopSV(self) -> SV | None:
+    def stop_sv(self) -> SV | None:
         if not isinstance(self.stop, SV):
             return None
         return self.stop
 
     @property
-    def stopTV(self) -> TV | None:
+    def stop_tv(self) -> TV | None:
         if not isinstance(self.stop, TV):
             return None
         return self.stop

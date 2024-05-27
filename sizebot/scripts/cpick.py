@@ -24,7 +24,7 @@ def draw(indexes: list[Index], sel: int):
     print(f"  {code}{names}{style.RESET}")
     print()
 
-    vals = "".join(f"{str(i.val):<5}" for i in indexes)
+    vals = "".join(f"{i.val:<5}" for i in indexes)
     print(" " + vals)
     selpadding = sel * 5 + 1
     print((selpadding * " ") + "^")
@@ -61,7 +61,7 @@ class Index:
         return name
 
     def __str__(self) -> str:
-        return f"{self.name:>5}: {str(self.val):>4} {self.code:>3}{self.codename}{style.RESET}"
+        return f"{self.name:>5}: {self.val:>4} {self.code:>3}{self.codename}{style.RESET}"
 
 
 def main():

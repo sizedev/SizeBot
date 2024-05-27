@@ -32,7 +32,7 @@ logger.propagate = False
 logger.addHandler(dfhandler)
 
 discordlogger = logging.getLogger("discord")
-discordlogger.setLevel(logging.WARN)
+discordlogger.setLevel(logging.WARNING)
 discordlogger.handlers = []
 discordlogger.propagate = False
 discordlogger.addHandler(dfhandler)

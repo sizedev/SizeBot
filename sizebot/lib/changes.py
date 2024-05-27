@@ -48,22 +48,22 @@ class Change:
                  userid: int,
                  guildid: int,
                  *,
-                 addPerSec: SV = SV(0),
-                 mulPerSec: Decimal = Decimal(1),
-                 powPerSec: Decimal = Decimal(1),
-                 stopSV: SV | None = None,
-                 stopTV: TV | None = None,
-                 startTime: Decimal,
-                 lastRan: Decimal):
+                 add_per_sec: SV = SV(0),
+                 mul_per_sec: Decimal = Decimal(1),
+                 pow_per_sec: Decimal = Decimal(1),
+                 stop_sv: SV | None = None,
+                 stop_tv: TV | None = None,
+                 start_time: Decimal,
+                 last_ran: Decimal):
         self.userid = userid
         self.guildid = guildid
-        self.addPerSec = addPerSec
-        self.mulPerSec = mulPerSec
-        self.powPerSec = powPerSec
-        self.stopSV = stopSV
-        self.stopTV = stopTV
-        self.startTime = startTime
-        self.lastRan = lastRan
+        self.addPerSec = add_per_sec
+        self.mulPerSec = mul_per_sec
+        self.powPerSec = pow_per_sec
+        self.stopSV = stop_sv
+        self.stopTV = stop_tv
+        self.startTime = start_time
+        self.lastRan = last_ran
 
     async def apply(self, bot: commands.Bot) -> bool:
         running = True
@@ -139,13 +139,13 @@ class Change:
         return Change(
             data["userid"],
             data["guildid"],
-            addPerSec=SV(data["addPerSec"]),
-            mulPerSec=Decimal(data["mulPerSec"]),
-            powPerSec=Decimal(data["powPerSec"]),
-            stopSV=SV(data["stopSV"]) if data["stopSV"] is not None else None,
-            stopTV=TV(data["stopTV"]) if data["stopTV"] is not None else None,
-            startTime=Decimal(data["startTime"]),
-            lastRan=Decimal(data["lastRan"])
+            add_per_sec=SV(data["addPerSec"]),
+            mul_per_sec=Decimal(data["mulPerSec"]),
+            pow_per_sec=Decimal(data["powPerSec"]),
+            stop_sv=SV(data["stopSV"]) if data["stopSV"] is not None else None,
+            stop_tv=TV(data["stopTV"]) if data["stopTV"] is not None else None,
+            start_time=Decimal(data["startTime"]),
+            last_ran=Decimal(data["lastRan"])
         )
 
     def toJSON(self) -> ChangeJSON:
@@ -162,10 +162,10 @@ class Change:
         }
 
 
-def start(userid: int, guildid: int, *, addPerSec: SV = SV(0), mulPerSec: Decimal = Decimal(1), stopSV: SV | None = None, stopTV: TV | None = None):
+def start(userid: int, guildid: int, *, add_per_sec: SV = SV(0), mul_per_sec: Decimal = Decimal(1), stop_sv: SV | None = None, stop_tv: TV | None = None):
     """Start a new change task"""
-    startTime = lastRan = Decimal(time.time())
-    change = Change(userid, guildid, addPerSec=addPerSec, mulPerSec=mulPerSec, stopSV=stopSV, stopTV=stopTV, startTime=startTime, lastRan=lastRan)
+    start_time = last_ran = Decimal(time.time())
+    change = Change(userid, guildid, add_per_sec=add_per_sec, mul_per_sec=mul_per_sec, stop_sv=stop_sv, stop_tv=stop_tv, start_time=start_time, last_ran=last_ran)
     _changes_to_start.put(change)
 
 
@@ -173,7 +173,7 @@ def stop(userid: int, guildid: int) -> Change | None:
     """Stop a running change task"""
     key = (userid, guildid)
     _changes_to_stop.put(key)
-    return _active_changes.get(key, None)
+    return _active_changes.get(key)
 
 
 async def apply(bot: commands.Bot):

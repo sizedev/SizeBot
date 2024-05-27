@@ -13,7 +13,7 @@ from sizebot.lib.loglevels import EGG
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.stats import HOUR
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV, WV, pos_SV, pos_WV
+from sizebot.lib.units import SV, WV, pos_sv, pos_wv
 from sizebot.lib.unitsystem import UnitSystem, parse_unitsystem
 from sizebot.lib.utils import parse_scale, randrange_log
 
@@ -324,7 +324,7 @@ class SetCog(commands.Cog):
         usage = "<foot>",
         category = "set"
     )
-    async def setfoot(self, ctx: BotContext, *, newfoot: Annotated[SV, pos_SV]):
+    async def setfoot(self, ctx: BotContext, *, newfoot: Annotated[SV, pos_sv]):
         """Set your current foot length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         currfoot = newfoot
@@ -409,7 +409,7 @@ class SetCog(commands.Cog):
         usage = "<hair>",
         category = "set"
     )
-    async def sethair(self, ctx: BotContext, *, newhair: Annotated[SV, pos_SV]):
+    async def sethair(self, ctx: BotContext, *, newhair: Annotated[SV, pos_sv]):
         """Set your current hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.hairlength = SV(newhair / userdata.scale)
@@ -423,7 +423,7 @@ class SetCog(commands.Cog):
         usage = "<tail>",
         category = "set"
     )
-    async def settail(self, ctx: BotContext, *, newtail: Annotated[SV, pos_SV]):
+    async def settail(self, ctx: BotContext, *, newtail: Annotated[SV, pos_sv]):
         """Set your current tail length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.taillength = SV(newtail / userdata.scale)
@@ -451,7 +451,7 @@ class SetCog(commands.Cog):
         usage = "<ear>",
         category = "set"
     )
-    async def setear(self, ctx: BotContext, *, newear: Annotated[SV, pos_SV]):
+    async def setear(self, ctx: BotContext, *, newear: Annotated[SV, pos_sv]):
         """Set your current ear heightear."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         currear = newear
@@ -482,7 +482,7 @@ class SetCog(commands.Cog):
         usage = "<weight>",
         category = "set"
     )
-    async def setstrength(self, ctx: BotContext, *, newstrength: Annotated[WV, pos_WV]):
+    async def setstrength(self, ctx: BotContext, *, newstrength: Annotated[WV, pos_wv]):
         """Set your current lift/carry strength."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         currstrength = newstrength
@@ -515,7 +515,7 @@ class SetCog(commands.Cog):
     async def setwalk(self, ctx: BotContext, *, newspeed: LinearRate):
         """Set your current walk speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        currspeed = SV(newspeed.addPerSec * HOUR)
+        currspeed = SV(newspeed.add_per_sec * HOUR)
         basespeed = SV(currspeed / userdata.scale)
         userdata.walkperhour = basespeed
         userdb.save(userdata)
@@ -544,7 +544,7 @@ class SetCog(commands.Cog):
     async def setrun(self, ctx: BotContext, *, newspeed: LinearRate):
         """Set your current run speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        currspeed = SV(newspeed.addPerSec * HOUR)
+        currspeed = SV(newspeed.add_per_sec * HOUR)
         basespeed = SV(currspeed / userdata.scale)
         userdata.runperhour = basespeed
         userdb.save(userdata)
@@ -573,7 +573,7 @@ class SetCog(commands.Cog):
     async def setswim(self, ctx: BotContext, *, newspeed: LinearRate):
         """Set your current swim speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        currspeed = SV(newspeed.addPerSec * HOUR)
+        currspeed = SV(newspeed.add_per_sec * HOUR)
         basespeed = SV(currspeed / userdata.scale)
         userdata.swimperhour = basespeed
         userdb.save(userdata)

@@ -263,7 +263,7 @@ class DigiObject:
         return None
 
     @classmethod
-    def from_JSON(cls, objJson: Any) -> DigiObject:
+    def fromJSON(cls, objJson: Any) -> DigiObject:
         return cls(**objJson)
 
     @classmethod
@@ -285,12 +285,12 @@ def load_obj_file(filename: str):
         fileJson = json.loads(pkg_resources.read_text(sizebot.data.objects, filename))
     except FileNotFoundError:
         fileJson = None
-    load_obj_JSON(fileJson)
+    load_obj_json(fileJson)
 
 
-def load_obj_JSON(fileJson: Any):
+def load_obj_json(fileJson: Any):
     for objJson in fileJson:
-        objects.append(DigiObject.from_JSON(objJson))
+        objects.append(DigiObject.fromJSON(objJson))
 
 
 def init():

@@ -1,5 +1,6 @@
 from __future__ import annotations
 from collections.abc import Callable
+import contextlib
 from typing import Literal, Any, TypeVar, cast, get_args
 
 import json
@@ -212,10 +213,8 @@ class User:
 
     def complete_step(self, step: str) -> bool:
         was_completed = self.registered
-        try:
+        with contextlib.suppress(ValueError):
             self.registration_steps_remaining.remove(step)
-        except ValueError:
-            pass
         is_completed = self.registered
         just_completed = (not was_completed) and is_completed
         return just_completed

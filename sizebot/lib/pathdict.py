@@ -89,7 +89,7 @@ class PathDict:
             return default
 
     # TODO: CamelCase
-    def toDict(self) -> dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return self._values
 
     def __str__(self) -> str:

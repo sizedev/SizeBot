@@ -73,7 +73,7 @@ class Config(AttrDict):
         for f in self._fields:
             f.init(configDict)
         with open(paths.confpath, "w") as f:
-            toml.dump(configDict.toDict(), f)
+            toml.dump(configDict.to_dict(), f)
 
 
 conf = Config([

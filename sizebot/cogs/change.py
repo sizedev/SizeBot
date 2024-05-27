@@ -72,7 +72,7 @@ class ChangeCog(commands.Cog):
             userdb.save(userdata)
             await ctx.send(f"{userdata.nickname} is now {userdata.height:m} ({userdata.height:u}) tall.")
         elif isinstance(arg, Rate) or isinstance(arg, LimitedRate):
-            changes.start(userid, guildid, addPerSec=arg.addPerSec, mulPerSec=arg.mulPerSec, stopSV=arg.stopSV, stopTV=arg.stopTV)
+            changes.start(userid, guildid, add_per_sec=arg.add_per_sec, mul_per_sec=arg.mul_per_sec, stop_sv=arg.stop_sv, stop_tv=arg.stop_tv)
             await ctx.send(f"{ctx.author.display_name} has begun slow-changing at a rate of `{str(arg)}`.")
         elif arg == "stop":
             await ctx.send(**stop_changes(ctx.author))

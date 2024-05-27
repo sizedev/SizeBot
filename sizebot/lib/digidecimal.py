@@ -6,7 +6,7 @@ import decimal
 import logging
 import math
 import re
-from decimal import ROUND_HALF_UP, Decimal as RawDecimal
+from decimal import Decimal as RawDecimal
 from decimal import ROUND_DOWN
 from functools import total_ordering
 

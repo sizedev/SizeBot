@@ -10,7 +10,7 @@ from sizebot.lib.diff import LinearRate
 from sizebot.lib.shoesize import to_shoe_size, from_shoe_size
 from sizebot.lib.stats import HOUR
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV, WV, pos_SV, pos_WV
+from sizebot.lib.units import SV, WV, pos_sv, pos_wv
 
 logger = logging.getLogger("sizebot")
 
@@ -24,7 +24,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseheight(self, ctx: BotContext, *, newbaseheight: Annotated[SV, pos_SV]):
+    async def setbaseheight(self, ctx: BotContext, *, newbaseheight: Annotated[SV, pos_sv]):
         """Change base height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -47,7 +47,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseweight(self, ctx: BotContext, *, newweight: Annotated[WV, pos_WV]):
+    async def setbaseweight(self, ctx: BotContext, *, newweight: Annotated[WV, pos_wv]):
         """Change base weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -69,7 +69,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbase(self, ctx: BotContext, arg1: Annotated[SV, pos_SV] | Annotated[WV, pos_WV], arg2: Annotated[SV, pos_SV] | Annotated[WV, pos_WV] = None):
+    async def setbase(self, ctx: BotContext, arg1: Annotated[SV, pos_sv] | Annotated[WV, pos_wv], arg2: Annotated[SV, pos_sv] | Annotated[WV, pos_wv] = None):
         """Set your base height and weight."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
@@ -108,7 +108,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasefoot(self, ctx: BotContext, *, newfoot: Annotated[SV, pos_SV]):
+    async def setbasefoot(self, ctx: BotContext, *, newfoot: Annotated[SV, pos_sv]):
         """Set a custom foot length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         basefoot = newfoot
@@ -149,7 +149,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasehair(self, ctx: BotContext, *, newhair: Annotated[SV, pos_SV]):
+    async def setbasehair(self, ctx: BotContext, *, newhair: Annotated[SV, pos_sv]):
         """Set a custom base hair length."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.hairlength = newhair
@@ -195,7 +195,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbaseear(self, ctx: BotContext, *, newear: Annotated[SV, pos_SV]):
+    async def setbaseear(self, ctx: BotContext, *, newear: Annotated[SV, pos_sv]):
         """Set a custom ear height."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         userdata.earheight = newear
@@ -210,7 +210,7 @@ class SetBaseCog(commands.Cog):
         category = "setbase"
     )
     @commands.guild_only()
-    async def setbasestrength(self, ctx: BotContext, *, newstrength: Annotated[WV, pos_WV]):
+    async def setbasestrength(self, ctx: BotContext, *, newstrength: Annotated[WV, pos_wv]):
         """Set a custom lift/carry strength."""
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
@@ -229,7 +229,7 @@ class SetBaseCog(commands.Cog):
     async def setbasewalk(self, ctx: BotContext, *, newwalk: LinearRate):
         """Set a custom walk speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.walkperhour = SV(newwalk.addPerSec * HOUR)
+        userdata.walkperhour = SV(newwalk.add_per_sec * HOUR)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s walk is now {userdata.walkperhour:mu} per hour.")
@@ -243,7 +243,7 @@ class SetBaseCog(commands.Cog):
     async def setbaserun(self, ctx: BotContext, *, newrun: LinearRate):
         """Set a custom run speed."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
-        userdata.runperhour = SV(newrun.addPerSec * HOUR)
+        userdata.runperhour = SV(newrun.add_per_sec * HOUR)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s run is now {userdata.runperhour:mu} per hour.")
@@ -259,7 +259,7 @@ class SetBaseCog(commands.Cog):
 
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
 
-        userdata.swimperhour = SV(newswim.addPerSec * HOUR)
+        userdata.swimperhour = SV(newswim.add_per_sec * HOUR)
         userdb.save(userdata)
 
         await ctx.send(f"{userdata.nickname}'s swim is now {userdata.swimperhour:mu} per hour.")

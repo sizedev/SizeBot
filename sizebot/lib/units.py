@@ -399,18 +399,18 @@ class Dimension(Decimal):
         except FileNotFoundError:
             logger.error(f"Error loading {filename}")
             return
-        cls.load_from_JSON(fileJson)
+        cls.load_from_json(fileJson)
 
     @classmethod
-    def load_from_JSON(cls, json: Any):
+    def load_from_json(cls, json: Any):
         for u in json["units"]:
-            cls.add_unit_from_JSON(**u)
+            cls.add_unit_from_json(**u)
         for systemname, systemunits in json["systems"].items():
             for u in systemunits:
-                cls.add_system_unit_from_JSON(systemname, **u)
+                cls.add_system_unit_from_json(systemname, **u)
 
     @classmethod
-    def add_unit_from_JSON(cls, **kwargs):
+    def add_unit_from_json(cls, **kwargs):
         unit = Unit(**kwargs)
         cls.add_unit(unit)
 
@@ -420,7 +420,7 @@ class Dimension(Decimal):
         _units.add_unit(unit)
 
     @classmethod
-    def add_system_unit_from_JSON(cls, systemname: str, **kwargs):
+    def add_system_unit_from_json(cls, systemname: str, **kwargs):
         systemunit = SystemUnit(**kwargs)
         cls.add_system_unit(systemname, systemunit)
 
@@ -570,14 +570,14 @@ def load_json_file(filename: str) -> Any | None:
     return units_JSON
 
 
-def pos_SV(s: str) -> SV:
+def pos_sv(s: str) -> SV:
     value = SV.parse(s)
     if value < 0:
         raise errors.InvalidSizeValue(s, "SV")
     return value
 
 
-def pos_WV(s: str) -> WV:
+def pos_wv(s: str) -> WV:
     value = WV.parse(s)
     if value < 0:
         raise errors.InvalidSizeValue(s, "WV")

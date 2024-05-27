@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import logging
 
 import discord
@@ -21,10 +22,8 @@ class AsyncHandler(logging.Handler):
     async def __loop(self):
         while True:
             record = await self.__queue.get()
-            try:
+            with contextlib.suppress(Exception):
                 await self.asyncemit(record)
-            except Exception:
-                pass
 
 
 class DiscordHandler(AsyncHandler):

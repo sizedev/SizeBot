@@ -36,9 +36,9 @@ fakestats_list: list[FakePlayerStat] = [
     FakePlayerStat("pawtoggle", truthy),
     FakePlayerStat("furtoggle", truthy),
     FakePlayerStat("liftstrength", WV.parse),
-    FakePlayerStat("walkperhour", lambda s: Rate.parse(s).addPerSec * HOUR),
-    FakePlayerStat("runperhour", lambda s: Rate.parse(s).addPerSec * HOUR),
-    FakePlayerStat("swimperhour", lambda s: Rate.parse(s).addPerSec * HOUR),
+    FakePlayerStat("walkperhour", lambda s: Rate.parse(s).add_per_sec * HOUR),
+    FakePlayerStat("runperhour", lambda s: Rate.parse(s).add_per_sec * HOUR),
+    FakePlayerStat("swimperhour", lambda s: Rate.parse(s).add_per_sec * HOUR),
     FakePlayerStat("gender", str),
     FakePlayerStat("scale", parse_scale)
 ]

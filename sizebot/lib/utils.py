@@ -1,3 +1,4 @@
+import contextlib
 from typing import Any, Generator, Hashable, Sequence, TypeVar, cast
 from collections.abc import Callable, Iterable, Iterator
 
@@ -93,10 +94,8 @@ def pretty_time_delta(totalSeconds: Decimal, millisecondAccuracy: bool = False, 
 
 def try_int(val: Any) -> Any:
     """Try to cast `val` to an `int`, if it can't, just return `val`."""
-    try:
+    with contextlib.suppress(ValueError):
         val = int(val)
-    except ValueError:
-        pass
     return val
 
 

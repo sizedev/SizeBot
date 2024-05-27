@@ -46,12 +46,12 @@ def test_neg__eq__():
 
 
 def test_pos__lt__():
-    result = 0 < posinf
+    result = posinf > 0
     assert result is True
 
 
 def test_neg__lt__():
-    result = 0 < neginf
+    result = neginf > 0
     assert result is False
 
 

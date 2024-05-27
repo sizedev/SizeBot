@@ -14,8 +14,8 @@ class _Getch:
 
 class _GetchUnix:
     def __init__(self):
-        import tty  # noqa
-        import sys  # noqa
+        import tty  # noqa: F401
+        import sys  # noqa: F401
 
     def __call__(self) -> str:
         import sys
@@ -49,7 +49,7 @@ class _GetchUnix:
 
 class _GetchWindows:
     def __init__(self):
-        import msvcrt  # noqa
+        import msvcrt  # noqa: F401
 
     def __call__(self) -> str:
         import msvcrt

@@ -32,7 +32,7 @@ def user(guildid: int, userid: int) -> str:
 
 
 @app.route("/unit/SV/parse", methods=["GET"])
-def SV_parse() -> str:
+def sv_parse() -> str:
     s = request.args.get("s")
     try:
         val = SV.parse(s)
@@ -42,7 +42,7 @@ def SV_parse() -> str:
 
 
 @app.route("/unit/SV/format", methods=["GET"])
-def SV_format() -> str:
+def sv_format() -> str:
     value = Decimal(request.args.get("value"))
     system = request.args.get("system")
     try:
@@ -53,7 +53,7 @@ def SV_format() -> str:
 
 
 @app.route("/unit/WV/parse", methods=["GET"])
-def WV_parse() -> str:
+def wv_parse() -> str:
     s = request.args.get("s")
     try:
         val = WV.parse(s)
@@ -63,7 +63,7 @@ def WV_parse() -> str:
 
 
 @app.route("/unit/WV/format", methods=["GET"])
-def WV_format() -> str:
+def wv_format() -> str:
     value = Decimal(request.args.get("value"))
     system = request.args.get("system")
     try:
@@ -74,7 +74,7 @@ def WV_format() -> str:
 
 
 @app.route("/unit/TV/parse", methods=["GET"])
-def TV_parse() -> str:
+def tv_parse() -> str:
     s = request.args.get("s")
     try:
         val = TV.parse(s)
@@ -84,7 +84,7 @@ def TV_parse() -> str:
 
 
 @app.route("/unit/TV/format", methods=["GET"])
-def TV_format() -> str:
+def tv_format() -> str:
     value = Decimal(request.args.get("value"))
     system = request.args.get("system", "m")
     try:
@@ -95,7 +95,7 @@ def TV_format() -> str:
 
 
 @app.route("/unit/Diff/parse", methods=["GET"])
-def Diff_parse() -> str:
+def diff_parse() -> str:
     s = request.args.get("s")
     try:
         val = Diff.parse(s)
@@ -105,7 +105,7 @@ def Diff_parse() -> str:
 
 
 @app.route("/unit/Rate/parse", methods=["GET"])
-def Rate_parse() -> str:
+def rate_parse() -> str:
     s = request.args.get("s")
     try:
         val = Rate.parse(s)
@@ -115,7 +115,7 @@ def Rate_parse() -> str:
 
 
 @app.route("/unit/LimitedRate/parse", methods=["GET"])
-def LimitedRate_parse() -> str:
+def limitedrate_parse() -> str:
     s = request.args.get("s")
     try:
         val = LimitedRate.parse(s)
