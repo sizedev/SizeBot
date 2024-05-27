@@ -15,12 +15,12 @@ To install the latest release of SizeBot, simply run:
 
 `pip install git+git://github.com/SizeDev/SizeBot@master`
 
-## Installing with pipenv
+## Installing with rye
 Clone to local directory
 
-`pipenv install`
+`rye sync --no-lock`
 
-`pipenv run sizebot`
+`rye run sizebot`
 
 ## Optional Requirements
 
