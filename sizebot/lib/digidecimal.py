@@ -142,7 +142,7 @@ class Decimal():
         rawother = other.to_pydecimal() if isinstance(other, Decimal) else other     # Don't use unwrap_decimal for object type
         return rawvalue == rawother
 
-    def __lt__(self, other: Decimal | RawDecimal | float | numbers.Rational) -> bool:
+    def __lt__(self, other: Decimal | RawDecimal | float | int | numbers.Rational) -> bool:
         rawvalue = unwrap_decimal(self)
         rawother = unwrap_decimal(other)
         return rawvalue < rawother
