@@ -7,9 +7,8 @@ import math
 
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.gender import Gender
-from sizebot.lib.units import SV, TV, WV, AV
+from sizebot.lib.units import SV, TV, WV, AV, Decimal
 from sizebot.lib.shoesize import to_shoe_size
 from sizebot.lib.surface import can_walk_on_water
 

@@ -20,13 +20,12 @@ from sizebot.conf import conf
 from sizebot.cogs import thistracker
 from sizebot.lib import errors, guilddb, proportions, userdb, utils
 from sizebot.lib.constants import emojis, ids
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.loglevels import BANNER, EGG, LOGIN
 from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.roller import evalmath, roll
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import Mult, SV, TV, WV
+from sizebot.lib.units import Mult, SV, TV, WV, Decimal
 
 
 logger = logging.getLogger("sizebot")
@@ -73,9 +72,21 @@ def eformat(name: str, value: Any) -> str:
     return f"{emojiType} {name}"
 
 
+def get_fullname(o: object) -> str:
+    moduleName = o.__class__.__module__
+    if moduleName == "builtins":
+        moduleName = ""
+    if moduleName:
+        moduleName = f"{moduleName}."
+
+    className = o.__class__.__name__
+    fullname = f"{moduleName}{className}"
+    return fullname
+
+
 def edir(o: Any) -> Embed:
     """send embed of an object's attributes, with type notation"""
-    e = Embed(title=utils.get_fullname(o))
+    e = Embed(title=get_fullname(o))
     attrs = [eformat(n, v) for n, v in utils.ddir(o).items()]
     pageLen = math.ceil(len(attrs) / 3)
     for page in utils.chunk_list(attrs, pageLen):

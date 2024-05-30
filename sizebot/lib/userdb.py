@@ -15,11 +15,10 @@ import discord
 
 import sizebot.data
 from sizebot.lib import errors, paths
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.gender import Gender
-from sizebot.lib.units import SV, TV, WV
+from sizebot.lib.units import SV, TV, WV, Decimal
 from sizebot.lib.unitsystem import UnitSystem
 from sizebot.lib.utils import truncate
 from sizebot.lib.stats import AVERAGE_HEIGHT, AVERAGE_WEIGHT, PlayerStats

@@ -1,39 +1,38 @@
-from sizebot.lib.utils import round_fraction, fix_zeroes
-from sizebot.lib.digidecimal import Decimal, RawDecimal
+from sizebot.lib.digidecimal import BaseDecimal, RawDecimal, round_fraction, fix_zeroes
 
 
 def test_makeSureDecimalStillWorks():
-    result = Decimal("1.2") + Decimal("2.3")
-    assert result == Decimal("3.5")
+    result = BaseDecimal("1.2") + BaseDecimal("2.3")
+    assert result == BaseDecimal("3.5")
 
 
 def test_roundDecimal_impliedAccuracy():
-    result = round(Decimal("2.41"))
-    assert result == Decimal("2")
+    result = round(BaseDecimal("2.41"))
+    assert result == BaseDecimal("2")
 
 
 def test_roundDecimal_specifiedAccuracy():
-    result = round(Decimal("2.41"), 1)
-    assert result == Decimal("2.4")
+    result = round(BaseDecimal("2.41"), 1)
+    assert result == BaseDecimal("2.4")
 
 
 def test_roundDecimalFraction():
-    result = round_fraction(Decimal("2.127"), 8)
-    assert result == Decimal("2.125")
+    result = round_fraction(BaseDecimal("2.127"), 8)
+    assert result == BaseDecimal("2.125")
 
 
 def test_toQuarters():
-    result = format(Decimal("2.25"), "%4")
+    result = format(BaseDecimal("2.25"), "%4")
     assert result == "2¼"
 
 
 def test_toQuarters_125():
-    result = format(Decimal("2.126"), "%4")
+    result = format(BaseDecimal("2.126"), "%4")
     assert result == "2¼"
 
 
 def test_toQuarters_noFraction():
-    result = format(Decimal("2.01"), "%4")
+    result = format(BaseDecimal("2.01"), "%4")
     assert result == "2"
 
 

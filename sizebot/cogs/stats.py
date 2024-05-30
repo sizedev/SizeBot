@@ -6,7 +6,6 @@ from discord.ext import commands
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.constants import colors, emojis
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.freefall import freefall
 from sizebot.lib.language import engine
 from sizebot.lib.metal import metal_value, nugget_value
@@ -14,9 +13,9 @@ from sizebot.lib.neuron import get_neuron_embed
 from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.statproxy import StatProxy
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV, TV, WV
+from sizebot.lib.units import SV, TV, WV, Decimal
 from sizebot.lib.userdb import load_or_fake, MemberOrFakeOrSize, load_or_fake_height, load_or_fake_weight
-from sizebot.lib.utils import pretty_time_delta, round_fraction, sentence_join
+from sizebot.lib.utils import pretty_time_delta, sentence_join, round_fraction
 
 logger = logging.getLogger("sizebot")
 
@@ -537,13 +536,16 @@ class StatsCog(commands.Cog):
     @commands.command(
         usage = "<distance>"
     )
-    async def mcfall(self, ctx: BotContext, distance: MemberOrFakeOrSize):
+    @commands.guild_only()
+    async def mcfall(self, ctx: BotContext, distance: discord.Member | SV):
+        if ctx.guild is None:
+            raise commands.errors.NoPrivateMessage()
         if isinstance(distance, discord.Member):
             ud = userdb.load(ctx.guild.id, distance.id)
             distance = ud.height
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         new_dist = SV(distance * userdata.viewscale)
-        hearts = round_fraction(max(0, new_dist - 3) / 2, 2)
+        hearts = round_fraction(max(SV(0), new_dist - SV(3)) / SV(2), 2)
 
         await ctx.send(f"You fell **{distance:,.3mu}**, and took {hearts:,.1}❤️ damage!\n"
                        f"[That feels like falling **{new_dist:,.3mu}**!]")

@@ -1,8 +1,7 @@
 import re
 
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.gender import Gender
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
 
 
 def to_shoe_size(footlength: SV, gender: Gender) -> str:

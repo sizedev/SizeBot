@@ -7,9 +7,8 @@ from sizebot.lib import userdb
 from sizebot.lib.errors import InvalidSizeValue, ParseError, UserNotFoundException
 
 from sizebot.lib import units
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff, Rate, LimitedRate
-from sizebot.lib.units import SV, WV, TV
+from sizebot.lib.units import SV, WV, TV, Decimal
 
 units.init()
 

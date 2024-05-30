@@ -1,17 +1,16 @@
 import logging
 import re
 from copy import copy
-from sizebot.lib.utils import try_int
 
 import discord
 from discord.ext import commands
 
 from sizebot.lib import userdb
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpException, UserNotFoundException, ValueIsZeroException
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
+from sizebot.lib.utils import try_int
 
 
 logger = logging.getLogger("sizebot")

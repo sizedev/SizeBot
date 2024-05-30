@@ -6,9 +6,8 @@ from discord.ext import commands
 
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
 from sizebot.lib.errors import UserNotFoundException
 from sizebot.lib.stats import AVERAGE_HEIGHT
 

@@ -6,13 +6,12 @@ from discord.ext import commands
 
 from sizebot.conf import conf
 from sizebot.lib import userdb
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, DigiContextException, ValueIsZeroException
 from sizebot.lib.loglevels import EGG
 from sizebot.lib.stats import StatBox
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
 from sizebot.lib.utils import try_int
 
 logger = logging.getLogger("sizebot")

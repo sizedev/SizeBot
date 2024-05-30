@@ -4,9 +4,8 @@ import json
 from math import ceil
 import requests
 
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import ThisShouldNeverHappenException
-from sizebot.lib.units import WV
+from sizebot.lib.units import WV, Decimal
 
 G_PER_OZ = Decimal("28.3495")
 

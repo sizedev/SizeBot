@@ -7,10 +7,9 @@ from discord.ext import commands
 from sizebot.lib import userdb, nickmanager
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.diff import Diff
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV, WV
+from sizebot.lib.units import SV, WV, Decimal
 
 logger = logging.getLogger("sizebot")
 

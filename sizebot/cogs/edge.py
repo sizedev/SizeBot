@@ -11,9 +11,8 @@ from discord.ext import commands
 
 from sizebot.lib import guilddb, userdb, nickmanager
 from sizebot.lib.checks import is_mod
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
 
 logger = logging.getLogger("sizebot")
 

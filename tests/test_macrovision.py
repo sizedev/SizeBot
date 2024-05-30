@@ -6,7 +6,6 @@ import base64
 import pytest
 
 from sizebot.lib import macrovision, units
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.units import SV
 
 
@@ -32,30 +31,10 @@ async def test_macrovision():
         "version": 3
     })
     expected_url = f"https://macrovision.crux.sexy/?scene={expected_base64}"
-    macrovision_url = await macrovision.get_url(
+    macrovision_url = macrovision.get_url(
         [
-            {"name": "Duncan", "model": "male", "height": Decimal("0.0127")},
-            {"name": "Natalie", "model": "female", "height": Decimal("0.1524")}
-        ]
-    )
-    assert macrovision_url == expected_url
-
-
-@pytest.mark.asyncio
-async def test_macrovision_SV():
-    expected_base64 = json_to_base64({
-        "entities": [
-            {"name": "Human", "customName": "Natalie", "scale": 0.08955223880597014, "view": "female", "x": "0", "y": "0", "priority": 0, "brightness": 1},
-            {"name": "Human", "customName": "Duncan", "scale": 0.00704225352112676, "view": "male", "x": "0.0381", "y": "0", "priority": 0, "brightness": 1}
-        ],
-        "world": {"height": 0.1524, "unit": "meters", "x": 0, "y": 0},
-        "version": 3
-    })
-    expected_url = f"https://macrovision.crux.sexy/?scene={expected_base64}"
-    macrovision_url = await macrovision.get_url(
-        [
-            {"name": "Duncan", "model": "male", "height": SV.parse("0.5in")},
-            {"name": "Natalie", "model": "female", "height": SV.parse("6in")}
+            macrovision.MacrovisionEntity(name="Duncan", model="male", view=None, height=SV("0.0127")),
+            macrovision.MacrovisionEntity(name="Natalie", model="female", view=None, height=SV("0.1524"))
         ]
     )
     assert macrovision_url == expected_url
@@ -72,10 +51,10 @@ async def test_weird_names():
         "version": 3
     })
     expected_url = f"https://macrovision.crux.sexy/?scene={expected_base64}"
-    macrovision_url = await macrovision.get_url(
+    macrovision_url = macrovision.get_url(
         [
-            {"name": r"r'(?<!\.)[.?!](?!\.)', z [1.22m]", "model": "male", "height": Decimal("1.219")},
-            {"name": "Natalie", "model": "female", "height": Decimal("0.1524")}
+            macrovision.MacrovisionEntity(name=r"r'(?<!\.)[.?!](?!\.)', z [1.22m]", model="male", view=None, height=SV("1.219")),
+            macrovision.MacrovisionEntity(name="Natalie", model="female", view=None, height=SV("0.1524"))
         ]
     )
     assert macrovision_url == expected_url

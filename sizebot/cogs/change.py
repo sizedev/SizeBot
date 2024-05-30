@@ -3,7 +3,6 @@ import logging
 import random
 from typing import cast
 from sizebot.lib import errors, utils
-from sizebot.lib.digidecimal import Decimal
 
 from discord import Member
 from discord.ext import commands, tasks
@@ -14,7 +13,7 @@ from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.objs import DigiObject, objects
 from sizebot.lib.types import BotContext, StrToSend
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
 
 logger = logging.getLogger("sizebot")
 

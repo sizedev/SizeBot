@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from sizebot.lib import utils
 from sizebot.lib.constants import emojis
-from sizebot.lib.eval import runEval
+from sizebot.lib.eval import runEval, get_fullname
 from sizebot.lib.types import BotContext
 
 
@@ -74,5 +74,15 @@ class EvalCog(commands.Cog):
                 await ctx.author.send(emojis.warning + f" ` {utils.format_error(err)} `")
 
 
+def format_error(err: Exception) -> str:
+    fullname = get_fullname(err)
+
+    errMessage = str(err)
+    if errMessage:
+        errMessage = f": {errMessage}"
+
+    return f"{fullname}{errMessage}"
+
 async def setup(bot: commands.Bot):
     await bot.add_cog(EvalCog(bot))
+

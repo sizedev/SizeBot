@@ -41,9 +41,8 @@ import re
 
 from sizebot.lib.errors import InvalidSizeValue, ParseError, ThisShouldNeverHappenException
 from sizebot.lib.utils import regexbuild
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV, TV
+from sizebot.lib.units import SV, TV, Decimal
 
 add_prefixes = ["+", "add", "plus"]
 subtract_prefixes = ["-", "sub", "subtract", "minus"]

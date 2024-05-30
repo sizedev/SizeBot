@@ -1,4 +1,5 @@
 from typing import Any
+from collections.abc import Iterable
 
 import importlib.resources as pkg_resources
 import logging
@@ -6,7 +7,6 @@ import json
 
 import sizebot.data
 from sizebot.conf import conf
-from sizebot.lib import utils
 from sizebot.lib.types import BotContext
 
 modelJSON = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
@@ -27,7 +27,7 @@ class DigiException(Exception):
         return None
 
     def __repr__(self) -> str:
-        return utils.get_fullname(self)
+        return get_fullname(self)
 
     def __str__(self) -> str:
         return self.formatMessage() or self.formatUserMessage() or repr(self)
@@ -45,7 +45,7 @@ class DigiContextException(Exception):
         return None
 
     def __repr__(self) -> str:
-        return utils.get_fullname(self)
+        return get_fullname(self)
 
     def __str__(self) -> str:
         return repr(self)
@@ -277,7 +277,7 @@ class ParseError(DigiException):
 
 class UnfoundStatException(DigiException):
     def __init__(self, s: list[Any]):
-        self.s = utils.sentence_join(getattr(t, "key", repr(t)) for t in s)
+        self.s = sentence_join(getattr(t, "key", repr(t)) for t in s)
 
     # TODO: CamelCase
     def formatMessage(self) -> str:
@@ -286,3 +286,45 @@ class UnfoundStatException(DigiException):
     # TODO: CamelCase
     def formatUserMessage(self) -> str:
         return f"Could not calculate the {self.s} stat(s)."
+
+
+def sentence_join(items: Iterable[str], *, joiner: str | None = None, oxford: bool = False) -> str:
+    """Join a list of strings like a sentence.
+
+    >>> sentence_join(['red', 'green', 'blue'])
+    'red, green and blue'
+
+    Optionally, a different joiner can be provided.
+
+    >>> sentence_join(['micro', 'tiny', 'normal', 'amazon', 'giantess'], joiner='or')
+    'micro, tiny, normal, amazon or giantess'
+    """
+    # Do this in case we received something like a generator, that needs to be wrapped in a list
+    items = list(items)
+
+    if len(items) == 1:
+        return items[0]
+
+    if not items:
+        return ""
+
+    if joiner is None:
+        joiner = "and"
+
+    ox = ""
+    if oxford:
+        ox = ","
+
+    return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
+
+
+def get_fullname(o: object) -> str:
+    moduleName = o.__class__.__module__
+    if moduleName == "builtins":
+        moduleName = ""
+    if moduleName:
+        moduleName = f"{moduleName}."
+
+    className = o.__class__.__name__
+    fullname = f"{moduleName}{className}"
+    return fullname

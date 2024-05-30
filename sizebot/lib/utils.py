@@ -1,5 +1,5 @@
-from typing import Any, Generator, Hashable, Sequence, TypeVar
-from collections.abc import Callable, Iterable, Iterator
+from typing import Any, Generator, Hashable, Sequence
+from collections.abc import Iterable, Iterator
 
 import inspect
 import pydoc
@@ -13,25 +13,8 @@ import validator_collection
 from discord.ext import commands
 
 from sizebot.lib import errors
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.types import BotContext
-
-re_num = r"\d+\.?\d*"
-
-glitch_template = ("V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUgLyBZb3Uga25vdyB0aGUgcnVsZXMgYW5kIHNvIGRv"
-                   "IEkgLyBBIGZ1bGwgY29tbWl0bWVudCdzIHdoYXQgSSdtIHRoaW5raW5nIG9mIC9Zb3Ugd291bGRu"
-                   "J3QgZ2V0IHRoaXMgZnJvbSBhbnkgb3RoZXIgZ3V5IC8gSSBqdXN0IHdhbm5hIHRlbGwgeW91IGhv"
-                   "dyBJJ20gZmVlbGluZyAvIEdvdHRhIG1ha2UgeW91IHVuZGVyc3RhbmQgLyBOZXZlciBnb25uYSBn"
-                   "aXZlIHlvdSB1cCAvIE5ldmVyIGdvbm5hIGxldCB5b3UgZG93biAvIE5ldmVyIGdvbm5hIHJ1biBh"
-                   "cm91bmQgYW5kIGRlc2VydCB5b3UgLyBOZXZlciBnb25uYSBtYWtlIHlvdSBjcnkgLyBOZXZlciBn"
-                   "b25uYSBzYXkgZ29vZGJ5ZSAvIE5ldmVyIGdvbm5hIHRlbGwgYSBsaWUgYW5kIGh1cnQgeW91")
-
-current_glitch_index = 0
-
-
-def clamp(minVal: Decimal, val: Decimal, maxVal: Decimal) -> Decimal:
-    """Clamp a `val` to be no lower than `minVal`, and no higher than `maxVal`."""
-    return max(minVal, min(maxVal, val))
+from sizebot.lib.units import Decimal
 
 
 def pretty_time_delta(totalSeconds: Decimal, millisecondAccuracy: bool = False, roundeventually: bool = False) -> str:
@@ -156,32 +139,6 @@ def chunk_msg(m: str) -> list:
     return chunk_str(m, chunklen=2000, prefix=p, suffix="\n```")
 
 
-def chunk_lines(s: str, chunklen: int):
-    """Split a string into groups of lines that don't go over the chunklen. Individual lines longer the chunklen will be split"""
-    lines = s.split("\n")
-
-    linesout = []
-    while lines:
-        linesout.append(lines.pop(0))
-        if len("\n".join(linesout)) > chunklen:
-            if len(linesout) == 1:
-                line = linesout.pop()
-                lines.insert(0, line[chunklen:])
-                linesout.append(line[:chunklen])
-            else:
-                lines.insert(0, linesout.pop())
-            yield "\n".join(linesout)
-            linesout = []
-    if linesout:
-        yield "\n".join(linesout)
-
-
-def remove_brackets(s: str) -> str:
-    """Remove all [] and <>s from a string."""
-    s = re.sub(r"[\[\]<>]", "", s)
-    return s
-
-
 def format_traceback(err: BaseException) -> str:
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
 
@@ -211,72 +168,9 @@ def ddir(o: Any) -> dict:
     # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
 
 
-def get_fullname(o: object) -> str:
-    moduleName = o.__class__.__module__
-    if moduleName == "builtins":
-        moduleName = ""
-    if moduleName:
-        moduleName = f"{moduleName}."
-
-    className = o.__class__.__name__
-    fullname = f"{moduleName}{className}"
-    return fullname
-
-
-def format_error(err: Exception) -> str:
-    fullname = get_fullname(err)
-
-    errMessage = str(err)
-    if errMessage:
-        errMessage = f": {errMessage}"
-
-    return f"{fullname}{errMessage}"
-
-
-def try_or_none(fn: Callable, *args, ignore: list = (), **kwargs) -> Any:
-    "Try to run a function. If it throws an error that's in `ignore`, just return `None`."""
-    try:
-        result = fn(*args, **kwargs)
-    except ignore:
-        result = None
-    return result
-
-
-class iset(set):
-    def __init__(self, iterable: Iterable):
-        iterable = (i.casefold() for i in iterable)
-        super().__init__(iterable)
-
-    def add(self, item: str):
-        item = item.casefold()
-        super().add(item)
-
-    def __contains__(self, item: str) -> bool:
-        item = item.casefold()
-        return super().__contains__(item)
-
-    def discard(self, item: str):
-        item = item.casefold()
-        super().discard(item)
-
-    def remove(self, item: str):
-        item = item.casefold()
-        super().remove(item)
-
 
 def str_help(topic: str) -> str:
     return pydoc.plain(pydoc.render_doc(topic))
-
-
-T = TypeVar('T')
-
-
-def minmax(first: T, second: T) -> tuple[T, T]:
-    """Return a tuple where item 0 is the smaller value, and item 1 is the larger value."""
-    small, big = first, second
-    if small > big:
-        small, big = big, small
-    return small, big
 
 
 def remove_code_block(s: str) -> str:
@@ -337,7 +231,7 @@ def is_url(value: str) -> bool:
         return True
 
 
-def sentence_join(items: list[str], *, joiner: str | None = None, oxford: bool = False) -> str:
+def sentence_join(items: Iterable[str], *, joiner: str | None = None, oxford: bool = False) -> str:
     """Join a list of strings like a sentence.
 
     >>> sentence_join(['red', 'green', 'blue'])
@@ -365,25 +259,6 @@ def sentence_join(items: list[str], *, joiner: str | None = None, oxford: bool =
         ox = ","
 
     return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
-
-
-def glitch_string(in_string: str, *, charset: str = None) -> str:
-    words = []
-    if charset is not None:
-        for word in in_string.split(" "):
-            words.append(''.join(random.choices(charset, k=len(word))))
-    else:
-        global current_glitch_index
-        for word in in_string.split(" "):
-            k = len(word)
-            new_word = glitch_template[current_glitch_index:current_glitch_index + k]
-            k -= len(new_word)
-            if k != 0:
-                current_glitch_index = 0
-                new_word = glitch_template[current_glitch_index:current_glitch_index + k]
-            words.append(new_word)
-            current_glitch_index += len(new_word)
-    return " ".join(words)
 
 
 def regexbuild(li: list[str] | list[list[str]], capture: bool = False) -> str:
@@ -523,11 +398,6 @@ def randrange_log(minval: Decimal, maxval: Decimal, precision: int = 26) -> Deci
     return newval
 
 
-def round_fraction(number: Decimal, denominator: int) -> Decimal:
-    rounded = round(number * denominator) / denominator
-    return rounded
-
-
 def fix_zeroes(d: Decimal) -> Decimal:
     """Reset the precision of a Decimal to avoid values that use exponents like '1e3' and values with trailing zeroes like '100.000'
 
@@ -555,3 +425,12 @@ def truthy(s: str) -> bool | None:
 
 def join_unique(items: list[str], *, sep: str) -> str:
     return sep.join(set(items))
+
+
+def round_fraction(number: Decimal, denominator: int) -> Decimal:
+    """
+    Round to the nearest fractional amount
+    round_fraction(1.8, 4) == 1.75
+    """
+    rounded = round(number * denominator) / denominator
+    return rounded

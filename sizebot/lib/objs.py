@@ -13,10 +13,9 @@ import sizebot.data.objects
 from sizebot import __version__
 from sizebot.lib import errors, userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import get_plural, get_indefinite_article
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import AV, SV, VV, WV, Unit, SystemUnit
+from sizebot.lib.units import AV, SV, VV, WV, Unit, SystemUnit, Decimal
 from sizebot.lib.utils import sentence_join
 
 objects: list[DigiObject] = []
@@ -109,14 +108,26 @@ class DigiObject:
 
     def add_to_units(self):
         if self.unitlength is not None:
-            SV.add_unit(Unit(factor=self.unitlength, name=self.name, namePlural=self.name_plural,
-                             names=self.aliases, symbol = self.symbol))
-            SV.add_system_unit("o", SystemUnit(self.name))
+            u = Unit(
+                factor=Decimal(self.unitlength),
+                name=self.name,
+                namePlural=self.name_plural,
+                names=self.aliases,
+                symbol=self.symbol
+            )
+            SV.add_unit(u)
+            SV.add_system_unit("o", SystemUnit(u))
 
         if self.weight is not None:
-            WV.add_unit(Unit(factor=self.weight, name=self.name, namePlural=self.name_plural,
-                             names=self.aliases, symbol = self.symbol))
-            WV.add_system_unit("o", SystemUnit(self.name))
+            u = Unit(
+                factor=Decimal(self.weight),
+                name=self.name,
+                namePlural=self.name_plural,
+                names=self.aliases,
+                symbol=self.symbol
+            )
+            WV.add_unit(u)
+            WV.add_system_unit("o", SystemUnit(u))
 
     def get_stats(self, multiplier: Decimal = 1) -> str:
         returnstr = ""

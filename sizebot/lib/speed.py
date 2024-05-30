@@ -1,10 +1,9 @@
 import math
 
 from sizebot.lib.constants import emojis
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.shoesize import to_shoe_size
 from sizebot.lib.stats import StatBox
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
 from sizebot.lib.utils import pretty_time_delta
 
 
