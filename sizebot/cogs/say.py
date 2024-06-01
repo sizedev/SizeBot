@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import BotContext, GuildContext
 from sizebot.lib.units import SV, Decimal
 from sizebot.lib.errors import UserNotFoundException
 from sizebot.lib.stats import AVERAGE_HEIGHT
@@ -111,58 +111,58 @@ small_caps = str.maketrans({
 })
 
 giant_letters = str.maketrans({
-    'a': ' :regional_indicator_a:',
-    'b': ' :regional_indicator_b:',
-    'c': ' :regional_indicator_c:',
-    'd': ' :regional_indicator_d:',
-    'e': ' :regional_indicator_e:',
-    'f': ' :regional_indicator_f:',
-    'g': ' :regional_indicator_g:',
-    'h': ' :regional_indicator_h:',
-    'i': ' :regional_indicator_i:',
-    'j': ' :regional_indicator_j:',
-    'k': ' :regional_indicator_k:',
-    'l': ' :regional_indicator_l:',
-    'm': ' :regional_indicator_m:',
-    'n': ' :regional_indicator_n:',
-    'o': ' :regional_indicator_o:',
-    'p': ' :regional_indicator_p:',
-    'q': ' :regional_indicator_q:',
-    'r': ' :regional_indicator_r:',
-    's': ' :regional_indicator_s:',
-    't': ' :regional_indicator_t:',
-    'u': ' :regional_indicator_u:',
-    'v': ' :regional_indicator_v:',
-    'w': ' :regional_indicator_w:',
-    'x': ' :regional_indicator_x:',
-    'y': ' :regional_indicator_y:',
-    'z': ' :regional_indicator_z:',
-    'A': ' :regional_indicator_a:',
-    'B': ' :regional_indicator_b:',
-    'C': ' :regional_indicator_c:',
-    'D': ' :regional_indicator_d:',
-    'E': ' :regional_indicator_e:',
-    'F': ' :regional_indicator_f:',
-    'G': ' :regional_indicator_g:',
-    'H': ' :regional_indicator_h:',
-    'I': ' :regional_indicator_i:',
-    'J': ' :regional_indicator_j:',
-    'K': ' :regional_indicator_k:',
-    'L': ' :regional_indicator_l:',
-    'M': ' :regional_indicator_m:',
-    'N': ' :regional_indicator_n:',
-    'O': ' :regional_indicator_o:',
-    'P': ' :regional_indicator_p:',
-    'Q': ' :regional_indicator_q:',
-    'R': ' :regional_indicator_r:',
-    'S': ' :regional_indicator_s:',
-    'T': ' :regional_indicator_t:',
-    'U': ' :regional_indicator_u:',
-    'V': ' :regional_indicator_v:',
-    'W': ' :regional_indicator_w:',
-    'X': ' :regional_indicator_x:',
-    'Y': ' :regional_indicator_y:',
-    'Z': ' :regional_indicator_z:',
+    'a': ':regional_indicator_a:',
+    'b': ':regional_indicator_b:',
+    'c': ':regional_indicator_c:',
+    'd': ':regional_indicator_d:',
+    'e': ':regional_indicator_e:',
+    'f': ':regional_indicator_f:',
+    'g': ':regional_indicator_g:',
+    'h': ':regional_indicator_h:',
+    'i': ':regional_indicator_i:',
+    'j': ':regional_indicator_j:',
+    'k': ':regional_indicator_k:',
+    'l': ':regional_indicator_l:',
+    'm': ':regional_indicator_m:',
+    'n': ':regional_indicator_n:',
+    'o': ':regional_indicator_o:',
+    'p': ':regional_indicator_p:',
+    'q': ':regional_indicator_q:',
+    'r': ':regional_indicator_r:',
+    's': ':regional_indicator_s:',
+    't': ':regional_indicator_t:',
+    'u': ':regional_indicator_u:',
+    'v': ':regional_indicator_v:',
+    'w': ':regional_indicator_w:',
+    'x': ':regional_indicator_x:',
+    'y': ':regional_indicator_y:',
+    'z': ':regional_indicator_z:',
+    'A': ':regional_indicator_a:',
+    'B': ':regional_indicator_b:',
+    'C': ':regional_indicator_c:',
+    'D': ':regional_indicator_d:',
+    'E': ':regional_indicator_e:',
+    'F': ':regional_indicator_f:',
+    'G': ':regional_indicator_g:',
+    'H': ':regional_indicator_h:',
+    'I': ':regional_indicator_i:',
+    'J': ':regional_indicator_j:',
+    'K': ':regional_indicator_k:',
+    'L': ':regional_indicator_l:',
+    'M': ':regional_indicator_m:',
+    'N': ':regional_indicator_n:',
+    'O': ':regional_indicator_o:',
+    'P': ':regional_indicator_p:',
+    'Q': ':regional_indicator_q:',
+    'R': ':regional_indicator_r:',
+    'S': ':regional_indicator_s:',
+    'T': ':regional_indicator_t:',
+    'U': ':regional_indicator_u:',
+    'V': ':regional_indicator_v:',
+    'W': ':regional_indicator_w:',
+    'X': ':regional_indicator_x:',
+    'Y': ':regional_indicator_y:',
+    'Z': ':regional_indicator_z:',
     '0': ':zero:',
     '1': ':one:',
     '2': ':two:',
@@ -267,7 +267,8 @@ class SayCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def say(self, ctx: BotContext, *, message: str):
+    @commands.guild_only()
+    async def say(self, ctx: GuildContext, *, message: str):
         """Talk to the world!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)
@@ -292,7 +293,8 @@ class SayCog(commands.Cog):
         category = "fun",
         multiline = True
     )
-    async def sayto(self, ctx: BotContext, memberOrHeight: discord.Member | SV, *, message: str):
+    @commands.guild_only()
+    async def sayto(self, ctx: GuildContext, memberOrHeight: discord.Member | SV, *, message: str):
         """Talk to someone!"""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay=0)

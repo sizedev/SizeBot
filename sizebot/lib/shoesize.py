@@ -1,5 +1,6 @@
 import re
 
+from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.gender import Gender
 from sizebot.lib.units import SV, Decimal
 
@@ -7,7 +8,7 @@ from sizebot.lib.units import SV, Decimal
 def to_shoe_size(footlength: SV, gender: Gender) -> str:
     women = gender == "f"
     # Inch in meters
-    inch = Decimal("0.0254")
+    inch = SV("0.0254")
     footlengthinches = footlength / inch
     shoesizeNum = (3 * (footlengthinches + Decimal("2/3"))) - 24
     prefix = ""
@@ -27,7 +28,10 @@ def to_shoe_size(footlength: SV, gender: Gender) -> str:
 
 
 def from_shoe_size(shoesize: str) -> SV:
-    shoesizenum = unmodifiedshoesizenum = Decimal(re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)[0])
+    parsed = re.search(r"(\d*,)*\d+(\.\d*)?", shoesize)
+    if parsed is None:
+        raise InvalidSizeValue(shoesize, "shoesize")
+    shoesizenum = unmodifiedshoesizenum = Decimal(parsed[0])
     if "w" in shoesize.lower():
         shoesizenum = unmodifiedshoesizenum - 1
     if "c" in shoesize.lower():  # Intentional override, children's sizes have no women/men distinction.

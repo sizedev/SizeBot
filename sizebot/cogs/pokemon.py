@@ -5,7 +5,7 @@ from discord.ext import commands
 
 from sizebot.lib import userdb
 from sizebot.lib.pokemon import pokemon
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import BotContext, GuildContext
 from sizebot.lib.userdb import MemberOrFakeOrSize
 
 logger = logging.getLogger("sizebot")
@@ -38,7 +38,8 @@ class PokemonCog(commands.Cog):
         aliases = ["pokecompare", "pokecomp", "lookatpoke"],
         category = "objects"
     )
-    async def lookatpokemon(self, ctx: BotContext, pkmn: int | str = None, *, who: MemberOrFakeOrSize = None):
+    @commands.guild_only()
+    async def lookatpokemon(self, ctx: GuildContext, pkmn: int | str = None, *, who: MemberOrFakeOrSize = None):
         """Pokemaaaaaaaaans"""
         if who is None:
             who = ctx.author

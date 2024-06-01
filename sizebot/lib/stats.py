@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, TypeVar, TypedDict
+from typing import Any, TypeVar, TypedDict, cast
 from collections.abc import Callable
 
 from functools import cached_property
@@ -8,7 +8,7 @@ import math
 from sizebot.lib import errors
 from sizebot.lib.constants import emojis
 from sizebot.lib.gender import Gender
-from sizebot.lib.units import SV, TV, WV, AV, Decimal
+from sizebot.lib.units import Decimal, SV, WV, TV, AV
 from sizebot.lib.shoesize import to_shoe_size
 from sizebot.lib.surface import can_walk_on_water
 
@@ -85,16 +85,16 @@ def wrap_str(f: str | Callable[[StatBox], str]) -> Callable[[StatBox], str]:
         return f
 
 
-def wrap_bool(f: bool | Callable[[ValueDict], bool]) -> Callable[[ValueDict], bool]:
+def wrap_bool(f: bool | Callable[[StatBox], bool]) -> Callable[[StatBox], bool]:
     if isinstance(f, bool):
-        def wrapped(values: ValueDict) -> bool:
+        def wrapped(sb: StatBox) -> bool:
             return f
         return wrapped
     else:
         return f
 
 
-def grouped_z(z: int) -> tuple[int, int]:
+def grouped_z(z: int | None) -> tuple[int, int]:
     if z is None:
         return (1, 0)
     elif z < 0:
@@ -130,12 +130,12 @@ class StatDef:
                  userkey: str | None = None,
                  value: Callable[[ValueDict], Any] | None = None,
                  power: int | None = None,
-                 requires: list[str] = None,
+                 requires: list[str] | None = None,
                  type: Callable[[Any], Any] | None = None,
                  z: int | None = None,
-                 tags: list[str] = None,
+                 tags: list[str] | None = None,
                  inline: bool = True,
-                 aliases: list[str] = None
+                 aliases: list[str] | None = None
                  ):
         if userkey is not None and power is None:
             raise Exception(f'StatDef("{key}") with userkey must have power set')
@@ -174,7 +174,7 @@ class StatDef:
                 value = self.get_value(values)
         elif self.userkey is not None:
             # load from userstats
-            value = userstats[self.userkey]
+            value: Any = userstats[self.userkey]
             if value is not None:
                 is_setbyuser = True
         elif self.get_value is not None:
@@ -191,7 +191,7 @@ class StatDef:
                    sb: StatBox,
                    values: dict[str, Any],
                    *,
-                   scale: Decimal = 1,
+                   scale: Decimal = Decimal(1),
                    old_value: Any = None,
                    is_setbyuser: bool
                    ) -> None | Stat:
@@ -208,11 +208,13 @@ class StatDef:
             else:
                 # Scale by the power
                 value = old_value * (scale ** self.power)
-        else:
+        elif self.get_value is not None:
             # calculate from value()
             if any(r not in values for r in self.requires):
                 return
             value = self.get_value(values)
+        else:
+            return
 
         return Stat(sb, self, self.type(value), is_setbyuser)
 
@@ -256,7 +258,7 @@ class Stat:
         return self.definition.get_string(self.sb)
 
     @cached_property
-    def embed(self) -> dict:
+    def embed(self) -> dict[str, str | bool]:
         return {
             "name": self.title,
             "value": self.body,
@@ -333,7 +335,12 @@ class StatBox:
             "taillength": None,
             "earheight": None,
             "macrovision_model": None,
-            "macrovision_view": None
+            "macrovision_view": None,
+            "footlength": None,
+            "liftstrength": None,
+            "walkperhour": None,
+            "swimperhour": None,
+            "runperhour": None
         }
         return cls.load(average_userdata)
 
@@ -813,7 +820,7 @@ all_stats = [
             value=lambda v: v["terminalvelocity"] < FALL_LIMIT),
     StatDef("fallprooficon",
             title="Fallproof Icon",
-            string=lambda s: bool_to_icon(s['fallproof']),
+            string=lambda s: bool_to_icon(cast(bool, s['fallproof'])),
             body=lambda s: bool_to_icon(s['fallproof'].value),
             is_shown=False,
             requires=["fallproof"],
@@ -1096,7 +1103,7 @@ all_stats = [
             requires=["height", "width", "weight"],
             type=SV,
             is_shown=False,
-            value=lambda v: SV(math.sqrt(((v["weight"] / 1000) * GRAVITY) / (v["height"] * v["width"] * AIR_DENSITY)) * 60 * 60),
+            value=lambda v: SV(math.sqrt(Decimal((v["weight"] / 1000) * GRAVITY) / Decimal(v["height"] * v["width"] * AIR_DENSITY)) * 60 * 60),
             tags=["speed"],
             aliases=["blow"]),
     StatDef("percievedvolume",
@@ -1128,7 +1135,7 @@ all_stats = [
 
 
 def generate_statmap() -> dict[str, str]:
-    statmap = {}
+    statmap: dict[str, str] = {}
     # Load all keys
     for stat in all_stats:
         if stat.key in statmap:
@@ -1144,7 +1151,7 @@ def generate_statmap() -> dict[str, str]:
 
 
 def generate_taglist() -> list[str]:
-    tags = []
+    tags: list[str] = []
     for stat in all_stats:
         if stat.tags:
             tags.extend(stat.tags)
@@ -1171,8 +1178,8 @@ def calc_view_angle(viewer: SV, viewee: SV) -> Decimal:
 
 # TODO: CamelCase
 def calcHorizon(height: SV) -> SV:
-    EARTH_RADIUS = 6378137
-    return SV(math.sqrt((EARTH_RADIUS + height) ** 2 - EARTH_RADIUS ** 2))
+    EARTH_RADIUS = SV(6378137)
+    return ((EARTH_RADIUS + height) ** 2 - EARTH_RADIUS ** 2).sqrt()
 
 
 # TODO: CamelCase

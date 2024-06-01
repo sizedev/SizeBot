@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from sizebot.lib import userdb
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import GuildContext
 
 logger = logging.getLogger("sizebot")
 
@@ -19,7 +19,7 @@ class AdminCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def halt(self, ctx: BotContext):
+    async def halt(self, ctx: GuildContext):
         """RIP SizeBot."""
         logger.critical(f"Help, {ctx.author.display_name} is closing me!")
         await ctx.send("Stopping SizeBot. ☠️")
@@ -29,7 +29,7 @@ class AdminCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def dump(self, ctx: BotContext, *, user: discord.Member = None):
+    async def dump(self, ctx: GuildContext, *, user: discord.Member = None):
         """Dump a user's data."""
         if user is None:
             user = ctx.author
@@ -40,7 +40,7 @@ class AdminCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def sudo(self, ctx: BotContext, victim: discord.Member, *, command: str):
+    async def sudo(self, ctx: GuildContext, victim: discord.Member, *, command: str):
         """Take control."""
         logger.warn(f"{ctx.author.display_name} made {victim.display_name} run {command}.")
         new_message = copy(ctx.message)

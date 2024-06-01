@@ -22,7 +22,7 @@ def test_pos__repr__():
 
 def test_neg__repr__():
     result = repr(neginf)
-    assert result == "Decimal('-∞')"
+    assert result == "BaseDecimal('-∞')"
 
 
 def test_pos__bool__():

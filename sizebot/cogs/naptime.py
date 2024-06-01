@@ -3,7 +3,7 @@ import logging
 from discord.ext import commands, tasks
 
 from sizebot.lib import naps, utils
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import BotContext, GuildContext
 from sizebot.lib.units import TV
 
 logger = logging.getLogger("sizebot")
@@ -16,7 +16,7 @@ class NaptimeCog(commands.Cog):
         self.bot = bot
         self.nannyTask.start()
 
-    def cog_unload(self):
+    def cog_unload(self): # type: ignore (Bad typing in discord.py)
         self.nannyTask.cancel()
 
     @commands.command(
@@ -25,7 +25,7 @@ class NaptimeCog(commands.Cog):
         category = "fun"
     )
     @commands.guild_only()
-    async def naptime(self, ctx: BotContext, *, duration: TV):
+    async def naptime(self, ctx: GuildContext, *, duration: TV):
         """Go to bed in a set amount of time.
 
         Kicks you from any voice channel you're in after a set amount of time.

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from abc import abstractmethod
-from typing import Self, cast, overload
+from typing import Self, overload
 
 import numbers
 import decimal
@@ -247,7 +247,7 @@ class BaseDecimal():
         rawvalue = unwrap_decimal(self)
         rawother = unwrap_decimal(other)
         if is_infinite(rawvalue):
-            return BaseDecimal(rawvalue)
+            return BaseDecimal(rawother)
         elif is_infinite(rawother):
             return BaseDecimal(0)
         return BaseDecimal(rawother % rawvalue)
@@ -351,7 +351,12 @@ class BaseDecimal():
     def log10(self) -> BaseDecimal:
         rawvalue = unwrap_decimal(self)
         return BaseDecimal(rawvalue.log10())
-    
+
+    @abstractmethod
+    def sqrt(self) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        return BaseDecimal(rawvalue.sqrt())
+
     def to_pydecimal(self) -> RawDecimal:
         return self._rawvalue
 

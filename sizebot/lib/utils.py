@@ -17,61 +17,46 @@ from sizebot.lib.types import BotContext
 from sizebot.lib.units import Decimal
 
 
+SECOND = 1000
+MINUTE = 60 * SECOND
+HOUR = 60 * MINUTE
+DAY = 24 * HOUR
+YEAR = 365 * DAY
+
+timeunits = [
+    # min    max               unit    name      frac
+    (YEAR,   None,             YEAR,   "year",   False),
+    (DAY,    1_000_000 * YEAR, DAY,    "day",    False),
+    (HOUR,   1000 * YEAR,      HOUR,   "hour",   False),
+    (MINUTE, YEAR,             MINUTE, "minute", False),
+    (None,   DAY,              SECOND, "second", True)
+]
+
 def pretty_time_delta(totalSeconds: Decimal, millisecondAccuracy: bool = False, roundeventually: bool = False) -> str:
     """Get a human readable string representing an amount of time passed."""
-    MILLISECONDS_PER_YEAR = 86400 * 365 * 1000
-    MILLISECONDS_PER_DAY = 86400 * 1000
-    MILLISECONDS_PER_HOUR = 3600 * 1000
-    MILLISECONDS_PER_MINUTE = 60 * 1000
-    MILLISECONDS_PER_SECOND = 1000
 
-    inputms = milliseconds = int(totalSeconds * 1000)
-    years, milliseconds = divmod(milliseconds, MILLISECONDS_PER_YEAR)
-    days, milliseconds = divmod(milliseconds, MILLISECONDS_PER_DAY)
-    hours, milliseconds = divmod(milliseconds, MILLISECONDS_PER_HOUR)
-    minutes, milliseconds = divmod(milliseconds, MILLISECONDS_PER_MINUTE)
-    seconds, milliseconds = divmod(milliseconds, MILLISECONDS_PER_SECOND)
+    duration = int(totalSeconds * 1000)
 
     s = ""
-    if not roundeventually or inputms <= MILLISECONDS_PER_DAY:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:,d} day{'s' if days != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_HOUR:
-            s += f"{hours:,d} hour{'s' if hours != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_MINUTE:
-            s += f"{minutes:,d} minute{'s' if minutes != 1 else ''}, "
-        if millisecondAccuracy:
-            s += f"{seconds:,d}.{milliseconds:03d} second{'' if seconds == 1 and milliseconds == 0 else 's'}"
-        else:
-            s += f"{seconds:,d} second{'s' if seconds != 1 else ''}"
-    elif inputms >= MILLISECONDS_PER_YEAR * 1_000_000:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}"
-    elif inputms >= MILLISECONDS_PER_YEAR * 1000:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:,d} day{'s' if days != 1 else ''}"
-    elif inputms >= MILLISECONDS_PER_YEAR:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:,d} day{'s' if days != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_HOUR:
-            s += f"{hours:,d} hour{'s' if hours != 1 else ''}"
-    elif inputms >= MILLISECONDS_PER_DAY:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:,d} day{'s' if days != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_HOUR:
-            s += f"{hours:,d} hour{'s' if hours != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_MINUTE:
-            s += f"{minutes:,d} minute{'s' if minutes != 1 else ''}"
 
+    remaining = duration
+    for mintime, maxtime, unit, name, fraction in timeunits:
+        value, remaining = divmod(remaining, unit)
+        if mintime is not None and duration < mintime:
+                continue
+        if roundeventually and maxtime is not None and duration >= maxtime:
+                continue
+        if millisecondAccuracy and fraction:
+            s += f"{value:,d}.{remaining:03d} second{_s(value, remaining)}"
+        else:
+            s += f"{value:,d} {name}{_s(value)}"
     return s
+
+def _s(value: int, fraction: int = 0) -> str:
+    if value != 1 or fraction != 0:
+        return "s"
+    else:
+        return ""
 
 
 def try_int(val: Any) -> Any:

@@ -19,7 +19,7 @@ def freefall(basemass: WV, altitude: SV, scale: Decimal) -> Tuple[TV, SV]:
         Terminal velocity (m/s)
     """
     basemass = basemass / Decimal(1000)
-    m = basemass * (scale ** Decimal(3))
+    m = Decimal(basemass * (scale ** Decimal(3)))
     h = altitude
     g = Decimal("9.807")
     k = Decimal("0.24") * (scale ** Decimal(2))

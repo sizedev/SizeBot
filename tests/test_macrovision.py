@@ -33,8 +33,8 @@ async def test_macrovision():
     expected_url = f"https://macrovision.crux.sexy/?scene={expected_base64}"
     macrovision_url = macrovision.get_url(
         [
-            macrovision.MacrovisionEntity(name="Duncan", model="male", view=None, height=SV("0.0127")),
-            macrovision.MacrovisionEntity(name="Natalie", model="female", view=None, height=SV("0.1524"))
+            macrovision.MacrovisionEntity(name="Duncan", model="Human", view="male", height=SV("0.0127")),
+            macrovision.MacrovisionEntity(name="Natalie", model="Human", view="female", height=SV("0.1524"))
         ]
     )
     assert macrovision_url == expected_url
@@ -53,8 +53,8 @@ async def test_weird_names():
     expected_url = f"https://macrovision.crux.sexy/?scene={expected_base64}"
     macrovision_url = macrovision.get_url(
         [
-            macrovision.MacrovisionEntity(name=r"r'(?<!\.)[.?!](?!\.)', z [1.22m]", model="male", view=None, height=SV("1.219")),
-            macrovision.MacrovisionEntity(name="Natalie", model="female", view=None, height=SV("0.1524"))
+            macrovision.MacrovisionEntity(name=r"r'(?<!\.)[.?!](?!\.)', z [1.22m]", model="Human", view="male", height=SV("1.219")),
+            macrovision.MacrovisionEntity(name="Natalie", model="Human", view="female", height=SV("0.1524"))
         ]
     )
     assert macrovision_url == expected_url

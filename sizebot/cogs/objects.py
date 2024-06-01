@@ -2,7 +2,7 @@ from decimal import Decimal
 import logging
 import math
 import random
-from typing import get_args
+from typing import cast, get_args
 
 import discord
 from discord import Embed
@@ -14,9 +14,9 @@ from sizebot.lib import objs, proportions, userdb, utils
 from sizebot.lib.constants import emojis
 from sizebot.lib.errors import InvalidSizeValue
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.objs import DigiObject, objects, tags, format_close_object_smart
+from sizebot.lib.objs import DigiLand, DigiObject, objects, relativestatsembed, relativestatssentence, statsembed, tags, format_close_object_smart, get_stats_sentence
 from sizebot.lib.stats import StatBox, taglist, AVERAGE_HEIGHT
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import BotContext, GuildContext
 from sizebot.lib.units import SV, WV, AV
 from sizebot.lib.userdb import load_or_fake, MemberOrFake, MemberOrFakeOrSize
 from sizebot.lib.fakeplayer import FakePlayer
@@ -61,7 +61,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookslike(self, ctx: BotContext, *, memberOrHeight: MemberOrFakeOrSize = None):
+    async def lookslike(self, ctx: GuildContext, *, memberOrHeight: MemberOrFakeOrSize = None):
         """See how tall you are in comparison to an object."""
         if memberOrHeight is None:
             memberOrHeight = ctx.author
@@ -83,7 +83,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def objectcompare(self, ctx: BotContext, *, args: str):
+    async def objectcompare(self, ctx: GuildContext, *, args: str):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -113,7 +113,7 @@ class ObjectsCog(commands.Cog):
         userstats = StatBox.load(userdata.stats).scale(userdata.scale)
 
         if isinstance(what, DigiObject):
-            oc = what.relativestatsembed(userdata)
+            oc = relativestatsembed(what, userdata)
             await ctx.send(embed = oc)
             return
         elif isinstance(what, discord.Member) or isinstance(what, SV):  # TODO: Make this not literally just a compare. (make one sided)
@@ -133,7 +133,7 @@ class ObjectsCog(commands.Cog):
         category = "objects"
     )
     @commands.guild_only()
-    async def lookat(self, ctx: BotContext, *, what: DigiObject | MemberOrFake | SV | str):
+    async def lookat(self, ctx: GuildContext, *, what: DigiObject | MemberOrFake | SV | str):
         """See what an object looks like to you.
 
         Used to see how an object would look at your scale.
@@ -151,7 +151,7 @@ class ObjectsCog(commands.Cog):
 
         # Compare to registered DigiObject by string name
         if isinstance(what, DigiObject):
-            la = what.relativestatssentence(userdata)
+            la = relativestatssentence(what, userdata)
             # Easter eggs.
             eggs = {
                 "photograph": ("<https://www.youtube.com/watch?v=BB0DU4DoPP4>", f"{ctx.author.display_name} is jamming to Nickleback."),
@@ -171,7 +171,7 @@ class ObjectsCog(commands.Cog):
 
         # Height comparisons
         if isinstance(what, SV):
-            height = SV(what * userdata.viewscale)
+            height = what * userdata.viewscale
             s = (f"{userdata.nickname} is {userdata.height:,.1{userdata.unitsystem}} tall."
                  f" To them, {what:,.1mu} looks like **{height:,.1mu}**."
                  f" That's about **{height.to_best_unit('o', preferName=True, spec='.1')}**.")
@@ -248,14 +248,15 @@ class ObjectsCog(commands.Cog):
             await ctx.send(f"`{what}` is not a valid object.")
             return
 
-        await ctx.send(embed = what.statsembed())
+        await ctx.send(embed = statsembed(what))
 
     @commands.command(
         category = "objects",
         usage = "[@User]"
     )
     # TODO: Bad name.
-    async def stackup(self, ctx: BotContext, amount: int | None = None, *, who: MemberOrFakeOrSize = None):
+    @commands.guild_only()
+    async def stackup(self, ctx: GuildContext, amount: int | None = None, *, who: MemberOrFakeOrSize = None):
         """How do you stack up against objects?
 
         Example:
@@ -287,7 +288,8 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def food(self, ctx: BotContext, food: DigiObject | str, *, who: MemberOrFakeOrSize = None):
+    @commands.guild_only()
+    async def food(self, ctx: GuildContext, food: DigiObject | str, *, who: MemberOrFakeOrSize = None):
         """How much food does a person need to eat?
 
         Takes optional argument of a user to get the food for.
@@ -349,7 +351,8 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def water(self, ctx: BotContext, *, who: MemberOrFakeOrSize = None):
+    @commands.guild_only()
+    async def water(self, ctx: GuildContext, *, who: MemberOrFakeOrSize = None):
         if who is None:
             who = ctx.author
 
@@ -371,7 +374,8 @@ class ObjectsCog(commands.Cog):
     @commands.command(
         category = "objects"
     )
-    async def land(self, ctx: BotContext, land: DigiObject | str, *, who: MemberOrFakeOrSize = None):
+    @commands.guild_only()
+    async def land(self, ctx: GuildContext, land: DigiObject | str, *, who: MemberOrFakeOrSize = None):
         """Get stats about how you cover land.
         #ACC#
 
@@ -380,8 +384,6 @@ class ObjectsCog(commands.Cog):
         `&land Australia`
         `&land @User random`
         `&land @User Australia`"""
-
-        lands = objs.land
 
         # Input validation.
         if isinstance(land, DigiObject) and "land" not in land.tags:
@@ -396,17 +398,17 @@ class ObjectsCog(commands.Cog):
         scale = userdata.scale
 
         if land == "random":
-            land = random.choice(lands)
+            land = random.choice(objs.land)
 
         if not isinstance(land, DigiObject):
             raise InvalidSizeValue(land, "object")
-
-        land_width = SV(land.width / scale)
-        land_length = SV(land.length / scale)
-        land_height = SV(land.height / scale)
+        _land = DigiLand.from_digiobject(land)
+        land_width = _land.width / scale
+        land_length = _land.length / scale
+        land_height = _land.height / scale
         fingertip_name = "paw bean" if userdata.pawtoggle else "fingertip"
 
-        land_area = AV(land.width * land.height)
+        land_area = _land.area
         area = AV(stats['height'].value * stats['width'].value)
         lay_percentage = area / land_area
         foot_area = AV(stats['footlength'].value * stats['footwidth'].value)
@@ -414,7 +416,7 @@ class ObjectsCog(commands.Cog):
         foot_percentage = foot_area / land_area
         finger_percentage = finger_area / land_area
 
-        landout = (f"To {userdata.nickname}, {land.name} looks **{land_width:,.1mu}** wide and **{land_length:,.1mu}** long. ({land_area:,.1mu}) The highest peak looks **{land_height:,.1mu}** tall. ({land.note})\n\n"
+        landout = (f"To {userdata.nickname}, {_land.name} looks **{land_width:,.1mu}** wide and **{land_length:,.1mu}** long. ({land_area:,.1mu}) The highest peak looks **{land_height:,.1mu}** tall. ({_land.note})\n\n"
                    f"Laying down, {userdata.nickname} would cover **{lay_percentage:,.2}%** of the land.\n"
                    f"{emojis.blank}({stats['height'].value:,.1mu} tall and {stats['width'].value:,.1mu} wide, or {area:,.1mu})\n"
                    f"{userdata.nickname}'s {userdata.footname.lower()} would cover **{foot_percentage:,.2}%** of the land.\n"
@@ -455,9 +457,10 @@ class ObjectsCog(commands.Cog):
         usage = "[object]",
         category = "objects"
     )
-    async def scaled(self, ctx: BotContext, *, obj: DigiObject):
+    @commands.guild_only()
+    async def scaled(self, ctx: GuildContext, *, obj: DigiObject):
         userdata = load_or_fake(ctx.author)
-        await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} is {obj.get_stats_sentence(userdata.scale, userdata.unitsystem)}")
+        await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} is {get_stats_sentence(obj, userdata.scale, userdata.unitsystem)}")
 
 
 async def setup(bot: commands.Bot):

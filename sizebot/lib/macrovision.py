@@ -4,17 +4,12 @@ import base64
 from dataclasses import dataclass
 import json
 import importlib.resources as pkg_resources
-from json.decoder import JSONDecodeError
-import aiohttp
-from aiohttp_requests import requests
 import logging
 
 import sizebot.data
-from sizebot.conf import conf
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV, Decimal
 from sizebot.lib.userdb import User
-from sizebot.lib.utils import url_safe
 
 logger = logging.getLogger("sizebot")
 
@@ -22,11 +17,11 @@ model_heights = json.loads(pkg_resources.read_text(sizebot.data, "models.json"))
 
 
 def get_model_scale(model: str, view: str, height_in_meters: SV) -> Decimal:
-    normal_height = Decimal(model_heights[model][view])
+    normal_height = SV(model_heights[model][view])
     return height_in_meters / normal_height
 
 
-def get_entity_json(name: str, model: str, view: str, height: SV, x: float) -> Any:
+def get_entity_json(name: str, model: str, view: str, height: SV, x: SV) -> Any:
     scale = get_model_scale(model, view, height)
     return {
         "name": model,
@@ -40,33 +35,13 @@ def get_entity_json(name: str, model: str, view: str, height: SV, x: float) -> A
     }
 
 
-async def shorten_url(url: str) -> str:
-    if not conf.cuttly_key:
-        return url
-    try:
-        r = await requests.get(f"https://cutt.ly/api/api.php?key={conf.cuttly_key}&short={url}", raise_for_status=True)
-    except aiohttp.ClientResponseError as e:
-        logger.error(f"Unable to shorten url: Status {e.status}")
-        return url
-    try:
-        cuttly_response = await r.json(content_type="text/html")
-    except (aiohttp.ContentTypeError):
-        logger.error(f"Unable to shorten url: Cannot parse JSON, bad content type: {r.content_type}")
-        return url
-    except (JSONDecodeError):
-        logger.error("Unable to shorten url: Cannot parse JSON")
-        return url
-    short_url = cuttly_response["url"]["shortLink"]
-    return short_url
-
-
 @dataclass
 class MacrovisionEntity():
     name: str
     model: str
-    view: str | None
+    view: str
     height: SV
-    x: float = 0
+    x: SV = SV(0)
 
 
 def user_to_entity(u: User) -> MacrovisionEntity:
@@ -103,13 +78,9 @@ def get_url(entities: list[MacrovisionEntity]) -> str:
 
     world_height = entities[0].height
 
-    x_offset = Decimal(0)
+    x_offset = SV(0)
     for p in entities:
-        p.name = url_safe(p.name)
-        # Backwards compatibility
-        if p.view is None:
-            p.view = p.model
-            p.model = "Human"
+        p.name = p.name
         p.x = x_offset
         x_offset += p.height / 4
 

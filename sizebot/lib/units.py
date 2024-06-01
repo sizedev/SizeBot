@@ -670,18 +670,25 @@ class Decimal(BaseDecimal):
             return Decimal(quotient), Decimal(remainder)
         raise NotImplementedError
 
+    # Decimal ** Decimal = Decimal
     def __pow__(self, other: Decimal | int) -> Decimal:
         if isinstance(other, Decimal | int):
             return Decimal(super().__pow__(other))
         raise NotImplementedError
 
+    # Decimal ** Decimal = Decimal
     def __rpow__(self, other: Decimal | int) -> Decimal:
         if isinstance(other, Decimal | int):
             return Decimal(super().__rpow__(other))
         raise NotImplementedError
 
+    # Decimal.log10() = Decimal
     def log10(self) -> Decimal:
         return Decimal(super().log10())
+
+    # Decimal.sqrt() = Decimal
+    def sqrt(self) -> Decimal:
+        return Decimal(super().sqrt())
 
 
 class SV(Dimension):
@@ -811,7 +818,7 @@ class SV(Dimension):
 
     # SV / Decimal = SV
     @overload
-    def __truediv__(self, other: Decimal) -> SV:
+    def __truediv__(self, other: Decimal | int) -> SV:
         ...
 
     # SV / SV = Decimal
@@ -942,6 +949,10 @@ class SV(Dimension):
     # SV.log10() = Decimal
     def log10(self) -> Decimal:
         return Decimal(super().log10())
+
+    # SV.sqrt() = NotImplementedError
+    def sqrt(self) -> Never:
+        raise NotImplementedError
 
 
 class WV(Dimension):
@@ -1095,9 +1106,13 @@ class WV(Dimension):
     def __rpow__(self, other: Never) -> Never:
         raise NotImplementedError
 
-    # SV.log10() = Decimal
+    # WV.log10() = Decimal
     def log10(self) -> Decimal:
         return Decimal(super().log10())
+
+    # WV.sqrt() = NotImplementedError
+    def sqrt(self) -> Never:
+        raise NotImplementedError
 
 
 class TV(Dimension):
@@ -1253,9 +1268,13 @@ class TV(Dimension):
     def __rpow__(self, other: Never) -> Never:
         raise NotImplementedError
 
-    # SV.log10() = Decimal
+    # TV.log10() = Decimal
     def log10(self) -> Decimal:
         return Decimal(super().log10())
+
+    # TV.sqrt() = NotImplementedError
+    def sqrt(self) -> Never:
+        raise NotImplementedError
 
 
 class AV(Dimension):
@@ -1430,9 +1449,13 @@ class AV(Dimension):
     def __rpow__(self, other: Never) -> Never:
         raise NotImplementedError
 
-    # SV.log10() = Decimal
+    # AV.log10() = Decimal
     def log10(self) -> Decimal:
         return Decimal(super().log10())
+
+    # AV.sqrt() = SV
+    def sqrt(self) -> SV:
+        return SV(super().sqrt())
 
 
 class VV(Dimension):
@@ -1580,9 +1603,13 @@ class VV(Dimension):
     def __rpow__(self, other: Never) -> Never:
         raise NotImplementedError
 
-    # SV.log10() = Decimal
+    # VV.log10() = Decimal
     def log10(self) -> Decimal:
         return Decimal(super().log10())
+
+    # VV.sqrt() = NotImplementedError
+    def sqrt(self) -> Never:
+        raise NotImplementedError
 
 
 class RV(Dimension):
@@ -1740,9 +1767,13 @@ class RV(Dimension):
     def __rpow__(self, other: Never) -> Never:
         raise NotImplementedError
 
-    # SV.log10() = Decimal
+    # RV.log10() = Decimal
     def log10(self) -> Decimal:
         return Decimal(super().log10())
+
+    # RV.sqrt() = NotImplementedError
+    def sqrt(self) -> Never:
+        raise NotImplementedError
 
 
 INCH = Decimal("0.0254")

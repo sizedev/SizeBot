@@ -1,7 +1,7 @@
 import importlib.resources as pkg_resources
 import logging
 import random
-from typing import cast
+from typing import Self, cast
 from sizebot.lib import errors, utils
 
 from discord import Member
@@ -12,7 +12,7 @@ from sizebot.lib import changes, userdb, nickmanager
 from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.errors import ChangeMethodInvalidException
 from sizebot.lib.objs import DigiObject, objects
-from sizebot.lib.types import BotContext, StrToSend
+from sizebot.lib.types import BotContext, GuildContext, StrToSend
 from sizebot.lib.units import SV, Decimal
 
 logger = logging.getLogger("sizebot")
@@ -28,7 +28,7 @@ class ChangeCog(commands.Cog):
         # Don't start the change tasks until the bot is properly connected
         self.changeTask.start()
 
-    def cog_unload(self):
+    def cog_unload(self): # type: ignore (Bad typing in discord.py)
         self.changeTask.cancel()
 
     @commands.command(
@@ -36,7 +36,8 @@ class ChangeCog(commands.Cog):
         category = "change",
         usage = "<change> [rate] [stop]"
     )
-    async def change(self, ctx: BotContext, *, arg: LimitedRate | Rate | Diff | str):
+    @commands.guild_only()
+    async def change(self, ctx: GuildContext, *, arg: LimitedRate | Rate | Diff | str):
         """Either change or slow-change your height.
 
         Can be used in essentially the three following ways:
@@ -66,7 +67,7 @@ class ChangeCog(commands.Cog):
             elif style == "power":
                 userdata.scale = userdata.scale ** cast(Decimal, amount)
             else:
-                raise ChangeMethodInvalidException
+                raise ChangeMethodInvalidException(style)
             await nickmanager.nick_update(ctx.author)
             userdb.save(userdata)
             await ctx.send(f"{userdata.nickname} is now {userdata.height:m} ({userdata.height:u}) tall.")
@@ -96,7 +97,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def stopchange(self, ctx: BotContext):
+    async def stopchange(self, ctx: GuildContext):
         """Stop a currently active slow change."""
         await ctx.send(**stop_changes(ctx.author))
 
@@ -105,7 +106,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def eatme(self, ctx: BotContext):
+    async def eatme(self, ctx: GuildContext):
         """Eat me!
 
         Increases your height by a random amount between 2x and 20x."""
@@ -113,8 +114,8 @@ class ChangeCog(commands.Cog):
         userid = ctx.author.id
 
         userdata = userdb.load(guildid, userid)
-        randmult = round(random.randint(2, 20), 1)
-        change_user(guildid, userid, "multiply", randmult)
+        randmult = Decimal(random.randint(2, 20))
+        change_user_mul(guildid, ctx.author.id, randmult)
         await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
@@ -130,7 +131,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def drinkme(self, ctx: BotContext):
+    async def drinkme(self, ctx: GuildContext):
         """Drink me!
 
         Decreases your height by a random amount between 2x and 20x."""
@@ -138,8 +139,8 @@ class ChangeCog(commands.Cog):
         userid = ctx.author.id
 
         userdata = userdb.load(guildid, userid)
-        randmult = round(random.randint(2, 20), 1)
-        change_user(guildid, ctx.author.id, "divide", randmult)
+        randmult = Decimal(random.randint(2, 20))
+        change_user_div(guildid, ctx.author.id, randmult)
         await nickmanager.nick_update(ctx.author)
         userdata = userdb.load(guildid, userid)
 
@@ -154,21 +155,21 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def pushme(self, ctx: BotContext):
+    async def pushme(self, ctx: GuildContext):
         """Push me!
 
         Increases or decreases your height by a random amount between 2x and 20x."""
-        c = random.randint(1, 2)
-        if c == 1:
-            await ctx.invoke(self.bot.get_command("eatme"))
-        else:
-            await ctx.invoke(self.bot.get_command("drinkme"))
+        next_cmd_name = random.choice(["eatme", "drinkme"])
+        next_cmd = cast(commands.Command[Self, ..., None] | None, self.bot.get_command(next_cmd_name))
+        if next_cmd is None:
+            raise errors.ThisShouldNeverHappenException(f"Missing command: {next_cmd_name}")
+        await ctx.invoke(next_cmd)
 
     @commands.command(
         category = "change"
     )
     @commands.guild_only()
-    async def outgrow(self, ctx: BotContext, *, obj: DigiObject = None):
+    async def outgrow(self, ctx: GuildContext, *, obj: DigiObject | None = None):
         """Outgrows the next object in the object database, or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -186,7 +187,7 @@ class ChangeCog(commands.Cog):
             return
 
         random_factor = Decimal(random.randint(11, 20) / 10)
-        userdata.height = SV(obj.unitlength * random_factor)
+        userdata.height = obj.unitlength * random_factor
         userdb.save(userdata)
 
         await ctx.send(f"You outgrew {obj.article} **{obj.name}** *({obj.unitlength:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
@@ -195,7 +196,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def outshrink(self, ctx: BotContext, *, obj: DigiObject = None):
+    async def outshrink(self, ctx: GuildContext, *, obj: DigiObject | None = None):
         """Outshrinks the next object in the object database or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -214,7 +215,7 @@ class ChangeCog(commands.Cog):
             return
 
         random_factor = Decimal(random.randint(11, 20) / 10)
-        userdata.height = SV(obj.unitlength / random_factor)
+        userdata.height = obj.unitlength / random_factor
         userdb.save(userdata)
 
         await ctx.send(f"You outshrunk {obj.article} **{obj.name}** *({obj.unitlength:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
@@ -230,59 +231,23 @@ class ChangeCog(commands.Cog):
             logger.error(utils.format_traceback(e))
 
 
-def change_user(guildid: int, userid: int, changestyle: str, amount: SV):
-    changestyle = changestyle.lower()
-    if changestyle in ["add", "+", "a", "plus"]:
-        changestyle = "add"
-    if changestyle in ["subtract", "sub", "-", "minus"]:
-        changestyle = "subtract"
-    if changestyle in ["power", "exp", "pow", "exponent", "^", "**"]:
-        changestyle = "power"
-    if changestyle in ["multiply", "mult", "m", "x", "times", "*"]:
-        changestyle = "multiply"
-    if changestyle in ["divide", "d", "/", "div"]:
-        changestyle = "divide"
-    if changestyle in ["percent", "per", "perc", "%"]:
-        changestyle = "percent"
-
-    if changestyle not in ["add", "subtract", "multiply", "divide", "power", "percent"]:
-        raise errors.ChangeMethodInvalidException(changestyle)
-
-    amountSV = None
-    amountVal = None
-    newamount = None
-
-    if changestyle in ["add", "subtract"]:
-        amountSV = SV.parse(amount)
-    elif changestyle in ["multiply", "divide", "power"]:
-        amountVal = Decimal(amount)
-        if amountVal == 1:
-            raise errors.ValueIsOneException
-        if amountVal == 0:
-            raise errors.ValueIsZeroException
-    elif changestyle in ["percent"]:
-        amountVal = Decimal(amount)
-        if amountVal == 0:
-            raise errors.ValueIsZeroException
-
+def change_user_mul(guildid: int, userid: int, amount: Decimal):
+    if amount == 1:
+        raise errors.ValueIsOneException
+    if amount == 0:
+        raise errors.ValueIsZeroException
     userdata = userdb.load(guildid, userid)
+    userdata.height = userdata.height * amount
+    userdb.save(userdata)
 
-    if changestyle == "add":
-        newamount = userdata.height + amountSV
-    elif changestyle == "subtract":
-        newamount = userdata.height - amountSV
-    elif changestyle == "multiply":
-        newamount = userdata.height * amountVal
-    elif changestyle == "divide":
-        newamount = userdata.height / amountVal
-    elif changestyle == "power":
-        userdata = userdata ** amountVal
-    elif changestyle == "percent":
-        newamount = userdata.height * (amountVal / 100)
 
-    if changestyle != "power":
-        userdata.height = newamount
-
+def change_user_div(guildid: int, userid: int, amount: Decimal):
+    if amount == 1:
+        raise errors.ValueIsOneException
+    if amount == 0:
+        raise errors.ValueIsZeroException
+    userdata = userdb.load(guildid, userid)
+    userdata.height = userdata.height / amount
     userdb.save(userdata)
 
 

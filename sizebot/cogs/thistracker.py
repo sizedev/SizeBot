@@ -13,7 +13,7 @@ from discord.ext import commands
 from sizebot import __version__
 from sizebot.lib import paths
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import BotContext, GuildContext
 
 logger = logging.getLogger("sizebot")
 
@@ -91,7 +91,7 @@ class ThisCog(commands.Cog):
         category = "misc"
     )
     @commands.guild_only()
-    async def leaderboard(self, ctx: BotContext):
+    async def leaderboard(self, ctx: GuildContext):
         """See who's the most agreeable!"""
         logger.log(EGG, f"{ctx.message.author.display_name} found the leaderboard!")
         now = datetime.now(tzlocal())

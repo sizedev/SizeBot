@@ -12,7 +12,7 @@ from sizebot.lib.metal import metal_value, nugget_value
 from sizebot.lib.neuron import get_neuron_embed
 from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.statproxy import StatProxy
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import BotContext, GuildContext
 from sizebot.lib.units import SV, TV, WV, Decimal
 from sizebot.lib.userdb import load_or_fake, MemberOrFakeOrSize, load_or_fake_height, load_or_fake_weight
 from sizebot.lib.utils import pretty_time_delta, sentence_join, round_fraction
@@ -29,7 +29,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stats(self, ctx: BotContext, memberOrHeight: MemberOrFakeOrSize | None = None):
+    async def stats(self, ctx: GuildContext, memberOrHeight: MemberOrFakeOrSize | None = None):
         """User stats command.
 
         Get tons of user stats about yourself, a user, or a raw height.
@@ -55,7 +55,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statsso(self, ctx: BotContext, sv1: MemberOrFakeOrSize, sv2: SV, *, memberOrHeight: MemberOrFakeOrSize = None):
+    async def statsso(self, ctx: GuildContext, sv1: MemberOrFakeOrSize, sv2: SV, *, memberOrHeight: MemberOrFakeOrSize = None):
         """Stats so that from looks like to.
         """
         if memberOrHeight is None:
@@ -78,7 +78,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def basestats(self, ctx: BotContext, *, member: discord.Member = None):
+    async def basestats(self, ctx: GuildContext, *, member: discord.Member = None):
         """Show user stats at 1x scale.
 
         Get the 1x scale stats about yourself or a user.
@@ -103,7 +103,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def settings(self, ctx: BotContext, *, member: discord.Member = None):
+    async def settings(self, ctx: GuildContext, *, member: discord.Member = None):
         """Show settable values on SizeBot.
 
         Get all settable values on SizeBot for yourself or a user.
@@ -128,7 +128,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statsas(self, ctx: BotContext, memberOrHeight: MemberOrFakeOrSize = None,
+    async def statsas(self, ctx: GuildContext, memberOrHeight: MemberOrFakeOrSize = None,
                       memberOrHeight2: MemberOrFakeOrSize = None):
         """User stats command with modified bases.
 
@@ -158,7 +158,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def stat(self, ctx: BotContext, stat: StatProxy, *, memberOrHeight: MemberOrFakeOrSize = None):
+    async def stat(self, ctx: GuildContext, stat: StatProxy, *, memberOrHeight: MemberOrFakeOrSize = None):
         """User stat command.
 
         Get a single stat about yourself, a user, or a raw height.
@@ -194,7 +194,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statso(self, ctx: BotContext, sv1: MemberOrFakeOrSize, sv2: SV, stat: StatProxy, *, memberOrHeight: MemberOrFakeOrSize = None):
+    async def statso(self, ctx: GuildContext, sv1: MemberOrFakeOrSize, sv2: SV, stat: StatProxy, *, memberOrHeight: MemberOrFakeOrSize = None):
         """User stat command as if an implied scale.
 
         Available stats are: #STATS#
@@ -227,7 +227,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def statas(self, ctx: BotContext, stat: StatProxy, memberOrHeight: MemberOrFakeOrSize = None,
+    async def statas(self, ctx: GuildContext, stat: StatProxy, memberOrHeight: MemberOrFakeOrSize = None,
                      memberOrHeight2: MemberOrFakeOrSize = None):
         """User stat command with custom bases.
 
@@ -267,7 +267,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def compare(self, ctx: BotContext, memberOrHeight: MemberOrFakeOrSize = None,
+    async def compare(self, ctx: GuildContext, memberOrHeight: MemberOrFakeOrSize = None,
                       *, memberOrHeight2: MemberOrFakeOrSize = None):
         """Compare two users' size.
 
@@ -293,7 +293,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def compareas(self, ctx: BotContext, asHeight: MemberOrFakeOrSize = None,
+    async def compareas(self, ctx: GuildContext, asHeight: MemberOrFakeOrSize = None,
                         memberOrHeight: MemberOrFakeOrSize = None):
         """Compare yourself as a different height and another user."""
 
@@ -314,7 +314,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def comparestat(self, ctx: BotContext, stat: StatProxy, *, memberOrHeight: MemberOrFakeOrSize, memberOrHeight2: MemberOrFakeOrSize = None):
+    async def comparestat(self, ctx: GuildContext, stat: StatProxy, *, memberOrHeight: MemberOrFakeOrSize, memberOrHeight2: MemberOrFakeOrSize = None):
         if memberOrHeight2 is None:
             memberOrHeight2 = ctx.author
 
@@ -341,7 +341,8 @@ class StatsCog(commands.Cog):
         usage = "<length> [user]",
         category = "stats"
     )
-    async def distance(self, ctx: BotContext, goal: MemberOrFakeOrSize | TV,
+    @commands.guild_only()
+    async def distance(self, ctx: GuildContext, goal: MemberOrFakeOrSize | TV,
                        *, member: MemberOrFakeOrSize = None):
         """How long will it take to walk, run, climb, etc. a distance/time?
 
@@ -371,7 +372,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def distancestats(self, ctx: BotContext, memberOrHeight: MemberOrFakeOrSize = None,
+    async def distancestats(self, ctx: GuildContext, memberOrHeight: MemberOrFakeOrSize = None,
                             *, memberOrHeight2: MemberOrFakeOrSize = None):
         """Find how long it would take to travel across a person."""
         if memberOrHeight2 is None:
@@ -394,7 +395,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def distancestat(self, ctx: BotContext, stat: str, memberOrHeight: MemberOrFakeOrSize = None,
+    async def distancestat(self, ctx: GuildContext, stat: str, memberOrHeight: MemberOrFakeOrSize = None,
                            *, memberOrHeight2: MemberOrFakeOrSize = None):
         """Find how long it would take to travel across a certain distance on a person.
 
@@ -422,7 +423,8 @@ class StatsCog(commands.Cog):
         usage = "<length> [user]",
         category = "stats"
     )
-    async def ruler(self, ctx: BotContext, length: SV, *, who: MemberOrFakeOrSize = None):
+    @commands.guild_only()
+    async def ruler(self, ctx: GuildContext, length: SV, *, who: MemberOrFakeOrSize = None):
         """A distance to a user looks how long to everyone else?
 
         Examples:
@@ -453,7 +455,8 @@ class StatsCog(commands.Cog):
         usage = "<user or length>",
         category = "stats"
     )
-    async def sound(self, ctx: BotContext, *, who: MemberOrFakeOrSize = None):
+    @commands.guild_only()
+    async def sound(self, ctx: GuildContext, *, who: MemberOrFakeOrSize = None):
         """Find how long it would take sound to travel a length or height."""
         ONE_SOUNDSECOND = SV(340.27)
         is_SV = False
@@ -485,7 +488,8 @@ class StatsCog(commands.Cog):
         usage = "<user or length>",
         category = "stats"
     )
-    async def light(self, ctx: BotContext, *, who: MemberOrFakeOrSize = None):
+    @commands.guild_only()
+    async def light(self, ctx: GuildContext, *, who: MemberOrFakeOrSize = None):
         """Find how long it would take light to travel a length or height."""
         ONE_LIGHTSECOND = SV(299792000)
         is_SV = False
@@ -516,7 +520,8 @@ class StatsCog(commands.Cog):
     @commands.command(
         usage = "<distance>"
     )
-    async def fall(self, ctx: BotContext, distance: MemberOrFakeOrSize):
+    @commands.guild_only()
+    async def fall(self, ctx: GuildContext, distance: MemberOrFakeOrSize):
         """
         Fall down.
         #ACC#
@@ -537,7 +542,7 @@ class StatsCog(commands.Cog):
         usage = "<distance>"
     )
     @commands.guild_only()
-    async def mcfall(self, ctx: BotContext, distance: discord.Member | SV):
+    async def mcfall(self, ctx: GuildContext, distance: discord.Member | SV):
         if ctx.guild is None:
             raise commands.errors.NoPrivateMessage()
         if isinstance(distance, discord.Member):
@@ -556,7 +561,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def lineup(self, ctx: BotContext):
+    async def lineup(self, ctx: GuildContext):
         """Lineup a bunch of people for comparison."""
         # TODO: Oh god this sucks, and doesn't support raw heights because of it
         if not ctx.message.mentions:
@@ -599,7 +604,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def simplecompare(self, ctx: BotContext, memberOrHeight: MemberOrFakeOrSize = None,
+    async def simplecompare(self, ctx: GuildContext, memberOrHeight: MemberOrFakeOrSize = None,
                             *, memberOrHeight2: MemberOrFakeOrSize = None):
         """Compare two users' size.
 
@@ -624,7 +629,8 @@ class StatsCog(commands.Cog):
         usage = "[user]",
         category = "stats"
     )
-    async def pehkui(self, ctx: BotContext, *, who: MemberOrFakeOrSize = None):
+    @commands.guild_only()
+    async def pehkui(self, ctx: GuildContext, *, who: MemberOrFakeOrSize = None):
         """Get your (or a user's) Pehkui scale.
 
         For use in the Pehkui Minecraft mod. Essentially a height represented in a unit of Steves."""
@@ -648,7 +654,8 @@ class StatsCog(commands.Cog):
         usage = "<user> [user]",
         category = "stats"
     )
-    async def gravitycompare(self, ctx: BotContext, memberOrHeight: MemberOrFakeOrSize = None,
+    @commands.guild_only()
+    async def gravitycompare(self, ctx: GuildContext, memberOrHeight: MemberOrFakeOrSize = None,
                              *, memberOrHeight2: MemberOrFakeOrSize = None):
         """
         Compare two users' gravitation pull.
@@ -681,7 +688,8 @@ class StatsCog(commands.Cog):
         usage = "[user]",
         category = "stats"
     )
-    async def metal(self, ctx: BotContext, *, who: MemberOrFakeOrSize | WV = None):
+    @commands.guild_only()
+    async def metal(self, ctx: GuildContext, *, who: MemberOrFakeOrSize | WV = None):
         """Get the price of your weight in gold (and other metals!)"""
 
         if who is None:
@@ -713,7 +721,8 @@ class StatsCog(commands.Cog):
         usage = "[value]",
         category = "stats"
     )
-    async def convert(self, ctx: BotContext, *, whoOrWhat: MemberOrFakeOrSize | WV = None):
+    @commands.guild_only()
+    async def convert(self, ctx: GuildContext, *, whoOrWhat: MemberOrFakeOrSize | WV = None):
         """Convert from metric to US, or the other way around.
 
         #ALPHA#
@@ -735,7 +744,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def keypoints(self, ctx: BotContext, who: MemberOrFakeOrSize = None):
+    async def keypoints(self, ctx: GuildContext, who: MemberOrFakeOrSize = None):
         """See a users key points."""
         if who is None:
             who = ctx.message.author
@@ -752,7 +761,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def neuron(self, ctx: BotContext, who: MemberOrFakeOrSize = None):
+    async def neuron(self, ctx: GuildContext, who: MemberOrFakeOrSize = None):
         """How long would brain signals take to travel for a person?"""
         if who is None:
             who = ctx.message.author
