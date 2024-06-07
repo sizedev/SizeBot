@@ -2,6 +2,10 @@
 *.pyc
 .pytest_cache
 build
+dist
+
+# Python Virtual Envs
+.venv
 
 # Visual Studio
 .vs
