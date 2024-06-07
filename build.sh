@@ -1,8 +1,8 @@
 echo ------------BEGIN-------------;
 branch=$1
-if [ "$branch" -eq "master" ]; then
+if [ "$branch" = "master" ]; then
     botname="sizebot"
-elif [ "$branch" -eq "develop" ]; then
+elif [ "$branch" = "develop" ]; then
     botname="nizebot"
 else
     echo "Unrecognized branch: ${branch}";
