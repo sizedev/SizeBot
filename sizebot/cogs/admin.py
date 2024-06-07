@@ -29,7 +29,7 @@ class AdminCog(commands.Cog):
         hidden = True
     )
     @commands.is_owner()
-    async def dump(self, ctx: GuildContext, *, user: discord.Member = None):
+    async def dump(self, ctx: GuildContext, *, user: discord.Member | None = None):
         """Dump a user's data."""
         if user is None:
             user = ctx.author
@@ -45,7 +45,7 @@ class AdminCog(commands.Cog):
         logger.warn(f"{ctx.author.display_name} made {victim.display_name} run {command}.")
         new_message = copy(ctx.message)
         new_message.author = victim
-        if not command.startswith(ctx.prefix):
+        if ctx.prefix is not None and not command.startswith(ctx.prefix):
             command = ctx.prefix + command
         new_message.content = command
         await self.bot.process_commands(new_message)
