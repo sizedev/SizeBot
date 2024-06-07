@@ -24,7 +24,7 @@ def getUserSizes(g: discord.Guild) -> Any:
     # Like, if you sorted the users by size, would that make this faster?
     # It's 1:30AM and I don't want to check.
     smallestuser = None
-    smallestsize = SV.infinity
+    smallestsize = SV("infinity")
     largestuser = None
     largestsize = SV(0)
     allusers = {}
@@ -33,7 +33,7 @@ def getUserSizes(g: discord.Guild) -> Any:
         if not (member and str(member.status) != "offline"):
             continue
         userdata = userdb.load(g.id, userid)
-        if userdata.height == 0 or userdata.height == SV.infinity:
+        if userdata.height == 0 or userdata.height == SV("infinity"):
             continue
         if not userdata.is_active:
             continue
@@ -155,7 +155,7 @@ class EdgeCog(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, m: discord.Message):
         # non-guild messages
-        if not isinstance(m.author, discord.Member):
+        if m.guild is None or not isinstance(m.author, discord.Member):
             return
 
         try:
@@ -191,7 +191,7 @@ class EdgeCog(commands.Cog):
         if lg == m.author.id:
             if m.author.id == largestuser:
                 return
-            elif userdata.height == SV.infinity:
+            elif userdata.height == SV("infinity"):
                 return
             else:
                 userdata.height = largestsize * Decimal(1.1)
