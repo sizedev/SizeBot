@@ -11,7 +11,7 @@ from sizebot.lib.stats import StatBox
 from sizebot.lib.units import RV, SV, TV
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.types import BotContext, GuildContext
+from sizebot.lib.types import GuildContext
 from sizebot.lib.utils import pretty_time_delta
 from sizebot.lib.userdb import MoveTypeStr
 import sizebot.lib.language as lang
@@ -37,7 +37,7 @@ def calc_move_dist(userdata: userdb.User) -> tuple[TV, SV]:
         raise ValueError(f"{movetype}perhour is not a valid stat.")
 
     persecond = RV(speed / 60 / 60)
-    distance = elapsed_seconds * persecond)
+    distance = elapsed_seconds * persecond
 
     return elapsed_seconds, distance
 

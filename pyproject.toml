@@ -110,7 +110,7 @@ select = [
     "RUF",      # Ruff-specific rules
 
 ]
-ignore = ["E501", "COM812", "PIE790", "RET504", "RUF001", "RUF013"]
+ignore = ["E501", "COM812", "PIE790", "RET504", "RUF001", "RUF013", "ANN101", "ANN102"]
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = ["fromJSON", "toJSON"]
