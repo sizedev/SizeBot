@@ -95,10 +95,10 @@ class Change:
             newheight = self.stopSV
             running = False
 
-        # if we've moved past 0 or SV.infinity, cancel the change
+        # if we've moved past 0 or SV("infinity"), cancel the change
         if newheight < SV(0):
             newheight = SV(0)
-        if newheight == SV(0) or newheight == SV.infinity:
+        if newheight == SV(0) or newheight == SV("infinity"):
             running = False
 
         # if we're not changing height anymore, cancel the change
