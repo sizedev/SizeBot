@@ -12,6 +12,8 @@ botservice=${botname}
 apiservice=${botname}api
 dest=~/envs/${branch}
 
+export PIPENV_YES=1;
+
 echo =============STOP=============;
 systemctl --user stop ${apiservice};
 systemctl --user stop ${botservice};
@@ -20,8 +22,11 @@ echo ============BUILD=============;
 rm -rf "${dest}";
 mkdir "${dest}";
 cd "${dest}" &&
+~/.local/bin/pipenv --rm &&
 git clone --depth=1 -b ${branch} https://github.com/sizedev/SizeBot.git . &&
-rye sync --no-dev --features=linux &&
+~/.local/bin/pipenv install . &&
+~/.local/bin/pipenv run pip install cysystemd &&
+~/.local/bin/pipenv run pip install uwsgi &&
 systemctl --user start ${botservice} &&
 systemctl --user start ${apiservice};
 code=$?;\

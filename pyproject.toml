@@ -42,6 +42,12 @@ dependencies = [
     "numexpr==2.9.0",
 ]
 
+[project.optional-dependencies]
+linux = [
+    "cysystemd>=1.6.2",
+    "uwsgi>=2.0.26",
+]
+
 [tool.rye]
 managed = true
 dev-dependencies = [
