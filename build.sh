@@ -4,7 +4,7 @@ if [ "$branch" -eq "master" ]; then
     botname="sizebot"
 elif [ "$branch" -eq "develop" ]; then
     botname="nizebot"
-else; then
+else
     echo "Unrecognized branch: ${branch}";
     exit 1
 fi
