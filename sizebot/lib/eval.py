@@ -1,21 +1,34 @@
-from types import CodeType
-from typing import Any
-from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
+if TYPE_CHECKING:
+    from types import CodeType
+    from collections.abc import Iterator
+    from sizebot.lib.types import BotContext
 
-import builtins
+import logging
 import inspect
+import math
+import re
+
+from mre import Regex, Group
+from arrow import Arrow
+import pydoc
+
+from discord import Embed, Member, User
+from discord.ext import commands
+
+from sizebot.lib.utils import chunk_list
+from sizebot.lib.units import SV, TV, WV
+import sizebot.lib.discordplusplus as dpp
+
+# Passthrough to eval_globals
+import builtins
 import io
 import itertools
-import logging
-import math
 from datetime import date, datetime, time, timedelta
-
 import arrow
-import discord
-from discord import Embed
 import PIL
 from PIL import Image, ImageDraw
-
+import discord
 from sizebot.conf import conf
 from sizebot.cogs import thistracker
 from sizebot.lib import errors, guilddb, proportions, userdb, utils
@@ -24,96 +37,142 @@ from sizebot.lib.diff import Diff, LimitedRate, Rate
 from sizebot.lib.loglevels import BANNER, EGG, LOGIN
 from sizebot.lib.objs import DigiObject, objects, tags
 from sizebot.lib.roller import evalmath, roll
-from sizebot.lib.types import BotContext
-from sizebot.lib.units import Mult, SV, TV, WV, Decimal
+from sizebot.lib.units import Mult, Decimal
 
 
 logger = logging.getLogger("sizebot")
 
 
+def remove_code_block(s: str) -> str:
+    """Extra {code} from a codeblock:
+
+    ```python{code}```
+    ```{code}```
+    `{code}`
+    """
+    re_python = Group("python", non_capturing=True).quantifier(0, 1)
+    re_code = Group(Regex(Regex.ANY).quantifier(0, without_maximum=True))
+    re_codeblock = Regex("```", re_python, re_code, "```")
+    re_miniblock = Regex("`", re_code, "`")
+
+    for r in [re_codeblock, re_miniblock]:
+        m = re.fullmatch(str(r), s, re.DOTALL)
+        if m:
+            return m.group(1)
+
+    return s
+
+
 def eformat(name: str, value: Any) -> str:
     if value is None:
-        emojiType = "❓"
+        emoji_type = "❓"
     elif callable(value):
-        emojiType = "🚙"
-    elif isinstance(value, (list, tuple)):
-        emojiType = "🗒️"
+        emoji_type = "🚙"
+    elif isinstance(value, list | tuple):
+        emoji_type = "🗒️"
     elif isinstance(value, set):
-        emojiType = "📘"
+        emoji_type = "📘"
     elif isinstance(value, dict):
-        emojiType = "📗"
+        emoji_type = "📗"
     elif isinstance(value, bool):
         if value:
-            emojiType = "✅"
+            emoji_type = "✅"
         else:
-            emojiType = "❎"
-    elif isinstance(value, (int, float)):
-        emojiType = "💯"
+            emoji_type = "❎"
+    elif isinstance(value, int | float):
+        emoji_type = "💯"
     elif isinstance(value, str):
-        emojiType = "✏️"
-    elif isinstance(value, discord.member.Member):
-        emojiType = "👥"
-    elif isinstance(value, discord.user.User):
-        emojiType = "👤"
-    elif isinstance(value, discord.ext.commands.Bot):
-        emojiType = "🤖"
-    elif isinstance(value, discord.ext.commands.cog.Cog):
-        emojiType = "⚙️"
+        emoji_type = "✏️"
+    elif isinstance(value, Member):
+        emoji_type = "👥"
+    elif isinstance(value, User):
+        emoji_type = "👤"
+    elif isinstance(value, commands.Bot):
+        emoji_type = "🤖"
+    elif isinstance(value, commands.Cog):
+        emoji_type = "⚙️"
     elif isinstance(value, SV):
-        emojiType = "🇸"
+        emoji_type = "🇸"
     elif isinstance(value, WV):
-        emojiType = "🇼"
+        emoji_type = "🇼"
     elif isinstance(value, TV):
-        emojiType = "🇹"
-    elif isinstance(value, arrow.arrow.Arrow):
-        emojiType = "🏹"
+        emoji_type = "🇹"
+    elif isinstance(value, Arrow):
+        emoji_type = "🏹"
     else:
-        emojiType = "▫️"
-    return f"{emojiType} {name}"
+        emoji_type = "▫️"
+    return f"{emoji_type} {name}"
 
 
 def get_fullname(o: object) -> str:
-    moduleName = o.__class__.__module__
-    if moduleName == "builtins":
-        moduleName = ""
-    if moduleName:
-        moduleName = f"{moduleName}."
+    module_name = o.__class__.__module__
+    if module_name == "builtins":
+        module_name = ""
+    if module_name:
+        module_name = f"{module_name}."
 
-    className = o.__class__.__name__
-    fullname = f"{moduleName}{className}"
+    class_name = o.__class__.__name__
+    fullname = f"{module_name}{class_name}"
     return fullname
 
 
 def edir(o: Any) -> Embed:
     """send embed of an object's attributes, with type notation"""
-    e = Embed(title=get_fullname(o))
-    attrs = [eformat(n, v) for n, v in utils.ddir(o).items()]
-    pageLen = math.ceil(len(attrs) / 3)
-    for page in utils.chunk_list(attrs, pageLen):
+    e = dpp.Embed(title=get_fullname(o))
+    attrs = [eformat(n, v) for n, v in ddir(o).items()]
+    page_len = math.ceil(len(attrs) / 3)
+    for page in chunk_list(attrs, page_len):
         e.add_field(value="\n".join(page))
     return e
 
 
-# TODO: CamelCase
-def cachedCopy(fn: Callable) -> Callable:
-    """Decorator that calls the wrapper function the first time it's called, and returns copies of the cached result on all later calls"""
-    isCached = False
-    r = None
-
-    def wrapper(*args, **kwargs) -> Any:
-        nonlocal isCached
-        nonlocal r
-        if not isCached:
-            r = fn(*args, **kwargs)
-        isCached = True
-        return r.copy()
-
-    return wrapper
+def pformat(name: str, value: Any) -> str:
+    if value is None:
+        return f"{name}?"
+    if callable(value):
+        return f"{name}()"
+    if isinstance(value, list | tuple):
+        return f"{name}[]"
+    if isinstance(value, set):
+        return f"{name}{{}}"
+    if isinstance(value, dict):
+        return f"{name}{{:}}"
+    return name
 
 
-# TODO: CamelCase
-@cachedCopy
-def getEvalGlobals() -> dict[str, Any]:
+def pdir(o: Any) -> list[str]:
+    """return a list of an object's attributes, with type notation."""
+    return [pformat(n, v) for n, v in ddir(o).items()]
+
+
+def ddir(o: Any) -> dict[str, Any]:
+    """return a dictionary of an object's attributes."""
+    return {n: v for n, v in inspect.getmembers(o) if not n.startswith("_")}
+
+
+def str_help(topic: str) -> str:
+    return pydoc.plain(pydoc.render_doc(topic))
+
+
+def find_one[T](iterator: Iterator[T]) -> T | None:
+    try:
+        val = next(iterator)
+    except StopIteration:
+        val = None
+    return val
+
+
+def format_error(err: Exception) -> str:
+    fullname = get_fullname(err)
+
+    err_message = str(err)
+    if err_message:
+        err_message = f": {err_message}"
+
+    return f"{fullname}{err_message}"
+
+
+def get_eval_globals() -> dict[str, Any]:
     """Construct a globals dict for eval"""
     # Create a dict of builtins, excluding any in the blacklist
     blacklist = [
@@ -131,12 +190,12 @@ def getEvalGlobals() -> dict[str, Any]:
         "super",
         "__import__"
     ]
-    evalBuiltins = {n: (v if n not in blacklist else None) for n, v in vars(builtins).items()}
+    eval_builtins = {n: (v if n not in blacklist else None) for n, v in vars(builtins).items()}
 
-    evalGlobals = {
-        "__builtins__": evalBuiltins,
+    eval_globals = {
+        "__builtins__": eval_builtins,
         "inspect": inspect,
-        "help": utils.str_help,
+        "help": str_help,
         "Decimal": Decimal,
         "discord": discord,
         "logging": logging,
@@ -147,7 +206,7 @@ def getEvalGlobals() -> dict[str, Any]:
         "objects": objects,
         "tags": tags,
         "utils": utils,
-        "pdir": utils.pdir,
+        "pdir": pdir,
         "userdb": userdb,
         "thistracker": thistracker,
         "edir": edir,
@@ -155,7 +214,7 @@ def getEvalGlobals() -> dict[str, Any]:
         "emojis": emojis,
         "itertools": itertools,
         "conf": conf,
-        "findOne": utils.find_one,
+        "findOne": find_one,
         "datetime": datetime,
         "date": date,
         "time": time,
@@ -168,53 +227,49 @@ def getEvalGlobals() -> dict[str, Any]:
         "Image": Image,
         "ImageDraw": ImageDraw,
         "io": io,
-        "logger": logger,
         "errors": errors,
         "arrow": arrow,
         "roll": roll,
         "evalmath": evalmath
     }
 
-    return evalGlobals
+    return eval_globals
 
 
-# TODO: CamelCase
-def buildEvalWrapper(evalStr: str, addReturn: bool = True) -> tuple[CodeType, str]:
+def build_eval_wrapper(eval_str: str, *, add_return: bool) -> tuple[CodeType, str]:
     """Build a wrapping async function that lets the eval command run multiple lines, and return the result of the last line"""
-    evalLines = evalStr.rstrip().split("\n")
-    if evalLines[-1].startswith(" "):
-        addReturn = False
-    if addReturn:
-        evalLines[-1] = "return " + evalLines[-1]
-    evalWrapperStr = "async def __ex():" + "".join(f"\n  {line}" for line in evalLines)
-    try:
-        evalWrapper = compile(evalWrapperStr, "<eval>", "exec")
-    except SyntaxError:
-        # If we get a syntax error, maybe it's because someone is trying to do an assignment on the last line? Might as well try it without a return statement and see if it works.
-        if addReturn:
-            return buildEvalWrapper(evalStr, False)
-        raise
-
-    return evalWrapper, evalWrapperStr
+    eval_lines = eval_str.rstrip().split("\n")
+    if eval_lines[-1].startswith(" "):
+        add_return = False
+    if add_return:
+        eval_lines[-1] = "return " + eval_lines[-1]
+    eval_wrapper_str = "async def __ex():" + "".join(f"\n  {line}" for line in eval_lines)
+    eval_wrapper = compile(eval_wrapper_str, "<eval>", "exec")
+    return eval_wrapper, eval_wrapper_str
 
 
-# TODO: CamelCase
-async def runEval(ctx: BotContext, evalStr: str) -> Any:
-    evalGlobals = getEvalGlobals()
-    evalLocals = {}
+async def run_eval(ctx: BotContext, eval_str: str) -> Embed | str:
+    eval_globals = get_eval_globals()
+    eval_locals: dict[str, Any] = {}
 
     # Add ctx to the globals
-    evalGlobals["ctx"] = ctx
+    eval_globals["ctx"] = ctx
+    try:
+        eval_wrapper, eval_wrapper_str = build_eval_wrapper(eval_str, add_return=True)
+    except SyntaxError:
+        eval_wrapper, eval_wrapper_str = build_eval_wrapper(eval_str, add_return=False)
 
-    evalWrapper, evalWrapperStr = buildEvalWrapper(evalStr)
-
-    logger.debug(f"Executing eval:\n{evalWrapperStr}")
+    logger.debug(f"Executing eval:\n{eval_wrapper_str}")
 
     exec(
-        evalWrapper,
-        evalGlobals,
-        evalLocals
+        eval_wrapper,
+        eval_globals,
+        eval_locals
     )
-    evalFn = evalLocals["__ex"]
+    eval_fn = eval_locals["__ex"]
 
-    return await evalFn()
+    result = await eval_fn()
+
+    if isinstance(result, Embed):
+        return result
+    return str(result).replace("```", r"\`\`\`")

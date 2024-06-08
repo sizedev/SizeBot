@@ -40,6 +40,7 @@ dependencies = [
     "packaging==24.0",
     "sizeroyale==1.0.5",
     "numexpr==2.9.0",
+    "mre>=0.12.0",
 ]
 
 [project.optional-dependencies]
@@ -82,12 +83,10 @@ build-backend = "hatchling.build"
 select = [
     "F",        # Pyflakes
     "E", "W",   # pycodestyle
-    "C90",      # mccabe
     "N",        # pep8-naming
     "UP",       # pyupgrade
     "ANN",      # flake8-annotations
     "ASYNC",    # flake8-async
-    "BLE",      # flake8-blind-except
     "FBT",      # flake8-boolean-trap
     "B",        # flake8-bugbear
     "A",        # flake8-builtins
@@ -110,7 +109,7 @@ select = [
     "RUF",      # Ruff-specific rules
 
 ]
-ignore = ["E501", "COM812", "PIE790", "RET504", "RUF001", "RUF013", "ANN101", "ANN102"]
+ignore = ["E501", "ANN101", "ANN102", "ANN401", "ANN204", "COM812", "PIE790", "RET504", "RUF001", "RUF013"]
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = ["fromJSON", "toJSON"]

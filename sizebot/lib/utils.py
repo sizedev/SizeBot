@@ -1,13 +1,12 @@
-from typing import Any, Generator, Hashable, Sequence
-from collections.abc import Iterable, Iterator
+from typing import Any, Hashable, Sequence
+from collections.abc import Iterable
 
-import inspect
-import pydoc
 import random
 import re
 import traceback
 from urllib.parse import quote
 
+from discord import Embed, Message
 import validator_collection
 
 from discord.ext import commands
@@ -96,28 +95,34 @@ def get_path(root: Any, path: str, default: Any = None) -> Any:
     return branch
 
 
-def chunk_list(lst: list, chunklen: int):
+def chunk_list(lst: list[Any], chunklen: int) -> Iterable[list[Any]]:
     while lst:
         yield lst[:chunklen]
         lst = lst[chunklen:]
 
 
-def chunk_str(s: str, chunklen: int, prefix: str = "", suffix: str = "") -> Generator[str, None, str]:
+def chunk_str(s: str, chunklen: int, prefix: str = "", suffix: str = "") -> Iterable[str]:
     """chunk_str(3, "ABCDEFG") --> ['ABC', 'DEF', 'G']"""
     innerlen = chunklen - len(prefix) - len(suffix)
     if innerlen <= 0:
         raise ValueError("Cannot fit prefix and suffix within chunklen")
 
     if not s:
-        return prefix + s + suffix
-
+        yield prefix + s + suffix
+        return
+    
     while len(s) > 0:
         chunk = s[:innerlen]
         s = s[innerlen:]
         yield prefix + chunk + suffix
 
 
-def chunk_msg(m: str) -> list:
+async def sendplus(ctx: BotContext, content: str | None = None, embed: Embed | None = None, *, paged: bool = False) -> list[Message]:
+    if content is not None and embed is None and paged:
+        return [await ctx.send(content=c) for c in chunk_msg(content)]
+    return [await ctx.send(content=content, embed=embed)] # type: ignore
+
+def chunk_msg(m: str) -> Iterable[str]:
     p = "```\n"
     if m.startswith("Traceback") or m.startswith("eval error") or m.startswith("Executing eval"):
         p = "```python\n"
@@ -126,50 +131,6 @@ def chunk_msg(m: str) -> list:
 
 def format_traceback(err: BaseException) -> str:
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
-
-
-def pformat(name: str, value: Any) -> str:
-    if value is None:
-        return f"{name}?"
-    if callable(value):
-        return f"{name}()"
-    if isinstance(value, (list, tuple)):
-        return f"{name}[]"
-    if isinstance(value, set):
-        return f"{name}{{}}"
-    if isinstance(value, dict):
-        return f"{name}{{:}}"
-    return name
-
-
-def pdir(o: Any) -> list:
-    """return a list of an object's attributes, with type notation."""
-    return [pformat(n, v) for n, v in ddir(o).items()]
-
-
-def ddir(o: Any) -> dict:
-    """return a dictionary of an object's attributes."""
-    return {n: v for n, v in inspect.getmembers(o) if not n.startswith("_")}
-    # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
-
-
-
-def str_help(topic: str) -> str:
-    return pydoc.plain(pydoc.render_doc(topic))
-
-
-def remove_code_block(s: str) -> str:
-    re_codeblock = re.compile(r"^\s*```(?:python)?(.*)```\s*$", re.DOTALL)
-    s_nocodeblock = re.sub(re_codeblock, r"\1", s)
-    if s_nocodeblock != s:
-        return s_nocodeblock
-
-    re_miniblock = re.compile(r"^\s*`(.*)`\s*$", re.DOTALL)
-    s_nominiblock = re.sub(re_miniblock, r"\1", s)
-    if s_nominiblock != s:
-        return s_nominiblock
-
-    return s
 
 
 def int_to_roman(input: int) -> str:
@@ -189,14 +150,6 @@ def int_to_roman(input: int) -> str:
     return ''.join(result)
 
 
-def find_one(iterator: Iterator) -> Any | None:
-    try:
-        val = next(iterator)
-    except StopIteration:
-        val = None
-    return val
-
-
 async def parse_many(ctx: BotContext, arg: str, types: list[commands.Converter], default: Any = None) -> Any:
     for t in types:
         try:
@@ -206,7 +159,6 @@ async def parse_many(ctx: BotContext, arg: str, types: list[commands.Converter],
     return default
 
 
-# TODO: CamelCase
 def is_url(value: str) -> bool:
     """Returns True when given either a valid URL, or `None`."""
     try:

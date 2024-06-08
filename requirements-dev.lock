@@ -85,6 +85,8 @@ markupsafe==2.1.5
     # via werkzeug
 mccabe==0.7.0
     # via flake8
+mre==0.12.0
+    # via sizebot
 multidict==6.0.5
     # via aiohttp
     # via yarl

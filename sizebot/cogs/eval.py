@@ -4,9 +4,9 @@ import discord
 from discord import Embed
 from discord.ext import commands
 
-from sizebot.lib import utils
+from sizebot.lib.utils import chunk_msg, format_traceback
 from sizebot.lib.constants import emojis
-from sizebot.lib.eval import runEval, get_fullname
+from sizebot.lib.eval import run_eval, format_error, remove_code_block
 from sizebot.lib.types import BotContext
 
 
@@ -22,34 +22,33 @@ class EvalCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def eval(self, ctx: BotContext, *, evalStr: str):
+    async def eval(self, ctx: BotContext, *, eval_str: str) -> None:
         """Evaluate a Python expression."""
-        evalStr = utils.remove_code_block(evalStr)
+        eval_str = remove_code_block(eval_str)
 
-        logger.info(f"{ctx.author.display_name} tried to eval {evalStr!r}.")
+        logger.info(f"{ctx.author.display_name} tried to eval {eval_str!r}.")
 
         # Show user that bot is busy doing something
-        waitMsg = None
+        wait_msg = None
         if isinstance(ctx.channel, discord.TextChannel):
-            waitMsg = await ctx.send(f"{emojis.run_program} Running eval... {emojis.loading}")
+            wait_msg = await ctx.send(f"{emojis.run_program} Running eval... {emojis.loading}")
 
         async with ctx.typing():
             try:
-                result = await runEval(ctx, evalStr)
+                result = await run_eval(ctx, eval_str)
             except Exception as err:
-                logger.error("eval error:\n" + utils.format_traceback(err))
-                await ctx.send(emojis.warning + f" ` {utils.format_error(err)} `")
+                logger.error("eval error:\n" + format_traceback(err))
+                await ctx.send(emojis.warning + f" ` {format_error(err)} `")
                 return
             finally:
                 # Remove wait message when done
-                if waitMsg:
-                    await waitMsg.delete(delay=0)
+                if wait_msg:
+                    await wait_msg.delete(delay=0)
 
         if isinstance(result, Embed):
             await ctx.send(embed=result)
         else:
-            strResult = str(result).replace("```", r"\`\`\`")
-            for m in utils.chunk_msg(strResult):
+            for m in chunk_msg(result):
                 await ctx.send(m)
 
     @commands.command(
@@ -57,32 +56,21 @@ class EvalCog(commands.Cog):
         multiline = True
     )
     @commands.is_owner()
-    async def evil(self, ctx: BotContext, *, evalStr: str):
+    async def evil(self, ctx: BotContext, *, eval_str: str) -> None:
         """Evaluate a Python expression, but evilly."""
         # PERMISSION: requires manage_messages
         await ctx.message.delete(delay = 0)
 
-        evalStr = utils.remove_code_block(evalStr)
+        eval_str = remove_code_block(eval_str)
 
-        logger.info(f"{ctx.author.display_name} tried to quietly eval {evalStr!r}.")
+        logger.info(f"{ctx.author.display_name} tried to quietly eval {eval_str!r}.")
 
-        async with ctx.typing():
-            try:
-                await runEval(ctx, evalStr, returnValue = False)
-            except Exception as err:
-                logger.error("eval error:\n" + utils.format_traceback(err))
-                await ctx.author.send(emojis.warning + f" ` {utils.format_error(err)} `")
+        try:
+            await run_eval(ctx, eval_str)
+        except Exception as err:
+            logger.error("eval error:\n" + format_traceback(err))
+            await ctx.author.send(emojis.warning + f" ` {format_error(err)} `")
 
 
-def format_error(err: Exception) -> str:
-    fullname = get_fullname(err)
-
-    errMessage = str(err)
-    if errMessage:
-        errMessage = f": {errMessage}"
-
-    return f"{fullname}{errMessage}"
-
-async def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(EvalCog(bot))
-

@@ -1,7 +1,7 @@
 from typing import TypedDict, cast
 
 import discord.utils
-from discord import Guild, Member
+from discord import Embed, Guild, Member
 from discord.ext import commands
 
 class GuildContext(commands.Context[commands.Bot]):
@@ -18,7 +18,7 @@ class GuildContext(commands.Context[commands.Bot]):
 BotContext = commands.Context[commands.Bot]
 
 class EmbedToSend(TypedDict):
-    embed: str
+    embed: Embed
 
 
 class StrToSend(TypedDict):
