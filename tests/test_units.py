@@ -1,4 +1,5 @@
 # pyright: reportUnnecessaryIsInstance=false
+# ruff: noqa: UP018
 from typing import Any
 import pytest
 from contextlib import AbstractContextManager, nullcontext as does_not_raise
@@ -15,8 +16,7 @@ units.init()
 def idfn(arg: Any) -> Any:
     if isinstance(arg, BaseDecimal):
         return repr(arg)
-    else:
-        return arg
+    return arg
 
 
 def expect_raise(expected: Any | type[BaseException]) -> AbstractContextManager[Any]:
@@ -26,7 +26,7 @@ def expect_raise(expected: Any | type[BaseException]) -> AbstractContextManager[
 
 # a + b = ?
 @pytest.mark.parametrize(
-    "a,b,expected",
+    ("a", "b", "expected"),
     [
         (int(4),        int(2),         int(6)),
         (int(4),        Decimal(2),     Decimal(6)),
@@ -95,7 +95,7 @@ def expect_raise(expected: Any | type[BaseException]) -> AbstractContextManager[
     ],
     ids=idfn
 )
-def test_add(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
+def test_add(a: Any, b: Any, expected: UnitType | type[NotImplementedError]) -> None:
     with expect_raise(expected):
         result = a + b
         assert type(result) is type(expected)
@@ -107,7 +107,7 @@ def test_add(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
 
 # a - b = ?
 @pytest.mark.parametrize(
-    "a,b,expected",
+    ("a", "b", "expected"),
     [
         (int(4),        int(2),         int(2)),
         (int(4),        Decimal(2),     Decimal(2)),
@@ -176,7 +176,7 @@ def test_add(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
     ],
     ids=idfn
 )
-def test_sub(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
+def test_sub(a: Any, b: Any, expected: UnitType | type[NotImplementedError]) -> None:
     with expect_raise(expected):
         result = a - b
         assert type(result) is type(expected)
@@ -184,7 +184,7 @@ def test_sub(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
 
 # a * b = ?
 @pytest.mark.parametrize(
-    "a,b,expected",
+    ("a","b","expected"),
     [
         (int(4),        int(2),         int(8)),
         (int(4),        Decimal(2),     Decimal(8)),
@@ -253,7 +253,7 @@ def test_sub(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
     ],
     ids=idfn
 )
-def test_mul(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
+def test_mul(a: Any, b: Any, expected: UnitType | type[NotImplementedError]) -> None:
     with expect_raise(expected):
         result = a * b
         assert type(result) is type(expected)
@@ -261,7 +261,7 @@ def test_mul(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
 
 # a / b = ?
 @pytest.mark.parametrize(
-    "a,b,expected",
+    ("a", "b", "expected"),
     [
         (int(4),        int(2),         float(2)),
         (int(4),        Decimal(2),     Decimal(2)),
@@ -330,7 +330,7 @@ def test_mul(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
     ],
     ids=idfn
 )
-def test_truediv(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
+def test_truediv(a: Any, b: Any, expected: UnitType | type[NotImplementedError]) -> None:
     with expect_raise(expected):
         result = a / b
         assert type(result) is type(expected)
@@ -338,7 +338,7 @@ def test_truediv(a: Any, b: Any, expected: UnitType | type[NotImplementedError])
 
 # a // b = ?
 @pytest.mark.parametrize(
-    "a,b,expected",
+    ("a", "b", "expected"),
     [
         (int(4),        int(2),         int(2)),
         (int(4),        Decimal(2),     Decimal(2)),
@@ -407,7 +407,7 @@ def test_truediv(a: Any, b: Any, expected: UnitType | type[NotImplementedError])
     ],
     ids=idfn
 )
-def test_floordiv(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
+def test_floordiv(a: Any, b: Any, expected: UnitType | type[NotImplementedError]) -> None:
     with expect_raise(expected):
         result = a // b
         assert type(result) is type(expected)
@@ -415,7 +415,7 @@ def test_floordiv(a: Any, b: Any, expected: UnitType | type[NotImplementedError]
 
 # a % b = ?
 @pytest.mark.parametrize(
-    "a,b,expected",
+    ("a", "b", "expected"),
     [
         (int(4),        int(2),         int(0)),
         (int(4),        Decimal(2),     Decimal(0)),
@@ -484,7 +484,7 @@ def test_floordiv(a: Any, b: Any, expected: UnitType | type[NotImplementedError]
     ],
     ids=idfn
 )
-def test_mod(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
+def test_mod(a: Any, b: Any, expected: UnitType | type[NotImplementedError]) -> None:
     with expect_raise(expected):
         result = a % b
         assert type(result) is type(expected)
@@ -492,7 +492,7 @@ def test_mod(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
 
 # divmod(a, b) = ?
 @pytest.mark.parametrize(
-    "a,b,expected",
+    ("a", "b", "expected"),
     [
         (int(4),        int(2),         (int(2), int(0))),
         (int(4),        Decimal(2),     (Decimal(2), Decimal(0))),
@@ -561,7 +561,7 @@ def test_mod(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
     ],
     ids=idfn
 )
-def test_divmod(a: Any, b: Any, expected: tuple[UnitType, UnitType] | type[NotImplementedError]):
+def test_divmod(a: Any, b: Any, expected: tuple[UnitType, UnitType] | type[NotImplementedError]) -> None:
     with expect_raise(expected):
         result_a, result_b = divmod(a, b)
         if isinstance(expected, tuple):
@@ -573,7 +573,7 @@ def test_divmod(a: Any, b: Any, expected: tuple[UnitType, UnitType] | type[NotIm
 
 # a ** b = ?
 @pytest.mark.parametrize(
-    "a,b,expected",
+    ("a", "b", "expected"),
     [
         (int(4),        int(2),         int(16)),
         (int(4),        Decimal(2),     Decimal(16)),
@@ -672,7 +672,7 @@ def test_divmod(a: Any, b: Any, expected: tuple[UnitType, UnitType] | type[NotIm
     ],
     ids=idfn
 )
-def test_pow(a: Any, b: Any, expected: UnitType | type[NotImplementedError]):
+def test_pow(a: Any, b: Any, expected: UnitType | type[NotImplementedError]) -> None:
     with expect_raise(expected):
         result = a ** b
         assert type(result) is type(expected)
