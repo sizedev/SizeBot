@@ -1,6 +1,5 @@
 from typing import Literal, NamedTuple
 
-from decimal import Decimal
 from discord import Embed
 import discord
 from discord.ext import commands
@@ -9,8 +8,8 @@ from sizebot.lib import userdb
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.quake import breath_joules, heartbeat_joules, joules_to_mag, jump_joules, mag_to_name, mag_to_radius, poke_joules, step_joules, stomp_joules, type_joules
 from sizebot.lib.stats import StatBox
-from sizebot.lib.types import BotContext, GuildContext
-from sizebot.lib.units import SV
+from sizebot.lib.types import GuildContext
+from sizebot.lib.units import SV, Decimal
 from sizebot.lib.userdb import load_or_fake, MemberOrFakeOrSize
 from sizebot.lib.errors import UserMessedUpException
 

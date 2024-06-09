@@ -1,8 +1,7 @@
-from decimal import Decimal
 import logging
 import math
 import random
-from typing import cast, get_args
+from typing import get_args
 
 import discord
 from discord import Embed
@@ -17,7 +16,7 @@ from sizebot.lib.loglevels import EGG
 from sizebot.lib.objs import DigiLand, DigiObject, objects, relativestatsembed, relativestatssentence, statsembed, tags, format_close_object_smart, get_stats_sentence
 from sizebot.lib.stats import StatBox, taglist, AVERAGE_HEIGHT
 from sizebot.lib.types import BotContext, GuildContext
-from sizebot.lib.units import SV, WV, AV
+from sizebot.lib.units import SV, WV, AV, Decimal
 from sizebot.lib.userdb import load_or_fake, MemberOrFake, MemberOrFakeOrSize
 from sizebot.lib.fakeplayer import FakePlayer
 from sizebot.lib.utils import parse_many, pretty_time_delta, sentence_join
