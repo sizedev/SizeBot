@@ -46,10 +46,10 @@ def pretty_time_delta(totalSeconds: Decimal, millisecondAccuracy: bool = False, 
         if roundeventually and maxtime is not None and duration >= maxtime:
                 continue
         if millisecondAccuracy and fraction:
-            s += f"{value:,d}.{remaining:03d} second{_s(value, remaining)}"
+            s += f"{value:,d}.{remaining:03d} second{_s(value, remaining)}, "
         else:
-            s += f"{value:,d} {name}{_s(value)}"
-    return s
+            s += f"{value:,d} {name}{_s(value)}, "
+    return s.rstrip(", ")
 
 def _s(value: int, fraction: int = 0) -> str:
     if value != 1 or fraction != 0:
