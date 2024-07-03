@@ -32,6 +32,7 @@ ONE_LIGHTSECOND = SV(299792000)
 AVERAGE_CAL_PER_DAY = 2000
 AVERAGE_WATER_PER_DAY = WV(3200)
 AVERAGE_HUMAN_DRAG_COEFFICIENT = Decimal("1.123")
+AVERAGE_HUMAN_IPD = SV("0.064")
 GRAVITY = Decimal("9.807")  # m/s^2
 AIR_DENSITY = Decimal("1.204")  # kg/m3
 HOUR = Decimal("3600")
@@ -1031,6 +1032,16 @@ all_stats = [
             value=(lambda v: v["height"] / 65),
             tags=["keypoint", "speedcompare"],
             aliases=["toe", "toes"]),
+    StatDef("ipd",
+            title="Inter Pupillary Distance",
+            string="{nickname} has an inter pupillary distance of **{ipd:,.3mu}**.",
+            body="{ipd:,.3mu}",
+            is_shown=False,
+            requires=["averagescale"],
+            power=1,
+            type=SV,
+            value=(lambda v: AVERAGE_HUMAN_IPD * v["averagescale"]),
+            aliases=["interpupillarydistance", "eyedistance", "eyedist", "vr"]),
     StatDef("height+",
             title=lambda s: s['height'].title,
             string="",
