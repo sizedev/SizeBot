@@ -164,7 +164,10 @@ class BaseDecimal():
     def __sub__(self, other: BaseDecimal | int) -> BaseDecimal:
         rawvalue = unwrap_decimal(self)
         rawother = unwrap_decimal(other)
-        return BaseDecimal(rawvalue - rawother)
+        try:
+            return BaseDecimal(rawvalue - rawother)
+        except decimal.InvalidOperation as e:
+            return BaseDecimal(0)
 
     @abstractmethod
     def __rsub__(self, other: BaseDecimal | int) -> BaseDecimal:
