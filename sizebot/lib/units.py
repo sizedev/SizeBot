@@ -408,11 +408,11 @@ class Dimension(BaseDecimal):
     def get_quantity_pair(cls, s: str) -> tuple[str | None, str | None]:
         raise NotImplementedError
 
-    def to_best_unit(self, sysname: str) -> str:
+    def to_best_unit(self, sysname: str, spec: str = "", preferName: bool = False) -> str:
         value = Decimal(self)
         system = self._systems[sysname]
         unit = system.get_best_unit(value)
-        return unit.format(value)
+        return unit.format(value, spec, preferName)
 
     @classmethod
     def load_from_file(cls, filename: str):
