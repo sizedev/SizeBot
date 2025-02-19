@@ -45,7 +45,7 @@ dependencies = [
 
 [project.optional-dependencies]
 linux = [
-    "cysystemd>=1.6.2",
+    "cysystemd==1.6.3",
     "pyuwsgi>=2.0.23.post0",
 ]
 
