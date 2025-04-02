@@ -14,7 +14,7 @@ import discordplus
 
 from sizebot import __version__
 from sizebot.conf import conf
-from sizebot.lib import language, objs, paths, pokemon, status, units, utils, nickmanager
+from sizebot.lib import language, objs, paths, pokemon, status, units, utils, nickmanager, constants
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.lib.types import BotContext
@@ -266,8 +266,8 @@ def main():
 
     @bot.tree.command(name="sb")
     async def sb(interaction: discord.Interaction, command: str):
-        message = await interaction.response.send_message(f"Processing command...", ephemeral=True)
-        message = await interaction.channel.send(f"{interaction.user.name}: `{command}`")
+        message = await interaction.response.send_message(f"{constants.emojis.loading} Processing command...", delete_after=0)
+        # message = await interaction.channel.send(f"{interaction.user.name}: `{command}`")
         new_message = copy(message)
         new_message.author = interaction.user
         new_message.content = conf.prefix + command
