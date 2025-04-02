@@ -20,6 +20,7 @@ from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.lib.types import BotContext
 from sizebot.lib.utils import truncate
 from sizebot.plugins import active, monika
+from copy import copy
 
 logging.basicConfig(level=CMD)
 dfhandler = digilogger.DigiFormatterHandler()
@@ -133,6 +134,13 @@ def main():
             await bot.user.edit(username = conf.name)
         except discord.errors.HTTPException:
             logger.warn("We can't change the username this much!")
+
+        try:
+            synced = await bot.tree.sync()
+            logger.info(f"Synced {len(synced)} slash command(s)")
+        except Exception as e:
+            logger.error(f"Failed to sync slash commands: {e}")
+            raise e
 
         # Print the splash screen.
         # Obviously we need the banner printed in the terminal
@@ -255,6 +263,15 @@ def main():
     @bot.event
     async def on_guild_remove(guild: discord.Guild):
         logger.warn(f"SizeBot has been removed from {guild.name}! ({guild.id})")
+
+    @bot.tree.command(name="sb")
+    async def sb(interaction: discord.Interaction, command: str):
+        message = await interaction.response.send_message(f"Processing command...", ephemeral=True)
+        message = await interaction.channel.send(f"{interaction.user.name}: `{command}`")
+        new_message = copy(message)
+        new_message.author = interaction.user
+        new_message.content = conf.prefix + command
+        await bot.process_commands(new_message)
 
     def on_disconnect():
         logger.error("SizeBot has been disconnected from Discord!")
