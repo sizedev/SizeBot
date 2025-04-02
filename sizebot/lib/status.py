@@ -1,5 +1,5 @@
 try:
-    from cysystemd import daemon
+    import pystemd.daemon as daemon
 except ImportError:
     daemon = None
 
@@ -7,10 +7,10 @@ except ImportError:
 def ready():
     if not daemon:
         return
-    daemon.notify(daemon.Notification.READY)
+    daemon.notify(False, ready=1)
 
 
 def stopping():
     if not daemon:
         return
-    daemon.notify(daemon.Notification.STOPPING)
+    daemon.notify(False, stopping=1)
