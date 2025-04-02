@@ -388,8 +388,8 @@ class HelpCog(commands.Cog):
         """Request an invite for SizeBot!"""
         await ctx.send("## Thank you for the interest in the bot!\n"
                        "You can invite SizeBot to your server now!\n"
-                       f"- Use this [link](https://discord.com/oauth2/authorize?client_id={ctx.bot.application_id}&permissions=563365424786496&scope=bot) to invite SizeBot to your server!\n"
-                       f"- (Use this [link](https://discord.com/oauth2/authorize?client_id={ctx.bot.application_id}&permissions=0&scope=bot) if you would like to manually manage the bot permissions).\n"
+                       f"- Use this [link](https://discord.com/oauth2/authorize?client_id={ctx.bot.application_id}&permissions=563365424786496&scope=applications.commands+bot) to invite SizeBot to your server!\n"
+                       f"- (Use this [link](https://discord.com/oauth2/authorize?client_id={ctx.bot.application_id}&permissions=0&scope=applications.commands+bot) if you would like to manually manage the bot permissions).\n"
                        "If you need help, reach out to DigiDuncan (@digiduncan) and use `&help`! You can also go to this server for additional help: https://discord.gg/bbGjN8dTgk")
 
 
