@@ -266,7 +266,7 @@ def main():
 
     @bot.tree.command(name="sb")
     async def sb(interaction: discord.Interaction, command: str):
-        message = await interaction.response.send_message(f"{constants.emojis.loading} Processing command...", delete_after=0)
+        message = await interaction.response.send_message(f"{constants.emojis.loading} Processing command...", delete_after=1)
         # message = await interaction.channel.send(f"{interaction.user.name}: `{command}`")
         new_message = copy(message)
         new_message.author = interaction.user
