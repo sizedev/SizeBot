@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Literal, Any
+from typing import Literal, Any, NotRequired, TypedDict, cast
 
 from functools import total_ordering
 import importlib.resources as pkg_resources
@@ -12,11 +12,9 @@ from discord import Embed
 import sizebot.data.objects
 from sizebot import __version__
 from sizebot.lib import errors, userdb
-from sizebot.lib.constants import emojis
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.language import get_plural, get_indefinite_article
 from sizebot.lib.types import BotContext
-from sizebot.lib.units import AV, SV, VV, WV, Unit, SystemUnit
+from sizebot.lib.units import AV, SV, VV, WV, Unit, SystemUnit, Decimal
 from sizebot.lib.utils import sentence_join
 
 objects: list[DigiObject] = []
@@ -27,27 +25,57 @@ tags: dict[str, int] = {}
 Dimension = Literal["h", "l", "d", "w", "t", "p"]
 
 
+class ObjectJson(TypedDict):
+    name: str
+    dimension: Dimension
+    aliases: NotRequired[list[str]]
+    tags: NotRequired[list[str]]
+    symbol: NotRequired[str]
+    height: NotRequired[str]    # SV
+    length: NotRequired[str]    # SV
+    width: NotRequired[str]     # SV
+    diameter: NotRequired[str]  # SV
+    depth: NotRequired[str]     # SV
+    thickness: NotRequired[str] # SV
+    calories: NotRequired[str]  # Decimal
+    price: NotRequired[str]     # Decimal
+    weight: NotRequired[str]    # WV
+    note: NotRequired[str]
+
+
+class LandJson(TypedDict):
+    name: str
+    dimension: Dimension
+    aliases: NotRequired[list[str]]
+    tags: NotRequired[list[str]]
+    height: str    # SV
+    length: str    # SV
+    width: str     # SV
+    note: NotRequired[str]
+
+
 @total_ordering
 class DigiObject:
-    def __init__(self,
-                 name: str,
-                 dimension: Dimension,
-                 aliases: list[str] = [],
-                 tags: list[str] = [],
-                 symbol: str | None = None,
-                 height: SV | None = None,
-                 length: SV | None = None,
-                 width: SV | None = None,
-                 diameter: SV | None = None,
-                 depth: SV | None = None,
-                 thickness: SV | None = None,
-                 calories: SV | None = None,
-                 price: Decimal | None = None,
-                 weight: WV | None = None,
-                 note: str | None = None):
-
+    def __init__(
+        self,
+        name: str,
+        dimension: Dimension,
+        aliases: list[str],
+        tags: list[str],
+        symbol: str | None,
+        height: SV | None,
+        length: SV | None,
+        width: SV | None,
+        diameter: SV | None,
+        depth: SV | None,
+        thickness: SV | None,
+        calories: Decimal | None,
+        price: Decimal | None,
+        weight: WV | None,
+        note: str | None
+    ):
         self.name = name
-        self.dimension = dimension
+        self.dimension: Dimension = dimension
         self.name_plural = get_plural(name)
         self.singular_names = aliases + [self.name]
         self.aliases = aliases + [get_plural(a) for a in aliases]
@@ -56,184 +84,51 @@ class DigiObject:
         self._tags = tags
         self.tags = tags + [get_plural(t) for t in self._tags]
         self.article = get_indefinite_article(self.name).split(" ")[0]
-        self.symbol = symbol or None
-        self.note = note or None
+        self.symbol = symbol
+        self.note = note
 
-        self.height = height and SV(height)
-        self.length = length and SV(length)
-        self.width = width and SV(width)
-        self.diameter = diameter and SV(diameter)
-        self.depth = depth and SV(depth)
-        self.thickness = thickness and SV(thickness)
-        self.calories = SV(calories) if calories is not None else None
-        self.price = Decimal(price) if price is not None else None
-        self.weight = weight and WV(weight)
-
-        dimensionmap = {
-            "h": "height",
-            "l": "length",
-            "w": "width",
-            "d": "diameter",
-            "p": "depth",
-            "t": "thickness",
-            "c": "calories",
-        }
-
-        self.unitlength: SV = getattr(self, dimensionmap[dimension])
+        self.height = height
+        self.length = length
+        self.width = width
+        self.diameter = diameter
+        self.depth = depth
+        self.thickness = thickness
+        self.calories = calories
+        self.price = price
+        self.weight = weight
 
     @property
-    def image(self):
-        # TODO: See issue #153.
-        return None
+    def unitlength(self) -> SV:
+        dimensionmap = {
+            "h": self.height,
+            "l": self.length,
+            "w": self.width,
+            "d": self.diameter,
+            "p": self.depth,
+            "t": self.thickness,
+        }
+        return cast(SV, dimensionmap[self.dimension])
 
     @property
     def area(self) -> AV | None:
         if self.height is not None and self.width is not None:
-            return AV(self.height * self.width)
+            return self.height * self.width
         elif self.length is not None and self.width is not None:
-            return AV(self.length * self.width)
+            return self.length * self.width
         elif self.diameter:
             r = self.diameter / 2
             r2 = r ** 2
-            return AV(Decimal(math.pi) * r2)
+            return Decimal(math.pi) * r2
         return None
 
     @property
     def volume(self) -> VV | None:
         if self.area is not None:
             if self.depth is not None:
-                return VV(self.area * self.depth)
+                return self.area * self.depth
             elif self.thickness is not None:
-                return VV(self.area * self.thickness)
+                return self.area * self.thickness
         return None
-
-    def add_to_units(self):
-        if self.unitlength is not None:
-            SV.add_unit(Unit(factor=self.unitlength, name=self.name, namePlural=self.name_plural,
-                             names=self.aliases, symbol = self.symbol))
-            SV.add_system_unit("o", SystemUnit(self.name))
-
-        if self.weight is not None:
-            WV.add_unit(Unit(factor=self.weight, name=self.name, namePlural=self.name_plural,
-                             names=self.aliases, symbol = self.symbol))
-            WV.add_system_unit("o", SystemUnit(self.name))
-
-    def get_stats(self, multiplier: Decimal = 1) -> str:
-        returnstr = ""
-        if self.height:
-            returnstr += f"{emojis.blank}**{SV(self.height * multiplier):,.3mu}** tall\n"
-        if self.length:
-            returnstr += f"{emojis.blank}**{SV(self.length * multiplier):,.3mu}** long\n"
-        if self.width:
-            returnstr += f"{emojis.blank}**{SV(self.width * multiplier):,.3mu}** wide\n"
-        if self.diameter:
-            returnstr += f"{emojis.blank}**{SV(self.diameter * multiplier):,.3mu}** across\n"
-        if self.depth:
-            returnstr += f"{emojis.blank}**{SV(self.depth * multiplier):,.3mu}** deep\n"
-        if self.thickness:
-            returnstr += f"{emojis.blank}**{SV(self.thickness * multiplier):,.3mu}** thick\n"
-        if self.calories is not None:
-            returnstr += f"{emojis.blank}has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n"
-        if self.price is not None:
-            returnstr += f"{emojis.blank}costs **USD ${Decimal(self.price * (multiplier ** 3)):,.2f}**\n"
-        if self.weight:
-            returnstr += "and weighs...\n"
-            returnstr += f"{emojis.blank}**{WV(self.weight * (multiplier ** 3)):,.3mu}**"
-        return returnstr
-
-    def get_stats_sentence(self, multiplier: Decimal = 1, system: Literal["m", "u"] = "m") -> str:
-        statsstrings = []
-        if self.height:
-            statsstrings.append(f"**{SV(self.height * multiplier):,.3{system}}** tall")
-        if self.length:
-            statsstrings.append(f"**{SV(self.length * multiplier):,.3{system}}** long")
-        if self.width:
-            statsstrings.append(f"**{SV(self.width * multiplier):,.3{system}}** wide")
-        if self.diameter:
-            statsstrings.append(f"**{SV(self.diameter * multiplier):,.3{system}}** across")
-        if self.depth:
-            statsstrings.append(f"**{SV(self.depth * multiplier):,.3{system}}** deep")
-        if self.thickness:
-            statsstrings.append(f"**{SV(self.thickness * multiplier):,.3{system}}** thick")
-        if self.calories is not None:
-            statsstrings.append(f"has **{Decimal(self.calories * (multiplier ** 3)):,.3}** calories")
-        if self.price is not None:
-            statsstrings.append(f"costs **USD ${Decimal(self.price * (multiplier ** 3)):,.2f}**")
-        if self.weight:
-            statsstrings.append(f"weighs **{WV(self.weight * multiplier ** 3):,.3{system}}**")
-
-        returnstr = sentence_join(statsstrings, oxford=True) + "."
-
-        return returnstr
-
-    def get_stats_embed(self, multiplier: Decimal = 1) -> Embed:
-        embed = Embed()
-        embed.set_author(name = f"SizeBot {__version__}")
-
-        if self.height:
-            embed.add_field(name = "Height",
-                            value = f"**{SV(self.height * multiplier):,.3mu}** tall\n")
-        if self.length:
-            embed.add_field(name = "Length",
-                            value = f"**{SV(self.length * multiplier):,.3mu}** long\n")
-        if self.width:
-            embed.add_field(name = "Width",
-                            value = f"**{SV(self.width * multiplier):,.3mu}** wide\n")
-        if self.diameter:
-            embed.add_field(name = "Diameter",
-                            value = f"**{SV(self.diameter * multiplier):,.3mu}** across\n")
-        if self.depth:
-            embed.add_field(name = "Depth",
-                            value = f"**{SV(self.depth * multiplier):,.3mu}** deep\n")
-        if self.thickness:
-            embed.add_field(name = "Thickness",
-                            value = f"**{SV(self.thickness * multiplier):,.3mu}** thick\n")
-        if self.area is not None:
-            embed.add_field(name = "Area",
-                            value = f"**{AV(self.area * (multiplier ** 2)):,.3mu}**\n")
-        if self.volume is not None:
-            embed.add_field(name = "Volume",
-                            value = f"**{VV(self.volume * (multiplier ** 3)):,.3mu}**\n")
-        if self.calories is not None:
-            embed.add_field(name = "Calories",
-                            value = f"**{Decimal(self.calories * (multiplier ** 3)):,.3}** calories\n")
-        if self.price is not None:
-            embed.add_field(name = "Price",
-                            value = f"**${Decimal(self.price * (multiplier ** 3)):,.2}**")
-        if self.weight:
-            embed.add_field(name = "Weight",
-                            value = f"**{WV(self.weight * (multiplier ** 3)):,.3mu}**")
-
-        if self.image:
-            embed.set_image(self.image)
-
-        return embed
-
-    def stats(self) -> str:
-        return f"{self.article.capitalize()} {self.name} is...\n" + self.get_stats()
-
-    def statsembed(self) -> Embed:
-        embed = self.get_stats_embed()
-        embed.title = self.name
-        embed.description = f"*{self.note}*" if self.note else None
-        return embed
-
-    def relativestats(self, userdata: userdb.User) -> str:
-        return (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
-                f"To {userdata.nickname}, {self.article} {self.name} looks...\n") \
-            + self.get_stats(userdata.viewscale)
-
-    def relativestatssentence(self, userdata: userdb.User) -> str:
-        return (f"{userdata.nickname} is {userdata.height:,.3{userdata.unitsystem}} tall."
-                f" To them, {self.article} {self.name} looks ") \
-            + self.get_stats_sentence(userdata.viewscale, userdata.unitsystem)
-
-    def relativestatsembed(self, userdata: userdb.User) -> Embed:
-        embed = self.get_stats_embed(userdata.viewscale)
-        embed.title = self.name + " *[relative]*"
-        embed.description = (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
-                             f"To {userdata.nickname}, {self.article} {self.name} looks...\n")
-        return embed
 
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, str):
@@ -263,8 +158,23 @@ class DigiObject:
         return None
 
     @classmethod
-    def from_JSON(cls, objJson: Any) -> DigiObject:
-        return cls(**objJson)
+    def from_json(cls, data: ObjectJson) -> DigiObject:
+        name = data["name"]
+        dimension = data["dimension"]
+        aliases = data.get("aliases", [])
+        tags = data.get("tags", [])
+        symbol = data.get("symbol")
+        height = SV(data["height"]) if "height" in data else None
+        length = SV(data["length"]) if "length" in data else None
+        width = SV(data["width"]) if "width" in data else None
+        diameter = SV(data["diameter"]) if "diameter" in data else None
+        depth = SV(data["depth"]) if "depth" in data else None
+        thickness = SV(data["thickness"]) if "thickness" in data else None
+        calories = Decimal(data["calories"]) if "calories" in data else None
+        price = Decimal(data["price"]) if "price" in data else None
+        weight = WV(data["weight"]) if "weight" in data else None
+        note = data.get("note")
+        return cls(name, dimension, aliases, tags, symbol, height, length, width, diameter, depth, thickness, calories, price, weight, note)
 
     @classmethod
     async def convert(cls, ctx: BotContext, argument: str) -> DigiObject:
@@ -280,17 +190,159 @@ class DigiObject:
         return str(self)
 
 
+class DigiLand:
+    def __init__(
+        self,
+        name: str,
+        dimension: Dimension,
+        height: SV,
+        length: SV,
+        width: SV,
+        tags: list[str],
+        note: str | None
+    ):
+        self.name = name
+        self.dimension = dimension
+        self.height = height
+        self.length = length
+        self.width = width
+        self.tags = tags
+        self.note = note
+
+    @property
+    def area(self) -> AV:
+        return self.height * self.width
+    
+    @classmethod
+    def from_digiobject(cls, obj: DigiObject) -> DigiLand:
+        return cls(
+            name=obj.name,
+            dimension=obj.dimension,
+            height=cast(SV, obj.height),
+            length=cast(SV, obj.length),
+            width=cast(SV, obj.width),
+            tags=obj.tags,
+            note=obj.note
+        )
+
+
+
+
+def _get_stats_embed(obj: DigiObject, multiplier: Decimal = Decimal(1)) -> Embed:
+    embed = Embed()
+    embed.set_author(name = f"SizeBot {__version__}")
+
+    if obj.height:
+        embed.add_field(name = "Height",
+                        value = f"**{SV(obj.height * multiplier):,.3mu}** tall\n")
+    if obj.length:
+        embed.add_field(name = "Length",
+                        value = f"**{SV(obj.length * multiplier):,.3mu}** long\n")
+    if obj.width:
+        embed.add_field(name = "Width",
+                        value = f"**{SV(obj.width * multiplier):,.3mu}** wide\n")
+    if obj.diameter:
+        embed.add_field(name = "Diameter",
+                        value = f"**{SV(obj.diameter * multiplier):,.3mu}** across\n")
+    if obj.depth:
+        embed.add_field(name = "Depth",
+                        value = f"**{SV(obj.depth * multiplier):,.3mu}** deep\n")
+    if obj.thickness:
+        embed.add_field(name = "Thickness",
+                        value = f"**{SV(obj.thickness * multiplier):,.3mu}** thick\n")
+    if obj.area is not None:
+        embed.add_field(name = "Area",
+                        value = f"**{AV(obj.area * (multiplier ** 2)):,.3mu}**\n")
+    if obj.volume is not None:
+        embed.add_field(name = "Volume",
+                        value = f"**{VV(obj.volume * (multiplier ** 3)):,.3mu}**\n")
+    if obj.calories is not None:
+        embed.add_field(name = "Calories",
+                        value = f"**{Decimal(obj.calories * (multiplier ** 3)):,.3}** calories\n")
+    if obj.price is not None:
+        embed.add_field(name = "Price",
+                        value = f"**${Decimal(obj.price * (multiplier ** 3)):,.2}**")
+    if obj.weight:
+        embed.add_field(name = "Weight",
+                        value = f"**{WV(obj.weight * (multiplier ** 3)):,.3mu}**")
+
+    return embed
+
+def relativestatsembed(obj: DigiObject, userdata: userdb.User) -> Embed:
+    embed = _get_stats_embed(obj, userdata.viewscale)
+    embed.title = obj.name + " *[relative]*"
+    embed.description = (f"__{userdata.nickname} is {userdata.height:,.3mu} tall.__\n"
+                            f"To {userdata.nickname}, {obj.article} {obj.name} looks...\n")
+    return embed
+
+def relativestatssentence(obj: DigiObject, userdata: userdb.User) -> str:
+    return (f"{userdata.nickname} is {userdata.height:,.3{userdata.unitsystem}} tall."
+            f" To them, {obj.article} {obj.name} looks ") \
+        + get_stats_sentence(obj, userdata.viewscale, userdata.unitsystem)
+
+def statsembed(obj: DigiObject) -> Embed:
+    embed = _get_stats_embed(obj)
+    embed.title = obj.name
+    embed.description = f"*{obj.note}*" if obj.note else None
+    return embed
+    
+def get_stats_sentence(obj: DigiObject, multiplier: Decimal, system: Literal["m", "u"]) -> str:
+    statsstrings: list[str] = []
+    if obj.height:
+        statsstrings.append(f"**{SV(obj.height * multiplier):,.3{system}}** tall")
+    if obj.length:
+        statsstrings.append(f"**{SV(obj.length * multiplier):,.3{system}}** long")
+    if obj.width:
+        statsstrings.append(f"**{SV(obj.width * multiplier):,.3{system}}** wide")
+    if obj.diameter:
+        statsstrings.append(f"**{SV(obj.diameter * multiplier):,.3{system}}** across")
+    if obj.depth:
+        statsstrings.append(f"**{SV(obj.depth * multiplier):,.3{system}}** deep")
+    if obj.thickness:
+        statsstrings.append(f"**{SV(obj.thickness * multiplier):,.3{system}}** thick")
+    if obj.calories is not None:
+        statsstrings.append(f"has **{Decimal(obj.calories * (multiplier ** 3)):,.3}** calories")
+    if obj.price is not None:
+        statsstrings.append(f"costs **USD ${Decimal(obj.price * (multiplier ** 3)):,.2f}**")
+    if obj.weight:
+        statsstrings.append(f"weighs **{WV(obj.weight * multiplier ** 3):,.3{system}}**")
+
+    returnstr = sentence_join(statsstrings, oxford=True) + "."
+
+    return returnstr
+
+def add_obj_to_units(obj: DigiObject):
+    if obj.unitlength is not None:
+        u = Unit(
+            factor=Decimal(obj.unitlength),
+            name=obj.name,
+            namePlural=obj.name_plural,
+            names=obj.aliases,
+            symbol=obj.symbol
+        )
+        SV.add_unit(u)
+        SV.add_system_unit("o", SystemUnit(u))
+
+    if obj.weight is not None:
+        u = Unit(
+            factor=Decimal(obj.weight),
+            name=obj.name,
+            namePlural=obj.name_plural,
+            names=obj.aliases,
+            symbol=obj.symbol
+        )
+        WV.add_unit(u)
+        WV.add_system_unit("o", SystemUnit(u))
+
+
 def load_obj_file(filename: str):
-    try:
-        fileJson = json.loads(pkg_resources.read_text(sizebot.data.objects, filename))
-    except FileNotFoundError:
-        fileJson = None
-    load_obj_JSON(fileJson)
+    fileJson = json.loads(pkg_resources.read_text(sizebot.data.objects, filename))
+    load_obj_json(fileJson)
 
 
-def load_obj_JSON(fileJson: Any):
-    for objJson in fileJson:
-        objects.append(DigiObject.from_JSON(objJson))
+def load_obj_json(data: list[ObjectJson]):
+    for d in data:
+        objects.append(DigiObject.from_json(d))
 
 
 def init():
@@ -302,7 +354,7 @@ def init():
 
     objects.sort()
     for o in objects:
-        o.add_to_units()
+        add_obj_to_units(o)
 
     # cached values
     food = [o for o in objects if "food" in o.tags]
@@ -320,35 +372,34 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
     Tries to get a single object for comparison, prioritizing integer closeness.
     """
-    best_dict: dict[float, list] = {
-        1.0: [],
-        0.5: [],
-        2.0: [],
-        1.5: [],
-        3.0: [],
-        2.5: [],
-        4.0: [],
-        5.0: [],
-        6.0: []
+    best_dict: dict[Decimal, list[tuple[Decimal, tuple[Decimal, Decimal], DigiObject]]] = {
+        Decimal(0.5): [],
+        Decimal(1): [],
+        Decimal(1.5): [],
+        Decimal(2): [],
+        Decimal(2.5): [],
+        Decimal(3): [],
+        Decimal(4): [],
+        Decimal(5): [],
+        Decimal(6): []
     }
 
-    weight = isinstance(val, WV)
-
-    val = float(val)
-
-    dists = []
+    dists: list[tuple[Decimal, tuple[Decimal, Decimal], DigiObject]] = []
     for obj in objects:
-        if weight and not obj.weight:
-            continue
         if "nc" in obj.tags:
             continue
-        ratio = val / float(obj.unitlength) if not weight else val / float(obj.weight)
+        if isinstance(val, WV) and obj.weight is not None:
+            ratio = val / obj.weight
+        elif isinstance(val, SV):
+            ratio = val / obj.unitlength
+        else:
+            continue
         ratio_semi = round(ratio, 1)
         rounded_ratio = round(ratio)
 
-        intness = 2.0 * (ratio - rounded_ratio)
+        intness = 2 * (ratio - rounded_ratio)
 
-        oneness = (1.0 - ratio if ratio > 1.0 else 1.0 / ratio - 1.0)
+        oneness = (1 - ratio if ratio > 1 else 1 / ratio - 1)
 
         dist = intness**2 + oneness**2
 
@@ -358,7 +409,7 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
         else:
             dists.append(p)
 
-    best = []
+    best: list[tuple[Decimal, tuple[Decimal, Decimal], DigiObject]] = []
     for at_val in best_dict.values():
         best.extend(at_val)
         if len(best) >= 10:
@@ -372,7 +423,12 @@ def get_close_object_smart(val: SV | WV) -> DigiObject:
 
 
 def format_close_object_smart(val: SV | WV) -> str:
-    weight = isinstance(val, WV)
     obj = get_close_object_smart(val)
-    ans = round(val / obj.unitlength, 1) if not weight else round(val / obj.weight, 1)
+    if isinstance(val, WV) and obj.weight is not None:
+        ans = round(val / obj.weight, 1)
+    elif isinstance(val, SV):
+        ans = round(val / obj.unitlength, 1)
+    else:
+        raise TypeError
+
     return f"{ans:.1f} {obj.name_plural if ans != 1 else obj.name}"

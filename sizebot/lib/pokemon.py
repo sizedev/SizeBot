@@ -7,8 +7,7 @@ import json
 from discord import Embed
 
 import sizebot.data
-from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.units import SV, WV
+from sizebot.lib.units import SV, WV, Decimal
 from sizebot.lib.userdb import User
 from sizebot.lib.utils import int_to_roman
 

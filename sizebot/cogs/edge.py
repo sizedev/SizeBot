@@ -11,9 +11,8 @@ from discord.ext import commands
 
 from sizebot.lib import guilddb, userdb, nickmanager
 from sizebot.lib.checks import is_mod
-from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV
+from sizebot.lib.types import GuildContext
+from sizebot.lib.units import SV, Decimal
 
 logger = logging.getLogger("sizebot")
 
@@ -25,7 +24,7 @@ def getUserSizes(g: discord.Guild) -> Any:
     # Like, if you sorted the users by size, would that make this faster?
     # It's 1:30AM and I don't want to check.
     smallestuser = None
-    smallestsize = SV.infinity
+    smallestsize = SV("infinity")
     largestuser = None
     largestsize = SV(0)
     allusers = {}
@@ -34,7 +33,7 @@ def getUserSizes(g: discord.Guild) -> Any:
         if not (member and str(member.status) != "offline"):
             continue
         userdata = userdb.load(g.id, userid)
-        if userdata.height == 0 or userdata.height == SV.infinity:
+        if userdata.height == 0 or userdata.height == SV("infinity"):
             continue
         if not userdata.is_active:
             continue
@@ -61,7 +60,8 @@ class EdgeCog(commands.Cog):
         hidden = True
     )
     @is_mod()
-    async def edges(self, ctx: BotContext):
+    @commands.guild_only()
+    async def edges(self, ctx: GuildContext):
         """See who is set to be the smallest and largest users."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         await ctx.send(f"**SERVER-SET SMALLEST AND LARGEST USERS:**\nSmallest: {'*Unset*' if guilddata.small_edge is None else guilddata.small_edge}\nLargest: {'*Unset*' if guilddata.large_edge is None else guilddata.large_edge}")
@@ -73,7 +73,8 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setsmallest(self, ctx: BotContext, *, member: discord.Member):
+    @commands.guild_only()
+    async def setsmallest(self, ctx: GuildContext, *, member: discord.Member):
         """Set the smallest user."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.small_edge = member.id
@@ -88,7 +89,8 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setlargest(self, ctx: BotContext, *, member: discord.Member):
+    @commands.guild_only()
+    async def setlargest(self, ctx: GuildContext, *, member: discord.Member):
         """Set the largest user."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.large_edge = member.id
@@ -102,7 +104,8 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearsmallest(self, ctx: BotContext):
+    @commands.guild_only()
+    async def clearsmallest(self, ctx: GuildContext):
         """Clear the role of 'smallest user.'"""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.small_edge = None
@@ -116,7 +119,8 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearlargest(self, ctx: BotContext):
+    @commands.guild_only()
+    async def clearlargest(self, ctx: GuildContext):
         """Clear the role of 'largest user.'"""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.large_edge = None
@@ -129,7 +133,8 @@ class EdgeCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def edgedebug(self, ctx: BotContext):
+    @commands.guild_only()
+    async def edgedebug(self, ctx: GuildContext):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         usersizes = getUserSizes(ctx.guild)
         guilddata = guilddb.load(ctx.guild.id)
@@ -150,7 +155,7 @@ class EdgeCog(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, m: discord.Message):
         # non-guild messages
-        if not isinstance(m.author, discord.Member):
+        if m.guild is None or not isinstance(m.author, discord.Member):
             return
 
         try:
@@ -186,7 +191,7 @@ class EdgeCog(commands.Cog):
         if lg == m.author.id:
             if m.author.id == largestuser:
                 return
-            elif userdata.height == SV.infinity:
+            elif userdata.height == SV("infinity"):
                 return
             else:
                 userdata.height = largestsize * Decimal(1.1)

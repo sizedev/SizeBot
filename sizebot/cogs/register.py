@@ -8,7 +8,7 @@ from discord.ext import commands
 from sizebot.conf import conf
 from sizebot.lib import errors, userdb, nickmanager
 from sizebot.lib.constants import ids, emojis
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import BotContext, GuildContext
 
 logger = logging.getLogger("sizebot")
 
@@ -64,7 +64,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def register(self, ctx: BotContext):
+    async def register(self, ctx: GuildContext):
         # nick: str
         # currentheight: SV = proportions.defaultheight
         # baseheight: SV = proportions.defaultheight
@@ -149,7 +149,7 @@ class RegisterCog(commands.Cog):
         await show_next_step(ctx, userdata)
 
     @register.error
-    async def register_handler(self, ctx: BotContext, error: commands.CommandError):
+    async def register_handler(self, ctx: GuildContext, error: commands.CommandError):
         # Check if required argument is missing
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
@@ -162,7 +162,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def unregister(self, ctx: BotContext):
+    async def unregister(self, ctx: GuildContext):
         """Unregister your SizeBot profile."""
         guild = ctx.guild
         user = ctx.author
@@ -216,7 +216,7 @@ class RegisterCog(commands.Cog):
         category = "setup"
     )
     @commands.guild_only()
-    async def copy(self, ctx: BotContext):
+    async def copy(self, ctx: GuildContext):
         """Copy your SizeBot profile from a different guild to this one."""
 
         inputdict = {

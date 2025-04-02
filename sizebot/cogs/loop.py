@@ -8,10 +8,10 @@ import discord
 from discord.ext import commands
 
 from sizebot.lib.stats import StatBox
-from sizebot.lib.units import SV, TV
+from sizebot.lib.units import RV, SV, TV
 from sizebot.lib import userdb
 from sizebot.lib.constants import emojis
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import GuildContext
 from sizebot.lib.utils import pretty_time_delta
 from sizebot.lib.userdb import MoveTypeStr
 import sizebot.lib.language as lang
@@ -36,8 +36,8 @@ def calc_move_dist(userdata: userdb.User) -> tuple[TV, SV]:
     except KeyError:
         raise ValueError(f"{movetype}perhour is not a valid stat.")
 
-    persecond = SV(speed / 60 / 60)
-    distance = SV(elapsed_seconds * persecond)
+    persecond = RV(speed / 60 / 60)
+    distance = elapsed_seconds * persecond
 
     return elapsed_seconds, distance
 
@@ -51,7 +51,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def start(self, ctx: BotContext, action: str, stop: TV = None):
+    async def start(self, ctx: GuildContext, action: str, stop: TV = None):
         """Keep moving forward -- Walt Disney
 
         `<type>` can be one of the following: walk, run, climb, crawl, swim
@@ -87,7 +87,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def stop(self, ctx: BotContext):
+    async def stop(self, ctx: GuildContext):
         """Stop a current movement."""
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         if userdata.currentmovetype is None:
@@ -107,7 +107,7 @@ class LoopCog(commands.Cog):
         category = "loop"
     )
     @commands.guild_only()
-    async def sofar(self, ctx: BotContext, *, who: discord.Member | None = None):
+    async def sofar(self, ctx: GuildContext, *, who: discord.Member | None = None):
         """How far have you moved so far? [See help.]
 
         #ALPHA#

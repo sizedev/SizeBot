@@ -27,7 +27,7 @@ class HolidayCog(commands.Cog):
         self.bot = bot
         self.holidayTask.start()
 
-    def cog_unload(self):
+    def cog_unload(self): # type: ignore (Bad typing in discord.py)
         self.holidayTask.cancel()
 
     # TODO: CamelCase

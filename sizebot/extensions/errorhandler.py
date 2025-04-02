@@ -38,18 +38,18 @@ async def setup(bot: commands.Bot):
         if isinstance(err, errors.DigiContextException):
             # DigiContextException handling
             message = await err.formatMessage(ctx)
-            if message is not None:
-                logger.log(err.level, message)
-                logger.error(utils.format_traceback(error))
+            # if message is not None:
+                # logger.log(err.level, message)
+                # logger.error(utils.format_traceback(error))
             userMessage = await err.formatUserMessage(ctx)
             if userMessage is not None:
                 await ctx.send(f"{emojis.warning} {userMessage}")
         elif isinstance(err, errors.DigiException):
             # DigiException handling
             message = err.formatMessage()
-            if message is not None:
-                logger.log(err.level, message)
-                logger.error(utils.format_traceback(error))
+            # if message is not None:
+                # logger.log(err.level, message)
+                # logger.error(utils.format_traceback(error))
             userMessage = err.formatUserMessage()
             if userMessage is not None:
                 await ctx.send(f"{emojis.warning} {userMessage}")
@@ -72,8 +72,8 @@ async def setup(bot: commands.Bot):
         else:
             # Default command error handling
             await ctx.send(f"{emojis.error} Something went wrong.")
-            logger.error(f"Ignoring exception in command {ctx.command}:")
-            logger.error(utils.format_traceback(error))
+        logger.error(f"Ignoring exception in command {ctx.command}:")
+        logger.error(utils.format_traceback(error))
 
     @bot.event
     async def on_error(event: discord.DiscordException, *args, **kwargs):

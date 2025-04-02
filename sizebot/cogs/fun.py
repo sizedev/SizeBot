@@ -9,7 +9,7 @@ import sizebot.data
 from sizebot.lib import userdb
 from sizebot.lib.constants import ids
 from sizebot.lib.loglevels import EGG
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import BotContext, GuildContext
 
 tasks = {}
 
@@ -36,7 +36,8 @@ class FunCog(commands.Cog):
         aliases = ["tra"],
         category = "fun"
     )
-    async def report(self, ctx: BotContext, *, user: discord.User):
+    @commands.guild_only()
+    async def report(self, ctx: GuildContext, *, user: discord.User):
         """Report a user to the Tiny Rights Alliance."""
         ud = userdb.load(ctx.guild.id, user.id)
         ud.tra_reports += 1

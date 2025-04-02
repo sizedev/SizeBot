@@ -1,8 +1,8 @@
 import math
-from sizebot.lib.digidecimal import Decimal
+from sizebot.lib.digidecimal import BaseDecimal
 
-posinf = Decimal("infinity")
-neginf = Decimal("-infinity")
+posinf = BaseDecimal("infinity")
+neginf = BaseDecimal("-infinity")
 
 
 def test_pos__str__():
@@ -17,12 +17,12 @@ def test_neg__str__():
 
 def test_pos__repr__():
     result = repr(posinf)
-    assert result == "Decimal('∞')"
+    assert result == "BaseDecimal('∞')"
 
 
 def test_neg__repr__():
     result = repr(neginf)
-    assert result == "Decimal('-∞')"
+    assert result == "BaseDecimal('-∞')"
 
 
 def test_pos__bool__():
@@ -195,76 +195,6 @@ def test_neg__rpow__():
     assert result == 0
 
 
-def test_pos__lshift__():
-    result = posinf << 2
-    assert result == posinf
-
-
-def test_neg__lshift__():
-    result = neginf << 2
-    assert result == neginf
-
-
-def test_pos__rlshift__():
-    result = 2 << posinf
-    assert result == posinf
-
-
-def test_neg__rlshift__():
-    result = 2 << neginf
-    assert result == 0
-
-
-def test_pos__rshift__():
-    result = posinf >> 2
-    assert result == posinf
-
-
-def test_neg__rshift__():
-    result = neginf >> 2
-    assert result == neginf
-
-
-def test_pos__rrshift__():
-    result = 2 >> posinf
-    assert result == 0
-
-
-def test_neg__rrshift__():
-    result = 2 >> neginf
-    assert result == posinf
-
-
-def test_pos__and__():
-    result = posinf & 2
-    assert result == 2
-
-
-def test_neg__and__():
-    result = neginf & 2
-    assert result == 2
-
-
-def test_pos__xor__():
-    result = posinf ^ 2
-    assert result == ~2
-
-
-def test_neg__xor__():
-    result = neginf ^ 2
-    assert result == ~2
-
-
-def test_pos__or__():
-    result = posinf | 2
-    assert result == posinf
-
-
-def test_neg__or__():
-    result = neginf | 2
-    assert result == posinf
-
-
 def test_pos__neg__():
     result = -posinf
     assert result == neginf
@@ -292,16 +222,6 @@ def test_pos__abs__():
 
 def test_neg__abs__():
     result = abs(neginf)
-    assert result == posinf
-
-
-def test_pos__invert__():
-    result = ~posinf
-    assert result == neginf
-
-
-def test_neg__invert__():
-    result = ~neginf
     assert result == posinf
 
 

@@ -1,8 +1,7 @@
 import math
 
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.userdb import User
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
 
 G = 9.81
 STOMP_G = 11.5

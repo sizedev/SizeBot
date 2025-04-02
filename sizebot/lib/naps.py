@@ -8,8 +8,7 @@ import time
 from discord.ext import commands
 
 from sizebot.lib import paths, utils
-from sizebot.lib.digidecimal import Decimal
-from sizebot.lib.units import TV
+from sizebot.lib.units import TV, Decimal
 
 logger = logging.getLogger("sizebot")
 

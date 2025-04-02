@@ -67,6 +67,15 @@ class WinksCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    @commands.command(
+        hidden = True,
+        category = "misc"
+    )
+    async def winkcount(self, ctx: BotContext):
+        winkcount = get_winks()
+        await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
+        logger.info(f"Wink count requested by {ctx.author.nickname}! Current count: {winkcount} times!")
+
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if message.author.id != ids.yukio:
@@ -81,15 +90,6 @@ class WinksCog(commands.Cog):
             logger.info(f"Yukio has winked {winkcount} times!")
         if winkcount in milestones:
             await say_milestone(message.channel, winkcount)
-
-    @commands.command(
-        hidden = True,
-        category = "misc"
-    )
-    async def winkcount(self, ctx: BotContext):
-        winkcount = get_winks()
-        await ctx.send(f"Yukio has winked {winkcount} times since 15 September, 2019! :wink:")
-        logger.info(f"Wink count requested by {ctx.author.nickname}! Current count: {winkcount} times!")
 
 
 async def setup(bot: commands.Bot):

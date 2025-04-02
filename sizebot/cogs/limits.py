@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from sizebot.lib import guilddb, userdb, nickmanager
 from sizebot.lib.checks import is_mod
-from sizebot.lib.types import BotContext
+from sizebot.lib.types import GuildContext
 from sizebot.lib.units import SV
 
 logger = logging.getLogger("sizebot")
@@ -21,7 +21,8 @@ class LimitCog(commands.Cog):
     @commands.command(
         category = "misc"
     )
-    async def limits(self, ctx: BotContext):
+    @commands.guild_only()
+    async def limits(self, ctx: GuildContext):
         """See the guild's current caps."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {'*Unset*' if guilddata.low_limit is None else guilddata.low_limit:,.3mu}\nHigh Limit: {'*Unset*' if guilddata.high_limit is None else guilddata.high_limit:,.3mu}")
@@ -33,7 +34,8 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def setlowlimit(self, ctx: BotContext, *, size: SV):
+    @commands.guild_only()
+    async def setlowlimit(self, ctx: GuildContext, *, size: SV):
         """Set the low size limit (floor)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.low_limit = size
@@ -48,7 +50,8 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def sethighlimit(self, ctx: BotContext, *, size: SV):
+    @commands.guild_only()
+    async def sethighlimit(self, ctx: GuildContext, *, size: SV):
         """Set the high size limit (ceiling)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.high_limit = size
@@ -63,7 +66,8 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearlowlimit(self, ctx: BotContext):
+    @commands.guild_only()
+    async def clearlowlimit(self, ctx: GuildContext):
         """Set the low size limit (floor)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.low_limit = None
@@ -78,7 +82,8 @@ class LimitCog(commands.Cog):
         category = "mod"
     )
     @is_mod()
-    async def clearhighlimit(self, ctx: BotContext):
+    @commands.guild_only()
+    async def clearhighlimit(self, ctx: GuildContext):
         """Set the high size limit (ceiling)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.high_limit = None

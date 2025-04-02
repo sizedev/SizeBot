@@ -1,26 +1,23 @@
 from __future__ import annotations
-from typing import Any, cast
-from collections.abc import Callable
+from abc import abstractmethod
+from typing import Self, overload
 
+import numbers
 import decimal
 import logging
 import math
 import re
-from decimal import Decimal as RawDecimal
-from decimal import ROUND_DOWN
+from decimal import Decimal as RawDecimal, ROUND_DOWN
 from functools import total_ordering
 
-__all__ = ["Decimal"]
+__all__ = ["BaseDecimal"]
 
 logger = logging.getLogger("sizebot")
 
-
 # local copy of utils.minmax to prevent circular import
-def minmax(first: Decimal, second: Decimal) -> tuple[Decimal, Decimal]:
+def minmax[T: BaseDecimal](first: T, second: T) -> tuple[T, T]:
     """Return a tuple where item 0 is the smaller value, and item 1 is the larger value."""
-    small, big = first, second
-    if small > big:
-        small, big = big, small
+    small, big = sorted((first, second))
     return small, big
 
 
@@ -33,31 +30,16 @@ context = decimal.Context(
 decimal.setcontext(context)
 
 
-# get the values for magic methods, instead of the objects
-def values(fn: Callable) -> Callable:
-    def wrapped(*args) -> Any:
-        valargs = [unwrapDecimal(a) for a in args]
-        return fn(*valargs)
-    return wrapped
-
-
-# TODO: CamelCase
-def unwrapDecimal(value: Decimal | RawDecimal | str | int | float) -> RawDecimal | str | int | float:
-    if isinstance(value, Decimal):
-        value = value._rawvalue
-    return value
-
-
 @total_ordering
-class Decimal():
+class BaseDecimal():
     infinity = RawDecimal("infinity")
     _infinity = RawDecimal("1e1000")
 
-    def __init__(self, value: Decimal | RawDecimal | str | int | float):
+    def __init__(self, value: BaseDecimal | RawDecimal | float | int | str):
         self._rawvalue: RawDecimal
         if isinstance(value, RawDecimal):
             rawvalue = value
-        elif isinstance(value, Decimal):
+        elif isinstance(value, BaseDecimal):
             rawvalue = value._rawvalue
         elif isinstance(value, str):
             if value == "∞":
@@ -68,7 +50,7 @@ class Decimal():
             values = value.split("/")
             if len(values) == 2:
                 numberator, denominator = values
-                calcvalue = cast(Decimal, Decimal(numberator) / Decimal(denominator))
+                calcvalue = BaseDecimal(numberator) / BaseDecimal(denominator)
                 rawvalue = calcvalue._rawvalue
             else:
                 rawvalue = RawDecimal(value)
@@ -98,7 +80,7 @@ class Decimal():
         if dSpec.precision is not None:
             precision = int(dSpec.precision)
 
-        if (Decimal("10") ** -(precision + 1)) < abs(value) < Decimal("1e10") or value == 0:
+        if (BaseDecimal("10") ** -(precision + 1)) < abs(value) < BaseDecimal("1e10") or value == 0:
             dSpec.type = "f"
             dSpec.precision = None
             if fractional:
@@ -116,7 +98,7 @@ class Decimal():
         numspec = str(dSpec)
         if fractional:
             whole = rounded.to_integral_value(ROUND_DOWN)
-            rawwhole = fix_zeroes(whole._rawvalue)
+            rawwhole = fix_zeroes(whole.to_pydecimal())
             formatted = format(rawwhole, numspec)
             part = abs(whole - rounded)
             fraction = format_fraction(part)
@@ -125,7 +107,7 @@ class Decimal():
                     formatted = ""
                 formatted += fraction
         else:
-            rawvalue = fix_zeroes(rounded._rawvalue)
+            rawvalue = fix_zeroes(rounded.to_pydecimal())
             formatted = format(rawvalue, numspec)
 
         if dSpec.type == "f":
@@ -141,230 +123,245 @@ class Decimal():
         return formatted
 
     def __str__(self) -> str:
-        return str(self._rawvalue)
+        rawvalue = unwrap_decimal(self)
+        return str(rawvalue)
 
     def __repr__(self) -> str:
-        return f"Decimal('{self}')"
+        return f"{type(self).__name__}('{self}')"
 
-    @values
-    def __bool__(value) -> bool:
-        return bool(value)
+    def __bool__(self) -> bool:
+        rawvalue = unwrap_decimal(self)
+        return bool(rawvalue)
 
-    @values
-    def __hash__(value) -> int:
-        return hash(value)
+    def __hash__(self) -> int:
+        rawvalue = unwrap_decimal(self)
+        return hash(rawvalue)
 
     # Math Methods
-    @values
-    def __eq__(value, other: Any) -> bool:
-        return value == other
+    def __eq__(self, other: object) -> bool:
+        rawvalue = unwrap_decimal(self)
+        rawother = other.to_pydecimal() if isinstance(other, BaseDecimal) else other     # Don't use unwrap_decimal for object type
+        return rawvalue == rawother
 
-    @values
-    def __lt__(value, other: Any) -> bool:
-        return value < other
+    def __lt__(self, other: BaseDecimal | float | int | numbers.Rational) -> bool:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        return rawvalue < rawother
 
-    @values
-    def __add__(value, other: Any) -> Decimal:
-        return Decimal(value + other)
+    @abstractmethod
+    def __add__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        return BaseDecimal(rawvalue + rawother)
 
-    def __radd__(self, other: Any) -> Decimal:
-        return Decimal.__add__(other, self)
+    @abstractmethod
+    def __radd__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        return BaseDecimal(rawother + rawvalue)
 
-    @values
-    def __sub__(value, other: Any) -> Decimal:
-        return Decimal(value - other)
+    @abstractmethod
+    def __sub__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        try:
+            return BaseDecimal(rawvalue - rawother)
+        except decimal.InvalidOperation as e:
+            return BaseDecimal(0)
 
-    def __rsub__(self, other: Any) -> Decimal:
-        return Decimal.__sub__(other, self)
+    @abstractmethod
+    def __rsub__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        return BaseDecimal(rawother - rawvalue)
 
-    @values
-    def __mul__(value, other: Any) -> Decimal:
-        return Decimal(value * other)
+    @abstractmethod
+    def __mul__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        return BaseDecimal(rawvalue * rawother)
 
-    def __rmul__(self, other: Any) -> Decimal:
-        return Decimal.__mul__(other, self)
+    @abstractmethod
+    def __rmul__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        return BaseDecimal(rawother * rawvalue)
 
-    @values
-    def __matmul__(value, other: Any) -> Decimal:
-        return Decimal(value @ other)
-
-    def __rmatmul__(self, other: Any) -> Decimal:
-        return Decimal.__matmul__(other, self)
-
-    @values
-    def __truediv__(value, other: Any) -> Decimal:
-        if isinstance(value, RawDecimal) and value.is_infinite() and isinstance(other, RawDecimal) and other.is_infinite():
+    @abstractmethod
+    def __truediv__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        if is_infinite(rawvalue) and is_infinite(rawother):
             raise decimal.InvalidOperation
-        elif isinstance(value, RawDecimal) and value.is_infinite():
-            return Decimal(value)
-        elif isinstance(other, RawDecimal) and other.is_infinite():
-            return Decimal(0)
-        return Decimal(value / other)
+        elif is_infinite(rawvalue):
+            return BaseDecimal(rawvalue)
+        elif is_infinite(rawother):
+            return BaseDecimal(0)
+        return BaseDecimal(rawvalue / rawother)
 
-    def __rtruediv__(self, other: Any) -> Decimal:
-        return Decimal.__truediv__(other, self)
-
-    @values
-    def __floordiv__(value, other: Any) -> Decimal:
-        if isinstance(value, RawDecimal) and value.is_infinite() and isinstance(other, RawDecimal) and other.is_infinite():
+    @abstractmethod
+    def __rtruediv__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        if is_infinite(rawvalue) and is_infinite(rawother):
             raise decimal.InvalidOperation
-        elif isinstance(value, RawDecimal) and value.is_infinite():
-            return Decimal(value)
-        elif isinstance(other, RawDecimal) and other.is_infinite():
-            return Decimal(0)
-        return Decimal(value // other)
+        elif is_infinite(rawvalue):
+            return BaseDecimal(0)
+        elif is_infinite(rawother):
+            return BaseDecimal(rawother)
+        return BaseDecimal(rawother / rawvalue)
 
-    def __rfloordiv__(self, other: Any) -> Decimal:
-        return Decimal.__floordiv__(other, self)
+    @abstractmethod
+    def __floordiv__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        if is_infinite(rawvalue) and is_infinite(rawother):
+            raise decimal.InvalidOperation
+        elif is_infinite(rawvalue):
+            return BaseDecimal(rawvalue)
+        elif is_infinite(rawother):
+            return BaseDecimal(0)
+        return BaseDecimal(rawvalue // rawother)
 
-    @values
-    def __mod__(value, other: Any) -> Decimal:
-        if isinstance(value, RawDecimal) and value.is_infinite():
-            return Decimal(0)
-        elif isinstance(other, RawDecimal) and other.is_infinite():
-            return Decimal(value)
-        return Decimal(value % other)
+    @abstractmethod
+    def __rfloordiv__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        if is_infinite(rawvalue) and is_infinite(rawother):
+            raise decimal.InvalidOperation
+        elif is_infinite(rawvalue):
+            return BaseDecimal(0)
+        elif is_infinite(rawother):
+            return BaseDecimal(rawother)
+        return BaseDecimal(rawother // rawvalue)
 
-    def __rmod__(self, other: Any) -> Decimal:
-        return Decimal.__mod__(other, self)
+    @abstractmethod
+    def __mod__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        if is_infinite(rawvalue):
+            return BaseDecimal(0)
+        elif is_infinite(rawother):
+            return BaseDecimal(rawother)
+        return BaseDecimal(rawvalue % rawother)
 
-    def __divmod__(self, other: Any) -> tuple[Decimal, Decimal]:
-        quotient = Decimal.__floordiv__(self, other)
-        remainder = Decimal.__mod__(self, other)
-        return Decimal(quotient), Decimal(remainder)
+    @abstractmethod
+    def __rmod__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        if is_infinite(rawvalue):
+            return BaseDecimal(rawother)
+        elif is_infinite(rawother):
+            return BaseDecimal(0)
+        return BaseDecimal(rawother % rawvalue)
 
-    def __rdivmod__(self, other: Any) -> tuple[Decimal, Decimal]:
-        return Decimal.__divmod__(other, self)
+    @abstractmethod
+    def __divmod__(self, other: BaseDecimal | int) -> tuple[BaseDecimal, BaseDecimal]:
+        quotient = BaseDecimal.__floordiv__(self, other)
+        remainder = BaseDecimal.__mod__(self, other)
+        return quotient, remainder
 
-    @values
-    def __pow__(value, other: Any) -> Decimal:
-        return Decimal(value ** other)
+    @abstractmethod
+    def __rdivmod__(self, other: BaseDecimal | int) -> tuple[BaseDecimal, BaseDecimal]:
+        quotient = BaseDecimal.__rfloordiv__(self, other)
+        remainder = BaseDecimal.__rmod__(self, other)
+        return quotient, remainder
 
-    @values
-    def __rpow__(value, other: Any) -> Decimal:
-        return Decimal(other ** value)
+    @abstractmethod
+    def __pow__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        return BaseDecimal(rawvalue ** rawother)
 
-    @values
-    def __lshift__(value, other: Any) -> Decimal:
-        return Decimal.__mul__(value, Decimal.__pow__(Decimal(2), other))
+    @abstractmethod
+    def __rpow__(self, other: BaseDecimal | int) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        rawother = unwrap_decimal(other)
+        return BaseDecimal(rawother ** rawvalue)
 
-    def __rlshift__(self, other: Any) -> Decimal:
-        return Decimal.__lshift__(other, self)
+    def __neg__(self) -> Self:
+        rawvalue = unwrap_decimal(self)
+        return type(self)(-rawvalue)
 
-    @values
-    def __rshift__(value, other: Any) -> Decimal:
-        return Decimal.__floordiv__(value, Decimal.__pow__(Decimal(2), other))
+    def __pos__(self) -> Self:
+        rawvalue = unwrap_decimal(self)
+        return type(self)(+rawvalue)
 
-    def __rrshift__(self, other: Any) -> Decimal:
-        return Decimal.__rshift__(other, self)
+    def __abs__(self) -> Self:
+        rawvalue = unwrap_decimal(self)
+        return type(self)(abs(rawvalue))
 
-    @values
-    def __and__(value, other: Any) -> Decimal:
-        if (isinstance(value, RawDecimal) and value.is_infinite()):
-            return other
-        elif (isinstance(other, RawDecimal) and other.is_infinite()):
-            return value
-        return Decimal(value & other)
+    def __complex__(self) -> complex:
+        rawvalue = unwrap_decimal(self)
+        return complex(rawvalue)
 
-    def __rand__(self, other: Any) -> Decimal:
-        return Decimal.__and__(other, self)
+    def __int__(self) -> int:
+        rawvalue = unwrap_decimal(self)
+        return int(rawvalue)
 
-    @values
-    def __xor__(value, other: Any) -> Decimal:
-        if isinstance(value, RawDecimal) and value.is_infinite():
-            return Decimal.__invert__(other)
-        elif isinstance(other, RawDecimal) and other.is_infinite():
-            return Decimal.__invert__(value)
-        return Decimal(value ^ other)
+    def __float__(self) -> float:
+        rawvalue = unwrap_decimal(self)
+        return float(rawvalue)
 
-    def __rxor__(self, other: Any) -> Decimal:
-        return Decimal.__xor__(other, self)
+    def __round__(self, ndigits: int = 0) -> Self:
+        rawvalue = unwrap_decimal(self)
+        if rawvalue.is_infinite():
+            return type(self)(rawvalue)
+        exp = RawDecimal(10) ** -ndigits
+        return type(self)(rawvalue.quantize(exp))
 
-    @values
-    def __or__(value, other: Any) -> Decimal:
-        if (isinstance(value, RawDecimal) and value.is_infinite()) or (isinstance(other, RawDecimal) and other.is_infinite()):
-            return Decimal("infinity")
-        return Decimal(value | other)
+    def __trunc__(self) -> Self:
+        rawvalue = unwrap_decimal(self)
+        if rawvalue.is_infinite():
+            return type(self)(rawvalue)
+        return type(self)(math.trunc(rawvalue))
 
-    def __ror__(self, other: Any) -> Decimal:
-        return Decimal.__or__(other, self)
+    def __floor__(self) -> Self:
+        rawvalue = unwrap_decimal(self)
+        if rawvalue.is_infinite():
+            return type(self)(rawvalue)
+        return type(self)(math.floor(rawvalue))
 
-    def __neg__(self: Decimal) -> Decimal:
-        return Decimal(-self._rawvalue)
+    def __ceil__(self) -> Self:
+        rawvalue = unwrap_decimal(self)
+        if rawvalue.is_infinite():
+            return type(self)(rawvalue)
+        return type(self)(math.ceil(rawvalue))
 
-    @values
-    def __pos__(value) -> Decimal:
-        return Decimal(+value)
+    def quantize(self, exp: BaseDecimal | int) -> Self:
+        rawvalue = unwrap_decimal(self)
+        rawexp = unwrap_decimal(exp)
+        return type(self)(rawvalue.quantize(rawexp))
 
-    @values
-    def __abs__(value) -> Decimal:
-        return Decimal(abs(value))
+    def is_infinite(self) -> bool:
+        rawvalue = unwrap_decimal(self)
+        return rawvalue.is_infinite()
 
-    @values
-    def __invert__(value) -> Decimal:
-        if isinstance(value, RawDecimal) and value.is_infinite():
-            return -value
-        return Decimal(~value)
-
-    @values
-    def __complex__(value) -> complex:
-        return complex(value)
-
-    @values
-    def __int__(value) -> int:
-        return int(value)
-
-    @values
-    def __float__(value) -> float:
-        return float(value)
-
-    def __round__(value, ndigits: int = 0) -> Decimal:
-        if value.is_infinite():
-            return value
-        exp = Decimal(10) ** -ndigits
-        return value.quantize(exp)
-
-    @values
-    def __trunc__(value) -> Decimal:
-        if isinstance(value, RawDecimal) and value.is_infinite():
-            return value
-        return Decimal(math.trunc(value))
-
-    @values
-    def __floor__(value) -> Decimal:
-        if isinstance(value, RawDecimal) and value.is_infinite():
-            return value
-        return Decimal(math.floor(value))
-
-    @values
-    def __ceil__(value) -> Decimal:
-        if isinstance(value, RawDecimal) and value.is_infinite():
-            return value
-        return Decimal(math.ceil(value))
-
-    @values
-    def quantize(value, exp: Decimal) -> Decimal:
-        return Decimal(value.quantize(exp))
-
-    @values
-    def is_infinite(value) -> bool:
-        return value.is_infinite()
-
-    @values
-    def is_signed(value) -> bool:
-        return value.is_signed()
+    def is_signed(self) -> bool:
+        rawvalue = unwrap_decimal(self)
+        return rawvalue.is_signed()
 
     @property
-    @values
-    def sign(value) -> str:
-        return "-" if value.is_signed() else ""
+    def sign(self) -> str:
+        rawvalue = unwrap_decimal(self)
+        return "-" if rawvalue.is_signed() else ""
 
-    def to_integral_value(self, *args, **kwargs) -> Decimal:
-        return Decimal(self._rawvalue.to_integral_value(*args, **kwargs))
+    def to_integral_value(self, rounding: str | None = None) -> Self:
+        rawvalue = unwrap_decimal(self)
+        return type(self)(rawvalue.to_integral_value(rounding))
 
-    @values
-    def log10(value) -> Decimal:
-        return Decimal(value.log10())
+    @abstractmethod
+    def log10(self) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        return BaseDecimal(rawvalue.log10())
+
+    @abstractmethod
+    def sqrt(self) -> BaseDecimal:
+        rawvalue = unwrap_decimal(self)
+        return BaseDecimal(rawvalue.sqrt())
+
+    def to_pydecimal(self) -> RawDecimal:
+        return self._rawvalue
 
 
 class DecimalSpec:
@@ -384,7 +381,7 @@ class DecimalSpec:
     \Z
     """, re.VERBOSE)
 
-    def __init__(self, formatDict: dict[str, Any]):
+    def __init__(self, formatDict: dict[str, str|None]):
         self.align = formatDict["align"]
         self.fill = formatDict["fill"]
         self.sign = formatDict["sign"]
@@ -429,21 +426,23 @@ class DecimalSpec:
         return spec
 
 
-def round_decimal(d: Decimal, accuracy: int = 0) -> Decimal:
+def round_decimal(d: BaseDecimal, accuracy: int = 0) -> BaseDecimal:
     if d.is_infinite():
         return d
-    places = Decimal(10) ** -accuracy
+    places = BaseDecimal(10) ** -accuracy
     return d.quantize(places)
 
 
-def round_fraction(number: Decimal, denominator: Decimal) -> Decimal:
+def round_fraction(number: BaseDecimal, denominator: int) -> BaseDecimal:
+    """
+    Round to the nearest fractional amount
+    round_fraction(1.8, 4) == 1.75
+    """
     rounded = round(number * denominator) / denominator
     return rounded
 
 
-def format_fraction(value: Decimal) -> str:
-    if value is None:
-        return None
+def format_fraction(value: BaseDecimal) -> str:
     fractionStrings = ["", "⅛", "¼", "⅜", "½", "⅝", "¾", "⅞"]
     part = round_fraction(value % 1, 8)
     index = int(part * len(fractionStrings)) % len(fractionStrings)
@@ -453,18 +452,18 @@ def format_fraction(value: Decimal) -> str:
         logger.error("Weird fraction IndexError:\n"
                      f"fractionStrings = {fractionStrings!r}\n"
                      f"len(fractionStrings) = {len(fractionStrings)!r}\n"
-                     f"value = {value._rawvalue}\n"
+                     f"value = {value.to_pydecimal()}\n"
                      f"part = {part!r}\n"
                      f"int(part * len(fractionStrings)) = {int(part * len(fractionStrings))}")
         raise e
     return fraction
 
 
-def fix_zeroes(d: Decimal) -> Decimal:
+def fix_zeroes(d: RawDecimal) -> RawDecimal:
     """Reset the precision of a Decimal to avoid values that use exponents like '1e3' and values with trailing zeroes like '100.000'
 
-    fixZeroes(Decimal('1e3')) -> Decimal('100')
-    fixZeroes(Decimal('100.000')) -> Decimal('100')
+    fix_zeroes(Decimal('1e3')) -> Decimal('100')
+    fix_zeroes(Decimal('100.000')) -> Decimal('100')
 
     Decimal.normalize() removes ALL trailing zeroes, including ones before the decimal place
     Decimal('100.000').normalize() -> Decimal('1e3')
@@ -473,3 +472,35 @@ def fix_zeroes(d: Decimal) -> Decimal:
     Decimal('1e3') -> Decimal('100')
     """
     return d.normalize() + 0
+
+
+@overload
+def unwrap_decimal(value: BaseDecimal) -> RawDecimal:
+    ...
+
+@overload
+def unwrap_decimal(value: RawDecimal) -> RawDecimal:
+    ...
+
+@overload
+def unwrap_decimal(value: int) -> int:
+    ...
+
+@overload
+def unwrap_decimal(value: float) -> float:
+    ...
+
+@overload
+def unwrap_decimal(value: numbers.Rational) -> numbers.Rational:
+    ...
+
+def unwrap_decimal(value: BaseDecimal | RawDecimal  | int | float | numbers.Rational) -> RawDecimal | int | float | numbers.Rational:
+    if isinstance(value, BaseDecimal):
+        value = value.to_pydecimal()
+    return value
+
+def is_infinite(value: RawDecimal | int):
+    if not isinstance(value, RawDecimal):
+        return False
+    return value.is_infinite()
+

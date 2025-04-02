@@ -1,94 +1,61 @@
-from typing import Any, Generator, Hashable, Sequence, TypeVar
-from collections.abc import Callable, Iterable, Iterator
+from typing import Any, Hashable, Sequence
+from collections.abc import Iterable
 
-import inspect
-import pydoc
 import random
 import re
 import traceback
 from urllib.parse import quote
 
+from discord import Embed, Message
 import validator_collection
 
 from discord.ext import commands
 
 from sizebot.lib import errors
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.types import BotContext
-
-re_num = r"\d+\.?\d*"
-
-glitch_template = ("V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUgLyBZb3Uga25vdyB0aGUgcnVsZXMgYW5kIHNvIGRv"
-                   "IEkgLyBBIGZ1bGwgY29tbWl0bWVudCdzIHdoYXQgSSdtIHRoaW5raW5nIG9mIC9Zb3Ugd291bGRu"
-                   "J3QgZ2V0IHRoaXMgZnJvbSBhbnkgb3RoZXIgZ3V5IC8gSSBqdXN0IHdhbm5hIHRlbGwgeW91IGhv"
-                   "dyBJJ20gZmVlbGluZyAvIEdvdHRhIG1ha2UgeW91IHVuZGVyc3RhbmQgLyBOZXZlciBnb25uYSBn"
-                   "aXZlIHlvdSB1cCAvIE5ldmVyIGdvbm5hIGxldCB5b3UgZG93biAvIE5ldmVyIGdvbm5hIHJ1biBh"
-                   "cm91bmQgYW5kIGRlc2VydCB5b3UgLyBOZXZlciBnb25uYSBtYWtlIHlvdSBjcnkgLyBOZXZlciBn"
-                   "b25uYSBzYXkgZ29vZGJ5ZSAvIE5ldmVyIGdvbm5hIHRlbGwgYSBsaWUgYW5kIGh1cnQgeW91")
-
-current_glitch_index = 0
+from sizebot.lib.units import Decimal
 
 
-def clamp(minVal: Decimal, val: Decimal, maxVal: Decimal) -> Decimal:
-    """Clamp a `val` to be no lower than `minVal`, and no higher than `maxVal`."""
-    return max(minVal, min(maxVal, val))
+SECOND = 1000
+MINUTE = 60 * SECOND
+HOUR = 60 * MINUTE
+DAY = 24 * HOUR
+YEAR = 365 * DAY
 
+timeunits = [
+    # min    max               unit    name      frac
+    (YEAR,   None,             YEAR,   "year",   False),
+    (DAY,    1_000_000 * YEAR, DAY,    "day",    False),
+    (HOUR,   1000 * YEAR,      HOUR,   "hour",   False),
+    (MINUTE, YEAR,             MINUTE, "minute", False),
+    (None,   DAY,              SECOND, "second", True)
+]
 
 def pretty_time_delta(totalSeconds: Decimal, millisecondAccuracy: bool = False, roundeventually: bool = False) -> str:
     """Get a human readable string representing an amount of time passed."""
-    MILLISECONDS_PER_YEAR = 86400 * 365 * 1000
-    MILLISECONDS_PER_DAY = 86400 * 1000
-    MILLISECONDS_PER_HOUR = 3600 * 1000
-    MILLISECONDS_PER_MINUTE = 60 * 1000
-    MILLISECONDS_PER_SECOND = 1000
 
-    inputms = milliseconds = int(totalSeconds * 1000)
-    years, milliseconds = divmod(milliseconds, MILLISECONDS_PER_YEAR)
-    days, milliseconds = divmod(milliseconds, MILLISECONDS_PER_DAY)
-    hours, milliseconds = divmod(milliseconds, MILLISECONDS_PER_HOUR)
-    minutes, milliseconds = divmod(milliseconds, MILLISECONDS_PER_MINUTE)
-    seconds, milliseconds = divmod(milliseconds, MILLISECONDS_PER_SECOND)
+    duration = int(totalSeconds * 1000)
 
     s = ""
-    if not roundeventually or inputms <= MILLISECONDS_PER_DAY:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:,d} day{'s' if days != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_HOUR:
-            s += f"{hours:,d} hour{'s' if hours != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_MINUTE:
-            s += f"{minutes:,d} minute{'s' if minutes != 1 else ''}, "
-        if millisecondAccuracy:
-            s += f"{seconds:,d}.{milliseconds:03d} second{'' if seconds == 1 and milliseconds == 0 else 's'}"
-        else:
-            s += f"{seconds:,d} second{'s' if seconds != 1 else ''}"
-    elif inputms >= MILLISECONDS_PER_YEAR * 1_000_000:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}"
-    elif inputms >= MILLISECONDS_PER_YEAR * 1000:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:,d} day{'s' if days != 1 else ''}"
-    elif inputms >= MILLISECONDS_PER_YEAR:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:,d} day{'s' if days != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_HOUR:
-            s += f"{hours:,d} hour{'s' if hours != 1 else ''}"
-    elif inputms >= MILLISECONDS_PER_DAY:
-        if inputms >= MILLISECONDS_PER_YEAR:
-            s += f"{years:,d} year{'s' if years != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_DAY:
-            s += f"{days:,d} day{'s' if days != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_HOUR:
-            s += f"{hours:,d} hour{'s' if hours != 1 else ''}, "
-        if inputms >= MILLISECONDS_PER_MINUTE:
-            s += f"{minutes:,d} minute{'s' if minutes != 1 else ''}"
 
-    return s
+    remaining = duration
+    for mintime, maxtime, unit, name, fraction in timeunits:
+        value, remaining = divmod(remaining, unit)
+        if mintime is not None and duration < mintime:
+                continue
+        if roundeventually and maxtime is not None and duration >= maxtime:
+                continue
+        if millisecondAccuracy and fraction:
+            s += f"{value:,d}.{remaining:03d} second{_s(value, remaining)}, "
+        else:
+            s += f"{value:,d} {name}{_s(value)}, "
+    return s.rstrip(", ")
+
+def _s(value: int, fraction: int = 0) -> str:
+    if value != 1 or fraction != 0:
+        return "s"
+    else:
+        return ""
 
 
 def try_int(val: Any) -> Any:
@@ -128,169 +95,42 @@ def get_path(root: Any, path: str, default: Any = None) -> Any:
     return branch
 
 
-def chunk_list(lst: list, chunklen: int):
+def chunk_list(lst: list[Any], chunklen: int) -> Iterable[list[Any]]:
     while lst:
         yield lst[:chunklen]
         lst = lst[chunklen:]
 
 
-def chunk_str(s: str, chunklen: int, prefix: str = "", suffix: str = "") -> Generator[str, None, str]:
+def chunk_str(s: str, chunklen: int, prefix: str = "", suffix: str = "") -> Iterable[str]:
     """chunk_str(3, "ABCDEFG") --> ['ABC', 'DEF', 'G']"""
     innerlen = chunklen - len(prefix) - len(suffix)
     if innerlen <= 0:
         raise ValueError("Cannot fit prefix and suffix within chunklen")
 
     if not s:
-        return prefix + s + suffix
-
+        yield prefix + s + suffix
+        return
+    
     while len(s) > 0:
         chunk = s[:innerlen]
         s = s[innerlen:]
         yield prefix + chunk + suffix
 
 
-def chunk_msg(m: str) -> list:
+async def sendplus(ctx: BotContext, content: str | None = None, embed: Embed | None = None, *, paged: bool = False) -> list[Message]:
+    if content is not None and embed is None and paged:
+        return [await ctx.send(content=c) for c in chunk_msg(content)]
+    return [await ctx.send(content=content, embed=embed)] # type: ignore
+
+def chunk_msg(m: str) -> Iterable[str]:
     p = "```\n"
     if m.startswith("Traceback") or m.startswith("eval error") or m.startswith("Executing eval"):
         p = "```python\n"
     return chunk_str(m, chunklen=2000, prefix=p, suffix="\n```")
 
 
-def chunk_lines(s: str, chunklen: int):
-    """Split a string into groups of lines that don't go over the chunklen. Individual lines longer the chunklen will be split"""
-    lines = s.split("\n")
-
-    linesout = []
-    while lines:
-        linesout.append(lines.pop(0))
-        if len("\n".join(linesout)) > chunklen:
-            if len(linesout) == 1:
-                line = linesout.pop()
-                lines.insert(0, line[chunklen:])
-                linesout.append(line[:chunklen])
-            else:
-                lines.insert(0, linesout.pop())
-            yield "\n".join(linesout)
-            linesout = []
-    if linesout:
-        yield "\n".join(linesout)
-
-
-def remove_brackets(s: str) -> str:
-    """Remove all [] and <>s from a string."""
-    s = re.sub(r"[\[\]<>]", "", s)
-    return s
-
-
 def format_traceback(err: BaseException) -> str:
     return "".join(traceback.format_exception(type(err), err, err.__traceback__))
-
-
-def pformat(name: str, value: Any) -> str:
-    if value is None:
-        return f"{name}?"
-    if callable(value):
-        return f"{name}()"
-    if isinstance(value, (list, tuple)):
-        return f"{name}[]"
-    if isinstance(value, set):
-        return f"{name}{{}}"
-    if isinstance(value, dict):
-        return f"{name}{{:}}"
-    return name
-
-
-def pdir(o: Any) -> list:
-    """return a list of an object's attributes, with type notation."""
-    return [pformat(n, v) for n, v in ddir(o).items()]
-
-
-def ddir(o: Any) -> dict:
-    """return a dictionary of an object's attributes."""
-    return {n: v for n, v in inspect.getmembers(o) if not n.startswith("_")}
-    # return {n: getattr(o, n, None) for n in dir(o) if not n.startswith("_")}
-
-
-def get_fullname(o: object) -> str:
-    moduleName = o.__class__.__module__
-    if moduleName == "builtins":
-        moduleName = ""
-    if moduleName:
-        moduleName = f"{moduleName}."
-
-    className = o.__class__.__name__
-    fullname = f"{moduleName}{className}"
-    return fullname
-
-
-def format_error(err: Exception) -> str:
-    fullname = get_fullname(err)
-
-    errMessage = str(err)
-    if errMessage:
-        errMessage = f": {errMessage}"
-
-    return f"{fullname}{errMessage}"
-
-
-def try_or_none(fn: Callable, *args, ignore: list = (), **kwargs) -> Any:
-    "Try to run a function. If it throws an error that's in `ignore`, just return `None`."""
-    try:
-        result = fn(*args, **kwargs)
-    except ignore:
-        result = None
-    return result
-
-
-class iset(set):
-    def __init__(self, iterable: Iterable):
-        iterable = (i.casefold() for i in iterable)
-        super().__init__(iterable)
-
-    def add(self, item: str):
-        item = item.casefold()
-        super().add(item)
-
-    def __contains__(self, item: str) -> bool:
-        item = item.casefold()
-        return super().__contains__(item)
-
-    def discard(self, item: str):
-        item = item.casefold()
-        super().discard(item)
-
-    def remove(self, item: str):
-        item = item.casefold()
-        super().remove(item)
-
-
-def str_help(topic: str) -> str:
-    return pydoc.plain(pydoc.render_doc(topic))
-
-
-T = TypeVar('T')
-
-
-def minmax(first: T, second: T) -> tuple[T, T]:
-    """Return a tuple where item 0 is the smaller value, and item 1 is the larger value."""
-    small, big = first, second
-    if small > big:
-        small, big = big, small
-    return small, big
-
-
-def remove_code_block(s: str) -> str:
-    re_codeblock = re.compile(r"^\s*```(?:python)?(.*)```\s*$", re.DOTALL)
-    s_nocodeblock = re.sub(re_codeblock, r"\1", s)
-    if s_nocodeblock != s:
-        return s_nocodeblock
-
-    re_miniblock = re.compile(r"^\s*`(.*)`\s*$", re.DOTALL)
-    s_nominiblock = re.sub(re_miniblock, r"\1", s)
-    if s_nominiblock != s:
-        return s_nominiblock
-
-    return s
 
 
 def int_to_roman(input: int) -> str:
@@ -310,14 +150,6 @@ def int_to_roman(input: int) -> str:
     return ''.join(result)
 
 
-def find_one(iterator: Iterator) -> Any | None:
-    try:
-        val = next(iterator)
-    except StopIteration:
-        val = None
-    return val
-
-
 async def parse_many(ctx: BotContext, arg: str, types: list[commands.Converter], default: Any = None) -> Any:
     for t in types:
         try:
@@ -327,7 +159,6 @@ async def parse_many(ctx: BotContext, arg: str, types: list[commands.Converter],
     return default
 
 
-# TODO: CamelCase
 def is_url(value: str) -> bool:
     """Returns True when given either a valid URL, or `None`."""
     try:
@@ -337,7 +168,7 @@ def is_url(value: str) -> bool:
         return True
 
 
-def sentence_join(items: list[str], *, joiner: str | None = None, oxford: bool = False) -> str:
+def sentence_join(items: Iterable[str], *, joiner: str | None = None, oxford: bool = False) -> str:
     """Join a list of strings like a sentence.
 
     >>> sentence_join(['red', 'green', 'blue'])
@@ -365,25 +196,6 @@ def sentence_join(items: list[str], *, joiner: str | None = None, oxford: bool =
         ox = ","
 
     return f"{', '.join(items[:-1])}{ox} {joiner} {items[-1]}"
-
-
-def glitch_string(in_string: str, *, charset: str = None) -> str:
-    words = []
-    if charset is not None:
-        for word in in_string.split(" "):
-            words.append(''.join(random.choices(charset, k=len(word))))
-    else:
-        global current_glitch_index
-        for word in in_string.split(" "):
-            k = len(word)
-            new_word = glitch_template[current_glitch_index:current_glitch_index + k]
-            k -= len(new_word)
-            if k != 0:
-                current_glitch_index = 0
-                new_word = glitch_template[current_glitch_index:current_glitch_index + k]
-            words.append(new_word)
-            current_glitch_index += len(new_word)
-    return " ".join(words)
 
 
 def regexbuild(li: list[str] | list[list[str]], capture: bool = False) -> str:
@@ -523,11 +335,6 @@ def randrange_log(minval: Decimal, maxval: Decimal, precision: int = 26) -> Deci
     return newval
 
 
-def round_fraction(number: Decimal, denominator: int) -> Decimal:
-    rounded = round(number * denominator) / denominator
-    return rounded
-
-
 def fix_zeroes(d: Decimal) -> Decimal:
     """Reset the precision of a Decimal to avoid values that use exponents like '1e3' and values with trailing zeroes like '100.000'
 
@@ -555,3 +362,12 @@ def truthy(s: str) -> bool | None:
 
 def join_unique(items: list[str], *, sep: str) -> str:
     return sep.join(set(items))
+
+
+def round_fraction(number: Decimal, denominator: int) -> Decimal:
+    """
+    Round to the nearest fractional amount
+    round_fraction(1.8, 4) == 1.75
+    """
+    rounded = round(number * denominator) / denominator
+    return rounded

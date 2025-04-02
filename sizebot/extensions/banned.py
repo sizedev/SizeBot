@@ -6,8 +6,7 @@ from sizebot.lib.types import BotContext
 
 def den_guild_ban(ctx: BotContext) -> bool:
     member = ctx.author
-    isMember = isinstance(member, discord.Member)
-    if not isMember:
+    if not isinstance(member, discord.Member):
         return True
     is_guild_banned = discord.utils.get(member.roles, name = "SizeBot_Banned") is not None
     return not is_guild_banned

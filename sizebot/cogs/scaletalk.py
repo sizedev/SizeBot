@@ -1,17 +1,17 @@
 import logging
 import re
 from copy import copy
-from sizebot.lib.utils import try_int
+from typing import cast
 
 import discord
 from discord.ext import commands
 
 from sizebot.lib import userdb
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.diff import Diff
 from sizebot.lib.errors import ChangeMethodInvalidException, UserMessedUpException, UserNotFoundException, ValueIsZeroException
-from sizebot.lib.types import BotContext
-from sizebot.lib.units import SV
+from sizebot.lib.types import BotContext, GuildContext
+from sizebot.lib.units import SV, Decimal
+from sizebot.lib.utils import try_int
 
 
 logger = logging.getLogger("sizebot")
@@ -28,7 +28,8 @@ class ScaleTypeCog(commands.Cog):
         category = "scalestep",
         usage = "<change per characters>"
     )
-    async def settalkscale(self, ctx: BotContext, *, change: str):
+    @commands.guild_only()
+    async def settalkscale(self, ctx: GuildContext, *, change: str):
         """Set the amount you scale per character.
 
         Sets the amount that you scale for each character you type.
@@ -38,6 +39,8 @@ class ScaleTypeCog(commands.Cog):
         `&settalkscale 2x/100`
         `&settalkscale -1mm` (defaults to per 1 character)
         """
+        if ctx.guild is None:
+            raise commands.errors.NoPrivateMessage()
 
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -85,9 +88,9 @@ class ScaleTypeCog(commands.Cog):
                    "cleartypescale", "unsettypescale", "resetscaletype", "clearscaletype", "unsetscaletype",
                    "resettypescale"]
     )
-    async def resettalkscale(self, ctx: BotContext):
+    @commands.guild_only()
+    async def resettalkscale(self, ctx: GuildContext):
         """Clear your talk-scale amount."""
-
         guildid = ctx.guild.id
         userid = ctx.author.id
 
@@ -120,9 +123,9 @@ class ScaleTypeCog(commands.Cog):
             return
 
         if userdata.currentscaletalk.changetype == "add":
-            userdata.height += (userdata.currentscaletalk.amount * length)
+            userdata.height += (cast(SV, userdata.currentscaletalk.amount) * length)
         elif userdata.currentscaletalk.changetype == "multiply":
-            userdata.height *= (userdata.currentscaletalk.amount ** length)
+            userdata.height *= (cast(Decimal, userdata.currentscaletalk.amount) ** length)
 
         userdb.save(userdata)
 

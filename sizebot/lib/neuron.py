@@ -2,10 +2,9 @@ from typing import Literal, get_args
 
 from discord import Embed
 
-from sizebot.lib.digidecimal import Decimal
 from sizebot.lib.proportions import EmbedToSend
 from sizebot.lib.stats import StatBox
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
 from sizebot.lib.userdb import User
 from sizebot.lib.utils import pretty_time_delta
 

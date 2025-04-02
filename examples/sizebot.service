@@ -1,0 +1,13 @@
+[Unit]
+Description=Sizebot
+
+[Install]
+WantedBy=default.target
+
+[Service]
+Type=notify
+
+WorkingDirectory=~/envs/develop
+ExecStart=~/.rye/shims/rye run sizebot
+Restart=on-failure
+TimeoutSec=600
