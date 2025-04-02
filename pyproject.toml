@@ -33,7 +33,7 @@ dependencies = [
     "werkzeug==3.0.1",
     "pytz==2024.1",
     "pillow==10.2.0",
-    "tqdm==4.66.2",
+    "tqdm==4.66.3",
     "aiohttp-requests==0.2.3",
     "asyncstdlib==3.12.1",
     "ndjson==0.3.1",
