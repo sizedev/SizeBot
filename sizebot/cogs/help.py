@@ -268,6 +268,28 @@ class HelpCog(commands.Cog):
         await ctx.send(embed = embed)
 
     @commands.command(
+        category = "help"
+    )
+    async def slash(self, ctx: BotContext):
+        """How do I use slash commands?"""
+        s = R"""
+### How do I use `/sb`?
+The same way you used `&`! The commands are nearly identical.
+
+`/sb` has two parameters: `command` and `arguments`. The name of the command goes in `command`, and everything else into `arguments`.
+
+**Examples:**
+- `&stats` :charm_right: `/sb` `stats`
+- `&compare 100ft` :charm_right: `/sb` `compare` `100ft`
+- `&stat finger @username` :charm_right: `/sb` `stat` `finger username`*
+
+-# \*Commands that reference other users need testing! Please let me know if you have issues.
+
+For the time being, `&` style commands will keep working, but ***please test /sb and report issues!*** `&` commands will cease working *extremely soon* so please try the new system.
+Thank you for your help with this process!"""
+        await ctx.send(s)
+
+    @commands.command(
         aliases = ["fund"],
         category = "help"
     )
