@@ -3,6 +3,7 @@ import os
 import logging
 import pytz
 import sys
+from typing import Optional
 from datetime import datetime, timedelta
 
 import discord
