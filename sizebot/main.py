@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 import discord
 from discord.ext.commands import Bot
+from discord.app_commands import Choice, autocomplete
 
 from digiformatter import styles, logger as digilogger
 
@@ -90,6 +91,19 @@ def initConf():
     os.startfile(paths.confpath.parent)
 
 
+# Autocomplete callback for /sb
+digis_favs = ["help", "register", "stats", "compare", "stat", "setheight", "change", "setbaseheight", "distance", "lookat",
+              "food", "water", "lookslike", "objectcompare", "scaled", "ruler", "stackup", "setrigger", "fall", "pushbutton", "lineup"]
+all_commands: list[str] = []
+
+async def command_autocomplete(interaction: discord.Interaction, current: str) -> list[Choice[str]]:
+    if current == "":
+        return [Choice(name=cmd, value=cmd) for cmd in digis_favs]
+    # If the user has already typed something...
+    # ?: How good is this "autocomplete algorithm?" Maybe use a fuzzy search or something?
+    return [Choice(name=cmd, value=cmd) for cmd in all_commands if current.lower() in cmd.lower()]
+
+
 def main():
     try:
         conf.load()
@@ -114,11 +128,12 @@ def main():
     @bot.event
     async def setup_hook():
         logger.info("Setup hook called!")
+        global all_commands
         for extension in initial_extensions:
             await bot.load_extension("sizebot.extensions." + extension)
         for cog in initial_cogs:
             await bot.load_extension("sizebot.cogs." + cog)
-        # await bot.load_extension("sizeroyale.cogs.royale")
+        all_commands = [cmd.name for cmd in bot.commands if not cmd.hidden]
 
     @bot.event
     async def on_first_ready():
@@ -265,12 +280,14 @@ def main():
         logger.warn(f"SizeBot has been removed from {guild.name}! ({guild.id})")
 
     @bot.tree.command(name="sb")
-    async def sb(interaction: discord.Interaction, command: str):
+    @autocomplete(command = command_autocomplete)
+    async def sb(interaction: discord.Interaction, command: str, arguments: Optional[str]):
         message = await interaction.response.send_message(f"{constants.emojis.loading} Processing command...", delete_after=0.5)
-        message = await interaction.channel.send(f"> **{interaction.user.display_name}** ran `{command}`.")
+        full_command = command if not arguments else f"{command} {arguments}"
+        message = await interaction.channel.send(f"> **{interaction.user.display_name}** ran `{full_command}`.")
         new_message = copy(message)
         new_message.author = interaction.user
-        new_message.content = conf.prefix + command
+        new_message.content = conf.prefix + full_command
         await bot.process_commands(new_message)
 
     def on_disconnect():
