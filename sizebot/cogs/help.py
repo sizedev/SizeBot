@@ -279,9 +279,9 @@ The same way you used `&`! The commands are nearly identical.
 `/sb` has two parameters: `command` and `arguments`. The name of the command goes in `command`, and everything else into `arguments`.
 
 **Examples:**
-- `&stats` :charm_right: `/sb` `stats`
-- `&compare 100ft` :charm_right: `/sb` `compare` `100ft`
-- `&stat finger @username` :charm_right: `/sb` `stat` `finger username`*
+- `&stats` -> `/sb` `stats`
+- `&compare 100ft` -> `/sb` `compare` `100ft`
+- `&stat finger @username` -> `/sb` `stat` `finger username`*
 
 -# \*Commands that reference other users need testing! Please let me know if you have issues.
 
