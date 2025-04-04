@@ -210,12 +210,19 @@ def main():
         ):
             await on_message_timed(message)
             return
+
         await bot.process_commands(message)
 
         if hasattr(message.author, "guild") and message.author.guild is not None:
             await nickmanager.nick_update(message.author)
         await monika.on_message(message)
         await active.on_message(message)
+
+        # For now, let's still process commands, but warn about it.
+        if message.content.startswith("&"):
+            for cmd in all_commands:
+                if message.content.startswith(f"&{cmd}"):
+                    await message.channel.send(f"-# {constants.emojis.warning} Very soon, `&`-style commands are going away! Please switch to using the `/sb` slash command! For help, run `&slash` or `/sb slash`!")
 
     async def on_message_timed(message: discord.Message):
         def timeywimey() -> timedelta:
