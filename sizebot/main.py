@@ -102,7 +102,7 @@ async def command_autocomplete(interaction: discord.Interaction, current: str) -
         return [Choice(name=cmd, value=cmd) for cmd in digis_favs]
     # If the user has already typed something...
     # ?: How good is this "autocomplete algorithm?" Maybe use a fuzzy search or something?
-    return [Choice(name=cmd, value=cmd) for cmd in all_commands if current.lower() in cmd.lower()]
+    return [Choice(name=cmd, value=cmd) for cmd in all_commands if current.lower() in cmd.lower()][:20]
 
 
 def main():
