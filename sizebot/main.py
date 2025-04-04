@@ -203,60 +203,20 @@ def main():
         message.content = message.content.replace("’", "'")
         message.content = message.content.replace("‘", "'")
 
-        if (
-            message.content.startswith(f"{conf.prefix}timeit")
-            and await bot.is_owner(message.author)
-            and hasattr(message.author, "guild") and message.author.guild is not None
-        ):
-            await on_message_timed(message)
-            return
-        await bot.process_commands(message)
+        # await bot.process_commands(message)
+        if message.content.startswith("&"):
+            for command in all_commands:
+                if message.content.startswith(f"&{command}"):
+                    await message.channel.send("SizeBot no longer supports `&` style commands! Please use the new `/sb` command.\n-# If the /sb command isn't available in your server, ask your server owner to re-add the bot via the [invite link](<https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=563365424786496&scope=applications.commands+bot>).")
+                    break
 
         if hasattr(message.author, "guild") and message.author.guild is not None:
             await nickmanager.nick_update(message.author)
         await monika.on_message(message)
         await active.on_message(message)
 
-    async def on_message_timed(message: discord.Message):
-        def timeywimey() -> timedelta:
-            now = arrow.now()
-            if getattr(timeywimey, "prev", None) is None:
-                timeywimey.prev = now
-            prev: arrow.Arrow = timeywimey.prev
-            diff = now - prev
-            timeywimey.prev = now
-            return diff
-
-        message.content = message.content[len(conf.prefix + "timeit"):].lstrip()
-        start = arrow.get(message.created_at.replace(tzinfo=pytz.UTC))
-        discordlatency = arrow.now() - start
-        timeywimey()
-        await bot.process_commands(message)
-        processlatency = timeywimey()
-        await nickmanager.nick_update(message.author)
-        nickupdatelatency = timeywimey()
-        await monika.on_message(message)
-        monikalatency = timeywimey()
-        await active.on_message(message)
-        activelatency = timeywimey()
-        end = arrow.now()
-        totaltime = end - start
-
-        latency = (
-            f"Discord Latency: {utils.pretty_time_delta(discordlatency.total_seconds(), True)}\n"
-            f"Command Process Latency: {utils.pretty_time_delta(processlatency.total_seconds(), True)}\n"
-            f"Nick Update Latency: {utils.pretty_time_delta(nickupdatelatency.total_seconds(), True)}\n"
-            f"Monika Latency: {utils.pretty_time_delta(monikalatency.total_seconds(), True)}\n"
-            f"User Active Check Latency: {utils.pretty_time_delta(activelatency.total_seconds(), True)}\n"
-            f"**Total Latency: {utils.pretty_time_delta(totaltime.total_seconds(), True)}**"
-        )
-        await message.channel.send(latency)
-
     @bot.event
     async def on_message_edit(before: discord.Message, after: discord.Message):
-        if before.content == after.content:
-            return
-        await bot.process_commands(after)
         if hasattr(after.author, "guild") and after.author.guild is not None:
             await nickmanager.nick_update(after.author)
         await active.on_message(after)
