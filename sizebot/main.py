@@ -1,10 +1,8 @@
-import arrow
 import os
 import logging
-import pytz
 import sys
 from typing import Optional
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import discord
 from discord.ext.commands import Bot
@@ -16,7 +14,7 @@ import discordplus
 
 from sizebot import __version__
 from sizebot.conf import conf
-from sizebot.lib import language, objs, paths, pokemon, status, units, utils, nickmanager, constants
+from sizebot.lib import language, objs, paths, pokemon, status, units, nickmanager, constants
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.lib.types import BotContext
@@ -35,7 +33,7 @@ logger.propagate = False
 logger.addHandler(dfhandler)
 
 discordlogger = logging.getLogger("discord")
-discordlogger.setLevel(logging.WARN)
+discordlogger.setLevel(logging.WARNING)
 discordlogger.handlers = []
 discordlogger.propagate = False
 discordlogger.addHandler(dfhandler)
@@ -94,7 +92,7 @@ def initConf():
 
 # Autocomplete callback for /sb
 digis_favs = ["help", "register", "stats", "compare", "stat", "setheight", "change", "setbaseheight", "distance", "lookat",
-              "food", "water", "lookslike", "objectcompare", "scaled", "ruler", "stackup", "setrigger", "fall", "pushbutton", "lineup"]
+              "food", "water", "lookslike", "objectcompare", "scaled", "ruler", "stackup", "settrigger", "fall", "pushbutton", "lineup"]
 all_commands: list[str] = []
 
 async def command_autocomplete(interaction: discord.Interaction, current: str) -> list[Choice[str]]:
@@ -112,7 +110,7 @@ def main():
         logger.error(f"Configuration file not found: {e.filename}")
         return
 
-    launchtime = datetime.now()
+    launchtime = datetime.now()  # noqa: DTZ005
 
     bot = Bot(command_prefix = conf.prefix, allowed_mentions = discord.AllowedMentions(everyone=False), intents=discord.Intents.all(), case_insensitive=True)
 
