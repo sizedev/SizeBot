@@ -1,10 +1,12 @@
 import importlib.resources as pkg_resources
 import csv
+import logging
 import sizebot.data
 from sizebot.lib.stats import StatBox
 from sizebot.lib.units import SV
 from sizebot.lib.userdb import User
 
+logger = logging.getLogger("sizebot")
 
 def get_facts(size: SV, prefix: str = "You are") -> list[str]:
     facts_csv = pkg_resources.read_text(sizebot.data, "gifts.txt").splitlines()
@@ -16,6 +18,7 @@ def get_facts(size: SV, prefix: str = "You are") -> list[str]:
         if n == 0:
             continue
 
+        logger.info(line)
         minimum = SV(line[0]) if line[0] else SV(0)
         maximum = SV(line[1]) if line[1] else SV(SV.infinity)
         fact = line[2]
