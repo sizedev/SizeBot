@@ -9,7 +9,7 @@ from sizebot.lib.userdb import User
 logger = logging.getLogger("sizebot")
 
 def get_facts(size: SV, prefix: str = "You are") -> list[str]:
-    facts_csv = pkg_resources.read_text(sizebot.data, "gifts.txt").splitlines()
+    facts_csv = pkg_resources.read_text(sizebot.data, "facts.csv").splitlines()
     csv_reader = csv.reader(facts_csv)
 
     facts = []
@@ -18,7 +18,6 @@ def get_facts(size: SV, prefix: str = "You are") -> list[str]:
         if n == 0:
             continue
 
-        logger.info(line)
         minimum = SV(line[0]) if line[0] else SV(0)
         maximum = SV(line[1]) if line[1] else SV(SV.infinity)
         fact = line[2]
