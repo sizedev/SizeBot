@@ -25,7 +25,9 @@ class LimitCog(commands.Cog):
     async def limits(self, ctx: GuildContext):
         """See the guild's current caps."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
-        await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {'*Unset*' if guilddata.low_limit is None else guilddata.low_limit:,.3mu}\nHigh Limit: {'*Unset*' if guilddata.high_limit is None else guilddata.high_limit:,.3mu}")
+        print_low = '*Unset*' if guilddata.low_limit is None else format(guilddata.low_limit, ",.3mu")
+        print_high = '*Unset*' if guilddata.high_limit is None else format(guilddata.high_limit, ",.3mu")
+        await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {print_low}\nHigh Limit: {print_high}")
 
     @commands.command(
         aliases = ["lowlimit", "lowcap", "setlowcap", "setfloor"],
