@@ -212,7 +212,7 @@ class DigiLand:
     @property
     def area(self) -> AV:
         return self.height * self.width
-    
+
     @classmethod
     def from_digiobject(cls, obj: DigiObject) -> DigiLand:
         return cls(

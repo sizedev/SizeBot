@@ -91,6 +91,8 @@ class ObjectsCog(commands.Cog):
         `&objcompare moon to @Kelly`
         """
 
+        orig = args
+
         argslist = args.rsplit(" to ", 1)
         if len(argslist) == 1:
             what = argslist[0]
@@ -121,7 +123,12 @@ class ObjectsCog(commands.Cog):
             compheight = userstats['averagescale'].value
             compdata = load_or_fake(compheight)
         else:
-            await ctx.send(f"`{what}` is not a valid object, member, or height.")
+            await ctx.send(
+            f"Sorry, I don't know what `{orig}` is.\n"
+            f"If this is an object or alias you'd like added to SizeBot, "
+            f"use `{ctx.prefix}suggestobject` to suggest it "
+            f"(see `{ctx.prefix}help suggestobject` for instructions on doing that.)"
+        )
             return
         tosend = proportions.get_compare(userdata, compdata, ctx.author.id)
         await ctx.send(**tosend)
@@ -147,6 +154,9 @@ class ObjectsCog(commands.Cog):
             what = what.lower()
 
         # TODO: Should easter eggs be in a different place?
+
+        if what == "random":
+            what = random.choice(objects)
 
         # Compare to registered DigiObject by string name
         if isinstance(what, DigiObject):
