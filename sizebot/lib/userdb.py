@@ -494,5 +494,6 @@ def migrate_json(jsondata: dict[str, Any]) -> dict[str, Any]:
         jsondata["triggers"] = {}
     for settable in ["walkperhour", "runperhour", "swimperhour", "currentscaletalk", "currentscalestep",
                      "currentmovetype", "movestop", "button"]:
-        jsondata[settable] = None
+        if settable not in jsondata:
+            jsondata[settable] = None
     return jsondata
