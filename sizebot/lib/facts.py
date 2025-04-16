@@ -9,10 +9,12 @@ from sizebot.lib.userdb import User
 logger = logging.getLogger("sizebot")
 
 def get_facts(size: SV, prefix: str = "You are", wiggle: float = 10) -> list[str]:
+    wiggle = Decimal(wiggle)
     facts_csv = pkg_resources.read_text(sizebot.data, "facts.csv").splitlines()
     csv_reader = csv.reader(facts_csv)
 
-    facts = []
+    true_facts = []
+    close_facts = []
 
     for n, line in enumerate(csv_reader):
         if n == 0:
@@ -20,20 +22,25 @@ def get_facts(size: SV, prefix: str = "You are", wiggle: float = 10) -> list[str
 
         minimum = SV(line[0]) if line[0] else None
         maximum = SV(line[1]) if line[1] else None
-        if not minimum:
-            minimum = maximum / Decimal(wiggle)
-        if not maximum:
-            maximum = minimum * Decimal(wiggle)
+        soft_minimum = minimum if minimum is not None else maximum / wiggle
+        soft_maximum = maximum if maximum is not None else minimum * wiggle
 
         fact = line[2]
 
-        if minimum < size <= maximum:
-            facts.append(prefix + " " + fact + ".")
+        if minimum is None or maximum is None:
+            if soft_minimum < fact <= soft_maximum:
+                close_facts.append(prefix + " " + fact + ".")
+                continue
 
-    if not facts:
+        if minimum < size <= maximum:
+            true_facts.append(prefix + " " + fact + ".")
+
+    if not true_facts and not close_facts:
         return [f"{prefix} outside of the bound of facts."]
 
-    return facts
+    if close_facts:
+        return close_facts
+    return true_facts
 
 
 def get_facts_from_user(userdata: User, prefix: str = "You are", wiggle: float = 10) -> list[str]:

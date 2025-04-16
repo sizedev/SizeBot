@@ -1,4 +1,5 @@
 import logging
+from random import choice
 
 import discord
 from discord.ext import commands
@@ -791,7 +792,7 @@ class StatsCog(commands.Cog):
         if prefix is None:
             prefix = userdata.nickname + " is"
         facts = get_facts_from_user(userdata, prefix, 2.5)
-        s = "\n".join(facts)
+        s = choice(facts)
 
         await ctx.send(s)
 
