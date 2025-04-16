@@ -18,12 +18,20 @@ def get_facts(size: SV, prefix: str = "You are") -> list[str]:
         if n == 0:
             continue
 
-        minimum = SV(line[0]) if line[0] else SV(0)
-        maximum = SV(line[1]) if line[1] else SV(SV.infinity)
+        minimum = SV(line[0]) if line[0] else None
+        maximum = SV(line[1]) if line[1] else None
+        if not minimum:
+            minimum = maximum / 10
+        if not maximum:
+            maximum = minimum * 10
+
         fact = line[2]
 
         if minimum < size <= maximum:
             facts.append(prefix + " " + fact + ".")
+
+    if not facts:
+        return "outside of the bound of facts"
 
     return facts
 
