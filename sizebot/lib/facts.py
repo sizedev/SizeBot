@@ -3,7 +3,7 @@ import csv
 import logging
 import sizebot.data
 from sizebot.lib.stats import StatBox
-from sizebot.lib.units import SV
+from sizebot.lib.units import SV, Decimal
 from sizebot.lib.userdb import User
 
 logger = logging.getLogger("sizebot")
@@ -21,9 +21,9 @@ def get_facts(size: SV, prefix: str = "You are", wiggle: float = 10) -> list[str
         minimum = SV(line[0]) if line[0] else None
         maximum = SV(line[1]) if line[1] else None
         if not minimum:
-            minimum = maximum / wiggle
+            minimum = maximum / Decimal(wiggle)
         if not maximum:
-            maximum = minimum * wiggle
+            maximum = minimum * Decimal(wiggle)
 
         fact = line[2]
 
