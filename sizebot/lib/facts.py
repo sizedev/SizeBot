@@ -28,7 +28,7 @@ def get_facts(size: SV, prefix: str = "You are", wiggle: float = 10) -> list[str
         fact = line[2]
 
         if minimum is None or maximum is None:
-            if soft_minimum < fact <= soft_maximum:
+            if soft_minimum < size <= soft_maximum:
                 close_facts.append(prefix + " " + fact + ".")
                 continue
 
