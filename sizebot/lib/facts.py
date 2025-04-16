@@ -31,7 +31,7 @@ def get_facts(size: SV, prefix: str = "You are") -> list[str]:
             facts.append(prefix + " " + fact + ".")
 
     if not facts:
-        return "outside of the bound of facts"
+        return [f"{prefix} outside of the bound of facts."]
 
     return facts
 
