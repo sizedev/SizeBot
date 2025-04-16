@@ -32,7 +32,7 @@ def get_facts(size: SV, prefix: str = "You are", wiggle: float = 10) -> list[str
                 close_facts.append(prefix + " " + fact + ".")
                 continue
 
-        if minimum < size <= maximum:
+        if (minimum or SV(0)) < size <= (maximum or SV(SV.infinity)):
             true_facts.append(prefix + " " + fact + ".")
 
     if not true_facts and not close_facts:
