@@ -790,7 +790,7 @@ class StatsCog(commands.Cog):
         userdata = load_or_fake(who)
         if prefix is None:
             prefix = userdata.nickname + " is"
-        facts = get_facts_from_user(userdata, prefix)
+        facts = get_facts_from_user(userdata, prefix, 2.5)
         s = "\n".join(facts)
 
         await ctx.send(s)
