@@ -251,7 +251,8 @@ def main():
         new_message.author = interaction.user
         new_message.content = conf.prefix + full_command
         await bot.process_commands(new_message)
-        if not command.content.startswith(tuple([c + " " for c in all_commands])):
+        first_arg = command.split()[0]
+        if first_arg not in all_commands:
             await interaction.channel.send(f"{constants.emojis.warning} Not a command!")
 
     def on_disconnect():
