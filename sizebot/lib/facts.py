@@ -44,7 +44,7 @@ def get_facts(size: SV, prefix: str = "You are", wiggle: float = 10) -> list[str
     if not close_facts:
         if not true_facts:
             return [f"{prefix} outside of the bounds of all facts."]
-        return [f'{prefix} outside the bounds of relevant facts']
+        return [f'{prefix} outside the bounds of relevant facts.']
 
     return close_facts
 
