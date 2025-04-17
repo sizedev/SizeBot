@@ -22,25 +22,31 @@ def get_facts(size: SV, prefix: str = "You are", wiggle: float = 10) -> list[str
 
         minimum = SV(line[0]) if line[0] else None
         maximum = SV(line[1]) if line[1] else None
+
+        # This assumes that atleast one bound is set.
         soft_minimum = minimum if minimum is not None else maximum / wiggle
         soft_maximum = maximum if maximum is not None else minimum * wiggle
 
         fact = line[2]
 
         if minimum is None or maximum is None:
+            # Check if unbounded fact is closely true, or generally true
             if soft_minimum < size <= soft_maximum:
-                close_facts.append(prefix + " " + fact + ".")
-                continue
+                close_facts.append(f"{prefix} {fact}.")
+            elif (minimum or SV(0)) < size <= (maximum or SV(SV.infinity)):
+                true_facts.append(f"{prefix} {fact}.")
+            continue
+        
+        # Check if a bounded fact is true and consider it 'close'
+        if minimum < size <= maximum:
+            close_facts.append(f"{prefix} {fact}.")
 
-        if (minimum or SV(0)) < size <= (maximum or SV(SV.infinity)):
-            true_facts.append(prefix + " " + fact + ".")
+    if not close_facts:
+        if not true_facts:
+            return [f"{prefix} outside of the bounds of all facts."]
+        return [f'{prefix} outside the bounds of relevant facts']
 
-    if not true_facts and not close_facts:
-        return [f"{prefix} outside of the bound of facts."]
-
-    if close_facts:
-        return close_facts
-    return true_facts
+    return close_facts
 
 
 def get_facts_from_user(userdata: User, prefix: str = "You are", wiggle: float = 10) -> list[str]:
