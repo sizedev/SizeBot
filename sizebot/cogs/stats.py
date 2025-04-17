@@ -780,7 +780,7 @@ class StatsCog(commands.Cog):
         category = "stats"
     )
     @commands.guild_only()
-    async def facts(self, ctx: GuildContext, who: MemberOrFakeOrSize = None):
+    async def facts(self, ctx: GuildContext, wiggle: float = 2.5, who: MemberOrFakeOrSize = None):
         """How long would brain signals take to travel for a person?"""
         if who is None:
             who = ctx.message.author
@@ -791,7 +791,7 @@ class StatsCog(commands.Cog):
         userdata = load_or_fake(who)
         if prefix is None:
             prefix = userdata.nickname + " is"
-        facts = get_facts_from_user(userdata, prefix, 2.5)
+        facts = get_facts_from_user(userdata, prefix, wiggle)
         s = choice(facts)
 
         await ctx.send(s)
