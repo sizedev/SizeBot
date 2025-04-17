@@ -131,7 +131,10 @@ def main():
             await bot.load_extension("sizebot.extensions." + extension)
         for cog in initial_cogs:
             await bot.load_extension("sizebot.cogs." + cog)
-        all_commands = [cmd.name for cmd in bot.commands if not cmd.hidden]
+        for cmd in bot.commands:
+            if not cmd.hidden:
+                all_commands.append(cmd.name)
+                all_commands.extend(cmd.aliases)
 
     @bot.event
     async def on_first_ready():
@@ -248,6 +251,8 @@ def main():
         new_message.author = interaction.user
         new_message.content = conf.prefix + full_command
         await bot.process_commands(new_message)
+        if not new_message.content.startswith(tuple(all_commands)):
+            await interaction.channel.send(f"{constants.emojis.warning} Not a command!")
 
     def on_disconnect():
         logger.error("SizeBot has been disconnected from Discord!")
