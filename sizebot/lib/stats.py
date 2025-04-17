@@ -449,7 +449,6 @@ all_stats = [
             title="Tier",
             string=lambda s: f"{s['nickname'].value} is **Size Tier {s['tier'].value:.1f}.**",
             body=lambda s: f"Size Tier {s['tier'].value:.1f}",
-            power=1,
             requires=["averagescale"],
             type=Decimal,
             is_shown=False,
