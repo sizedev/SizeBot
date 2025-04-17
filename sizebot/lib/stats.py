@@ -450,6 +450,7 @@ all_stats = [
             string=lambda s: f"{s['nickname'].value}'s size tier is **{s['tier'].value:,.1}**.",
             body="{tier:,.1}",
             is_shown=False,
+            power=0,
             value=lambda v: math.log2((v["height"] * v["scale"]) / 1.8),
             type=Decimal,
             userkey="tier",
