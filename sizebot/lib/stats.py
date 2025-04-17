@@ -445,7 +445,7 @@ all_stats = [
             userkey="height",
             tags=["keypoint", "speedcompare"],
             aliases=["size"]),
-     StatDef("tier",
+    StatDef("tier",
             title="Tier",
             string=lambda s: f"{s['nickname'].value}'s size tier is **{s['tier'].value:,.1}**.",
             body="{tier:,.1}",
