@@ -36,7 +36,7 @@ class WeirdCog(commands.Cog):
         """Get info about a color."""
         outmessage = await ctx.send(emojis.loading)
 
-        url = "http://thecolorapi.com"
+        url = "https://www.thecolorapi.com"
         schemeurl = "https://www.thecolorapi.com/scheme?hex={0}&format=html"
 
         # Default to hex.

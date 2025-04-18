@@ -1,4 +1,5 @@
 import logging
+from random import choice
 
 import discord
 from discord.ext import commands
@@ -6,6 +7,7 @@ from discord.ext import commands
 from sizebot.cogs.register import show_next_step
 from sizebot.lib import errors, proportions, userdb, macrovision
 from sizebot.lib.constants import colors, emojis
+from sizebot.lib.facts import get_facts_from_user
 from sizebot.lib.freefall import freefall
 from sizebot.lib.language import engine
 from sizebot.lib.metal import metal_value, nugget_value
@@ -532,7 +534,7 @@ class StatsCog(commands.Cog):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         basemass = userdata.baseweight
         scale = userdata.scale
-        time, vm, fl = freefall(basemass, distance, scale)
+        time, vm = freefall(basemass, distance, scale)
         ftime = pretty_time_delta(time, millisecondAccuracy = True, roundeventually = True)
 
         await ctx.send(f"You fell **{distance:,.3mu}** in **{ftime}**!\n"
@@ -771,6 +773,28 @@ class StatsCog(commands.Cog):
         tosend = get_neuron_embed(userdata)
 
         await ctx.send(**tosend)
+
+    @commands.command(
+        aliases = ["fact"],
+        usage = "[user/height]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def facts(self, ctx: GuildContext, who: MemberOrFakeOrSize = None):
+        """How long would brain signals take to travel for a person?"""
+        if who is None:
+            who = ctx.message.author
+            prefix = "You are"
+        else:
+            prefix = None
+
+        userdata = load_or_fake(who)
+        if prefix is None:
+            prefix = userdata.nickname + " is"
+        facts = get_facts_from_user(userdata, prefix)
+        s = choice(facts)
+
+        await ctx.send(s)
 
 
 async def setup(bot: commands.Bot):

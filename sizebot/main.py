@@ -1,10 +1,8 @@
-import arrow
 import os
 import logging
-import pytz
 import sys
 from typing import Optional
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import discord
 from discord.ext.commands import Bot
@@ -16,7 +14,7 @@ import discordplus
 
 from sizebot import __version__
 from sizebot.conf import conf
-from sizebot.lib import language, objs, paths, pokemon, status, units, utils, nickmanager, constants
+from sizebot.lib import language, objs, paths, pokemon, status, units, nickmanager, constants
 from sizebot.lib.discordlogger import DiscordHandler
 from sizebot.lib.loglevels import BANNER, LOGIN, CMD
 from sizebot.lib.types import BotContext
@@ -35,7 +33,7 @@ logger.propagate = False
 logger.addHandler(dfhandler)
 
 discordlogger = logging.getLogger("discord")
-discordlogger.setLevel(logging.WARN)
+discordlogger.setLevel(logging.WARNING)
 discordlogger.handlers = []
 discordlogger.propagate = False
 discordlogger.addHandler(dfhandler)
@@ -52,7 +50,6 @@ initial_cogs = [
     "limits",
     "loop",
     "multiplayer",
-    "naptime",
     "objects",
     "pokemon",
     "profile",
@@ -94,7 +91,7 @@ def initConf():
 
 # Autocomplete callback for /sb
 digis_favs = ["help", "register", "stats", "compare", "stat", "setheight", "change", "setbaseheight", "distance", "lookat",
-              "food", "water", "lookslike", "objectcompare", "scaled", "ruler", "stackup", "setrigger", "fall", "pushbutton", "lineup"]
+              "food", "water", "lookslike", "objectcompare", "scaled", "ruler", "stackup", "settrigger", "fall", "pushbutton", "lineup"]
 all_commands: list[str] = []
 
 async def command_autocomplete(interaction: discord.Interaction, current: str) -> list[Choice[str]]:
@@ -102,7 +99,7 @@ async def command_autocomplete(interaction: discord.Interaction, current: str) -
         return [Choice(name=cmd, value=cmd) for cmd in digis_favs]
     # If the user has already typed something...
     # ?: How good is this "autocomplete algorithm?" Maybe use a fuzzy search or something?
-    return [Choice(name=cmd, value=cmd) for cmd in all_commands if current.lower() in cmd.lower()]
+    return [Choice(name=cmd, value=cmd) for cmd in all_commands if current.lower() in cmd.lower()][:20]
 
 
 def main():
@@ -112,7 +109,7 @@ def main():
         logger.error(f"Configuration file not found: {e.filename}")
         return
 
-    launchtime = datetime.now()
+    launchtime = datetime.now()  # noqa: DTZ005
 
     bot = Bot(command_prefix = conf.prefix, allowed_mentions = discord.AllowedMentions(everyone=False), intents=discord.Intents.all(), case_insensitive=True)
 
@@ -134,7 +131,10 @@ def main():
             await bot.load_extension("sizebot.extensions." + extension)
         for cog in initial_cogs:
             await bot.load_extension("sizebot.cogs." + cog)
-        all_commands = [cmd.name for cmd in bot.commands if not cmd.hidden]
+        for cmd in bot.commands:
+            if not cmd.hidden:
+                all_commands.append(cmd.name)
+                all_commands.extend(cmd.aliases)
 
     @bot.event
     async def on_first_ready():
@@ -203,67 +203,20 @@ def main():
         message.content = message.content.replace("’", "'")
         message.content = message.content.replace("‘", "'")
 
-        if (
-            message.content.startswith(f"{conf.prefix}timeit")
-            and await bot.is_owner(message.author)
-            and hasattr(message.author, "guild") and message.author.guild is not None
-        ):
-            await on_message_timed(message)
-            return
-
-        await bot.process_commands(message)
+        # await bot.process_commands(message)
+        if message.content.startswith("&"):
+            for command in all_commands:
+                if message.content.startswith(f"&{command}"):
+                    await message.channel.send("SizeBot no longer supports `&` style commands! Please use the new `/sb` command.\n-# If the /sb command isn't available in your server, ask your server owner to re-add the bot via the [invite link](<https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=563365424786496&scope=applications.commands+bot>).")
+                    break
 
         if hasattr(message.author, "guild") and message.author.guild is not None:
             await nickmanager.nick_update(message.author)
         await monika.on_message(message)
         await active.on_message(message)
 
-        # For now, let's still process commands, but warn about it.
-        if message.content.startswith("&"):
-            for cmd in all_commands:
-                if message.content.startswith(f"&{cmd}"):
-                    await message.channel.send(f"-# {constants.emojis.warning} Very soon, `&`-style commands are going away! Please switch to using the `/sb` slash command! For help, run `&slash` or `/sb slash`!")
-
-    async def on_message_timed(message: discord.Message):
-        def timeywimey() -> timedelta:
-            now = arrow.now()
-            if getattr(timeywimey, "prev", None) is None:
-                timeywimey.prev = now
-            prev: arrow.Arrow = timeywimey.prev
-            diff = now - prev
-            timeywimey.prev = now
-            return diff
-
-        message.content = message.content[len(conf.prefix + "timeit"):].lstrip()
-        start = arrow.get(message.created_at.replace(tzinfo=pytz.UTC))
-        discordlatency = arrow.now() - start
-        timeywimey()
-        await bot.process_commands(message)
-        processlatency = timeywimey()
-        await nickmanager.nick_update(message.author)
-        nickupdatelatency = timeywimey()
-        await monika.on_message(message)
-        monikalatency = timeywimey()
-        await active.on_message(message)
-        activelatency = timeywimey()
-        end = arrow.now()
-        totaltime = end - start
-
-        latency = (
-            f"Discord Latency: {utils.pretty_time_delta(discordlatency.total_seconds(), True)}\n"
-            f"Command Process Latency: {utils.pretty_time_delta(processlatency.total_seconds(), True)}\n"
-            f"Nick Update Latency: {utils.pretty_time_delta(nickupdatelatency.total_seconds(), True)}\n"
-            f"Monika Latency: {utils.pretty_time_delta(monikalatency.total_seconds(), True)}\n"
-            f"User Active Check Latency: {utils.pretty_time_delta(activelatency.total_seconds(), True)}\n"
-            f"**Total Latency: {utils.pretty_time_delta(totaltime.total_seconds(), True)}**"
-        )
-        await message.channel.send(latency)
-
     @bot.event
     async def on_message_edit(before: discord.Message, after: discord.Message):
-        if before.content == after.content:
-            return
-        await bot.process_commands(after)
         if hasattr(after.author, "guild") and after.author.guild is not None:
             await nickmanager.nick_update(after.author)
         await active.on_message(after)
@@ -292,11 +245,15 @@ def main():
     async def sb(interaction: discord.Interaction, command: str, arguments: Optional[str]):
         message = await interaction.response.send_message(f"{constants.emojis.loading} Processing command...", delete_after=0.5)
         full_command = command if not arguments else f"{command} {arguments}"
-        message = await interaction.channel.send(f"> **{interaction.user.display_name}** ran `{full_command}`.")
+        full_command_formatted = f"`{full_command}`".replace("<", "` <").replace(">", "> `").replace("``", "")
+        message = await interaction.channel.send(f"> **{interaction.user.display_name}** ran {full_command_formatted}.")
         new_message = copy(message)
         new_message.author = interaction.user
         new_message.content = conf.prefix + full_command
         await bot.process_commands(new_message)
+        first_arg = command.split()[0]
+        if first_arg not in all_commands:
+            await interaction.channel.send(f"{constants.emojis.warning} Not a command!")
 
     def on_disconnect():
         logger.error("SizeBot has been disconnected from Discord!")
