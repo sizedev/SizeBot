@@ -111,7 +111,7 @@ def main():
 
     launchtime = datetime.now()  # noqa: DTZ005
 
-    bot = Bot(command_prefix = conf.prefix, allowed_mentions = discord.AllowedMentions(everyone=False), intents=discord.Intents.all(), case_insensitive=True)
+    bot = Bot(command_prefix = conf.prefix, allowed_mentions = discord.AllowedMentions(everyone=False), intents=discord.Intents.default() & discord.Intents.members & discord.Intents.messages, case_insensitive=True)
 
     bot.remove_command("help")
 
