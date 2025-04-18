@@ -192,13 +192,13 @@ class Rate:
     def addPerSec(self) -> SV:
         if self.diff.changetype != "add":
             return SV(0)
-        return SV(cast(SV, self.diff.amount / self.time))
+        return SV(cast(SV, self.diff.amount / Decimal(self.time)))
 
     @property
     def mulPerSec(self) -> Decimal:
         if self.diff.changetype != "multiply":
             return Decimal(1)
-        return Decimal(cast(Decimal, self.diff.amount ** (1 / self.time)))
+        return Decimal(cast(Decimal, self.diff.amount ** (1 / Decimal(self.time))))
 
     @property
     def stopSV(self) -> SV | None:
