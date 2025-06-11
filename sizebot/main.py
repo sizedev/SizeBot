@@ -214,6 +214,12 @@ def main():
                     await message.channel.send("SizeBot no longer supports `&` style commands! Please use the new `/sb` command.\n-# If the /sb command isn't available in your server, ask your server owner to re-add the bot via the [invite link](<https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=563365424786496&scope=applications.commands+bot>).")
                     break
 
+        if message.content.startswith(f"<@{bot.user.id}>"):
+            new_message_content = message.content.removeprefix(f"<@{bot.user.id}>")
+            new_message_content = new_message_content.strip()
+            message.content = new_message_content
+            await bot.process_commands(message)
+
         if hasattr(message.author, "guild") and message.author.guild is not None:
             await nickmanager.nick_update(message.author)
         await monika.on_message(message)
