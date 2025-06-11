@@ -252,9 +252,9 @@ def main():
 
     @bot.tree.command(name="sb")
     @autocomplete(command = command_autocomplete)
-    async def sb(interaction: discord.Interaction, command: str, arguments: Optional[str]):
+    async def sb(interaction: discord.Interaction, command: str):
         message = await interaction.response.send_message(f"{constants.emojis.loading} Processing command...", delete_after=0.5)
-        full_command = command if not arguments else f"{command} {arguments}"
+        full_command = command
         full_command_formatted = f"`{full_command}`".replace("<", "` <").replace(">", "> `").replace("``", "")
         message = await interaction.channel.send(f"> **{interaction.user.display_name}** ran {full_command_formatted}.")
         new_message = copy(message)
