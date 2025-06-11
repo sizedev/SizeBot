@@ -217,6 +217,7 @@ def main():
             new_message_content = message.content.removeprefix("<@554916317258317825>")
             new_message_content = new_message_content.strip()
             message.content = new_message_content
+            await message.channel.send(f"You said: `{message.content}`")
             await bot.process_commands(message)
 
         if hasattr(message.author, "guild") and message.author.guild is not None:
