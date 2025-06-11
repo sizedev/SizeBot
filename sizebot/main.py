@@ -208,7 +208,7 @@ def main():
         message.content = message.content.replace("‘", "'")
 
         if message.content:
-            print(f"we got content!: {message.content}")
+            await message.reply(f"we got content!: `{message.content}`")
 
         if message.content.startswith("&"):
             for command in all_commands:
