@@ -207,7 +207,9 @@ def main():
         message.content = message.content.replace("’", "'")
         message.content = message.content.replace("‘", "'")
 
-        # await bot.process_commands(message)
+        if message.content:
+            logger.warning(f"we got content!: {message.content}")
+
         if message.content.startswith("&"):
             for command in all_commands:
                 if message.content.startswith(f"&{command}"):
