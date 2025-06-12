@@ -177,7 +177,7 @@ class MPCog(commands.Cog):
 
     @commands.command(
         aliases = ["sother", "so"],
-        usage = "<height>",
+        usage = "<user> <height>",
         category = "multiplayer"
     )
     @commands.guild_only()
