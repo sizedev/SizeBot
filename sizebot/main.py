@@ -214,11 +214,11 @@ def main():
                     break
 
         for i in {"554916317258317825", "662106540274090008"}:
-        if message.content.startswith(f"<@{i}>") and int(i) == bot.user.id:
-            new_message_content = message.content.removeprefix(f"<@{i}>")
-            new_message_content = new_message_content.strip()
-            message.content = conf.prefix + new_message_content
-            await bot.process_commands(message)
+            if message.content.startswith(f"<@{i}>") and int(i) == bot.user.id:
+                new_message_content = message.content.removeprefix(f"<@{i}>")
+                new_message_content = new_message_content.strip()
+                message.content = conf.prefix + new_message_content
+                await bot.process_commands(message)
 
         if hasattr(message.author, "guild") and message.author.guild is not None:
             await nickmanager.nick_update(message.author)
