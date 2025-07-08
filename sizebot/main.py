@@ -229,7 +229,7 @@ def main():
     async def on_message_edit(before: discord.Message, after: discord.Message):
         if hasattr(after.author, "guild") and after.author.guild is not None:
             await nickmanager.nick_update(after.author)
-        await active.on_message(after)
+        await on_message(after)
 
     @bot.event
     async def on_guild_join(guild: discord.Guild):
