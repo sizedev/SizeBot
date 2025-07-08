@@ -1,5 +1,6 @@
 import os
 import logging
+import random
 import sys
 from typing import Optional
 from datetime import datetime
@@ -93,6 +94,10 @@ def initConf():
 digis_favs = ["help", "register", "stats", "compare", "stat", "setheight", "change", "setbaseheight", "distance", "lookat",
               "food", "water", "lookslike", "objectcompare", "scaled", "ruler", "stackup", "settrigger", "fall", "pushbutton", "lineup"]
 all_commands: list[str] = []
+retorts = ["Sorry, that's not a command.", "Where you talking to me?",
+           "Not sure what you mean by that.", "Try the `help` command for valid commands!",
+           "Did you need something?", "I'm not sure what you're trying to do.",
+           "I don't think that's a command."]
 
 async def command_autocomplete(interaction: discord.Interaction, current: str) -> list[Choice[str]]:
     if current == "":
@@ -218,6 +223,10 @@ def main():
                 new_message_content = message.content.removeprefix(f"<@{i}>")
                 new_message_content = new_message_content.strip()
                 message.content = conf.prefix + new_message_content
+                valid = message.content.split()[1] in all_commands
+                if not valid:
+                    msg = random.choice(retorts)
+                    await message.channel.send(msg)
                 await bot.process_commands(message)
 
         if hasattr(message.author, "guild") and message.author.guild is not None:
