@@ -213,7 +213,7 @@ def main():
                     await message.channel.send("SizeBot no longer supports `&` style commands! Please use the new `/sb` command.\n-# If the /sb command isn't available in your server, ask your server owner to re-add the bot via the [invite link](<https://discord.com/oauth2/authorize?client_id=554916317258317825&permissions=563365424786496&scope=applications.commands+bot>).")
                     break
 
-        for i in {"554916317258317825", "662106540274090008"}
+        for i in {"554916317258317825", "662106540274090008"}:
         if message.content.startswith(f"<@{i}>") and int(i) == bot.user.id:
             new_message_content = message.content.removeprefix(f"<@{i}>")
             new_message_content = new_message_content.strip()
