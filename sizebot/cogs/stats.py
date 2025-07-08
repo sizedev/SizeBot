@@ -14,9 +14,10 @@ from sizebot.lib.metal import metal_value, nugget_value
 from sizebot.lib.neuron import get_neuron_embed
 from sizebot.lib.objs import format_close_object_smart
 from sizebot.lib.statproxy import StatProxy
+from sizebot.lib.stats import StatBox
 from sizebot.lib.types import BotContext, GuildContext
 from sizebot.lib.units import SV, TV, WV, Decimal
-from sizebot.lib.userdb import load_or_fake, MemberOrFakeOrSize, load_or_fake_height, load_or_fake_weight
+from sizebot.lib.userdb import MemberOrFake, load_or_fake, MemberOrFakeOrSize, load_or_fake_height, load_or_fake_weight
 from sizebot.lib.utils import pretty_time_delta, sentence_join, round_fraction
 
 logger = logging.getLogger("sizebot")
@@ -515,6 +516,29 @@ class StatsCog(commands.Cog):
             desc = f"To travel from **{userdata.nickname}**'s head to their {engine.plural(userdata.footname).lower()}, it would take light **{printtime}**."
 
         embed = discord.Embed(title = f"Light Travel Time in {traveldist:,.3mu}",
+                                      description = desc)
+
+        await ctx.send(embed = embed)
+
+    @commands.command(
+        usage = "<count> [user]",
+        category = "stats"
+    )
+    @commands.guild_only()
+    async def steps(self, ctx: GuildContext, *, count: int = 10000, who: MemberOrFakeOrSize = None):
+        """Find how much you'd travel walking a number of steps."""
+        if who is None:
+            who = ctx.message.author
+
+        userdata = load_or_fake(who)
+
+        statbox = StatBox.load(userdata.stats).scale(userdata.scale)
+        distance = statbox.stats_by_key['walksteplength'].value * count
+        time = (distance / statbox.stats_by_key['walkperhour'].value) * 60 * 60
+        printtime = pretty_time_delta(time, True, True)
+
+        desc = f"Walking {count:,} steps for {userdata.nickname} would be a distance of {distance:,.3mu}, and take {printtime}."
+        embed = discord.Embed(title = f"Walking {count:,} steps for {userdata.nickname}",
                                       description = desc)
 
         await ctx.send(embed = embed)
