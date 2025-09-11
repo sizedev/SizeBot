@@ -110,7 +110,7 @@ def chunk_str(s: str, chunklen: int, prefix: str = "", suffix: str = "") -> Iter
     if not s:
         yield prefix + s + suffix
         return
-    
+
     while len(s) > 0:
         chunk = s[:innerlen]
         s = s[innerlen:]

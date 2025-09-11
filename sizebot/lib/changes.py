@@ -8,7 +8,7 @@ import time
 
 from discord.ext import commands
 
-from sizebot.lib import userdb, paths, nickmanager
+from sizebot.lib import guilddb, userdb, paths, nickmanager
 from sizebot.lib import utils
 from sizebot.lib.units import SV, TV, Decimal
 from sizebot.lib.utils import pretty_time_delta
@@ -75,8 +75,29 @@ class Change:
         addPerTick = cast(SV, self.addPerSec * seconds)
         mulPerTick = cast(Decimal, self.mulPerSec ** seconds)
         powPerTick = cast(Decimal, self.powPerSec ** seconds)
+        guilddata = guilddb.load(self.guildid)
         userdata = userdb.load(self.guildid, self.userid)
         newheight = cast(SV, ((userdata.height ** powPerTick) * mulPerTick) + addPerTick)
+
+        if guilddata.low_limit:
+            if newheight < guilddata.low_limit:
+                newheight = guilddata.low_limit
+                running = False
+
+        if guilddata.high_limit:
+            if newheight > guilddata.high_limit:
+                newheight = guilddata.high_limit
+                running = False
+
+        if userdata.minimum_limit:
+            if newheight < userdata.minimum_limit:
+                newheight = userdata.minimum_limit
+                running = False
+
+        if userdata.maximum_limit:
+            if newheight > userdata.maximum_limit:
+                newheight = userdata.maximum_limit
+                running = False
 
         if newheight < userdata.height:
             direction = "down"

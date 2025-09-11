@@ -19,25 +19,28 @@ class LimitCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
+        aliases = ["caps", "limit", "cap"]
         category = "misc"
     )
     @commands.guild_only()
     async def limits(self, ctx: GuildContext):
         """See the guild's current caps."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
-        print_low = '*Unset*' if guilddata.low_limit is None else format(guilddata.low_limit, ",.3mu")
-        print_high = '*Unset*' if guilddata.high_limit is None else format(guilddata.high_limit, ",.3mu")
-        await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {print_low}\nHigh Limit: {print_high}")
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        print_glow = '*Unset*' if guilddata.low_limit is None else format(guilddata.low_limit, ",.3mu")
+        print_ghigh = '*Unset*' if guilddata.high_limit is None else format(guilddata.high_limit, ",.3mu")
+        print_ulow = '*Unset*' if userdata.minimum_limit is None else format(userdata.minimum_limit, ",.3mu")
+        print_uhigh = '*Unset*' if userdata.maximum_limit is None else format(userdata.maximum_limit, ",.3mu")
+        await ctx.send(f"**SERVER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {print_glow}\nHigh Limit: {print_ghigh}\n**USER-SET LOW CAPS AND HIGH CAPS:**\nLow Limit: {print_ulow}\nHigh Limit: {print_uhigh}")
 
     @commands.command(
-        aliases = ["lowlimit", "lowcap", "setlowcap", "setfloor"],
         usage = "[size]",
         hidden = True,
         category = "mod"
     )
     @is_mod()
     @commands.guild_only()
-    async def setlowlimit(self, ctx: GuildContext, *, size: SV):
+    async def setguildminimum(self, ctx: GuildContext, *, size: SV):
         """Set the low size limit (floor)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.low_limit = size
@@ -46,14 +49,13 @@ class LimitCog(commands.Cog):
         logger.info(f"{size:,.3mu} is now the low size cap in guild {ctx.guild.id}.")
 
     @commands.command(
-        aliases = ["highlimit", "highcap", "sethighcap", "setceiling"],
         usage = "[size]",
         hidden = True,
         category = "mod"
     )
     @is_mod()
     @commands.guild_only()
-    async def sethighlimit(self, ctx: GuildContext, *, size: SV):
+    async def setguildmaximum(self, ctx: GuildContext, *, size: SV):
         """Set the high size limit (ceiling)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.high_limit = size
@@ -62,14 +64,14 @@ class LimitCog(commands.Cog):
         logger.info(f"{size:,.3mu} is now the high size cap in guild {ctx.guild.id}.")
 
     @commands.command(
-        aliases = ["resetlowlimit", "resetlowcap", "clearlowcap", "resetfloor", "clearfloor"],
+        aliases = ["resetguildminimum"],
         usage = "[size]",
         hidden = True,
         category = "mod"
     )
     @is_mod()
     @commands.guild_only()
-    async def clearlowlimit(self, ctx: GuildContext):
+    async def clearguildminimum(self, ctx: GuildContext):
         """Set the low size limit (floor)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.low_limit = None
@@ -78,20 +80,78 @@ class LimitCog(commands.Cog):
         logger.info(f"Cleared low size cap in guild {ctx.guild.id}.")
 
     @commands.command(
-        aliases = ["resethighlimit", "resethighcap", "clearhighcap", "resetceiling", "clearceiling"],
+        aliases = ["resetguildmaximum"],
         usage = "[size]",
         hidden = True,
         category = "mod"
     )
     @is_mod()
     @commands.guild_only()
-    async def clearhighlimit(self, ctx: GuildContext):
+    async def clearguildmaximum(self, ctx: GuildContext):
         """Set the high size limit (ceiling)."""
         guilddata = guilddb.load_or_create(ctx.guild.id)
         guilddata.high_limit = None
         guilddb.save(guilddata)
         await ctx.send("There is now no highest allowed size in this guild.")
         logger.info(f"Cleared high size cap in guild {ctx.guild.id}.")
+
+    @commands.command(
+        usage = "[size]",
+        hidden = True,
+        category = "misc"
+    )
+    @commands.guild_only()
+    async def setminimum(self, ctx: GuildContext, *, size: SV):
+        """Set the low size limit (floor)."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata.minimum_limit = size
+        userdb.save(userdata)
+        await ctx.send(f"{size:,.3mu} is now your minimum size.")
+        logger.info(f"{size:,.3mu} is now the low size cap for user {userdata.id}.")
+
+    @commands.command(
+        usage = "[size]",
+        hidden = True,
+        category = "misc"
+    )
+    @commands.guild_only()
+    async def setmaximum(self, ctx: GuildContext, *, size: SV):
+        """Set the high size limit (ceiling)."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata.maximum_limit = size
+        userdb.save(userdata)
+        await ctx.send(f"{size:,.3mu} is now your maximum size.")
+        logger.info(f"{size:,.3mu} is now the high size cap for user {userdata.id}.")
+
+    @commands.command(
+        aliases = ["resetminimum"],
+        usage = "[size]",
+        hidden = True,
+        category = "misc"
+    )
+    @commands.guild_only()
+    async def clearminimum(self, ctx: GuildContext):
+        """Clear the low size limit (floor)."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata.minimum_limit = None
+        userdb.save(userdata)
+        await ctx.send("You no longer have a lower limit.")
+        logger.info(f"None is now the low size cap for user {userdata.id}.")
+
+    @commands.command(
+        aliases = ["resetmaximum"],
+        usage = "[size]",
+        hidden = True,
+        category = "misc"
+    )
+    @commands.guild_only()
+    async def clearmaximum(self, ctx: GuildContext):
+        """Set the high size limit (ceiling)."""
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata.maximum_limit = None
+        userdb.save(userdata)
+        await ctx.send("You no longer have an upper limit.")
+        logger.info(f"None is now the high size cap for user {userdata.id}.")
 
     @commands.Cog.listener()
     async def on_message(self, m: discord.Message):
@@ -119,6 +179,18 @@ class LimitCog(commands.Cog):
                 userdata.height = guilddata.high_limit
                 userdb.save(userdata)
                 await m.channel.send(f"{userdata.nickname} hit the upper limit of this guild and has been set to {guilddata.high_limit:,.3mu}.")
+
+        if userdata.minimum_limit:
+            if userdata.height < userdata.minimum_limit:
+                userdata.height = userdata.minimum_limit
+                userdb.save(userdata)
+                await m.channel.send(f"{userdata.nickname} hit their lower limit and has been set to {userdata.minimum_limit:,.3mu}.")
+
+        if userdata.maximum_limit:
+            if userdata.height > userdata.maximum_limit:
+                userdata.height = userdata.maximum_limit
+                userdb.save(userdata)
+                await m.channel.send(f"{userdata.nickname} hit their upper limit and has been set to {userdata.maximum_limit:,.3mu}.")
 
         if userdata.display:
             await nickmanager.nick_update(m.author)

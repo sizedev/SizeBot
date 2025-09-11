@@ -1,6 +1,6 @@
 from __future__ import annotations
 from collections.abc import Callable
-from typing import Literal, Any, TypeVar, cast, get_args
+from typing import Literal, Any, cast, get_args
 
 import json
 from copy import copy
@@ -44,14 +44,46 @@ def str_or_none(v: Any) -> str | None:
 class User:
     # __slots__ declares to python what attributes to expect.
     __slots__ = [
-        "guildid", "id", "nickname", "lastactive", "picture_url", "description", "gender", "display",
-        "_height", "baseheight", "baseweight", "footlength", "pawtoggle", "furtoggle",
-        "hairlength", "taillength", "earheight", "liftstrength", "triggers", "unitsystem", "species", "soft_gender",
-        "avatar_url", "walkperhour", "runperhour", "swimperhour",
-        "currentscalestep", "currentscaletalk", "scaletalklock",
-        "currentmovetype", "movestarted", "movestop",
-        "registration_steps_remaining", "_macrovision_model", "_macrovision_view",
-        "button", "tra_reports", "allowchangefromothers"
+        "_height",
+        "_macrovision_model",
+        "_macrovision_view",
+        "allowchangefromothers",
+        "avatar_url",
+        "baseheight",
+        "baseweight",
+        "button",
+        "currentmovetype",
+        "currentscalestep",
+        "currentscaletalk",
+        "description",
+        "display",
+        "earheight",
+        "footlength",
+        "furtoggle",
+        "gender",
+        "guildid",
+        "hairlength",
+        "id",
+        "lastactive",
+        "liftstrength",
+        "maximum_limit",
+        "minimum_limit",
+        "movestarted",
+        "movestop",
+        "nickname",
+        "pawtoggle",
+        "picture_url",
+        "registration_steps_remaining",
+        "runperhour",
+        "scaletalklock",
+        "soft_gender",
+        "species",
+        "swimperhour",
+        "taillength",
+        "tra_reports",
+        "triggers",
+        "unitsystem",
+        "walkperhour"
     ]
 
     def __init__(self):
@@ -83,7 +115,7 @@ class User:
         self.movestop: TV | None = None
         self.triggers: dict[str, Diff] = {}
         self.button: Diff | None = None
-        self.tra_reports = 0
+        self.tra_reports: int = 0
         self.unitsystem: UnitSystem = "m"
         self.species: str | None = None
         self.soft_gender: str | None = None
@@ -93,6 +125,8 @@ class User:
         self._macrovision_model: str | None = None
         self._macrovision_view: str | None = None
         self.allowchangefromothers: bool = False
+        self.minimum_limit: SV | None = None
+        self.maximum_limit: SV | None = None
 
     def __str__(self) -> str:
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r} ...>")
@@ -284,9 +318,11 @@ class User:
             "unitsystem":       self.unitsystem,
             "species":          self.species,
             "registration_steps_remaining": self.registration_steps_remaining,
-            "macrovision_model": self._macrovision_model,
-            "macrovision_view": self._macrovision_view,
-            "allowchangefromothers": self.allowchangefromothers
+            "macrovision_model":            self._macrovision_model,
+            "macrovision_view":             self._macrovision_view,
+            "allowchangefromothers":        self.allowchangefromothers,
+            "minimum_height":  self.minimum_limit,
+            "maximum_height":  self.maximum_limit
         }
 
     # Create a new object from a python dictionary imported using json
@@ -330,6 +366,8 @@ class User:
         userdata._macrovision_model = cast(str | None, jsondata["macrovision_model"])
         userdata._macrovision_view = cast(str | None, jsondata["macrovision_view"])
         userdata.allowchangefromothers = cast(bool | None, jsondata["allowchangefromothers"])
+        userdata.minimum_limit = optional_parse(SV, jsondata["minimum_limit"])
+        userdata.maximum_limit = optional_parse(SV, jsondata["maximum_limit"])
         return userdata
 
     def __lt__(self, other: User) -> bool:
@@ -436,8 +474,8 @@ def count_users() -> int:
 
 
 def list_users(*, guildid: int | None = None, userid: int | None = None) -> list[tuple[int, int]]:
-    guildid = int(guildid) if guildid else "*"
-    userid = int(userid) if userid else "*"
+    guildid: int | str = int(guildid) if guildid else "*"
+    userid: int | str = int(userid) if userid else "*"
     userfiles = paths.guilddbpath.glob(f"{guildid}/users/{userid}.json")
     users = [(int(u.parent.parent.name), int(u.stem)) for u in userfiles]
     return users
@@ -446,36 +484,36 @@ def list_users(*, guildid: int | None = None, userid: int | None = None) -> list
 def load_or_fake(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> User:
     if isinstance(arg, discord.Member):
         return load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
-    elif isinstance(arg, FakePlayer):
+    if isinstance(arg, FakePlayer):
         return User.from_fake(arg)
-    elif isinstance(arg, SV):
+    if isinstance(arg, SV):
         return User.from_height(arg)
+    raise RuntimeError("Can not load or fake")
 
 
 def load_or_fake_height(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> SV:
     if isinstance(arg, discord.Member):
         user = load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
         return user.height
-    elif isinstance(arg, FakePlayer):
+    if isinstance(arg, FakePlayer):
         return User.from_fake(arg).height
-    elif isinstance(arg, SV):
+    if isinstance(arg, SV):
         return arg
+    raise RuntimeError("Can not load or fake height!")
 
 
 def load_or_fake_weight(arg: MemberOrFakeOrSize, *, allow_unreg: bool = False) -> WV:
     if isinstance(arg, discord.Member):
         user = load(arg.guild.id, arg.id, member=arg, allow_unreg=allow_unreg)
         return user.weight
-    elif isinstance(arg, FakePlayer):
+    if isinstance(arg, FakePlayer):
         return User.from_fake(arg).weight
-    elif isinstance(arg, WV):
+    if isinstance(arg, WV):
         return arg
+    raise RuntimeError("Can not load or fake weight!")
 
 
-T = TypeVar("T")
-
-
-def optional_parse(parser: Callable[[str], T], val: str | None) -> T | None:
+def optional_parse[T](parser: Callable[[str], T], val: str | None) -> T | None:
     if val is None:
         return None
     return parser(val)
@@ -493,7 +531,7 @@ def migrate_json(jsondata: dict[str, Any]) -> dict[str, Any]:
     if "triggers" not in jsondata:
         jsondata["triggers"] = {}
     for settable in ["walkperhour", "runperhour", "swimperhour", "currentscaletalk", "currentscalestep",
-                     "currentmovetype", "movestop", "button"]:
+                     "currentmovetype", "movestop", "button", "minimum_limit", "maximum_limit"]:
         if settable not in jsondata:
             jsondata[settable] = None
     return jsondata
