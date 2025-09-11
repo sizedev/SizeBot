@@ -278,7 +278,7 @@ class ScaleWalkCog(commands.Cog):
             return
 
         if userdata.currentscalestep is None:
-            await ctx.send(f"You do not have a stepscale set. Please use `{conf.prefix}setstepscale <amount>` to do so.")
+            await ctx.send(f"You do not have a stepscale set. Please use `setstepscale <amount>` to do so.")
             return
 
         if userdata.currentscalestep.changetype == "add":

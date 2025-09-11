@@ -63,9 +63,9 @@ class UserNotFoundException(DigiContextException):
         usernick = user.display_name
         returnstr = f"Sorry, {usernick} isn't registered with SizeBot."
         if ctx.message.author.id == self.userid and not self.unreg:
-            returnstr += f"\nTo register, use the `{conf.prefix}register` command."
+            returnstr += f"\nTo register, use the `register` command."
         elif ctx.message.author.id == self.userid and self.unreg:
-            returnstr += f"\nTo complete registration, use the `{conf.prefix}register` command to see your next step."
+            returnstr += f"\nTo complete registration, use the `register` command to see your next step."
         return returnstr
 
 

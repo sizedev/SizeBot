@@ -35,21 +35,21 @@ async def show_next_step(ctx: BotContext, userdata: userdb.User, completed: bool
     if completed:
         congrats_message = (
             f"Congratulations, {ctx.author.display_name}, you're all set up with SizeBot! Here are some next steps you might want to take:\n"
-            f"* You can use `{conf.prefix}setspecies` to set your species to be shown in your sizetag.\n"
-            f"* You can adjust your current height with `{conf.prefix}setheight`."
+            f"* You can use `setspecies` to set your species to be shown in your sizetag.\n"
+            f"* You can adjust your current height with `setheight`."
         )
         if ctx.me.guild_permissions.manage_nicknames:
-            congrats_message += f"\n* You can turn off sizetags with `{conf.prefix}setdisplay N`."
+            congrats_message += f"\n* You can turn off sizetags with `setdisplay N`."
         await ctx.send(congrats_message)
 
     if userdata.registered:
         return
     next_step = userdata.registration_steps_remaining[0]
     step_messages = {
-        "setheight": f"To start, set your current height with {conf.prefix}setheight. You can always change this later.\n*Examples: `{conf.prefix}setheight 200ft` or `{conf.prefix}setheight 0.5in`*",
-        "setbaseheight": f"Next, set your base height with `{conf.prefix}setbaseheight`. This should be roughly a human height in order for comparisons to make better sense.\n*Examples: `{conf.prefix}setbaseheight 5ft6in` or `{conf.prefix}setbaseheight 170cm`*",
-        "setbaseweight": f"Now, use `{conf.prefix}setbaseweight` to set your base weight. This should be whatever weight you'd be at your base height.\n*Examples: `{conf.prefix}setbaseweight 120lb` or `{conf.prefix}setbaseweight 80kg`*",
-        "setsystem": f"Finally, use `{conf.prefix}setsystem` to set what unit system you use: `M` for Metric, `U` for US.\n*Examples: `{conf.prefix}setsystem U` or `{conf.prefix}setsystem M`*"
+        "setheight": f"To start, set your current height with setheight. You can always change this later.\n*Examples: `setheight 200ft` or `setheight 0.5in`*",
+        "setbaseheight": f"Next, set your base height with `setbaseheight`. This should be roughly a human height in order for comparisons to make better sense.\n*Examples: `setbaseheight 5ft6in` or `setbaseheight 170cm`*",
+        "setbaseweight": f"Now, use `setbaseweight` to set your base weight. This should be whatever weight you'd be at your base height.\n*Examples: `setbaseweight 120lb` or `setbaseweight 80kg`*",
+        "setsystem": f"Finally, use `setsystem` to set what unit system you use: `M` for Metric, `U` for US.\n*Examples: `setsystem U` or `setsystem M`*"
     }
     next_step_message = step_messages[next_step]
     await ctx.send(f"You have {len(userdata.registration_steps_remaining)} registration steps remaining.\n{next_step_message}")
@@ -83,7 +83,7 @@ class RegisterCog(commands.Cog):
         if userdata:
             if userdata.registered:
                 await ctx.send("Sorry! You already registered with SizeBot.\n"
-                               f"To unregister, use the `{conf.prefix}unregister` command.")
+                               f"To unregister, use the `unregister` command.")
             else:
                 await show_next_step(ctx, userdata)
             return
@@ -128,7 +128,7 @@ class RegisterCog(commands.Cog):
         if ctx.me.guild_permissions.manage_nicknames:
             userdata.display = True
             if any(c in ctx.author.display_name for c in "()[]"):
-                await ctx.send(f"**If you have already have a size tag in your name, you can fix your nick with `{conf.prefix}setnick`.**")
+                await ctx.send(f"**If you have already have a size tag in your name, you can fix your nick with `setnick`.**")
         userdata.registration_steps_remaining = ["setheight", "setbaseheight", "setbaseweight", "setsystem"]
 
         # TODO: If the bot has MANAGE_NICKNAMES permission but can't change this user's permission, let the user know
@@ -154,7 +154,7 @@ class RegisterCog(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
                 "Not enough variables for `register`.\n"
-                f"See `{conf.prefix}help register`.")
+                f"See `help register`.")
             return
         raise error
 
