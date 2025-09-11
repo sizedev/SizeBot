@@ -97,7 +97,6 @@ class LimitCog(commands.Cog):
 
     @commands.command(
         usage = "[size]",
-        hidden = True,
         category = "misc"
     )
     @commands.guild_only()
@@ -111,7 +110,6 @@ class LimitCog(commands.Cog):
 
     @commands.command(
         usage = "[size]",
-        hidden = True,
         category = "misc"
     )
     @commands.guild_only()
@@ -126,7 +124,6 @@ class LimitCog(commands.Cog):
     @commands.command(
         aliases = ["resetminimum"],
         usage = "[size]",
-        hidden = True,
         category = "misc"
     )
     @commands.guild_only()
@@ -141,7 +138,6 @@ class LimitCog(commands.Cog):
     @commands.command(
         aliases = ["resetmaximum"],
         usage = "[size]",
-        hidden = True,
         category = "misc"
     )
     @commands.guild_only()

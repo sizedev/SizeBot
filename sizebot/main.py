@@ -93,7 +93,7 @@ def initConf():
 digis_favs = ["help", "register", "stats", "compare", "stat", "setheight", "change", "setbaseheight", "distance", "lookat",
               "food", "water", "lookslike", "objectcompare", "scaled", "ruler", "stackup", "settrigger", "fall", "pushbutton", "lineup"]
 all_commands: list[str] = []
-retorts = ["Sorry, that's not a command.", "Where you talking to me?",
+retorts = ["Sorry, that's not a command.", "Were you talking to me?",
            "Not sure what you mean by that.", "Try the `help` command for valid commands!",
            "Did you need something?", "I'm not sure what you're trying to do.",
            "I don't think that's a command."]
