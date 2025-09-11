@@ -321,8 +321,8 @@ class User:
             "macrovision_model":            self._macrovision_model,
             "macrovision_view":             self._macrovision_view,
             "allowchangefromothers":        self.allowchangefromothers,
-            "minimum_height":  None if self.minimum_limit is None else str(self.minimum_limit),
-            "maximum_height":  None if self.maximum_limit is None else str(self.maximum_limit)
+            "minimum_limit":  None if self.minimum_limit is None else str(self.minimum_limit),
+            "maximum_limit":  None if self.maximum_limit is None else str(self.maximum_limit)
         }
 
     # Create a new object from a python dictionary imported using json
