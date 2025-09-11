@@ -16,7 +16,7 @@ colormap = {
 
 offset = 1
 POKE_URL = "https://pokeapi.co/api/v2/"
-ALL_POKEMON = POKE_URL + f"pokemon-species?offset={offset - 1}&limit={898 - offset}"
+ALL_POKEMON = POKE_URL + f"pokemon-species?offset={offset - 1}&limit={1025 - offset}"
 
 data = []
 
