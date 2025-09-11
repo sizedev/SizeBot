@@ -1,3 +1,4 @@
+from json import JSONDecodeError
 import logging
 import sys
 from decimal import InvalidOperation
@@ -69,6 +70,8 @@ async def setup(bot: commands.Bot):
             await ctx.send(f"{emojis.warning} That's... not math I can do.")
         elif isinstance(err, OverflowError):
             await ctx.send("*SizeBot attempts to comprehend a being of infinite height, and gives up before it explodes.*")
+        elif isinstance(err, JSONDecodeError):
+            await ctx.send("{emojis.error} Database file failed to load!")
         else:
             # Default command error handling
             await ctx.send(f"{emojis.error} Something went wrong.")

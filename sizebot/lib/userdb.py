@@ -520,6 +520,10 @@ def optional_parse[T](parser: Callable[[str], T], val: str | None) -> T | None:
 
 
 def migrate_json(jsondata: dict[str, Any]) -> dict[str, Any]:
+    if "minimum_height" in jsondata:
+        jsondata.pop("minimum_height")
+    if "maximum_height" in jsondata:
+        jsondata.pop("maximum_height")
     if "allowchangefromothers" not in jsondata:
         jsondata["allowchangefromothers"] = False
     if "tra_reports" not in jsondata:
