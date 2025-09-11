@@ -221,6 +221,20 @@ THIS ALLOWS ANYONE TO CHANGE YOUR SIZE TO ANYTHING WITHIN YOUR LIMITS.
 YOU HAVE BEEN WARNED."""
         await ctx.send(s)
 
+    @commands.command(
+        category = "multiplayer"
+    )
+    @commands.guild_only()
+    async def toggleallowmatching(self, ctx: GuildContext):
+        """Allow other users to match your size.
+        """
+        userdata = userdb.load(ctx.guild.id, ctx.author.id)
+        userdata.allow_matching = not userdata.allow_matching
+        userdb.save(userdata)
+
+        s = f"Set allowing matching of your size to {userdata.allow_matching}."
+        await ctx.send(s)
+
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(MPCog(bot))
