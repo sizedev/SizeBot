@@ -75,7 +75,7 @@ class Change:
         addPerTick = cast(SV, self.addPerSec * seconds)
         mulPerTick = cast(Decimal, self.mulPerSec ** seconds)
         powPerTick = cast(Decimal, self.powPerSec ** seconds)
-        guilddata = guilddb.load(self.guildid)
+        guilddata = guilddb.load_or_create(self.guildid)
         userdata = userdb.load(self.guildid, self.userid)
         newheight = cast(SV, ((userdata.height ** powPerTick) * mulPerTick) + addPerTick)
 

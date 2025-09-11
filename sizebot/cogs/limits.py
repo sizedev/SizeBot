@@ -160,7 +160,7 @@ class LimitCog(commands.Cog):
         except UserNotFoundException:
             return
         try:
-            guilddata = guilddb.load(m.guild.id)
+            guilddata = guilddb.load_or_create(m.guild.id)
         except GuildNotFoundException:
             return
 

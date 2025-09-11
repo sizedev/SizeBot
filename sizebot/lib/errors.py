@@ -287,6 +287,14 @@ class UnfoundStatException(DigiException):
     def formatUserMessage(self) -> str:
         return f"Could not calculate the {self.s} stat(s)."
 
+class DatabaseLoadException(DigiException):
+    def __init__(self, f: str):
+        self.f = f
+
+    # TODO: CamelCase
+    def formatUserMessage(self) -> str:
+        return f"The database file {self.f} failed to load."
+
 
 def sentence_join(items: Iterable[str], *, joiner: str | None = None, oxford: bool = False) -> str:
     """Join a list of strings like a sentence.

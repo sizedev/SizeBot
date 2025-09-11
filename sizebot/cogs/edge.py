@@ -137,7 +137,7 @@ class EdgeCog(commands.Cog):
     async def edgedebug(self, ctx: GuildContext):
         userdata = userdb.load(ctx.guild.id, ctx.author.id)
         usersizes = getUserSizes(ctx.guild)
-        guilddata = guilddb.load(ctx.guild.id)
+        guilddata = guilddb.load_or_create(ctx.guild.id)
         sm = guilddata.small_edge
         lg = guilddata.large_edge
 
@@ -159,7 +159,7 @@ class EdgeCog(commands.Cog):
             return
 
         try:
-            guilddata = guilddb.load(m.guild.id)
+            guilddata = guilddb.load_or_create(m.guild.id)
         except GuildNotFoundException:
             return  # Guild does not have edges set
 

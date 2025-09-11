@@ -432,7 +432,10 @@ def load(guildid: int, userid: int, *, member: discord.Member = None, allow_unre
     path = get_user_path(guildid, userid)
     try:
         with open(path, "r") as f:
-            jsondata = json.load(f)
+            try:
+                jsondata = json.load(f)
+            except json.JSONDecodeError as e:
+                raise errors.DatabaseLoadException(str(path.absolute())) from e
     except FileNotFoundError:
         raise errors.UserNotFoundException(guildid, userid)
     user = User.fromJSON(jsondata)
