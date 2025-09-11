@@ -148,7 +148,7 @@ class User:
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
                 f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}>, "
-                f"ALLOWCHANGEFROMOTHERS = {self.allowchangefromothers!r}")
+                f"ALLOWCHANGEFROMOTHERS = {self.allowchangefromothers!r}, MINIMUM_LIMIT = {self.minimum_limit!r}, MAXIMUM_LIMIT = {self.maximum_limit!r}")
 
     @property
     def auto_picture_url(self) -> str | None:
@@ -321,8 +321,8 @@ class User:
             "macrovision_model":            self._macrovision_model,
             "macrovision_view":             self._macrovision_view,
             "allowchangefromothers":        self.allowchangefromothers,
-            "minimum_height":  str(self.minimum_limit),
-            "maximum_height":  str(self.maximum_limit)
+            "minimum_height":  None if self.minimum_limit is None else str(self.minimum_limit),
+            "maximum_height":  None if self.maximum_limit is None else str(self.maximum_limit)
         }
 
     # Create a new object from a python dictionary imported using json
