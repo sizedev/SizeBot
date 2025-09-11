@@ -65,7 +65,6 @@ initial_cogs = [
     "stats",
     "test",
     "thistracker",
-    "trigger",
     "weird",
     "winks"
 ]
