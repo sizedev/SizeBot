@@ -372,7 +372,7 @@ class User:
         userdata.allowchangefromothers = cast(bool | None, jsondata["allowchangefromothers"])
         userdata.minimum_limit = optional_parse(SV, jsondata["minimum_limit"])
         userdata.maximum_limit = optional_parse(SV, jsondata["maximum_limit"])
-        userdata.allow_matching = jsondata["allow_matching"]
+        userdata.allow_matching = jsondata.get("allow_matching", True)
         return userdata
 
     def __lt__(self, other: User) -> bool:
