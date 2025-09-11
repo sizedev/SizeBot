@@ -10,7 +10,7 @@ from discord.ext import commands, tasks
 import sizebot.data
 from sizebot.lib import changes, userdb, nickmanager
 from sizebot.lib.diff import Diff, LimitedRate, Rate
-from sizebot.lib.errors import ChangeMethodInvalidException
+from sizebot.lib.errors import ChangeMethodInvalidException, UserNotFoundException
 from sizebot.lib.objs import DigiObject, objects
 from sizebot.lib.types import BotContext, GuildContext, StrToSend
 from sizebot.lib.units import SV, Decimal
@@ -169,7 +169,7 @@ class ChangeCog(commands.Cog):
         category = "change"
     )
     @commands.guild_only()
-    async def outgrow(self, ctx: GuildContext, *, obj: DigiObject | None = None):
+    async def outgrow(self, ctx: GuildContext, *, obj: DigiObject | Member | None = None):
         """Outgrows the next object in the object database, or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -181,22 +181,38 @@ class ChangeCog(commands.Cog):
                 await ctx.send("You have nothing left to outgrow!")
                 return
             obj = objs_larger[0]
+            name = obj.name
+            length = obj.unitlength
+        elif isinstance(obj, Member):
+            try:
+                userdata2 = userdb.load(ctx.guild.id, obj.id)
+                name = userdata2.nickname
+                length = userdata2.height
+            except UserNotFoundException:
+                await ctx.send("This user is not registered with SizeBot!")
+                return
+            if not userdata2.allow_matching:
+                await ctx.send("This user is does not allow others to match their height!")
+                return
+        else:
+            name = obj.name
+            length = obj.unitlength
 
-        if obj.unitlength < userdata.height:
-            await ctx.send(f"You're already larger than {obj.article} {obj.name}!")
+        if length < userdata.height:
+            await ctx.send(f"You're already larger than {obj.article if hasattr(obj, 'article') else ''} {name}!")
             return
 
         random_factor = Decimal(random.randint(11, 20) / 10)
-        userdata.height = obj.unitlength * random_factor
+        userdata.height = length * random_factor
         userdb.save(userdata)
 
-        await ctx.send(f"You outgrew {obj.article} **{obj.name}** *({obj.unitlength:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
+        await ctx.send(f"You outgrew {obj.article if hasattr(obj, 'article') else ''} **{name}** *({length:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
 
     @commands.command(
         category = "change"
     )
     @commands.guild_only()
-    async def outshrink(self, ctx: GuildContext, *, obj: DigiObject | None = None):
+    async def outshrink(self, ctx: GuildContext, *, obj: DigiObject | Member | None = None):
         """Outshrinks the next object in the object database or an object you specify."""
         guildid = ctx.guild.id
         userid = ctx.author.id
@@ -209,16 +225,32 @@ class ChangeCog(commands.Cog):
                 await ctx.send("You have nothing left to outshrink!")
                 return
             obj = objs_smaller[0]
+            name = obj.name
+            length = obj.unitlength
+        elif isinstance(obj, Member):
+            try:
+                userdata2 = userdb.load(ctx.guild.id, obj.id)
+                name = userdata2.nickname
+                length = userdata2.height
+            except UserNotFoundException:
+                await ctx.send("This user is not registered with SizeBot!")
+                return
+            if not userdata2.allow_matching:
+                await ctx.send("This user is does not allow others to match their height!")
+                return
+        else:
+            name = obj.name
+            length = obj.unitlength
 
-        if obj.unitlength > userdata.height:
-            await ctx.send(f"You're already smaller than {obj.article} {obj.name}!")
+        if length > userdata.height:
+            await ctx.send(f"You're already smaller than {obj.article if hasattr(obj, 'article') else ''} {name}!")
             return
 
         random_factor = Decimal(random.randint(11, 20) / 10)
-        userdata.height = obj.unitlength / random_factor
+        userdata.height = length / random_factor
         userdb.save(userdata)
 
-        await ctx.send(f"You outshrunk {obj.article} **{obj.name}** *({obj.unitlength:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
+        await ctx.send(f"You outshrunk {obj.article if hasattr(obj, 'article') else ''} **{name}** *({length:,.3mu})* and are now **{userdata.height:,.3mu}** tall!")
 
     # TODO: CamelCase
     @tasks.loop(seconds=6)

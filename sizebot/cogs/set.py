@@ -189,6 +189,9 @@ class SetCog(commands.Cog):
         """
         userdata = userdb.load(ctx.guild.id, ctx.author.id, allow_unreg=True)
         from_userdata = userdb.load(ctx.guild.id, from_user.id)
+        if not from_userdata.allow_matching:
+            await ctx.send("This user is does not allow others to match their height!")
+            return
         userdata.height = from_userdata.height * newscale
         completed_registration = userdata.complete_step("setheight")
         userdb.save(userdata)

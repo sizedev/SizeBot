@@ -47,6 +47,7 @@ class User:
         "_height",
         "_macrovision_model",
         "_macrovision_view",
+        "allow_matching",
         "allowchangefromothers",
         "avatar_url",
         "baseheight",
@@ -127,6 +128,7 @@ class User:
         self.allowchangefromothers: bool = False
         self.minimum_limit: SV | None = None
         self.maximum_limit: SV | None = None
+        self.allow_matching: bool = True
 
     def __str__(self) -> str:
         return (f"<User GUILDID = {self.guildid!r}, ID = {self.id!r}, NICKNAME = {self.nickname!r} ...>")
@@ -148,7 +150,8 @@ class User:
                 f"AVATAR_URL = {self.avatar_url!r}, LASTACTIVE = {self.lastactive!r}, IS_ACTIVE = {self.is_active!r}, "
                 f"REGISTRATION_STEPS_REMAINING = {self.registration_steps_remaining!r}, REGISTERED = {self.registered!r}, "
                 f"MACROVISION_MODEL = {self.macrovision_model!r}, MACROVISION_VIEW = {self.macrovision_view!r}>, "
-                f"ALLOWCHANGEFROMOTHERS = {self.allowchangefromothers!r}, MINIMUM_LIMIT = {self.minimum_limit!r}, MAXIMUM_LIMIT = {self.maximum_limit!r}")
+                f"ALLOWCHANGEFROMOTHERS = {self.allowchangefromothers!r}, ALLOW_MATCHING = {self.allow_matching!r}, "
+                f"MINIMUM_LIMIT = {self.minimum_limit!r}, MAXIMUM_LIMIT = {self.maximum_limit!r}")
 
     @property
     def auto_picture_url(self) -> str | None:
@@ -322,7 +325,8 @@ class User:
             "macrovision_view":             self._macrovision_view,
             "allowchangefromothers":        self.allowchangefromothers,
             "minimum_limit":  None if self.minimum_limit is None else str(self.minimum_limit),
-            "maximum_limit":  None if self.maximum_limit is None else str(self.maximum_limit)
+            "maximum_limit":  None if self.maximum_limit is None else str(self.maximum_limit),
+            "allow_matching":  self.allow_matching
         }
 
     # Create a new object from a python dictionary imported using json
@@ -368,6 +372,7 @@ class User:
         userdata.allowchangefromothers = cast(bool | None, jsondata["allowchangefromothers"])
         userdata.minimum_limit = optional_parse(SV, jsondata["minimum_limit"])
         userdata.maximum_limit = optional_parse(SV, jsondata["maximum_limit"])
+        userdata.allow_matching = jsondata["allow_matching"]
         return userdata
 
     def __lt__(self, other: User) -> bool:

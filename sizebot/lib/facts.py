@@ -36,7 +36,7 @@ def get_facts(size: SV, prefix: str = "You are", wiggle: float = 10) -> list[str
             elif (minimum or SV(0)) < size <= (maximum or SV(SV.infinity)):
                 true_facts.append(f"{prefix} {fact}.")
             continue
-        
+
         # Check if a bounded fact is true and consider it 'close'
         if minimum < size <= maximum:
             close_facts.append(f"{prefix} {fact}.")

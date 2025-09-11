@@ -805,7 +805,7 @@ class StatsCog(commands.Cog):
     )
     @commands.guild_only()
     async def facts(self, ctx: GuildContext, who: MemberOrFakeOrSize = None):
-        """How long would brain signals take to travel for a person?"""
+        """Give me the facts, Jack!"""
         if who is None:
             who = ctx.message.author
             prefix = "You are"
