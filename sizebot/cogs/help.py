@@ -379,10 +379,10 @@ Thank you for your help with this process!"""
         waitMsg = await ctx.send(emojis.loading)
 
         if subcommand.lower() in ["heartbeat", "discord"]:
-            response = f"Ping! :ping_pong:\nDiscord HEARTBEAT latency: -{round(self.bot.latency, 3)} seconds"
+            response = f"Pong! :ping_pong:\nDiscord HEARTBEAT latency: -{round(self.bot.latency, 3)} seconds"
         else:
             messageLatency = waitMsg.created_at - ctx.message.created_at
-            response = f"Ping! :ping_pong:\nCommand latency: -{utils.pretty_time_delta(messageLatency.total_seconds(), True)}"
+            response = f"Pong! :ping_pong:\nCommand latency: -{utils.pretty_time_delta(messageLatency.total_seconds(), True)}"
         await waitMsg.edit(content = response)
 
     @commands.command(
@@ -413,6 +413,15 @@ Thank you for your help with this process!"""
                        f"- Use this [link](https://discord.com/oauth2/authorize?client_id={ctx.bot.application_id}&permissions=563365424786496&scope=applications.commands+bot) to invite SizeBot to your server!\n"
                        f"- (Use this [link](https://discord.com/oauth2/authorize?client_id={ctx.bot.application_id}&permissions=0&scope=applications.commands+bot) if you would like to manually manage the bot permissions).\n"
                        "If you need help, reach out to DigiDuncan (@digiduncan) and use `&help`! You can also go to this server for additional help: https://discord.gg/bbGjN8dTgk")
+
+    @commands.command(
+        usage = "<list>",
+        category = "help"
+    )
+    async def list(self, ctx: BotContext, list_type: str):
+        """List something about SizeBot! """
+        if list_type in ["stat", "stats"]:
+            await ctx.send(f"**STATS:**\n{stats_string}")
 
 
 class HelpCategory:
