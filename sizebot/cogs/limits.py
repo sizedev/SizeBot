@@ -19,7 +19,7 @@ class LimitCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
-        aliases = ["caps", "limit", "cap"]
+        aliases = ["caps", "limit", "cap"],
         category = "misc"
     )
     @commands.guild_only()
