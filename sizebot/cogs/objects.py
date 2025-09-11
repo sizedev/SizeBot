@@ -463,13 +463,39 @@ class ObjectsCog(commands.Cog):
         await ctx.send(out)
 
     @commands.command(
-        usage = "[object]",
+        usage = "<object>",
         category = "objects"
     )
     @commands.guild_only()
     async def scaled(self, ctx: GuildContext, *, obj: DigiObject):
         userdata = load_or_fake(ctx.author)
         await ctx.send(f"{obj.article.capitalize()} {obj.name} scaled for {userdata.nickname} is {get_stats_sentence(obj, userdata.scale, userdata.unitsystem)}")
+
+    @commands.command(
+        usage = "<object> [height]",
+        category = "objects"
+    )
+    @commands.guild_only()
+    async def stacked(self, ctx: GuildContext, obj: DigiObject, height: SV | None = None):
+        userdata = load_or_fake(ctx.author)
+        if height is None:
+            height = userdata.height
+        if obj.height:
+            os = height / obj.height
+            noun = "tall"
+        elif obj.thickness:
+            os = height / obj.thickness
+            noun = "tall"
+        elif obj.length:
+            os = height / obj.length
+            noun = "long"
+        elif obj.diameter:
+            os = height / obj.diameter
+            noun = "long"
+        else:
+            os = height / obj.unitlength
+            noun = "tall"
+        await ctx.send(f"{height:.3mu} is {os:.2f} {obj.name_plural} {noun}.")
 
 
 async def setup(bot: commands.Bot):
