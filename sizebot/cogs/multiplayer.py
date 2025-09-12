@@ -209,7 +209,7 @@ class MPCog(commands.Cog):
             user = ctx.author
         userdata = userdb.load(user.guild.id, user.id)
 
-        if not userdata.allowchangefromothers:
+        if ctx.author.id != user.id and not userdata.allowchangefromothers:
             await ctx.send(f"{userdata.nickname} does not allow others to change their size.")
             return
 
@@ -270,7 +270,7 @@ class MPCog(commands.Cog):
             user = ctx.author
         userdata = userdb.load(user.guild.id, user.id)
 
-        if not userdata.allowchangefromothers:
+        if ctx.author.id != user.id and not userdata.allowchangefromothers:
             await ctx.send(f"{userdata.nickname} does not allow others to change their size.")
             return
 
