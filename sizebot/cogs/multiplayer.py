@@ -170,7 +170,7 @@ class MPCog(commands.Cog):
         elif style == "power":
             userdata = userdata ** amount
         else:
-            raise ChangeMethodInvalidException
+            raise ChangeMethodInvalidException(style)
         await nickmanager.nick_update(other)
 
         userdb.save(userdata)
