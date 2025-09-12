@@ -327,8 +327,8 @@ class MPCog(commands.Cog):
     async def toggleallowothers(self, ctx: GuildContext):
         """Allow other users to change your size.
 
-        NOTE: THIS HAS NO WHITELIST, BLACKLIST, LIMITS, OR OTHERWISE.
-        THIS ALLOWS ANYONE TO CHANGE YOUR SIZE TO ANYTHING.
+        NOTE: THIS HAS NO WHITELIST OR BLACKLIST.
+        THIS ALLOWS ANYONE TO CHANGE YOUR SIZE TO ANYTHING WITHIN YOUR LIMITS.
         YOU HAVE BEEN WARNED.
 
         #ALPHA#
