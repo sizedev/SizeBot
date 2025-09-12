@@ -233,7 +233,7 @@ class MPCog(commands.Cog):
 
         amount = 0.9 ** (level * (1 + (level / 5)))
 
-        userdata.height *= amount
+        userdata.height = SV(userdata.height * amount)
 
         await nickmanager.nick_update(user)
         userdb.save(userdata)
@@ -294,7 +294,7 @@ class MPCog(commands.Cog):
 
         amount = 1.1 ** (level * (1 + (level / 5)))
 
-        userdata.height *= amount
+        userdata.height = SV(userdata.height * amount)
 
         await nickmanager.nick_update(user)
         userdb.save(userdata)
