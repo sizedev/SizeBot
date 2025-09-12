@@ -1,5 +1,6 @@
 from copy import copy
 import logging
+import random
 
 import discord
 from discord.ext import commands
@@ -7,9 +8,10 @@ from discord.ext import commands
 from sizebot.lib import userdb, nickmanager
 from sizebot.lib.constants import colors, emojis
 from sizebot.lib.diff import Diff
-from sizebot.lib.errors import ChangeMethodInvalidException
+from sizebot.lib.errors import ChangeMethodInvalidException, UserNotFoundException
 from sizebot.lib.types import BotContext, GuildContext
 from sizebot.lib.units import SV, WV, Decimal
+from sizebot.lib.utils import map_range
 
 logger = logging.getLogger("sizebot")
 
@@ -195,6 +197,128 @@ class MPCog(commands.Cog):
         await ctx.send(f"{userdata.nickname} is now {userdata.height:mu} tall.")
 
         await nickmanager.nick_update(other)
+
+    @commands.command(
+        category = "multiplayer",
+        usage = "<power> [user]"
+    )
+    @commands.guild_only()
+    async def shrinkray(self, ctx: GuildContext, level: int, user: discord.Member | None = None):
+        """Zap! Shrink a user with power 1-10."""
+        if user is None:
+            user = ctx.author
+        userdata = userdb.load(user.guild.id, user.id)
+
+        if not userdata.allowchangefromothers:
+            await ctx.send(f"{userdata.nickname} does not allow others to change their size.")
+            return
+
+        if level == 0:
+            await ctx.send("The shrink ray is off...")
+            return
+        if level < 0:
+            await ctx.send("Did you mean to use the growth ray?")
+            return
+        if level > 11:
+            await ctx.send("Don't overpower the shrink ray!")
+            return
+
+        level_was_11 = level == 11
+        original_level = level
+        crit = random.random() < 0.05
+
+        randomness = map_range(random.random(), 0, 1, 0.75, 1.25)
+        level = level + (1 if crit else 0)
+        level: float = level * randomness
+
+        amount = 0.9 ** (level * (1 + (level / 5)))
+
+        userdata.height *= amount
+
+        await nickmanager.nick_update(user)
+        userdb.save(userdata)
+
+        self_nick = ctx.author.display_name
+        try:
+            self_data = userdb.load(ctx.guild.id, ctx.author.id)
+            self_nick = self_data.nickname
+        except UserNotFoundException:
+            pass
+
+        outstring = f"{self_nick} cranks the shrink ray to {original_level}..."
+        if level_was_11:
+            outstring += "\n-# *Wait, it goes up that high?!*"
+        if ctx.author.id == user.id:
+            outstring += "and zaps themselves!"
+        else:
+            outstring += f"and zaps {userdata.nickname}!"
+        if crit:
+            outstring += f" And it's a critical hit! They are now {userdata.height:mu} tall."
+        else:
+            outstring += f" They are now {userdata.height:mu} tall."
+
+        await ctx.send(outstring)
+
+    @commands.command(
+        category = "multiplayer",
+        usage = "<power> [user]"
+    )
+    @commands.guild_only()
+    async def growthray(self, ctx: GuildContext, level: int, user: discord.Member | None = None):
+        """Zap! Grow a user with power 1-10."""
+        if user is None:
+            user = ctx.author
+        userdata = userdb.load(user.guild.id, user.id)
+
+        if not userdata.allowchangefromothers:
+            await ctx.send(f"{userdata.nickname} does not allow others to change their size.")
+            return
+
+        if level == 0:
+            await ctx.send("The growth ray is off...")
+            return
+        if level < 0:
+            await ctx.send("Did you mean to use the shrink ray?")
+            return
+        if level > 11:
+            await ctx.send("Don't overpower the growth ray!")
+            return
+
+        level_was_11 = level == 11
+        original_level = level
+        crit = random.random() < 0.05
+
+        randomness = map_range(random.random(), 0, 1, 0.75, 1.25)
+        level = level + (1 if crit else 0)
+        level: float = level * randomness
+
+        amount = 1.1 ** (level * (1 + (level / 5)))
+
+        userdata.height *= amount
+
+        await nickmanager.nick_update(user)
+        userdb.save(userdata)
+
+        self_nick = ctx.author.display_name
+        try:
+            self_data = userdb.load(ctx.guild.id, ctx.author.id)
+            self_nick = self_data.nickname
+        except UserNotFoundException:
+            pass
+
+        outstring = f"{self_nick} cranks the growth ray to {original_level}..."
+        if level_was_11:
+            outstring += "\n-# *Wait, it goes up that high?!*"
+        if ctx.author.id == user.id:
+            outstring += "and zaps themselves!"
+        else:
+            outstring += f"and zaps {userdata.nickname}!"
+        if crit:
+            outstring += f" And it's a critical hit! They are now {userdata.height:mu} tall."
+        else:
+            outstring += f" They are now {userdata.height:mu} tall."
+
+        await ctx.send(outstring)
 
     @commands.command(
         category = "multiplayer"
