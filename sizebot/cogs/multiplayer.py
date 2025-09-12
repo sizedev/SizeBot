@@ -245,7 +245,7 @@ class MPCog(commands.Cog):
         except UserNotFoundException:
             pass
 
-        outstring = f"{self_nick} cranks the shrink ray to {original_level}..."
+        outstring = f"{self_nick} cranks the shrink ray to {original_level}... "
         if level_was_11:
             outstring += "\n-# *Wait, it goes up that high?!*"
         if ctx.author.id == user.id:
@@ -253,9 +253,9 @@ class MPCog(commands.Cog):
         else:
             outstring += f"and zaps {userdata.nickname}!"
         if crit:
-            outstring += f" And it's a critical hit! They are now {userdata.height:mu} tall."
+            outstring += f"\nAnd it's a critical hit! They are now {userdata.height:mu} tall."
         else:
-            outstring += f" They are now {userdata.height:mu} tall."
+            outstring += f"\nThey are now {userdata.height:mu} tall."
 
         await ctx.send(outstring)
 
@@ -306,7 +306,7 @@ class MPCog(commands.Cog):
         except UserNotFoundException:
             pass
 
-        outstring = f"{self_nick} cranks the growth ray to {original_level}..."
+        outstring = f"{self_nick} cranks the growth ray to {original_level}... "
         if level_was_11:
             outstring += "\n-# *Wait, it goes up that high?!*"
         if ctx.author.id == user.id:
@@ -314,9 +314,9 @@ class MPCog(commands.Cog):
         else:
             outstring += f"and zaps {userdata.nickname}!"
         if crit:
-            outstring += f" And it's a critical hit! They are now {userdata.height:mu} tall."
+            outstring += f"\nAnd it's a critical hit! They are now {userdata.height:mu} tall."
         else:
-            outstring += f" They are now {userdata.height:mu} tall."
+            outstring += f"\nThey are now {userdata.height:mu} tall."
 
         await ctx.send(outstring)
 
