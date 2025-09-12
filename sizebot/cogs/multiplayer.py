@@ -229,9 +229,9 @@ class MPCog(commands.Cog):
 
         randomness = map_range(random.random(), 0, 1, 0.75, 1.25)
         level = level + (1 if crit else 0)
-        level: float = level * randomness
+        level: Decimal = level * Decimal(randomness)
 
-        amount = 0.9 ** (level * (1 + (level / 5)))
+        amount = Decimal(0.9) ** (level * (1 + (level / Decimal(5))))
 
         userdata.height = SV(userdata.height * amount)
 
@@ -290,9 +290,9 @@ class MPCog(commands.Cog):
 
         randomness = map_range(random.random(), 0, 1, 0.75, 1.25)
         level = level + (1 if crit else 0)
-        level: float = level * randomness
+        level: Decimal = level * Decimal(randomness)
 
-        amount = 1.1 ** (level * (1 + (level / 5)))
+        amount = Decimal(1.1) ** (level * (1 + (level / Decimal(5))))
 
         userdata.height = SV(userdata.height * amount)
 
